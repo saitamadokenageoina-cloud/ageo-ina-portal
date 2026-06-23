@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>CCUSカードレベル確認ツール（職種別）｜埼玉土建上尾伊奈支部</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.47.0/iconfont/tabler-icons.min.css">
+<style>
+:root {
+  --bg1:#fff;--bg2:#f5f4f0;--bg3:#ebe9e2;
+  --ok-bg:#EAF3DE;--ok-tx:#173404;
+  --warn-bg:#FAEEDA;--warn-tx:#412402;
+  --info-bg:#E6F1FB;--info-tx:#0C447C;
+  --tx1:#1a1a18;--tx2:#5f5e5a;--tx3:#888780;
+  --bd:rgba(0,0,0,0.15);
+  --r8:8px;--r12:12px;
+  --w-bg:#f8f8f8;--w-tx:#444441;
+  --b-bg:#B5D4F4;--b-tx:#042C53;
+  --s-bg:#D3D1C7;--s-tx:#2C2C2A;
+  --g-bg:#FAC775;--g-tx:#412402;
+}
+@media(prefers-color-scheme:dark){
+:root{
+  --bg1:#232320;--bg2:#2c2c2a;--bg3:#1a1a18;
+  --ok-bg:#173404;--ok-tx:#C0DD97;
+  --warn-bg:#412402;--warn-tx:#FAC775;
+  --info-bg:#0C447C;--info-tx:#B5D4F4;
+  --tx1:#f1efe8;--tx2:#b4b2a9;--tx3:#888780;
+  --bd:rgba(255,255,255,0.15);
+  --w-bg:#444441;--w-tx:#D3D1C7;
+  --b-bg:#042C53;--b-tx:#B5D4F4;
+  --s-bg:#2C2C2A;--s-tx:#D3D1C7;
+  --g-bg:#412402;--g-tx:#FAC775;
+}}
+*{box-sizing:border-box;}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;background:var(--bg3);color:var(--tx1);line-height:1.7;}
+.wrap{max-width:680px;margin:0 auto;padding:1.25rem 1rem 3rem;}
+header{padding:.5rem 0 1.25rem;}
+.eyebrow{font-size:12px;color:var(--tx3);margin:0 0 4px;}
+h1{font-size:19px;font-weight:500;margin:0 0 4px;}
+.lead{font-size:13px;color:var(--tx2);margin:0;}
+.card{background:var(--bg1);border:.5px solid var(--bd);border-radius:var(--r12);padding:1rem 1.25rem;margin-bottom:1rem;}
+.sec-title{font-size:13px;font-weight:500;color:var(--tx2);margin:0 0 10px;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+.input-group{display:flex;flex-direction:column;gap:4px;}
+.input-group label{font-size:12px;color:var(--tx2);}
+input[type=number],select{width:100%;font-size:14px;}
+.cb-group{display:flex;flex-direction:column;gap:8px;margin-bottom:4px;}
+.cb-label{display:flex;align-items:flex-start;gap:8px;font-size:13px;cursor:pointer;}
+.cb-label input{width:16px;height:16px;cursor:pointer;margin:2px 0 0;flex-shrink:0;}
+.calc-btn{width:100%;font-size:14px;padding:10px;margin-top:4px;font-weight:500;}
+.hidden{display:none;}
+.badge{display:flex;align-items:center;gap:16px;padding:1rem;border-radius:var(--r12);margin-bottom:12px;}
+.card-icon{width:56px;height:72px;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:10px;font-weight:500;gap:4px;flex-shrink:0;border:2px solid rgba(0,0,0,0.15);}
+.card-icon i{font-size:22px;}
+.lv-info h2{font-size:18px;font-weight:500;margin:0 0 4px;}
+.lv-info p{font-size:13px;color:var(--tx2);margin:0;}
+.prog-wrap{margin-bottom:10px;}
+.prog-label{display:flex;justify-content:space-between;font-size:12px;color:var(--tx2);margin-bottom:4px;}
+.prog-bar{height:8px;background:var(--bg2);border-radius:4px;overflow:hidden;}
+.prog-fill{height:100%;border-radius:4px;transition:width .5s;}
+.next-box{background:var(--bg2);border-radius:var(--r8);padding:12px 16px;margin-bottom:12px;}
+.next-title{font-size:12px;font-weight:500;color:var(--tx2);margin:0 0 8px;}
+.req{display:flex;align-items:flex-start;gap:8px;font-size:13px;margin-bottom:6px;}
+.req i{font-size:15px;flex-shrink:0;margin-top:2px;}
+.req.ok i{color:#27500A;}
+.req.ng i{color:#854F0B;}
+.table-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:.5px solid var(--bd);}
+.mini-card{width:36px;height:46px;border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:9px;font-weight:500;border:1px solid rgba(0,0,0,0.15);flex-shrink:0;gap:2px;}
+.mini-card i{font-size:14px;}
+.tag{display:inline-block;font-size:11px;background:var(--ok-bg);color:var(--ok-tx);padding:1px 8px;border-radius:4px;margin-left:6px;}
+.note{background:var(--info-bg);border-radius:var(--r8);padding:10px 14px;font-size:12px;color:var(--info-tx);margin-top:12px;}
+.links-box{background:var(--bg2);border-radius:var(--r12);padding:1rem 1.25rem;font-size:13px;margin-top:1.5rem;}
+.links-box p{font-weight:500;margin:0 0 8px;}
+.links-box a{color:var(--info-tx);display:block;margin-bottom:6px;text-decoration:none;}
+.links-box a:hover{text-decoration:underline;}
+footer{margin-top:2rem;font-size:11px;color:var(--tx3);text-align:center;}
+.shoku-info{font-size:12px;color:var(--tx3);margin:8px 0 0;}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <p class="eyebrow">埼玉土建一般労働組合 上尾伊奈支部</p>
+  <h1><i class="ti ti-id" style="font-size:20px;vertical-align:-3px;margin-right:6px;" aria-hidden="true"></i>CCUSカードレベル確認ツール（職種別）</h1>
+  <p class="lead">職種・就労日数・資格を入力すると、現在のレベルと次レベルへの条件を表示します。</p>
+</header>
+
+<div class="card">
+  <p class="sec-title">① 職種を選択</p>
+  <select id="shoku" onchange="onShokuChange()" style="margin-bottom:1rem;">
+    <option value="">-- 職種を選んでください --</option>
+    <option value="daiku">建築大工</option>
+    <option value="denki">電気工事</option>
+    <option value="tobi">とび</option>
+    <option value="tesshin">鉄筋</option>
+    <option value="sakan">左官</option>
+    <option value="tosou">建設塗装</option>
+    <option value="other">その他の職種（共通目安で判定）</option>
+  </select>
+
+  <p class="sec-title">② 就労日数・資格を入力</p>
+  <div class="grid2">
+    <div class="input-group">
+      <label>累計就労日数（日）</label>
+      <input type="number" id="days" min="0" value="" placeholder="例：800">
+    </div>
+    <div class="input-group">
+      <label>職長・班長としての就労日数（日）</label>
+      <input type="number" id="leader" min="0" value="" placeholder="例：200">
+    </div>
+  </div>
+
+  <p class="sec-title" style="margin-bottom:8px;">③ 保有資格にチェック</p>
+  <div id="qual-area" class="cb-group">
+    <p style="font-size:13px;color:var(--tx3);">職種を選ぶと資格一覧が表示されます。</p>
+  </div>
+
+  <button class="calc-btn" onclick="calc()">レベルを判定する</button>
+</div>
+
+<div id="result" class="hidden">
+  <p class="sec-title">判定結果</p>
+  <div class="card">
+    <div id="badge"></div>
+    <div id="progs"></div>
+  </div>
+
+  <div id="next-wrap" class="hidden">
+    <p class="sec-title">次のレベルアップに必要な条件</p>
+    <div class="card" id="next-content"></div>
+  </div>
+
+  <p class="sec-title">全レベル要件早見表</p>
+  <div class="card" id="level-table"></div>
+
+  <div class="note">
+    <i class="ti ti-info-circle" style="font-size:14px;vertical-align:-2px;margin-right:4px;" aria-hidden="true"></i>
+    レベル判定の詳細基準・申請手続きは職種ごとに異なります。実際の申請は埼玉土建各支部（認定登録機関）または各能力評価実施団体にご相談ください。就業日数は1年＝215日換算です。
+  </div>
+</div>
+
+<div class="links-box">
+  <p><i class="ti ti-link" aria-hidden="true"></i> 関連リンク</p>
+  <a href="https://www.mlit.go.jp/totikensangyo/const/totikensangyo_const_fr2_000040.html" target="_blank" rel="noopener">能力評価制度・職種別基準一覧（国土交通省）</a>
+  <a href="https://www.mlit.go.jp/tochi_fudousan_kensetsugyo/const/nouryokuhyouka_otoiawase.html" target="_blank" rel="noopener">能力評価実施団体一覧（申請先の確認）</a>
+  <a href="https://www.zenkensoren.org/training/sistemuriyouniyorumeri/kensentuginousyanoryokuhyoukazennsyokusyu/" target="_blank" rel="noopener">全建総連 レベル判定申請（建築大工・電気工事等8職種）</a>
+  <a href="https://www.ccus.jp/" target="_blank" rel="noopener">建設キャリアアップシステム（CCUS）公式サイト</a>
+  <a href="https://www.saitama-doken.or.jp/" target="_blank" rel="noopener">埼玉土建一般労働組合（CCUS認定登録機関）</a>
+</div>
+<footer>詳細は支部窓口または各能力評価実施団体にご確認ください。</footer>
+</div>
+
+<script>
+const SHOKU_DATA = {
+  daiku: {
+    name: "建築大工",
+    org: "全建総連・JBN等",
+    levels: [
+      { lv:1, days:0, leader:0, quals:[], qualDesc:"なし（CCUS登録のみ）", role:"見習い技能者" },
+      { lv:2, days:645, leader:0,
+        quals:["丸のこ等取扱作業者安全衛生教育", "足場の組立て等作業従事者特別教育または足場作業主任者技能講習"],
+        qualDesc:"上記2点が必須", role:"中堅技能者" },
+      { lv:3, days:1505, leader:108,
+        quals:["レベル2の資格を満たすこと", "1級または2級建築大工技能士など指定資格のうち2つ以上"],
+        qualDesc:"指定資格のうち2つ以上＋レベル2資格", role:"職長・班長クラス" },
+      { lv:4, days:2150, leader:645,
+        quals:["レベル2・3の資格を満たすこと", "登録建築大工基幹技能者など指定上位資格のいずれか"],
+        qualDesc:"登録建築大工基幹技能者等いずれか＋レベル2・3資格", role:"登録基幹技能者クラス" }
+    ],
+    qids: ["q_maru","q_ashiba","q_2q","q_1q","q_kikan"],
+    qLabels: [
+      "丸のこ等取扱作業者安全衛生教育",
+      "足場の組立て等作業従事者特別教育または足場作業主任者技能講習",
+      "2級建築大工技能士 または 2級建築施工管理技士等（レベル3用資格）",
+      "1級建築大工技能士 または 1級建築施工管理技士等（レベル3用資格）",
+      "登録建築大工基幹技能者（レベル4用）"
+    ],
+    reqFn: function(days, leader, q) {
+      const h = {maru:q[0],ashiba:q[1],q2:q[2],q1:q[3],kikan:q[4]};
+      if(days>=2150&&leader>=645&&h.maru&&h.ashiba&&(h.q2||h.q1)&&h.kikan) return 4;
+      if(days>=1505&&leader>=108&&h.maru&&h.ashiba&&(h.q2||h.q1)) return 3;
+      if(days>=645&&h.maru&&h.ashiba) return 2;
+      return 1;
+    },
+    nextReqs: function(cur, days, leader, q) {
+      const h = {maru:q[0],ashiba:q[1],q2:q[2],q1:q[3],kikan:q[4]};
+      if(cur===1) return [
+        {ok:days>=645, txt:`就労日数 645日以上（あと${Math.max(0,645-days)}日）`},
+        {ok:h.maru, txt:"丸のこ等取扱作業者安全衛生教育"},
+        {ok:h.ashiba, txt:"足場の組立て等作業従事者特別教育（または足場作業主任者）"}
+      ];
+      if(cur===2) return [
+        {ok:days>=1505, txt:`就労日数 1,505日以上（あと${Math.max(0,1505-days)}日 ≒${Math.ceil(Math.max(0,1505-days)/215*10)/10}年）`},
+        {ok:leader>=108, txt:`職長・班長 就労日数 108日以上（あと${Math.max(0,108-leader)}日）`},
+        {ok:h.q2||h.q1, txt:"1・2級建築大工技能士など指定資格のうち2つ以上"}
+      ];
+      if(cur===3) return [
+        {ok:days>=2150, txt:`就労日数 2,150日以上（あと${Math.max(0,2150-days)}日 ≒${Math.ceil(Math.max(0,2150-days)/215*10)/10}年）`},
+        {ok:leader>=645, txt:`職長 就労日数 645日以上（あと${Math.max(0,645-leader)}日）`},
+        {ok:h.kikan, txt:"登録建築大工基幹技能者等の上位資格"}
+      ];
+      return [];
+    }
+  },
+  denki: {
+    name: "電気工事",
+    org: "（一社）日本電設工業協会",
+    levels: [
+      { lv:1, days:0, leader:0, quals:[], qualDesc:"なし（CCUS登録のみ）", role:"見習い技能者" },
+      { lv:2, days:645, leader:0, quals:["第一種電気工事士試験合格 または 第二種電気工事士免状"], qualDesc:"上記いずれか", role:"中堅技能者" },
+      { lv:3, days:1075, leader:215, quals:["レベル2の資格を満たすこと", "第一種電気工事士免状（または相当）"], qualDesc:"第一種電気工事士免状等＋レベル2資格", role:"職長・班長クラス" },
+      { lv:4, days:2150, leader:645, quals:["レベル2・3の資格を満たすこと", "登録電気工事基幹技能者など"], qualDesc:"登録電気工事基幹技能者等＋レベル2・3資格", role:"登録基幹技能者クラス" }
+    ],
+    qids:["q_2shu","q_1shu","q_kikan"],
+    qLabels:["第二種電気工事士免状 または 第一種電気工事士試験合格（レベル2）","第一種電気工事士免状（レベル3）","登録電気工事基幹技能者（レベル4）"],
+    reqFn: function(days, leader, q) {
+      const h = {q2:q[0],q1:q[1],kikan:q[2]};
+      if(days>=2150&&leader>=645&&h.q2&&h.q1&&h.kikan) return 4;
+      if(days>=1075&&leader>=215&&h.q2&&h.q1) return 3;
+      if(days>=645&&h.q2) return 2;
+      return 1;
+    },
+    nextReqs: function(cur, days, leader, q) {
+      const h = {q2:q[0],q1:q[1],kikan:q[2]};
+      if(cur===1) return [
+        {ok:days>=645, txt:`就労日数 645日以上（あと${Math.max(0,645-days)}日）`},
+        {ok:h.q2, txt:"第二種電気工事士免状または第一種試験合格"}
+      ];
+      if(cur===2) return [
+        {ok:days>=1075, txt:`就労日数 1,075日以上（あと${Math.max(0,1075-days)}日 ≒${Math.ceil(Math.max(0,1075-days)/215*10)/10}年）`},
+        {ok:leader>=215, txt:`職長・班長 就労日数 215日以上（あと${Math.max(0,215-leader)}日）`},
+        {ok:h.q1, txt:"第一種電気工事士免状（または認定電気工事従事者+就労日数1,505日以上等）"}
+      ];
+      if(cur===3) return [
+        {ok:days>=2150, txt:`就労日数 2,150日以上（あと${Math.max(0,2150-days)}日 ≒${Math.ceil(Math.max(0,2150-days)/215*10)/10}年）`},
+        {ok:leader>=645, txt:`職長 就労日数 645日以上（あと${Math.max(0,645-leader)}日）`},
+        {ok:h.kikan, txt:"登録電気工事基幹技能者"}
+      ];
+      return [];
+    }
+  },
+  tobi: {
+    name: "とび",
+    org: "（一社）日本建設躯体工事業団体連合会 等",
+    levels: [
+      { lv:1, days:0, leader:0, quals:[], qualDesc:"なし（CCUS登録のみ）", role:"見習い技能者" },
+      { lv:2, days:645, leader:0, quals:["玉掛け技能講習", "職長・安全衛生責任者教育", "足場組立作業主任者等12資格のうち1つ以上"], qualDesc:"上記3点が必須", role:"中堅技能者" },
+      { lv:3, days:1720, leader:430, quals:["レベル2の資格を満たすこと", "1級とびまたは建築/土木施工管理技士等、またはレベル2の12資格のうち3つ以上"], qualDesc:"指定資格のいずれか＋レベル2資格", role:"職長・班長クラス" },
+      { lv:4, days:2580, leader:1505, quals:["レベル2・3の資格を満たすこと", "登録鳶・土工基幹技能者等"], qualDesc:"登録鳶・土工基幹技能者等＋レベル2・3資格", role:"登録基幹技能者クラス" }
+    ],
+    qids:["q_tama","q_shoku","q_ashi12","q_1q","q_kikan"],
+    qLabels:["玉掛け技能講習","職長・安全衛生責任者教育","足場組立作業主任者等12資格のうち1つ以上（レベル2）","1級とび技能士または施工管理技士等（レベル3）","登録鳶・土工基幹技能者（レベル4）"],
+    reqFn: function(days, leader, q) {
+      const h={tama:q[0],shoku:q[1],ashi:q[2],q1:q[3],kikan:q[4]};
+      if(days>=2580&&leader>=1505&&h.tama&&h.shoku&&h.ashi&&h.q1&&h.kikan) return 4;
+      if(days>=1720&&leader>=430&&h.tama&&h.shoku&&h.ashi&&h.q1) return 3;
+      if(days>=645&&h.tama&&h.shoku&&h.ashi) return 2;
+      return 1;
+    },
+    nextReqs: function(cur, days, leader, q) {
+      const h={tama:q[0],shoku:q[1],ashi:q[2],q1:q[3],kikan:q[4]};
+      if(cur===1) return [
+        {ok:days>=645, txt:`就労日数 645日以上（あと${Math.max(0,645-days)}日）`},
+        {ok:h.tama, txt:"玉掛け技能講習"},
+        {ok:h.shoku, txt:"職長・安全衛生責任者教育"},
+        {ok:h.ashi, txt:"足場組立作業主任者等12資格のうち1つ以上"}
+      ];
+      if(cur===2) return [
+        {ok:days>=1720, txt:`就労日数 1,720日以上（あと${Math.max(0,1720-days)}日 ≒${Math.ceil(Math.max(0,1720-days)/215*10)/10}年）`},
+        {ok:leader>=430, txt:`職長・班長 就労日数 430日以上（あと${Math.max(0,430-leader)}日）`},
+        {ok:h.q1, txt:"1級とび技能士または建築・土木施工管理技士等（またはレベル2の12資格のうち3つ以上）"}
+      ];
+      if(cur===3) return [
+        {ok:days>=2580, txt:`就労日数 2,580日以上（あと${Math.max(0,2580-days)}日 ≒${Math.ceil(Math.max(0,2580-days)/215*10)/10}年）`},
+        {ok:leader>=1505, txt:`職長 就労日数 1,505日以上（あと${Math.max(0,1505-leader)}日）`},
+        {ok:h.kikan, txt:"登録鳶・土工基幹技能者"}
+      ];
+      return [];
+    }
+  },
+  tesshin: {
+    name: "鉄筋",
+    org: "（公社）全国鉄筋工事業協会",
+    levels: [
+      { lv:1, days:0, leader:0, quals:[], qualDesc:"なし（CCUS登録のみ）", role:"見習い技能者" },
+      { lv:2, days:645, leader:0, quals:["玉掛け技能講習"], qualDesc:"玉掛け技能講習が必須", role:"中堅技能者" },
+      { lv:3, days:1505, leader:645, quals:["玉掛け技能講習（レベル2の資格）", "1級鉄筋施工技能士（組立てまたは施工図）"], qualDesc:"1級鉄筋施工技能士が必須＋玉掛け", role:"職長・班長クラス" },
+      { lv:4, days:2150, leader:645, quals:["レベル2・3の資格を満たすこと", "登録鉄筋基幹技能者等"], qualDesc:"登録鉄筋基幹技能者等＋レベル2・3資格", role:"登録基幹技能者クラス" }
+    ],
+    qids:["q_tama","q_1tesshin","q_kikan"],
+    qLabels:["玉掛け技能講習（レベル2必須）","1級鉄筋施工技能士（組立てまたは施工図）（レベル3必須）","登録鉄筋基幹技能者（レベル4）"],
+    reqFn: function(days, leader, q) {
+      const h={tama:q[0],q1:q[1],kikan:q[2]};
+      if(days>=2150&&leader>=645&&h.tama&&h.q1&&h.kikan) return 4;
+      if(days>=1505&&leader>=645&&h.tama&&h.q1) return 3;
+      if(days>=645&&h.tama) return 2;
+      return 1;
+    },
+    nextReqs: function(cur, days, leader, q) {
+      const h={tama:q[0],q1:q[1],kikan:q[2]};
+      if(cur===1) return [
+        {ok:days>=645, txt:`就労日数 645日以上（あと${Math.max(0,645-days)}日）`},
+        {ok:h.tama, txt:"玉掛け技能講習"}
+      ];
+      if(cur===2) return [
+        {ok:days>=1505, txt:`就労日数 1,505日以上（あと${Math.max(0,1505-days)}日 ≒${Math.ceil(Math.max(0,1505-days)/215*10)/10}年）`},
+        {ok:leader>=645, txt:`職長・班長 就労日数 645日以上（あと${Math.max(0,645-leader)}日）`},
+        {ok:h.q1, txt:"1級鉄筋施工技能士（組立てまたは施工図）"}
+      ];
+      if(cur===3) return [
+        {ok:days>=2150, txt:`就労日数 2,150日以上（あと${Math.max(0,2150-days)}日 ≒${Math.ceil(Math.max(0,2150-days)/215*10)/10}年）`},
+        {ok:leader>=645, txt:`職長 就労日数 645日以上（あと${Math.max(0,645-leader)}日）`},
+        {ok:h.kikan, txt:"登録鉄筋基幹技能者"}
+      ];
+      return [];
+    }
+  },
+  sakan: {
+    name: "左官",
+    org: "（一社）日本左官業組合連合会",
+    levels: [
+      { lv:1, days:0, leader:0, quals:[], qualDesc:"なし（CCUS登録のみ）", role:"見習い技能者" },
+      { lv:2, days:645, leader:0, quals:["2級左官作業技能士 または 研削といし特別教育＋足場組立系講習"], qualDesc:"いずれかの組み合わせ", role:"中堅技能者" },
+      { lv:3, days:1075, leader:215, quals:["レベル2の資格を満たすこと", "1級左官作業技能士"], qualDesc:"1級左官作業技能士が必須＋レベル2資格", role:"職長・班長クラス" },
+      { lv:4, days:2150, leader:645, quals:["レベル2・3の資格を満たすこと", "登録左官基幹技能者等"], qualDesc:"登録左官基幹技能者等＋レベル2・3資格", role:"登録基幹技能者クラス" }
+    ],
+    qids:["q_2sakan","q_1sakan","q_kikan"],
+    qLabels:["2級左官作業技能士（または研削といし特別教育＋足場組立系）（レベル2）","1級左官作業技能士（レベル3必須）","登録左官基幹技能者（レベル4）"],
+    reqFn: function(days, leader, q) {
+      const h={q2:q[0],q1:q[1],kikan:q[2]};
+      if(days>=2150&&leader>=645&&h.q2&&h.q1&&h.kikan) return 4;
+      if(days>=1075&&leader>=215&&h.q2&&h.q1) return 3;
+      if(days>=645&&h.q2) return 2;
+      return 1;
+    },
+    nextReqs: function(cur, days, leader, q) {
+      const h={q2:q[0],q1:q[1],kikan:q[2]};
+      if(cur===1) return [
+        {ok:days>=645, txt:`就労日数 645日以上（あと${Math.max(0,645-days)}日）`},
+        {ok:h.q2, txt:"2級左官作業技能士（または研削といし特別教育＋足場組立系講習）"}
+      ];
+      if(cur===2) return [
+        {ok:days>=1075, txt:`就労日数 1,075日以上（あと${Math.max(0,1075-days)}日 ≒${Math.ceil(Math.max(0,1075-days)/215*10)/10}年）`},
+        {ok:leader>=215, txt:`職長・班長 就労日数 215日以上（あと${Math.max(0,215-leader)}日）`},
+        {ok:h.q1, txt:"1級左官作業技能士"}
+      ];
+      if(cur===3) return [
+        {ok:days>=2150, txt:`就労日数 2,150日以上（あと${Math.max(0,2150-days)}日 ≒${Math.ceil(Math.max(0,2150-days)/215*10)/10}年）`},
+        {ok:leader>=645, txt:`職長 就労日数 645日以上（あと${Math.max(0,645-leader)}日）`},
+        {ok:h.kikan, txt:"登録左官基幹技能者"}
+      ];
+      return [];
+    }
+  },
+  tosou: {
+    name: "建設塗装",
+    org: "（一社）日本塗装工業会",
+    levels: [
+      { lv:1, days:0, leader:0, quals:[], qualDesc:"なし（CCUS登録のみ）", role:"見習い技能者" },
+      { lv:2, days:645, leader:0, quals:["1・2級建築塗装または鋼橋塗装技能士など指定資格のいずれか"], qualDesc:"指定資格のいずれか", role:"中堅技能者" },
+      { lv:3, days:1505, leader:215, quals:["職長・安全衛生責任者教育（必須）", "1級建築塗装または鋼橋塗装技能士等の上位資格"], qualDesc:"職長教育必須＋上位資格＋レベル2資格", role:"職長・班長クラス" },
+      { lv:4, days:2150, leader:645, quals:["レベル2・3の資格を満たすこと", "登録建設塗装基幹技能者等"], qualDesc:"登録建設塗装基幹技能者等＋レベル2・3資格", role:"登録基幹技能者クラス" }
+    ],
+    qids:["q_2tosou","q_shoku","q_1tosou","q_kikan"],
+    qLabels:["2級建築塗装または鋼橋塗装技能士など（レベル2資格）","職長・安全衛生責任者教育（レベル3必須）","1級建築塗装または鋼橋塗装技能士等（レベル3資格）","登録建設塗装基幹技能者（レベル4）"],
+    reqFn: function(days, leader, q) {
+      const h={q2:q[0],shoku:q[1],q1:q[2],kikan:q[3]};
+      if(days>=2150&&leader>=645&&h.q2&&h.shoku&&h.q1&&h.kikan) return 4;
+      if(days>=1505&&leader>=215&&h.q2&&h.shoku&&h.q1) return 3;
+      if(days>=645&&h.q2) return 2;
+      return 1;
+    },
+    nextReqs: function(cur, days, leader, q) {
+      const h={q2:q[0],shoku:q[1],q1:q[2],kikan:q[3]};
+      if(cur===1) return [
+        {ok:days>=645, txt:`就労日数 645日以上（あと${Math.max(0,645-days)}日）`},
+        {ok:h.q2, txt:"2級建築塗装または鋼橋塗装技能士など指定資格のいずれか"}
+      ];
+      if(cur===2) return [
+        {ok:days>=1505, txt:`就労日数 1,505日以上（あと${Math.max(0,1505-days)}日 ≒${Math.ceil(Math.max(0,1505-days)/215*10)/10}年）`},
+        {ok:leader>=215, txt:`職長・班長 就労日数 215日以上（あと${Math.max(0,215-leader)}日）`},
+        {ok:h.shoku, txt:"職長・安全衛生責任者教育（必須）"},
+        {ok:h.q1, txt:"1級建築塗装または鋼橋塗装技能士等の上位資格"}
+      ];
+      if(cur===3) return [
+        {ok:days>=2150, txt:`就労日数 2,150日以上（あと${Math.max(0,2150-days)}日 ≒${Math.ceil(Math.max(0,2150-days)/215*10)/10}年）`},
+        {ok:leader>=645, txt:`職長 就労日数 645日以上（あと${Math.max(0,645-leader)}日）`},
+        {ok:h.kikan, txt:"登録建設塗装基幹技能者"}
+      ];
+      return [];
+    }
+  },
+  other: {
+    name: "その他（共通目安）",
+    org: "各能力評価実施団体",
+    levels: [
+      { lv:1, days:0, leader:0, quals:[], qualDesc:"なし（CCUS登録のみ）", role:"見習い技能者" },
+      { lv:2, days:645, leader:0, quals:["職種に応じた基礎的な資格・特別教育"], qualDesc:"職種により異なる", role:"中堅技能者" },
+      { lv:3, days:1075, leader:215, quals:["職種に応じた技能士・施工管理技士等", "職長経験"], qualDesc:"職種により異なる", role:"職長・班長クラス" },
+      { lv:4, days:2150, leader:645, quals:["登録基幹技能者等の上位資格", "職長経験"], qualDesc:"職種により異なる", role:"登録基幹技能者クラス" }
+    ],
+    qids:["q_basic","q_mid","q_kikan"],
+    qLabels:["基礎資格・特別教育等（レベル2相当）","技能士・施工管理技士等（レベル3相当）","登録基幹技能者等（レベル4）"],
+    reqFn: function(days, leader, q) {
+      const h={basic:q[0],mid:q[1],kikan:q[2]};
+      if(days>=2150&&leader>=645&&h.basic&&h.mid&&h.kikan) return 4;
+      if(days>=1075&&leader>=215&&h.basic&&h.mid) return 3;
+      if(days>=645&&h.basic) return 2;
+      return 1;
+    },
+    nextReqs: function(cur, days, leader, q) {
+      const h={basic:q[0],mid:q[1],kikan:q[2]};
+      if(cur===1) return [
+        {ok:days>=645, txt:`就労日数 645日以上（あと${Math.max(0,645-days)}日）`},
+        {ok:h.basic, txt:"職種に応じた基礎資格・特別教育等"}
+      ];
+      if(cur===2) return [
+        {ok:days>=1075, txt:`就労日数 1,075日以上（あと${Math.max(0,1075-days)}日 ≒${Math.ceil(Math.max(0,1075-days)/215*10)/10}年）`},
+        {ok:leader>=215, txt:`職長・班長 就労日数 215日以上（あと${Math.max(0,215-leader)}日）`},
+        {ok:h.mid, txt:"技能士・施工管理技士等（職種に応じた中級資格）"}
+      ];
+      if(cur===3) return [
+        {ok:days>=2150, txt:`就労日数 2,150日以上（あと${Math.max(0,2150-days)}日 ≒${Math.ceil(Math.max(0,2150-days)/215*10)/10}年）`},
+        {ok:leader>=645, txt:`職長 就労日数 645日以上（あと${Math.max(0,645-leader)}日）`},
+        {ok:h.kikan, txt:"登録基幹技能者等の上位資格"}
+      ];
+      return [];
+    }
+  }
+};
+
+const CARD = [
+  {bg:"var(--w-bg)",fg:"var(--w-tx)",label:"白"},
+  {bg:"var(--b-bg)",fg:"var(--b-tx)",label:"青"},
+  {bg:"var(--s-bg)",fg:"var(--s-tx)",label:"銀"},
+  {bg:"var(--g-bg)",fg:"var(--g-tx)",label:"金"}
+];
+
+function onShokuChange() {
+  const key = document.getElementById('shoku').value;
+  const area = document.getElementById('qual-area');
+  if(!key || !SHOKU_DATA[key]) {
+    area.innerHTML = '<p style="font-size:13px;color:var(--tx3);">職種を選ぶと資格一覧が表示されます。</p>';
+    return;
+  }
+  const d = SHOKU_DATA[key];
+  area.innerHTML = d.qids.map((id,i) =>
+    `<label class="cb-label"><input type="checkbox" id="${id}"> ${d.qLabels[i]}</label>`
+  ).join('');
+  document.getElementById('result').classList.add('hidden');
+}
+
+function pct(v,m){return Math.min(100,Math.round(v/m*100));}
+
+function progBar(label, val, max, color) {
+  const p = pct(val, max);
+  return `<div class="prog-wrap">
+    <div class="prog-label"><span>${label}</span><span>${val.toLocaleString()} / ${max.toLocaleString()}日（${p}%）</span></div>
+    <div class="prog-bar"><div class="prog-fill" style="width:${p}%;background:${color};"></div></div>
+  </div>`;
+}
+
+function reqItem(ok, txt) {
+  return `<div class="req ${ok?'ok':'ng'}">
+    <i class="ti ${ok?'ti-check':'ti-x'}" aria-hidden="true"></i>
+    <span>${txt}</span>
+  </div>`;
+}
+
+function calc() {
+  const key = document.getElementById('shoku').value;
+  if(!key || !SHOKU_DATA[key]) { alert('職種を選択してください'); return; }
+  const d = SHOKU_DATA[key];
+  const days = parseInt(document.getElementById('days').value)||0;
+  const leader = parseInt(document.getElementById('leader').value)||0;
+  const quals = d.qids.map(id => {
+    const el = document.getElementById(id);
+    return el ? el.checked : false;
+  });
+  const lv = d.reqFn(days, leader, quals);
+  const c = CARD[lv-1];
+  const lvData = d.levels[lv-1];
+
+  document.getElementById('result').classList.remove('hidden');
+
+  document.getElementById('badge').innerHTML = `
+    <div class="card-icon" style="background:${c.bg};color:${c.fg};">
+      <i class="ti ti-id" aria-hidden="true"></i>
+      <span>${c.label}</span>
+    </div>
+    <div class="lv-info">
+      <h2>レベル${lv}（${c.label}カード）</h2>
+      <p>${lvData.role}</p>
+      <p style="margin-top:4px;font-size:12px;">職種：${d.name}　申請先：${d.org}</p>
+    </div>`;
+
+  let progs = '';
+  if(lv < 4) {
+    const next = d.levels[lv];
+    progs += progBar('就労日数', days, next.days, '#0F6E56');
+    if(next.leader > 0) progs += progBar('職長・班長 就労日数', leader, next.leader, '#185FA5');
+  } else {
+    progs = '<p style="font-size:13px;color:var(--tx2);margin:0;">最上位レベル（金カード）に到達しています。</p>';
+  }
+  document.getElementById('progs').innerHTML = progs;
+
+  const nextWrap = document.getElementById('next-wrap');
+  if(lv < 4) {
+    nextWrap.classList.remove('hidden');
+    const next = d.levels[lv];
+    const reqs = d.nextReqs(lv, days, leader, quals);
+    document.getElementById('next-content').innerHTML = `
+      <p style="font-size:14px;font-weight:500;margin:0 0 12px;">→ レベル${lv+1}（${CARD[lv].label}カード）への条件</p>
+      ${reqs.map(r => reqItem(r.ok, r.txt)).join('')}
+      <div style="margin-top:12px;padding-top:12px;border-top:.5px solid var(--bd);">
+        <p style="font-size:12px;color:var(--tx2);margin:0;">
+          <i class="ti ti-info-circle" style="font-size:13px;vertical-align:-2px;margin-right:4px;" aria-hidden="true"></i>
+          申請先：${d.org}<br>
+          埼玉土建各支部でも申請相談・手続き支援を行っています（要予約）
+        </p>
+      </div>`;
+  } else {
+    nextWrap.classList.add('hidden');
+  }
+
+  document.getElementById('level-table').innerHTML = d.levels.map(l => `
+    <div class="table-row">
+      <div class="mini-card" style="background:${CARD[l.lv-1].bg};color:${CARD[l.lv-1].fg};">
+        <i class="ti ti-id" aria-hidden="true"></i>
+        <span>${CARD[l.lv-1].label}</span>
+      </div>
+      <div style="flex:1;">
+        <p style="font-size:13px;font-weight:500;margin:0 0 2px;">
+          レベル${l.lv}（${CARD[l.lv-1].label}カード）${l.lv===lv?'<span class="tag">現在</span>':''}
+        </p>
+        <p style="font-size:12px;color:var(--tx2);margin:0;">
+          就労${l.days}日${l.leader>0?'・職長'+l.leader+'日':''}　資格：${l.qualDesc}
+        </p>
+      </div>
+    </div>`).join('');
+}
+</script>
+</body>
+</html>

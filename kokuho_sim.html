@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>国民健康保険税シミュレーター｜埼玉土建上尾伊奈支部</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.47.0/iconfont/tabler-icons.min.css">
+<style>
+:root{
+  --bg1:#fff;--bg2:#f5f4f0;--bg3:#ebe9e2;
+  --ok-bg:#EAF3DE;--ok-tx:#173404;
+  --warn-bg:#FAEEDA;--warn-tx:#412402;
+  --info-bg:#E6F1FB;--info-tx:#0C447C;
+  --tx1:#1a1a18;--tx2:#5f5e5a;--tx3:#888780;
+  --bd:rgba(0,0,0,0.15);
+  --r8:8px;--r12:12px;
+  --teal:#0F6E56;
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg1:#232320;--bg2:#2c2c2a;--bg3:#1a1a18;
+  --ok-bg:#173404;--ok-tx:#C0DD97;
+  --warn-bg:#412402;--warn-tx:#FAC775;
+  --info-bg:#0C447C;--info-tx:#B5D4F4;
+  --tx1:#f1efe8;--tx2:#b4b2a9;--tx3:#888780;
+  --bd:rgba(255,255,255,0.15);
+  --teal:#5DCAA5;
+}}
+*{box-sizing:border-box;}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;background:var(--bg3);color:var(--tx1);line-height:1.7;}
+.wrap{max-width:680px;margin:0 auto;padding:1.25rem 1rem 3rem;}
+header{padding:.5rem 0 1.25rem;}
+.eyebrow{font-size:12px;color:var(--tx3);margin:0 0 4px;}
+h1{font-size:19px;font-weight:500;margin:0 0 4px;}
+.lead{font-size:13px;color:var(--tx2);margin:0;}
+.card{background:var(--bg1);border:.5px solid var(--bd);border-radius:var(--r12);padding:1rem 1.25rem;margin-bottom:.75rem;}
+.sec-title{font-size:12px;font-weight:500;color:var(--tx2);margin:0 0 8px;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+.input-group{display:flex;flex-direction:column;gap:3px;}
+.input-group label{font-size:11px;color:var(--tx2);}
+input[type=number],select{width:100%;font-size:14px;padding:7px 10px;border-radius:var(--r8);border:.5px solid var(--bd);background:var(--bg1);color:var(--tx1);}
+.member-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;background:var(--bg2);border-radius:var(--r8);padding:8px 10px;}
+.member-row label{font-size:12px;flex:1;}
+.member-row input,
+.member-row select{font-size:12px;padding:4px 8px;}
+.member-row .rm-btn{background:none;border:none;cursor:pointer;color:var(--tx3);font-size:16px;padding:2px 4px;flex-shrink:0;}
+.add-btn{font-size:12px;padding:6px 12px;margin-bottom:10px;}
+.calc-btn{width:100%;font-size:14px;padding:10px;font-weight:500;}
+.hidden{display:none;}
+.tab-row{display:flex;gap:1px;margin-bottom:.75rem;background:var(--bd);border-radius:var(--r8);overflow:hidden;}
+.tab-btn{flex:1;border:none;background:var(--bg2);cursor:pointer;font-size:13px;padding:8px;color:var(--tx2);}
+.tab-btn.active{background:var(--bg1);color:var(--tx1);font-weight:500;}
+.result-block{margin-bottom:10px;}
+.result-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:.5px solid var(--bd);font-size:13px;}
+.result-row:last-child{border:none;}
+.result-row.total{font-weight:500;font-size:14px;padding-top:8px;}
+.result-sub{font-size:11px;color:var(--tx2);}
+.result-label{flex:1;}
+.result-val{text-align:right;white-space:nowrap;}
+.winner-box{border-radius:var(--r8);padding:10px 14px;font-size:13px;margin-top:6px;}
+.winner-box.doken{background:var(--ok-bg);color:var(--ok-tx);}
+.winner-box.city{background:var(--info-bg);color:var(--info-tx);}
+.note-box{background:var(--warn-bg);border-radius:var(--r8);padding:10px 14px;font-size:12px;color:var(--warn-tx);margin-top:8px;}
+.breakdown-title{font-size:11px;font-weight:500;color:var(--tx2);margin:10px 0 4px;}
+.links-box{background:var(--bg2);border-radius:var(--r12);padding:1rem 1.25rem;font-size:13px;margin-top:1.5rem;}
+.links-box p{font-weight:500;margin:0 0 8px;}
+.links-box a{color:var(--info-tx);display:block;margin-bottom:6px;text-decoration:none;}
+.links-box a:hover{text-decoration:underline;}
+footer{margin-top:2rem;font-size:11px;color:var(--tx3);text-align:center;}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <p class="eyebrow">埼玉土建一般労働組合 上尾伊奈支部</p>
+  <h1><i class="ti ti-calculator" style="font-size:20px;vertical-align:-3px;margin-right:6px;" aria-hidden="true"></i>国民健康保険税シミュレーター</h1>
+  <p class="lead">上尾市・伊奈町の国保税と埼玉土建国保を比較します。家族全員の情報を入力してください。</p>
+</header>
+
+<!-- 世帯入力 -->
+<div class="card">
+  <p class="sec-title">① 世帯の基本情報</p>
+  <div class="grid2">
+    <div class="input-group">
+      <label>お住まいの市町村</label>
+      <select id="city">
+        <option value="ageo">上尾市</option>
+        <option value="ina">伊奈町（令和8年度）</option>
+      </select>
+    </div>
+    <div class="input-group">
+      <label>土建国保 組合員区分</label>
+      <select id="dkubun">
+        <option value="toku2">特2種（50歳以上の法人代表・株式法人代表で妻以外に従業員）</option>
+        <option value="toku1">特1種（妻以外には従業員を使わない株式以外の法人代表）</option>
+        <option value="1">第1種（40歳以上の法人役員・個人事業主・40〜49歳の法人代表）</option>
+        <option value="2">第2種（40歳以上の一人親方・手間請者）</option>
+        <option value="3m" selected>第3種 男性（40歳以上の労働者・家族専従者・30〜39歳）</option>
+        <option value="3f">第3種 女性（40歳以上の労働者・家族専従者・30〜39歳）</option>
+        <option value="5">第5種（25〜29歳）</option>
+        <option value="6">第6種（外国人技能実習生・18〜24歳）</option>
+      </select>
+    </div>
+  </div>
+
+  <p class="sec-title">② 世帯員を入力（国保加入者全員）</p>
+  <div id="members"></div>
+  <button class="add-btn" onclick="addMember()"><i class="ti ti-plus" aria-hidden="true"></i> 家族を追加</button>
+
+  <button class="calc-btn" onclick="calc()">保険税を計算する</button>
+</div>
+
+<!-- 結果タブ -->
+<div id="result" class="hidden">
+  <div class="tab-row">
+    <button class="tab-btn active" onclick="switchResult('compare')" id="tab-compare">比較</button>
+    <button class="tab-btn" onclick="switchResult('ageo')" id="tab-ageo">市区町村国保 詳細</button>
+    <button class="tab-btn" onclick="switchResult('doken')" id="tab-doken">土建国保 詳細</button>
+  </div>
+
+  <!-- 比較 -->
+  <div id="panel-compare" class="card">
+    <p class="sec-title">月額比較（年税額÷12）</p>
+    <div id="compare-content"></div>
+  </div>
+
+  <!-- 市区町村国保詳細 -->
+  <div id="panel-ageo" class="card hidden">
+    <div id="ageo-detail"></div>
+  </div>
+
+  <!-- 土建国保詳細 -->
+  <div id="panel-doken" class="card hidden">
+    <div id="doken-detail"></div>
+  </div>
+
+  <div class="note-box">
+    <i class="ti ti-alert-triangle" style="font-size:13px;vertical-align:-2px;margin-right:4px;" aria-hidden="true"></i>
+    <strong>ご注意</strong>：この試算は概算です。低所得世帯の軽減・年度途中加入の月割・未就学児の半額軽減等は反映されていません。実際の金額は各市町村窓口または土建国保公式シミュレーターでご確認ください。<br>
+    伊奈町の数値は令和8年度の公式税率です（公式サイト確認済み）。18歳以上の子ども・子育て支援金分均等割は139円が加算されます。
+  </div>
+</div>
+
+<div class="links-box">
+  <p><i class="ti ti-link" aria-hidden="true"></i> 関連リンク</p>
+  <a href="https://www.city.ageo.lg.jp/page/35-kokuho-hokenzeisantei.html" target="_blank" rel="noopener">上尾市 国民健康保険税の算定方法（公式）</a>
+  <a href="https://www.town.saitama-ina.lg.jp/0000009522.html" target="_blank" rel="noopener">伊奈町 令和8年度国民健康保険税の税率等（公式）</a>
+  <a href="https://www.sai-doken-kokuho.jp/05hoken/04simulation.html" target="_blank" rel="noopener">埼玉土建国保 国保料計算シミュレーション（公式）</a>
+  <a href="https://www.sai-doken-kokuho.jp" target="_blank" rel="noopener">埼玉土建国民健康保険組合</a>
+</div>
+
+<footer>埼玉土建一般労働組合 上尾伊奈支部｜TEL 048-773-9863</footer>
+</div>
+
+<script>
+// ========== 税率データ ==========
+const RATES = {
+  ageo: {
+    name: "上尾市", year: "令和8年度",
+    iry: { sRate:0.081,  uRate:49233, cap:660000 },
+    shi: { sRate:0.0283, uRate:17105, cap:260000 },
+    kai: { sRate:0.0247, uRate:17492, cap:170000 },
+    ko:  { sRate:0.0026, uRate:1687,  cap:30000  }
+  },
+  ina: {
+    name: "伊奈町", year: "令和8年度",
+    iry: { sRate:0.0845, uRate:45700, cap:650000 },
+    shi: { sRate:0.0293, uRate:16700, cap:260000 },
+    kai: { sRate:0.0238, uRate:15500, cap:170000 },
+    ko:  { sRate:0.0029, uRate:1765,  cap:30000  }
+  }
+};
+
+// 埼玉土建国保 保険料（月額・2026年4月分から）
+// ※特1・特2の金額は公式サイトで確認できていないため支部にてご確認ください
+const DOKEN_KUBUN = {
+  "toku2": { label:"特2種", hoken:43200, shien:700 },
+  "toku1": { label:"特1種", hoken:43200, shien:700 },
+  "1":     { label:"第1種", hoken:43200, shien:700 },
+  "2":     { label:"第2種", hoken:41300, shien:600 },
+  "3m":    { label:"第3種（男）", hoken:38700, shien:600 },
+  "3f":    { label:"第3種（女）", hoken:38700, shien:600 },
+  "5":     { label:"第5種", hoken:27700, shien:500 },
+  "6":     { label:"第6種", hoken:15400, shien:200 },
+};
+// 家族保険料（月額）
+// ※金額は公式サイトJSから取得できていないため概算。正確には公式シミュレーターでご確認を
+const DOKEN_FAMILY_HOKEN = {
+  "tokubetsu": 7900,
+  "ippan":     6200,
+  "chuko":     4400,
+  "shogaku":   3200,
+  "mishuugaku":2100,
+};
+const DOKEN_FAMILY_SHIEN = {
+  "tokubetsu": 200,
+  "ippan":     200,
+  "chuko":     100,
+  "shogaku":   0,
+  "mishuugaku":0,
+};
+// 介護保険料（40〜64歳・月額）
+const DOKEN_KAIGO_M = 2700;
+
+// ========== 世帯員管理 ==========
+let members = [];
+let memberCount = 0;
+
+function addMember(preset) {
+  memberCount++;
+  const id = memberCount;
+  const isFirst = members.length === 0;
+  members.push({id});
+  const div = document.createElement('div');
+  div.className = 'member-row';
+  div.id = 'member-' + id;
+  div.innerHTML = `
+    <div style="display:flex;flex-direction:column;gap:4px;flex:1;">
+      <div style="display:flex;align-items:center;gap:6px;">
+        <label style="font-size:11px;color:var(--tx2);white-space:nowrap;">続柄</label>
+        <select id="rel-${id}" style="font-size:12px;padding:3px 6px;">
+          <option value="honnin" ${isFirst?'selected':''}>本人（組合員）</option>
+          <option value="tokubetsu" ${!isFirst?'selected':''}>特別家族（20〜59歳・配偶者含む）</option>
+          <option value="ippan">一般家族（18〜19歳・60歳以上・妻・母・学生等）</option>
+          <option value="chuko">中高生相当（12〜17歳）</option>
+          <option value="shogaku">小学生相当（6〜11歳）</option>
+          <option value="mishuugaku">未就学児（5歳以下）</option>
+        </select>
+        <label style="font-size:11px;color:var(--tx2);white-space:nowrap;">年齢</label>
+        <input type="number" id="age-${id}" min="0" max="100" value="${isFirst?40:35}" style="width:60px;font-size:12px;padding:3px 6px;">
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <label style="font-size:11px;color:var(--tx2);white-space:nowrap;">前年所得額</label>
+        <input type="number" id="income-${id}" min="0" value="${isFirst?3000000:0}" style="width:120px;font-size:12px;padding:3px 6px;">
+        <label style="font-size:11px;color:var(--tx3);">円（給与なら収入×0.8が目安）</label>
+      </div>
+    </div>
+    ${id > 1 ? `<button class="rm-btn" onclick="removeMember(${id})" title="削除"><i class="ti ti-x" aria-hidden="true"></i></button>` : ''}
+  `;
+  document.getElementById('members').appendChild(div);
+}
+
+function removeMember(id) {
+  members = members.filter(m => m.id !== id);
+  const el = document.getElementById('member-' + id);
+  if(el) el.remove();
+}
+
+// 初期：本人1名
+addMember();
+
+// ========== 計算 ==========
+function yen(n){return Math.round(n).toLocaleString('ja-JP') + '円';}
+function yenM(n){return Math.round(n/12).toLocaleString('ja-JP') + '円/月';}
+
+function getMemberData() {
+  return members.map(m => {
+    const age = parseInt(document.getElementById('age-' + m.id).value) || 0;
+    const income = parseFloat(document.getElementById('income-' + m.id).value) || 0;
+    const rel = document.getElementById('rel-' + m.id).value;
+    const taxBase = Math.max(0, income - 430000);
+    return {id: m.id, age, income, taxBase, rel};
+  });
+}
+
+function calcCityTax(mems, cityKey) {
+  const r = RATES[cityKey];
+  let iry = 0, shi = 0, kai = 0, ko = 0;
+
+  // 所得割（全員分合算して税率適用）
+  const totalBase = mems.reduce((s,m) => s + m.taxBase, 0);
+  iry += totalBase * r.iry.sRate;
+  shi += totalBase * r.shi.sRate;
+
+  const kaiBase = mems.filter(m => m.age >= 40 && m.age < 65)
+                       .reduce((s,m) => s + m.taxBase, 0);
+  kai += kaiBase * r.kai.sRate;
+
+  ko += totalBase * r.ko.sRate;
+
+  // 均等割
+  const n = mems.length;
+  const kaiN = mems.filter(m => m.age >= 40 && m.age < 65).length;
+  iry += n * r.iry.uRate;
+  shi += n * r.shi.uRate;
+  kai += kaiN * r.kai.uRate;
+  ko  += n * r.ko.uRate;
+
+  // 高校生以下の子ども分均等割は無料
+  const koFreeKids = mems.filter(m => m.age <= 18 && (m.rel === 'ko')).length;
+  ko -= koFreeKids * r.ko.uRate;
+
+  // 賦課限度額
+  iry = Math.min(iry, r.iry.cap);
+  shi = Math.min(shi, r.shi.cap);
+  kai = Math.min(kai, r.kai.cap);
+  ko  = Math.min(ko,  r.ko.cap);
+
+  const total = iry + shi + kai + ko;
+  return {iry, shi, kai, ko, total, r};
+}
+
+function calcDokenTax(mems, dkubun) {
+  const kd = DOKEN_KUBUN[dkubun];
+  const honnin = mems.find(m => m.rel === 'honnin');
+  const honninAge = honnin?.age || 40;
+
+  // 組合員本人
+  const hokenM = kd.hoken;
+  const shienM = kd.shien;
+  const kaigoM = (honninAge >= 40 && honninAge < 65) ? DOKEN_KAIGO_M : 0;
+
+  // 家族（4人目以降は保険料免除のため3名まで）
+  const families = mems.filter(m => m.rel !== 'honnin');
+  const freeIdx = 3; // 4人目から免除
+  let famHoken = 0, famShien = 0, famKaigo = 0;
+  const famDetails = [];
+  families.forEach((m, i) => {
+    const exempt = i >= freeIdx;
+    const fh = exempt ? 0 : (DOKEN_FAMILY_HOKEN[m.rel] || 7900);
+    const fs = exempt ? 0 : (DOKEN_FAMILY_SHIEN[m.rel] || 200);
+    const fk = (exempt || !['tokubetsu','ippan'].includes(m.rel)) ? 0
+               : (m.age >= 40 && m.age < 65) ? DOKEN_KAIGO_M : 0;
+    famHoken += fh;
+    famShien += fs;
+    famKaigo += fk;
+    famDetails.push({ rel: m.rel, age: m.age, exempt, fh, fs, fk });
+  });
+
+  const monthTotal = hokenM + shienM + kaigoM + famHoken + famShien + famKaigo;
+  const yearTotal = monthTotal * 12;
+
+  return {
+    hokenM, shienM, kaigoM,
+    famHoken, famShien, famKaigo,
+    famDetails,
+    monthTotal, yearTotal,
+    kubunLabel: kd.label,
+  };
+}
+
+function calc() {
+  const cityKey = document.getElementById('city').value;
+  const dkubun = document.getElementById('dkubun').value;
+  const mems = getMemberData();
+
+  if(mems.length === 0) { alert('世帯員を入力してください'); return; }
+
+  const city = calcCityTax(mems, cityKey);
+  const doken = calcDokenTax(mems, dkubun);
+  const cityName = RATES[cityKey].name;
+
+  document.getElementById('result').classList.remove('hidden');
+
+  // 比較
+  const cityM = Math.round(city.total / 12);
+  const dokenM = doken.monthTotal;
+  const diffM = cityM - dokenM;
+  const cheaper = diffM > 0 ? '土建国保' : cityName + '国保';
+  const winClass = diffM > 0 ? 'doken' : 'city';
+
+  document.getElementById('compare-content').innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
+      <div style="background:var(--bg2);border-radius:var(--r8);padding:12px;">
+        <p style="font-size:11px;font-weight:500;color:var(--tx2);margin:0 0 4px;">${cityName}国保<br><span style="font-size:10px;">${RATES[cityKey].year}</span></p>
+        <p style="font-size:22px;font-weight:500;margin:0;">${cityM.toLocaleString()}<span style="font-size:12px;">円/月</span></p>
+        <p style="font-size:11px;color:var(--tx3);margin:2px 0 0;">年間 ${yen(city.total)}</p>
+      </div>
+      <div style="background:var(--bg2);border-radius:var(--r8);padding:12px;">
+        <p style="font-size:11px;font-weight:500;color:var(--tx2);margin:0 0 4px;">埼玉土建国保<br><span style="font-size:10px;">令和8年度</span></p>
+        <p style="font-size:22px;font-weight:500;margin:0;">${dokenM.toLocaleString()}<span style="font-size:12px;">円/月</span></p>
+        <p style="font-size:11px;color:var(--tx3);margin:2px 0 0;">年間 ${yen(doken.yearTotal)}</p>
+      </div>
+    </div>
+    <div class="winner-box ${winClass}">
+      <i class="ti ti-info-circle" style="font-size:13px;vertical-align:-2px;margin-right:4px;" aria-hidden="true"></i>
+      月額では<strong>${cheaper}</strong>が <strong>${Math.abs(diffM).toLocaleString()}円/月</strong>（年間 <strong>${yen(Math.abs(diffM)*12)}</strong>）安い試算です。
+    </div>
+    <p style="font-size:11px;color:var(--tx3);margin:8px 0 0;">※ 詳細は各タブでご確認ください。土建国保には入院医療費の全額払戻しや傷病手当金など、金額以外のメリットもあります。</p>
+  `;
+
+  // 市区町村国保詳細
+  const hasKaigo = mems.some(m => m.age >= 40 && m.age < 65);
+  document.getElementById('ageo-detail').innerHTML = `
+    <p class="sec-title">${cityName}国保 内訳（${RATES[cityKey].year}）</p>
+    <div class="result-row"><span class="result-label">医療分（所得割＋均等割）</span><span class="result-val">${yen(city.iry)}<br><span class="result-sub">月 ${yenM(city.iry)}</span></span></div>
+    <div class="result-row"><span class="result-label">後期高齢者支援分</span><span class="result-val">${yen(city.shi)}<br><span class="result-sub">月 ${yenM(city.shi)}</span></span></div>
+    ${hasKaigo ? `<div class="result-row"><span class="result-label">介護分（40〜64歳）</span><span class="result-val">${yen(city.kai)}<br><span class="result-sub">月 ${yenM(city.kai)}</span></span></div>` : ''}
+    <div class="result-row"><span class="result-label">子ども・子育て支援金分</span><span class="result-val">${yen(city.ko)}<br><span class="result-sub">月 ${yenM(city.ko)}</span></span></div>
+    <div class="result-row total"><span class="result-label">年間合計</span><span class="result-val">${yen(city.total)}</span></div>
+    <div class="result-row"><span class="result-label" style="color:var(--tx3);">月額換算</span><span class="result-val" style="font-size:15px;font-weight:500;">${Math.round(city.total/12).toLocaleString()}円/月</span></div>
+    <p class="breakdown-title">算定の前提（世帯）</p>
+    <div style="font-size:12px;color:var(--tx2);">
+      ${mems.map(m => `${m.rel==='honnin'?'本人':m.rel==='haiguu'?'配偶者':m.rel==='ko'?'子':'家族'}（${m.age}歳）：前年所得 ${m.income.toLocaleString()}円 → 課税基準額 ${m.taxBase.toLocaleString()}円`).join('<br>')}
+    </div>
+  `;
+
+  // 土建国保詳細
+  const famRows = doken.famDetails.map(f => {
+    const rel_label = {tokubetsu:'特別家族',ippan:'一般家族',chuko:'中高生',shogaku:'小学生',mishuugaku:'未就学児'}[f.rel] || f.rel;
+    const total_m = f.fh + f.fs + f.fk;
+    if(f.exempt) return `<div class="result-row" style="opacity:.5;"><span class="result-label">${rel_label}（${f.age}歳）</span><span class="result-val">免除（4人目以降）</span></div>`;
+    return `<div class="result-row"><span class="result-label">${rel_label}（${f.age}歳）${f.fk>0?' ＋介護':''}</span><span class="result-val">${yen(total_m*12)}<br><span class="result-sub">月 ${total_m.toLocaleString()}円</span></span></div>`;
+  }).join('');
+
+  document.getElementById('doken-detail').innerHTML = `
+    <p class="sec-title">埼玉土建国保 内訳（月額×12）</p>
+    <p style="font-size:11px;color:var(--tx2);margin:0 0 8px;">区分：${doken.kubunLabel}</p>
+    <div class="result-row"><span class="result-label">組合員保険料</span><span class="result-val">${yen(doken.hokenM*12)}<br><span class="result-sub">月 ${doken.hokenM.toLocaleString()}円</span></span></div>
+    <div class="result-row"><span class="result-label">子育て支援金（組合員）</span><span class="result-val">${yen(doken.shienM*12)}<br><span class="result-sub">月 ${doken.shienM.toLocaleString()}円</span></span></div>
+    ${doken.kaigoM > 0 ? `<div class="result-row"><span class="result-label">介護保険料（組合員）</span><span class="result-val">${yen(doken.kaigoM*12)}<br><span class="result-sub">月 ${doken.kaigoM.toLocaleString()}円</span></span></div>` : ''}
+    ${famRows}
+    <div class="result-row total"><span class="result-label">月額合計</span><span class="result-val" style="font-size:15px;">${doken.monthTotal.toLocaleString()}円/月</span></div>
+    <div class="result-row total"><span class="result-label">年間合計</span><span class="result-val">${yen(doken.yearTotal)}</span></div>
+    <div style="background:var(--ok-bg);border-radius:var(--r8);padding:8px 12px;font-size:12px;color:var(--ok-tx);margin-top:10px;">
+      <i class="ti ti-star" style="font-size:13px;vertical-align:-2px;margin-right:3px;" aria-hidden="true"></i>
+      土建国保のメリット：入院医療費全額払戻し・傷病手当金（最大180日）・出産育児一時金50万円・葬祭費7万円
+    </div>
+    <p style="font-size:11px;color:var(--tx3);margin:8px 0 0;">※ 家族保険料は概算です。正確な金額は<a href="https://www.sai-doken-kokuho.jp/05hoken/04simulation.html" target="_blank" style="color:var(--info-tx);">公式シミュレーター</a>でご確認ください。特1・特2種の組合員保険料も支部確認を推奨します。</p>
+  `;
+
+  switchResult('compare');
+}
+
+function switchResult(tab) {
+  ['compare','ageo','doken'].forEach(t => {
+    document.getElementById('panel-' + t).classList.toggle('hidden', t !== tab);
+    document.getElementById('tab-' + t).classList.toggle('active', t === tab);
+  });
+}
+</script>
+</body>
+</html>

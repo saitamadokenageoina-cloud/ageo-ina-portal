@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>手続き・必要書類ガイド｜埼玉土建上尾伊奈支部</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.47.0/iconfont/tabler-icons.min.css">
+<style>
+  :root {
+    --color-background-primary: #ffffff;
+    --color-background-secondary: #f5f4f0;
+    --color-background-tertiary: #ebe9e2;
+    --color-background-success: #EAF3DE;
+    --color-text-success: #173404;
+    --color-background-warning: #FAEEDA;
+    --color-text-warning: #412402;
+    --color-text-primary: #1a1a18;
+    --color-text-secondary: #5f5e5a;
+    --color-text-tertiary: #888780;
+    --color-text-info: #185fa5;
+    --color-border-tertiary: rgba(0,0,0,0.15);
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+    --c-teal-50: #E1F5EE; --c-teal-800: #085041;
+    --c-pink-50: #FBEAF0; --c-pink-800: #72243E;
+    --c-blue-50: #E6F1FB; --c-blue-800: #0C447C;
+    --c-coral-50: #FAECE7; --c-coral-800: #712B13;
+    --c-amber-50: #FAEEDA; --c-amber-800: #633806;
+    --c-green-50: #EAF3DE; --c-green-800: #27500A;
+    --c-purple-50: #EEEDFE; --c-purple-800: #3C3489;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-background-primary: #232320;
+      --color-background-secondary: #2c2c2a;
+      --color-background-tertiary: #1a1a18;
+      --color-background-success: #173404;
+      --color-text-success: #C0DD97;
+      --color-background-warning: #412402;
+      --color-text-warning: #FAC775;
+      --color-text-primary: #f1efe8;
+      --color-text-secondary: #b4b2a9;
+      --color-text-tertiary: #888780;
+      --color-text-info: #85b7eb;
+      --color-border-tertiary: rgba(255,255,255,0.15);
+      --c-teal-50: #085041; --c-teal-800: #9FE1CB;
+      --c-pink-50: #72243E; --c-pink-800: #F4C0D1;
+      --c-blue-50: #0C447C; --c-blue-800: #B5D4F4;
+      --c-coral-50: #712B13; --c-coral-800: #F5C4B3;
+      --c-amber-50: #633806; --c-amber-800: #FAC775;
+      --c-green-50: #27500A; --c-green-800: #C0DD97;
+      --c-purple-50: #3C3489; --c-purple-800: #CECBF6;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
+    background: var(--color-background-tertiary);
+    color: var(--color-text-primary);
+    line-height: 1.7;
+  }
+  .wrap { max-width: 680px; margin: 0 auto; padding: 1.25rem 1rem 3rem; }
+  header { padding: 0.5rem 0 1.25rem; }
+  header p.eyebrow { font-size: 12px; color: var(--color-text-tertiary); margin: 0 0 4px; }
+  header h1 { font-size: 19px; font-weight: 500; margin: 0; }
+  .searchbox { position: relative; margin-bottom: 12px; }
+  .searchbox i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 16px; color: var(--color-text-tertiary); }
+  #search { width: 100%; padding: 10px 12px 10px 36px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); background: var(--color-background-primary); color: var(--color-text-primary); font-size: 14px; }
+  #search:focus { outline: 2px solid #0F6E56; outline-offset: -1px; }
+  .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.5rem; }
+  .filters button { font-size: 13px; padding: 6px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); background: var(--color-background-primary); color: var(--color-text-primary); cursor: pointer; }
+  .filters button.active { background: var(--color-background-secondary); font-weight: 500; }
+  #list { display: flex; flex-direction: column; gap: 10px; }
+  .card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1rem 1.1rem; }
+  .card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+  .card-head-left { display: flex; align-items: center; gap: 10px; }
+  .icon-circle { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .icon-circle i { font-size: 18px; }
+  .card-title { font-size: 14px; font-weight: 500; margin: 0; }
+  .badge { font-size: 11px; padding: 3px 10px; border-radius: var(--border-radius-md); white-space: nowrap; }
+  .badge.ok { background: var(--color-background-success); color: var(--color-text-success); }
+  .badge.warn { background: var(--color-background-warning); color: var(--color-text-warning); }
+  .card-body { padding-left: 46px; }
+  .label { font-size: 12px; color: var(--color-text-secondary); margin: 0 0 4px; }
+  ul.docs { font-size: 13px; margin: 0 0 10px; padding-left: 18px; }
+  ul.docs li { margin-bottom: 4px; }
+  .meta-row { display: flex; gap: 24px; font-size: 13px; flex-wrap: wrap; }
+  .meta-row > div { margin-bottom: 4px; }
+  .meta-row p { margin: 0; }
+  .note { font-size: 12px; color: var(--color-text-tertiary); margin: 10px 0 0; }
+  .note i { font-size: 13px; vertical-align: -2px; margin-right: 4px; }
+  .empty { font-size: 13px; color: var(--color-text-tertiary); padding: 1rem 0; }
+  .links-box { background: var(--color-background-secondary); border-radius: var(--border-radius-lg); padding: 1rem 1.25rem; font-size: 13px; margin-top: 1.5rem; }
+  .links-box p.title { font-weight: 500; margin: 0 0 8px; }
+  .links-box a { color: var(--color-text-info); display: block; margin-bottom: 6px; text-decoration: none; }
+  .links-box a:hover { text-decoration: underline; }
+  footer { margin-top: 2rem; font-size: 11px; color: var(--color-text-tertiary); text-align: center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="eyebrow">埼玉土建一般労働組合 上尾伊奈支部</p>
+    <h1>手続き・必要書類ガイド</h1>
+  </header>
+
+
+  <div style="display:flex; gap:8px; margin-bottom:1rem;">
+    <button id="mode-tetsuzuki" onclick="setMode('tetsuzuki')" style="flex:1; font-size:13px;">手続きを調べる</button>
+    <button id="mode-merit" onclick="setMode('merit')" style="flex:1; font-size:13px;">加入のメリット</button>
+  </div>
+
+  <div id="panel-tetsuzuki">
+  <div class="searchbox">
+    <i class="ti ti-search" aria-hidden="true"></i>
+    <input type="text" id="search" placeholder="キーワードで探す（例：出生、結婚、傷病手当、葬祭費）">
+  </div>
+
+  <div class="filters" id="filters"></div>
+
+  <div id="list"></div>
+  </div>
+
+  <div id="panel-merit" style="display:none;">
+    <p style="font-size:13px; color:var(--color-text-secondary); margin:0 0 1rem;">埼玉土建に加入すると受けられる主なメリットです。組合費の中にこれらの保障・サービスがすべて含まれています。</p>
+    <div id="merit-list"></div>
+  </div>
+
+  <div class="links-box">
+    <p class="title"><i class="ti ti-link" aria-hidden="true"></i> 関連リンク</p>
+    <a href="https://www.saitama-doken.or.jp/" target="_blank" rel="noopener">埼玉土建一般労働組合 公式サイト</a>
+    <a href="https://www.sai-doken-kokuho.jp" target="_blank" rel="noopener">埼玉土建国民健康保険組合</a>
+    <a href="https://www.sai-doken-kokuho.jp/05hoken/03todokede.html" target="_blank" rel="noopener">国民健康保険の手続きが必要なとき（公式）</a>
+    <a href="https://www.sai-doken-kokuho.jp/03kyufu/01kyufu_index.html" target="_blank" rel="noopener">給付制度総合案内（公式）</a>
+    <a href="https://www.sai-doken-kokuho.jp/05hoken/04simulation.html" target="_blank" rel="noopener">国保料計算シミュレーション</a>
+    <a href="https://www.saitama-doken.or.jp/join/" target="_blank" rel="noopener">加入方法（公式）</a>
+  </div>
+
+  <footer>このガイドは随時更新されます。最新の制度・料率は支部窓口でご確認ください。</footer>
+</div>
+
+<script>
+const ITEMS = [
+  { id:1, tag:"加入", title:"新規加入（組合のみ）", icon:"ti-user-plus", bg:"var(--c-teal-50)", fg:"var(--c-teal-800)",
+    docs:["加入申込書","加入金 1,000円","翌月分の組合費"],
+    where:"支部事務所（または近所の組合員経由）", deadline:"特になし",
+    note:"建設業で働く人なら、事業主・一人親方・職人を問わず誰でも加入可（公式パンフレットP.42）", confirmed:true },
+  { id:2, tag:"加入", title:"新規加入（組合＋土建国保 同時）", icon:"ti-user-plus", bg:"var(--c-teal-50)", fg:"var(--c-teal-800)",
+    docs:["加入申込書","加入金 1,000円","翌月分の組合費","世帯全員の住民票（個人番号入り・原本）","就業形態のわかるもの"],
+    where:"支部事務所", deadline:"特になし",
+    note:"国保加入希望は加入申込書とは別に手続きが必要（公式パンフレットP.42）", confirmed:true },
+  { id:3, tag:"家族異動", title:"出生（家族が増えたとき）", icon:"ti-baby-carriage", bg:"var(--c-pink-50)", fg:"var(--c-pink-800)",
+    docs:["世帯全員の住民票（個人番号入り・原本）"],
+    where:"支部事務所", deadline:"原則14日以内。住民票の添付がないと資格確認書等の到着が1週間程度遅れる（国保公式サイト）",
+    note:"総合共済の出生祝金 2万円が別途給付されます（公式パンフレットP.6-7）", confirmed:true },
+  { id:4, tag:"家族異動", title:"結婚（配偶者を扶養に追加）", icon:"ti-heart", bg:"var(--c-pink-50)", fg:"var(--c-pink-800)",
+    docs:["世帯全員の住民票（個人番号入り・原本）"],
+    where:"支部事務所", deadline:"原則14日以内。住民票の添付がないと資格確認書等の到着が1週間程度遅れる（国保公式サイト）",
+    note:"総合共済の結婚祝金 3万円が別途給付されます（公式パンフレットP.6-7）", confirmed:true },
+  { id:5, tag:"家族異動", title:"家族が就職して社保加入（扶養から外す）", icon:"ti-briefcase", bg:"var(--c-pink-50)", fg:"var(--c-pink-800)",
+    docs:["資格情報のお知らせ・資格確認書・マイナポータルの情報のいずれかで社保加入の事実が確認できればOK","あわせて、土建国保を脱退するため「埼玉土建国保の資格確認書」を本人から回収"],
+    where:"支部事務所", deadline:"特になし（確認できる資料が揃い次第手続き）",
+    note:"", confirmed:true },
+  { id:9, tag:"家族異動", title:"家族が他の世帯に移った／家族が亡くなった", icon:"ti-users-minus", bg:"var(--c-pink-50)", fg:"var(--c-pink-800)",
+    docs:["資格確認書等（本人分）","個人番号記載の住民票の除票（対象家族分）"],
+    where:"支部事務所", deadline:"原則14日以内",
+    note:"「家族減少届」として扱います（国保公式サイト）", confirmed:true },
+  { id:10, tag:"住所・氏名", title:"住所が変わった（引越し・市町村統合等）", icon:"ti-home-move", bg:"var(--c-blue-50)", fg:"var(--c-blue-800)",
+    docs:["個人番号記載の世帯全員の住民票（住所表示変更のみの場合は変更通知でも可）","資格確認書等"],
+    where:"支部事務所", deadline:"特になし",
+    note:"", confirmed:true },
+  { id:11, tag:"住所・氏名", title:"氏名が変わった（結婚等）", icon:"ti-signature", bg:"var(--c-blue-50)", fg:"var(--c-blue-800)",
+    docs:["個人番号記載の世帯全員の住民票","資格確認書等"],
+    where:"支部事務所", deadline:"特になし",
+    note:"", confirmed:true },
+  { id:12, tag:"脱退", title:"埼玉土建国保をやめるとき", icon:"ti-door-exit", bg:"var(--c-coral-50)", fg:"var(--c-coral-800)",
+    docs:["資格喪失（脱退）届","資格確認書等の返還"],
+    where:"支部事務所", deadline:"特になし",
+    note:"組合員が死亡した場合は、住民票を添えて葬祭費の手続きも同時に行う（国保公式サイト）", confirmed:true },
+  { id:13, tag:"再交付", title:"資格確認書等の紛失・破損・汚損", icon:"ti-replace", bg:"var(--c-amber-50)", fg:"var(--c-amber-800)",
+    docs:["本人とわかる書類（運転免許証・パスポート等）","個人番号（マイナンバー）がわかるもの"],
+    where:"支部事務所", deadline:"特になし",
+    note:"見つかった場合は古い方を返却。盗難・外出先での紛失は必ず警察に届出を（国保公式サイト）", confirmed:true },
+  { id:14, tag:"住所・氏名", title:"修学のため住民票を移動したとき", icon:"ti-school", bg:"var(--c-blue-50)", fg:"var(--c-blue-800)",
+    docs:["在学証明書","転居先の個人番号記載の住民票"],
+    where:"支部事務所", deadline:"特になし",
+    note:"", confirmed:true },
+  { id:6, tag:"加入", title:"法人化・従業員5人以上化（適用除外申請）", icon:"ti-building", bg:"var(--c-teal-50)", fg:"var(--c-teal-800)",
+    docs:["まずは支部事務所に要相談（個別の事情により対応が異なるため）"],
+    where:"支部事務所に要相談（最終的には年金事務所での手続き）", deadline:"要相談",
+    note:"土建国保または中建国保加入者が法人設立時に適用除外をした場合、総合共済から5万円の支援金あり（公式パンフレットP.7）", confirmed:true },
+  { id:7, tag:"労働保険", title:"労働保険（労災・雇用保険）の新規加入", icon:"ti-shield-check", bg:"var(--c-green-50)", fg:"var(--c-green-800)",
+    docs:["【労災保険】法人代表者印または個人の認め印／保険料引き落とし口座の通帳／銀行印／初年度労災保険料","【雇用保険】法人登記簿謄本または個人の住民票／事業実態がわかる書類／代表者印または認め印／通帳・銀行印／労働者名簿・賃金台帳・出勤簿／雇用保険被保険者証／個人番号がわかるもの／初年度雇用保険料／顔写真付き身分証／法人番号がわかるもの／在留カード（外国人労働者）"],
+    where:"支部事務所（埼玉土建は厚生労働大臣認可の労働保険事務組合）", deadline:"事業主は労働者を雇った場合は強制加入",
+    note:"建設現場では下請労働者のケガは原則「元請労災」が適用されるため、事業主・一人親方は別途「特別加入」が必要（公式パンフレットP.18-19）", confirmed:true },
+  { id:8, tag:"労働保険", title:"一人親方労災保険（特別加入）", icon:"ti-helmet", bg:"var(--c-green-50)", fg:"var(--c-green-800)",
+    docs:["本人確認書類（顔写真付き：運転免許証・マイナンバーカード・パスポート等）","認め印","保険料引き落とし口座の通帳・銀行印","初年度保険料","（給付基礎日額18,000円以上の場合）確定申告書・所得証明書など前年度収入のわかるもの"],
+    where:"支部事務所", deadline:"特になし（現場に入る前の加入を推奨）",
+    note:"医療費全額無料、休業補償額は給付基礎日額の約8割（公式パンフレットP.19）", confirmed:true },
+  { id:15, tag:"国保給付", title:"病気・ケガで4日以上休業した（傷病手当金）", icon:"ti-bandage", bg:"var(--c-purple-50)", fg:"var(--c-purple-800)",
+    docs:["傷病手当金申請書（支部事務所か近くの役員から受取り）","医師による「労務不能の意見」の記入"],
+    where:"支部事務所", deadline:"4日以上連続休業した場合、1日目から支給対象",
+    note:"病気区分・ケガ区分それぞれ最大180日分。組合員区分により日額が異なる（第3種なら病気入院1日5,000円）。交通事故・労災・仕事中の事故は対象外（国保公式サイト）", confirmed:true },
+  { id:16, tag:"国保給付", title:"出産した（出産育児一時金）", icon:"ti-baby-carriage", bg:"var(--c-purple-50)", fg:"var(--c-purple-800)",
+    docs:["出産育児一時金等支給申請書","（直接支払制度利用時）合意文書の原本＋領収書または明細書の写し"],
+    where:"支部事務所（事前に医療機関と「直接支払制度」の合意文書を取り交わす）", deadline:"出産日に埼玉土建国保加入、妊娠12週以上の出産が条件",
+    note:"1児につき50万円（産科医療補償制度対象外の場合48万8,000円）。窓口負担を抑える「直接支払制度」が利用可能（国保公式サイト）", confirmed:true },
+  { id:17, tag:"国保給付", title:"医療費が高額になりそう（限度額適用認定証）", icon:"ti-receipt", bg:"var(--c-purple-50)", fg:"var(--c-purple-800)",
+    docs:["限度額適用・標準負担額減額認定申請書","資格確認書または資格情報のお知らせ","マイナンバーと身元確認書類（運転免許証・マイナンバーカード等）"],
+    where:"支部事務所（書類点検後、国保本部へ送付）", deadline:"事前申請が必要（受診前に支部窓口へ）",
+    note:"申請書類に不備がなければ本部到着の翌日に交付。窓口負担が自己負担限度額までに軽減される（国保公式サイト）", confirmed:true },
+  { id:18, tag:"国保給付", title:"組合員・家族が亡くなった（葬祭費）", icon:"ti-flower", bg:"var(--c-purple-50)", fg:"var(--c-purple-800)",
+    docs:["葬祭費申請書","葬儀の領収書（または「会葬御礼」）"],
+    where:"支部事務所", deadline:"特になし",
+    note:"7万円を葬儀をあげた人（通常は喪主）へ支給。喪主が国保未加入でも受給可（国保公式サイト）", confirmed:true },
+  { id:19, tag:"共済金", title:"病気・ケガ・死亡時の共済金（総合共済）", icon:"ti-shield-heart", bg:"var(--c-coral-50)", fg:"var(--c-coral-800)",
+    docs:["共済金請求書（班の仲間の審査と支部審査が必要）","本人または家族が班会議に出席し班審査を受ける","医師証明（医療機関が原則。接骨院等は医師の指示による受診のみ可）"],
+    where:"支部事務所（班審査を経て申請）", deadline:"事由発生の翌日から1年以内（本人死亡・重度障害は3年以内）",
+    note:"A型共済（〜59歳加入）は病気入院1日5,000円・本人死亡100万円。69歳までの組合員は自動加入、掛金は組合費に含まれる（公式パンフレットP.6-7）", confirmed:true }
+];
+
+const MERITS = [
+  { cat:"共済・保障", icon:"ti-shield-heart", bg:"var(--c-coral-50)", fg:"var(--c-coral-800)", title:"総合共済", desc:"月1,390円（組合費に含む）で病気・ケガの休業補償、死亡保障、結婚・出生等の祝金、資格取得祝金まで幅広くカバー。" },
+  { cat:"共済・保障", icon:"ti-heart-plus", bg:"var(--c-coral-50)", fg:"var(--c-coral-800)", title:"埼玉土建国保", desc:"入院医療費の全額払戻しなど、組合員・家族とも手厚い給付制度。傷病手当金は最大180日分支給。" },
+  { cat:"共済・保障", icon:"ti-lungs", bg:"var(--c-coral-50)", fg:"var(--c-coral-800)", title:"じん肺・アスベスト対策", desc:"建設従事者に多い職業病。組織をあげて被害者救済・労災認定支援に取り組んでいます。" },
+  { cat:"共済・保障", icon:"ti-piggy-bank", bg:"var(--c-coral-50)", fg:"var(--c-coral-800)", title:"建設業退職金共済（建退共）", desc:"元請が現場で証紙を貼ることで積み立てる、建設労働者のための国の退職金制度。" },
+  { cat:"労働環境", icon:"ti-shield-check", bg:"var(--c-green-50)", fg:"var(--c-green-800)", title:"労働保険（労災・雇用保険）", desc:"埼玉土建の各支部は厚生労働大臣認可の労働保険事務組合。加入手続きを支部で完結できます。" },
+  { cat:"労働環境", icon:"ti-id", bg:"var(--c-green-50)", fg:"var(--c-green-800)", title:"CCUS（建設キャリアアップシステム）", desc:"各支部が認定登録機関のため、登録手続き・相談を支部で対応可能。" },
+  { cat:"労働環境", icon:"ti-briefcase", bg:"var(--c-green-50)", fg:"var(--c-green-800)", title:"労働者供給事業", desc:"国の認可を受けた事業で、安心して働ける現場環境づくりを支援。" },
+  { cat:"仕事支援", icon:"ti-home-check", bg:"var(--c-amber-50)", fg:"var(--c-amber-800)", title:"住推協（住宅リフォーム推進サポート協議会）", desc:"消費者が安心して選べる事業者として、国の登録制度に対応した団体に加入できます。" },
+  { cat:"仕事支援", icon:"ti-certificate", bg:"var(--c-amber-50)", fg:"var(--c-amber-800)", title:"資格取得支援", desc:"埼玉土建技術研修センターで技能検定支援・各種作業主任者講習を実施。資格取得祝金も充実。" },
+  { cat:"仕事支援", icon:"ti-building-bank", bg:"var(--c-amber-50)", fg:"var(--c-amber-800)", title:"建築支援センター", desc:"国土交通大臣指定の法定建築士講習を実施。" },
+  { cat:"補償・保険", icon:"ti-shield", bg:"var(--c-blue-50)", fg:"var(--c-blue-800)", title:"総合賠償責任補償", desc:"工事中・引渡後の事故まで補償。業務災害・通勤災害の政府労災への上乗せ補償も。" },
+  { cat:"補償・保険", icon:"ti-car", bg:"var(--c-blue-50)", fg:"var(--c-blue-800)", title:"自動車共済", desc:"団体割引で民間損保よりお得。走行距離・使用目的による割増なし、全車種ロードサービス付帯。" },
+  { cat:"補償・保険", icon:"ti-bike", bg:"var(--c-blue-50)", fg:"var(--c-blue-800)", title:"サイクるん（自転車保険）", desc:"年間4,250円（家族型）で相手への賠償3億円・自身のケガも補償。国内最大級の安さ。" },
+  { cat:"補償・保険", icon:"ti-flame", bg:"var(--c-blue-50)", fg:"var(--c-blue-800)", title:"どけん火災共済・地震共済", desc:"月500円程度の掛金で最大1,000万円規模の保障。火災共済加入で地震共済にも加入可。" },
+  { cat:"生活サポート", icon:"ti-credit-card", bg:"var(--c-purple-50)", fg:"var(--c-purple-800)", title:"DOKENカード", desc:"埼玉県内700店以上の登録店と全国の提携施設で優待が受けられる組合員カード。" },
+  { cat:"生活サポート", icon:"ti-bed", bg:"var(--c-purple-50)", fg:"var(--c-purple-800)", title:"宿帳（指定宿泊施設利用補助）", desc:"関東周辺の提携宿泊施設で、1人3,000円まで補助。家族旅行を応援。" },
+  { cat:"生活サポート", icon:"ti-scale", bg:"var(--c-purple-50)", fg:"var(--c-purple-800)", title:"各種相談（弁護士・税理士等）", desc:"弁護士・税理士・社労士・行政書士・司法書士の士業ネットワークで無料相談に対応。" },
+  { cat:"仲間づくり", icon:"ti-users", bg:"var(--c-teal-50)", fg:"var(--c-teal-800)", title:"班会議・青年部・主婦の会・シニア友の会", desc:"地域の仲間とつながり、現場の悩みを共有できる場。コンビニ・スマホ払いへの移行も進行中。" }
+];
+
+let currentMode = "tetsuzuki";
+
+function setMode(mode){
+  currentMode = mode;
+  document.getElementById('panel-tetsuzuki').style.display = mode === 'tetsuzuki' ? 'block' : 'none';
+  document.getElementById('panel-merit').style.display = mode === 'merit' ? 'block' : 'none';
+  const tBtn = document.getElementById('mode-tetsuzuki');
+  const mBtn = document.getElementById('mode-merit');
+  if(mode === 'tetsuzuki'){
+    tBtn.classList.add('active'); mBtn.classList.remove('active');
+  } else {
+    mBtn.classList.add('active'); tBtn.classList.remove('active');
+  }
+}
+
+function renderMerits(){
+  const el = document.getElementById('merit-list');
+  el.innerHTML = '';
+  const cats = [...new Set(MERITS.map(m => m.cat))];
+  cats.forEach(cat=>{
+    const catHeader = document.createElement('p');
+    catHeader.style.fontSize = '12px';
+    catHeader.style.fontWeight = '500';
+    catHeader.style.color = 'var(--color-text-secondary)';
+    catHeader.style.margin = '14px 0 6px';
+    catHeader.textContent = cat;
+    el.appendChild(catHeader);
+
+    MERITS.filter(m => m.cat === cat).forEach(m=>{
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.style.padding = '0.85rem 1.1rem';
+      card.style.marginBottom = '10px';
+      card.innerHTML = `
+        <div style="display:flex; align-items:flex-start; gap:10px;">
+          <div class="icon-circle" style="width:32px; height:32px; background:${m.bg}; color:${m.fg};">
+            <i class="ti ${m.icon}" style="font-size:16px;" aria-hidden="true"></i>
+          </div>
+          <div>
+            <p style="font-size:14px; font-weight:500; margin:0 0 4px;">${m.title}</p>
+            <p style="font-size:13px; color:var(--color-text-secondary); margin:0;">${m.desc}</p>
+          </div>
+        </div>
+      `;
+      el.appendChild(card);
+    });
+  });
+}
+
+const TAGS = ["すべて","加入","家族異動","住所・氏名","脱退","再交付","労働保険","国保給付","共済金"];
+let activeTag = "すべて";
+
+function renderFilters(){
+  const el = document.getElementById('filters');
+  el.innerHTML = '';
+  TAGS.forEach(tag=>{
+    const btn = document.createElement('button');
+    btn.textContent = tag;
+    if(tag === activeTag) btn.classList.add('active');
+    btn.onclick = () => { activeTag = tag; renderFilters(); renderList(); };
+    el.appendChild(btn);
+  });
+}
+
+function renderList(){
+  const q = document.getElementById('search').value.trim().toLowerCase();
+  const list = document.getElementById('list');
+  list.innerHTML = '';
+
+  const filtered = ITEMS.filter(item=>{
+    const tagMatch = activeTag === 'すべて' || item.tag === activeTag;
+    const text = (item.title + item.docs.join(' ') + item.tag).toLowerCase();
+    const qMatch = q === '' || text.includes(q);
+    return tagMatch && qMatch;
+  });
+
+  if(filtered.length === 0){
+    list.innerHTML = '<p class="empty">該当する項目が見つかりませんでした</p>';
+    return;
+  }
+
+  filtered.forEach(item=>{
+    const card = document.createElement('div');
+    card.className = 'card';
+
+    const docsHtml = item.docs.map(d => '<li>' + d + '</li>').join('');
+    const badgeClass = item.confirmed ? 'ok' : 'warn';
+    const badgeText = item.confirmed ? '確認済み' : '要確認';
+    const noteHtml = item.note ? `<p class="note"><i class="ti ti-info-circle" aria-hidden="true"></i>${item.note}</p>` : '';
+
+    card.innerHTML = `
+      <div class="card-head">
+        <div class="card-head-left">
+          <div class="icon-circle" style="background:${item.bg}; color:${item.fg};">
+            <i class="ti ${item.icon}" aria-hidden="true"></i>
+          </div>
+          <p class="card-title">${item.title}</p>
+        </div>
+        <span class="badge ${badgeClass}">${badgeText}</span>
+      </div>
+      <div class="card-body">
+        <p class="label">必要書類</p>
+        <ul class="docs">${docsHtml}</ul>
+        <div class="meta-row">
+          <div>
+            <p class="label">提出先</p>
+            <p>${item.where}</p>
+          </div>
+          <div>
+            <p class="label">期限</p>
+            <p>${item.deadline}</p>
+          </div>
+        </div>
+        ${noteHtml}
+      </div>
+    `;
+    list.appendChild(card);
+  });
+}
+
+document.getElementById('search').addEventListener('input', renderList);
+renderFilters();
+renderList();
+renderMerits();
+setMode('tetsuzuki');
+</script>
+</body>
+</html>
