@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>どけんカード登録店｜埼玉土建 上尾伊奈支部</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.47.0/iconfont/tabler-icons.min.css">
+<link rel="stylesheet" href="common.css">
+<style>
+/* デジタルカード */
+.digital-card {
+  background: linear-gradient(135deg, #1B2A3B 0%, #0D4A7A 50%, #1B2A3B 100%);
+  border-radius: var(--r16);
+  padding: 24px 20px;
+  margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+.digital-card::before {
+  content: '';
+  position: absolute;
+  right: -30px; top: -30px;
+  width: 160px; height: 160px;
+  background: rgba(232,97,42,.15);
+  border-radius: 50%;
+}
+.digital-card::after {
+  content: '';
+  position: absolute;
+  left: -20px; bottom: -40px;
+  width: 120px; height: 120px;
+  background: rgba(255,255,255,.04);
+  border-radius: 50%;
+}
+.card-logo {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 20px;
+}
+.card-logo-icon {
+  width: 40px; height: 40px; background: var(--orange);
+  border-radius: var(--r8); display: flex; align-items: center; justify-content: center;
+}
+.card-logo-icon i { font-size: 22px; color: white; }
+.card-logo-text { font-size: 20px; font-weight: 800; color: white; letter-spacing: .04em; }
+.card-logo-sub { font-size: 11px; color: rgba(255,255,255,.5); }
+.card-number {
+  font-size: 14px; letter-spacing: .2em; color: rgba(255,255,255,.5);
+  font-family: monospace; margin-bottom: 16px;
+}
+.card-member { font-size: 16px; font-weight: 700; color: white; margin: 0 0 2px; }
+.card-org { font-size: 12px; color: rgba(255,255,255,.5); margin: 0; }
+.card-valid { position: absolute; right: 20px; bottom: 24px; text-align: right; }
+.card-valid-label { font-size: 10px; color: rgba(255,255,255,.4); margin: 0 0 2px; }
+.card-valid-val { font-size: 14px; font-weight: 600; color: rgba(255,255,255,.7); margin: 0; }
+
+/* クイックリンク */
+.quick-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px;
+}
+.quick-btn {
+  background: var(--white); border-radius: var(--r12); box-shadow: var(--shadow-sm);
+  padding: 14px 12px; display: flex; align-items: center; gap: 10px;
+  cursor: pointer; border: 2px solid transparent; transition: all .15s;
+  text-decoration: none; color: inherit;
+}
+.quick-btn:hover { border-color: var(--orange); box-shadow: var(--shadow-md); }
+.quick-btn i { font-size: 22px; flex-shrink: 0; }
+.quick-btn-text p { margin: 0; }
+.quick-btn-title { font-size: 13px; font-weight: 700; color: var(--navy); }
+.quick-btn-sub { font-size: 11px; color: var(--gray400); }
+
+/* カテゴリグリッド */
+.cat-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 16px;
+}
+.cat-card {
+  background: var(--white); border-radius: var(--r16); box-shadow: var(--shadow-sm);
+  overflow: hidden; cursor: pointer; transition: all .15s;
+  border: 2px solid transparent;
+}
+.cat-card:hover { border-color: var(--orange); box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.cat-card-head {
+  padding: 16px 14px 10px;
+  display: flex; align-items: center; gap: 10px;
+}
+.cat-icon {
+  width: 42px; height: 42px; border-radius: var(--r12);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.cat-icon i { font-size: 22px; }
+.cat-name { font-size: 14px; font-weight: 700; color: var(--navy); margin: 0; }
+.cat-sub { font-size: 11px; color: var(--gray400); margin: 2px 0 0; }
+.cat-keywords {
+  display: flex; gap: 4px; flex-wrap: wrap;
+  padding: 0 14px 12px;
+}
+.cat-kw {
+  font-size: 11px; background: var(--gray50); color: var(--gray600);
+  padding: 3px 8px; border-radius: 99px; font-weight: 500;
+  text-decoration: none; transition: all .15s;
+}
+.cat-kw:hover { background: var(--orange-lt); color: var(--orange); }
+
+/* エリアボタン */
+.area-btns { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+.area-btn {
+  flex: 1; min-width: 120px; padding: 12px 16px;
+  background: var(--white); border-radius: var(--r12); box-shadow: var(--shadow-sm);
+  border: 2px solid transparent; cursor: pointer; transition: all .15s;
+  text-decoration: none; color: inherit; display: flex; align-items: center; gap: 8px;
+}
+.area-btn:hover { border-color: var(--orange); }
+.area-btn i { font-size: 18px; color: var(--orange); }
+.area-btn-title { font-size: 14px; font-weight: 700; color: var(--navy); margin: 0; }
+.area-btn-sub { font-size: 11px; color: var(--gray400); margin: 0; }
+
+/* 注意書き */
+.caution {
+  background: var(--gray50); border-radius: var(--r12);
+  padding: 14px 16px; font-size: 13px; color: var(--gray600);
+  border-left: 4px solid var(--gray200); margin-bottom: 16px;
+}
+.caution p { margin: 0 0 6px; }
+.caution p:last-child { margin: 0; }
+</style>
+</head>
+<body>
+<div class="app">
+<header class="hdr">
+  <button class="hdr-back" onclick="location.href='index.html'">
+    <i class="ti ti-arrow-left"></i>ホーム
+  </button>
+  <div style="text-align:right;">
+    <p class="hdr-org" style="margin:0;">組合員向け優待</p>
+    <p class="hdr-title" style="margin:0;font-size:14px;">どけんカード登録店</p>
+  </div>
+</header>
+
+<div class="content">
+
+  <!-- デジタルカード -->
+  <div class="digital-card">
+    <div class="card-logo">
+      <div class="card-logo-icon"><i class="ti ti-credit-card"></i></div>
+      <div>
+        <p class="card-logo-text">DOKEN CARD</p>
+        <p class="card-logo-sub">埼玉土建一般労働組合</p>
+      </div>
+    </div>
+    <p class="card-number">**** **** **** ****</p>
+    <p class="card-member">上尾伊奈支部 組合員</p>
+    <p class="card-org">埼玉土建一般労働組合</p>
+    <div class="card-valid">
+      <p class="card-valid-label">VALID THRU</p>
+      <p class="card-valid-val">組合員証をご提示</p>
+    </div>
+  </div>
+
+  <div class="caution">
+    <p><i class="ti ti-lock" style="font-size:14px;vertical-align:-2px;margin-right:4px;color:var(--gray400);"></i>どけんカードは<strong>組合員と家族のみ</strong>が利用できます。</p>
+    <p><i class="ti ti-alert-triangle" style="font-size:14px;vertical-align:-2px;margin-right:4px;color:var(--gray400);"></i>本サイトの情報を組合外・SNSに流出させることは禁止されています。</p>
+  </div>
+
+  <!-- クイック検索 -->
+  <p class="sec-label">エリアから探す</p>
+  <div class="area-btns">
+    <a href="https://doken-card.jp/dc/result?category=01&city=%E4%B8%8A%E5%B0%BE%E5%B8%82" target="_blank" class="area-btn">
+      <i class="ti ti-map-pin"></i>
+      <div>
+        <p class="area-btn-title">上尾市の店舗</p>
+        <p class="area-btn-sub">全カテゴリ</p>
+      </div>
+    </a>
+    <a href="https://doken-card.jp/dc/result?category=01&city=%E4%BC%8A%E5%A5%88%E7%94%BA" target="_blank" class="area-btn">
+      <i class="ti ti-map-pin"></i>
+      <div>
+        <p class="area-btn-title">伊奈町の店舗</p>
+        <p class="area-btn-sub">全カテゴリ</p>
+      </div>
+    </a>
+  </div>
+
+  <div class="quick-grid">
+    <a href="https://doken-card.jp/dc/map" target="_blank" class="quick-btn">
+      <i class="ti ti-current-location" style="color:var(--orange);"></i>
+      <div class="quick-btn-text">
+        <p class="quick-btn-title">現在地から探す</p>
+        <p class="quick-btn-sub">GPS で近くの店舗</p>
+      </div>
+    </a>
+    <a href="https://doken-card.jp/dc/address" target="_blank" class="quick-btn">
+      <i class="ti ti-building-store" style="color:var(--blue);"></i>
+      <div class="quick-btn-text">
+        <p class="quick-btn-title">市区町村から探す</p>
+        <p class="quick-btn-sub">全国の登録店舗</p>
+      </div>
+    </a>
+    <a href="https://doken-card.jp/dc/favorite" target="_blank" class="quick-btn">
+      <i class="ti ti-heart" style="color:var(--red);"></i>
+      <div class="quick-btn-text">
+        <p class="quick-btn-title">お気に入り店舗</p>
+        <p class="quick-btn-sub">保存したリスト</p>
+      </div>
+    </a>
+    <a href="https://doken-card.jp/dc/card" target="_blank" class="quick-btn">
+      <i class="ti ti-id" style="color:var(--green);"></i>
+      <div class="quick-btn-text">
+        <p class="quick-btn-title">デジタルカード</p>
+        <p class="quick-btn-sub">公式アプリ版</p>
+      </div>
+    </a>
+  </div>
+
+  <!-- カテゴリ別 -->
+  <p class="sec-label">カテゴリから探す</p>
+  <div class="cat-grid">
+
+    <div class="cat-card" onclick="openCat('01')">
+      <div class="cat-card-head">
+        <div class="cat-icon" style="background:#FEE8D6;">
+          <i class="ti ti-tools-kitchen-2" style="color:#C04E1E;"></i>
+        </div>
+        <div>
+          <p class="cat-name">食べる・飲む</p>
+          <p class="cat-sub">飲食店・居酒屋</p>
+        </div>
+      </div>
+      <div class="cat-keywords">
+        <a onclick="event.stopPropagation()" href="https://doken-card.jp/dc/result?category=01&keyword=%E5%B1%85%E9%85%92%E5%B1%8B" target="_blank" class="cat-kw">居酒屋</a>
+        <a onclick="event.stopPropagation()" href="https://doken-card.jp/dc/result?category=01&keyword=%E5%92%8C%E9%A3%9F" target="_blank" class="cat-kw">和食</a>
+        <a onclick="event.stopPropagation()" href="https://doken-card.jp/dc/result?category=01&keyword=%E6%B4%8B%E9%A3%9F" target="_blank" class="cat-kw">洋食</a>
+        <a onclick="event.stopPropagation()" href="https://doken-card.jp/dc/result?category=01&keyword=%E4%B8%AD%E8%8F%AF" target="_blank" class="cat-kw">中華</a>
+      </div>
+    </div>
+
+    <div class="cat-card" onclick="openCat('02')">
+      <div class="cat-card-head">
+        <div class="cat-icon" style="background:#E8F5EE;">
+          <i class="ti ti-rollercoaster" style="color:#1A7A4A;"></i>
+        </div>
+        <div>
+          <p class="cat-name">レジャー・教養</p>
+          <p class="cat-sub">宿泊・娯楽</p>
+        </div>
+      </div>
+      <div class="cat-keywords">
+        <a onclick="event.stopPropagation()" href="https://doken-card.jp/dc/result?category=02&keyword=%E3%83%9B%E3%83%86%E3%83%AB%E3%83%BB%E6%97%85%E9%A4%A8%E3%83%BB%E6%B8%A9%E6%B3%89" target="_blank" class="cat-kw">ホテル・温泉</a>
+        <a onclick="event.stopPropagation()" href="https://doken-card.jp/dc/result?category=02&keyword=%E3%82%AB%E3%83%A9%E3%82%AA%E3%82%B1" target="_blank" class="cat-kw">カラオケ</a>
+        <a onclick="event.stopPropagation()" href="https://doken-card.jp/dc/result?category=02&keyword=%E3%83%9C%E3%82%A6%E3%83%AA%E3%83%B3%E3%82%B0" target="_blank" class="cat-kw">ボウリング</a>
+      </div>
+    </div>
+
+    <div class="cat-card" onclick="openCat('03')">
+      <div class="cat-card-head">
+        <div class="cat-icon" style="background:#E8F0FB;">
+          <i class="ti ti-shopping-bag" style="color:#1A5FA8;"></i>
+        </div>
+        <div>
+          <p class="cat-name">ショッピング</p>
+          <p class="cat-sub">工具・資材・衣料</p>
+        </div>
+      </div>
+      <div class="cat-keywords">
+        <a onclick="event.stopPropagation()" href="https://doken-card.jp/dc/result?category=03&keyword=%E5%B7%A5%E5%85%B7%E3%83%BB%E8%B3%87%E6%9D%90" target="_blank" class="cat-kw">工具・資材</a>
+        <a onclick="event.stopPropagation()" href="https://doken-card.jp/dc/result?category=03&keyword=%E8%A1%A3%E6%96%99%E5%93%81" target="_blank" class="cat-kw">衣料品</a>
+        <a onclick="event.stopPropagation()" href="https://doken-card.jp/dc/result?category=03&keyword=%E9%A3%9F%E5%93%81" target="_blank" class="cat-kw">食品</a>
+        <a onclick="event.stopPropagation()" href="https://doken-card.jp/dc/result?category=03&keyword=%E8%B6%A3%E5%91%B3" target="_blank" class="cat-kw">趣味</a>
+      </div>
+    </div>
+
+    <div class="cat-card" onclick="openCat('04')">
+      <div class="cat-card-head">
+        <div class="cat-icon" style="background:#EDE8FE;">
+          <i class="ti ti-heart-plus" style="color:#6B21A8;"></i>
+        </div>
+        <div>
+          <p class="cat-name">美容・健康</p>
+          <p class="cat-sub">美容室・クリニック</p>
+        </div>
+      </div>
+      <div class="cat-keywords">
+        <a onclick="event.stopPropagation()" href="https://doken-card.jp/dc/result?category=04&keyword=%E7%90%86%E5%AE%B9%E3%83%BB%E7%BE%8E%E5%AE%B9%E5%AE%A4" target="_blank" class="cat-kw">理容・美容室</a>
+        <a onclick="event.stopPropagation()" href="https://doken-card.jp/dc/result?category=04&keyword=%E8%A8%BA%E7%99%82" target="_blank" class="cat-kw">診療</a>
+        <a onclick="event.stopPropagation()" href="https://doken-card.jp/dc/result?category=04&keyword=%E3%82%B8%E3%83%A0" target="_blank" class="cat-kw">ジム</a>
+        <a onclick="event.stopPropagation()" href="https://doken-card.jp/dc/result?category=04&keyword=%E3%82%A8%E3%82%B9%E3%83%86" target="_blank" class="cat-kw">エステ</a>
+      </div>
+    </div>
+
+    <div class="cat-card" onclick="openCat('05')" style="grid-column:1/-1;">
+      <div class="cat-card-head">
+        <div class="cat-icon" style="background:#FFF8E6;">
+          <i class="ti ti-car" style="color:#B07800;"></i>
+        </div>
+        <div>
+          <p class="cat-name">車・仕事・その他</p>
+          <p class="cat-sub">車・仕事支援・生活相談・冠婚葬祭</p>
+        </div>
+      </div>
+      <div class="cat-keywords">
+        <a onclick="event.stopPropagation()" href="https://doken-card.jp/dc/result?category=05&keyword=%E8%BB%8A" target="_blank" class="cat-kw">車</a>
+        <a onclick="event.stopPropagation()" href="https://doken-card.jp/dc/result?category=05&keyword=%E4%BB%95%E4%BA%8B%E6%94%AF%E6%8F%B4" target="_blank" class="cat-kw">仕事支援</a>
+        <a onclick="event.stopPropagation()" href="https://doken-card.jp/dc/result?category=05&keyword=%E7%94%9F%E6%B4%BB%E7%9B%B8%E8%AB%87" target="_blank" class="cat-kw">生活相談</a>
+        <a onclick="event.stopPropagation()" href="https://doken-card.jp/dc/result?category=05&keyword=%E5%86%A0%E5%A9%9A%E8%91%AC%E7%A5%AD" target="_blank" class="cat-kw">冠婚葬祭</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 公式サイトへ -->
+  <a href="https://doken-card.jp/dc/top" target="_blank" rel="noopener" class="btn-primary" style="display:flex;margin-bottom:12px;">
+    <i class="ti ti-external-link"></i>どけんカード公式サイトで検索する
+  </a>
+  <div class="alert alert-info">
+    <i class="ti ti-info-circle"></i>
+    <span>店舗情報は公式サイト（doken-card.jp）に直接移動します。最新の優待内容・営業時間は各店舗にご確認ください。</span>
+  </div>
+
+</div>
+<footer>埼玉土建一般労働組合 上尾伊奈支部｜TEL 048-773-9863</footer>
+</div>
+
+<script>
+function openCat(cat) {
+  window.open(`https://doken-card.jp/dc/result?category=${cat}`, '_blank');
+}
+</script>
+</body>
+</html>
