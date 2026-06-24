@@ -100,19 +100,8 @@
 .empty p { font-size: 15px; margin: 0; }
 .panel { display: none; }
 .panel.on { display: block; }
-/* 検索結果はタブの下に積み上げ */
-#search-result.on {
-  display: block;
-  border-top: 2px dashed #ECEEF2;
-  padding-top: 14px;
-  margin-top: 14px;
-}
-#search-result-label {
-  font-size: 13px; font-weight: 700; color: #E8612A;
-  background: #FFF0E9; border-radius: 8px;
-  padding: 6px 12px; margin-bottom: 12px; display: none;
-}
-#search-result-label.on { display: block; }
+/* 検索件数バナー */
+#search-result.on { display: block; margin-bottom: 10px; }
 </style>
 </head>
 <body>
@@ -148,6 +137,8 @@
     <i class="ti ti-search"></i>
     <input type="text" id="search" placeholder="🔍 キーワードで全カテゴリを横断検索" oninput="doSearch(this.value)">
   </div>
+  <!-- 検索件数バナー（タブの上に表示） -->
+  <div id="search-result" class="panel"></div>
 
   <!-- ===== パネル1：組合加入 ===== -->
   <div class="panel on" id="p1">
@@ -197,8 +188,7 @@
     <div id="p4-3" class="panel"></div>
   </div>
 
-  <!-- 検索結果（タブと並列表示・キーワードがある場合のみ表示） -->
-  <div id="search-result" class="panel" style="margin-top:0;"></div>
+
 
   <div style="background:#F5F6F8;border-radius:8px;padding:10px 14px;font-size:12px;color:#8B90A0;margin-top:8px;">
     <i class="ti ti-info-circle" style="font-size:13px;vertical-align:-2px;margin-right:4px;"></i>
@@ -491,39 +481,48 @@ function sTab(m, n) {
 }
 
 // ===== 検索 =====
+// タブは常時表示。検索ワードに合わないカードだけ非表示にする。
 function doSearch(q) {
+  const lq = q.trim().toLowerCase();
+  const allCards = document.querySelectorAll('.gcard');
   const sr = document.getElementById('search-result');
-  if(!q.trim()){
+
+  if(!lq){
+    // 検索ワードなし → 全カード表示に戻す
+    allCards.forEach(c => c.style.display = '');
+    // 各サブパネルの「該当なし」メッセージを消す
+    document.querySelectorAll('.no-match-msg').forEach(e => e.remove());
     sr.classList.remove('on');
     sr.innerHTML = '';
     return;
   }
-  const lq = q.toLowerCase();
-  // カテゴリ名マッピング
-  const CAT_NAMES = {'1':'組合加入','2':'土建国保','3':'総合共済','4':'労働保険'};
-  const CAT_COLORS = {'1':'#1A7A4A','2':'#4A1A9B','3':'#9B3A1A','4':'#0C447C'};
-  const CAT_BG = {'1':'#E8F5EE','2':'#EDE8FE','3':'#FEF0ED','4':'#E8F0FB'};
-  let html = '';
-  let count = 0;
-  for(const [key, items] of Object.entries(DATA)){
-    const m = key.split('-')[0];
-    for(const d of items){
-      const text = (d.title + d.docs.join(' ') + (d.note||'')).toLowerCase();
-      if(text.includes(lq)){
-        // カテゴリバッジ付きで表示
-        const withBadge = Object.assign({}, d, {
-          _catBadge: `<span style="font-size:11px;font-weight:700;background:${CAT_BG[m]};color:${CAT_COLORS[m]};padding:2px 8px;border-radius:99px;margin-left:8px;">${CAT_NAMES[m]}</span>`
-        });
-        html += card(d, CAT_COLORS[m], withBadge._catBadge);
-        count++;
-      }
+
+  // カードごとにテキストマッチを確認
+  let totalHit = 0;
+  allCards.forEach(c => {
+    const text = c.textContent.toLowerCase();
+    const hit = text.includes(lq);
+    c.style.display = hit ? '' : 'none';
+    if(hit) totalHit++;
+  });
+
+  // 各サブパネルに「該当なし」メッセージを出す
+  document.querySelectorAll('.no-match-msg').forEach(e => e.remove());
+  document.querySelectorAll('[id^="p"][id$="-1"],[id^="p"][id$="-2"],[id^="p"][id$="-3"],[id^="p"][id$="-4"]').forEach(panel => {
+    const visible = [...panel.querySelectorAll('.gcard')].some(c => c.style.display !== 'none');
+    if(!visible && panel.querySelector('.gcard')){
+      const msg = document.createElement('p');
+      msg.className = 'no-match-msg';
+      msg.style.cssText = 'text-align:center;padding:20px;color:#A0A5B4;font-size:13px;';
+      msg.textContent = '「' + q + '」に一致する項目はありません';
+      panel.appendChild(msg);
     }
-  }
-  if(!html){
-    sr.innerHTML = `<div class="empty"><i class="ti ti-search-off"></i><p>「${q}」に一致する項目がありませんでした</p></div>`;
-  } else {
-    sr.innerHTML = `<div style="font-size:13px;font-weight:600;color:var(--gray600);margin-bottom:10px;"><i class="ti ti-search" style="font-size:14px;vertical-align:-2px;margin-right:4px;"></i>${count}件見つかりました</div>` + html;
-  }
+  });
+
+  // 検索件数バナー
+  sr.innerHTML = totalHit > 0
+    ? `<div style="font-size:13px;font-weight:600;color:#E8612A;background:#FFF0E9;border-radius:8px;padding:8px 14px;margin-bottom:4px;"><i class="ti ti-search" style="font-size:14px;vertical-align:-2px;margin-right:4px;"></i>全カテゴリで <strong>${totalHit}件</strong> 見つかりました</div>`
+    : `<div style="font-size:13px;font-weight:600;color:#8B90A0;background:#F5F6F8;border-radius:8px;padding:8px 14px;margin-bottom:4px;"><i class="ti ti-search-off" style="font-size:14px;vertical-align:-2px;margin-right:4px;"></i>「${q}」に一致する項目がありませんでした</div>`;
   sr.classList.add('on');
 }
 
