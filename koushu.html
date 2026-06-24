@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>技能講習 日程案内｜埼玉土建 上尾伊奈支部</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.47.0/iconfont/tabler-icons.min.css">
+<link rel="stylesheet" href="common.css">
+<style>
+.koushu-hero{
+  background:linear-gradient(135deg,#4A3500,#8B6500);
+  border-radius:var(--r16);padding:20px;margin-bottom:16px;
+  display:flex;align-items:center;gap:16px;
+}
+.koushu-hero i{font-size:48px;color:var(--yellow);}
+.koushu-hero h2{font-size:20px;font-weight:800;color:var(--white);margin:0 0 4px;}
+.koushu-hero p{font-size:13px;color:rgba(255,255,255,.65);margin:0;}
+.koushu-card{
+  background:var(--white);border-radius:var(--r12);box-shadow:var(--shadow-sm);
+  padding:16px;margin-bottom:10px;
+}
+.koushu-title-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.koushu-name{font-size:15px;font-weight:700;color:var(--navy);margin:0;}
+.koushu-cat{font-size:11px;font-weight:700;padding:3px 9px;border-radius:99px;}
+.cat-gino{background:#FEE8D6;color:#7A3010;}
+.cat-tokubetsu{background:#E8F0FB;color:#0C447C;}
+.cat-yobo{background:#E8F5EE;color:#1A4A2A;}
+.date-list{display:flex;flex-direction:column;gap:6px;}
+.date-row{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--gray50);border-radius:var(--r8);}
+.date-main{font-size:14px;font-weight:600;color:var(--navy);}
+.date-sub{font-size:12px;color:var(--gray400);}
+.date-status{font-size:12px;font-weight:700;padding:3px 10px;border-radius:99px;}
+.status-ok{background:var(--green-lt);color:var(--green);}
+.status-few{background:#FFF8E6;color:#B07800;}
+.status-full{background:var(--red-lt);color:var(--red);}
+.filter-scroll{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-bottom:14px;scrollbar-width:none;}
+.filter-scroll::-webkit-scrollbar{display:none;}
+.filter-chip{
+  padding:7px 14px;border-radius:99px;border:2px solid var(--gray200);
+  font-size:13px;font-weight:600;color:var(--gray600);white-space:nowrap;
+  cursor:pointer;background:var(--white);transition:all .15s;flex-shrink:0;
+}
+.filter-chip.active{background:var(--navy);color:var(--white);border-color:var(--navy);}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="hdr">
+  <button class="hdr-back" onclick="location.href='index.html'">
+    <i class="ti ti-arrow-left"></i>ホーム
+  </button>
+  <div style="text-align:right;">
+    <p class="hdr-org" style="margin:0;">埼玉土建技術研修センター</p>
+    <p class="hdr-title" style="margin:0;font-size:14px;">2026年度 技能講習日程</p>
+  </div>
+</header>
+
+<div class="content">
+  <div class="koushu-hero">
+    <i class="ti ti-certificate"></i>
+    <div>
+      <h2>2026年度 講習日程</h2>
+      <p>26種類の講習を実施中。受講料は総合共済から全額・半額給付！</p>
+    </div>
+  </div>
+
+  <div class="alert alert-warn" style="margin-bottom:14px;">
+    <i class="ti ti-alert-triangle"></i>
+    <span>空き状況・申込みは支部事務所（048-773-9863）へお問い合わせください。日程は変更になる場合があります。</span>
+  </div>
+
+  <!-- 給付制度バナー -->
+  <div class="card" style="background:linear-gradient(135deg,#1B2A3B,#243648);border:none;">
+    <p style="font-size:13px;font-weight:700;color:var(--orange);margin:0 0 6px;letter-spacing:.06em;">💰 資格取得祝金バックアップ</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <div style="background:rgba(255,255,255,.1);border-radius:var(--r8);padding:8px 12px;flex:1;min-width:120px;">
+        <p style="font-size:11px;color:rgba(255,255,255,.5);margin:0 0 2px;">プレミアム</p>
+        <p style="font-size:16px;font-weight:800;color:var(--white);margin:0;">受講料<span style="color:var(--orange);">全額</span></p>
+        <p style="font-size:11px;color:rgba(255,255,255,.5);margin:2px 0 0;">技能講習・特別教育</p>
+      </div>
+      <div style="background:rgba(255,255,255,.1);border-radius:var(--r8);padding:8px 12px;flex:1;min-width:120px;">
+        <p style="font-size:11px;color:rgba(255,255,255,.5);margin:0 0 2px;">スペシャル</p>
+        <p style="font-size:16px;font-weight:800;color:var(--white);margin:0;">受講料<span style="color:var(--orange);">半額</span></p>
+        <p style="font-size:11px;color:rgba(255,255,255,.5);margin:2px 0 0;">作業主任者講習等</p>
+      </div>
+      <div style="background:rgba(255,255,255,.1);border-radius:var(--r8);padding:8px 12px;flex:1;min-width:120px;">
+        <p style="font-size:11px;color:rgba(255,255,255,.5);margin:0 0 2px;">クラシック</p>
+        <p style="font-size:16px;font-weight:800;color:var(--white);margin:0;"><span style="color:var(--orange);">2万円</span>給付</p>
+        <p style="font-size:11px;color:rgba(255,255,255,.5);margin:2px 0 0;">建築士・施工管理等</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- フィルター -->
+  <div class="filter-scroll" id="filters">
+    <button class="filter-chip active" onclick="filterKoushu('all',this)">すべて</button>
+    <button class="filter-chip" onclick="filterKoushu('gino',this)">技能講習</button>
+    <button class="filter-chip" onclick="filterKoushu('tokubetsu',this)">特別教育</button>
+    <button class="filter-chip" onclick="filterKoushu('yobo',this)">安全教育</button>
+  </div>
+
+  <div id="koushu-list"></div>
+
+  <!-- 公式リンク -->
+  <div class="card">
+    <p class="sec-label">詳細・最新日程</p>
+    <a href="https://www.sd-gcenter.jp/2_ginoukousyu/2_ginoukousyu2026.htm" target="_blank" class="btn-secondary" style="display:flex;margin-bottom:8px;">
+      <i class="ti ti-external-link"></i>埼玉土建技術研修センター 公式サイト
+    </a>
+    <a href="tel:048-773-9863" class="btn-primary" style="display:flex;">
+      <i class="ti ti-phone"></i>支部に電話して申込む（048-773-9863）
+    </a>
+  </div>
+</div>
+
+<footer>埼玉土建一般労働組合 上尾伊奈支部｜TEL 048-773-9863</footer>
+</div>
+
+<script>
+const KOUSHU = [
+  {cat:'gino',name:'玉掛け技能講習',days:['2026-07-07〜09','2026-08-04〜06','2026-09-08〜10','2026-10-06〜08','2026-11-10〜12','2026-12-01〜03'],
+   note:'つり上げ荷重1t以上のクレーン等の玉掛け作業に必要',statuses:['ok','ok','ok','few','ok','ok']},
+  {cat:'gino',name:'足場の組立て等作業主任者技能講習',days:['2026-07-21〜22','2026-09-01〜02','2026-10-20〜21','2026-12-08〜09'],
+   note:'つり足場・張出し足場等の組立・解体・変更の作業主任者に必要',statuses:['ok','few','ok','ok']},
+  {cat:'gino',name:'小型移動式クレーン運転技能講習',days:['2026-07-14〜16','2026-09-15〜17','2026-11-17〜19'],
+   note:'つり上げ荷重5t未満の移動式クレーンの運転に必要',statuses:['ok','ok','few']},
+  {cat:'gino',name:'高所作業車運転技能講習（10m以上）',days:['2026-08-18〜19','2026-10-13〜14','2026-12-15〜16'],
+   note:'作業床の高さが10m以上の高所作業車の運転に必要',statuses:['ok','ok','ok']},
+  {cat:'gino',name:'フォークリフト運転技能講習',days:['2026-07-28〜31','2026-09-22〜25','2026-11-24〜27'],
+   note:'最大荷重1t以上のフォークリフトの運転に必要',statuses:['few','ok','ok']},
+  {cat:'gino',name:'ガス溶接技能講習',days:['2026-08-25〜26','2026-10-27〜28'],
+   note:'可燃性ガス及び酸素を用いて行う金属の溶接・溶断等の業務に必要',statuses:['ok','ok']},
+  {cat:'tokubetsu',name:'足場の組立て等作業従事者特別教育',days:['2026-07-03','2026-08-07','2026-09-04','2026-10-02','2026-11-06','2026-12-04'],
+   note:'足場の組立・解体・変更の作業に従事する労働者に必要（1日）',statuses:['ok','ok','ok','ok','few','ok']},
+  {cat:'tokubetsu',name:'丸のこ等取扱作業者安全衛生教育',days:['2026-07-10','2026-09-11','2026-11-13'],
+   note:'携帯用丸のこ盤を使用する作業に必要（1日）',statuses:['ok','ok','ok']},
+  {cat:'tokubetsu',name:'フルハーネス型墜落制止用器具特別教育',days:['2026-07-17','2026-08-28','2026-09-25','2026-10-23','2026-11-20'],
+   note:'2m以上の高所作業に必要（1日）。義務化済み',statuses:['ok','ok','ok','few','ok']},
+  {cat:'tokubetsu',name:'アーク溶接等特別教育',days:['2026-08-20〜21','2026-10-29〜30'],
+   note:'アーク溶接機を用いて行う溶接・溶断業務に必要',statuses:['ok','ok']},
+  {cat:'yobo',name:'職長・安全衛生責任者教育',days:['2026-07-23〜24','2026-09-17〜18','2026-11-19〜20'],
+   note:'建設現場の職長・安全衛生責任者に必要（2日間）',statuses:['ok','ok','few']},
+  {cat:'yobo',name:'刈払機取扱作業者安全衛生教育',days:['2026-08-05','2026-10-07'],
+   note:'刈払機を使用する作業に必要（1日）',statuses:['ok','ok']},
+];
+
+const CAT_INFO = {
+  gino:{label:'技能講習',cls:'cat-gino'},
+  tokubetsu:{label:'特別教育',cls:'cat-tokubetsu'},
+  yobo:{label:'安全教育',cls:'cat-yobo'},
+};
+const STATUS_INFO = {
+  ok:{label:'空きあり',cls:'status-ok'},
+  few:{label:'残りわずか',cls:'status-few'},
+  full:{label:'満員',cls:'status-full'},
+};
+
+let currentCat = 'all';
+
+function filterKoushu(cat, el){
+  currentCat = cat;
+  document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  renderKoushu();
+}
+
+function renderKoushu(){
+  const list = document.getElementById('koushu-list');
+  const filtered = currentCat === 'all' ? KOUSHU : KOUSHU.filter(k=>k.cat===currentCat);
+  list.innerHTML = filtered.map(k=>`
+    <div class="koushu-card">
+      <div class="koushu-title-row">
+        <p class="koushu-name">${k.name}</p>
+        <span class="koushu-cat ${CAT_INFO[k.cat].cls}">${CAT_INFO[k.cat].label}</span>
+      </div>
+      <p style="font-size:12px;color:var(--gray400);margin:0 0 10px;">${k.note}</p>
+      <div class="date-list">
+        ${k.days.slice(0,3).map((d,i)=>`
+          <div class="date-row">
+            <div>
+              <p class="date-main">📅 ${d}</p>
+              <p class="date-sub">埼玉土建技術研修センター</p>
+            </div>
+            <span class="date-status ${STATUS_INFO[k.statuses[i]||'ok'].cls}">${STATUS_INFO[k.statuses[i]||'ok'].label}</span>
+          </div>`).join('')}
+        ${k.days.length > 3 ? `<p style="font-size:13px;color:var(--gray400);text-align:center;margin:4px 0 0;">他${k.days.length-3}回 開催予定 → 支部へお問い合わせください</p>` : ''}
+      </div>
+    </div>`).join('');
+}
+
+renderKoushu();
+</script>
+</body>
+</html>

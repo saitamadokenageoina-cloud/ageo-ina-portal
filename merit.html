@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>加入のメリット｜埼玉土建 上尾伊奈支部</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.47.0/iconfont/tabler-icons.min.css">
+<link rel="stylesheet" href="common.css">
+<style>
+.cat-heading{font-size:13px;font-weight:700;letter-spacing:.08em;color:var(--orange);text-transform:uppercase;margin:20px 0 10px;padding-bottom:6px;border-bottom:2px solid var(--orange-lt);}
+.merit-card{background:var(--white);border-radius:var(--r16);box-shadow:var(--shadow-sm);padding:14px 16px;margin-bottom:8px;display:flex;align-items:flex-start;gap:14px;transition:box-shadow .15s;}
+.merit-card:hover{box-shadow:var(--shadow-md);}
+.merit-icon{width:44px;height:44px;border-radius:var(--r12);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.merit-icon i{font-size:22px;}
+.merit-title{font-size:15px;font-weight:700;margin:0 0 3px;color:var(--navy);}
+.merit-desc{font-size:13px;color:var(--gray600);margin:0;line-height:1.6;}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="hdr">
+  <button class="hdr-back" onclick="location.href='index.html'">
+    <i class="ti ti-arrow-left"></i>ホーム
+  </button>
+  <div style="text-align:right;">
+    <p class="hdr-org" style="margin:0;">埼玉土建 上尾伊奈支部</p>
+    <p class="hdr-title" style="margin:0;font-size:14px;">加入のメリット</p>
+  </div>
+</header>
+<div class="content">
+  <div id="merit-list"></div>
+  <a href="tel:048-773-9863" class="btn-primary" style="display:flex;margin-top:8px;">
+    <i class="ti ti-phone"></i>加入のご相談は支部へ（048-773-9863）
+  </a>
+</div>
+<footer>埼玉土建一般労働組合 上尾伊奈支部｜TEL 048-773-9863</footer>
+</div>
+<script>
+const MERITS=[
+  {cat:"共済・保障",icon:"ti-shield-heart",bg:"#FEF0ED",fg:"#9B3A1A",title:"総合共済",desc:"月1,390円（組合費に含む）で病気・ケガの休業補償、死亡保障、結婚・出生等の祝金、資格取得祝金まで幅広くカバー。"},
+  {cat:"共済・保障",icon:"ti-heart-plus",bg:"#FEF0ED",fg:"#9B3A1A",title:"埼玉土建国保",desc:"入院医療費の全額払戻しなど、組合員・家族とも手厚い給付制度。傷病手当金は最大180日分支給。"},
+  {cat:"共済・保障",icon:"ti-lungs",bg:"#FEF0ED",fg:"#9B3A1A",title:"じん肺・アスベスト対策",desc:"建設従事者に多い職業病。組織をあげて被害者救済・労災認定支援に取り組んでいます。"},
+  {cat:"共済・保障",icon:"ti-piggy-bank",bg:"#FEF0ED",fg:"#9B3A1A",title:"建設業退職金共済（建退共）",desc:"元請が現場で証紙を貼ることで積み立てる、建設労働者のための国の退職金制度。"},
+  {cat:"労働環境",icon:"ti-shield-check",bg:"#E8F5EE",fg:"#1A7A4A",title:"労働保険（労災・雇用保険）",desc:"埼玉土建の各支部は厚生労働大臣認可の労働保険事務組合。加入手続きを支部で完結できます。"},
+  {cat:"労働環境",icon:"ti-id",bg:"#E8F5EE",fg:"#1A7A4A",title:"CCUS（建設キャリアアップシステム）",desc:"各支部が認定登録機関のため、登録手続き・相談を支部で対応可能。"},
+  {cat:"労働環境",icon:"ti-briefcase",bg:"#E8F5EE",fg:"#1A7A4A",title:"労働者供給事業",desc:"国の認可を受けた事業で、安心して働ける現場環境づくりを支援。"},
+  {cat:"仕事支援",icon:"ti-home-check",bg:"#FFF8E6",fg:"#7A5500",title:"住推協（住宅リフォーム推進サポート協議会）",desc:"消費者が安心して選べる事業者として、国の登録制度に対応した団体に加入できます。"},
+  {cat:"仕事支援",icon:"ti-certificate",bg:"#FFF8E6",fg:"#7A5500",title:"資格取得支援",desc:"埼玉土建技術研修センターで技能検定支援・各種作業主任者講習を実施。資格取得祝金も充実。"},
+  {cat:"補償・保険",icon:"ti-car",bg:"#E8F0FB",fg:"#1A5FA8",title:"自動車共済",desc:"団体割引で民間損保よりお得。走行距離・使用目的による割増なし、全車種ロードサービス付帯。"},
+  {cat:"補償・保険",icon:"ti-bike",bg:"#E8F0FB",fg:"#1A5FA8",title:"サイクるん（自転車保険）",desc:"年間4,250円（家族型）で相手への賠償3億円・自身のケガも補償。"},
+  {cat:"補償・保険",icon:"ti-flame",bg:"#E8F0FB",fg:"#1A5FA8",title:"どけん火災共済・地震共済",desc:"月500円程度の掛金で最大1,000万円規模の保障。"},
+  {cat:"生活サポート",icon:"ti-credit-card",bg:"#EDE8FE",fg:"#4A1A9B",title:"DOKENカード",desc:"埼玉県内700店以上の登録店と全国の提携施設で優待が受けられる組合員カード。"},
+  {cat:"生活サポート",icon:"ti-bed",bg:"#EDE8FE",fg:"#4A1A9B",title:"宿帳（指定宿泊施設利用補助）",desc:"関東周辺の提携宿泊施設で、1人3,000円まで補助。家族旅行を応援。"},
+  {cat:"生活サポート",icon:"ti-scale",bg:"#EDE8FE",fg:"#4A1A9B",title:"各種相談（弁護士・税理士等）",desc:"弁護士・税理士・社労士・行政書士・司法書士の士業ネットワークで無料相談に対応。"},
+  {cat:"仲間づくり",icon:"ti-users",bg:"#E8F5EE",fg:"#1A7A4A",title:"班会議・青年部・主婦の会・シニア友の会",desc:"地域の仲間とつながり、現場の悩みを共有できる場。コンビニ・スマホ払いへの移行も進行中。"}
+];
+
+function renderMerits(){
+  const el=document.getElementById('merit-list');
+  const cats=[...new Set(MERITS.map(m=>m.cat))];
+  cats.forEach(cat=>{
+    const h=document.createElement('p');h.className='cat-heading';h.textContent=cat;el.appendChild(h);
+    MERITS.filter(m=>m.cat===cat).forEach(m=>{
+      const card=document.createElement('div');card.className='merit-card';
+      card.innerHTML=`
+        <div class="merit-icon" style="background:${m.bg};"><i class="ti ${m.icon}" style="color:${m.fg};font-size:22px;" aria-hidden="true"></i></div>
+        <div><p class="merit-title">${m.title}</p><p class="merit-desc">${m.desc}</p></div>`;
+      el.appendChild(card);
+    });
+  });
+}
+function renderMerits(){
+  const el=document.getElementById("merit-list");
+  const cats=[...new Set(MERITS.map(m=>m.cat))];
+  cats.forEach(cat=>{
+    const h=document.createElement("p");h.className="cat-heading";h.textContent=cat;el.appendChild(h);
+    MERITS.filter(m=>m.cat===cat).forEach(m=>{
+      const card=document.createElement("div");card.className="merit-card";
+      card.innerHTML=`<div class="merit-icon" style="background:${m.bg};"><i class="ti ${m.icon}" style="color:${m.fg};font-size:22px;"></i></div><div><p class="merit-title">${m.title}</p><p class="merit-desc">${m.desc}</p></div>`;
+      el.appendChild(card);
+    });
+  });
+}
+renderMerits();
+</script>
+</body>
+</html>

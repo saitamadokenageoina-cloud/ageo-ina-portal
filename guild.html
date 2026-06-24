@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>DOKENギルド｜埼玉土建 上尾伊奈支部</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.47.0/iconfont/tabler-icons.min.css">
+<link rel="stylesheet" href="common.css">
+<style>
+.tab-row{display:flex;gap:4px;background:var(--gray100);border-radius:var(--r12);padding:4px;margin-bottom:16px;}
+.tab-btn{flex:1;border:none;border-radius:var(--r8);padding:9px 4px;font-size:13px;font-weight:600;color:var(--gray600);background:none;cursor:pointer;transition:all .15s;}
+.tab-btn.active{background:var(--white);color:var(--navy);box-shadow:var(--shadow-sm);}
+.post-card{
+  background:var(--white);border-radius:var(--r16);box-shadow:var(--shadow-sm);
+  padding:16px;margin-bottom:10px;
+}
+.post-header{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.post-avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.post-author{font-size:14px;font-weight:700;color:var(--navy);margin:0 0 1px;}
+.post-time{font-size:12px;color:var(--gray400);margin:0;}
+.post-badge{
+  margin-left:auto;font-size:11px;font-weight:700;padding:3px 10px;
+  border-radius:99px;white-space:nowrap;
+}
+.badge-jinzai{background:#FEE8D6;color:#C04E1E;}
+.badge-shizai{background:#E8F5EE;color:#1A7A4A;}
+.badge-soudan{background:#EDE8FE;color:#6B21A8;}
+.post-body{font-size:15px;color:var(--gray900);margin:0 0 10px;line-height:1.65;}
+.post-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
+.post-tag{font-size:12px;background:var(--gray100);color:var(--gray600);padding:3px 10px;border-radius:99px;font-weight:500;}
+.post-actions{display:flex;gap:8px;}
+.post-action-btn{
+  flex:1;padding:9px;border-radius:var(--r8);border:1.5px solid var(--gray200);
+  background:none;font-size:13px;font-weight:600;color:var(--gray600);
+  display:flex;align-items:center;justify-content:center;gap:5px;
+  transition:all .15s;cursor:pointer;
+}
+.post-action-btn:hover{border-color:var(--orange);color:var(--orange);}
+.post-action-btn.primary{background:var(--orange);color:var(--white);border-color:var(--orange);}
+.post-action-btn.primary:hover{background:var(--orange-dk);}
+.fab{
+  position:fixed;bottom:24px;right:50%;transform:translateX(50%);
+  max-width:300px;width:calc(100% - 32px);
+  background:var(--orange);color:var(--white);border:none;border-radius:var(--r16);
+  padding:15px 20px;font-size:16px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  box-shadow:0 8px 24px rgba(232,97,42,.4);cursor:pointer;
+  transition:all .15s;
+}
+.fab:hover{background:var(--orange-dk);transform:translateX(50%) translateY(-2px);}
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:300;
+  display:flex;align-items:flex-end;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .2s;
+}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal-sheet{
+  background:var(--white);border-radius:var(--r24) var(--r24) 0 0;
+  padding:24px 20px;width:100%;max-width:640px;
+  transform:translateY(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);
+}
+.modal-overlay.open .modal-sheet{transform:translateY(0);}
+.modal-title{font-size:18px;font-weight:800;color:var(--navy);margin:0 0 16px;}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="hdr">
+  <button class="hdr-back" onclick="location.href='index.html'">
+    <i class="ti ti-arrow-left"></i>ホーム
+  </button>
+  <div style="text-align:right;">
+    <p class="hdr-org" style="margin:0;">組合員限定</p>
+    <p class="hdr-title" style="margin:0;font-size:14px;">DOKENギルド</p>
+  </div>
+</header>
+
+<div class="content" style="padding-bottom:100px;">
+  <div class="alert alert-info" style="margin-bottom:16px;">
+    <i class="ti ti-lock"></i>
+    <span>組合員限定のクローズド掲示板です。情報は支部内でのみ共有されます。</span>
+  </div>
+
+  <div class="tab-row" id="tabs">
+    <button class="tab-btn active" onclick="switchTab('all')">すべて</button>
+    <button class="tab-btn" onclick="switchTab('jinzai')">人材募集</button>
+    <button class="tab-btn" onclick="switchTab('shizai')">資材・道具</button>
+    <button class="tab-btn" onclick="switchTab('soudan')">相談</button>
+  </div>
+
+  <div id="post-list"></div>
+</div>
+
+<button class="fab" onclick="openModal()">
+  <i class="ti ti-plus"></i>投稿する
+</button>
+
+<!-- 投稿モーダル -->
+<div class="modal-overlay" id="modal" onclick="closeModal(event)">
+  <div class="modal-sheet">
+    <p class="modal-title">新しく投稿する</p>
+    <div class="input-group">
+      <label>カテゴリ</label>
+      <select id="post-cat">
+        <option value="jinzai">人材募集・お手伝い依頼</option>
+        <option value="shizai">資材・道具の譲渡・貸出</option>
+        <option value="soudan">現場の悩み・相談</option>
+      </select>
+    </div>
+    <div class="input-group">
+      <label>内容</label>
+      <textarea id="post-body" rows="4" placeholder="例：明日、上尾市の現場で左官が1人足りません。日給2万円。午前7時〜。" style="resize:none;"></textarea>
+    </div>
+    <div class="input-group">
+      <label>地域（任意）</label>
+      <input type="text" id="post-area" placeholder="例：上尾市、伊奈町">
+    </div>
+    <button class="btn-primary" onclick="submitPost()">
+      <i class="ti ti-send"></i>投稿する
+    </button>
+    <button class="btn-secondary" style="margin-top:8px;" onclick="closeModal()">キャンセル</button>
+  </div>
+</div>
+
+<footer>埼玉土建一般労働組合 上尾伊奈支部｜TEL 048-773-9863</footer>
+</div>
+
+<script>
+const POSTS = [
+  {id:1,cat:'jinzai',avatar:'🪚',author:'大工 鈴木',area:'上尾市',time:'5分前',
+   body:'明日（6/25）、上尾市内の現場で大工が1人足りません。床張り作業です。日給2万円、午前7時〜17時。心当たりある方、直接連絡ください。',
+   tags:['上尾市','大工','急募','1日'],replies:3},
+  {id:2,cat:'shizai',avatar:'🏗️',author:'鳶 田中組',area:'伊奈町',time:'2時間前',
+   body:'単管パイプ（6m×50本）と足場板（2m×30枚）を安く譲ります。引き取りに来てくれる方限定。状態良好です。詳細はご連絡を。',
+   tags:['足場材','譲渡','伊奈町'],replies:1},
+  {id:3,cat:'soudan',avatar:'🔧',author:'設備 山本',area:'上尾市',time:'昨日',
+   body:'一人親方で確定申告を初めてやります。経費の書き方で迷っています。アドバイスいただける先輩いますか？支部に聞けばいいですかね？',
+   tags:['確定申告','相談','一人親方'],replies:5},
+  {id:4,cat:'jinzai',avatar:'🧱',author:'左官 小川',area:'桶川市',time:'昨日',
+   body:'来月から2週間、桶川の現場で左官・タイル工各1名募集。単価応相談。経験者優遇。埼玉土建組合員の方を優先します。',
+   tags:['左官','タイル','桶川市','長期'],replies:2},
+];
+
+let currentTab = 'all';
+let localPosts = [...POSTS];
+
+const CAT_INFO = {
+  jinzai:{label:'人材募集',cls:'badge-jinzai'},
+  shizai:{label:'資材・道具',cls:'badge-shizai'},
+  soudan:{label:'相談',cls:'badge-soudan'},
+};
+
+function renderPosts(){
+  const list = document.getElementById('post-list');
+  const filtered = currentTab === 'all' ? localPosts : localPosts.filter(p=>p.cat===currentTab);
+  if(!filtered.length){
+    list.innerHTML='<p style="text-align:center;color:var(--gray400);padding:40px 0;">投稿がありません</p>';return;
+  }
+  list.innerHTML = filtered.map(p=>`
+    <div class="post-card">
+      <div class="post-header">
+        <div class="post-avatar" style="background:var(--gray100);">${p.avatar}</div>
+        <div>
+          <p class="post-author">${p.author}${p.area?` <span style="font-size:11px;color:var(--gray400);">📍${p.area}</span>`:''}</p>
+          <p class="post-time">${p.time}</p>
+        </div>
+        <span class="post-badge ${CAT_INFO[p.cat].cls}">${CAT_INFO[p.cat].label}</span>
+      </div>
+      <p class="post-body">${p.body}</p>
+      <div class="post-tags">${p.tags.map(t=>`<span class="post-tag">${t}</span>`).join('')}</div>
+      <div class="post-actions">
+        <button class="post-action-btn" onclick="alert('💬 コメント機能は支部確認後に本番実装します。')">
+          <i class="ti ti-message-circle"></i>返信（${p.replies}）
+        </button>
+        <button class="post-action-btn primary" onclick="alert('📞 相手の連絡先は支部経由でお伝えします。048-773-9863')">
+          <i class="ti ti-phone"></i>連絡する
+        </button>
+      </div>
+    </div>`).join('');
+}
+
+function switchTab(tab){
+  currentTab = tab;
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>{
+    b.classList.toggle('active',['all','jinzai','shizai','soudan'][i]===tab);
+  });
+  renderPosts();
+}
+
+function openModal(){ document.getElementById('modal').classList.add('open'); }
+function closeModal(e){
+  if(!e||e.target===document.getElementById('modal')) document.getElementById('modal').classList.remove('open');
+}
+
+function submitPost(){
+  const cat = document.getElementById('post-cat').value;
+  const body = document.getElementById('post-body').value.trim();
+  const area = document.getElementById('post-area').value.trim();
+  if(!body){ alert('内容を入力してください'); return; }
+  localPosts.unshift({
+    id:Date.now(),cat,avatar:'👤',author:'あなた',area,time:'たった今',
+    body,tags:[area||'上尾・伊奈'],replies:0
+  });
+  closeModal();
+  currentTab='all';
+  switchTab('all');
+  document.getElementById('post-body').value='';
+  document.getElementById('post-area').value='';
+  alert('✅ 投稿しました！');
+}
+
+renderPosts();
+</script>
+</body>
+</html>

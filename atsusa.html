@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>熱中症AIアラート｜埼玉土建 上尾伊奈支部</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.47.0/iconfont/tabler-icons.min.css">
+<link rel="stylesheet" href="common.css">
+<style>
+.risk-display{
+  border-radius:var(--r16);padding:24px;text-align:center;margin-bottom:16px;
+  transition:all .4s;
+}
+.risk-icon{font-size:56px;margin-bottom:8px;}
+.risk-level{font-size:28px;font-weight:800;margin:0 0 4px;}
+.risk-wbgt{font-size:15px;opacity:.8;margin:0 0 12px;}
+.risk-msg{font-size:15px;font-weight:600;margin:0;}
+.gauge-wrap{background:rgba(255,255,255,.2);border-radius:99px;height:12px;margin:14px 0;overflow:hidden;}
+.gauge-fill{height:100%;border-radius:99px;background:rgba(255,255,255,.8);transition:width .6s cubic-bezier(.4,0,.2,1);}
+.action-list{display:flex;flex-direction:column;gap:8px;}
+.action-item{
+  background:var(--white);border-radius:var(--r12);padding:14px 16px;
+  display:flex;align-items:center;gap:12px;box-shadow:var(--shadow-sm);
+}
+.action-item i{font-size:22px;flex-shrink:0;}
+.action-item p{margin:0;font-size:14px;font-weight:500;color:var(--navy);}
+.timer-box{
+  background:var(--navy);border-radius:var(--r16);padding:18px;
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:12px;
+}
+.timer-label{color:rgba(255,255,255,.6);font-size:13px;margin:0 0 4px;}
+.timer-val{color:var(--white);font-size:32px;font-weight:800;margin:0;font-variant-numeric:tabular-nums;}
+.timer-btn{
+  background:var(--orange);border:none;border-radius:var(--r12);
+  color:var(--white);font-size:14px;font-weight:700;padding:10px 16px;
+}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="hdr">
+  <div class="hdr-left">
+    <button class="hdr-back" onclick="location.href='index.html'">
+      <i class="ti ti-arrow-left"></i>ホーム
+    </button>
+  </div>
+  <div style="text-align:right;">
+    <p class="hdr-org" style="margin:0;">埼玉土建 上尾伊奈支部</p>
+    <p class="hdr-title" style="margin:0;font-size:14px;">熱中症AIアラート</p>
+  </div>
+</header>
+
+<div class="content">
+  <!-- リスク表示 -->
+  <div id="risk-display" class="risk-display" style="background:var(--gray100);">
+    <div class="risk-icon">🌡️</div>
+    <p class="risk-level" style="color:var(--gray600);">気象データを入力してください</p>
+    <p class="risk-wbgt" style="color:var(--gray400);">WBGT値を計算します</p>
+    <div class="gauge-wrap" style="background:var(--gray200);">
+      <div class="gauge-fill" id="gauge" style="width:0%;"></div>
+    </div>
+    <p class="risk-msg" style="color:var(--gray500);">下のフォームに入力 → 判定ボタンを押してください</p>
+  </div>
+
+  <!-- 入力 -->
+  <div class="card">
+    <p class="sec-label">現在の環境を入力</p>
+    <div class="grid2">
+      <div class="input-group">
+        <label>気温（℃）</label>
+        <input type="number" id="temp" value="32" min="0" max="50" step="0.1">
+      </div>
+      <div class="input-group">
+        <label>湿度（%）</label>
+        <input type="number" id="hum" value="70" min="0" max="100" step="1">
+      </div>
+    </div>
+    <div class="input-group">
+      <label>日射・作業環境</label>
+      <select id="suntype">
+        <option value="outdoor">屋外・直射日光あり</option>
+        <option value="outdoor-shade">屋外・日陰</option>
+        <option value="indoor">屋内・換気あり</option>
+      </select>
+    </div>
+    <div class="input-group">
+      <label>作業の強度</label>
+      <select id="worktype">
+        <option value="heavy">重作業（解体・基礎・鉄筋等）</option>
+        <option value="medium" selected>中程度（大工・左官・塗装等）</option>
+        <option value="light">軽作業（監督・点検等）</option>
+      </select>
+    </div>
+    <button class="btn-primary" onclick="calcRisk()">
+      <i class="ti ti-refresh"></i>リスクを判定する
+    </button>
+  </div>
+
+  <!-- 水分補給タイマー -->
+  <div class="card">
+    <p class="sec-label">水分補給タイマー</p>
+    <div class="timer-box">
+      <div>
+        <p class="timer-label">次の水分補給まで</p>
+        <p class="timer-val" id="timer-display">20:00</p>
+      </div>
+      <button class="timer-btn" id="timer-btn" onclick="toggleTimer()">スタート</button>
+    </div>
+    <p style="font-size:13px;color:var(--gray400);margin:0;">
+      <i class="ti ti-info-circle" style="font-size:14px;vertical-align:-2px;margin-right:4px;"></i>
+      高リスク時は自動で15分に短縮されます。水は1回200ml以上を目安に。
+    </p>
+  </div>
+
+  <!-- 対策一覧 -->
+  <p class="sec-label">現場での熱中症対策</p>
+  <div class="action-list">
+    <div class="action-item"><i class="ti ti-droplet" style="color:#1A5FA8;"></i><p>こまめな水分・塩分補給（20〜30分ごと）</p></div>
+    <div class="action-item"><i class="ti ti-shirt" style="color:#1A7A4A;"></i><p>通気性のよい作業服・日よけ帽子を着用</p></div>
+    <div class="action-item"><i class="ti ti-home" style="color:#E8612A;"></i><p>休憩は日陰または涼しい場所で</p></div>
+    <div class="action-item"><i class="ti ti-users" style="color:#7B2FBE;"></i><p>仲間の体調を互いに確認し合う</p></div>
+    <div class="action-item"><i class="ti ti-ambulance" style="color:var(--red);"></i><p>意識がおかしい・体が熱い場合は即座に救急（119）</p></div>
+  </div>
+
+  <div class="alert alert-info" style="margin-top:12px;">
+    <i class="ti ti-info-circle"></i>
+    <span>WBGT値は気温と湿度・日射から推定した概算値です。気象庁の「熱中症警戒アラート」も必ずご確認ください。</span>
+  </div>
+</div>
+
+<footer>埼玉土建一般労働組合 上尾伊奈支部｜TEL 048-773-9863</footer>
+</div>
+
+<script>
+const RISK_LEVELS = [
+  {min:0,  max:21, label:"ほぼ安全", icon:"😊", bg:"linear-gradient(135deg,#1A7A4A,#2EA868)", color:"#fff", msg:"通常通り作業可能。こまめな水分補給を忘れずに。", pct:10, interval:30},
+  {min:21, max:25, label:"注意",    icon:"🌤️", bg:"linear-gradient(135deg,#1A5FA8,#2E82D4)", color:"#fff", msg:"激しい作業では発症の危険あり。休憩と水分補給を意識して。", pct:35, interval:25},
+  {min:25, max:28, label:"警戒",    icon:"☀️",  bg:"linear-gradient(135deg,#B07800,#E8A800)", color:"#fff", msg:"作業の合間に積極的に休憩。直射日光を避けてください。", pct:55, interval:20},
+  {min:28, max:31, label:"厳重警戒",icon:"🌡️", bg:"linear-gradient(135deg,#C04E1E,#E8612A)", color:"#fff", msg:"激しい作業は中止を検討。熱中症の危険が高い状態です。", pct:75, interval:15},
+  {min:31, max:99, label:"危険",    icon:"🔴", bg:"linear-gradient(135deg,#8B0000,#C0392B)", color:"#fff", msg:"すべての人が熱中症の危険。作業中止を強く推奨します。", pct:100, interval:10}
+];
+
+let timerInterval = null;
+let timerSeconds = 1200;
+let timerRunning = false;
+let currentInterval = 20;
+
+function calcWBGT(temp, hum, sun) {
+  const tw = temp * Math.atan(0.151977 * Math.pow(hum + 8.313659, 0.5))
+    + Math.atan(temp + hum) - Math.atan(hum - 1.676331)
+    + 0.00391838 * Math.pow(hum, 1.5) * Math.atan(0.023101 * hum) - 4.686035;
+  const sunAdj = sun === 'outdoor' ? 1.5 : sun === 'outdoor-shade' ? 0.5 : 0;
+  return tw * 0.7 + temp * 0.2 + sunAdj;
+}
+
+function calcRisk() {
+  const temp = parseFloat(document.getElementById('temp').value) || 30;
+  const hum = parseFloat(document.getElementById('hum').value) || 60;
+  const sun = document.getElementById('suntype').value;
+  const work = document.getElementById('worktype').value;
+  const workAdj = work === 'heavy' ? 1.5 : work === 'light' ? -1 : 0;
+  const wbgt = calcWBGT(temp, hum, sun) + workAdj;
+
+  const level = RISK_LEVELS.find(l => wbgt >= l.min && wbgt < l.max) || RISK_LEVELS[4];
+
+  const disp = document.getElementById('risk-display');
+  disp.style.background = level.bg;
+  disp.innerHTML = `
+    <div class="risk-icon">${level.icon}</div>
+    <p class="risk-level" style="color:${level.color};">${level.label}</p>
+    <p class="risk-wbgt" style="color:rgba(255,255,255,.8);">WBGT推定値：${wbgt.toFixed(1)}℃</p>
+    <div class="gauge-wrap">
+      <div class="gauge-fill" style="width:${level.pct}%;"></div>
+    </div>
+    <p class="risk-msg" style="color:${level.color};">${level.msg}</p>`;
+
+  currentInterval = level.interval;
+  timerSeconds = currentInterval * 60;
+  updateTimerDisplay();
+  document.getElementById('timer-btn').textContent = 'スタート';
+  timerRunning = false;
+  if(timerInterval) clearInterval(timerInterval);
+}
+
+function toggleTimer() {
+  if(timerRunning) {
+    clearInterval(timerInterval);
+    timerRunning = false;
+    document.getElementById('timer-btn').textContent = 'スタート';
+  } else {
+    timerRunning = true;
+    document.getElementById('timer-btn').textContent = 'リセット';
+    timerInterval = setInterval(() => {
+      timerSeconds--;
+      if(timerSeconds <= 0) {
+        timerSeconds = currentInterval * 60;
+        alert('💧 水分補給のタイミングです！200ml以上の水分を取ってください。');
+      }
+      updateTimerDisplay();
+    }, 1000);
+  }
+}
+
+function updateTimerDisplay() {
+  const m = Math.floor(timerSeconds / 60).toString().padStart(2,'0');
+  const s = (timerSeconds % 60).toString().padStart(2,'0');
+  document.getElementById('timer-display').textContent = `${m}:${s}`;
+}
+
+calcRisk();
+</script>
+</body>
+</html>

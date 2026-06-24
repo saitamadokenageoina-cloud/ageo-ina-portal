@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>計算ツール｜埼玉土建 上尾伊奈支部</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.47.0/iconfont/tabler-icons.min.css">
+<link rel="stylesheet" href="common.css">
+<style>
+.tool-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+.tool-card{background:var(--white);border-radius:var(--r16);box-shadow:var(--shadow-sm);padding:18px 14px;cursor:pointer;transition:box-shadow .2s,transform .15s;border:2px solid transparent;}
+.tool-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px);border-color:var(--orange);}
+.tool-card-icon{font-size:28px;margin-bottom:8px;}
+.tool-card-title{font-size:14px;font-weight:700;margin:0 0 3px;color:var(--navy);}
+.tool-card-desc{font-size:12px;color:var(--gray400);margin:0;}
+.tool-detail{display:none;}
+.tool-detail.active{display:block;}
+.tool-back{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:600;color:var(--orange);background:none;border:none;padding:0;margin-bottom:16px;cursor:pointer;}
+.tool-back i{font-size:18px;}
+.tab-row{display:flex;gap:4px;margin-bottom:12px;background:var(--gray100);border-radius:var(--r12);padding:4px;}
+.tab-row .t-btn{flex:1;border:none;border-radius:var(--r8);font-size:13px;font-weight:600;padding:8px 4px;color:var(--gray600);background:none;cursor:pointer;transition:all .15s;}
+.tab-row .t-btn.active{background:var(--white);color:var(--navy);box-shadow:var(--shadow-sm);}
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+.compare-box{background:var(--gray50);border-radius:var(--r12);padding:14px;border:2px solid var(--gray100);}
+.compare-box.winner{border-color:var(--orange);background:var(--orange-lt);}
+.compare-box-label{font-size:12px;font-weight:700;color:var(--gray400);margin:0 0 4px;}
+.compare-box-amount{font-size:26px;font-weight:800;color:var(--navy);margin:0;line-height:1.1;}
+.compare-box-unit{font-size:13px;font-weight:600;}
+.compare-box-year{font-size:12px;color:var(--gray400);margin:3px 0 0;}
+.winner-banner{border-radius:var(--r12);padding:12px 16px;font-size:14px;font-weight:600;margin-top:4px;}
+.winner-banner.doken{background:var(--green-lt);color:var(--green);}
+.winner-banner.city{background:var(--blue-lt);color:var(--blue);}
+.result-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--gray100);font-size:15px;}
+.result-row:last-child{border:none;}
+.result-row.total{font-weight:700;font-size:16px;}
+.result-label{flex:1;color:var(--gray600);}
+.result-val{text-align:right;font-weight:600;color:var(--navy);}
+.result-sub{font-size:12px;color:var(--gray400);font-weight:400;}
+.member-row{display:flex;align-items:center;gap:10px;background:var(--gray50);border-radius:var(--r12);padding:12px 14px;margin-bottom:8px;border:1.5px solid var(--gray100);}
+.add-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--r12);border:2px dashed var(--gray200);background:none;color:var(--gray600);font-size:14px;font-weight:600;margin-bottom:12px;cursor:pointer;transition:all .15s;}
+.add-btn:hover{border-color:var(--orange);color:var(--orange);}
+.rm-btn{background:var(--red-lt);border:none;border-radius:var(--r8);color:var(--red);width:32px;height:32px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px;cursor:pointer;}
+.lv-badge{display:flex;align-items:center;gap:16px;background:var(--navy);border-radius:var(--r16);padding:16px 20px;margin-bottom:14px;}
+.ccus-card-icon{width:52px;height:68px;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:10px;font-weight:700;gap:4px;flex-shrink:0;border:3px solid rgba(255,255,255,.3);}
+.ccus-card-icon i{font-size:22px;}
+.lv-info h3{font-size:18px;font-weight:800;color:#fff;margin:0 0 3px;}
+.lv-info p{font-size:13px;color:rgba(255,255,255,.65);margin:0;}
+.prog-wrap{margin-bottom:10px;}
+.prog-label{display:flex;justify-content:space-between;font-size:13px;color:var(--gray600);margin-bottom:5px;font-weight:500;}
+.prog-bar{height:10px;background:var(--gray100);border-radius:99px;overflow:hidden;}
+.prog-fill{height:100%;border-radius:99px;transition:width .6s;}
+.req{display:flex;align-items:flex-start;gap:8px;font-size:14px;margin-bottom:8px;}
+.req i{font-size:18px;flex-shrink:0;margin-top:1px;}
+.req.ok i{color:var(--green);}
+.req.ng i{color:var(--red);}
+.cur-tag{display:inline-block;font-size:11px;font-weight:700;background:var(--orange);color:#fff;padding:2px 8px;border-radius:99px;margin-left:6px;}
+.table-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--gray100);}
+.mini-card{width:34px;height:44px;border-radius:5px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:9px;font-weight:700;border:2px solid rgba(0,0,0,.12);flex-shrink:0;gap:2px;}
+.mini-card i{font-size:14px;}
+.comp-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--gray100);font-size:14px;}
+.comp-row:last-child{border:none;}
+.comp-row-total{font-weight:700;font-size:15px;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.hidden{display:none!important;}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="hdr">
+  <button class="hdr-back" onclick="goBack()">
+    <i class="ti ti-arrow-left"></i><span id="back-label">ホーム</span>
+  </button>
+  <div style="text-align:right;">
+    <p class="hdr-org" style="margin:0;">埼玉土建 上尾伊奈支部</p>
+    <p class="hdr-title" id="page-title" style="margin:0;font-size:14px;">計算ツール</p>
+  </div>
+</header>
+
+<div class="content">
+  <!-- ホーム -->
+  <div id="calc-home">
+    <div class="tool-grid">
+      <div class="tool-card" onclick="openTool('shakai')">
+        <div class="tool-card-icon" style="color:var(--blue);"><i class="ti ti-chart-bar"></i></div>
+        <p class="tool-card-title">社会保険料比較</p>
+        <p class="tool-card-desc">協会けんぽ vs 土建国保</p>
+      </div>
+      <div class="tool-card" onclick="openTool('kokuho')">
+        <div class="tool-card-icon" style="color:var(--orange);"><i class="ti ti-building-community"></i></div>
+        <p class="tool-card-title">国保税シミュ</p>
+        <p class="tool-card-desc">上尾市・伊奈町 vs 土建国保</p>
+      </div>
+      <div class="tool-card" onclick="openTool('ccus')">
+        <div class="tool-card-icon" style="color:var(--green);"><i class="ti ti-id"></i></div>
+        <p class="tool-card-title">CCUSレベル確認</p>
+        <p class="tool-card-desc">職種別 能力評価判定</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 社保比較 -->
+  <div id="tool-shakai" class="tool-detail">
+    <p style="font-size:17px;font-weight:800;color:var(--navy);margin:0 0 14px;">社会保険料比較（令和8年度）</p>
+    <div class="card">
+      <div class="grid2">
+        <div class="input-group"><label>標準報酬月額（円）</label><input type="number" id="hyojun" value="320000" step="1000" oninput="calcShakai()"></div>
+        <div class="input-group"><label>年齢区分</label><select id="ageband" onchange="calcShakai()"><option value="under40">40歳未満</option><option value="40to64" selected>40〜64歳</option><option value="65plus">65歳以上</option></select></div>
+        <div class="input-group"><label>雇用区分</label><select id="koyokubun" onchange="calcShakai()"><option value="normal" selected>一般従業員</option><option value="officer">役員（雇用保険対象外）</option><option value="family">家族従事者</option></select></div>
+        <div class="input-group"><label>土建国保 区分</label><select id="dokenkubun" onchange="calcShakai()"><option value="1">第1種</option><option value="2">第2種</option><option value="3" selected>第3種</option><option value="4">第4種</option><option value="5">第5種</option><option value="6">第6種</option></select></div>
+      </div>
+      <div id="shakai-result"></div>
+    </div>
+  </div>
+
+  <!-- 国保シミュ -->
+  <div id="tool-kokuho" class="tool-detail">
+    <p style="font-size:17px;font-weight:800;color:var(--navy);margin:0 0 14px;">国保税シミュレーター（令和8年度）</p>
+    <div class="card">
+      <div class="grid2">
+        <div class="input-group"><label>市町村</label><select id="kk-city"><option value="ageo">上尾市</option><option value="ina">伊奈町</option></select></div>
+        <div class="input-group"><label>土建国保 区分</label><select id="kk-dkubun"><option value="toku2">特2種</option><option value="toku1">特1種</option><option value="1">第1種</option><option value="2">第2種</option><option value="3m" selected>第3種 男性</option><option value="3f">第3種 女性</option><option value="5">第5種</option><option value="6">第6種</option></select></div>
+      </div>
+      <p class="sec-label" style="margin-top:4px;">世帯員を入力</p>
+      <div id="kk-members"></div>
+      <button class="add-btn" onclick="kkAddMember()"><i class="ti ti-plus"></i>家族を追加</button>
+      <button class="btn-primary" onclick="kkCalc()"><i class="ti ti-calculator"></i>計算する</button>
+    </div>
+    <div id="kk-result" class="hidden">
+      <div class="tab-row"><button class="t-btn active" onclick="kkTab('compare')" id="kkt-compare">比較</button><button class="t-btn" onclick="kkTab('ageo')" id="kkt-ageo">市区町村国保</button><button class="t-btn" onclick="kkTab('doken')" id="kkt-doken">土建国保</button></div>
+      <div class="card" id="kkp-compare"><div id="kk-compare-content"></div></div>
+      <div class="card hidden" id="kkp-ageo"><div id="kk-ageo-detail"></div></div>
+      <div class="card hidden" id="kkp-doken"><div id="kk-doken-detail"></div></div>
+      <div class="alert alert-warn"><i class="ti ti-alert-triangle"></i><span>概算試算です。正確には各窓口・<a href="https://www.sai-doken-kokuho.jp/05hoken/04simulation.html" target="_blank" style="color:#7A5500;text-decoration:underline;">公式シミュレーター</a>でご確認ください。</span></div>
+    </div>
+  </div>
+
+  <!-- CCUS -->
+  <div id="tool-ccus" class="tool-detail">
+    <p style="font-size:17px;font-weight:800;color:var(--navy);margin:0 0 14px;">CCUSカードレベル確認（職種別）</p>
+    <div class="card">
+      <div class="input-group" style="margin-bottom:12px;"><label>職種を選択</label><select id="shoku" onchange="onShokuChange()"></select></div>
+      <div class="grid2">
+        <div class="input-group"><label>累計就労日数（日）</label><input type="number" id="days" min="0" value="" placeholder="例：800"></div>
+        <div class="input-group"><label>職長・班長の就労日数</label><input type="number" id="leader" min="0" value="" placeholder="例：200"></div>
+      </div>
+      <p class="sec-label" style="margin-top:4px;">保有資格</p>
+      <div id="qual-area" style="margin-bottom:8px;"><p style="font-size:14px;color:var(--gray400);">職種を選ぶと表示されます。</p></div>
+      <button class="btn-primary" onclick="calcCcus()"><i class="ti ti-search"></i>レベルを判定する</button>
+    </div>
+    <div id="ccus-result" class="hidden">
+      <div id="ccus-badge"></div>
+      <div class="card" style="margin-bottom:12px;"><p class="sec-label">進捗</p><div id="ccus-progs"></div></div>
+      <div id="ccus-next-wrap" class="hidden"><p class="sec-label">次のレベルへの条件</p><div class="card" id="ccus-next"></div></div>
+      <p class="sec-label">全レベル早見表</p>
+      <div class="card" id="ccus-table"></div>
+      <div class="alert alert-info"><i class="ti ti-info-circle"></i><span>詳細基準は職種により異なります。申請は支部または各能力評価実施団体へ。就業日数は1年＝215日換算。</span></div>
+    </div>
+  </div>
+</div>
+
+<footer>埼玉土建一般労働組合 上尾伊奈支部｜TEL 048-773-9863</footer>
+</div>
+
+<script>
+let currentTool = null;
+function goBack(){
+  if(currentTool){ closeTool(); } else { location.href='index.html'; }
+}
+function openTool(name){
+  currentTool=name;
+  document.getElementById('calc-home').style.display='none';
+  document.querySelectorAll('.tool-detail').forEach(d=>d.classList.remove('active'));
+  document.getElementById('tool-'+name).classList.add('active');
+  document.getElementById('back-label').textContent='計算ツール';
+  const titles={shakai:'社会保険料比較',kokuho:'国保税シミュ',ccus:'CCUSレベル確認'};
+  document.getElementById('page-title').textContent=titles[name]||'計算ツール';
+  if(name==='shakai')calcShakai();
+  if(name==='ccus')initCcus();
+}
+function closeTool(){
+  currentTool=null;
+  document.getElementById('calc-home').style.display='';
+  document.querySelectorAll('.tool-detail').forEach(d=>d.classList.remove('active'));
+  document.getElementById('back-label').textContent='ホーム';
+  document.getElementById('page-title').textContent='計算ツール';
+}
+// ========== 社会保険料比較 ==========
+const KENPO_R=0.0967,KAIGO_R=0.0162,SHIEN_R=0.0023,NENKIN_R=0.183;
+const KOYO_H=0.006,KOYO_K=0.0105;
+const NENKIN_MIN_H=8052,NENKIN_MIN_K=8052;
+const DOKEN_HOKEN_S={"1":43200,"2":41300,"3":38700,"4":31400,"5":27700,"6":15400};
+const DOKEN_SHIEN_S={"1":700,"2":600,"3":600,"4":500,"5":500,"6":200};
+const DOKEN_KAIGO_S=2700;
+
+function yen(n){return Math.round(n).toLocaleString('ja-JP')+'円';}
+
+function calcShakai(){
+  const hyojun=parseFloat(document.getElementById('hyojun').value)||0;
+  const age=document.getElementById('ageband').value;
+  const koyo=document.getElementById('koyokubun').value;
+  const dkubun=document.getElementById('dokenkubun').value;
+  const hasKaigo=age==='40to64';
+  const koyoExempt=koyo!=='normal';
+  const kH=hyojun*KENPO_R/2;
+  const kaH=hasKaigo?hyojun*KAIGO_R/2:0;
+  const shH=hyojun*SHIEN_R/2;
+  const nH=Math.max(hyojun*NENKIN_R/2,NENKIN_MIN_H);
+  const nK=Math.max(hyojun*NENKIN_R/2,NENKIN_MIN_K);
+  const yH=koyoExempt?0:hyojun*KOYO_H;
+  const yK=koyoExempt?0:hyojun*KOYO_K;
+  const kTotal=kH+kaH+shH+nH+yH;
+  const dHoken=DOKEN_HOKEN_S[dkubun];
+  const dShien=DOKEN_SHIEN_S[dkubun];
+  const dKaigo=hasKaigo?DOKEN_KAIGO_S:0;
+  const dTotal=dHoken+dShien+dKaigo+nH+yH;
+  const diff=kTotal-dTotal;
+  document.getElementById('shakai-result').innerHTML=`
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+      <div style="background:var(--gray50);border-radius:var(--r12);padding:12px;border:2px solid var(--gray100);">
+        <p style="font-size:12px;font-weight:700;color:var(--gray500);margin:0 0 5px;">協会けんぽ（埼玉）</p>
+        <div class="comp-row"><span>健康保険料</span><span style="font-weight:600;">${yen(kH)}</span></div>
+        ${hasKaigo?`<div class="comp-row"><span>介護保険料</span><span style="font-weight:600;">${yen(kaH)}</span></div>`:''}
+        <div class="comp-row"><span>子育て支援金</span><span style="font-weight:600;">${yen(shH)}</span></div>
+        <div class="comp-row"><span>厚生年金</span><span style="font-weight:600;">${yen(nH)}</span></div>
+        <div class="comp-row"><span>雇用保険</span><span style="font-weight:600;">${yen(yH)}</span></div>
+        <div class="comp-row comp-row-total"><span>本人負担計</span><span>${yen(kTotal)}</span></div>
+      </div>
+      <div style="background:var(--gray50);border-radius:var(--r12);padding:12px;border:2px solid var(--gray100);">
+        <p style="font-size:12px;font-weight:700;color:var(--gray500);margin:0 0 5px;">埼玉土建国保</p>
+        <div class="comp-row"><span>国保料</span><span style="font-weight:600;">${yen(dHoken)}</span></div>
+        <div class="comp-row"><span>子育て支援金</span><span style="font-weight:600;">${yen(dShien)}</span></div>
+        ${hasKaigo?`<div class="comp-row"><span>介護保険料</span><span style="font-weight:600;">${yen(dKaigo)}</span></div>`:''}
+        <div class="comp-row"><span>厚生年金</span><span style="font-weight:600;">${yen(nH)}</span></div>
+        <div class="comp-row"><span>雇用保険</span><span style="font-weight:600;">${yen(yH)}</span></div>
+        <div class="comp-row comp-row-total"><span>本人負担計</span><span>${yen(dTotal)}</span></div>
+      </div>
+    </div>
+    <div class="winner-banner ${diff>0?'doken':'city'}">
+      <i class="ti ti-info-circle" style="font-size:15px;vertical-align:-2px;margin-right:4px;" aria-hidden="true"></i>
+      <strong>${diff>0?'土建国保':'協会けんぽ'}</strong>が月額 <strong>${yen(Math.abs(diff))}</strong> 安い試算です。
+      <span style="font-size:12px;display:block;margin-top:2px;opacity:.8;">※土建国保の保険料は前年度データ。詳細は公式シミュレーションで要確認。</span>
+    </div>`;
+}
+// ========== CCUS ==========
+const SHOKU_DATA={
+  daiku:{name:"建築大工",org:"全建総連・JBN等",
+    qids:["dq0","dq1","dq2","dq3","dq4"],
+    qLabels:["丸のこ等取扱作業者安全衛生教育","足場の組立て等作業従事者特別教育または足場作業主任者技能講習","2級建築大工技能士または2級建築施工管理技士等（レベル3）","1級建築大工技能士または1級建築施工管理技士等（レベル3）","登録建築大工基幹技能者（レベル4）"],
+    reqFn:function(d,l,q){if(d>=2150&&l>=645&&q[0]&&q[1]&&(q[2]||q[3])&&q[4])return 4;if(d>=1505&&l>=108&&q[0]&&q[1]&&(q[2]||q[3]))return 3;if(d>=645&&q[0]&&q[1])return 2;return 1;},
+    nextReqs:function(c,d,l,q){if(c===1)return[{ok:d>=645,txt:`就労日数 645日以上（あと${Math.max(0,645-d)}日）`},{ok:q[0],txt:"丸のこ等取扱作業者安全衛生教育"},{ok:q[1],txt:"足場の組立て等作業従事者特別教育"}];if(c===2)return[{ok:d>=1505,txt:`就労日数 1,505日以上（あと${Math.max(0,1505-d)}日 ≒${Math.ceil(Math.max(0,1505-d)/215*10)/10}年）`},{ok:l>=108,txt:`職長・班長 108日以上（あと${Math.max(0,108-l)}日）`},{ok:q[2]||q[3],txt:"1・2級建築大工技能士等（2つ以上）"}];if(c===3)return[{ok:d>=2150,txt:`就労日数 2,150日以上（あと${Math.max(0,2150-d)}日 ≒${Math.ceil(Math.max(0,2150-d)/215*10)/10}年）`},{ok:l>=645,txt:`職長 645日以上（あと${Math.max(0,645-l)}日）`},{ok:q[4],txt:"登録建築大工基幹技能者"}];return[];},
+    levels:[{lv:1,days:0,leader:0,desc:"CCUS登録のみ",role:"見習い技能者"},{lv:2,days:645,leader:0,desc:"就労645日＋丸のこ・足場資格",role:"中堅技能者"},{lv:3,days:1505,leader:108,desc:"就労1,505日＋1・2級技能士等＋職長108日",role:"職長・班長クラス"},{lv:4,days:2150,leader:645,desc:"就労2,150日＋登録基幹技能者＋職長645日",role:"登録基幹技能者クラス"}]},
+  denki:{name:"電気工事",org:"（一社）日本電設工業協会",
+    qids:["eq0","eq1","eq2"],
+    qLabels:["第二種電気工事士免状または第一種試験合格（レベル2）","第一種電気工事士免状（レベル3）","登録電気工事基幹技能者（レベル4）"],
+    reqFn:function(d,l,q){if(d>=2150&&l>=645&&q[0]&&q[1]&&q[2])return 4;if(d>=1075&&l>=215&&q[0]&&q[1])return 3;if(d>=645&&q[0])return 2;return 1;},
+    nextReqs:function(c,d,l,q){if(c===1)return[{ok:d>=645,txt:`就労日数 645日以上（あと${Math.max(0,645-d)}日）`},{ok:q[0],txt:"第二種電気工事士免状または第一種試験合格"}];if(c===2)return[{ok:d>=1075,txt:`就労日数 1,075日以上（あと${Math.max(0,1075-d)}日）`},{ok:l>=215,txt:`職長・班長 215日以上（あと${Math.max(0,215-l)}日）`},{ok:q[1],txt:"第一種電気工事士免状"}];if(c===3)return[{ok:d>=2150,txt:`就労日数 2,150日以上（あと${Math.max(0,2150-d)}日 ≒${Math.ceil(Math.max(0,2150-d)/215*10)/10}年）`},{ok:l>=645,txt:`職長 645日以上（あと${Math.max(0,645-l)}日）`},{ok:q[2],txt:"登録電気工事基幹技能者"}];return[];},
+    levels:[{lv:1,days:0,leader:0,desc:"CCUS登録のみ",role:"見習い技能者"},{lv:2,days:645,leader:0,desc:"就労645日＋第二種電工士等",role:"中堅技能者"},{lv:3,days:1075,leader:215,desc:"就労1,075日＋第一種電工士＋職長215日",role:"職長・班長クラス"},{lv:4,days:2150,leader:645,desc:"就労2,150日＋登録基幹技能者＋職長645日",role:"登録基幹技能者クラス"}]},
+  tobi:{name:"とび",org:"（一社）日本建設躯体工事業団体連合会等",
+    qids:["tq0","tq1","tq2","tq3","tq4"],
+    qLabels:["玉掛け技能講習","職長・安全衛生責任者教育","足場組立作業主任者等12資格のうち1つ以上（レベル2）","1級とび技能士または施工管理技士等（レベル3）","登録鳶・土工基幹技能者（レベル4）"],
+    reqFn:function(d,l,q){if(d>=2580&&l>=1505&&q[0]&&q[1]&&q[2]&&q[3]&&q[4])return 4;if(d>=1720&&l>=430&&q[0]&&q[1]&&q[2]&&q[3])return 3;if(d>=645&&q[0]&&q[1]&&q[2])return 2;return 1;},
+    nextReqs:function(c,d,l,q){if(c===1)return[{ok:d>=645,txt:`就労日数 645日以上（あと${Math.max(0,645-d)}日）`},{ok:q[0],txt:"玉掛け技能講習"},{ok:q[1],txt:"職長・安全衛生責任者教育"},{ok:q[2],txt:"足場組立作業主任者等12資格のうち1つ以上"}];if(c===2)return[{ok:d>=1720,txt:`就労日数 1,720日以上（あと${Math.max(0,1720-d)}日 ≒${Math.ceil(Math.max(0,1720-d)/215*10)/10}年）`},{ok:l>=430,txt:`職長・班長 430日以上（あと${Math.max(0,430-l)}日）`},{ok:q[3],txt:"1級とび技能士または建築・土木施工管理技士等"}];if(c===3)return[{ok:d>=2580,txt:`就労日数 2,580日以上（あと${Math.max(0,2580-d)}日 ≒${Math.ceil(Math.max(0,2580-d)/215*10)/10}年）`},{ok:l>=1505,txt:`職長 1,505日以上（あと${Math.max(0,1505-l)}日）`},{ok:q[4],txt:"登録鳶・土工基幹技能者"}];return[];},
+    levels:[{lv:1,days:0,leader:0,desc:"CCUS登録のみ",role:"見習い技能者"},{lv:2,days:645,leader:0,desc:"就労645日＋玉掛け・職長教育・12資格の1つ",role:"中堅技能者"},{lv:3,days:1720,leader:430,desc:"就労1,720日＋1級とび等＋職長430日",role:"職長・班長クラス"},{lv:4,days:2580,leader:1505,desc:"就労2,580日＋登録基幹技能者＋職長1,505日",role:"登録基幹技能者クラス"}]},
+  tesshin:{name:"鉄筋",org:"（公社）全国鉄筋工事業協会",
+    qids:["rq0","rq1","rq2"],
+    qLabels:["玉掛け技能講習（レベル2必須）","1級鉄筋施工技能士（組立てまたは施工図）（レベル3必須）","登録鉄筋基幹技能者（レベル4）"],
+    reqFn:function(d,l,q){if(d>=2150&&l>=645&&q[0]&&q[1]&&q[2])return 4;if(d>=1505&&l>=645&&q[0]&&q[1])return 3;if(d>=645&&q[0])return 2;return 1;},
+    nextReqs:function(c,d,l,q){if(c===1)return[{ok:d>=645,txt:`就労日数 645日以上（あと${Math.max(0,645-d)}日）`},{ok:q[0],txt:"玉掛け技能講習"}];if(c===2)return[{ok:d>=1505,txt:`就労日数 1,505日以上（あと${Math.max(0,1505-d)}日 ≒${Math.ceil(Math.max(0,1505-d)/215*10)/10}年）`},{ok:l>=645,txt:`職長・班長 645日以上（あと${Math.max(0,645-l)}日）`},{ok:q[1],txt:"1級鉄筋施工技能士（組立てまたは施工図）"}];if(c===3)return[{ok:d>=2150,txt:`就労日数 2,150日以上（あと${Math.max(0,2150-d)}日 ≒${Math.ceil(Math.max(0,2150-d)/215*10)/10}年）`},{ok:l>=645,txt:`職長 645日以上（あと${Math.max(0,645-l)}日）`},{ok:q[2],txt:"登録鉄筋基幹技能者"}];return[];},
+    levels:[{lv:1,days:0,leader:0,desc:"CCUS登録のみ",role:"見習い技能者"},{lv:2,days:645,leader:0,desc:"就労645日＋玉掛け技能講習",role:"中堅技能者"},{lv:3,days:1505,leader:645,desc:"就労1,505日＋1級鉄筋施工技能士＋職長645日",role:"職長・班長クラス"},{lv:4,days:2150,leader:645,desc:"就労2,150日＋登録基幹技能者＋職長645日",role:"登録基幹技能者クラス"}]},
+  sakan:{name:"左官",org:"（一社）日本左官業組合連合会",
+    qids:["sq0","sq1","sq2"],
+    qLabels:["2級左官作業技能士（または研削といし特別教育＋足場組立系）（レベル2）","1級左官作業技能士（レベル3必須）","登録左官基幹技能者（レベル4）"],
+    reqFn:function(d,l,q){if(d>=2150&&l>=645&&q[0]&&q[1]&&q[2])return 4;if(d>=1075&&l>=215&&q[0]&&q[1])return 3;if(d>=645&&q[0])return 2;return 1;},
+    nextReqs:function(c,d,l,q){if(c===1)return[{ok:d>=645,txt:`就労日数 645日以上（あと${Math.max(0,645-d)}日）`},{ok:q[0],txt:"2級左官作業技能士（または研削といし特別教育＋足場組立系）"}];if(c===2)return[{ok:d>=1075,txt:`就労日数 1,075日以上（あと${Math.max(0,1075-d)}日）`},{ok:l>=215,txt:`職長・班長 215日以上（あと${Math.max(0,215-l)}日）`},{ok:q[1],txt:"1級左官作業技能士"}];if(c===3)return[{ok:d>=2150,txt:`就労日数 2,150日以上（あと${Math.max(0,2150-d)}日 ≒${Math.ceil(Math.max(0,2150-d)/215*10)/10}年）`},{ok:l>=645,txt:`職長 645日以上（あと${Math.max(0,645-l)}日）`},{ok:q[2],txt:"登録左官基幹技能者"}];return[];},
+    levels:[{lv:1,days:0,leader:0,desc:"CCUS登録のみ",role:"見習い技能者"},{lv:2,days:645,leader:0,desc:"就労645日＋2級左官技能士等",role:"中堅技能者"},{lv:3,days:1075,leader:215,desc:"就労1,075日＋1級左官技能士＋職長215日",role:"職長・班長クラス"},{lv:4,days:2150,leader:645,desc:"就労2,150日＋登録基幹技能者＋職長645日",role:"登録基幹技能者クラス"}]},
+  tosou:{name:"建設塗装",org:"（一社）日本塗装工業会",
+    qids:["pq0","pq1","pq2","pq3"],
+    qLabels:["2級建築塗装または鋼橋塗装技能士等（レベル2）","職長・安全衛生責任者教育（レベル3必須）","1級建築塗装または鋼橋塗装技能士等（レベル3）","登録建設塗装基幹技能者（レベル4）"],
+    reqFn:function(d,l,q){if(d>=2150&&l>=645&&q[0]&&q[1]&&q[2]&&q[3])return 4;if(d>=1505&&l>=215&&q[0]&&q[1]&&q[2])return 3;if(d>=645&&q[0])return 2;return 1;},
+    nextReqs:function(c,d,l,q){if(c===1)return[{ok:d>=645,txt:`就労日数 645日以上（あと${Math.max(0,645-d)}日）`},{ok:q[0],txt:"2級建築塗装または鋼橋塗装技能士など"}];if(c===2)return[{ok:d>=1505,txt:`就労日数 1,505日以上（あと${Math.max(0,1505-d)}日 ≒${Math.ceil(Math.max(0,1505-d)/215*10)/10}年）`},{ok:l>=215,txt:`職長・班長 215日以上（あと${Math.max(0,215-l)}日）`},{ok:q[1],txt:"職長・安全衛生責任者教育（必須）"},{ok:q[2],txt:"1級建築塗装または鋼橋塗装技能士等"}];if(c===3)return[{ok:d>=2150,txt:`就労日数 2,150日以上（あと${Math.max(0,2150-d)}日 ≒${Math.ceil(Math.max(0,2150-d)/215*10)/10}年）`},{ok:l>=645,txt:`職長 645日以上（あと${Math.max(0,645-l)}日）`},{ok:q[3],txt:"登録建設塗装基幹技能者"}];return[];},
+    levels:[{lv:1,days:0,leader:0,desc:"CCUS登録のみ",role:"見習い技能者"},{lv:2,days:645,leader:0,desc:"就労645日＋2級塗装技能士等",role:"中堅技能者"},{lv:3,days:1505,leader:215,desc:"就労1,505日＋職長教育＋1級塗装技能士等＋職長215日",role:"職長・班長クラス"},{lv:4,days:2150,leader:645,desc:"就労2,150日＋登録基幹技能者＋職長645日",role:"登録基幹技能者クラス"}]},
+  other:{name:"その他（共通目安）",org:"各能力評価実施団体",
+    qids:["oq0","oq1","oq2"],
+    qLabels:["基礎資格・特別教育等（レベル2相当）","技能士・施工管理技士等（レベル3相当）","登録基幹技能者等（レベル4）"],
+    reqFn:function(d,l,q){if(d>=2150&&l>=645&&q[0]&&q[1]&&q[2])return 4;if(d>=1075&&l>=215&&q[0]&&q[1])return 3;if(d>=645&&q[0])return 2;return 1;},
+    nextReqs:function(c,d,l,q){if(c===1)return[{ok:d>=645,txt:`就労日数 645日以上（あと${Math.max(0,645-d)}日）`},{ok:q[0],txt:"職種に応じた基礎資格・特別教育等"}];if(c===2)return[{ok:d>=1075,txt:`就労日数 1,075日以上（あと${Math.max(0,1075-d)}日）`},{ok:l>=215,txt:`職長・班長 215日以上（あと${Math.max(0,215-l)}日）`},{ok:q[1],txt:"技能士・施工管理技士等（中級資格）"}];if(c===3)return[{ok:d>=2150,txt:`就労日数 2,150日以上（あと${Math.max(0,2150-d)}日 ≒${Math.ceil(Math.max(0,2150-d)/215*10)/10}年）`},{ok:l>=645,txt:`職長 645日以上（あと${Math.max(0,645-l)}日）`},{ok:q[2],txt:"登録基幹技能者等"}];return[];},
+    levels:[{lv:1,days:0,leader:0,desc:"CCUS登録のみ",role:"見習い技能者"},{lv:2,days:645,leader:0,desc:"就労645日＋基礎資格",role:"中堅技能者"},{lv:3,days:1075,leader:215,desc:"就労1,075日＋中級資格＋職長215日",role:"職長・班長クラス"},{lv:4,days:2150,leader:645,desc:"就労2,150日＋登録基幹技能者＋職長645日",role:"登録基幹技能者クラス"}]}
+};
+
+const CARD=[
+  {bg:"#F5F5F0",fg:"#555550",label:"白"},
+  {bg:"#BBDEFB",fg:"#0D47A1",label:"青"},
+  {bg:"#CFD8DC",fg:"#263238",label:"銀"},
+  {bg:"#FFE082",fg:"#4E2500",label:"金"}
+];
+
+function initCcus(){
+  const sel=document.getElementById('shoku');
+  if(sel.options.length<=1){
+    sel.innerHTML='<option value="">-- 職種を選んでください --</option>';
+    Object.entries(SHOKU_DATA).forEach(([k,v])=>{
+      const o=document.createElement('option');o.value=k;o.textContent=v.name;sel.appendChild(o);
+    });
+  }
+}
+
+function onShokuChange(){
+  const key=document.getElementById('shoku').value;
+  const area=document.getElementById('qual-area');
+  if(!key||!SHOKU_DATA[key]){area.innerHTML='<p style="font-size:14px;color:var(--gray500);">職種を選ぶと表示されます。</p>';return;}
+  const d=SHOKU_DATA[key];
+  area.innerHTML=d.qids.map((id,i)=>`
+    <label style="display:flex;align-items:flex-start;gap:8px;font-size:14px;cursor:pointer;margin-bottom:8px;">
+      <input type="checkbox" id="${id}" style="width:18px;height:18px;margin-top:2px;flex-shrink:0;"> ${d.qLabels[i]}
+    </label>`).join('');
+  document.getElementById('ccus-result').classList.add('hidden');
+}
+
+function pct(v,m){return Math.min(100,Math.round(v/m*100));}
+
+function calcCcus(){
+  const key=document.getElementById('shoku').value;
+  if(!key||!SHOKU_DATA[key]){alert('職種を選択してください');return;}
+  const d=SHOKU_DATA[key];
+  const days=parseInt(document.getElementById('days').value)||0;
+  const leader=parseInt(document.getElementById('leader').value)||0;
+  const quals=d.qids.map(id=>{const el=document.getElementById(id);return el?el.checked:false;});
+  const lv=d.reqFn(days,leader,quals);
+  const c=CARD[lv-1];
+  const lvData=d.levels[lv-1];
+
+  document.getElementById('ccus-result').classList.remove('hidden');
+  document.getElementById('ccus-badge').innerHTML=`
+    <div class="lv-badge">
+      <div class="ccus-card-icon" style="background:${c.bg};color:${c.fg};">
+        <i class="ti ti-id" aria-hidden="true"></i><span>${c.label}</span>
+      </div>
+      <div class="lv-info">
+        <h3>レベル${lv}（${c.label}カード）</h3>
+        <p>${lvData.role}</p>
+        <p style="margin-top:3px;font-size:12px;">${d.name}・申請先：${d.org}</p>
+      </div>
+    </div>`;
+
+  let progs='';
+  if(lv<4){
+    const next=d.levels[lv];
+    progs+=`<div class="prog-wrap"><div class="prog-label"><span>就労日数</span><span>${days.toLocaleString()} / ${next.days.toLocaleString()}日（${pct(days,next.days)}%）</span></div><div class="prog-bar"><div class="prog-fill" style="width:${pct(days,next.days)}%;background:var(--orange);"></div></div></div>`;
+    if(next.leader>0)progs+=`<div class="prog-wrap"><div class="prog-label"><span>職長日数</span><span>${leader.toLocaleString()} / ${next.leader.toLocaleString()}日（${pct(leader,next.leader)}%）</span></div><div class="prog-bar"><div class="prog-fill" style="width:${pct(leader,next.leader)}%;background:var(--blue);"></div></div></div>`;
+  }else{progs='<p style="font-size:15px;color:var(--gray700);margin:0;">最上位レベル（金カード）に到達しています。</p>';}
+  document.getElementById('ccus-progs').innerHTML=progs;
+
+  const nextWrap=document.getElementById('ccus-next-wrap');
+  if(lv<4){
+    nextWrap.classList.remove('hidden');
+    const reqs=d.nextReqs(lv,days,leader,quals);
+    document.getElementById('ccus-next').innerHTML=`
+      <p style="font-size:15px;font-weight:700;margin:0 0 10px;color:var(--navy);">→ レベル${lv+1}（${CARD[lv].label}カード）への条件</p>
+      ${reqs.map(r=>`<div class="req ${r.ok?'ok':'ng'}"><i class="ti ${r.ok?'ti-circle-check':'ti-circle-x'}" aria-hidden="true"></i><span>${r.txt}</span></div>`).join('')}
+      <p style="font-size:13px;color:var(--gray500);margin:10px 0 0;">申請先：${d.org}（埼玉土建各支部でも相談可）</p>`;
+  }else{nextWrap.classList.add('hidden');}
+
+  document.getElementById('ccus-table').innerHTML=d.levels.map(l=>`
+    <div class="table-row">
+      <div class="mini-card" style="background:${CARD[l.lv-1].bg};color:${CARD[l.lv-1].fg};">
+        <i class="ti ti-id" aria-hidden="true"></i><span>${CARD[l.lv-1].label}</span>
+      </div>
+      <div style="flex:1;">
+        <p style="font-size:14px;font-weight:700;margin:0 0 2px;color:var(--navy);">レベル${l.lv}（${CARD[l.lv-1].label}）${l.lv===lv?'<span class="cur-tag">現在</span>':''}</p>
+        <p style="font-size:13px;color:var(--gray700);margin:0;">${l.desc}</p>
+      </div>
+    </div>`).join('');
+}
+// ========== 国保税シミュレーター ==========
+const KK_RATES={
+  ageo:{name:"上尾市",year:"令和8年度",
+    iry:{sRate:0.081,uRate:49233,cap:660000},shi:{sRate:0.0283,uRate:17105,cap:260000},
+    kai:{sRate:0.0247,uRate:17492,cap:170000},ko:{sRate:0.0026,uRate:1687,cap:30000}},
+  ina:{name:"伊奈町",year:"令和8年度",
+    iry:{sRate:0.0845,uRate:45700,cap:650000},shi:{sRate:0.0293,uRate:16700,cap:260000},
+    kai:{sRate:0.0238,uRate:15500,cap:170000},ko:{sRate:0.0029,uRate:1765,cap:30000}}
+};
+const KK_DOKEN_KUBUN={
+  "toku2":{label:"特2種",hoken:43200,shien:700},"toku1":{label:"特1種",hoken:43200,shien:700},
+  "1":{label:"第1種",hoken:43200,shien:700},"2":{label:"第2種",hoken:41300,shien:600},
+  "3m":{label:"第3種（男）",hoken:38700,shien:600},"3f":{label:"第3種（女）",hoken:38700,shien:600},
+  "5":{label:"第5種",hoken:27700,shien:500},"6":{label:"第6種",hoken:15400,shien:200}
+};
+const KK_FAM_HOKEN={tokubetsu:7900,ippan:6200,chuko:4400,shogaku:3200,mishuugaku:2100};
+const KK_FAM_SHIEN={tokubetsu:200,ippan:200,chuko:100,shogaku:0,mishuugaku:0};
+const KK_KAIGO_M=2700;
+let kkMembers=[],kkMemberCount=0;
+
+function kkAddMember(){
+  kkMemberCount++;const id=kkMemberCount;const isFirst=kkMembers.length===0;kkMembers.push({id});
+  const div=document.createElement('div');div.className='member-row';div.id='kkm-'+id;
+  div.innerHTML=`
+    <div style="display:flex;flex-direction:column;gap:6px;flex:1;">
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+        <label style="font-size:13px;font-weight:600;color:var(--gray700);white-space:nowrap;">続柄</label>
+        <select id="kkrel-${id}" style="font-size:14px;padding:6px 8px;flex:1;min-width:160px;">
+          <option value="honnin" ${isFirst?'selected':''}>本人（組合員）</option>
+          <option value="tokubetsu" ${!isFirst?'selected':''}>特別家族（20〜59歳）</option>
+          <option value="ippan">一般家族（18〜19歳・60歳以上・妻・母・学生等）</option>
+          <option value="chuko">中高生相当（12〜17歳）</option>
+          <option value="shogaku">小学生相当（6〜11歳）</option>
+          <option value="mishuugaku">未就学児（5歳以下）</option>
+        </select>
+        <label style="font-size:13px;font-weight:600;color:var(--gray700);white-space:nowrap;">年齢</label>
+        <input type="number" id="kkage-${id}" min="0" max="100" value="${isFirst?40:35}" style="width:64px;font-size:14px;padding:6px 8px;">
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+        <label style="font-size:13px;font-weight:600;color:var(--gray700);white-space:nowrap;">前年所得額</label>
+        <input type="number" id="kkinc-${id}" min="0" value="${isFirst?3000000:0}" style="width:130px;font-size:14px;padding:6px 8px;">
+        <span style="font-size:12px;color:var(--gray500);">円（給与収入×約0.8が目安）</span>
+      </div>
+    </div>
+    ${!isFirst?`<button class="rm-btn" onclick="kkRemoveMember(${id})"><i class="ti ti-x" aria-hidden="true"></i></button>`:''}
+  `;
+  document.getElementById('kk-members').appendChild(div);
+}
+
+function kkRemoveMember(id){kkMembers=kkMembers.filter(m=>m.id!==id);const el=document.getElementById('kkm-'+id);if(el)el.remove();}
+
+function kkGetMembers(){return kkMembers.map(m=>{const age=parseInt(document.getElementById('kkage-'+m.id).value)||0;const income=parseFloat(document.getElementById('kkinc-'+m.id).value)||0;const rel=document.getElementById('kkrel-'+m.id).value;return{id:m.id,age,income,taxBase:Math.max(0,income-430000),rel};});}
+
+function kkCalcCity(mems,cityKey){
+  const r=KK_RATES[cityKey];
+  const totalBase=mems.reduce((s,m)=>s+m.taxBase,0);
+  const kaiBase=mems.filter(m=>m.age>=40&&m.age<65).reduce((s,m)=>s+m.taxBase,0);
+  const n=mems.length;const kaiN=mems.filter(m=>m.age>=40&&m.age<65).length;
+  const freeKids=mems.filter(m=>m.age<=18&&m.rel!=='honnin').length;
+  let iry=Math.min(totalBase*r.iry.sRate+n*r.iry.uRate,r.iry.cap);
+  let shi=Math.min(totalBase*r.shi.sRate+n*r.shi.uRate,r.shi.cap);
+  let kai=Math.min(kaiBase*r.kai.sRate+kaiN*r.kai.uRate,r.kai.cap);
+  let ko=Math.min(totalBase*r.ko.sRate+n*r.ko.uRate-freeKids*r.ko.uRate,r.ko.cap);
+  return{iry,shi,kai,ko,total:iry+shi+kai+ko,r};
+}
+
+function kkCalcDoken(mems,dkubun){
+  const kd=KK_DOKEN_KUBUN[dkubun];const honnin=mems.find(m=>m.rel==='honnin');const honninAge=honnin?.age||40;
+  const kaigoM=(honninAge>=40&&honninAge<65)?KK_KAIGO_M:0;
+  const families=mems.filter(m=>m.rel!=='honnin');let famHoken=0,famShien=0,famKaigo=0;const famDetails=[];
+  families.forEach((m,i)=>{const exempt=i>=3;const fh=exempt?0:(KK_FAM_HOKEN[m.rel]||7900);const fs=exempt?0:(KK_FAM_SHIEN[m.rel]||200);const fk=(exempt||!['tokubetsu','ippan'].includes(m.rel))?0:(m.age>=40&&m.age<65?KK_KAIGO_M:0);famHoken+=fh;famShien+=fs;famKaigo+=fk;famDetails.push({rel:m.rel,age:m.age,exempt,fh,fs,fk});});
+  const monthTotal=kd.hoken+kd.shien+kaigoM+famHoken+famShien+famKaigo;
+  return{hokenM:kd.hoken,shienM:kd.shien,kaigoM,famHoken,famShien,famKaigo,famDetails,monthTotal,yearTotal:monthTotal*12,kubunLabel:kd.label};
+}
+
+function kkCalc(){
+  const cityKey=document.getElementById('kk-city').value;const dkubun=document.getElementById('kk-dkubun').value;
+  const mems=kkGetMembers();if(!mems.length){alert('世帯員を入力してください');return;}
+  const city=kkCalcCity(mems,cityKey);const doken=kkCalcDoken(mems,dkubun);
+  const cityName=KK_RATES[cityKey].name;const yn=n=>Math.round(n).toLocaleString('ja-JP')+'円';
+  const cityM=Math.round(city.total/12);const diffM=cityM-doken.monthTotal;
+  const cheaper=diffM>0?'土建国保':cityName+'国保';const wc=diffM>0?'doken':'city';
+
+  document.getElementById('kk-result').classList.remove('hidden');
+
+  document.getElementById('kk-compare-content').innerHTML=`
+    <div class="compare-grid">
+      <div class="compare-box ${diffM>0?'':'winner'}">
+        <p class="compare-box-label">${cityName}国保</p>
+        <p class="compare-box-amount">${cityM.toLocaleString()}<span class="compare-box-unit">円/月</span></p>
+        <p class="compare-box-year">年間 ${yn(city.total)}</p>
+      </div>
+      <div class="compare-box ${diffM>0?'winner':''}">
+        <p class="compare-box-label">埼玉土建国保</p>
+        <p class="compare-box-amount">${doken.monthTotal.toLocaleString()}<span class="compare-box-unit">円/月</span></p>
+        <p class="compare-box-year">年間 ${yn(doken.yearTotal)}</p>
+      </div>
+    </div>
+    <div class="winner-banner ${wc}">
+      <i class="ti ti-trending-down" style="font-size:16px;vertical-align:-3px;margin-right:6px;" aria-hidden="true"></i>
+      月額では<strong>${cheaper}</strong>が <strong>${Math.abs(diffM).toLocaleString()}円/月</strong>（年間 <strong>${yn(Math.abs(diffM)*12)}</strong>）安い試算です。
+    </div>`;
+
+  const hasKaigo=mems.some(m=>m.age>=40&&m.age<65);
+  document.getElementById('kk-ageo-detail').innerHTML=`
+    <p style="font-size:15px;font-weight:700;color:var(--navy);margin:0 0 10px;">${cityName}国保 内訳</p>
+    <div class="result-row"><span class="result-label">医療分</span><span class="result-val">${yn(city.iry)}<br><span class="result-sub">月 ${yn(city.iry/12)}</span></span></div>
+    <div class="result-row"><span class="result-label">後期高齢者支援分</span><span class="result-val">${yn(city.shi)}<br><span class="result-sub">月 ${yn(city.shi/12)}</span></span></div>
+    ${hasKaigo?`<div class="result-row"><span class="result-label">介護分（40〜64歳）</span><span class="result-val">${yn(city.kai)}<br><span class="result-sub">月 ${yn(city.kai/12)}</span></span></div>`:''}
+    <div class="result-row"><span class="result-label">子ども・子育て支援金分</span><span class="result-val">${yn(city.ko)}<br><span class="result-sub">月 ${yn(city.ko/12)}</span></span></div>
+    <div class="result-row total"><span class="result-label">年間合計</span><span class="result-val">${yn(city.total)}</span></div>
+    <div class="result-row"><span class="result-label" style="color:var(--gray500);">月額換算</span><span class="result-val" style="font-size:18px;">${cityM.toLocaleString()}円/月</span></div>`;
+
+  const famRows=doken.famDetails.map(f=>{const rl={tokubetsu:'特別家族',ippan:'一般家族',chuko:'中高生',shogaku:'小学生',mishuugaku:'未就学児'}[f.rel]||f.rel;const tm=f.fh+f.fs+f.fk;return f.exempt?`<div class="result-row" style="opacity:.5;"><span class="result-label">${rl}（${f.age}歳）</span><span class="result-val">免除（4人目以降）</span></div>`:`<div class="result-row"><span class="result-label">${rl}（${f.age}歳）${f.fk>0?' +介護':''}</span><span class="result-val">${yn(tm*12)}<br><span class="result-sub">月 ${tm.toLocaleString()}円</span></span></div>`;}).join('');
+
+  document.getElementById('kk-doken-detail').innerHTML=`
+    <p style="font-size:15px;font-weight:700;color:var(--navy);margin:0 0 10px;">埼玉土建国保 内訳（${doken.kubunLabel}）</p>
+    <div class="result-row"><span class="result-label">組合員保険料</span><span class="result-val">${yn(doken.hokenM*12)}<br><span class="result-sub">月 ${doken.hokenM.toLocaleString()}円</span></span></div>
+    <div class="result-row"><span class="result-label">子育て支援金</span><span class="result-val">${yn(doken.shienM*12)}<br><span class="result-sub">月 ${doken.shienM.toLocaleString()}円</span></span></div>
+    ${doken.kaigoM>0?`<div class="result-row"><span class="result-label">介護保険料（組合員）</span><span class="result-val">${yn(doken.kaigoM*12)}<br><span class="result-sub">月 ${doken.kaigoM.toLocaleString()}円</span></span></div>`:''}
+    ${famRows}
+    <div class="result-row total"><span class="result-label">月額合計</span><span class="result-val" style="font-size:18px;">${doken.monthTotal.toLocaleString()}円/月</span></div>
+    <div class="result-row total"><span class="result-label">年間合計</span><span class="result-val">${yn(doken.yearTotal)}</span></div>
+    <div class="info-box" style="margin-top:10px;">
+      <i class="ti ti-star" style="font-size:15px;vertical-align:-2px;margin-right:4px;" aria-hidden="true"></i>
+      土建国保：入院医療費全額払戻し・傷病手当金（最大180日）・出産育児一時金50万円・葬祭費7万円
+    </div>`;
+
+  kkTab('compare');
+}
+
+function kkTab(tab){
+  ['compare','ageo','doken'].forEach(t=>{
+    document.getElementById('kkp-'+t).classList.toggle('hidden',t!==tab);
+    document.getElementById('kkt-'+t).classList.toggle('active',t===tab);
+  });
+}
+
+// 初期化
+kkAddMember();
+
+function kkTab(tab){
+  ['compare','ageo','doken'].forEach(t=>{
+    document.getElementById('kkp-'+t).classList.toggle('hidden',t!==tab);
+    document.getElementById('kkt-'+t).classList.toggle('active',t===tab);
+  });
+}
+</script>
+</body>
+</html>

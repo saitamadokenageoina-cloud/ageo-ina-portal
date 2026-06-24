@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>ワンタップ共済申請｜埼玉土建 上尾伊奈支部</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.47.0/iconfont/tabler-icons.min.css">
+<link rel="stylesheet" href="common.css">
+<style>
+.step-row{display:flex;gap:12px;align-items:flex-start;margin-bottom:16px;}
+.step-num{
+  width:32px;height:32px;border-radius:50%;
+  background:var(--orange);color:var(--white);
+  font-size:15px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.step-body h3{font-size:15px;font-weight:700;color:var(--navy);margin:0 0 3px;}
+.step-body p{font-size:13px;color:var(--gray600);margin:0;}
+.upload-zone{
+  border:2.5px dashed var(--gray200);border-radius:var(--r16);
+  padding:32px 20px;text-align:center;cursor:pointer;
+  transition:all .2s;position:relative;overflow:hidden;margin-bottom:12px;
+}
+.upload-zone:hover{border-color:var(--orange);background:var(--orange-lt);}
+.upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;}
+.upload-zone i{font-size:40px;color:var(--gray200);display:block;margin-bottom:8px;}
+.upload-zone p{font-size:14px;color:var(--gray400);margin:0;}
+.preview-box{
+  background:var(--gray50);border-radius:var(--r12);padding:16px;
+  margin-bottom:12px;display:none;
+}
+.draft-box{
+  background:var(--navy);border-radius:var(--r16);padding:20px;color:var(--white);
+  margin-bottom:12px;display:none;
+}
+.draft-title{font-size:16px;font-weight:700;margin:0 0 14px;display:flex;align-items:center;gap:8px;}
+.draft-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.1);font-size:14px;}
+.draft-row:last-child{border:none;}
+.draft-key{color:rgba(255,255,255,.6);}
+.draft-val{font-weight:600;}
+.kyosai-type{
+  display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;
+}
+.kyosai-chip{
+  padding:8px 14px;border-radius:99px;border:2px solid var(--gray200);
+  font-size:13px;font-weight:600;color:var(--gray600);cursor:pointer;
+  transition:all .15s;background:var(--white);
+}
+.kyosai-chip.selected{background:var(--orange);color:var(--white);border-color:var(--orange);}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="hdr">
+  <button class="hdr-back" onclick="location.href='index.html'">
+    <i class="ti ti-arrow-left"></i>ホーム
+  </button>
+  <div style="text-align:right;">
+    <p class="hdr-org" style="margin:0;">AI搭載</p>
+    <p class="hdr-title" style="margin:0;font-size:14px;">ワンタップ共済申請</p>
+  </div>
+</header>
+
+<div class="content">
+  <div class="alert alert-info" style="margin-bottom:16px;">
+    <i class="ti ti-sparkles"></i>
+    <span>AIが書類を自動解析して申請書の下書きを作成します。最終的な申請は支部への提出が必要です。</span>
+  </div>
+
+  <!-- ステップ説明 -->
+  <div class="card">
+    <p class="sec-label">かんたん3ステップ</p>
+    <div class="step-row">
+      <div class="step-num">1</div>
+      <div class="step-body"><h3>申請種別を選ぶ</h3><p>傷病・入院・ケガなど当てはまるものを選択</p></div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">2</div>
+      <div class="step-body"><h3>書類を撮影・アップロード</h3><p>領収書・診断書・診療明細書など</p></div>
+    </div>
+    <div class="step-row" style="margin-bottom:0;">
+      <div class="step-num">3</div>
+      <div class="step-body"><h3>AIが下書きを作成 → 支部に提出</h3><p>内容を確認して支部事務所にお持ちください</p></div>
+    </div>
+  </div>
+
+  <!-- STEP1 -->
+  <div class="card">
+    <p class="sec-label">STEP 1 申請種別を選択</p>
+    <div class="kyosai-type" id="chips">
+      <button class="kyosai-chip" onclick="selectChip(this,'病気（入院）')">病気（入院）</button>
+      <button class="kyosai-chip" onclick="selectChip(this,'ケガ（入院）')">ケガ（入院）</button>
+      <button class="kyosai-chip" onclick="selectChip(this,'通院')">通院</button>
+      <button class="kyosai-chip" onclick="selectChip(this,'手術')">手術</button>
+      <button class="kyosai-chip" onclick="selectChip(this,'死亡')">死亡</button>
+      <button class="kyosai-chip" onclick="selectChip(this,'後遺障害')">後遺障害</button>
+    </div>
+  </div>
+
+  <!-- STEP2 -->
+  <div class="card">
+    <p class="sec-label">STEP 2 書類をアップロード</p>
+    <div class="upload-zone" onclick="document.getElementById('file-input').click()">
+      <input type="file" id="file-input" accept="image/*" capture="environment" onchange="previewFile(event)">
+      <i class="ti ti-camera"></i>
+      <p>タップしてカメラで撮影<br>または写真を選択</p>
+    </div>
+    <div class="preview-box" id="preview-box">
+      <p style="font-size:13px;font-weight:600;color:var(--green);margin:0 0 8px;">
+        <i class="ti ti-check" style="font-size:15px;vertical-align:-2px;margin-right:4px;"></i>書類を読み込みました
+      </p>
+      <img id="preview-img" style="border-radius:var(--r8);width:100%;">
+    </div>
+
+    <button class="btn-primary" onclick="analyzeDocs()" id="analyze-btn" style="display:none;">
+      <i class="ti ti-sparkles"></i>AIで解析・下書きを作成する
+    </button>
+  </div>
+
+  <!-- STEP3 結果 -->
+  <div class="draft-box" id="draft-box">
+    <p class="draft-title"><i class="ti ti-file-check" style="font-size:20px;color:var(--orange);"></i>申請書 下書き（AIが作成）</p>
+    <div class="draft-row"><span class="draft-key">申請種別</span><span class="draft-val" id="d-type">—</span></div>
+    <div class="draft-row"><span class="draft-key">氏名</span><span class="draft-val">（要記入）</span></div>
+    <div class="draft-row"><span class="draft-key">組合員番号</span><span class="draft-val">（要記入）</span></div>
+    <div class="draft-row"><span class="draft-key">診療機関</span><span class="draft-val" id="d-hospital">（書類から読取中）</span></div>
+    <div class="draft-row"><span class="draft-key">受診日</span><span class="draft-val" id="d-date">（書類から読取中）</span></div>
+    <div class="draft-row"><span class="draft-key">診断名</span><span class="draft-val" id="d-diag">（書類から読取中）</span></div>
+    <div class="draft-row"><span class="draft-key">医療費（本人負担）</span><span class="draft-val" id="d-fee">（書類から読取中）</span></div>
+    <div class="draft-row"><span class="draft-key">振込先口座</span><span class="draft-val">（要記入）</span></div>
+  </div>
+
+  <div id="next-step" style="display:none;">
+    <div class="alert alert-ok">
+      <i class="ti ti-check-circle"></i>
+      <span>下書きが完成しました。内容を確認の上、支部事務所（048-773-9863）にお越しください。<br>班審査が必要な場合は役員にご相談ください。</span>
+    </div>
+    <a href="tel:048-773-9863" class="btn-primary" style="display:flex;margin-top:8px;">
+      <i class="ti ti-phone"></i>支部に電話する
+    </a>
+  </div>
+</div>
+
+<footer>埼玉土建一般労働組合 上尾伊奈支部｜TEL 048-773-9863</footer>
+</div>
+
+<script>
+let selectedType = '';
+
+function selectChip(el, type){
+  document.querySelectorAll('.kyosai-chip').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedType = type;
+  checkReady();
+}
+
+let fileLoaded = false;
+
+function previewFile(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    document.getElementById('preview-img').src = ev.target.result;
+    document.getElementById('preview-box').style.display = 'block';
+    fileLoaded = true;
+    checkReady();
+  };
+  reader.readAsDataURL(file);
+}
+
+function checkReady(){
+  const btn = document.getElementById('analyze-btn');
+  btn.style.display = (selectedType && fileLoaded) ? 'flex' : 'none';
+}
+
+function analyzeDocs(){
+  const btn = document.getElementById('analyze-btn');
+  btn.innerHTML = '<i class="ti ti-loader" style="animation:spin 1s linear infinite;"></i>AIが解析中…';
+  btn.disabled = true;
+
+  // デモ：2秒後に仮データを表示
+  setTimeout(()=>{
+    const SAMPLE_DATA = {
+      hospital: '上尾中央総合病院',
+      date: '2026年6月24日',
+      diag: selectedType.includes('ケガ') ? '右手擦過傷・打撲' : '急性胃腸炎',
+      fee: '¥12,480',
+    };
+    document.getElementById('d-type').textContent = selectedType;
+    document.getElementById('d-hospital').textContent = SAMPLE_DATA.hospital;
+    document.getElementById('d-date').textContent = SAMPLE_DATA.date;
+    document.getElementById('d-diag').textContent = SAMPLE_DATA.diag;
+    document.getElementById('d-fee').textContent = SAMPLE_DATA.fee;
+    document.getElementById('draft-box').style.display = 'block';
+    document.getElementById('next-step').style.display = 'block';
+    btn.style.display = 'none';
+  }, 2000);
+}
+
+const style = document.createElement('style');
+style.textContent = '@keyframes spin{to{transform:rotate(360deg)}}';
+document.head.appendChild(style);
+</script>
+</body>
+</html>

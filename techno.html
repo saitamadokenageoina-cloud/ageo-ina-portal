@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>資格・CCUSデジタル手帳｜埼玉土建 上尾伊奈支部</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.47.0/iconfont/tabler-icons.min.css">
+<link rel="stylesheet" href="common.css">
+<style>
+.techno-header{
+  background:linear-gradient(135deg,var(--navy-dk),#1A3A6B);
+  border-radius:var(--r16);padding:20px;margin-bottom:12px;
+}
+.techno-name{font-size:13px;color:rgba(255,255,255,.6);margin:0 0 2px;}
+.techno-title{font-size:20px;font-weight:800;color:var(--white);margin:0 0 14px;}
+.ccus-level-row{display:flex;gap:12px;}
+.ccus-card{
+  width:60px;height:78px;border-radius:var(--r8);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;gap:4px;flex-shrink:0;
+  border:3px solid rgba(255,255,255,.3);
+}
+.ccus-card i{font-size:24px;}
+.ccus-info{flex:1;}
+.ccus-level-label{font-size:24px;font-weight:800;color:var(--white);margin:0 0 2px;}
+.ccus-days{font-size:13px;color:rgba(255,255,255,.65);margin:0 0 8px;}
+.ccus-prog-wrap{background:rgba(255,255,255,.2);border-radius:99px;height:8px;overflow:hidden;}
+.ccus-prog-fill{height:100%;background:var(--orange);border-radius:99px;}
+
+.shikaku-list{display:flex;flex-direction:column;gap:10px;}
+.shikaku-card{
+  background:var(--white);border-radius:var(--r12);box-shadow:var(--shadow-sm);
+  padding:14px 16px;display:flex;align-items:center;gap:12px;
+}
+.shikaku-icon{width:44px;height:44px;border-radius:var(--r12);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.shikaku-icon i{font-size:22px;}
+.shikaku-name{font-size:14px;font-weight:700;color:var(--navy);margin:0 0 2px;}
+.shikaku-date{font-size:12px;color:var(--gray400);margin:0;}
+.shikaku-status{margin-left:auto;flex-shrink:0;}
+.days-badge{
+  text-align:center;min-width:52px;padding:4px 8px;border-radius:var(--r8);
+  font-size:14px;font-weight:800;
+}
+.days-badge.ok{background:var(--green-lt);color:var(--green);}
+.days-badge.warn{background:#FFF8E6;color:#B07800;}
+.days-badge.danger{background:var(--red-lt);color:var(--red);}
+.days-badge.none{background:var(--gray100);color:var(--gray600);}
+.days-unit{font-size:10px;font-weight:500;}
+
+.add-form{background:var(--gray50);border-radius:var(--r12);padding:14px;margin-top:10px;}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="hdr">
+  <button class="hdr-back" onclick="location.href='index.html'">
+    <i class="ti ti-arrow-left"></i>ホーム
+  </button>
+  <div style="text-align:right;">
+    <p class="hdr-org" style="margin:0;">埼玉土建 上尾伊奈支部</p>
+    <p class="hdr-title" style="margin:0;font-size:14px;">資格・CCUSデジタル手帳</p>
+  </div>
+</header>
+
+<div class="content">
+  <!-- CCUSカードレベル -->
+  <div class="techno-header">
+    <p class="techno-name">建設キャリアアップシステム（CCUS）</p>
+    <p class="techno-title">カードレベル</p>
+    <div class="ccus-level-row">
+      <div class="ccus-card" style="background:#B5D4F4;color:#042C53;">
+        <i class="ti ti-id"></i><span>青カード</span>
+      </div>
+      <div class="ccus-info">
+        <p class="ccus-level-label">レベル2 <span style="font-size:15px;">（青カード）</span></p>
+        <p class="ccus-days">就労日数：782日 ／ 次のレベルまで723日</p>
+        <div class="ccus-prog-wrap">
+          <div class="ccus-prog-fill" style="width:52%;"></div>
+        </div>
+        <p style="font-size:11px;color:rgba(255,255,255,.5);margin:6px 0 0;">レベル3まで残り723日（約3.4年）</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 資格一覧 -->
+  <div class="card">
+    <p class="sec-label">保有資格・有効期限</p>
+    <div class="shikaku-list" id="shikaku-list"></div>
+
+    <!-- 資格追加フォーム -->
+    <div class="add-form" id="add-form" style="display:none;">
+      <p style="font-size:13px;font-weight:700;color:var(--navy);margin:0 0 10px;">資格を追加</p>
+      <div class="input-group">
+        <label>資格名</label>
+        <input type="text" id="new-name" placeholder="例：足場の組立て等作業主任者技能講習">
+      </div>
+      <div class="input-group">
+        <label>取得日</label>
+        <input type="date" id="new-date">
+      </div>
+      <div class="input-group">
+        <label>有効期限（なければ空欄）</label>
+        <input type="date" id="new-exp">
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn-primary" style="flex:1;" onclick="addShikaku()">
+          <i class="ti ti-plus"></i>追加
+        </button>
+        <button class="btn-secondary" style="flex:1;" onclick="document.getElementById('add-form').style.display='none'">
+          キャンセル
+        </button>
+      </div>
+    </div>
+
+    <button class="btn-secondary" style="margin-top:10px;" onclick="document.getElementById('add-form').style.display='block'">
+      <i class="ti ti-plus"></i>資格を追加する
+    </button>
+  </div>
+
+  <!-- 次回受講推奨 -->
+  <div class="card">
+    <p class="sec-label">次に取るべき講習（AIおすすめ）</p>
+    <div style="display:flex;flex-direction:column;gap:8px;" id="recommend-list">
+      <div style="background:var(--orange-lt);border-radius:var(--r12);padding:12px 14px;border-left:4px solid var(--orange);">
+        <p style="font-size:14px;font-weight:700;color:#7A3010;margin:0 0 3px;">⭐ 職長・安全衛生責任者教育</p>
+        <p style="font-size:13px;color:#9B4A1A;margin:0;">レベル3昇格に必要。埼玉土建技術研修センターで受講可（受講料全額補助）</p>
+      </div>
+      <div style="background:var(--blue-lt);border-radius:var(--r12);padding:12px 14px;border-left:4px solid var(--blue);">
+        <p style="font-size:14px;font-weight:700;color:#0C447C;margin:0 0 3px;">フルハーネス型墜落制止器具 特別教育</p>
+        <p style="font-size:13px;color:#1A5FA8;margin:0;">2022年より義務化。未取得の場合は早急に受講を。</p>
+      </div>
+    </div>
+    <a href="koushu.html" class="btn-secondary" style="display:flex;margin-top:12px;">
+      <i class="ti ti-calendar-event"></i>講習日程を確認する
+    </a>
+  </div>
+</div>
+
+<footer>埼玉土建一般労働組合 上尾伊奈支部｜TEL 048-773-9863</footer>
+</div>
+
+<script>
+const DEFAULT_SHIKAKU = [
+  {id:1,name:'玉掛け技能講習',date:'2020-03-15',exp:null},
+  {id:2,name:'足場の組立て等作業従事者特別教育',date:'2021-06-10',exp:null},
+  {id:3,name:'丸のこ等取扱作業者安全衛生教育',date:'2022-09-05',exp:null},
+  {id:4,name:'フォークリフト運転技能講習',date:'2019-11-20',exp:null},
+  {id:5,name:'特定化学物質及び四アルキル鉛等作業主任者技能講習',date:'2024-02-14',exp:'2029-02-13'},
+];
+
+let shikaku = [...DEFAULT_SHIKAKU];
+let nextId = 10;
+
+function daysUntil(dateStr){
+  if(!dateStr) return null;
+  const d = new Date(dateStr);
+  const today = new Date('2026-06-24');
+  return Math.round((d - today) / 86400000);
+}
+
+function badgeClass(days){
+  if(days === null) return 'none';
+  if(days < 0) return 'danger';
+  if(days < 90) return 'warn';
+  return 'ok';
+}
+
+function renderShikaku(){
+  const list = document.getElementById('shikaku-list');
+  const ICONS = ['ti-hammer','ti-tools','ti-shield-check','ti-certificate','ti-award'];
+  const COLORS = ['#FEE8D6|#C04E1E','#E8F5EE|#1A7A4A','#E8F0FB|#1A5FA8','#EDE8FE|#6B21A8','#FFF8E6|#B07800'];
+
+  list.innerHTML = shikaku.map((s,i)=>{
+    const days = daysUntil(s.exp);
+    const cls = badgeClass(days);
+    const [ibg,ifg] = (COLORS[i%COLORS.length]).split('|');
+    const badgeText = days === null ? '無期限' : days < 0 ? `期限切れ` : `残${days}日`;
+    return `
+      <div class="shikaku-card">
+        <div class="shikaku-icon" style="background:${ibg};">
+          <i class="ti ${ICONS[i%ICONS.length]}" style="color:${ifg};"></i>
+        </div>
+        <div style="flex:1;">
+          <p class="shikaku-name">${s.name}</p>
+          <p class="shikaku-date">取得：${s.date}${s.exp?'　有効期限：'+s.exp:''}</p>
+        </div>
+        <div class="shikaku-status">
+          <div class="days-badge ${cls}">${badgeText}</div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function addShikaku(){
+  const name = document.getElementById('new-name').value.trim();
+  const date = document.getElementById('new-date').value;
+  const exp = document.getElementById('new-exp').value || null;
+  if(!name||!date){alert('資格名と取得日を入力してください');return;}
+  shikaku.push({id:nextId++,name,date,exp});
+  renderShikaku();
+  document.getElementById('new-name').value='';
+  document.getElementById('new-date').value='';
+  document.getElementById('new-exp').value='';
+  document.getElementById('add-form').style.display='none';
+}
+
+renderShikaku();
+</script>
+</body>
+</html>
