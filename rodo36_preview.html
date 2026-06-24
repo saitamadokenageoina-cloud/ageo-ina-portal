@@ -2,425 +2,578 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>36協定届プレビュー</title>
 <style>
-@page { size: A4 portrait; margin: 12mm 14mm 12mm 14mm; }
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'MS Mincho','Hiragino Mincho ProN','Yu Mincho',serif;font-size:10.5pt;color:#000;background:#fff;line-height:1.4;}
-h1{font-size:13.5pt;font-weight:bold;text-align:center;margin:4px 0 2px;}
-.subtitle{text-align:center;font-size:9.5pt;margin:0 0 6px;}
-.remark{text-align:right;font-size:8.5pt;margin:0 0 4px;}
+/* ===== 印刷設定 ===== */
+@page {
+  size: A4 portrait;
+  margin: 12mm 12mm 10mm 15mm;
+}
+@media print {
+  .no-print { display: none !important; }
+  body { margin: 0; }
+  .page { page-break-after: always; }
+  .page:last-child { page-break-after: avoid; }
+}
 
-/* 番号欄 */
-.num-row{display:flex;gap:0;border:1px solid #000;margin-bottom:4px;}
-.num-cell{flex:1;border-right:1px solid #000;padding:2px 4px;font-size:8.5pt;}
-.num-cell:last-child{border-right:none;}
-.num-cell .label{font-size:7.5pt;display:block;}
-.num-cell .val{font-size:9pt;display:block;min-height:16px;}
+/* ===== 基本 ===== */
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  font-family: 'MS Mincho', 'Hiragino Mincho ProN', 'Yu Mincho', '游明朝', serif;
+  font-size: 9pt;
+  color: #000;
+  background: #f0f0f0;
+  margin: 0;
+  line-height: 1.35;
+}
 
-/* メインテーブル */
-table{width:100%;border-collapse:collapse;font-size:9.5pt;}
-th,td{border:1px solid #000;padding:2px 4px;vertical-align:middle;}
-th{background:#e0e0e0;font-weight:bold;text-align:center;}
-.th-sub{font-size:8pt;font-weight:normal;}
-.center{text-align:center;}
-.right{text-align:right;}
-.small{font-size:8.5pt;}
-.note-cell{font-size:7.5pt;line-height:1.4;}
-.underline{text-decoration:underline;}
+/* ===== 操作バー ===== */
+.topbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: #1B2A3B; color: #fff;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 16px; gap: 10px;
+  font-family: 'Hiragino Sans', 'Meiryo', sans-serif;
+}
+.topbar-title { font-size: 14px; font-weight: 700; }
+.topbar-right { display: flex; gap: 8px; align-items: center; }
+.btn-print {
+  background: #E8612A; color: #fff; border: none; border-radius: 6px;
+  padding: 8px 18px; font-size: 14px; font-weight: 700; cursor: pointer;
+}
+.btn-back {
+  background: rgba(255,255,255,.15); color: #fff; border: 1px solid rgba(255,255,255,.3);
+  border-radius: 6px; padding: 8px 14px; font-size: 13px; cursor: pointer;
+}
+.warn {
+  background: #FFF8E6; border: 1px solid #E8A800; border-radius: 6px;
+  padding: 8px 14px; font-size: 11px; color: #7A5500; margin: 0;
+  font-family: 'Hiragino Sans', 'Meiryo', sans-serif;
+}
 
-/* チェックボックス */
-.cb{display:inline-block;width:11px;height:11px;border:1px solid #000;vertical-align:middle;margin-right:3px;}
-.cb.checked::after{content:'✓';font-size:10px;line-height:1;}
-.cb-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:9pt;margin:2px 0;}
+/* ===== A4用紙 ===== */
+.paper-wrap {
+  padding: 60px 16px 24px;
+  display: flex; flex-direction: column; align-items: center; gap: 20px;
+}
+.page {
+  background: #fff;
+  width: 210mm;
+  min-height: 297mm;
+  padding: 12mm 12mm 10mm 15mm;
+  box-shadow: 0 2px 8px rgba(0,0,0,.15);
+  position: relative;
+}
 
-/* 署名欄 */
-.sign-section{margin-top:6px;border:1px solid #000;padding:6px;}
-.sign-row{display:flex;gap:0;margin-bottom:4px;align-items:center;}
-.sign-label{width:130px;font-size:9pt;flex-shrink:0;}
-.sign-val{flex:1;border-bottom:1px solid #000;min-height:18px;padding:0 4px;font-size:9.5pt;}
-.hanko{width:36px;height:36px;border:1px solid #000;display:inline-block;flex-shrink:0;margin-left:6px;}
+/* ===== タイトル ===== */
+.doc-title {
+  font-size: 14pt; font-weight: bold; text-align: center;
+  margin: 0 0 1mm; letter-spacing: .05em;
+}
+.doc-subtitle { font-size: 9pt; text-align: center; margin: 0 0 1mm; }
+.doc-note-right { font-size: 7.5pt; text-align: right; margin: 0 0 2mm; }
+.doc-note-right-small { font-size: 7pt; text-align: right; color: #444; margin: 0 0 2mm; }
 
-/* 印刷ボタン */
-.print-bar{background:#1B2A3B;color:#fff;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
-.print-bar .title{font-family:sans-serif;font-weight:700;font-size:15px;}
-.print-btn{background:#E8612A;color:#fff;border:none;border-radius:6px;padding:9px 20px;font-size:14px;font-weight:700;cursor:pointer;font-family:sans-serif;}
-.warn-box{background:#FFF8E6;border:1px solid #E8A800;border-radius:6px;padding:10px 14px;font-family:sans-serif;font-size:12px;color:#7A5500;margin-bottom:14px;}
-@media print{.print-bar,.warn-box{display:none;}}
+/* ===== 番号行 ===== */
+.num-row {
+  display: flex; border: 1px solid #000; margin-bottom: 2mm;
+}
+.num-cell {
+  flex: 1; border-right: 1px solid #000; padding: 1mm 2mm;
+}
+.num-cell:last-child { border-right: none; }
+.num-cell .nl { font-size: 7pt; display: block; color: #222; margin-bottom: 1mm; }
+.num-cell .nv {
+  font-size: 9.5pt; display: block; min-height: 5mm;
+  border-bottom: 1px solid #aaa;
+}
 
-.section-title{background:#c0c0c0;font-weight:bold;font-size:9.5pt;text-align:center;border:1px solid #000;padding:2px 4px;}
-.page-break{page-break-before:always;margin-top:12px;}
+/* ===== テーブル ===== */
+table { width: 100%; border-collapse: collapse; font-size: 8.5pt; margin-bottom: 2mm; }
+th, td { border: 1px solid #000; padding: 1mm 2mm; vertical-align: middle; }
+th { background: #d8d8d8; font-weight: bold; text-align: center; }
+.th-s { font-size: 7pt; font-weight: normal; display: block; }
+.center { text-align: center; }
+.right { text-align: right; }
+.bold { font-weight: bold; }
+
+/* 入力値スタイル */
+.val { font-size: 9.5pt; display: block; min-height: 4mm; }
+.val-lg { font-size: 9.5pt; display: block; min-height: 10mm; white-space: pre-wrap; word-break: break-all; }
+
+/* ===== チェックボックス ===== */
+.cb-area {
+  border: 1px solid #000; padding: 1.5mm 2mm; margin-bottom: 2mm; font-size: 8pt;
+}
+.cb-row { display: flex; align-items: flex-start; gap: 4px; margin: 1mm 0; }
+.cb { display: inline-block; width: 10px; height: 10px; border: 1px solid #000; flex-shrink: 0; margin-top: 1px; position: relative; }
+.cb.on::after { content: '✓'; font-size: 9px; position: absolute; top: -1px; left: 0; }
+
+/* ===== 協定有効期間 ===== */
+.yuko-row { display: flex; margin-bottom: 2mm; }
+.yuko-label { border: 1px solid #000; padding: 1mm 2mm; background: #d8d8d8; font-weight: bold; font-size: 8.5pt; white-space: nowrap; }
+.yuko-val { border: 1px solid #000; border-left: none; flex: 1; padding: 1mm 2mm; font-size: 9.5pt; }
+
+/* ===== 当事者欄 ===== */
+.toujisha {
+  border: 1px solid #000; margin-bottom: 2mm;
+}
+.tj-row {
+  display: flex; border-bottom: 1px solid #000;
+}
+.tj-row:last-child { border-bottom: none; }
+.tj-label {
+  background: #d8d8d8; font-weight: bold; font-size: 8pt;
+  border-right: 1px solid #000; padding: 1mm 2mm; white-space: nowrap;
+  display: flex; align-items: center; justify-content: center; min-width: 55mm;
+  writing-mode: horizontal-tb;
+}
+.tj-sub { font-weight: normal; font-size: 7pt; }
+.tj-inner { flex: 1; display: flex; flex-direction: column; }
+.tj-field { display: flex; border-bottom: 1px solid #ccc; }
+.tj-field:last-child { border-bottom: none; }
+.tj-fl { font-size: 8pt; background: #eee; border-right: 1px solid #ccc; padding: 1mm 2mm; white-space: nowrap; min-width: 28mm; display: flex; align-items: center; }
+.tj-fv { flex: 1; padding: 1mm 2mm; font-size: 9.5pt; }
+
+/* ===== 届出日・署名欄 ===== */
+.todoke-line { text-align: right; font-size: 9pt; margin-bottom: 3mm; }
+.sign-table { width: 100%; border-collapse: collapse; margin-bottom: 2mm; }
+.sign-table td { border: 1px solid #000; padding: 1.5mm 2mm; vertical-align: middle; }
+.sign-label-cell { background: #d8d8d8; font-weight: bold; font-size: 8.5pt; text-align: center; width: 28mm; }
+.sign-val-cell { font-size: 9.5pt; }
+.hanko-cell { width: 14mm; text-align: center; }
+.hanko { width: 12mm; height: 12mm; border: 1px solid #000; display: inline-block; }
+
+/* ===== フッターノート ===== */
+.foot-note { font-size: 7pt; color: #333; line-height: 1.5; margin-top: 2mm; border-top: 0.5px solid #888; padding-top: 2mm; }
+
+/* ===== 見本ウォーターマーク ===== */
+.watermark {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%,-50%) rotate(-30deg);
+  font-size: 72pt; color: rgba(0,0,0,.04);
+  font-weight: bold; white-space: nowrap; pointer-events: none; z-index: 0;
+}
+.page > *:not(.watermark) { position: relative; z-index: 1; }
+
+/* ===== 入力値（色付き） ===== */
+.user-val { color: #00008B; }
+.sample-val { color: #888; font-style: italic; }
 </style>
 </head>
 <body>
-<div class="print-bar no-print">
-  <span class="title">📄 36協定届 プレビュー（公式様式準拠）</span>
-  <button class="print-btn" onclick="window.print()">🖨️ 印刷・PDF保存</button>
-</div>
-<div class="warn-box">
-  ⚠️ <strong>ご注意：</strong>この書式は公式様式（様式第9号・第9号の2）に準拠した参考書式です。正式な届出には<strong>厚生労働省ホームページからダウンロードした公式様式</strong>をご使用ください。印刷後、関係者の署名・押印のうえ、所轄労働基準監督署へ届け出てください。
-</div>
 
-<!-- ========== 1枚目（一般条項） ========== -->
-<div id="page1">
-<h1 id="main-title">時間外労働・休日労働に関する協定届</h1>
-<p class="subtitle">（様式第9号（第16条第1項関係））</p>
-<p class="remark">（記入例は裏面参照）</p>
-
-<!-- 労働保険番号・法人番号 -->
-<div class="num-row">
-  <div class="num-cell" style="flex:2.5;">
-    <span class="label">労働保険番号</span>
-    <span class="val" id="p-rodo-bango">　</span>
-  </div>
-  <div class="num-cell" style="flex:2.5;">
-    <span class="label">法人番号</span>
-    <span class="val" id="p-hojin-bango">　</span>
-  </div>
-  <div class="num-cell" style="flex:1.2;">
-    <span class="label">常時使用する労働者数</span>
-    <span class="val center" id="p-ninzu">　</span>
+<!-- 操作バー（印刷時非表示） -->
+<div class="topbar no-print">
+  <span class="topbar-title">📄 36協定届 プレビュー</span>
+  <div class="topbar-right">
+    <p class="warn" id="warn-msg">⚠️ 正式な届出には厚生労働省の公式様式をご使用ください。</p>
+    <button class="btn-back" onclick="window.close()">✕ 閉じる</button>
+    <button class="btn-print" onclick="window.print()">🖨️ 印刷・PDF保存</button>
   </div>
 </div>
 
-<!-- 事業場情報 -->
-<table style="margin-bottom:4px;">
-  <tr>
-    <th style="width:18%;">事業の種類</th>
-    <td id="p-jigyoshu"></td>
-    <th style="width:18%;">事業の名称</th>
-    <td id="p-jigyomei"></td>
-  </tr>
-  <tr>
-    <th>事業の所在地<br><span class="th-sub">（電話番号）</span></th>
-    <td colspan="3" id="p-jusho"></td>
-  </tr>
-</table>
+<div class="paper-wrap" id="paper-wrap">
 
-<!-- 協定内容テーブル -->
-<table style="margin-bottom:4px;">
-  <colgroup>
-    <col style="width:22%">
-    <col style="width:14%">
-    <col style="width:10%">
-    <col style="width:11%">
-    <col style="width:11%">
-    <col style="width:11%">
-    <col style="width:21%">
-  </colgroup>
-  <tr>
-    <th rowspan="2">時間外労働をさせる<br>必要のある具体的事由</th>
-    <th rowspan="2">業務の種類</th>
-    <th rowspan="2">労働者数<br><span class="th-sub">（満18歳以上）</span></th>
-    <th colspan="3">延長することができる時間数</th>
-    <th rowspan="2">所定労働時間<br><span class="th-sub">（1日）</span></th>
-  </tr>
-  <tr>
-    <th>1日</th>
-    <th>1か月<br><span class="th-sub">（限度時間 45時間）</span></th>
-    <th>1年間<br><span class="th-sub">（限度時間 360時間）</span></th>
-  </tr>
-  <tr>
-    <td style="min-height:50px;" id="p-jiyu"></td>
-    <td class="center" id="p-gyomu"></td>
-    <td class="center" id="p-kyotei-ninzu"></td>
-    <td class="center" id="p-1nichi"></td>
-    <td class="center" id="p-1tsuki"></td>
-    <td class="center" id="p-1nen"></td>
-    <td class="center" id="p-shotei"></td>
-  </tr>
-</table>
+<!-- ========== 1枚目：様式第9号（一般条項） ========== -->
+<div class="page" id="page1">
+  <div class="watermark" id="wm1">見　本</div>
 
-<!-- 休日労働 -->
-<table style="margin-bottom:4px;" id="kyujitsu-table">
-  <colgroup>
-    <col style="width:22%"><col style="width:14%"><col style="width:10%"><col style="width:54%">
-  </colgroup>
-  <tr>
-    <th>休日労働をさせる必要のある具体的事由</th>
-    <th>業務の種類</th>
-    <th>労働者数<br><span class="th-sub">（満18歳以上）</span></th>
-    <th>所定休日（労働させることができる休日）</th>
-  </tr>
-  <tr id="kyujitsu-row">
-    <td id="p-kj-jiyu"></td>
-    <td class="center" id="p-kj-gyomu"></td>
-    <td class="center" id="p-kj-ninzu"></td>
-    <td id="p-kj-bi"></td>
-  </tr>
-</table>
+  <p class="doc-title">時間外労働・休日労働に関する協定届</p>
+  <p class="doc-subtitle">（様式第9号（第16条第1項関係））</p>
+  <p class="doc-note-right-small">事業場ごとに協定してください。</p>
 
-<!-- チェックボックス -->
-<div style="border:1px solid #000;padding:4px 6px;font-size:8.5pt;margin-bottom:4px;">
-  <div class="cb-row">
-    <span>上記で定める時間数にかかわらず、時間外労働及び休日労働を合算した時間数は、1箇月について100時間未満でなければならず、かつ2箇月から6箇月までを平均して80時間を超過しないこと。</span>
-    <span><span class="cb checked">　</span></span>
+  <!-- 労働保険番号 -->
+  <div class="num-row">
+    <div class="num-cell" style="flex:2.2;">
+      <span class="nl">労働保険番号（14桁）</span>
+      <span class="nv user-val" id="d-rodo-bango"></span>
+    </div>
+    <div class="num-cell" style="flex:2.2;">
+      <span class="nl">法人番号（13桁）</span>
+      <span class="nv user-val" id="d-hojin-bango"></span>
+    </div>
+    <div class="num-cell" style="flex:1.1;">
+      <span class="nl">常時使用する<br>労働者数</span>
+      <span class="nv center user-val" id="d-ninzu"></span>
+    </div>
   </div>
-</div>
 
-<!-- 協定の有効期間 -->
-<table style="margin-bottom:4px;">
-  <tr>
-    <th style="width:25%;">協定の有効期間</th>
-    <td id="p-yuko"></td>
-  </tr>
-</table>
+  <!-- 事業場情報 -->
+  <table>
+    <tr>
+      <th style="width:17%;">事業の種類</th>
+      <td class="user-val" id="d-jigyoshu"></td>
+      <th style="width:17%;">事業の名称</th>
+      <td class="user-val" id="d-jigyomei"></td>
+    </tr>
+    <tr>
+      <th>事業の所在地<br><span class="th-s">（電話番号）</span></th>
+      <td colspan="3" class="user-val" id="d-jusho"></td>
+    </tr>
+  </table>
 
-<!-- 当事者情報 -->
-<table style="margin-bottom:6px;">
-  <tr>
-    <th style="width:35%;">協定の当事者である労働組合（労働組合がある場合）の名称又は労働者の過半数を代表する者の</th>
-    <th style="width:15%;">職名</th>
-    <td id="p-daihyo-shoku"></td>
-  </tr>
-  <tr>
-    <td></td>
-    <th>氏名</th>
-    <td id="p-daihyo-name"></td>
-  </tr>
-  <tr>
-    <td colspan="2" class="small">協定の当事者（労働者の過半数を代表する者の場合）の選出方法</td>
-    <td id="p-daihyo-method"></td>
-  </tr>
-</table>
+  <!-- 時間外労働メインテーブル -->
+  <table>
+    <colgroup>
+      <col style="width:23%"><col style="width:15%"><col style="width:8%">
+      <col style="width:10%"><col style="width:12%"><col style="width:12%"><col style="width:20%">
+    </colgroup>
+    <tr>
+      <th rowspan="2">時間外労働をさせる必要のある<br>具体的事由</th>
+      <th rowspan="2">業務の種類</th>
+      <th rowspan="2">労働者数<br><span class="th-s">（満18歳<br>以上）</span></th>
+      <th colspan="3">延長することができる時間数</th>
+      <th rowspan="2">所定労働時間<br><span class="th-s">（1日）</span></th>
+    </tr>
+    <tr>
+      <th>1日</th>
+      <th>1か月<br><span class="th-s">（限度時間<br>45時間）</span></th>
+      <th>1年間<br><span class="th-s">（限度時間<br>360時間）</span></th>
+    </tr>
+    <tr>
+      <td><span class="val-lg user-val" id="d-jiyu" style="min-height:14mm;"></span></td>
+      <td class="center"><span class="val user-val" id="d-gyomu"></span></td>
+      <td class="center"><span class="val user-val" id="d-kyotei-ninzu"></span></td>
+      <td class="center"><span class="val user-val" id="d-1nichi"></span></td>
+      <td class="center"><span class="val user-val" id="d-1tsuki"></span></td>
+      <td class="center"><span class="val user-val" id="d-1nen"></span></td>
+      <td class="center"><span class="val user-val" id="d-shotei"></span></td>
+    </tr>
+  </table>
 
-<!-- チェックボックス2 -->
-<div style="border:1px solid #000;padding:4px 6px;font-size:8.5pt;margin-bottom:6px;">
-  <div class="cb-row">
-    <span class="cb checked">　</span><span>協定の当事者である労働組合が事業場の全ての労働者の過半数で組織する労働組合である又は協定の当事者である労働者の過半数を代表する者が事業場の全ての労働者の過半数を代表する者であること。</span>
+  <!-- 休日労働テーブル -->
+  <table id="kj-table">
+    <colgroup>
+      <col style="width:23%"><col style="width:15%"><col style="width:8%"><col style="width:54%">
+    </colgroup>
+    <tr>
+      <th>休日労働をさせる必要のある<br>具体的事由</th>
+      <th>業務の種類</th>
+      <th>労働者数<br><span class="th-s">（満18歳<br>以上）</span></th>
+      <th>所定休日（労働させることができる休日）</th>
+    </tr>
+    <tr>
+      <td><span class="val user-val" id="d-kj-jiyu" style="min-height:8mm;"></span></td>
+      <td class="center"><span class="val user-val" id="d-kj-gyomu"></span></td>
+      <td class="center"><span class="val user-val" id="d-kj-ninzu"></span></td>
+      <td><span class="val user-val" id="d-kj-bi"></span></td>
+    </tr>
+  </table>
+
+  <!-- チェックボックス① -->
+  <div class="cb-area">
+    <div class="cb-row">
+      <span>上記で定める時間数にかかわらず、時間外労働及び休日労働を合算した時間数は、1箇月について100時間未満でなければならず、かつ２箇月から６箇月までを平均して80時間を超過しないこと。</span>
+      <span class="cb on" style="flex-shrink:0;"></span>
+    </div>
   </div>
-  <div class="cb-row" style="margin-top:4px;">
-    <span class="cb checked">　</span><span>（労働者の過半数を代表する者の場合）上記の協定の当事者である労働者の過半数を代表する者は、労働基準法第41条第2号に規定する監督又は管理の地位にある者でなく、かつ同法に規定する協定等をする者を選出することを明らかにして実施される投票、挙手等の方法による手続により選出された者であって使用者の意向に基づき選出されたものでないこと。</span>
+
+  <!-- 協定の有効期間 -->
+  <div class="yuko-row">
+    <span class="yuko-label">協定の有効期間</span>
+    <span class="yuko-val user-val" id="d-yuko"></span>
   </div>
-</div>
 
-<!-- 締結日・届出日・署名欄 -->
-<table style="margin-bottom:4px;">
-  <tr>
-    <th style="width:22%;">協定の締結年月日</th>
-    <td id="p-teiketsu"></td>
-  </tr>
-</table>
-
-<div style="text-align:right;font-size:9.5pt;margin:4px 0 6px;" id="p-todoke-to"></div>
-
-<div class="sign-section">
-  <div class="sign-row">
-    <span class="sign-label">使用者　職名</span>
-    <span class="sign-val" id="p-shiyosha-shoku"></span>
-    <span class="sign-label" style="width:40px;text-align:center;padding:0 4px;">氏名</span>
-    <span class="sign-val" id="p-shiyosha-name"></span>
-    <span class="hanko"></span>
+  <!-- 協定の当事者 -->
+  <div class="toujisha">
+    <div class="tj-row">
+      <div class="tj-label" style="font-size:7.5pt;">
+        協定の当事者である<br>労働組合（労働組合<br>がある場合）の名称<br>又は労働者の過半数<br>を代表する者の
+      </div>
+      <div class="tj-inner">
+        <div class="tj-field">
+          <span class="tj-fl">職名</span>
+          <span class="tj-fv user-val" id="d-daihyo-shoku"></span>
+        </div>
+        <div class="tj-field">
+          <span class="tj-fl">氏名</span>
+          <span class="tj-fv user-val" id="d-daihyo-name"></span>
+        </div>
+        <div class="tj-field" style="border-bottom:none;">
+          <span class="tj-fl" style="font-size:7pt;">選出方法</span>
+          <span class="tj-fv user-val" style="font-size:8.5pt;" id="d-daihyo-method"></span>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
 
-<div style="font-size:7.5pt;margin:4px 0;">
-  ※ 本様式で届出を行う場合は、本届出書が36協定書を兼ねることができます。その場合は、使用者及び労働者代表の署名・押印が必要です。<br>
-  ※ 届出部数は1部（控えが必要な場合は2部）。提出先：事業場を管轄する労働基準監督署
-</div>
-</div>
-
-<!-- ========== 2枚目（特別条項） ========== -->
-<div id="page2" style="display:none;" class="page-break">
-<h1>時間外労働・休日労働に関する協定届（特別条項）</h1>
-<p class="subtitle">（様式第9号の2（第16条第1項関係））</p>
-<p class="remark">※ 一般条項（1枚目）と合わせて届出してください</p>
-
-<div class="num-row">
-  <div class="num-cell" style="flex:2.5;">
-    <span class="label">労働保険番号</span>
-    <span class="val" id="p2-rodo-bango"></span>
+  <!-- チェックボックス② -->
+  <div class="cb-area" style="font-size:7.5pt;">
+    <div class="cb-row">
+      <span class="cb on"></span>
+      <span>協定の当事者である労働組合が事業場の全ての労働者の過半数で組織する労働組合である又は協定の当事者である労働者の過半数を代表する者が事業場の全ての労働者の過半数を代表する者であること。</span>
+    </div>
+    <div class="cb-row" style="margin-top:2mm;">
+      <span class="cb on"></span>
+      <span>（労働者の過半数を代表する者の場合）上記の協定の当事者である労働者の過半数を代表する者は、労働基準法第41条第2号に規定する監督又は管理の地位にある者でなく、かつ同法に規定する協定等をする者を選出することを明らかにして実施される投票、挙手等の方法による手続により選出された者であって使用者の意向に基づき選出されたものでないこと。</span>
+    </div>
   </div>
-  <div class="num-cell" style="flex:2.5;">
-    <span class="label">法人番号</span>
-    <span class="val" id="p2-hojin-bango"></span>
+
+  <!-- 締結日・届出先・署名 -->
+  <div style="display:flex;gap:6mm;align-items:flex-start;margin-bottom:3mm;">
+    <div style="display:flex;gap:0;border:1px solid #000;flex-shrink:0;">
+      <span style="background:#d8d8d8;font-weight:bold;font-size:8pt;padding:1mm 2mm;border-right:1px solid #000;white-space:nowrap;">協定の締結年月日</span>
+      <span style="padding:1mm 2mm;font-size:9.5pt;min-width:60mm;" class="user-val" id="d-teiketsu"></span>
+    </div>
   </div>
-  <div class="num-cell" style="flex:1.2;">
-    <span class="label">常時使用する労働者数</span>
-    <span class="val center" id="p2-ninzu"></span>
+
+  <p class="todoke-line"><span class="user-val" id="d-todoke"></span>　<span class="user-val" id="d-roukisho"></span>　殿</p>
+
+  <table class="sign-table">
+    <tr>
+      <td class="sign-label-cell">使用者<br>職名・氏名</td>
+      <td class="sign-val-cell">
+        <span class="user-val" id="d-shiyosha-shoku"></span>　<span class="user-val" id="d-shiyosha-name"></span>
+      </td>
+      <td class="hanko-cell"><div class="hanko"></div></td>
+    </tr>
+  </table>
+
+  <p class="foot-note">
+    ※ 本様式を36協定書として使用することができます。その場合は、使用者及び労働者代表の署名又は記名押印が必要です。<br>
+    ※ 届出部数：1部（控えが必要な場合は2部）　提出先：事業場を管轄する労働基準監督署長<br>
+    ※ 大宮労働基準監督署：〒330-6016 さいたま市中央区新都心11-2 明治安田生命さいたま新都心ビル16F　TEL 048-600-4816
+  </p>
+</div>
+
+<!-- ========== 2枚目：様式第9号の2（特別条項） ========== -->
+<div class="page" id="page2" style="display:none;">
+  <div class="watermark" id="wm2">見　本</div>
+
+  <p class="doc-title">時間外労働・休日労働に関する協定届（特別条項）</p>
+  <p class="doc-subtitle">（様式第9号の2（第16条第1項関係））</p>
+  <p class="doc-note-right-small">※ 様式第9号（一般条項）と合わせて届け出てください。</p>
+
+  <div class="num-row">
+    <div class="num-cell" style="flex:2.2;">
+      <span class="nl">労働保険番号（14桁）</span>
+      <span class="nv user-val" id="d2-rodo-bango"></span>
+    </div>
+    <div class="num-cell" style="flex:2.2;">
+      <span class="nl">法人番号（13桁）</span>
+      <span class="nv user-val" id="d2-hojin-bango"></span>
+    </div>
+    <div class="num-cell" style="flex:1.1;">
+      <span class="nl">常時使用する<br>労働者数</span>
+      <span class="nv center user-val" id="d2-ninzu"></span>
+    </div>
   </div>
-</div>
 
-<table style="margin-bottom:4px;">
-  <tr>
-    <th style="width:18%;">事業の種類</th><td id="p2-jigyoshu"></td>
-    <th style="width:18%;">事業の名称</th><td id="p2-jigyomei"></td>
-  </tr>
-  <tr><th>事業の所在地</th><td colspan="3" id="p2-jusho"></td></tr>
-</table>
+  <table>
+    <tr>
+      <th style="width:17%;">事業の種類</th><td class="user-val" id="d2-jigyoshu"></td>
+      <th style="width:17%;">事業の名称</th><td class="user-val" id="d2-jigyomei"></td>
+    </tr>
+    <tr><th>事業の所在地<br><span class="th-s">（電話番号）</span></th><td colspan="3" class="user-val" id="d2-jusho"></td></tr>
+  </table>
 
-<!-- 特別条項テーブル -->
-<div class="section-title">臨時的に限度時間を超えて労働させることができる場合</div>
-<table style="margin-bottom:4px;">
-  <colgroup>
-    <col style="width:22%"><col style="width:14%"><col style="width:10%">
-    <col style="width:11%"><col style="width:11%"><col style="width:11%"><col style="width:21%">
-  </colgroup>
-  <tr>
-    <th rowspan="2">臨時的に限度時間を超えて<br>労働させる必要のある具体的事由</th>
-    <th rowspan="2">業務の種類</th>
-    <th rowspan="2">労働者数</th>
-    <th colspan="3">延長することができる時間数及び<br>休日労働の時間数</th>
-    <th rowspan="2">限度時間を超えて<br>労働させることができる<br>回数（年6回以内）</th>
-  </tr>
-  <tr>
-    <th>1日</th>
-    <th>1か月<br><span class="th-sub">（100時間未満）</span></th>
-    <th>1年間<br><span class="th-sub">（720時間以内）</span></th>
-  </tr>
-  <tr>
-    <td id="p2-toku-jiyu"></td>
-    <td class="center" id="p2-toku-gyomu"></td>
-    <td class="center" id="p2-toku-ninzu"></td>
-    <td class="center" id="p2-1nichi">　</td>
-    <td class="center" id="p2-toku-tsuki"></td>
-    <td class="center" id="p2-toku-nen"></td>
-    <td class="center" id="p2-toku-kaisu"></td>
-  </tr>
-</table>
+  <!-- 特別条項テーブル -->
+  <table>
+    <tr>
+      <th colspan="7" style="background:#c8c8c8;">臨時的に限度時間を超えて労働させることができる場合</th>
+    </tr>
+    <colgroup>
+      <col style="width:23%"><col style="width:15%"><col style="width:8%">
+      <col style="width:9%"><col style="width:11%"><col style="width:11%"><col style="width:23%">
+    </colgroup>
+    <tr>
+      <th rowspan="2">臨時的に限度時間を超えて<br>労働させる必要のある<br>具体的事由</th>
+      <th rowspan="2">業務の種類</th>
+      <th rowspan="2">労働者数<br><span class="th-s">（満18歳<br>以上）</span></th>
+      <th colspan="3">延長することができる時間数<br><span class="th-s">（休日労働の時間数を含む）</span></th>
+      <th rowspan="2">限度時間を超えて<br>労働させることができる<br>回数（年6回以内）</th>
+    </tr>
+    <tr>
+      <th>1日</th>
+      <th>1か月<br><span class="th-s">（100時間<br>未満）</span></th>
+      <th>1年間<br><span class="th-s">（720時間<br>以内）</span></th>
+    </tr>
+    <tr>
+      <td><span class="val-lg user-val" id="d2-toku-jiyu" style="min-height:14mm;"></span></td>
+      <td class="center"><span class="val user-val" id="d2-toku-gyomu"></span></td>
+      <td class="center"><span class="val user-val" id="d2-toku-ninzu"></span></td>
+      <td class="center"><span class="val user-val" id="d2-1nichi">　</span></td>
+      <td class="center"><span class="val user-val" id="d2-toku-tsuki"></span></td>
+      <td class="center"><span class="val user-val" id="d2-toku-nen"></span></td>
+      <td class="center"><span class="val user-val" id="d2-toku-kaisu"></span></td>
+    </tr>
+  </table>
 
-<!-- チェックボックス（特別条項） -->
-<div style="border:1px solid #000;padding:4px 6px;font-size:8.5pt;margin-bottom:4px;">
-  <div class="cb-row">
-    <span>上記で定める時間数にかかわらず、時間外労働及び休日労働を合算した時間数は、1箇月について100時間未満でなければならず、かつ2箇月から6箇月までを平均して80時間を超過しないこと。</span>
-    <span><span class="cb checked">　</span></span>
+  <div class="cb-area">
+    <div class="cb-row">
+      <span>上記で定める時間数にかかわらず、時間外労働及び休日労働を合算した時間数は、1箇月について100時間未満でなければならず、かつ２箇月から６箇月までを平均して80時間を超過しないこと。</span>
+      <span class="cb on" style="flex-shrink:0;"></span>
+    </div>
   </div>
-</div>
 
-<!-- 限度時間を超えた場合の割増賃金率 -->
-<table style="margin-bottom:4px;">
-  <tr>
-    <th style="width:40%;">限度時間を超えた労働に係る割増賃金率</th>
-    <td><span id="p2-warimashi"></span>　　％（法定割増賃金率を超えていること　<span class="cb checked">　</span>）</td>
-  </tr>
-</table>
+  <table>
+    <tr>
+      <th style="width:50%;">限度時間を超えた労働に係る割増賃金率</th>
+      <td><span class="user-val" id="d2-warimashi"></span>　（法定割増賃金率を超えていること　<span class="cb on"></span>）</td>
+    </tr>
+  </table>
 
-<!-- 健康福祉確保措置 -->
-<table style="margin-bottom:4px;">
-  <tr>
-    <th style="width:40%;">限度時間を超えて労働させる労働者に対する健康及び福祉を確保するための措置</th>
-    <td id="p2-fukushi"></td>
-  </tr>
-</table>
+  <table>
+    <tr>
+      <th style="width:50%;">限度時間を超えて労働させる労働者に対する<br>健康及び福祉を確保するための措置</th>
+      <td class="user-val" id="d2-fukushi"></td>
+    </tr>
+  </table>
 
-<!-- 有効期間・当事者 -->
-<table style="margin-bottom:4px;">
-  <tr>
-    <th style="width:25%;">協定の有効期間</th>
-    <td id="p2-yuko"></td>
-  </tr>
-</table>
-
-<table style="margin-bottom:6px;">
-  <tr>
-    <th style="width:35%;">協定の当事者（労働者代表）</th>
-    <th style="width:15%;">職名</th><td id="p2-daihyo-shoku"></td>
-  </tr>
-  <tr><td></td><th>氏名</th><td id="p2-daihyo-name"></td></tr>
-  <tr><td colspan="2" class="small">選出方法</td><td id="p2-daihyo-method"></td></tr>
-</table>
-
-<div style="border:1px solid #000;padding:4px 6px;font-size:8.5pt;margin-bottom:6px;">
-  <div class="cb-row"><span class="cb checked">　</span>
-    <span>協定の当事者である労働者の過半数を代表する者は、労働基準法第41条第2号の監督管理の地位にある者でなく、かつ同法の協定をする者を選出することを明らかにして実施される投票、挙手等の方法により選出された者であって使用者の意向に基づき選出されたものでないこと。</span>
+  <div class="yuko-row">
+    <span class="yuko-label">協定の有効期間</span>
+    <span class="yuko-val user-val" id="d2-yuko"></span>
   </div>
-</div>
 
-<table style="margin-bottom:4px;">
-  <tr><th style="width:22%;">協定の締結年月日</th><td id="p2-teiketsu"></td></tr>
-</table>
-
-<div style="text-align:right;font-size:9.5pt;margin:4px 0 6px;" id="p2-todoke-to"></div>
-
-<div class="sign-section">
-  <div class="sign-row">
-    <span class="sign-label">使用者　職名</span>
-    <span class="sign-val" id="p2-shiyosha-shoku"></span>
-    <span class="sign-label" style="width:40px;text-align:center;">氏名</span>
-    <span class="sign-val" id="p2-shiyosha-name"></span>
-    <span class="hanko"></span>
+  <div class="toujisha">
+    <div class="tj-row">
+      <div class="tj-label" style="font-size:7.5pt;">協定の当事者である<br>労働組合の名称<br>又は労働者の過半数<br>を代表する者の</div>
+      <div class="tj-inner">
+        <div class="tj-field"><span class="tj-fl">職名</span><span class="tj-fv user-val" id="d2-daihyo-shoku"></span></div>
+        <div class="tj-field"><span class="tj-fl">氏名</span><span class="tj-fv user-val" id="d2-daihyo-name"></span></div>
+        <div class="tj-field" style="border-bottom:none;"><span class="tj-fl" style="font-size:7pt;">選出方法</span><span class="tj-fv user-val" style="font-size:8.5pt;" id="d2-daihyo-method"></span></div>
+      </div>
+    </div>
   </div>
+
+  <div class="cb-area" style="font-size:7.5pt;">
+    <div class="cb-row">
+      <span class="cb on"></span>
+      <span>上記労働者の過半数を代表する者は、労働基準法第41条第2号に規定する監督又は管理の地位にある者でなく、かつ同法に規定する協定等をする者を選出することを明らかにして実施される投票、挙手等の方法による手続により選出された者であって使用者の意向に基づき選出されたものでないこと。</span>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:6mm;align-items:flex-start;margin-bottom:3mm;">
+    <div style="display:flex;gap:0;border:1px solid #000;flex-shrink:0;">
+      <span style="background:#d8d8d8;font-weight:bold;font-size:8pt;padding:1mm 2mm;border-right:1px solid #000;white-space:nowrap;">協定の締結年月日</span>
+      <span style="padding:1mm 2mm;font-size:9.5pt;min-width:60mm;" class="user-val" id="d2-teiketsu"></span>
+    </div>
+  </div>
+
+  <p class="todoke-line"><span class="user-val" id="d2-todoke"></span>　<span class="user-val" id="d2-roukisho"></span>　殿</p>
+
+  <table class="sign-table">
+    <tr>
+      <td class="sign-label-cell">使用者<br>職名・氏名</td>
+      <td class="sign-val-cell">
+        <span class="user-val" id="d2-shiyosha-shoku"></span>　<span class="user-val" id="d2-shiyosha-name"></span>
+      </td>
+      <td class="hanko-cell"><div class="hanko"></div></td>
+    </tr>
+  </table>
+
+  <p class="foot-note">
+    ※ 特別条項届は様式第9号（一般条項）と合わせて2枚で1組の届出となります。<br>
+    ※ 届出部数：1部（控えが必要な場合は2部）　提出先：事業場を管轄する労働基準監督署長
+  </p>
 </div>
-<div style="font-size:7.5pt;margin:4px 0;">
-  ※ 特別条項届は一般条項届（様式第9号）と合わせて2枚で1組の届出となります。<br>
-  ※ 届出部数は1部（控えが必要な場合は2部）。提出先：事業場を管轄する労働基準監督署
-</div>
-</div>
+
+</div><!-- /paper-wrap -->
 
 <script>
-// 親ウィンドウからデータを受け取って表示
+function s(id, val, fallback) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const v = val || fallback || '';
+  el.textContent = v;
+  if (!val && fallback) el.classList.add('sample-val');
+  else el.classList.add('user-val');
+}
+
+function fd(str) {
+  if (!str) return '';
+  const d = new Date(str);
+  if (isNaN(d)) return str;
+  return `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`;
+}
+
 window.addEventListener('message', function(e) {
-  const d = e.data;
-  if(!d) return;
+  const D = e.data;
+  if (!D) return;
+
+  // 見本モードか本番モードか
+  const isSample = D.isSample;
+  if (!isSample) {
+    document.getElementById('wm1').style.display = 'none';
+    document.getElementById('wm2').style.display = 'none';
+  }
 
   // 1枚目
-  sv('p-rodo-bango',  d.rodoBango || '　　　　　　　　　　　　　　（14桁）');
-  sv('p-hojin-bango', d.hojinBango || '　　　　　　　　　　　　　（13桁）');
-  sv('p-ninzu',       d.ninzu ? d.ninzu+'人' : '');
-  sv('p-jigyoshu',   d.jigyoshu);
-  sv('p-jigyomei',   d.jigyomei);
-  sv('p-jusho',      d.jusho);
-  sv('p-jiyu',       d.jiyu);
-  sv('p-gyomu',      d.gyomu);
-  sv('p-kyotei-ninzu', d.kyoteiNinzu || d.ninzu || '');
-  sv('p-1nichi',     d.nichi);
-  sv('p-1tsuki',     d.tsuki);
-  sv('p-1nen',       d.nen);
-  sv('p-shotei',     d.shotei);
-  sv('p-yuko',       d.yuko);
-  sv('p-daihyo-shoku',  d.daihyoShoku || '（職名）');
-  sv('p-daihyo-name',   d.daihyoName);
-  sv('p-daihyo-method', d.daihyoMethod);
-  sv('p-teiketsu',   d.teiketsu);
-  sv('p-shiyosha-shoku', d.shiyoshaShoku);
-  sv('p-shiyosha-name',  d.shiyoshaName);
-  document.getElementById('p-todoke-to').textContent =
-    d.todoke + '　' + d.roukisho + '　殿';
+  s('d-rodo-bango',   D.rodoBango,   '00-000000-000000-000');
+  s('d-hojin-bango',  D.hojinBango,  '（任意）');
+  s('d-ninzu',        D.ninzu ? D.ninzu+'人' : '', '○人');
+  s('d-jigyoshu',     D.jigyoshu,    '建築工事業');
+  s('d-jigyomei',     D.jigyomei,    '○○建設株式会社');
+  s('d-jusho',        D.jusho,       '埼玉県上尾市○○1-1-1（TEL 048-000-0000）');
+  s('d-jiyu',         D.jiyu,        '工期の短縮を必要とする場合、機械・設備の緊急修理、予期せぬ設計変更・追加工事への対応');
+  s('d-gyomu',        D.gyomu,       '大工工事、内装工事、施工管理');
+  s('d-kyotei-ninzu', D.kyoteiNinzu ? D.kyoteiNinzu+'人' : '', '○人');
+  s('d-1nichi',       D.nichi,       '4時間');
+  s('d-1tsuki',       D.tsuki || '45時間');
+  s('d-1nen',         D.nen  || '360時間');
+  s('d-shotei',       D.shotei,      '8時間');
+  s('d-yuko',         D.yuko,        '○年○月○日から1年間');
+  s('d-daihyo-shoku', D.daihyoShoku, '大工（班長）');
+  s('d-daihyo-name',  D.daihyoName,  '○○ ○○');
+  s('d-daihyo-method',D.daihyoMethod,'投票による選出');
+  s('d-teiketsu',     fd(D.teiketsuRaw) || D.teiketsu, '○年○月○日');
+  s('d-todoke',       fd(D.todoke)  || D.todoke, '○年○月○日');
+  s('d-roukisho',     D.roukisho,    '大宮労働基準監督署長');
+  s('d-shiyosha-shoku', D.shiyoshaShoku, '代表取締役');
+  s('d-shiyosha-name',  D.shiyoshaName,  '○○ ○○');
 
   // 休日労働
-  if(d.hasKyujitsu) {
-    sv('p-kj-jiyu',   d.kjJiyu || '（記入してください）');
-    sv('p-kj-gyomu',  d.kjGyomu);
-    sv('p-kj-ninzu',  d.kjNinzu);
-    sv('p-kj-bi',     d.kjBi);
+  const kjTable = document.getElementById('kj-table');
+  if (D.hasKyujitsu) {
+    s('d-kj-jiyu',   D.kjJiyu,   '工期遅延の挽回、緊急の補修工事対応');
+    s('d-kj-gyomu',  D.kjGyomu,  '大工工事');
+    s('d-kj-ninzu',  D.kjNinzu ? D.kjNinzu+'人' : '', '○人');
+    s('d-kj-bi',     D.kjBi,     '毎月第2・第4土曜日（月2回以内）');
   } else {
-    const t = document.getElementById('kyujitsu-table');
-    if(t) t.style.display = 'none';
+    if (kjTable) kjTable.style.display = 'none';
   }
 
   // 2枚目（特別条項）
-  if(d.isTokubetsu) {
+  if (D.isTokubetsu) {
     document.getElementById('page2').style.display = 'block';
-    sv('p2-rodo-bango',  d.rodoBango || '');
-    sv('p2-hojin-bango', d.hojinBango || '');
-    sv('p2-ninzu',       d.ninzu ? d.ninzu+'人' : '');
-    sv('p2-jigyoshu',    d.jigyoshu);
-    sv('p2-jigyomei',    d.jigyomei);
-    sv('p2-jusho',       d.jusho);
-    sv('p2-toku-jiyu',   d.tokuJiyu);
-    sv('p2-toku-gyomu',  d.gyomu);
-    sv('p2-toku-ninzu',  d.kyoteiNinzu || d.ninzu || '');
-    sv('p2-toku-tsuki',  d.tokuTsuki);
-    sv('p2-toku-nen',    d.tokuNen);
-    sv('p2-toku-kaisu',  d.tokuKaisu);
-    sv('p2-warimashi',   d.warimashi || '25');
-    sv('p2-fukushi',     d.fukushi);
-    sv('p2-yuko',        d.yuko);
-    sv('p2-daihyo-shoku',  d.daihyoShoku || '');
-    sv('p2-daihyo-name',   d.daihyoName);
-    sv('p2-daihyo-method', d.daihyoMethod);
-    sv('p2-teiketsu',      d.teiketsu);
-    sv('p2-shiyosha-shoku', d.shiyoshaShoku);
-    sv('p2-shiyosha-name',  d.shiyoshaName);
-    document.getElementById('p2-todoke-to').textContent =
-      d.todoke + '　' + d.roukisho + '　殿';
+    s('d2-rodo-bango',   D.rodoBango,   '00-000000-000000-000');
+    s('d2-hojin-bango',  D.hojinBango,  '（任意）');
+    s('d2-ninzu',        D.ninzu ? D.ninzu+'人' : '', '○人');
+    s('d2-jigyoshu',     D.jigyoshu,    '建築工事業');
+    s('d2-jigyomei',     D.jigyomei,    '○○建設株式会社');
+    s('d2-jusho',        D.jusho,       '埼玉県上尾市○○1-1-1');
+    s('d2-toku-jiyu',    D.tokuJiyu,    '大規模な設計変更・工法変更に伴う追加工事、自然災害による緊急補修工事、官公庁の検査・引渡し対応');
+    s('d2-toku-gyomu',   D.gyomu,       '大工工事、施工管理');
+    s('d2-toku-ninzu',   D.kyoteiNinzu ? D.kyoteiNinzu+'人' : '', '○人');
+    s('d2-toku-tsuki',   D.tokuTsuki || '100時間未満');
+    s('d2-toku-nen',     D.tokuNen   || '720時間');
+    s('d2-toku-kaisu',   D.tokuKaisu || '6回以内');
+    s('d2-warimashi',    D.warimashi  ? D.warimashi+'％' : '', '25％以上');
+    s('d2-fukushi',      D.fukushi,   '対象労働者への医師による面接指導');
+    s('d2-yuko',         D.yuko,      '○年○月○日から1年間');
+    s('d2-daihyo-shoku', D.daihyoShoku, '大工（班長）');
+    s('d2-daihyo-name',  D.daihyoName,  '○○ ○○');
+    s('d2-daihyo-method',D.daihyoMethod,'投票による選出');
+    s('d2-teiketsu',     fd(D.teiketsuRaw) || D.teiketsu, '○年○月○日');
+    s('d2-todoke',       fd(D.todoke) || D.todoke, '○年○月○日');
+    s('d2-roukisho',     D.roukisho,  '大宮労働基準監督署長');
+    s('d2-shiyosha-shoku', D.shiyoshaShoku, '代表取締役');
+    s('d2-shiyosha-name',  D.shiyoshaName,  '○○ ○○');
   }
 });
 
-function sv(id, val) {
-  const el = document.getElementById(id);
-  if(el) el.textContent = val || '　';
-}
+// 見本として表示（データ受信前）
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    // データが来なかった場合は見本モードで表示
+    const firstCell = document.getElementById('d-jigyoshu');
+    if (firstCell && !firstCell.textContent) {
+      window.postMessage({ isSample: true }, '*');
+    }
+  }, 500);
+});
 </script>
 </body>
 </html>
