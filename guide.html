@@ -100,6 +100,19 @@
 .empty p { font-size: 15px; margin: 0; }
 .panel { display: none; }
 .panel.on { display: block; }
+/* 検索結果はタブの下に積み上げ */
+#search-result.on {
+  display: block;
+  border-top: 2px dashed #ECEEF2;
+  padding-top: 14px;
+  margin-top: 14px;
+}
+#search-result-label {
+  font-size: 13px; font-weight: 700; color: #E8612A;
+  background: #FFF0E9; border-radius: 8px;
+  padding: 6px 12px; margin-bottom: 12px; display: none;
+}
+#search-result-label.on { display: block; }
 </style>
 </head>
 <body>
@@ -133,7 +146,7 @@
   <!-- 検索 -->
   <div class="sbox">
     <i class="ti ti-search"></i>
-    <input type="text" id="search" placeholder="キーワードで絞り込む（全カテゴリ検索）" oninput="doSearch(this.value)">
+    <input type="text" id="search" placeholder="🔍 キーワードで全カテゴリを横断検索" oninput="doSearch(this.value)">
   </div>
 
   <!-- ===== パネル1：組合加入 ===== -->
@@ -184,8 +197,8 @@
     <div id="p4-3" class="panel"></div>
   </div>
 
-  <!-- 検索結果 -->
-  <div id="search-result" class="panel"></div>
+  <!-- 検索結果（タブと並列表示・キーワードがある場合のみ表示） -->
+  <div id="search-result" class="panel" style="margin-top:0;"></div>
 
   <div style="background:#F5F6F8;border-radius:8px;padding:10px 14px;font-size:12px;color:#8B90A0;margin-top:8px;">
     <i class="ti ti-info-circle" style="font-size:13px;vertical-align:-2px;margin-right:4px;"></i>
@@ -197,12 +210,12 @@
 
 <script>
 // ===== カード生成関数 =====
-function card(d) {
-  const borderColor = d.color || '#E8612A';
+function card(d, overrideColor, badge) {
+  const borderColor = overrideColor || d.color || '#E8612A';
   return `<div class="gcard" style="border-left-color:${borderColor};">
     <div class="gcard-head">
       <div class="gicon" style="background:${d.bg};"><i class="ti ${d.icon}" style="color:${d.fg};"></i></div>
-      <p class="gtitle">${d.title}</p>
+      <p class="gtitle">${d.title}${badge||''}</p>
     </div>
     <div class="gbody">
       ${d.amount ? `<div class="gamount">💰 ${d.amount}</div>` : ''}
@@ -480,23 +493,38 @@ function sTab(m, n) {
 // ===== 検索 =====
 function doSearch(q) {
   const sr = document.getElementById('search-result');
-  if(!q.trim()){ sr.classList.remove('on'); return; }
+  if(!q.trim()){
+    sr.classList.remove('on');
+    sr.innerHTML = '';
+    return;
+  }
   const lq = q.toLowerCase();
-  // 全データを横断
+  // カテゴリ名マッピング
+  const CAT_NAMES = {'1':'組合加入','2':'土建国保','3':'総合共済','4':'労働保険'};
+  const CAT_COLORS = {'1':'#1A7A4A','2':'#4A1A9B','3':'#9B3A1A','4':'#0C447C'};
+  const CAT_BG = {'1':'#E8F5EE','2':'#EDE8FE','3':'#FEF0ED','4':'#E8F0FB'};
   let html = '';
+  let count = 0;
   for(const [key, items] of Object.entries(DATA)){
+    const m = key.split('-')[0];
     for(const d of items){
       const text = (d.title + d.docs.join(' ') + (d.note||'')).toLowerCase();
-      if(text.includes(lq)) html += card(d);
+      if(text.includes(lq)){
+        // カテゴリバッジ付きで表示
+        const withBadge = Object.assign({}, d, {
+          _catBadge: `<span style="font-size:11px;font-weight:700;background:${CAT_BG[m]};color:${CAT_COLORS[m]};padding:2px 8px;border-radius:99px;margin-left:8px;">${CAT_NAMES[m]}</span>`
+        });
+        html += card(d, CAT_COLORS[m], withBadge._catBadge);
+        count++;
+      }
     }
   }
-  sr.innerHTML = html || `<div class="empty"><i class="ti ti-search-off"></i><p>「${q}」に一致する項目がありませんでした</p></div>`;
+  if(!html){
+    sr.innerHTML = `<div class="empty"><i class="ti ti-search-off"></i><p>「${q}」に一致する項目がありませんでした</p></div>`;
+  } else {
+    sr.innerHTML = `<div style="font-size:13px;font-weight:600;color:var(--gray600);margin-bottom:10px;"><i class="ti ti-search" style="font-size:14px;vertical-align:-2px;margin-right:4px;"></i>${count}件見つかりました</div>` + html;
+  }
   sr.classList.add('on');
-  // メインパネルを隠す
-  document.querySelectorAll('.panel[id^="p"]').forEach(el=>{
-    if(el.id==='search-result') return;
-    if(['p1','p2','p3','p4'].includes(el.id)) el.classList.remove('on');
-  });
 }
 
 // ===== 初期レンダリング =====
