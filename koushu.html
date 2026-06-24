@@ -7,54 +7,65 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.47.0/iconfont/tabler-icons.min.css">
 <link rel="stylesheet" href="common.css">
 <style>
-.koushu-hero{background:linear-gradient(135deg,#4A3500,#8B6500);border-radius:var(--r16);padding:20px;margin-bottom:16px;display:flex;align-items:center;gap:16px;}
-.koushu-hero i{font-size:44px;color:#FAC775;}
-.koushu-hero h2{font-size:19px;font-weight:800;color:#fff;margin:0 0 4px;}
-.koushu-hero p{font-size:13px;color:rgba(255,255,255,.65);margin:0;}
+.k-hero{background:linear-gradient(135deg,#4A3500,#8B6500);border-radius:var(--r16);padding:20px;margin-bottom:16px;display:flex;align-items:center;gap:14px;}
+.k-hero i{font-size:40px;color:#FAC775;flex-shrink:0;}
+.k-hero h2{font-size:18px;font-weight:800;color:#fff;margin:0 0 3px;}
+.k-hero p{font-size:12px;color:rgba(255,255,255,.65);margin:0;}
 
-.subsidy-box{background:linear-gradient(135deg,#1B2A3B,#0D3A6B);border-radius:var(--r16);padding:16px 18px;margin-bottom:16px;}
-.subsidy-box-title{font-size:12px;font-weight:700;color:var(--orange);margin:0 0 10px;letter-spacing:.08em;}
-.subsidy-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
-.subsidy-item{background:rgba(255,255,255,.08);border-radius:var(--r8);padding:10px 8px;text-align:center;}
-.subsidy-label{font-size:10px;color:rgba(255,255,255,.5);margin:0 0 3px;}
-.subsidy-val{font-size:15px;font-weight:800;color:#fff;margin:0;}
-.subsidy-val span{color:var(--orange);}
-.subsidy-sub{font-size:10px;color:rgba(255,255,255,.4);margin:2px 0 0;}
+.subsidy{background:linear-gradient(135deg,#1B2A3B,#0D3A6B);border-radius:var(--r16);padding:14px 16px;margin-bottom:14px;}
+.subsidy-ttl{font-size:11px;font-weight:700;color:var(--orange);margin:0 0 8px;letter-spacing:.08em;}
+.subsidy-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;}
+.s-item{background:rgba(255,255,255,.08);border-radius:8px;padding:8px 6px;text-align:center;}
+.s-lbl{font-size:10px;color:rgba(255,255,255,.5);margin:0 0 2px;}
+.s-val{font-size:13px;font-weight:800;color:#fff;margin:0;}
+.s-val span{color:var(--orange);}
+.s-sub{font-size:9px;color:rgba(255,255,255,.4);margin:1px 0 0;}
 
-.filter-scroll{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-bottom:14px;scrollbar-width:none;}
-.filter-scroll::-webkit-scrollbar{display:none;}
-.filter-chip{padding:7px 14px;border-radius:99px;border:2px solid var(--gray200);font-size:13px;font-weight:600;color:var(--gray600);white-space:nowrap;cursor:pointer;background:var(--white);transition:all .15s;flex-shrink:0;}
-.filter-chip.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+/* 期フィルター */
+.period-tabs{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px;}
+.period-tabs::-webkit-scrollbar{display:none;}
+.ptab{padding:8px 16px;border-radius:99px;border:2px solid var(--gray200);background:var(--white);color:var(--gray600);font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all .15s;}
+.ptab.on{background:var(--navy);color:#fff;border-color:var(--navy);}
 
-.koushu-card{background:var(--white);border-radius:var(--r16);box-shadow:var(--shadow-sm);padding:16px;margin-bottom:12px;}
-.koushu-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:8px;}
-.koushu-name{font-size:15px;font-weight:700;color:var(--navy);margin:0;}
-.koushu-cat{font-size:11px;font-weight:700;padding:3px 9px;border-radius:99px;white-space:nowrap;flex-shrink:0;}
-.cat-gino{background:#FEE8D6;color:#7A3010;}
-.cat-tokubetsu{background:#E8F0FB;color:#0C447C;}
-.cat-yobo{background:#E8F5EE;color:#1A4A2A;}
+/* カテゴリフィルター */
+.cat-tabs{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px;}
+.cat-tabs::-webkit-scrollbar{display:none;}
+.ctab{padding:7px 14px;border-radius:99px;border:2px solid var(--gray200);background:var(--white);color:var(--gray600);font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all .15s;}
+.ctab.on{border-color:var(--orange);color:var(--orange);background:var(--orange-lt);}
 
-.koushu-note{font-size:13px;color:var(--gray600);margin:0 0 10px;line-height:1.6;}
+/* 月グループ */
+.month-group{margin-bottom:16px;}
+.month-label{font-size:13px;font-weight:700;color:var(--gray600);margin:0 0 8px;display:flex;align-items:center;gap:6px;}
+.month-label::after{content:'';flex:1;height:1px;background:var(--gray200);}
 
-/* 詳細情報グリッド */
-.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
-.info-cell{background:var(--gray50);border-radius:var(--r8);padding:8px 10px;}
-.info-cell-label{font-size:10px;font-weight:700;color:var(--gray400);margin:0 0 3px;letter-spacing:.06em;text-transform:uppercase;}
-.info-cell-val{font-size:13px;font-weight:600;color:var(--navy);margin:0;line-height:1.5;}
-.info-cell-val.fee{color:var(--orange);font-size:15px;}
-.info-cell.full{grid-column:1/-1;}
+/* 講習カード */
+.kcard{background:var(--white);border-radius:var(--r12);box-shadow:var(--shadow-sm);padding:14px 16px;margin-bottom:8px;border-left:4px solid var(--gray200);}
+.kcard.gino{border-left-color:#E8612A;}
+.kcard.tokubetsu{border-left-color:#1A5FA8;}
+.kcard.sakugyou{border-left-color:#1A7A4A;}
+.kcard.yobo{border-left-color:#7B2FBE;}
+.kcard.other{border-left-color:#888;}
+.kcard-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:8px;}
+.kcard-name{font-size:15px;font-weight:700;color:var(--navy);margin:0;line-height:1.4;flex:1;}
+.kcat-badge{font-size:11px;font-weight:700;padding:3px 9px;border-radius:99px;white-space:nowrap;flex-shrink:0;}
+.kcat-badge.gino{background:#FEE8D6;color:#7A3010;}
+.kcat-badge.tokubetsu{background:#E8F0FB;color:#0C447C;}
+.kcat-badge.sakugyou{background:#E8F5EE;color:#1A4A2A;}
+.kcat-badge.yobo{background:#EDE8FE;color:#4A1A9B;}
+.kcard-date{font-size:15px;font-weight:700;color:var(--navy);margin:0 0 4px;}
+.kcard-place{font-size:12px;color:var(--gray500);margin:0 0 6px;}
+.kcard-note{font-size:12px;color:var(--gray500);background:var(--gray50);border-radius:6px;padding:6px 8px;margin:0;}
 
-.docs-list{display:flex;flex-direction:column;gap:4px;margin-bottom:10px;}
-.docs-item{display:flex;align-items:flex-start;gap:6px;font-size:13px;color:var(--gray700);}
-.docs-item i{font-size:14px;color:var(--orange);flex-shrink:0;margin-top:2px;}
+.info-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;}
+.info-chip{font-size:12px;background:var(--gray50);border-radius:6px;padding:4px 10px;color:var(--gray700);}
+.info-chip i{font-size:13px;vertical-align:-2px;margin-right:3px;}
 
-.date-list{display:flex;flex-direction:column;gap:6px;}
-.date-row{display:flex;align-items:center;padding:8px 12px;background:var(--gray50);border-radius:var(--r8);}
-.date-main{font-size:14px;font-weight:600;color:var(--navy);margin:0;}
-.date-sub{font-size:11px;color:var(--gray400);margin:2px 0 0;}
+.empty{text-align:center;padding:40px 20px;color:var(--gray400);}
+.empty i{font-size:44px;display:block;margin-bottom:10px;opacity:.4;}
 
-.fee-note{font-size:11px;color:var(--gray400);margin:8px 0 0;display:flex;align-items:flex-start;gap:4px;}
-.fee-note i{font-size:12px;flex-shrink:0;margin-top:1px;}
+.legend{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--gray600);}
+.legend-dot{width:12px;height:12px;border-radius:2px;flex-shrink:0;}
 </style>
 </head>
 <body>
@@ -63,59 +74,64 @@
   <button class="hdr-back" onclick="location.href='index.html'"><i class="ti ti-arrow-left"></i>ホーム</button>
   <div style="text-align:right;">
     <p class="hdr-org" style="margin:0;">埼玉土建技術研修センター</p>
-    <p class="hdr-title" style="margin:0;font-size:14px;">2026年度 技能講習日程</p>
+    <p class="hdr-title" style="margin:0;font-size:14px;">2026年度 講習日程</p>
   </div>
 </header>
 
 <div class="content">
-  <div class="koushu-hero">
+  <div class="k-hero">
     <i class="ti ti-certificate"></i>
     <div>
       <h2>2026年度 技能講習日程</h2>
-      <p>埼玉労働局 登録教習機関｜年間26種類の講習を実施</p>
+      <p>埼玉労働局 登録教習機関｜開始時間 9:20〜</p>
     </div>
   </div>
 
   <!-- 受講料補助 -->
-  <div class="subsidy-box">
-    <p class="subsidy-box-title">💰 資格取得祝金バックアップ制度</p>
+  <div class="subsidy">
+    <p class="subsidy-ttl">💰 資格取得祝金バックアップ</p>
     <div class="subsidy-grid">
-      <div class="subsidy-item">
-        <p class="subsidy-label">プレミアム</p>
-        <p class="subsidy-val">受講料<span>全額</span>給付</p>
-        <p class="subsidy-sub">技能講習・特別教育</p>
-      </div>
-      <div class="subsidy-item">
-        <p class="subsidy-label">スペシャル</p>
-        <p class="subsidy-val">受講料<span>半額</span>給付</p>
-        <p class="subsidy-sub">作業主任者講習等</p>
-      </div>
-      <div class="subsidy-item">
-        <p class="subsidy-label">クラシック</p>
-        <p class="subsidy-val"><span>2万円</span>給付</p>
-        <p class="subsidy-sub">建築士・施工管理等</p>
-      </div>
+      <div class="s-item"><p class="s-lbl">プレミアム</p><p class="s-val">受講料<span>全額</span></p><p class="s-sub">技能講習・特別教育</p></div>
+      <div class="s-item"><p class="s-lbl">スペシャル</p><p class="s-val">受講料<span>半額</span></p><p class="s-sub">作業主任者講習等</p></div>
+      <div class="s-item"><p class="s-lbl">クラシック</p><p class="s-val"><span>2万円</span>給付</p><p class="s-sub">建築士・施工管理等</p></div>
     </div>
   </div>
 
-  <div class="alert alert-warn" style="margin-bottom:14px;">
+  <div class="alert alert-warn" style="margin-bottom:12px;">
     <i class="ti ti-alert-triangle"></i>
-    <span>受講料は参考値です。正確な金額・申込方法は支部事務所（048-773-9863）へお問い合わせください。24歳以下は特別教育等12講習が2,000円引きになります。</span>
+    <span>受講料・申込方法は支部事務所（048-773-9863）へ。受講票と写真（縦30mm×横24mm・無背景・脱帽）が必要。事業主の説明印が必要な講習あり。キャンセルは1週間前までに支部へ連絡を。</span>
   </div>
 
-  <!-- フィルター -->
-  <div class="filter-scroll" id="filters">
-    <button class="filter-chip active" onclick="filterKoushu('all',this)">すべて</button>
-    <button class="filter-chip" onclick="filterKoushu('gino',this)">技能講習</button>
-    <button class="filter-chip" onclick="filterKoushu('tokubetsu',this)">特別教育</button>
-    <button class="filter-chip" onclick="filterKoushu('yobo',this)">安全教育</button>
+  <!-- 凡例 -->
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#E8612A;"></div>技能講習</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#1A5FA8;"></div>特別教育</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#1A7A4A;"></div>作業主任者</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#7B2FBE;"></div>安全衛生教育</div>
+  </div>
+
+  <!-- 期タブ -->
+  <div class="period-tabs">
+    <button class="ptab on" onclick="setPeriod('all',this)">全期間</button>
+    <button class="ptab" onclick="setPeriod('1',this)">第一期（4〜7月）</button>
+    <button class="ptab" onclick="setPeriod('2',this)">第二期（8〜11月）</button>
+    <button class="ptab" onclick="setPeriod('3',this)">第三期（12〜3月）</button>
+  </div>
+
+  <!-- カテゴリタブ -->
+  <div class="cat-tabs">
+    <button class="ctab on" onclick="setCat('all',this)">すべて</button>
+    <button class="ctab" onclick="setCat('gino',this)">技能講習</button>
+    <button class="ctab" onclick="setCat('tokubetsu',this)">特別教育</button>
+    <button class="ctab" onclick="setCat('sakugyou',this)">作業主任者</button>
+    <button class="ctab" onclick="setCat('yobo',this)">安全衛生教育</button>
   </div>
 
   <div id="koushu-list"></div>
 
-  <div class="card">
+  <div class="card" style="margin-top:8px;">
     <p class="sec-label">申込・詳細</p>
-    <a href="https://www.sd-gcenter.jp/2_ginoukousyu/2_ginoukousyu2026.htm" target="_blank" class="btn-secondary" style="display:flex;margin-bottom:8px;">
+    <a href="https://www.sd-gcenter.jp/" target="_blank" class="btn-secondary" style="display:flex;margin-bottom:8px;">
       <i class="ti ti-external-link"></i>埼玉土建技術研修センター 公式サイト
     </a>
     <a href="tel:048-773-9863" class="btn-primary" style="display:flex;">
@@ -123,150 +139,184 @@
     </a>
   </div>
 </div>
-
 <footer>埼玉土建一般労働組合 上尾伊奈支部｜TEL 048-773-9863</footer>
 </div>
 
 <script>
+// cat: gino=技能講習, tokubetsu=特別教育, sakugyou=作業主任者, yobo=安全衛生教育
+// period: 1=4〜7月, 2=8〜11月, 3=12〜3月
 const KOUSHU = [
-  { cat:'gino', name:'玉掛け技能講習', days:['2026-07-07〜09','2026-08-04〜06','2026-09-08〜10','2026-10-06〜08','2026-11-10〜12','2026-12-01〜03'],
-    fee:'約20,000〜22,000円', days_count:'3日間', target:'18歳以上で玉掛け作業に従事する方',
-    qualify:'特になし（ただしクレーン等の免許・技能講習修了者は一部免除あり）',
-    docs:['本人確認書類（運転免許証等）','写真2枚（3cm×2.5cm）','受講料','免除対象者は該当資格の修了証または免許証のコピー'],
-    note:'つり上げ荷重1t以上のクレーン等の玉掛け作業に必要。修了後は修了証を交付。埼玉土建での受講は受講料が全額祝金として給付されます。' },
+  // ===== 第一期 4月 =====
+  {period:'1',month:'4月',cat:'tokubetsu',name:'足場の組立て',date:'4月2日（水）',place:'技術研修センター',note:''},
+  {period:'1',month:'4月',cat:'gino',name:'玉掛け',date:'4月7日（月）・8日（火）・9日（水）',place:'技術研修センター',note:''},
+  {period:'1',month:'4月',cat:'gino',name:'玉掛け ※実技別日',date:'4月7日（月）・8日（火）・10日（木）※',place:'技術研修センター',note:'実技日が異なります'},
+  {period:'1',month:'4月',cat:'yobo',name:'職長・安全衛生責任者教育（リスクアセスメント含む）',date:'4月14日（月）・15日（火）',place:'技術研修センター',note:''},
+  {period:'1',month:'4月',cat:'tokubetsu',name:'研削砥石取替（自由研削）',date:'4月21日（月）',place:'技術研修センター',note:''},
+  {period:'1',month:'4月',cat:'gino',name:'ガス溶接',date:'4月22日（火）・23日（水）',place:'技術研修センター',note:''},
+  {period:'1',month:'4月',cat:'tokubetsu',name:'低圧電気取扱（開閉器の操作／8H）',date:'4月24日（木）',place:'技術研修センター',note:'8時間コース'},
+  {period:'1',month:'4月',cat:'yobo',name:'熱中症予防管理者教育（事業主・職長向け）',date:'4月28日（月）',place:'技術研修センター',note:'事業主・職長向け'},
 
-  { cat:'gino', name:'足場の組立て等作業主任者技能講習', days:['2026-07-21〜22','2026-09-01〜02','2026-10-20〜21','2026-12-08〜09'],
-    fee:'約20,000〜24,000円', days_count:'2日間', target:'足場組立・解体の作業主任者になる方',
-    qualify:'足場の組立て・解体・変更に関する実務経験3年以上（作業主任者技能講習共通）',
-    docs:['本人確認書類','写真2枚（3cm×2.5cm）','受講料','実務経験を証明できるもの（雇用保険被保険者証・事業主証明等）'],
-    note:'つり足場・張出し足場等を設置する工事に必要な作業主任者資格。労働安全衛生法により作業主任者の配置が義務付けられています。' },
+  // ===== 第一期 5月 =====
+  {period:'1',month:'5月',cat:'yobo',name:'職長・安全衛生責任者能力向上教育',date:'5月8日（木）',place:'技術研修センター',note:''},
+  {period:'1',month:'5月',cat:'sakugyou',name:'石綿',date:'5月12日（月）・13日（火）',place:'技術研修センター',note:'作業主任者技能講習。受講資格：実務経験3年以上'},
+  {period:'1',month:'5月',cat:'yobo',name:'丸のこ等取扱い教育＋熱中症予防教育（労働者向け）',date:'5月14日（水）',place:'技術研修センター',note:''},
+  {period:'1',month:'5月',cat:'tokubetsu',name:'高所作業車（10m未満）運転',date:'5月15日（木）',place:'技術研修センター',note:'10m未満は特別教育'},
+  {period:'1',month:'5月',cat:'gino',name:'玉掛け',date:'5月19日（月）・20日（火）・21日（水）',place:'技術研修センター',note:''},
+  {period:'1',month:'5月',cat:'tokubetsu',name:'フルハーネス型安全帯',date:'5月22日（木）',place:'技術研修センター',note:''},
+  {period:'1',month:'5月',cat:'gino',name:'高所作業車（10m以上）運転',date:'5月23日（金）・24日（土）',place:'アイチ研修センター（地図参照）',note:'締切：4月22日。会場が異なります'},
+  {period:'1',month:'5月',cat:'gino',name:'小型移動式クレーン運転',date:'5月27日（火）・28日（水）・29日（木）',place:'技術研修センター',note:''},
 
-  { cat:'gino', name:'小型移動式クレーン運転技能講習', days:['2026-07-14〜16','2026-09-15〜17','2026-11-17〜19'],
-    fee:'約30,000〜35,000円', days_count:'3日間（学科2日・実技1日）', target:'つり上げ荷重5t未満の移動式クレーンを運転する方',
-    qualify:'18歳以上',
-    docs:['本人確認書類','写真2枚（3cm×2.5cm）','受講料'],
-    note:'玉掛け技能講習と同時取得で現場での活躍の幅が広がります。' },
+  // ===== 第一期 6月 =====
+  {period:'1',month:'6月',cat:'sakugyou',name:'金属アーク溶接限定',date:'6月2日（月）',place:'技術研修センター',note:'作業主任者技能講習'},
+  {period:'1',month:'6月',cat:'tokubetsu',name:'アーク溶接',date:'6月3日（火）・4日（水）',place:'技術研修センター',note:''},
+  {period:'1',month:'6月',cat:'yobo',name:'熱中症予防教育（労働者向け）',date:'6月9日（月）9:20〜',place:'技術研修センター',note:'労働者向け'},
+  {period:'1',month:'6月',cat:'yobo',name:'熱中症予防管理者教育（事業主・職長向け）',date:'6月9日（月）13:30〜',place:'技術研修センター',note:'事業主・職長向け（午後開始）'},
+  {period:'1',month:'6月',cat:'gino',name:'玉掛け',date:'6月10日（火）・11日（水）・12日（木）',place:'技術研修センター',note:''},
+  {period:'1',month:'6月',cat:'sakugyou',name:'足場の組立て',date:'6月16日（月）・17日（火）',place:'技術研修センター',note:'作業主任者技能講習。受講資格：実務経験3年以上'},
+  {period:'1',month:'6月',cat:'yobo',name:'職長・安全衛生責任者教育（リスクアセスメント含む）',date:'6月18日（水）・19日（木）',place:'技術研修センター',note:''},
+  {period:'1',month:'6月',cat:'gino',name:'小型移動式クレーン運転',date:'6月23日（月）・24日（火）・25日（水）',place:'技術研修センター',note:''},
+  {period:'1',month:'6月',cat:'tokubetsu',name:'巻き上げ機（ウインチ）',date:'6月26日（木）',place:'技術研修センター',note:''},
+  {period:'1',month:'6月',cat:'other',name:'一般建築物石綿含有建材調査者（締切：5月27日）',date:'6月29日（日）・30日（月）',place:'技術研修センター',note:'要事前申請。締切：5月27日'},
 
-  { cat:'gino', name:'高所作業車運転技能講習（10m以上）', days:['2026-08-18〜19','2026-10-13〜14','2026-12-15〜16'],
-    fee:'約25,000〜30,000円', days_count:'2日間', target:'作業床の高さ10m以上の高所作業車を運転する方',
-    qualify:'18歳以上',
-    docs:['本人確認書類','写真2枚（3cm×2.5cm）','受講料'],
-    note:'外壁塗装・電気工事・看板取付など高所作業に必須の資格。10m未満は特別教育でOK。' },
+  // ===== 第一期 7月 =====
+  {period:'1',month:'7月',cat:'tokubetsu',name:'酸素欠乏症・硫化水素',date:'7月2日（水）',place:'技術研修センター',note:''},
+  {period:'1',month:'7月',cat:'yobo',name:'足場の組立て 作業主任者能力向上教育',date:'7月3日（木）',place:'技術研修センター',note:''},
+  {period:'1',month:'7月',cat:'yobo',name:'石綿作業者特別教育＋熱中症予防教育（労働者向け）',date:'7月7日（月）',place:'技術研修センター',note:''},
+  {period:'1',month:'7月',cat:'tokubetsu',name:'フルハーネス型安全帯',date:'7月8日（火）',place:'技術研修センター',note:''},
+  {period:'1',month:'7月',cat:'sakugyou',name:'木造建築物の組立て',date:'7月9日（水）・10日（木）',place:'技術研修センター',note:'作業主任者技能講習'},
+  {period:'1',month:'7月',cat:'sakugyou',name:'型枠支保工の組立て',date:'7月9日（水）・10日（木）',place:'技術研修センター',note:'作業主任者技能講習'},
+  {period:'1',month:'7月',cat:'gino',name:'玉掛け',date:'7月14日（月）・15日（火）・16日（水）',place:'技術研修センター',note:''},
+  {period:'1',month:'7月',cat:'gino',name:'玉掛け ※実技別日',date:'7月14日（月）・15日（火）・17日（木）※',place:'技術研修センター',note:'実技日が異なります'},
+  {period:'1',month:'7月',cat:'sakugyou',name:'地山の掘削および土止め支保工',date:'7月22日（火）・23日（水）・24日（木）',place:'技術研修センター',note:'作業主任者技能講習'},
+  {period:'1',month:'7月',cat:'sakugyou',name:'有機溶剤',date:'7月28日（月）・29日（火）',place:'技術研修センター',note:'作業主任者技能講習'},
+  {period:'1',month:'7月',cat:'sakugyou',name:'鉄骨の組立て',date:'7月30日（水）・31日（木）',place:'技術研修センター',note:'作業主任者技能講習'},
 
-  { cat:'gino', name:'フォークリフト運転技能講習', days:['2026-07-28〜31','2026-09-22〜25','2026-11-24〜27'],
-    fee:'約35,000〜40,000円', days_count:'4日間', target:'最大荷重1t以上のフォークリフトを運転する方',
-    qualify:'18歳以上',
-    docs:['本人確認書類','写真2枚（3cm×2.5cm）','受講料','自動車免許証（あれば一部科目免除）'],
-    note:'普通自動車免許所持者は学科の一部が免除になる場合があります。' },
+  // ===== 第二期 8月 =====
+  {period:'2',month:'8月',cat:'tokubetsu',name:'足場の組立て',date:'8月4日（火）',place:'技術研修センター',note:''},
+  {period:'2',month:'8月',cat:'tokubetsu',name:'研削砥石取替（自由研削）',date:'8月5日（水）',place:'技術研修センター',note:''},
+  {period:'2',month:'8月',cat:'tokubetsu',name:'低圧電気取扱（開閉器の操作／8H）',date:'8月6日（木）',place:'技術研修センター',note:'8時間コース'},
 
-  { cat:'gino', name:'ガス溶接技能講習', days:['2026-08-25〜26','2026-10-27〜28'],
-    fee:'約15,000〜18,000円', days_count:'2日間', target:'可燃性ガス・酸素を使用して溶接・溶断・加熱する方',
-    qualify:'18歳以上',
-    docs:['本人確認書類','写真2枚（3cm×2.5cm）','受講料'],
-    note:'アーク溶接と並んで建設現場でよく使われる資格。溶接・鉄骨工事等に従事する方は必須。' },
+  // ===== 第二期 9月 =====
+  {period:'2',month:'9月',cat:'sakugyou',name:'石綿',date:'9月1日（月）・2日（火）',place:'技術研修センター',note:'作業主任者技能講習。受講資格：実務経験3年以上'},
+  {period:'2',month:'9月',cat:'yobo',name:'丸のこ等取扱い教育',date:'9月3日（水）',place:'技術研修センター',note:''},
+  {period:'2',month:'9月',cat:'tokubetsu',name:'高所作業車（10m未満）運転',date:'9月4日（木）',place:'技術研修センター',note:''},
+  {period:'2',month:'9月',cat:'tokubetsu',name:'フルハーネス型安全帯',date:'9月8日（月）',place:'技術研修センター',note:''},
+  {period:'2',month:'9月',cat:'gino',name:'ガス溶接',date:'9月9日（火）・10日（水）',place:'技術研修センター',note:''},
+  {period:'2',month:'9月',cat:'yobo',name:'職長・安全衛生責任者能力向上教育',date:'9月11日（木）',place:'技術研修センター',note:''},
+  {period:'2',month:'9月',cat:'gino',name:'高所作業車（10m以上）運転',date:'9月12日（金）・13日（土）',place:'アイチ研修センター（地図参照）',note:'締切：8月5日。会場が異なります'},
+  {period:'2',month:'9月',cat:'gino',name:'玉掛け',date:'9月15日（月）・16日（火）・17日（水）',place:'技術研修センター',note:''},
+  {period:'2',month:'9月',cat:'gino',name:'玉掛け ※実技別日',date:'9月15日（月）・16日（火）・18日（木）※',place:'技術研修センター',note:'実技日が異なります'},
+  {period:'2',month:'9月',cat:'yobo',name:'職長・安全衛生責任者教育（リスクアセスメント含む）',date:'9月29日（月）・30日（火）',place:'技術研修センター',note:''},
 
-  { cat:'tokubetsu', name:'足場の組立て等作業従事者特別教育', days:['2026-07-03','2026-08-07','2026-09-04','2026-10-02','2026-11-06','2026-12-04'],
-    fee:'約8,000〜10,000円', days_count:'1日（約7時間）', target:'足場の組立・解体・変更の作業に従事するすべての労働者',
-    qualify:'特になし（年齢制限なし）',
-    docs:['本人確認書類','写真1枚','受講料'],
-    note:'2015年の法改正で義務化。足場作業に携わる全員が受講必須。修了後は作業従事者として認められます。埼玉土建での受講は受講料が全額祝金給付。' },
+  // ===== 第二期 10月 =====
+  {period:'2',month:'10月',cat:'gino',name:'玉掛け',date:'10月6日（月）・7日（火）・8日（水）',place:'技術研修センター',note:''},
+  {period:'2',month:'10月',cat:'tokubetsu',name:'石綿作業従事者',date:'10月14日（火）',place:'技術研修センター',note:''},
+  {period:'2',month:'10月',cat:'gino',name:'小型移動式クレーン運転',date:'10月21日（火）・22日（水）・23日（木）',place:'技術研修センター',note:''},
+  {period:'2',month:'10月',cat:'sakugyou',name:'足場の組立て',date:'10月27日（月）・28日（火）',place:'技術研修センター',note:'作業主任者技能講習。受講資格：実務経験3年以上'},
+  {period:'2',month:'10月',cat:'other',name:'一般建築物石綿含有建材調査者（締切：9月25日）',date:'10月29日（水）・30日（木）',place:'技術研修センター',note:'締切：9月25日'},
 
-  { cat:'tokubetsu', name:'丸のこ等取扱作業者安全衛生教育', days:['2026-07-10','2026-09-11','2026-11-13'],
-    fee:'約8,000〜10,000円', days_count:'1日（約6時間）', target:'携帯用丸のこ盤・卓上丸のこを使用する作業者',
-    qualify:'特になし',
-    docs:['本人確認書類','受講料'],
-    note:'大工・内装・解体など丸のこを使う作業者全員に受講が推奨されています（一部現場では義務）。' },
+  // ===== 第二期 11月 =====
+  {period:'2',month:'11月',cat:'yobo',name:'職長・安全衛生責任者教育（リスクアセスメント含む）',date:'11月5日（水）・6日（木）',place:'技術研修センター',note:''},
+  {period:'2',month:'11月',cat:'gino',name:'玉掛け',date:'11月10日（月）・11日（火）・12日（水）',place:'技術研修センター',note:''},
+  {period:'2',month:'11月',cat:'gino',name:'高所作業車（10m以上）運転',date:'11月14日（金）・15日（土）',place:'アイチ研修センター（地図参照）',note:'締切：10月13日。会場が異なります'},
+  {period:'2',month:'11月',cat:'gino',name:'小型移動式クレーン運転',date:'11月17日（月）・18日（火）・19日（水）',place:'技術研修センター',note:''},
 
-  { cat:'tokubetsu', name:'フルハーネス型墜落制止用器具特別教育', days:['2026-07-17','2026-08-28','2026-09-25','2026-10-23','2026-11-20'],
-    fee:'約8,000〜10,000円', days_count:'1日（約6時間）', target:'高さ2m以上の箇所でフルハーネス型安全帯を使用する作業者',
-    qualify:'特になし',
-    docs:['本人確認書類','受講料'],
-    note:'2019年の法改正で義務化。旧来の胴ベルト型では対応不可の現場が増えており、早急な受講が推奨されます。' },
+  // ===== 第三期 12月 =====
+  {period:'3',month:'12月',cat:'tokubetsu',name:'フルハーネス型安全帯',date:'12月2日（火）',place:'技術研修センター',note:''},
+  {period:'3',month:'12月',cat:'tokubetsu',name:'巻き上げ機（ウインチ）',date:'12月3日（水）',place:'技術研修センター',note:''},
+  {period:'3',month:'12月',cat:'sakugyou',name:'金属アーク溶接限定',date:'12月8日（月）',place:'技術研修センター',note:'作業主任者技能講習'},
+  {period:'3',month:'12月',cat:'tokubetsu',name:'アーク溶接',date:'12月9日（火）・10日（水）',place:'技術研修センター',note:''},
+  {period:'3',month:'12月',cat:'tokubetsu',name:'酸素欠乏症・硫化水素',date:'12月15日（月）',place:'技術研修センター',note:''},
+  {period:'3',month:'12月',cat:'tokubetsu',name:'足場の組立て',date:'12月16日（火）',place:'技術研修センター',note:''},
+  {period:'3',month:'12月',cat:'gino',name:'玉掛け',date:'12月12日（金）・13日（土）・14日（日）',place:'技術研修センター',note:''},
+  {period:'3',month:'12月',cat:'gino',name:'玉掛け ※実技別日',date:'12月12日（金）・13日（土）・14日（日）※',place:'技術研修センター',note:'実技日が異なります'},
 
-  { cat:'tokubetsu', name:'アーク溶接等特別教育', days:['2026-08-20〜21','2026-10-29〜30'],
-    fee:'約12,000〜15,000円', days_count:'2日間', target:'アーク溶接機を用いて行う溶接・溶断業務に就く方',
-    qualify:'特になし',
-    docs:['本人確認書類','写真1枚','受講料'],
-    note:'2022年4月より溶接ヒュームが特定化学物質に指定されたため、アーク溶接作業には作業主任者の選任も必要。' },
+  // ===== 第三期 1月 =====
+  {period:'3',month:'1月',cat:'tokubetsu',name:'石綿作業従事者',date:'1月19日（月）',place:'技術研修センター',note:''},
+  {period:'3',month:'1月',cat:'gino',name:'ガス溶接',date:'1月21日（水）・21日',place:'技術研修センター',note:''},
+  {period:'3',month:'1月',cat:'tokubetsu',name:'高所作業車（10m未満）運転',date:'1月22日（木）',place:'技術研修センター',note:''},
+  {period:'3',month:'1月',cat:'sakugyou',name:'石綿',date:'1月26日（月）・27日（火）',place:'技術研修センター',note:'作業主任者技能講習'},
+  {period:'3',month:'1月',cat:'yobo',name:'職長・安全衛生責任者教育（リスクアセスメント含む）',date:'1月28日（水）・29日（木）',place:'技術研修センター',note:''},
+  {period:'3',month:'1月',cat:'yobo',name:'職長・安全衛生責任者能力向上教育',date:'1月2日（金）',place:'技術研修センター',note:''},
+  {period:'3',month:'1月',cat:'gino',name:'玉掛け',date:'1月3日（土）・4日（日）・5日（月）',place:'技術研修センター',note:''},
 
-  { cat:'yobo', name:'職長・安全衛生責任者教育', days:['2026-07-23〜24','2026-09-17〜18','2026-11-19〜20'],
-    fee:'約18,000〜22,000円', days_count:'2日間', target:'建設現場で職長・班長・安全衛生責任者になる方',
-    qualify:'特になし（ただし新規雇用者への安全教育修了が望ましい）',
-    docs:['本人確認書類','写真2枚','受講料'],
-    note:'CCUSレベル3昇格に多くの職種で必須。現場の安全管理の要となる資格で、事業者が受講させる義務があります。' },
+  // ===== 第三期 2月 =====
+  {period:'3',month:'2月',cat:'yobo',name:'職長・安全衛生責任者能力向上教育',date:'2月2日（月）',place:'技術研修センター',note:''},
+  {period:'3',month:'2月',cat:'gino',name:'玉掛け',date:'2月3日（火）・4日（水）・5日（木）',place:'技術研修センター',note:''},
+  {period:'3',month:'2月',cat:'other',name:'〈住宅リフォームエキスパート〉増改築相談員 新規',date:'2月7日（土）',place:'技術研修センター',note:'新規申請'},
+  {period:'3',month:'2月',cat:'other',name:'〈住宅リフォームエキスパート〉増改築相談員 更新・再登録',date:'2月7日（土）',place:'技術研修センター',note:'更新・再登録'},
+  {period:'3',month:'2月',cat:'sakugyou',name:'有機溶剤',date:'2月9日（月）・10日（火）',place:'技術研修センター',note:'作業主任者技能講習'},
+  {period:'3',month:'2月',cat:'gino',name:'高所作業車（10m以上）運転',date:'2月13日（金）・14日（土）',place:'アイチ研修センター（地図参照）',note:'締切：1月13日。会場が異なります'},
+  {period:'3',month:'2月',cat:'gino',name:'小型移動式クレーン運転',date:'2月16日（月）・17日（火）・18日（水）',place:'技術研修センター',note:''},
+  {period:'3',month:'2月',cat:'tokubetsu',name:'低圧電気取扱（開閉器の操作／8H）',date:'2月19日（木）',place:'技術研修センター',note:'8時間コース'},
+  {period:'3',month:'2月',cat:'yobo',name:'丸のこ等取扱い教育',date:'2月24日（火）',place:'技術研修センター',note:''},
+  {period:'3',month:'2月',cat:'tokubetsu',name:'研削砥石取替（自由研削）',date:'2月25日（水）',place:'技術研修センター',note:''},
 
-  { cat:'yobo', name:'刈払機取扱作業者安全衛生教育', days:['2026-08-05','2026-10-07'],
-    fee:'約5,000〜8,000円', days_count:'1日', target:'刈払機（草刈り機）を使用する作業者',
-    qualify:'特になし',
-    docs:['本人確認書類','受講料'],
-    note:'外構・造園・法面保護工事などで刈払機を扱う作業者向け。' },
+  // ===== 第三期 3月 =====
+  {period:'3',month:'3月',cat:'tokubetsu',name:'フルハーネス型安全帯',date:'3月3日（火）',place:'技術研修センター',note:''},
+  {period:'3',month:'3月',cat:'sakugyou',name:'足場の組立て',date:'3月4日（水）・5日（木）',place:'技術研修センター',note:'作業主任者技能講習'},
+  {period:'3',month:'3月',cat:'yobo',name:'職長・安全衛生責任者教育（リスクアセスメント含む）',date:'3月9日（月）・10日（火）',place:'技術研修センター',note:''},
 ];
 
-const CAT_INFO = {
-  gino:      {label:'技能講習', cls:'cat-gino'},
-  tokubetsu: {label:'特別教育', cls:'cat-tokubetsu'},
-  yobo:      {label:'安全教育', cls:'cat-yobo'},
-};
+const CAT_LABEL = {gino:'技能講習',tokubetsu:'特別教育',sakugyou:'作業主任者',yobo:'安全衛生教育',other:'その他'};
+let curPeriod = 'all', curCat = 'all';
 
-let currentCat = 'all';
-
-function filterKoushu(cat, el){
-  currentCat = cat;
-  document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
-  el.classList.add('active');
-  renderKoushu();
+function setPeriod(v, btn) {
+  curPeriod = v;
+  document.querySelectorAll('.ptab').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  render();
+}
+function setCat(v, btn) {
+  curCat = v;
+  document.querySelectorAll('.ctab').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  render();
 }
 
-function renderKoushu(){
-  const list = document.getElementById('koushu-list');
-  const filtered = currentCat === 'all' ? KOUSHU : KOUSHU.filter(k=>k.cat===currentCat);
-  list.innerHTML = filtered.map(k=>`
-    <div class="koushu-card">
-      <div class="koushu-head">
-        <p class="koushu-name">${k.name}</p>
-        <span class="koushu-cat ${CAT_INFO[k.cat].cls}">${CAT_INFO[k.cat].label}</span>
-      </div>
-      <p class="koushu-note">${k.note}</p>
+function render() {
+  let items = KOUSHU;
+  if(curPeriod !== 'all') items = items.filter(k=>k.period===curPeriod);
+  if(curCat !== 'all')    items = items.filter(k=>k.cat===curCat);
 
-      <div class="info-grid">
-        <div class="info-cell">
-          <p class="info-cell-label">受講料（参考）</p>
-          <p class="info-cell-val fee">${k.fee}</p>
-        </div>
-        <div class="info-cell">
-          <p class="info-cell-label">日数</p>
-          <p class="info-cell-val">${k.days_count}</p>
-        </div>
-        <div class="info-cell full">
-          <p class="info-cell-label">受講対象</p>
-          <p class="info-cell-val">${k.target}</p>
-        </div>
-        <div class="info-cell full">
-          <p class="info-cell-label">受講資格</p>
-          <p class="info-cell-val">${k.qualify}</p>
-        </div>
-      </div>
+  if(!items.length){
+    document.getElementById('koushu-list').innerHTML=`<div class="empty"><i class="ti ti-calendar-off"></i><p>該当する講習がありません</p></div>`;
+    return;
+  }
 
-      <p style="font-size:11px;font-weight:700;color:var(--gray500);margin:0 0 6px;letter-spacing:.06em;">📋 必要書類</p>
-      <div class="docs-list">
-        ${k.docs.map(d=>`<div class="docs-item"><i class="ti ti-check"></i>${d}</div>`).join('')}
-      </div>
+  // 月ごとにグループ化
+  const byMonth = {};
+  const MONTH_ORDER = ['4月','5月','6月','7月','8月','9月','10月','11月','12月','1月','2月','3月'];
+  items.forEach(k=>{
+    if(!byMonth[k.month]) byMonth[k.month] = [];
+    byMonth[k.month].push(k);
+  });
 
-      <p style="font-size:11px;font-weight:700;color:var(--gray500);margin:8px 0 6px;letter-spacing:.06em;">📅 2026年度 開催日程</p>
-      <div class="date-list">
-        ${k.days.map(d=>`
-          <div class="date-row">
-            <div>
-              <p class="date-main">📅 ${d}</p>
-              <p class="date-sub">埼玉土建技術研修センター（北浦和）</p>
-            </div>
-          </div>`).join('')}
-      </div>
-      <p class="fee-note"><i class="ti ti-info-circle"></i>受講料は参考値です。正確な金額・申込方法は支部事務所（048-773-9863）へ。組合員は受講料が祝金として給付されます。</p>
-    </div>`).join('');
+  let html = '';
+  MONTH_ORDER.forEach(m=>{
+    if(!byMonth[m]) return;
+    html += `<div class="month-group"><p class="month-label">📅 ${m}</p>`;
+    byMonth[m].forEach(k=>{
+      const catLabel = CAT_LABEL[k.cat] || k.cat;
+      const noteHtml = k.note ? `<p class="kcard-note"><i class="ti ti-info-circle" style="font-size:12px;vertical-align:-2px;margin-right:3px;color:var(--orange);"></i>${k.note}</p>` : '';
+      const placeIcon = k.place.includes('アイチ') ? '📍' : '🏫';
+      html += `<div class="kcard ${k.cat}">
+        <div class="kcard-top">
+          <p class="kcard-name">${k.name}</p>
+          <span class="kcat-badge ${k.cat}">${catLabel}</span>
+        </div>
+        <p class="kcard-date">📅 ${k.date}</p>
+        <p class="kcard-place">${placeIcon} ${k.place}</p>
+        ${noteHtml}
+      </div>`;
+    });
+    html += '</div>';
+  });
+
+  document.getElementById('koushu-list').innerHTML = html;
 }
 
-renderKoushu();
+render();
 </script>
 </body>
 </html>
