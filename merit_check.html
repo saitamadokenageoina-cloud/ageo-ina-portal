@@ -11,29 +11,63 @@
 .diag-hero i{font-size:44px;color:#FFAABB;flex-shrink:0;}
 .diag-hero h2{font-size:18px;font-weight:800;color:#fff;margin:0 0 4px;}
 .diag-hero p{font-size:13px;color:rgba(255,255,255,.65);margin:0;}
-/* 質問 */
-.diag-step{background:var(--white);border-radius:var(--r16);box-shadow:var(--shadow-sm);padding:20px;margin-bottom:12px;display:none;}
-.diag-step.active{display:block;}
-.diag-step-num{font-size:11px;font-weight:700;color:#C0392B;letter-spacing:.1em;margin:0 0 6px;}
-.diag-q{font-size:17px;font-weight:800;color:var(--navy);margin:0 0 14px;line-height:1.45;}
-.diag-choice{width:100%;padding:13px 16px;border-radius:var(--r12);border:2px solid var(--gray200);background:var(--white);color:var(--navy);font-size:15px;font-weight:600;text-align:left;margin-bottom:8px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:10px;}
-.diag-choice:hover,.diag-choice.selected{border-color:#C0392B;background:#FEF0ED;color:#9B1A1A;}
-.diag-choice i{font-size:20px;color:#C0392B;flex-shrink:0;}
+
+/* 進捗ドット */
+.prog-dots{display:flex;justify-content:center;gap:8px;margin-bottom:16px;}
+.prog-dot{width:10px;height:10px;border-radius:50%;background:var(--gray200);transition:all .3s;}
+.prog-dot.done{background:#C0392B;}
+.prog-dot.current{background:#C0392B;transform:scale(1.4);}
+
+/* 質問カード */
+.q-card{background:var(--white);border-radius:var(--r16);box-shadow:var(--shadow-sm);padding:22px 20px;margin-bottom:12px;}
+.q-num{font-size:11px;font-weight:700;color:#C0392B;letter-spacing:.12em;margin:0 0 8px;}
+.q-text{font-size:18px;font-weight:800;color:var(--navy);margin:0 0 18px;line-height:1.45;}
+
+/* 選択肢ボタン */
+.q-choices{display:flex;flex-direction:column;gap:10px;}
+.q-choice{
+  display:flex !important;
+  align-items:center !important;
+  gap:12px !important;
+  width:100% !important;
+  padding:14px 16px !important;
+  border-radius:var(--r12) !important;
+  border:2px solid var(--gray200) !important;
+  background:var(--white) !important;
+  color:var(--navy) !important;
+  font-size:15px !important;
+  font-weight:600 !important;
+  text-align:left !important;
+  cursor:pointer !important;
+  transition:all .15s !important;
+  box-shadow:none !important;
+  transform:none !important;
+}
+.q-choice:hover{
+  border-color:#C0392B !important;
+  background:#FEF0ED !important;
+  color:#9B1A1A !important;
+  transform:translateX(4px) !important;
+}
+.q-choice i{font-size:22px;color:#C0392B;flex-shrink:0;}
+
 /* 結果 */
-.result-hero{background:linear-gradient(135deg,#1B2A3B,#0D3A6B);border-radius:var(--r16);padding:20px;margin-bottom:14px;text-align:center;}
-.result-hero-emoji{font-size:52px;display:block;margin-bottom:8px;}
-.result-hero-title{font-size:20px;font-weight:800;color:#fff;margin:0 0 4px;}
-.result-hero-sub{font-size:14px;color:rgba(255,255,255,.65);margin:0;}
-.merit-result-card{background:var(--white);border-radius:var(--r16);box-shadow:var(--shadow-sm);padding:16px;margin-bottom:10px;display:flex;gap:14px;align-items:flex-start;}
-.merit-result-icon{width:48px;height:48px;border-radius:var(--r12);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.merit-result-icon i{font-size:24px;}
-.merit-result-rank{font-size:11px;font-weight:700;letter-spacing:.06em;margin:0 0 3px;}
-.merit-result-title{font-size:15px;font-weight:800;color:var(--navy);margin:0 0 4px;}
-.merit-result-desc{font-size:13px;color:var(--gray600);margin:0;line-height:1.65;}
-.merit-result-amount{font-size:13px;font-weight:700;color:var(--orange);background:var(--orange-lt);border-radius:6px;padding:3px 10px;display:inline-block;margin-top:5px;}
-.rank1{border-left:4px solid var(--orange);}
-.rank2{border-left:4px solid var(--blue);}
-.rank3{border-left:4px solid var(--green);}
+.r-hero{background:linear-gradient(135deg,#1B2A3B,#0D3A6B);border-radius:var(--r16);padding:22px;margin-bottom:14px;text-align:center;}
+.r-emoji{font-size:56px;display:block;margin-bottom:10px;}
+.r-title{font-size:22px;font-weight:800;color:#fff;margin:0 0 6px;}
+.r-sub{font-size:13px;color:rgba(255,255,255,.65);margin:0;}
+.r-profile{background:var(--gray50);border-radius:var(--r12);padding:12px 16px;font-size:13px;color:var(--gray600);margin-bottom:14px;line-height:1.7;}
+
+.merit-card{background:var(--white);border-radius:var(--r16);box-shadow:var(--shadow-sm);padding:16px;margin-bottom:10px;display:flex;gap:14px;align-items:flex-start;}
+.merit-card.rank1{border-left:5px solid var(--orange);}
+.merit-card.rank2{border-left:5px solid var(--blue);}
+.merit-card.rank3{border-left:5px solid var(--green);}
+.merit-icon{width:48px;height:48px;border-radius:var(--r12);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.merit-icon i{font-size:24px;}
+.merit-rank{font-size:11px;font-weight:700;margin:0 0 3px;letter-spacing:.06em;}
+.merit-title{font-size:15px;font-weight:800;color:var(--navy);margin:0 0 5px;}
+.merit-desc{font-size:13px;color:var(--gray600);margin:0;line-height:1.65;}
+.merit-amount{font-size:13px;font-weight:700;color:var(--orange);background:var(--orange-lt);border-radius:6px;padding:3px 10px;display:inline-block;margin-top:6px;}
 </style>
 </head>
 <body>
@@ -45,189 +79,249 @@
     <p class="hdr-title" style="margin:0;font-size:14px;">加入メリット診断</p>
   </div>
 </header>
+
 <div class="content">
   <div class="diag-hero">
     <i class="ti ti-sparkles"></i>
     <div>
       <h2>加入メリット診断</h2>
-      <p>あなたに最もメリットになる制度を診断します</p>
+      <p>5つの質問に答えるだけ。あなたに最もお得な制度を診断します。</p>
     </div>
   </div>
 
-  <!-- Q1：就業形態 -->
-  <div class="diag-step active" id="dq1">
-    <p class="diag-step-num">QUESTION 1 / 5</p>
-    <p class="diag-q">あなたの就業形態は？</p>
-    <button class="diag-choice" onclick="setAns('type','hitori');goNext('dq2')"><i class="ti ti-hammer"></i>一人親方・個人事業主</button>
-    <button class="diag-choice" onclick="setAns('type','shain');goNext('dq2')"><i class="ti ti-users"></i>会社員・現場作業員</button>
-    <button class="diag-choice" onclick="setAns('type','jigyou');goNext('dq2')"><i class="ti ti-building"></i>事業主（従業員を雇用）</button>
+  <!-- 進捗ドット -->
+  <div class="prog-dots" id="prog-dots">
+    <div class="prog-dot current" id="dot0"></div>
+    <div class="prog-dot" id="dot1"></div>
+    <div class="prog-dot" id="dot2"></div>
+    <div class="prog-dot" id="dot3"></div>
+    <div class="prog-dot" id="dot4"></div>
   </div>
 
-  <!-- Q2：年齢 -->
-  <div class="diag-step" id="dq2">
-    <p class="diag-step-num">QUESTION 2 / 5</p>
-    <p class="diag-q">年齢は？</p>
-    <button class="diag-choice" onclick="setAns('age','u30');goNext('dq3')"><i class="ti ti-user"></i>29歳以下</button>
-    <button class="diag-choice" onclick="setAns('age','30to49');goNext('dq3')"><i class="ti ti-user"></i>30〜49歳</button>
-    <button class="diag-choice" onclick="setAns('age','50to59');goNext('dq3')"><i class="ti ti-user"></i>50〜59歳</button>
-    <button class="diag-choice" onclick="setAns('age','60plus');goNext('dq3')"><i class="ti ti-user"></i>60歳以上</button>
-  </div>
+  <!-- 質問エリア -->
+  <div id="q-area"></div>
 
-  <!-- Q3：家族 -->
-  <div class="diag-step" id="dq3">
-    <p class="diag-step-num">QUESTION 3 / 5</p>
-    <p class="diag-q">家族構成は？</p>
-    <button class="diag-choice" onclick="setAns('family','hitori');goNext('dq4')"><i class="ti ti-user-circle"></i>独身・単身</button>
-    <button class="diag-choice" onclick="setAns('family','fufu');goNext('dq4')"><i class="ti ti-heart"></i>夫婦のみ</button>
-    <button class="diag-choice" onclick="setAns('family','kodomo');goNext('dq4')"><i class="ti ti-baby-carriage"></i>子どもがいる</button>
-    <button class="diag-choice" onclick="setAns('family','oyako');goNext('dq4')"><i class="ti ti-users"></i>子ども＋親など大家族</button>
-  </div>
-
-  <!-- Q4：健康保険 -->
-  <div class="diag-step" id="dq4">
-    <p class="diag-step-num">QUESTION 4 / 5</p>
-    <p class="diag-q">現在の健康保険は？</p>
-    <button class="diag-choice" onclick="setAns('hoken','kokuho');goNext('dq5')"><i class="ti ti-building-community"></i>市区町村の国民健康保険</button>
-    <button class="diag-choice" onclick="setAns('hoken','shakai');goNext('dq5')"><i class="ti ti-briefcase"></i>会社の社会保険（協会けんぽ等）</button>
-    <button class="diag-choice" onclick="setAns('hoken','doken');goNext('dq5')"><i class="ti ti-heart-plus"></i>すでに土建国保に加入</button>
-    <button class="diag-choice" onclick="setAns('hoken','nashi');goNext('dq5')"><i class="ti ti-x"></i>未加入・わからない</button>
-  </div>
-
-  <!-- Q5：関心 -->
-  <div class="diag-step" id="dq5">
-    <p class="diag-step-num">QUESTION 5 / 5</p>
-    <p class="diag-q">今一番気になることは？（複数ある場合は最も重要なもの）</p>
-    <button class="diag-choice" onclick="setAns('concern','medical');showResult()"><i class="ti ti-stethoscope"></i>病気・ケガのときの保障</button>
-    <button class="diag-choice" onclick="setAns('concern','rousai');showResult()"><i class="ti ti-helmet"></i>現場での労働災害・労災保険</button>
-    <button class="diag-choice" onclick="setAns('concern','shotoku');showResult()"><i class="ti ti-cash"></i>収入が途絶えたときの補償</button>
-    <button class="diag-choice" onclick="setAns('concern','shikaku');showResult()"><i class="ti ti-certificate"></i>資格取得・スキルアップ</button>
-    <button class="diag-choice" onclick="setAns('concern','life');showResult()"><i class="ti ti-star"></i>生活優待・お得なサービス</button>
-    <button class="diag-choice" onclick="setAns('concern','sougou');showResult()"><i class="ti ti-list-check"></i>全体的に知りたい</button>
-  </div>
-
-  <!-- 結果 -->
-  <div class="diag-step" id="dresult">
-    <div id="result-content"></div>
-    <button class="btn-secondary" onclick="resetDiag()" style="display:flex;margin-top:4px;"><i class="ti ti-refresh"></i>もう一度診断する</button>
-    <a href="tel:048-773-9863" class="btn-primary" style="display:flex;margin-top:8px;"><i class="ti ti-phone"></i>詳しく相談する（048-773-9863）</a>
-  </div>
+  <!-- 結果エリア（最初は非表示） -->
+  <div id="result-area" style="display:none;"></div>
 </div>
 <footer>埼玉土建一般労働組合 上尾伊奈支部｜TEL 048-773-9863</footer>
 </div>
+
 <script>
+// ===== 質問定義 =====
+const QUESTIONS = [
+  {
+    key: 'type',
+    text: 'あなたの就業形態は？',
+    choices: [
+      { val:'hitori', icon:'ti-hammer',    label:'一人親方・個人事業主' },
+      { val:'shain',  icon:'ti-users',     label:'会社員・現場作業員' },
+      { val:'jigyou', icon:'ti-building',  label:'事業主（従業員を雇用している）' },
+    ]
+  },
+  {
+    key: 'age',
+    text: '年齢は？',
+    choices: [
+      { val:'u30',    icon:'ti-user', label:'29歳以下' },
+      { val:'30to49', icon:'ti-user', label:'30〜49歳' },
+      { val:'50to59', icon:'ti-user', label:'50〜59歳' },
+      { val:'60plus', icon:'ti-user', label:'60歳以上' },
+    ]
+  },
+  {
+    key: 'family',
+    text: '家族構成は？',
+    choices: [
+      { val:'hitori', icon:'ti-user-circle',   label:'独身・単身' },
+      { val:'fufu',   icon:'ti-heart',          label:'夫婦のみ' },
+      { val:'kodomo', icon:'ti-baby-carriage',  label:'子どもがいる' },
+      { val:'oyako',  icon:'ti-users',          label:'子ども＋親など大家族' },
+    ]
+  },
+  {
+    key: 'hoken',
+    text: '現在の健康保険は？',
+    choices: [
+      { val:'kokuho',  icon:'ti-building-community', label:'市区町村の国民健康保険' },
+      { val:'shakai',  icon:'ti-briefcase',           label:'会社の社会保険（協会けんぽ等）' },
+      { val:'doken',   icon:'ti-heart-plus',          label:'すでに土建国保に加入' },
+      { val:'nashi',   icon:'ti-question-mark',       label:'未加入・わからない' },
+    ]
+  },
+  {
+    key: 'concern',
+    text: '今一番気になることは？',
+    choices: [
+      { val:'medical',  icon:'ti-stethoscope',   label:'病気・ケガのときの保障' },
+      { val:'rousai',   icon:'ti-helmet',         label:'現場での労働災害・労災保険' },
+      { val:'shotoku',  icon:'ti-cash',           label:'収入が途絶えたときの補償' },
+      { val:'shikaku',  icon:'ti-certificate',    label:'資格取得・スキルアップ' },
+      { val:'life',     icon:'ti-star',           label:'生活優待・お得なサービス' },
+      { val:'sougou',   icon:'ti-list-check',     label:'全体的に知りたい' },
+    ]
+  },
+];
+
 let answers = {};
+let currentQ = 0;
 
-function setAns(k,v){ answers[k]=v; }
-function goNext(id){
-  document.querySelectorAll('.diag-step').forEach(s=>s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+// ===== 描画 =====
+function renderQuestion(idx) {
+  const q = QUESTIONS[idx];
+  const choicesHtml = q.choices.map(c => `
+    <button class="q-choice" onclick="answer('${q.key}','${c.val}',${idx})">
+      <i class="ti ${c.icon}"></i>${c.label}
+    </button>`).join('');
+
+  document.getElementById('q-area').innerHTML = `
+    <div class="q-card">
+      <p class="q-num">QUESTION ${idx+1} / ${QUESTIONS.length}</p>
+      <p class="q-text">${q.text}</p>
+      <div class="q-choices">${choicesHtml}</div>
+    </div>`;
+
+  // 進捗ドット更新
+  for(let i=0;i<QUESTIONS.length;i++){
+    const dot = document.getElementById('dot'+i);
+    if(!dot) continue;
+    dot.className = 'prog-dot' + (i<idx?' done':i===idx?' current':'');
+  }
+
   window.scrollTo({top:0,behavior:'smooth'});
 }
-function resetDiag(){
-  answers = {};
-  document.querySelectorAll('.diag-step').forEach(s=>s.classList.remove('active'));
-  document.getElementById('dq1').classList.add('active');
-  window.scrollTo({top:0,behavior:'smooth'});
+
+function answer(key, val, idx) {
+  answers[key] = val;
+  if(idx + 1 < QUESTIONS.length) {
+    currentQ = idx + 1;
+    renderQuestion(currentQ);
+  } else {
+    showResult();
+  }
 }
 
-// 診断ロジック：回答に応じてメリットスコアを計算
-function showResult(){
+// ===== 診断ロジック =====
+function showResult() {
   const {type, age, family, hoken, concern} = answers;
 
-  // メリット候補リスト（各シナリオでスコアリング）
-  const merits = [
+  const MERITS = [
     {
       id:'rousai', icon:'ti-helmet', bg:'#E8F5EE', fg:'#1A7A4A',
       title:'一人親方労災保険（特別加入）',
-      desc:'現場でのケガ・事故の際、治療費全額無料＋休業補償（給付基礎日額の80%）が受け取れます。元請から加入を求められるケースも増えており、今すぐ加入を検討してください。',
-      amount:'保険料：年額 約数万円〜（給付基礎日額による）',
-      score: (type==='hitori'?50:0) + (concern==='rousai'?40:0) + (concern==='shotoku'?20:0)
+      desc:'現場でのケガ・事故の際、治療費全額無料＋休業補償（給付基礎日額の約80%）が受け取れます。元請から加入を求められるケースも急増しており、現場に入る前の加入を強くおすすめします。',
+      amount:'保険料：給付基礎日額により異なる（年額数万円〜）',
+      score: (type==='hitori'?50:0)+(concern==='rousai'?40:0)+(concern==='shotoku'?15:0)+(hoken==='nashi'?10:0)
     },
     {
       id:'kokuho', icon:'ti-heart-plus', bg:'#EDE8FE', fg:'#4A1A9B',
       title:'土建国保への加入',
-      desc:'市区町村の国保と比べ、傷病手当金（最大180日）・一部負担払戻金（医療費全額）・葬祭費7万円など独自給付が充実。家族が多いほどメリットが大きくなります。',
-      amount:'傷病手当金：最大180日分 ／ 一部負担払戻金：全額',
-      score: (hoken==='kokuho'?50:0) + (hoken==='nashi'?40:0) + (family==='kodomo'?20:0) + (family==='oyako'?30:0) + (concern==='medical'?40:0) + (concern==='shotoku'?20:0)
+      desc:'市区町村の国保にはない独自給付が充実。傷病手当金（最大180日・給付基礎日額の60%）、一部負担払戻金（医療費自己負担の全額払い戻し）、葬祭費7万円など。家族が多いほどお得です。',
+      amount:'傷病手当金：最大180日分 ／ 医療費：自己負担を全額払い戻し',
+      score: (hoken==='kokuho'?50:0)+(hoken==='nashi'?40:0)+(family==='kodomo'?25:0)+(family==='oyako'?35:0)+(concern==='medical'?40:0)+(concern==='shotoku'?20:0)
     },
     {
       id:'kyosai', icon:'ti-shield-heart', bg:'#FEF0ED', fg:'#9B3A1A',
       title:'総合共済（病気・ケガ・死亡保障）',
-      desc:'月1,390円（組合費に含む）で入院1日5,000円・死亡100〜300万円・手術5〜40倍の共済金が受け取れます。子育て世代や家族を持つ方に特に重要な制度です。',
+      desc:'月1,390円（組合費に含む）で入院1日5,000円・死亡最大300万円・手術5〜40倍の共済金が受け取れます。出生祝金2万円・結婚祝金3万円など祝金も充実。子育て世代や家族を持つ方に特に重要な制度です。',
       amount:'入院：1日5,000円 ／ 死亡：最大300万円 ／ 出生祝金：2万円',
-      score: (family==='kodomo'?30:0) + (family==='oyako'?30:0) + (age==='30to49'?20:0) + (concern==='medical'?30:0) + (concern==='shotoku'?20:0) + (age==='50to59'?10:0)
+      score: (family==='kodomo'?35:0)+(family==='oyako'?35:0)+(age==='30to49'?20:0)+(age==='50to59'?15:0)+(concern==='medical'?30:0)+(concern==='shotoku'?15:0)
     },
     {
       id:'shikaku', icon:'ti-certificate', bg:'#FFF8E6', fg:'#7A5500',
       title:'資格取得祝金・技能講習',
-      desc:'埼玉土建技術研修センターで受講した技能講習・特別教育の受講料が全額祝金として給付されます。玉掛け（16,700円）・フルハーネス（8,000円）など、現場で必須の資格取得に活用できます。',
-      amount:'技能講習：受講料全額給付 ／ 作業主任者：半額',
-      score: (concern==='shikaku'?60:0) + (age==='u30'?20:0) + (type==='shain'?15:0)
-    },
-    {
-      id:'life', icon:'ti-credit-card', bg:'#EDE8FE', fg:'#6B21A8',
-      title:'どけんカード・生活優待サービス',
-      desc:'埼玉県内700店以上の登録店で優待が受けられるどけんカード、宿泊補助（1人3,000円）、自動車共済、弁護士・税理士等の無料相談など、くらしに役立つサービスが充実。',
-      amount:'DOKENカード：県内700店以上で割引',
-      score: (concern==='life'?50:0) + (concern==='sougou'?20:0) + (family==='kodomo'?10:0)
+      desc:'埼玉土建技術研修センターで受講した技能講習・特別教育の受講料が全額祝金として給付されます。玉掛け（16,700円）・フルハーネス（8,000円）・足場特別教育（6,000円）など現場で必須の資格が実質無料に。',
+      amount:'技能講習・特別教育：受講料全額給付 ／ 作業主任者：受講料半額',
+      score: (concern==='shikaku'?60:0)+(age==='u30'?25:0)+(age==='30to49'?15:0)+(type==='shain'?15:0)+(type==='hitori'?10:0)
     },
     {
       id:'rodo', icon:'ti-shield-check', bg:'#E8F0FB', fg:'#1A5FA8',
       title:'労働保険事務組合への加入',
-      desc:'埼玉土建は厚生労働大臣認可の労働保険事務組合です。労災・雇用保険の手続きを支部で一括対応。事業主の特別加入（一人親方労災）も含め、まとめて相談できます。',
-      amount:'労災保険：医療費全額 ／ 休業補償：給付基礎日額の80%',
-      score: (type==='jigyou'?40:0) + (concern==='rousai'?30:0) + (type==='hitori'?20:0)
+      desc:'埼玉土建は厚生労働大臣認可の労働保険事務組合です。労災・雇用保険の手続きを支部でまとめて対応。事業主の特別加入（一人親方労災）も含め、一か所で相談できます。',
+      amount:'労災保険：医療費全額無料 ／ 休業補償：給付基礎日額の約80%',
+      score: (type==='jigyou'?45:0)+(concern==='rousai'?30:0)+(type==='hitori'?20:0)+(hoken==='nashi'?10:0)
+    },
+    {
+      id:'life', icon:'ti-credit-card', bg:'#EDE8FE', fg:'#6B21A8',
+      title:'どけんカード・生活優待サービス',
+      desc:'埼玉県内700店以上でお得に使えるどけんカード、宿泊補助（1人3,000円）、自動車共済（団体割引）、弁護士・税理士等の無料相談など、くらしに役立つサービスが組合費に含まれています。',
+      amount:'DOKENカード：県内700店以上で割引 ／ 宿泊補助：1人3,000円',
+      score: (concern==='life'?55:0)+(concern==='sougou'?20:0)+(family==='kodomo'?10:0)+(family==='oyako'?15:0)
     },
   ];
 
-  // concern=sougouの場合は全体的にスコアアップ
-  if(concern==='sougou'){
-    merits.forEach(m=>m.score+=10);
-  }
+  // 「全体的に知りたい」は全体スコアアップ
+  if(concern === 'sougou') MERITS.forEach(m=>m.score+=10);
 
-  // スコア順でソート
-  merits.sort((a,b)=>b.score-a.score);
-  const top3 = merits.slice(0,3);
+  MERITS.sort((a,b)=>b.score-a.score);
+  const top3 = MERITS.slice(0,3);
 
-  const rankLabel = ['⭐ 最もおすすめ','🔷 次におすすめ','🔶 あわせてチェック'];
-  const rankClass = ['rank1','rank2','rank3'];
+  const typeLabel   = {hitori:'一人親方・個人事業主', shain:'会社員・現場作業員', jigyou:'事業主'}[type]||'';
+  const ageLabel    = {u30:'29歳以下', '30to49':'30〜49歳', '50to59':'50〜59歳', '60plus':'60歳以上'}[age]||'';
+  const familyLabel = {hitori:'独身', fufu:'夫婦のみ', kodomo:'子どもあり', oyako:'大家族'}[family]||'';
+  const hokenLabel  = {kokuho:'市区町村国保', shakai:'社会保険', doken:'土建国保加入済', nashi:'未加入'}[hoken]||'';
 
-  // プロフィールサマリー
-  const typeLabel = {hitori:'一人親方・個人事業主',shain:'会社員・現場作業員',jigyou:'事業主'}[type]||'';
-  const ageLabel  = {u30:'29歳以下',30to49:'30〜49歳',50to59:'50〜59歳',60plus:'60歳以上'}[age]||'';
-  const familyLabel = {hitori:'独身',fufu:'夫婦のみ',kodomo:'子どもあり',oyako:'大家族'}[family]||'';
-  const hokenLabel = {kokuho:'市区町村国保',shakai:'社会保険',doken:'土建国保',nashi:'未加入'}[hoken]||'';
+  const rankInfo = [
+    { label:'⭐ 最もおすすめ', cls:'rank1', color:'var(--orange)' },
+    { label:'🔷 次におすすめ', cls:'rank2', color:'var(--blue)' },
+    { label:'🔶 あわせてチェック', cls:'rank3', color:'var(--green)' },
+  ];
 
   let html = `
-    <div class="result-hero">
-      <span class="result-hero-emoji">🎯</span>
-      <p class="result-hero-title">診断結果</p>
-      <p class="result-hero-sub">${typeLabel}・${ageLabel}・${familyLabel}の場合</p>
+    <div class="r-hero">
+      <span class="r-emoji">🎯</span>
+      <p class="r-title">診断結果</p>
+      <p class="r-sub">${typeLabel}・${ageLabel}・${familyLabel} の方の場合</p>
     </div>
-    <div style="background:var(--gray50);border-radius:var(--r12);padding:12px 16px;font-size:13px;color:var(--gray600);margin-bottom:14px;">
-      <strong>入力内容：</strong>${typeLabel} ／ ${ageLabel} ／ ${familyLabel} ／ 健康保険：${hokenLabel}
-    </div>`;
+    <div class="r-profile">
+      <strong>📋 入力内容：</strong><br>
+      就業形態：${typeLabel}<br>
+      年齢：${ageLabel}　家族：${familyLabel}　健康保険：${hokenLabel}
+    </div>
+    ${top3.map((m,i)=>`
+      <div class="merit-card ${rankInfo[i].cls}">
+        <div class="merit-icon" style="background:${m.bg};"><i class="ti ${m.icon}" style="color:${m.fg};"></i></div>
+        <div style="flex:1;">
+          <p class="merit-rank" style="color:${rankInfo[i].color};">${rankInfo[i].label}</p>
+          <p class="merit-title">${m.title}</p>
+          <p class="merit-desc">${m.desc}</p>
+          <span class="merit-amount">💰 ${m.amount}</span>
+        </div>
+      </div>`).join('')}
+    <div class="alert alert-info" style="margin-top:4px;">
+      <i class="ti ti-info-circle"></i>
+      <span>診断結果はあくまで参考です。詳しい制度内容・加入手続きは支部へお気軽にご相談ください。</span>
+    </div>
+    <a href="tel:048-773-9863" class="btn-primary" style="display:flex;margin-bottom:8px;">
+      <i class="ti ti-phone"></i>詳しく相談する（048-773-9863）
+    </a>
+    <button class="btn-secondary" onclick="resetDiag()" style="display:flex;width:100%;">
+      <i class="ti ti-refresh"></i>もう一度診断する
+    </button>`;
 
-  top3.forEach((m,i)=>{
-    html += `<div class="merit-result-card ${rankClass[i]}">
-      <div class="merit-result-icon" style="background:${m.bg};"><i class="ti ${m.icon}" style="color:${m.fg};font-size:24px;"></i></div>
-      <div>
-        <p class="merit-result-rank" style="color:${i===0?'var(--orange)':i===1?'var(--blue)':'var(--green)'}">${rankLabel[i]}</p>
-        <p class="merit-result-title">${m.title}</p>
-        <p class="merit-result-desc">${m.desc}</p>
-        <span class="merit-result-amount">💰 ${m.amount}</span>
-      </div>
-    </div>`;
-  });
+  // 進捗ドットを全部完了に
+  for(let i=0;i<QUESTIONS.length;i++){
+    const dot = document.getElementById('dot'+i);
+    if(dot) dot.className = 'prog-dot done';
+  }
 
-  html += `<div class="alert alert-info" style="margin-top:4px;">
-    <i class="ti ti-info-circle"></i>
-    <span>診断結果はあくまで参考です。詳しい制度内容や加入手続きは支部にお気軽にご相談ください。</span>
-  </div>`;
-
-  document.getElementById('result-content').innerHTML = html;
-  goNext('dresult');
+  document.getElementById('q-area').style.display = 'none';
+  document.getElementById('result-area').innerHTML = html;
+  document.getElementById('result-area').style.display = 'block';
+  window.scrollTo({top:0,behavior:'smooth'});
 }
+
+function resetDiag() {
+  answers = {};
+  currentQ = 0;
+  document.getElementById('q-area').style.display = 'block';
+  document.getElementById('result-area').style.display = 'none';
+  document.getElementById('result-area').innerHTML = '';
+  renderQuestion(0);
+}
+
+// 初期表示
+renderQuestion(0);
 </script>
 </body>
 </html>
