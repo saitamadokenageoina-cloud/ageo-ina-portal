@@ -169,8 +169,10 @@ let currentQ = 0;
 // ===== 描画 =====
 function renderQuestion(idx) {
   const q = QUESTIONS[idx];
-  const choicesHtml = q.choices.map(c => `
-    <button class="q-choice" onclick="answer('${q.key}','${c.val}',${idx})">
+
+  // choicesHtmlはdata属性でval・keyを渡す（onclick属性を使わない）
+  const choicesHtml = q.choices.map((c, ci) => `
+    <button class="q-choice" data-key="${q.key}" data-val="${c.val}" data-idx="${idx}" data-ci="${ci}">
       <i class="ti ${c.icon}"></i>${c.label}
     </button>`).join('');
 
@@ -180,6 +182,18 @@ function renderQuestion(idx) {
       <p class="q-text">${q.text}</p>
       <div class="q-choices">${choicesHtml}</div>
     </div>`;
+
+  // イベントをaddEventListenerで設定
+  document.querySelectorAll('.q-choice').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      const key = this.getAttribute('data-key');
+      const val = this.getAttribute('data-val');
+      const i   = parseInt(this.getAttribute('data-idx'));
+      answer(key, val, i);
+    });
+  });
 
   // 進捗ドット更新
   for(let i=0;i<QUESTIONS.length;i++){
@@ -295,7 +309,7 @@ function showResult() {
     <a href="tel:048-773-9863" class="btn-primary" style="display:flex;margin-bottom:8px;">
       <i class="ti ti-phone"></i>詳しく相談する（048-773-9863）
     </a>
-    <button class="btn-secondary" onclick="resetDiag()" style="display:flex;width:100%;">
+    <button id="reset-btn" class="btn-secondary" style="display:flex;width:100%;">
       <i class="ti ti-refresh"></i>もう一度診断する
     </button>`;
 
@@ -309,6 +323,10 @@ function showResult() {
   document.getElementById('result-area').innerHTML = html;
   document.getElementById('result-area').style.display = 'block';
   window.scrollTo({top:0,behavior:'smooth'});
+
+  // リセットボタンのイベント
+  const rb = document.getElementById('reset-btn');
+  if(rb) rb.addEventListener('click', function(e){ e.preventDefault(); resetDiag(); });
 }
 
 function resetDiag() {
