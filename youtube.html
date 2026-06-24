@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>YouTubeチャンネル｜埼玉土建 上尾伊奈支部</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.47.0/iconfont/tabler-icons.min.css">
+<link rel="stylesheet" href="common.css">
+<style>
+.yt-hero{
+  background:linear-gradient(135deg,#1A0000,#8B0000,#CC0000);
+  border-radius:var(--r16);padding:20px;margin-bottom:16px;
+  display:flex;align-items:center;gap:16px;position:relative;overflow:hidden;
+}
+.yt-hero::before{content:'';position:absolute;right:-20px;top:-20px;width:120px;height:120px;background:rgba(255,255,255,.06);border-radius:50%;}
+.yt-hero-icon{width:56px;height:56px;background:#FF0000;border-radius:var(--r12);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 12px rgba(255,0,0,.4);}
+.yt-hero-icon i{font-size:32px;color:white;}
+.yt-hero-title{font-size:18px;font-weight:800;color:white;margin:0 0 4px;}
+.yt-hero-sub{font-size:13px;color:rgba(255,255,255,.65);margin:0;}
+
+.video-card{
+  background:var(--white);border-radius:var(--r16);box-shadow:var(--shadow-sm);
+  overflow:hidden;margin-bottom:12px;cursor:pointer;
+  transition:box-shadow .2s,transform .15s;border:2px solid transparent;
+}
+.video-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px);border-color:#FF0000;}
+.video-thumb{
+  width:100%;aspect-ratio:16/9;background:var(--gray100);
+  position:relative;overflow:hidden;
+}
+.video-thumb img{width:100%;height:100%;object-fit:cover;}
+.video-thumb-fallback{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1a0000,#550000);}
+.video-play-btn{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  background:rgba(0,0,0,.3);transition:background .15s;
+}
+.video-card:hover .video-play-btn{background:rgba(0,0,0,.5);}
+.play-circle{
+  width:56px;height:56px;background:rgba(255,0,0,.9);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 16px rgba(0,0,0,.4);
+}
+.play-circle i{font-size:24px;color:white;margin-left:3px;}
+.video-duration{
+  position:absolute;bottom:8px;right:8px;
+  background:rgba(0,0,0,.8);color:white;font-size:11px;font-weight:600;
+  padding:2px 6px;border-radius:4px;
+}
+.video-body{padding:12px 14px 14px;}
+.video-title{font-size:14px;font-weight:700;color:var(--navy);margin:0 0 5px;line-height:1.4;}
+.video-meta{font-size:12px;color:var(--gray400);margin:0;display:flex;align-items:center;gap:8px;}
+.video-meta i{font-size:13px;}
+
+.loading-state{text-align:center;padding:40px 20px;color:var(--gray400);}
+.loading-state i{font-size:48px;display:block;margin-bottom:12px;animation:spin 1.2s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.error-state{text-align:center;padding:30px 20px;color:var(--gray400);}
+.error-state i{font-size:40px;display:block;margin-bottom:10px;opacity:.4;}
+
+.ch-btn{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:14px;background:#FF0000;color:white;
+  border-radius:var(--r12);font-size:15px;font-weight:700;
+  text-decoration:none;box-shadow:0 4px 12px rgba(255,0,0,.3);
+  transition:all .15s;
+}
+.ch-btn:hover{background:#CC0000;}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="hdr">
+  <button class="hdr-back" onclick="location.href='index.html'">
+    <i class="ti ti-arrow-left"></i>ホーム
+  </button>
+  <div style="text-align:right;">
+    <p class="hdr-org" style="margin:0;">埼玉土建 上尾伊奈支部</p>
+    <p class="hdr-title" style="margin:0;font-size:14px;">YouTubeチャンネル</p>
+  </div>
+</header>
+
+<div class="content">
+
+  <div class="yt-hero">
+    <div class="yt-hero-icon"><i class="ti ti-brand-youtube"></i></div>
+    <div>
+      <p class="yt-hero-title">埼玉土建上尾伊奈支部</p>
+      <p class="yt-hero-sub">活動動画・講習案内・行事記録を配信中</p>
+    </div>
+  </div>
+
+  <!-- 動画一覧 -->
+  <p class="sec-label">最新の動画</p>
+  <div id="video-list">
+    <div class="loading-state">
+      <i class="ti ti-loader-2"></i>
+      <p>動画を読み込み中…</p>
+    </div>
+  </div>
+
+  <!-- チャンネルへ -->
+  <a href="https://www.youtube.com/@%E5%9F%BC%E7%8E%89%E5%9C%9F%E5%BB%BA%E4%B8%8A%E5%B0%BE%E4%BC%8A%E5%A5%88%E6%94%AF%E9%83%A8" target="_blank" rel="noopener" class="ch-btn" style="margin-bottom:12px;">
+    <i class="ti ti-brand-youtube" style="font-size:20px;"></i>チャンネルを開く（YouTube）
+  </a>
+
+  <div class="alert alert-info">
+    <i class="ti ti-info-circle"></i>
+    <span>動画をタップするとYouTubeアプリ（またはブラウザ）で再生します。チャンネル登録でお知らせを受け取れます。</span>
+  </div>
+</div>
+
+<footer>埼玉土建一般労働組合 上尾伊奈支部｜TEL 048-773-9863</footer>
+</div>
+
+<script>
+const CHANNEL_ID = 'UCl-kAtNcthcVmAZT2jK3JrA';
+const RSS_URL = `https://www.youtube.com/feeds/videos.xml?channel_id=${CHANNEL_ID}`;
+// CORSを回避するためrssbridgeまたはrss2jsonを使用
+const API_URL = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(RSS_URL)}&count=12`;
+
+function timeAgo(dateStr) {
+  const diff = (Date.now() - new Date(dateStr)) / 1000;
+  if (diff < 3600) return `${Math.floor(diff/60)}分前`;
+  if (diff < 86400) return `${Math.floor(diff/3600)}時間前`;
+  if (diff < 2592000) return `${Math.floor(diff/86400)}日前`;
+  if (diff < 31536000) return `${Math.floor(diff/2592000)}ヶ月前`;
+  return `${Math.floor(diff/31536000)}年前`;
+}
+
+function getVideoId(link) {
+  const m = link.match(/watch\?v=([^&]+)/);
+  return m ? m[1] : null;
+}
+
+function renderVideos(items) {
+  const list = document.getElementById('video-list');
+  if (!items || !items.length) {
+    list.innerHTML = `<div class="error-state"><i class="ti ti-video-off"></i><p>動画を取得できませんでした。<br>下のボタンからチャンネルを直接ご覧ください。</p></div>`;
+    return;
+  }
+  list.innerHTML = items.map(item => {
+    const vid = getVideoId(item.link);
+    const thumb = vid ? `https://img.youtube.com/vi/${vid}/mqdefault.jpg` : null;
+    const url = item.link;
+    return `
+      <div class="video-card" onclick="window.open('${url}','_blank')">
+        <div class="video-thumb">
+          ${thumb
+            ? `<img src="${thumb}" alt="${item.title}" loading="lazy" onerror="this.parentNode.innerHTML='<div class=\\"video-thumb-fallback\\"><i class=\\"ti ti-brand-youtube\\" style=\\"font-size:48px;color:rgba(255,255,255,.3)\\"></i></div>'">`
+            : `<div class="video-thumb-fallback"><i class="ti ti-brand-youtube" style="font-size:48px;color:rgba(255,255,255,.3);"></i></div>`
+          }
+          <div class="video-play-btn">
+            <div class="play-circle"><i class="ti ti-player-play-filled"></i></div>
+          </div>
+        </div>
+        <div class="video-body">
+          <p class="video-title">${item.title}</p>
+          <p class="video-meta">
+            <i class="ti ti-calendar"></i>${timeAgo(item.pubDate)}
+          </p>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+async function loadVideos() {
+  try {
+    const res = await fetch(API_URL);
+    const data = await res.json();
+    if (data.status === 'ok' && data.items?.length) {
+      renderVideos(data.items);
+    } else {
+      throw new Error('no items');
+    }
+  } catch(e) {
+    // フォールバック：直接RSSを試みる（CORSエラーの場合はエラー表示）
+    document.getElementById('video-list').innerHTML = `
+      <div class="error-state">
+        <i class="ti ti-wifi-off"></i>
+        <p style="margin-bottom:12px;">動画の読み込みに失敗しました。<br>ネットワーク接続をご確認ください。</p>
+      </div>`;
+  }
+}
+
+loadVideos();
+</script>
+</body>
+</html>
