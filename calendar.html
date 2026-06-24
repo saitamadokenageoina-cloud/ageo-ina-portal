@@ -36,21 +36,7 @@
 .view-btn:hover:not(.active){border-color:var(--orange);color:var(--orange);}
 .view-btn i{font-size:16px;}
 
-.upcoming-list{display:flex;flex-direction:column;gap:8px;}
-.event-card{
-  background:var(--white);border-radius:var(--r12);box-shadow:var(--shadow-sm);
-  padding:14px 16px;display:flex;align-items:flex-start;gap:12px;
-  border-left:4px solid var(--orange);
-}
-.event-date-box{
-  background:var(--navy);border-radius:var(--r8);
-  padding:8px 10px;text-align:center;flex-shrink:0;min-width:48px;
-}
-.event-month{font-size:10px;font-weight:700;color:rgba(255,255,255,.6);margin:0;line-height:1;}
-.event-day{font-size:22px;font-weight:800;color:#fff;margin:0;line-height:1.1;}
-.event-wday{font-size:10px;color:rgba(255,255,255,.5);margin:0;}
-.event-title{font-size:14px;font-weight:700;color:var(--navy);margin:0 0 3px;}
-.event-desc{font-size:13px;color:var(--gray500);margin:0;}
+
 </style>
 </head>
 <body>
@@ -114,63 +100,6 @@
     </iframe>
   </div>
 
-  <!-- 直近の予定（手入力） -->
-  <p class="sec-label" style="margin-top:4px;">直近の主な予定</p>
-  <div class="upcoming-list" id="upcoming-list">
-    <div class="event-card">
-      <div class="event-date-box">
-        <p class="event-month">7月</p>
-        <p class="event-day">1</p>
-        <p class="event-wday">水</p>
-      </div>
-      <div>
-        <p class="event-title">班長・分会長会議</p>
-        <p class="event-desc">支部事務所｜18:30〜</p>
-      </div>
-    </div>
-    <div class="event-card">
-      <div class="event-date-box">
-        <p class="event-month">7月</p>
-        <p class="event-day">7</p>
-        <p class="event-wday">火</p>
-      </div>
-      <div>
-        <p class="event-title">玉掛け技能講習（1日目）</p>
-        <p class="event-desc">埼玉土建技術研修センター｜9:00〜</p>
-      </div>
-    </div>
-    <div class="event-card">
-      <div class="event-date-box">
-        <p class="event-month">7月</p>
-        <p class="event-day">10</p>
-        <p class="event-wday">金</p>
-      </div>
-      <div>
-        <p class="event-title">足場特別教育</p>
-        <p class="event-desc">埼玉土建技術研修センター｜9:00〜</p>
-      </div>
-    </div>
-    <div class="event-card">
-      <div class="event-date-box">
-        <p class="event-month">7月</p>
-        <p class="event-day">20</p>
-        <p class="event-wday">日</p>
-      </div>
-      <div>
-        <p class="event-title">支部大会（第52回定期大会）</p>
-        <p class="event-desc">上尾市内｜13:00〜 詳細は支部へ</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="alert alert-info" style="margin-top:14px;">
-    <i class="ti ti-info-circle"></i>
-    <span>カレンダーの内容についてはこちらをご確認いただくか、支部（048-773-9863）までお問い合わせください。</span>
-  </div>
-
-  <a href="tel:048-773-9863" class="btn-primary" style="display:flex;margin-top:12px;">
-    <i class="ti ti-phone"></i>支部に電話する（048-773-9863）
-  </a>
 </div>
 
 <footer>埼玉土建一般労働組合 上尾伊奈支部｜TEL 048-773-9863</footer>
