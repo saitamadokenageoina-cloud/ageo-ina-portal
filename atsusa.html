@@ -7,73 +7,108 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.47.0/iconfont/tabler-icons.min.css">
 <link rel="stylesheet" href="common.css">
 <style>
+.weather-banner{
+  background:linear-gradient(135deg,var(--navy-dk),#1A3A6B);
+  border-radius:var(--r16);padding:18px 20px;margin-bottom:14px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+}
+.weather-left{flex:1;}
+.weather-loc{font-size:12px;color:rgba(255,255,255,.5);margin:0 0 2px;display:flex;align-items:center;gap:4px;}
+.weather-loc i{font-size:13px;}
+.weather-main{display:flex;align-items:baseline;gap:8px;}
+.weather-temp{font-size:42px;font-weight:800;color:#fff;margin:0;line-height:1;}
+.weather-unit{font-size:16px;color:rgba(255,255,255,.6);font-weight:500;}
+.weather-desc{font-size:13px;color:rgba(255,255,255,.65);margin:4px 0 0;}
+.weather-right{text-align:center;flex-shrink:0;}
+.weather-icon{font-size:52px;line-height:1;display:block;}
+.weather-hum{font-size:12px;color:rgba(255,255,255,.5);margin:4px 0 0;}
+.reload-btn{
+  background:rgba(255,255,255,.1);border:none;border-radius:var(--r8);
+  color:rgba(255,255,255,.7);padding:6px 10px;font-size:12px;font-weight:600;
+  display:flex;align-items:center;gap:4px;cursor:pointer;margin-top:10px;
+  transition:background .15s;
+}
+.reload-btn:hover{background:rgba(255,255,255,.2);}
+.reload-btn i{font-size:14px;}
+.reload-btn.loading i{animation:spin 1s linear infinite;}
+
 .risk-display{
-  border-radius:var(--r16);padding:24px;text-align:center;margin-bottom:16px;
+  border-radius:var(--r16);padding:22px;text-align:center;margin-bottom:14px;
   transition:all .4s;
 }
-.risk-icon{font-size:56px;margin-bottom:8px;}
-.risk-level{font-size:28px;font-weight:800;margin:0 0 4px;}
-.risk-wbgt{font-size:15px;opacity:.8;margin:0 0 12px;}
+.risk-emoji{font-size:52px;margin-bottom:8px;display:block;}
+.risk-level{font-size:26px;font-weight:800;margin:0 0 4px;}
+.risk-wbgt{font-size:14px;opacity:.8;margin:0 0 12px;}
+.gauge-wrap{background:rgba(255,255,255,.2);border-radius:99px;height:12px;margin:12px 0;overflow:hidden;}
+.gauge-fill{height:100%;border-radius:99px;background:rgba(255,255,255,.85);transition:width .6s cubic-bezier(.4,0,.2,1);}
 .risk-msg{font-size:15px;font-weight:600;margin:0;}
-.gauge-wrap{background:rgba(255,255,255,.2);border-radius:99px;height:12px;margin:14px 0;overflow:hidden;}
-.gauge-fill{height:100%;border-radius:99px;background:rgba(255,255,255,.8);transition:width .6s cubic-bezier(.4,0,.2,1);}
+
 .action-list{display:flex;flex-direction:column;gap:8px;}
-.action-item{
-  background:var(--white);border-radius:var(--r12);padding:14px 16px;
-  display:flex;align-items:center;gap:12px;box-shadow:var(--shadow-sm);
-}
+.action-item{background:var(--white);border-radius:var(--r12);padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow-sm);}
 .action-item i{font-size:22px;flex-shrink:0;}
 .action-item p{margin:0;font-size:14px;font-weight:500;color:var(--navy);}
-.timer-box{
-  background:var(--navy);border-radius:var(--r16);padding:18px;
-  display:flex;align-items:center;justify-content:space-between;
-  margin-bottom:12px;
-}
+
+.timer-box{background:var(--navy);border-radius:var(--r16);padding:18px;display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
 .timer-label{color:rgba(255,255,255,.6);font-size:13px;margin:0 0 4px;}
-.timer-val{color:var(--white);font-size:32px;font-weight:800;margin:0;font-variant-numeric:tabular-nums;}
-.timer-btn{
-  background:var(--orange);border:none;border-radius:var(--r12);
-  color:var(--white);font-size:14px;font-weight:700;padding:10px 16px;
-}
+.timer-val{color:#fff;font-size:32px;font-weight:800;margin:0;font-variant-numeric:tabular-nums;}
+.timer-btn{background:var(--orange);border:none;border-radius:var(--r12);color:#fff;font-size:14px;font-weight:700;padding:10px 16px;cursor:pointer;}
+
+@keyframes spin{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
 <div class="app">
 <header class="hdr">
-  <div class="hdr-left">
-    <button class="hdr-back" onclick="location.href='index.html'">
-      <i class="ti ti-arrow-left"></i>ホーム
-    </button>
-  </div>
+  <button class="hdr-back" onclick="location.href='index.html'">
+    <i class="ti ti-arrow-left"></i>ホーム
+  </button>
   <div style="text-align:right;">
-    <p class="hdr-org" style="margin:0;">埼玉土建 上尾伊奈支部</p>
+    <p class="hdr-org" style="margin:0;">AI搭載</p>
     <p class="hdr-title" style="margin:0;font-size:14px;">熱中症AIアラート</p>
   </div>
 </header>
 
 <div class="content">
+
+  <!-- 現在地天気バナー -->
+  <div class="weather-banner" id="weather-banner">
+    <div class="weather-left">
+      <p class="weather-loc"><i class="ti ti-map-pin"></i><span id="loc-name">位置情報を取得中…</span></p>
+      <div class="weather-main">
+        <p class="weather-temp" id="w-temp">--</p>
+        <span class="weather-unit">℃</span>
+      </div>
+      <p class="weather-desc" id="w-desc">天気を取得中</p>
+      <button class="reload-btn" id="reload-btn" onclick="loadWeather()">
+        <i class="ti ti-refresh" id="reload-icon"></i>更新する
+      </button>
+    </div>
+    <div class="weather-right">
+      <span class="weather-icon" id="w-icon">🌤️</span>
+      <p class="weather-hum">湿度 <span id="w-hum">--%</span></p>
+    </div>
+  </div>
+
   <!-- リスク表示 -->
   <div id="risk-display" class="risk-display" style="background:var(--gray100);">
-    <div class="risk-icon">🌡️</div>
-    <p class="risk-level" style="color:var(--gray600);">気象データを入力してください</p>
-    <p class="risk-wbgt" style="color:var(--gray400);">WBGT値を計算します</p>
-    <div class="gauge-wrap" style="background:var(--gray200);">
-      <div class="gauge-fill" id="gauge" style="width:0%;"></div>
-    </div>
-    <p class="risk-msg" style="color:var(--gray500);">下のフォームに入力 → 判定ボタンを押してください</p>
+    <span class="risk-emoji">🌡️</span>
+    <p class="risk-level" style="color:var(--gray600);">天気情報を取得してから判定します</p>
+    <p class="risk-wbgt" style="color:var(--gray400);">または下のフォームで手動入力</p>
+    <div class="gauge-wrap" style="background:var(--gray200);"><div class="gauge-fill" id="gauge" style="width:0%;"></div></div>
+    <p class="risk-msg" style="color:var(--gray500);">— 作業強度を選択して判定してください —</p>
   </div>
 
   <!-- 入力 -->
   <div class="card">
-    <p class="sec-label">現在の環境を入力</p>
+    <p class="sec-label">環境・作業条件（手動調整可）</p>
     <div class="grid2">
       <div class="input-group">
         <label>気温（℃）</label>
-        <input type="number" id="temp" value="32" min="0" max="50" step="0.1">
+        <input type="number" id="temp" value="" min="0" max="50" step="0.1" placeholder="自動取得">
       </div>
       <div class="input-group">
         <label>湿度（%）</label>
-        <input type="number" id="hum" value="70" min="0" max="100" step="1">
+        <input type="number" id="hum" value="" min="0" max="100" step="1" placeholder="自動取得">
       </div>
     </div>
     <div class="input-group">
@@ -109,7 +144,7 @@
     </div>
     <p style="font-size:13px;color:var(--gray400);margin:0;">
       <i class="ti ti-info-circle" style="font-size:14px;vertical-align:-2px;margin-right:4px;"></i>
-      高リスク時は自動で15分に短縮されます。水は1回200ml以上を目安に。
+      高リスク時は自動で15分に短縮。水は1回200ml以上を目安に。
     </p>
   </div>
 
@@ -118,14 +153,14 @@
   <div class="action-list">
     <div class="action-item"><i class="ti ti-droplet" style="color:#1A5FA8;"></i><p>こまめな水分・塩分補給（20〜30分ごと）</p></div>
     <div class="action-item"><i class="ti ti-shirt" style="color:#1A7A4A;"></i><p>通気性のよい作業服・日よけ帽子を着用</p></div>
-    <div class="action-item"><i class="ti ti-home" style="color:#E8612A;"></i><p>休憩は日陰または涼しい場所で</p></div>
-    <div class="action-item"><i class="ti ti-users" style="color:#7B2FBE;"></i><p>仲間の体調を互いに確認し合う</p></div>
+    <div class="action-item"><i class="ti ti-home" style="color:var(--orange);"></i><p>休憩は日陰または涼しい場所で</p></div>
+    <div class="action-item"><i class="ti ti-users" style="color:#6B21A8;"></i><p>仲間の体調を互いに確認し合う</p></div>
     <div class="action-item"><i class="ti ti-ambulance" style="color:var(--red);"></i><p>意識がおかしい・体が熱い場合は即座に救急（119）</p></div>
   </div>
 
   <div class="alert alert-info" style="margin-top:12px;">
     <i class="ti ti-info-circle"></i>
-    <span>WBGT値は気温と湿度・日射から推定した概算値です。気象庁の「熱中症警戒アラート」も必ずご確認ください。</span>
+    <span>気温は気象庁の埼玉県予報（今日の最高気温）を取得します。湿度は推定値です。WBGT値は概算。<br>出典：気象庁ホームページ</span>
   </div>
 </div>
 
@@ -133,18 +168,129 @@
 </div>
 
 <script>
+// ===== 気象データ取得 =====
+const JMA_SAITAMA = 'https://www.jma.go.jp/bosai/forecast/data/forecast/110000.json';
+
+const WEATHER_ICONS = {
+  '晴': '☀️', '晴れ': '☀️', '曇': '⛅', '曇り': '⛅',
+  '雨': '🌧️', '雷': '⛈️', '雪': '❄️', '霧': '🌫️',
+  '晴時々曇': '🌤️', '晴のち曇': '🌤️', '曇時々晴': '⛅',
+  '曇時々雨': '🌦️', '晴時々雨': '🌦️'
+};
+
+function getWeatherIcon(desc) {
+  for (const [k, v] of Object.entries(WEATHER_ICONS)) {
+    if (desc && desc.includes(k)) return v;
+  }
+  return '🌤️';
+}
+
+async function loadWeather() {
+  const btn = document.getElementById('reload-btn');
+  const icon = document.getElementById('reload-icon');
+  btn.classList.add('loading');
+  icon.className = 'ti ti-refresh';
+
+  try {
+    // GPS取得
+    const pos = await new Promise((res, rej) =>
+      navigator.geolocation.getCurrentPosition(res, rej, {timeout:8000})
+    );
+    const lat = pos.coords.latitude;
+    const lon = pos.coords.longitude;
+
+    // 逆ジオコーディング（nominatim）
+    const geoRes = await fetch(
+      `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&accept-language=ja`,
+      {headers:{'User-Agent':'DokenPortalApp/1.0'}}
+    );
+    const geoData = await geoRes.json();
+    const city = geoData.address?.city || geoData.address?.town || geoData.address?.village || '埼玉県';
+    document.getElementById('loc-name').textContent = city + ' 付近';
+
+    // 気象庁予報取得（埼玉県）
+    const jmaRes = await fetch(JMA_SAITAMA);
+    const jmaData = await jmaRes.json();
+
+    // 今日の予報を取得
+    const timeSeriesArr = jmaData[0]?.timeSeries || [];
+    let tempMax = null, weather = null;
+
+    // 天気
+    const weatherSeries = timeSeriesArr.find(ts =>
+      ts.areas?.[0]?.weathers?.length > 0
+    );
+    if (weatherSeries) {
+      weather = weatherSeries.areas[0]?.weathers?.[0] || null;
+    }
+
+    // 気温（今日の最高気温）
+    const tempSeries = timeSeriesArr.find(ts =>
+      ts.areas?.[0]?.tempsMax?.length > 0 || ts.areas?.[0]?.temps?.length > 0
+    );
+    if (tempSeries) {
+      const area = tempSeries.areas[0];
+      tempMax = parseFloat(area?.tempsMax?.[0] || area?.temps?.[0] || null);
+    }
+
+    // 週間予報から補完
+    if (!tempMax) {
+      const weekly = jmaData[1]?.timeSeries || [];
+      const wTemp = weekly.find(ts => ts.areas?.[0]?.tempsMax?.length > 0);
+      if (wTemp) tempMax = parseFloat(wTemp.areas[0]?.tempsMax?.[0]);
+    }
+
+    // 表示更新
+    const displayTemp = tempMax ? Math.round(tempMax) : '--';
+    document.getElementById('w-temp').textContent = displayTemp;
+    document.getElementById('w-desc').textContent = weather ? weather.replace(/　/g,'') : '埼玉県の予報';
+    document.getElementById('w-icon').textContent = getWeatherIcon(weather || '');
+
+    // 気温を入力欄にセット
+    if (tempMax) {
+      document.getElementById('temp').value = Math.round(tempMax);
+      // 湿度は季節・天気から推定
+      const estHum = weather && weather.includes('雨') ? 85 :
+                     weather && weather.includes('曇') ? 70 : 55;
+      document.getElementById('hum').value = estHum;
+      document.getElementById('w-hum').textContent = estHum + '%';
+      calcRisk();
+    }
+
+  } catch(err) {
+    // GPS拒否・APIエラー時は上尾市の固定予報表示
+    document.getElementById('loc-name').textContent = '上尾市（GPSオフ）';
+    document.getElementById('w-desc').textContent = '位置情報またはAPIを取得できませんでした';
+    try {
+      const jmaRes = await fetch(JMA_SAITAMA);
+      const jmaData = await jmaRes.json();
+      const weekly = jmaData[1]?.timeSeries || [];
+      const wTemp = weekly.find(ts => ts.areas?.[0]?.tempsMax?.length > 0);
+      if (wTemp) {
+        const t = parseFloat(wTemp.areas[0]?.tempsMax?.[0]);
+        document.getElementById('w-temp').textContent = Math.round(t);
+        document.getElementById('temp').value = Math.round(t);
+        document.getElementById('hum').value = 60;
+        document.getElementById('w-hum').textContent = '60%（推定）';
+        calcRisk();
+      }
+    } catch(e2) {}
+  }
+
+  btn.classList.remove('loading');
+  icon.className = 'ti ti-refresh';
+}
+
+// ===== リスク判定 =====
 const RISK_LEVELS = [
-  {min:0,  max:21, label:"ほぼ安全", icon:"😊", bg:"linear-gradient(135deg,#1A7A4A,#2EA868)", color:"#fff", msg:"通常通り作業可能。こまめな水分補給を忘れずに。", pct:10, interval:30},
-  {min:21, max:25, label:"注意",    icon:"🌤️", bg:"linear-gradient(135deg,#1A5FA8,#2E82D4)", color:"#fff", msg:"激しい作業では発症の危険あり。休憩と水分補給を意識して。", pct:35, interval:25},
-  {min:25, max:28, label:"警戒",    icon:"☀️",  bg:"linear-gradient(135deg,#B07800,#E8A800)", color:"#fff", msg:"作業の合間に積極的に休憩。直射日光を避けてください。", pct:55, interval:20},
-  {min:28, max:31, label:"厳重警戒",icon:"🌡️", bg:"linear-gradient(135deg,#C04E1E,#E8612A)", color:"#fff", msg:"激しい作業は中止を検討。熱中症の危険が高い状態です。", pct:75, interval:15},
-  {min:31, max:99, label:"危険",    icon:"🔴", bg:"linear-gradient(135deg,#8B0000,#C0392B)", color:"#fff", msg:"すべての人が熱中症の危険。作業中止を強く推奨します。", pct:100, interval:10}
+  {min:0,  max:21, label:"ほぼ安全", emoji:"😊", bg:"linear-gradient(135deg,#1A7A4A,#2EA868)", msg:"通常通り作業可能。こまめな水分補給を忘れずに。", pct:10, interval:30},
+  {min:21, max:25, label:"注意",    emoji:"🌤️", bg:"linear-gradient(135deg,#1A5FA8,#2E82D4)", msg:"激しい作業では発症の危険あり。休憩と水分補給を意識して。", pct:35, interval:25},
+  {min:25, max:28, label:"警戒",    emoji:"☀️",  bg:"linear-gradient(135deg,#B07800,#E8A800)", msg:"作業の合間に積極的に休憩。直射日光を避けてください。", pct:55, interval:20},
+  {min:28, max:31, label:"厳重警戒",emoji:"🌡️", bg:"linear-gradient(135deg,#C04E1E,#E8612A)", msg:"激しい作業は中止を検討。熱中症の危険が高い状態です。", pct:75, interval:15},
+  {min:31, max:99, label:"危険",    emoji:"🔴", bg:"linear-gradient(135deg,#8B0000,#C0392B)", msg:"すべての人が熱中症の危険。作業中止を強く推奨します。", pct:100, interval:10}
 ];
 
-let timerInterval = null;
-let timerSeconds = 1200;
-let timerRunning = false;
-let currentInterval = 20;
+let timerInterval = null, timerSeconds = 1200, timerRunning = false, currentInterval = 20;
 
 function calcWBGT(temp, hum, sun) {
   const tw = temp * Math.atan(0.151977 * Math.pow(hum + 8.313659, 0.5))
@@ -155,25 +301,27 @@ function calcWBGT(temp, hum, sun) {
 }
 
 function calcRisk() {
-  const temp = parseFloat(document.getElementById('temp').value) || 30;
-  const hum = parseFloat(document.getElementById('hum').value) || 60;
+  const temp = parseFloat(document.getElementById('temp').value);
+  const hum = parseFloat(document.getElementById('hum').value);
+  if (!temp || !hum) {
+    alert('気温と湿度を入力してください');
+    return;
+  }
   const sun = document.getElementById('suntype').value;
   const work = document.getElementById('worktype').value;
   const workAdj = work === 'heavy' ? 1.5 : work === 'light' ? -1 : 0;
   const wbgt = calcWBGT(temp, hum, sun) + workAdj;
-
   const level = RISK_LEVELS.find(l => wbgt >= l.min && wbgt < l.max) || RISK_LEVELS[4];
 
-  const disp = document.getElementById('risk-display');
-  disp.style.background = level.bg;
-  disp.innerHTML = `
-    <div class="risk-icon">${level.icon}</div>
-    <p class="risk-level" style="color:${level.color};">${level.label}</p>
-    <p class="risk-wbgt" style="color:rgba(255,255,255,.8);">WBGT推定値：${wbgt.toFixed(1)}℃</p>
+  document.getElementById('risk-display').style.background = level.bg;
+  document.getElementById('risk-display').innerHTML = `
+    <span class="risk-emoji">${level.emoji}</span>
+    <p class="risk-level" style="color:#fff;">${level.label}</p>
+    <p class="risk-wbgt" style="color:rgba(255,255,255,.8);">WBGT推定値：${wbgt.toFixed(1)}℃（気温${temp}℃ / 湿度${hum}%）</p>
     <div class="gauge-wrap">
       <div class="gauge-fill" style="width:${level.pct}%;"></div>
     </div>
-    <p class="risk-msg" style="color:${level.color};">${level.msg}</p>`;
+    <p class="risk-msg" style="color:#fff;">${level.msg}</p>`;
 
   currentInterval = level.interval;
   timerSeconds = currentInterval * 60;
@@ -185,8 +333,7 @@ function calcRisk() {
 
 function toggleTimer() {
   if(timerRunning) {
-    clearInterval(timerInterval);
-    timerRunning = false;
+    clearInterval(timerInterval); timerRunning = false;
     document.getElementById('timer-btn').textContent = 'スタート';
   } else {
     timerRunning = true;
@@ -203,12 +350,13 @@ function toggleTimer() {
 }
 
 function updateTimerDisplay() {
-  const m = Math.floor(timerSeconds / 60).toString().padStart(2,'0');
-  const s = (timerSeconds % 60).toString().padStart(2,'0');
+  const m = Math.floor(timerSeconds/60).toString().padStart(2,'0');
+  const s = (timerSeconds%60).toString().padStart(2,'0');
   document.getElementById('timer-display').textContent = `${m}:${s}`;
 }
 
-calcRisk();
+// 起動時に自動で天気取得
+loadWeather();
 </script>
 </body>
 </html>
