@@ -89,15 +89,6 @@
     </div>
   </div>
 
-  <!-- リスク表示 -->
-  <div id="risk-display" class="risk-display" style="background:var(--gray100);">
-    <span class="risk-emoji">🌡️</span>
-    <p class="risk-level" style="color:var(--gray600);">天気情報を取得してから判定します</p>
-    <p class="risk-wbgt" style="color:var(--gray400);">または下のフォームで手動入力</p>
-    <div class="gauge-wrap" style="background:var(--gray200);"><div class="gauge-fill" id="gauge" style="width:0%;"></div></div>
-    <p class="risk-msg" style="color:var(--gray500);">— 作業強度を選択して判定してください —</p>
-  </div>
-
   <!-- 入力 -->
   <div class="card">
     <p class="sec-label">環境・作業条件（手動調整可）</p>
@@ -130,6 +121,15 @@
     <button class="btn-primary" onclick="calcRisk()">
       <i class="ti ti-refresh"></i>リスクを判定する
     </button>
+  </div>
+
+  <!-- リスク表示（ボタンの下） -->
+  <div id="risk-display" class="risk-display" style="background:var(--gray100);">
+    <span class="risk-emoji">🌡️</span>
+    <p class="risk-level" style="color:var(--gray600);">判定結果がここに表示されます</p>
+    <p class="risk-wbgt" style="color:var(--gray400);">上のフォームを入力して判定してください</p>
+    <div class="gauge-wrap" style="background:var(--gray200);"><div class="gauge-fill" style="width:0%;"></div></div>
+    <p class="risk-msg" style="color:var(--gray500);">— 作業強度を選択して判定ボタンを押してください —</p>
   </div>
 
   <!-- 水分補給タイマー -->
