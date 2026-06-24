@@ -274,7 +274,12 @@ async function loadWeather() {
         document.getElementById('w-hum').textContent = '60%（推定）';
         calcRisk();
       }
-    } catch(e2) {}
+    } catch(e2) {
+      // APIも取得できない場合はデフォルト値で判定
+      document.getElementById('temp').value = 32;
+      document.getElementById('hum').value  = 65;
+      calcRisk();
+    }
   }
 
   btn.classList.remove('loading');
@@ -301,12 +306,11 @@ function calcWBGT(temp, hum, sun) {
 }
 
 function calcRisk() {
-  const temp = parseFloat(document.getElementById('temp').value);
-  const hum = parseFloat(document.getElementById('hum').value);
-  if (!temp || !hum) {
-    alert('気温と湿度を入力してください');
-    return;
-  }
+  let temp = parseFloat(document.getElementById('temp').value);
+  let hum  = parseFloat(document.getElementById('hum').value);
+  // 未入力・NaNの場合は埼玉の夏の平均値をデフォルトにセット
+  if (isNaN(temp)) { temp = 32; document.getElementById('temp').value = temp; }
+  if (isNaN(hum))  { hum  = 65; document.getElementById('hum').value  = hum; }
   const sun = document.getElementById('suntype').value;
   const work = document.getElementById('worktype').value;
   const workAdj = work === 'heavy' ? 1.5 : work === 'light' ? -1 : 0;
@@ -355,7 +359,10 @@ function updateTimerDisplay() {
   document.getElementById('timer-display').textContent = `${m}:${s}`;
 }
 
-// 起動時に自動で天気取得
+// 起動時：まずデフォルト値で即時表示、並行して天気を取得
+document.getElementById('temp').value = 32;
+document.getElementById('hum').value  = 65;
+calcRisk();
 loadWeather();
 </script>
 </body>
