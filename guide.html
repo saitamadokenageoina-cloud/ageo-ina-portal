@@ -7,171 +7,497 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.47.0/iconfont/tabler-icons.min.css">
 <link rel="stylesheet" href="common.css">
 <style>
-.searchbox{position:relative;margin-bottom:12px;}
-.searchbox i{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:18px;color:var(--gray400);}
-#search{padding-left:44px;}
-.filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;}
-.filter-tag{padding:6px 14px;border-radius:99px;border:2px solid var(--gray200);background:var(--white);color:var(--gray600);font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;}
-.filter-tag.active{background:var(--navy);color:var(--white);border-color:var(--navy);}
-.guide-card{background:var(--white);border-radius:var(--r16);box-shadow:var(--shadow-sm);padding:16px 18px;margin-bottom:10px;border-left:4px solid transparent;}
-.guide-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px;}
-.guide-card-left{display:flex;align-items:center;gap:12px;}
-.guide-icon{width:40px;height:40px;border-radius:var(--r12);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.guide-icon i{font-size:20px;}
-.guide-title{font-size:15px;font-weight:700;color:var(--navy);margin:0;}
-.badge-ok{font-size:11px;font-weight:600;padding:3px 10px;border-radius:99px;white-space:nowrap;background:#E6F5ED;color:var(--green);}
-.guide-body{padding-left:52px;}
-.guide-label{font-size:11px;font-weight:600;color:var(--gray400);margin:0 0 3px;letter-spacing:.04em;}
-.guide-docs{font-size:14px;margin:0 0 10px;padding-left:18px;}
-.guide-docs li{margin-bottom:3px;}
-.guide-meta{display:flex;gap:20px;flex-wrap:wrap;}
-.guide-meta-item p{margin:0;font-size:14px;}
-.guide-note{font-size:13px;color:var(--gray400);margin:8px 0 0;display:flex;align-items:flex-start;gap:4px;}
-.guide-note i{font-size:14px;flex-shrink:0;margin-top:2px;}
+/* ===== メインタブ ===== */
+.main-tabs {
+  display: flex; gap: 4px; overflow-x: auto;
+  padding: 0 0 4px; margin-bottom: 14px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.main-tabs::-webkit-scrollbar { display: none; }
+.main-tab {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  padding: 10px 16px; border-radius: var(--r12);
+  border: 2px solid var(--gray100); background: var(--white);
+  cursor: pointer; white-space: nowrap; flex-shrink: 0;
+  transition: all .15s; color: var(--gray600); font-size: 12px; font-weight: 600;
+}
+.main-tab i { font-size: 22px; }
+.main-tab.active { color: var(--white); border-color: transparent; }
+
+/* ===== サブタブ ===== */
+.sub-tabs {
+  display: flex; gap: 6px; overflow-x: auto;
+  padding-bottom: 4px; margin-bottom: 14px;
+  scrollbar-width: none;
+}
+.sub-tabs::-webkit-scrollbar { display: none; }
+.sub-tab {
+  padding: 7px 14px; border-radius: 99px;
+  border: 2px solid var(--gray200); background: var(--white);
+  color: var(--gray600); font-size: 13px; font-weight: 600;
+  cursor: pointer; white-space: nowrap; flex-shrink: 0;
+  transition: all .15s;
+}
+.sub-tab.active { background: var(--navy); color: var(--white); border-color: var(--navy); }
+
+/* ===== 検索 ===== */
+.searchbox { position: relative; margin-bottom: 14px; }
+.searchbox i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 18px; color: var(--gray400); }
+#search { padding-left: 44px; }
+
+/* ===== カード ===== */
+.guide-card {
+  background: var(--white); border-radius: var(--r16);
+  box-shadow: var(--shadow-sm); padding: 16px 18px;
+  margin-bottom: 10px; border-left: 4px solid transparent;
+}
+.guide-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.guide-head-left { display: flex; align-items: center; gap: 12px; }
+.guide-icon { width: 40px; height: 40px; border-radius: var(--r12); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.guide-icon i { font-size: 20px; }
+.guide-title { font-size: 15px; font-weight: 700; color: var(--navy); margin: 0; line-height: 1.4; }
+.guide-body { padding-left: 52px; }
+.g-label { font-size: 11px; font-weight: 700; color: var(--gray400); margin: 0 0 4px; letter-spacing: .05em; text-transform: uppercase; }
+.g-docs { font-size: 14px; margin: 0 0 10px; padding-left: 18px; }
+.g-docs li { margin-bottom: 4px; }
+.g-meta { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 2px; }
+.g-meta-item p { margin: 0; font-size: 14px; }
+.g-note { font-size: 13px; color: var(--gray500); margin: 8px 0 0; display: flex; align-items: flex-start; gap: 5px; background: var(--gray50); border-radius: var(--r8); padding: 8px 10px; }
+.g-note i { font-size: 14px; flex-shrink: 0; margin-top: 1px; color: var(--orange); }
+.g-amount { font-size: 16px; font-weight: 800; color: var(--orange); background: var(--orange-lt); border-radius: var(--r8); padding: 6px 12px; display: inline-block; margin-bottom: 8px; }
+.empty { text-align: center; padding: 40px 20px; color: var(--gray400); }
+.empty i { font-size: 40px; display: block; margin-bottom: 8px; opacity: .4; }
 </style>
 </head>
 <body>
 <div class="app">
 <header class="hdr">
-  <button class="hdr-back" onclick="location.href='index.html'">
-    <i class="ti ti-arrow-left"></i>ホーム
-  </button>
+  <button class="hdr-back" onclick="location.href='index.html'"><i class="ti ti-arrow-left"></i>ホーム</button>
   <div style="text-align:right;">
     <p class="hdr-org" style="margin:0;">埼玉土建 上尾伊奈支部</p>
-    <p class="hdr-title" style="margin:0;font-size:14px;">手続き・必要書類ガイド</p>
+    <p class="hdr-title" id="page-subtitle" style="margin:0;font-size:14px;">手続き・必要書類ガイド</p>
   </div>
 </header>
 <div class="content">
+
+  <!-- メインタブ -->
+  <div class="main-tabs" id="main-tabs"></div>
+
+  <!-- サブタブ -->
+  <div class="sub-tabs" id="sub-tabs"></div>
+
+  <!-- 検索 -->
   <div class="searchbox">
     <i class="ti ti-search"></i>
-    <input type="text" id="search" placeholder="キーワードで探す　例：出生、傷病手当">
+    <input type="text" id="search" placeholder="キーワードで絞り込む">
   </div>
-  <div class="filters" id="filters"></div>
+
+  <!-- 一覧 -->
   <div id="list"></div>
+
+  <div style="background:var(--gray50);border-radius:var(--r8);padding:10px 14px;font-size:12px;color:var(--gray500);margin-top:8px;">
+    <i class="ti ti-info-circle" style="font-size:13px;vertical-align:-2px;margin-right:4px;"></i>
+    最新の制度・金額は支部窓口（048-773-9863）でご確認ください。
+  </div>
 </div>
 <footer>埼玉土建一般労働組合 上尾伊奈支部｜TEL 048-773-9863</footer>
 </div>
-<script>
-const ITEMS=[
-  {id:1,tag:"加入",title:"新規加入（組合のみ）",icon:"ti-user-plus",bg:"#E8F5EE",fg:"#1A7A4A",docs:["加入申込書","加入金 1,000円","翌月分の組合費"],where:"支部事務所（または近所の組合員経由）",deadline:"特になし",note:"建設業で働く人なら誰でも加入可"},
-  {id:2,tag:"加入",title:"新規加入（組合＋土建国保 同時）",icon:"ti-user-plus",bg:"#E8F5EE",fg:"#1A7A4A",docs:["加入申込書","加入金 1,000円","翌月分の組合費","世帯全員の住民票（個人番号入り・原本）","就業形態のわかるもの"],where:"支部事務所",deadline:"特になし",note:"国保加入希望は加入申込書とは別に手続きが必要"},
-  {id:3,tag:"家族異動",title:"出生（家族が増えたとき）",icon:"ti-baby-carriage",bg:"#FEE8F0",fg:"#9B1A4A",docs:["世帯全員の住民票（個人番号入り・原本）"],where:"支部事務所",deadline:"原則14日以内",note:"総合共済の出生祝金 2万円が別途給付されます"},
-  {id:4,tag:"家族異動",title:"結婚（配偶者を扶養に追加）",icon:"ti-heart",bg:"#FEE8F0",fg:"#9B1A4A",docs:["世帯全員の住民票（個人番号入り・原本）"],where:"支部事務所",deadline:"原則14日以内",note:"総合共済の結婚祝金 3万円が別途給付されます"},
-  {id:5,tag:"家族異動",title:"家族が就職して社保加入",icon:"ti-briefcase",bg:"#FEE8F0",fg:"#9B1A4A",docs:["資格情報のお知らせ・資格確認書等で社保加入を確認","埼玉土建国保の資格確認書を本人から回収"],where:"支部事務所",deadline:"確認できる資料が揃い次第",note:""},
-  {id:9,tag:"家族異動",title:"家族が他の世帯に移った／亡くなった",icon:"ti-users-minus",bg:"#FEE8F0",fg:"#9B1A4A",docs:["資格確認書等（本人分）","住民票の除票（対象家族分）"],where:"支部事務所",deadline:"原則14日以内",note:"「家族減少届」として扱います"},
-  {id:10,tag:"住所・氏名",title:"住所が変わった",icon:"ti-home-move",bg:"#E8F0FB",fg:"#1A5FA8",docs:["個人番号記載の世帯全員の住民票","資格確認書等"],where:"支部事務所",deadline:"特になし",note:""},
-  {id:11,tag:"住所・氏名",title:"氏名が変わった（結婚等）",icon:"ti-signature",bg:"#E8F0FB",fg:"#1A5FA8",docs:["個人番号記載の世帯全員の住民票","資格確認書等"],where:"支部事務所",deadline:"特になし",note:""},
-  {id:12,tag:"脱退",title:"埼玉土建国保をやめるとき",icon:"ti-door-exit",bg:"#FEF0ED",fg:"#9B3A1A",docs:["資格喪失（脱退）届","資格確認書等の返還"],where:"支部事務所",deadline:"特になし",note:"死亡の場合は葬祭費の手続きも同時に"},
-  {id:13,tag:"再交付",title:"資格確認書等の紛失・破損",icon:"ti-replace",bg:"#FFF8E6",fg:"#7A5500",docs:["本人とわかる書類（運転免許証等）","マイナンバーがわかるもの"],where:"支部事務所",deadline:"特になし",note:"盗難・外出先での紛失は必ず警察に届出を"},
-  {id:14,tag:"住所・氏名",title:"修学のため住民票を移動したとき",icon:"ti-school",bg:"#E8F0FB",fg:"#1A5FA8",docs:["在学証明書","転居先の住民票"],where:"支部事務所",deadline:"特になし",note:""},
-  {id:6,tag:"加入",title:"法人化・従業員5人以上化（適用除外申請）",icon:"ti-building",bg:"#E8F5EE",fg:"#1A7A4A",docs:["まずは支部事務所に要相談"],where:"支部事務所に要相談",deadline:"要相談",note:"適用除外をした場合、総合共済から5万円の支援金あり"},
-  {id:7,tag:"労働保険",title:"労働保険（労災・雇用保険）の新規加入",icon:"ti-shield-check",bg:"#E8F5EE",fg:"#1A7A4A",docs:["【労災】代表者印・通帳・銀行印・初年度保険料","【雇用】登記簿謄本または住民票・事業実態書類・労働者名簿・賃金台帳等"],where:"支部事務所（厚生労働大臣認可の労働保険事務組合）",deadline:"労働者を雇った場合は強制加入",note:"事業主・一人親方は別途「特別加入」が必要"},
-  {id:8,tag:"労働保険",title:"一人親方労災保険（特別加入）",icon:"ti-helmet",bg:"#E8F5EE",fg:"#1A7A4A",docs:["本人確認書類（顔写真付き）","認め印","通帳・銀行印","初年度保険料"],where:"支部事務所",deadline:"現場に入る前の加入を推奨",note:"医療費全額無料、休業補償額は給付基礎日額の約8割"},
-  {id:15,tag:"国保給付",title:"病気・ケガで4日以上休業（傷病手当金）",icon:"ti-bandage",bg:"#EDE8FE",fg:"#4A1A9B",docs:["傷病手当金申請書（支部事務所から受取り）","医師による「労務不能の意見」の記入"],where:"支部事務所",deadline:"4日以上連続休業した場合、1日目から支給対象",note:"最大180日分。交通事故・労災は対象外"},
-  {id:16,tag:"国保給付",title:"出産した（出産育児一時金）",icon:"ti-baby-carriage",bg:"#EDE8FE",fg:"#4A1A9B",docs:["出産育児一時金等支給申請書","（直接支払制度利用時）合意文書の原本＋領収書"],where:"支部事務所",deadline:"妊娠12週以上の出産が条件",note:"1児につき50万円。直接支払制度で窓口負担を軽減可能"},
-  {id:17,tag:"国保給付",title:"医療費が高額になりそう（限度額適用認定証）",icon:"ti-receipt",bg:"#EDE8FE",fg:"#4A1A9B",docs:["限度額適用・標準負担額減額認定申請書","資格確認書または資格情報のお知らせ","マイナンバーと本人確認書類"],where:"支部事務所（書類確認後、国保本部へ送付）",deadline:"事前申請が必要（受診前に窓口へ）",note:"書類に不備がなければ本部到着の翌日に交付"},
-  {id:18,tag:"国保給付",title:"組合員・家族が亡くなった（葬祭費）",icon:"ti-flower",bg:"#EDE8FE",fg:"#4A1A9B",docs:["葬祭費申請書","葬儀の領収書（または「会葬御礼」）"],where:"支部事務所",deadline:"特になし",note:"7万円を喪主へ支給。喪主が国保未加入でも受給可"},
-  {id:19,tag:"共済金",title:"病気・ケガ・死亡時の共済金（総合共済）",icon:"ti-shield-heart",bg:"#FEF0ED",fg:"#9B3A1A",docs:["共済金請求書","本人または家族が班会議に出席し班審査を受ける","医師証明（医療機関が原則）"],where:"支部事務所（班審査を経て申請）",deadline:"事由発生の翌日から1年以内（死亡・重度障害は3年以内）",note:"A型共済（〜59歳加入）：病気入院1日5,000円・本人死亡100万円"}
-];
-const TAGS=["すべて","加入","家族異動","住所・氏名","脱退","再交付","労働保険","国保給付","共済金"];
-let activeTag="すべて";
 
-function renderFilters(){
-  const el=document.getElementById('filters');
-  el.innerHTML='';
-  TAGS.forEach(tag=>{
-    const btn=document.createElement('button');
-    btn.className='filter-tag'+(tag===activeTag?' active':'');
-    btn.textContent=tag;
-    btn.onclick=()=>{activeTag=tag;renderFilters();renderList();};
-    el.appendChild(btn);
-  });
+<script>
+// ===== データ定義 =====
+// cat: メインカテゴリ, sub: サブカテゴリ
+const ITEMS = [
+
+  // ========== 組合加入 ==========
+  { cat:'kanyu', sub:'shin', icon:'ti-user-plus', bg:'#E8F5EE', fg:'#1A7A4A',
+    title:'新規加入（組合のみ）',
+    docs:['加入申込書','加入金 1,000円','翌月分の組合費'],
+    where:'支部事務所（または近所の組合員経由）', deadline:'いつでも',
+    note:'建設業で働く人なら事業主・一人親方・職人を問わず誰でも加入できます。' },
+
+  { cat:'kanyu', sub:'shin', icon:'ti-user-plus', bg:'#E8F5EE', fg:'#1A7A4A',
+    title:'新規加入（組合＋土建国保 同時）',
+    docs:['加入申込書','加入金 1,000円','翌月分の組合費','世帯全員の住民票（個人番号入り・原本）','就業形態のわかるもの'],
+    where:'支部事務所', deadline:'いつでも',
+    note:'組合加入と同時に土建国保にも加入できます。国保の申請は別途手続きが必要です。' },
+
+  { cat:'kanyu', sub:'shin', icon:'ti-building', bg:'#E8F5EE', fg:'#1A7A4A',
+    title:'法人化・従業員5人以上化（適用除外申請）',
+    docs:['まずは支部事務所に要相談'],
+    where:'支部事務所', deadline:'法人化・雇用前に相談を',
+    note:'適用除外が認められた場合、総合共済から支援金5万円が給付されます。' },
+
+  { cat:'kanyu', sub:'kazoku', icon:'ti-baby-carriage', bg:'#FEE8F0', fg:'#9B1A4A',
+    title:'出生（家族が増えたとき）',
+    docs:['世帯全員の住民票（個人番号入り・原本）'],
+    where:'支部事務所', deadline:'原則14日以内',
+    note:'総合共済の出生祝金2万円が別途給付されます。出生届と合わせてお早めに。' },
+
+  { cat:'kanyu', sub:'kazoku', icon:'ti-heart', bg:'#FEE8F0', fg:'#9B1A4A',
+    title:'結婚（配偶者を扶養に追加）',
+    docs:['世帯全員の住民票（個人番号入り・原本）'],
+    where:'支部事務所', deadline:'原則14日以内',
+    note:'総合共済の結婚祝金3万円が別途給付されます。' },
+
+  { cat:'kanyu', sub:'kazoku', icon:'ti-briefcase', bg:'#FEE8F0', fg:'#9B1A4A',
+    title:'家族が就職して社保加入（扶養から外す）',
+    docs:['資格情報のお知らせ・資格確認書等で社保加入を確認','土建国保の資格確認書を本人から回収'],
+    where:'支部事務所', deadline:'社保加入が確認できたらすぐに',
+    note:'二重加入にならないよう早めの手続きをお願いします。' },
+
+  { cat:'kanyu', sub:'kazoku', icon:'ti-users-minus', bg:'#FEE8F0', fg:'#9B1A4A',
+    title:'家族が他の世帯へ移った／亡くなった',
+    docs:['資格確認書等（本人分）','住民票の除票（対象家族分）'],
+    where:'支部事務所', deadline:'原則14日以内',
+    note:'「家族減少届」として扱います。死亡の場合は国保の葬祭費申請も同時にできます。' },
+
+  { cat:'kanyu', sub:'henkou', icon:'ti-home-move', bg:'#E8F0FB', fg:'#1A5FA8',
+    title:'住所が変わった',
+    docs:['個人番号記載の世帯全員の住民票（原本）','資格確認書等'],
+    where:'支部事務所', deadline:'できるだけ早めに',
+    note:'引越し後は必ず支部に届け出てください。' },
+
+  { cat:'kanyu', sub:'henkou', icon:'ti-signature', bg:'#E8F0FB', fg:'#1A5FA8',
+    title:'氏名が変わった（結婚・離婚等）',
+    docs:['個人番号記載の世帯全員の住民票（原本）','資格確認書等'],
+    where:'支部事務所', deadline:'できるだけ早めに',
+    note:'' },
+
+  { cat:'kanyu', sub:'henkou', icon:'ti-school', bg:'#E8F0FB', fg:'#1A5FA8',
+    title:'修学のため住民票を移動したとき',
+    docs:['在学証明書','転居先の住民票'],
+    where:'支部事務所', deadline:'できるだけ早めに',
+    note:'進学・就学で住所が変わっても国保の資格はそのまま継続できます。' },
+
+  { cat:'kanyu', sub:'henkou', icon:'ti-replace', bg:'#FFF8E6', fg:'#7A5500',
+    title:'資格確認書等の紛失・破損',
+    docs:['本人確認書類（運転免許証等）','マイナンバーがわかるもの'],
+    where:'支部事務所', deadline:'気づいたらすぐに',
+    note:'盗難・外出先での紛失は警察への届出（紛失届）も行ってください。' },
+
+  { cat:'kanyu', sub:'taikai', icon:'ti-door-exit', bg:'#FEF0ED', fg:'#9B3A1A',
+    title:'土建国保をやめるとき',
+    docs:['資格喪失（脱退）届','資格確認書等の返還'],
+    where:'支部事務所', deadline:'特になし',
+    note:'死亡の場合は住民票を添えて葬祭費の手続きも同時に行えます。' },
+
+  // ========== 土建国保 ==========
+  { cat:'kokuho', sub:'kyufu', icon:'ti-bandage', bg:'#EDE8FE', fg:'#4A1A9B',
+    title:'病気・ケガで4日以上仕事を休んだ（傷病手当金）',
+    amount:'給付基礎日額の60% × 最大180日分',
+    docs:['傷病手当金申請書（支部事務所から受取り）','医師による「労務不能の意見」の記入（申請書内）','本人確認書類'],
+    where:'支部事務所', deadline:'休業4日目から申請可能（1日目から支給対象）',
+    note:'交通事故・労災による傷病は対象外。市区町村国保にはない土建国保独自の制度です。' },
+
+  { cat:'kokuho', sub:'kyufu', icon:'ti-receipt', bg:'#EDE8FE', fg:'#4A1A9B',
+    title:'医療費の自己負担が戻ってくる（一部負担払戻金）',
+    amount:'入院・通院の自己負担分を全額払い戻し',
+    docs:['一部負担払戻金申請書（支部事務所から受取り）','領収書の原本（医療機関発行）','本人確認書類','振込先口座のわかるもの'],
+    where:'支部事務所', deadline:'受診月から6ヶ月以内',
+    note:'市区町村国保には存在しない土建国保独自の制度。自己負担（3割）が実質ゼロになります。' },
+
+  { cat:'kokuho', sub:'kyufu', icon:'ti-coin', bg:'#EDE8FE', fg:'#4A1A9B',
+    title:'医療費が高額になりそう（限度額適用認定証）',
+    docs:['限度額適用・標準負担額減額認定申請書','資格確認書または資格情報のお知らせ','マイナンバーと本人確認書類'],
+    where:'支部事務所（書類確認後、国保本部へ送付）', deadline:'受診前に申請（事前申請が必要）',
+    note:'書類に不備がなければ本部到着の翌日に交付されます。入院前に必ず申請を。' },
+
+  { cat:'kokuho', sub:'kyufu', icon:'ti-baby-carriage', bg:'#EDE8FE', fg:'#4A1A9B',
+    title:'出産した（出産育児一時金）',
+    amount:'1児につき50万円',
+    docs:['出産育児一時金等支給申請書','（直接支払制度を使わない場合）領収書の原本','本人確認書類'],
+    where:'支部事務所', deadline:'妊娠12週以上の出産が条件。出産後2年以内',
+    note:'直接支払制度を利用すると病院窓口での支払いが50万円差し引かれ、自己負担が軽くなります。' },
+
+  { cat:'kokuho', sub:'kyufu', icon:'ti-flower', bg:'#EDE8FE', fg:'#4A1A9B',
+    title:'組合員・家族が亡くなった（葬祭費）',
+    amount:'7万円（喪主に支給）',
+    docs:['葬祭費申請書','葬儀の領収書（または会葬御礼）','喪主の本人確認書類','振込先口座のわかるもの'],
+    where:'支部事務所', deadline:'特になし（2年以内）',
+    note:'喪主が国保未加入でも受給できます。市区町村国保の3〜5万円より手厚い支給額です。' },
+
+  { cat:'kokuho', sub:'kazoku2', icon:'ti-user-plus', bg:'#EDE8FE', fg:'#4A1A9B',
+    title:'家族を国保に追加したい',
+    docs:['世帯全員の住民票（個人番号入り・原本）','追加する家族の本人確認書類'],
+    where:'支部事務所', deadline:'原則14日以内',
+    note:'扶養に入れる家族は組合員と同一世帯が原則。別世帯の場合は要相談。' },
+
+  { cat:'kokuho', sub:'kazoku2', icon:'ti-users-minus', bg:'#EDE8FE', fg:'#4A1A9B',
+    title:'家族を国保から外したい（就職・独立等）',
+    docs:['資格喪失の事実がわかる書類（就職先の保険証コピー等）','土建国保の資格確認書'],
+    where:'支部事務所', deadline:'事実発生後できるだけ早く',
+    note:'二重加入の期間は保険料が二重にかかる場合があります。早めの手続きを。' },
+
+  { cat:'kokuho', sub:'sashidashi', icon:'ti-id', bg:'#EDE8FE', fg:'#4A1A9B',
+    title:'資格確認書・医療証の再発行',
+    docs:['本人確認書類（運転免許証等）','マイナンバーカードまたはマイナンバー通知カード'],
+    where:'支部事務所', deadline:'気づいたらすぐに',
+    note:'新しい資格確認書が届くまでの間、保険証代わりとなる書類を発行できる場合があります。' },
+
+  // ========== 総合共済 ==========
+  { cat:'kyosai', sub:'kyosai-kyufu', icon:'ti-shield-heart', bg:'#FEF0ED', fg:'#9B3A1A',
+    title:'病気・ケガで入院した（入院共済金）',
+    amount:'1日5,000円（A型）／1日3,000円（B型）',
+    docs:['共済金請求書（支部事務所から受取り）','医師証明（入院証明書・診断書等）','班審査への参加（本人または家族が班会議に出席）'],
+    where:'支部事務所（班審査 → 書類提出）', deadline:'事由発生の翌日から1年以内',
+    note:'班の審査を経て申請します。事前に支部へ連絡のうえ、書類を準備してください。' },
+
+  { cat:'kyosai', sub:'kyosai-kyufu', icon:'ti-wheelchair', bg:'#FEF0ED', fg:'#9B3A1A',
+    title:'手術を受けた（手術共済金）',
+    amount:'入院共済金の5〜40倍（手術の種類による）',
+    docs:['共済金請求書','手術証明書（医師記入）','班審査への参加'],
+    where:'支部事務所', deadline:'事由発生の翌日から1年以内',
+    note:'手術の種類・規模によって支給額が変わります。詳細は支部にご確認ください。' },
+
+  { cat:'kyosai', sub:'kyosai-kyufu', icon:'ti-run', bg:'#FEF0ED', fg:'#9B3A1A',
+    title:'通院した（通院共済金）',
+    amount:'1日2,500円（A型）／1日1,500円（B型）※上限あり',
+    docs:['共済金請求書','医師証明（通院証明）','班審査への参加'],
+    where:'支部事務所', deadline:'事由発生の翌日から1年以内',
+    note:'入院後の継続通院が対象。通院のみの場合は条件を支部にご確認ください。' },
+
+  { cat:'kyosai', sub:'kyosai-kyufu', icon:'ti-heart-broken', bg:'#FEF0ED', fg:'#9B3A1A',
+    title:'組合員が亡くなった（死亡共済金）',
+    amount:'病気死亡：100万円 / 事故死亡：300万円（A型）',
+    docs:['共済金請求書','死亡診断書（写し）','戸籍謄本（受取人の確認用）','班審査への参加（家族）','受取人の本人確認書類・振込先口座'],
+    where:'支部事務所', deadline:'死亡の翌日から3年以内',
+    note:'受取人（法定相続人）が支部に連絡してください。班審査は家族の参加でOKです。' },
+
+  { cat:'kyosai', sub:'kyosai-kyufu', icon:'ti-alert-triangle', bg:'#FEF0ED', fg:'#9B3A1A',
+    title:'後遺障害が残った（障害共済金）',
+    amount:'障害の程度により異なる（最高300万円）',
+    docs:['共済金請求書','後遺障害診断書（医師記入）','班審査への参加'],
+    where:'支部事務所', deadline:'症状固定後、翌日から3年以内',
+    note:'後遺障害の等級に応じて支給額が決まります。詳細は支部にご相談ください。' },
+
+  { cat:'kyosai', sub:'kyosai-iwai', icon:'ti-heart', bg:'#FEF0ED', fg:'#9B3A1A',
+    title:'結婚したとき（結婚祝金）',
+    amount:'3万円',
+    docs:['慶弔見舞金申請書','戸籍謄本または婚姻届受理証明書'],
+    where:'支部事務所', deadline:'結婚後1年以内',
+    note:'組合員本人の結婚が対象。' },
+
+  { cat:'kyosai', sub:'kyosai-iwai', icon:'ti-baby-carriage', bg:'#FEF0ED', fg:'#9B3A1A',
+    title:'子どもが生まれたとき（出生祝金）',
+    amount:'2万円',
+    docs:['慶弔見舞金申請書','母子健康手帳の出生記録ページの写し（または出生証明書）'],
+    where:'支部事務所', deadline:'出生後1年以内',
+    note:'第何子でも支給対象です。' },
+
+  { cat:'kyosai', sub:'kyosai-iwai', icon:'ti-certificate', bg:'#FEF0ED', fg:'#9B3A1A',
+    title:'資格を取得したとき（資格取得祝金）',
+    amount:'技能講習・特別教育：受講料全額 ／ 作業主任者：半額 ／ 建築士・施工管理士等：2万円',
+    docs:['資格取得祝金申請書（支部事務所から受取り）','修了証・免許証の写し','受講料の領収書（プレミアム・スペシャルの場合）'],
+    where:'支部事務所', deadline:'資格取得後6ヶ月以内',
+    note:'埼玉土建技術研修センター（または支部経由の指定機関）での受講が条件。' },
+
+  { cat:'kyosai', sub:'kyosai-iwai', icon:'ti-building', bg:'#FEF0ED', fg:'#9B3A1A',
+    title:'法人化・従業員5人以上化（適用除外支援金）',
+    amount:'5万円',
+    docs:['支援金申請書（支部事務所から受取り）','法人登記簿謄本または適用除外承認通知書の写し'],
+    where:'支部事務所', deadline:'適用除外承認後1年以内',
+    note:'社会保険の適用除外が認められた後に申請できます。' },
+
+  // ========== 労働保険 ==========
+  { cat:'rodo', sub:'kanyu-rodo', icon:'ti-shield-check', bg:'#E8F5EE', fg:'#1A7A4A',
+    title:'労働保険（労災・雇用保険）の新規加入',
+    docs:['【労災保険】代表者印・通帳・銀行印・初年度保険料','【雇用保険】登記簿謄本または住民票・事業実態がわかる書類・労働者名簿・賃金台帳・出勤簿等'],
+    where:'支部事務所（厚生労働大臣認可 労働保険事務組合）', deadline:'労働者を雇ったときは強制加入',
+    note:'埼玉土建は厚生労働大臣認可の労働保険事務組合です。手続きを一括でサポートします。' },
+
+  { cat:'rodo', sub:'kanyu-rodo', icon:'ti-helmet', bg:'#E8F5EE', fg:'#1A7A4A',
+    title:'一人親方労災保険（特別加入）',
+    docs:['本人確認書類（顔写真付き）','認め印','通帳・銀行印','初年度保険料（年間保険料を一括または分割）'],
+    where:'支部事務所', deadline:'現場に入る前の加入を強く推奨',
+    note:'医療費全額無料・休業補償は給付基礎日額の約80%。元請から加入を求められるケースも増えています。' },
+
+  { cat:'rodo', sub:'rousai-seikyu', icon:'ti-first-aid-kit', bg:'#E8F5EE', fg:'#1A7A4A',
+    title:'仕事中にケガをした（業務災害）',
+    docs:['療養補償給付たる療養の給付請求書（様式第5号）','医師の診断書（指定医療機関以外の場合）','事業主の証明（様式に記入）'],
+    where:'支部事務所 または 労働基準監督署', deadline:'できるだけ早く（時効2年）',
+    note:'指定医療機関では窓口負担ゼロで受診できます。まず支部に連絡してください。' },
+
+  { cat:'rodo', sub:'rousai-seikyu', icon:'ti-road', bg:'#E8F5EE', fg:'#1A7A4A',
+    title:'通勤中にケガをした（通勤災害）',
+    docs:['療養給付たる療養の給付請求書（様式第16号の3）','事業主の証明','通勤経路がわかるもの'],
+    where:'支部事務所 または 労働基準監督署', deadline:'できるだけ早く（時効2年）',
+    note:'通勤経路の逸脱・中断があると対象外になる場合があります。支部に相談を。' },
+
+  { cat:'rodo', sub:'rousai-seikyu', icon:'ti-bed', bg:'#E8F5EE', fg:'#1A7A4A',
+    title:'労災で仕事を休んだ（休業補償給付）',
+    docs:['休業補償給付支給請求書（様式第8号）','医師の診断書（休業の必要性の証明）','事業主の証明'],
+    where:'支部事務所 または 労働基準監督署', deadline:'休業4日目から（3日間は待期期間）',
+    note:'給付基礎日額の80%が支給されます。労災が認定されるまで仮払いの相談も可能です。' },
+
+  { cat:'rodo', sub:'rousai-seikyu', icon:'ti-lung', bg:'#E8F5EE', fg:'#1A7A4A',
+    title:'アスベスト（石綿）・じん肺の被害（職業病）',
+    docs:['まず支部事務所に相談（必要書類は状況により異なります）','健康診断の結果・治療歴がわかるもの'],
+    where:'支部事務所', deadline:'要相談（時効の中断手続きが重要）',
+    note:'埼玉土建は被害者救済に長年取り組んでいます。一人で悩まず、まず支部へご相談を。' },
+
+  { cat:'rodo', sub:'nenkan', icon:'ti-calendar-stats', bg:'#E8F5EE', fg:'#1A7A4A',
+    title:'労働保険の年度更新（毎年6〜7月）',
+    docs:['確定保険料申告書（支部から送付）','前年度の賃金台帳・出勤簿','印鑑・通帳'],
+    where:'支部事務所', deadline:'毎年7月10日まで',
+    note:'毎年6月頃に支部から連絡が届きます。保険料の精算・翌年度概算保険料の申告を行います。' },
+];
+
+// ===== カテゴリ定義 =====
+const CATS = [
+  { id:'kanyu', label:'組合加入',  icon:'ti-users',        color:'#1A7A4A', bg:'#E8F5EE',
+    subs:[
+      { id:'shin',    label:'新規加入' },
+      { id:'kazoku',  label:'家族の異動' },
+      { id:'henkou',  label:'住所・氏名変更' },
+      { id:'taikai',  label:'脱退・喪失' },
+    ]
+  },
+  { id:'kokuho', label:'土建国保',  icon:'ti-heart-plus',   color:'#4A1A9B', bg:'#EDE8FE',
+    subs:[
+      { id:'kyufu',    label:'給付を受ける' },
+      { id:'kazoku2',  label:'家族の加入・脱退' },
+      { id:'sashidashi', label:'証明書・再発行' },
+    ]
+  },
+  { id:'kyosai', label:'総合共済',  icon:'ti-shield-heart', color:'#9B3A1A', bg:'#FEF0ED',
+    subs:[
+      { id:'kyosai-kyufu', label:'共済金の申請' },
+      { id:'kyosai-iwai',  label:'祝金・支援金' },
+    ]
+  },
+  { id:'rodo',   label:'労働保険',  icon:'ti-helmet',       color:'#0C447C', bg:'#E8F0FB',
+    subs:[
+      { id:'kanyu-rodo',   label:'加入する' },
+      { id:'rousai-seikyu', label:'労災申請' },
+      { id:'nenkan',       label:'年度更新' },
+    ]
+  },
+];
+
+let currentCat = 'kanyu';
+let currentSub = 'shin';
+let searchWord = '';
+
+// ===== 描画 =====
+function renderMainTabs(){
+  document.getElementById('main-tabs').innerHTML = CATS.map(c=>`
+    <button class="main-tab${currentCat===c.id?' active':''}"
+      style="${currentCat===c.id?`background:${c.color};`:'color:var(--gray600);'}"
+      onclick="selectCat('${c.id}')">
+      <i class="ti ${c.icon}"></i>${c.label}
+    </button>`).join('');
+}
+
+function renderSubTabs(){
+  const cat = CATS.find(c=>c.id===currentCat);
+  document.getElementById('sub-tabs').innerHTML = cat.subs.map(s=>`
+    <button class="sub-tab${currentSub===s.id?' active':''}"
+      onclick="selectSub('${s.id}')">${s.label}</button>`).join('');
 }
 
 function renderList(){
-  const q=document.getElementById('search').value.trim().toLowerCase();
-  const list=document.getElementById('list');
-  list.innerHTML='';
-  const filtered=ITEMS.filter(item=>{
-    const tagMatch=activeTag==='すべて'||item.tag===activeTag;
-    const text=(item.title+item.docs.join(' ')+item.tag).toLowerCase();
-    return tagMatch&&(q===''||text.includes(q));
+  const q = searchWord.toLowerCase();
+  const cat = CATS.find(c=>c.id===currentCat);
+  const filtered = ITEMS.filter(item=>{
+    const catMatch = item.cat === currentCat && item.sub === currentSub;
+    if(q){
+      const text = (item.title + item.docs.join(' ') + (item.note||'')).toLowerCase();
+      return text.includes(q);
+    }
+    return catMatch;
   });
-  if(filtered.length===0){
-    list.innerHTML='<div class="guide-card" style="text-align:center;padding:24px;color:var(--gray500);">該当する項目が見つかりませんでした</div>';
+
+  const list = document.getElementById('list');
+  if(!filtered.length){
+    list.innerHTML=`<div class="empty"><i class="ti ti-search-off"></i><p>該当する項目が見つかりませんでした</p></div>`;
     return;
   }
-  filtered.forEach(item=>{
-    const card=document.createElement('div');
-    card.className='guide-card';
-    card.style.borderLeftColor=item.fg;
-    const docsHtml=item.docs.map(d=>'<li>'+d+'</li>').join('');
-    const noteHtml=item.note?`<div class="guide-note"><i class="ti ti-info-circle" aria-hidden="true"></i><span>${item.note}</span></div>`:'';
-    card.innerHTML=`
-      <div class="guide-card-head">
-        <div class="guide-card-left">
-          <div class="guide-icon" style="background:${item.bg};"><i class="ti ${item.icon}" style="color:${item.fg};" aria-hidden="true"></i></div>
-          <p class="guide-title">${item.title}</p>
-        </div>
-        <span class="badge-ok">確認済み</span>
-      </div>
-      <div class="guide-body">
-        <p class="guide-label">必要書類</p>
-        <ul class="guide-docs">${docsHtml}</ul>
-        <div class="guide-meta">
-          <div class="guide-meta-item"><p class="guide-label">提出先</p><p>${item.where}</p></div>
-          <div class="guide-meta-item"><p class="guide-label">期限</p><p>${item.deadline}</p></div>
-        </div>
-        ${noteHtml}
-      </div>`;
-    list.appendChild(card);
-  });
-}
-let activeTag="すべて";
-function renderFilters(){
-  const el=document.getElementById("filters");el.innerHTML="";
-  TAGS.forEach(tag=>{
-    const btn=document.createElement("button");
-    btn.className="filter-tag"+(tag===activeTag?" active":"");
-    btn.textContent=tag;
-    btn.onclick=()=>{activeTag=tag;renderFilters();renderList();};
-    el.appendChild(btn);
-  });
-}
-function renderList(){
-  const q=document.getElementById("search").value.trim().toLowerCase();
-  const list=document.getElementById("list");list.innerHTML="";
-  const filtered=ITEMS.filter(item=>{
-    const tagMatch=activeTag==="すべて"||item.tag===activeTag;
-    const text=(item.title+item.docs.join(" ")+item.tag).toLowerCase();
-    return tagMatch&&(q===""||text.includes(q));
-  });
-  if(!filtered.length){list.innerHTML="<p style=\"text-align:center;color:var(--gray400);padding:40px 0;\">該当する項目が見つかりませんでした</p>";return;}
-  filtered.forEach(item=>{
-    const card=document.createElement("div");card.className="guide-card";card.style.borderLeftColor=item.fg;
-    const docsHtml=item.docs.map(d=>"<li>"+d+"</li>").join("");
-    const noteHtml=item.note?`<div class="guide-note"><i class="ti ti-info-circle"></i><span>${item.note}</span></div>`:"";
-    card.innerHTML=`
-      <div class="guide-card-head">
-        <div class="guide-card-left">
+  const color = cat.color;
+  list.innerHTML = filtered.map(item=>`
+    <div class="guide-card" style="border-left-color:${color};">
+      <div class="guide-head">
+        <div class="guide-head-left">
           <div class="guide-icon" style="background:${item.bg};"><i class="ti ${item.icon}" style="color:${item.fg};"></i></div>
           <p class="guide-title">${item.title}</p>
         </div>
-        <span class="badge-ok">確認済み</span>
       </div>
       <div class="guide-body">
-        <p class="guide-label">必要書類</p>
-        <ul class="guide-docs">${docsHtml}</ul>
-        <div class="guide-meta">
-          <div class="guide-meta-item"><p class="guide-label">提出先</p><p>${item.where}</p></div>
-          <div class="guide-meta-item"><p class="guide-label">期限</p><p>${item.deadline}</p></div>
-        </div>${noteHtml}
-      </div>`;
-    list.appendChild(card);
-  });
+        ${item.amount ? `<div class="g-amount">💰 ${item.amount}</div>` : ''}
+        <p class="g-label">必要書類</p>
+        <ul class="g-docs">${item.docs.map(d=>`<li>${d}</li>`).join('')}</ul>
+        <div class="g-meta">
+          <div class="guide-meta-item"><p class="g-label">提出先</p><p>${item.where}</p></div>
+          <div class="guide-meta-item"><p class="g-label">期限・タイミング</p><p>${item.deadline}</p></div>
+        </div>
+        ${item.note ? `<div class="g-note"><i class="ti ti-info-circle"></i><span>${item.note}</span></div>` : ''}
+      </div>
+    </div>`).join('');
 }
-document.getElementById("search").addEventListener("input",renderList);
-renderFilters();renderList();
+
+function selectCat(id){
+  currentCat = id;
+  const cat = CATS.find(c=>c.id===id);
+  currentSub = cat.subs[0].id;
+  searchWord = '';
+  document.getElementById('search').value = '';
+  renderMainTabs();
+  renderSubTabs();
+  renderList();
+  document.getElementById('page-subtitle').textContent = cat.label;
+}
+
+function selectSub(id){
+  currentSub = id;
+  searchWord = '';
+  document.getElementById('search').value = '';
+  renderSubTabs();
+  renderList();
+}
+
+document.getElementById('search').addEventListener('input', e=>{
+  searchWord = e.target.value.trim();
+  // 検索時はカテゴリを無視して全件検索
+  const q = searchWord.toLowerCase();
+  if(!q){ renderList(); return; }
+  const filtered = ITEMS.filter(item=>{
+    const text = (item.title + item.docs.join(' ') + (item.note||'')).toLowerCase();
+    return text.includes(q);
+  });
+  const list = document.getElementById('list');
+  if(!filtered.length){
+    list.innerHTML=`<div class="empty"><i class="ti ti-search-off"></i><p>「${searchWord}」に一致する項目がありませんでした</p></div>`;
+    return;
+  }
+  list.innerHTML = filtered.map(item=>{
+    const cat = CATS.find(c=>c.id===item.cat);
+    return `
+    <div class="guide-card" style="border-left-color:${cat.color};">
+      <div class="guide-head">
+        <div class="guide-head-left">
+          <div class="guide-icon" style="background:${item.bg};"><i class="ti ${item.icon}" style="color:${item.fg};"></i></div>
+          <p class="guide-title">${item.title}</p>
+        </div>
+        <span style="font-size:11px;font-weight:700;background:${cat.bg};color:${cat.color};padding:3px 8px;border-radius:99px;white-space:nowrap;">${cat.label}</span>
+      </div>
+      <div class="guide-body">
+        ${item.amount ? `<div class="g-amount">💰 ${item.amount}</div>` : ''}
+        <p class="g-label">必要書類</p>
+        <ul class="g-docs">${item.docs.map(d=>`<li>${d}</li>`).join('')}</ul>
+        <div class="g-meta">
+          <div class="guide-meta-item"><p class="g-label">提出先</p><p>${item.where}</p></div>
+          <div class="guide-meta-item"><p class="g-label">期限・タイミング</p><p>${item.deadline}</p></div>
+        </div>
+        ${item.note ? `<div class="g-note"><i class="ti ti-info-circle"></i><span>${item.note}</span></div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+});
+
+// 初期表示
+renderMainTabs();
+renderSubTabs();
+renderList();
 </script>
 </body>
 </html>
