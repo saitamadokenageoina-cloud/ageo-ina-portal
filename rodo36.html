@@ -163,6 +163,114 @@
     <i class="ti ti-alert-triangle"></i>
     <span>この計算は目安です。36協定の内容・休日労働の扱い等により実際の上限は異なります。詳細は支部または最寄りの労働基準監督署にご相談ください。</span>
   </div>
+
+  <!-- ===== 36協定書作成 ===== -->
+  <div class="card" style="margin-top:4px;">
+    <p class="sec-label">📄 36協定届の作成・印刷</p>
+    <p style="font-size:13px;color:var(--gray600);margin:0 0 14px;line-height:1.65;">厚生労働省 様式第9号（一般）・様式第9号の2（特別条項）に準拠した書式を作成します。印刷後、使用者・労働者代表の署名・押印のうえ労働基準監督署へ届け出てください。</p>
+
+    <!-- 協定種別選択 -->
+    <div style="display:flex;gap:8px;margin-bottom:14px;">
+      <button id="type-ippan" class="btn-primary" onclick="setType('ippan')" style="flex:1;font-size:13px;padding:10px 8px;">
+        <i class="ti ti-file-text"></i>一般条項のみ
+      </button>
+      <button id="type-tokubetsu" class="btn-secondary" onclick="setType('tokubetsu')" style="flex:1;font-size:13px;padding:10px 8px;">
+        <i class="ti ti-file-plus"></i>特別条項あり
+      </button>
+    </div>
+
+    <!-- 事業場情報 -->
+    <p style="font-size:12px;font-weight:700;color:var(--gray500);margin:0 0 10px;letter-spacing:.06em;">事業場情報</p>
+    <div class="grid2">
+      <div class="input-group"><label>事業の種類</label><input type="text" id="f-jigyoshu" placeholder="例：建築工事業"></div>
+      <div class="input-group"><label>事業の名称</label><input type="text" id="f-jigyomei" placeholder="例：株式会社〇〇建設"></div>
+    </div>
+    <div class="input-group"><label>事業の所在地（電話番号）</label><input type="text" id="f-jusho" placeholder="例：埼玉県上尾市〇〇 TEL 048-000-0000"></div>
+    <div class="grid2">
+      <div class="input-group"><label>労働者数</label><input type="number" id="f-ninzu" placeholder="例：5" min="1"></div>
+      <div class="input-group"><label>協定の有効期間</label><input type="text" id="f-yuko" placeholder="例：1年間"></div>
+    </div>
+    <div class="grid2">
+      <div class="input-group"><label>協定の締結日</label><input type="date" id="f-teiketsubi"></div>
+      <div class="input-group"><label>届出日（労基署提出日）</label><input type="date" id="f-todokede"></div>
+    </div>
+
+    <!-- 業務・時間外の内容 -->
+    <p style="font-size:12px;font-weight:700;color:var(--gray500);margin:12px 0 10px;letter-spacing:.06em;">時間外・休日労働の内容</p>
+    <div class="input-group"><label>時間外労働をさせる必要のある具体的事由</label>
+      <textarea id="f-jiyu" rows="3" placeholder="例：工期短縮のための突貫工事、予期せぬ設計変更・追加工事への対応、機械・設備の故障修理、年末年始前の工事完了対応など"></textarea>
+    </div>
+    <div class="input-group"><label>業務の種類</label>
+      <input type="text" id="f-gyomu" placeholder="例：大工工事・内装工事・施工管理"></div>
+    <div class="grid2">
+      <div class="input-group"><label>1日の延長時間（上限）</label><input type="text" id="f-1nichi" placeholder="例：4時間"></div>
+      <div class="input-group"><label>1ヶ月の延長時間（上限）</label><input type="text" id="f-1tsuki" value="45時間"></div>
+    </div>
+    <div class="grid2">
+      <div class="input-group"><label>1年間の延長時間（上限）</label><input type="text" id="f-1nen" value="360時間"></div>
+      <div class="input-group"><label>所定労働時間</label><input type="text" id="f-shotei" placeholder="例：8時間（1日）"></div>
+    </div>
+
+    <!-- 休日労働 -->
+    <div class="input-group" style="margin-top:4px;">
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+        <input type="checkbox" id="f-kyujitsu" style="width:18px;height:18px;accent-color:var(--orange);">
+        休日労働あり（労働させることができる休日を追記）
+      </label>
+    </div>
+    <div id="kyujitsu-detail" style="display:none;">
+      <div class="grid2" style="margin-top:8px;">
+        <div class="input-group"><label>休日労働の具体的事由</label><input type="text" id="f-kyujitsu-jiyu" placeholder="例：工期遅延の挽回"></div>
+        <div class="input-group"><label>業務の種類</label><input type="text" id="f-kyujitsu-gyomu" placeholder="例：大工工事"></div>
+      </div>
+      <div class="input-group"><label>労働させることができる休日</label><input type="text" id="f-kyujitsu-bi" placeholder="例：毎月第1・第3土曜日（月2回以内）"></div>
+    </div>
+
+    <!-- 特別条項（条件表示） -->
+    <div id="tokubetsu-section" style="display:none;margin-top:12px;">
+      <div style="background:var(--orange-lt);border-radius:var(--r12);padding:14px;border-left:4px solid var(--orange);margin-bottom:12px;">
+        <p style="font-size:12px;font-weight:700;color:var(--orange);margin:0 0 4px;">⚠️ 特別条項（臨時的な特別の事情）</p>
+        <p style="font-size:12px;color:#7A3010;margin:0;">特別条項は「通常予見することのできない業務量の大幅な増加等に伴い臨時的に限度時間を超えて労働させる必要がある場合」に限り使用できます。</p>
+      </div>
+      <div class="input-group"><label>臨時的に限度時間を超えて働かせる必要のある具体的事由</label>
+        <textarea id="f-toku-jiyu" rows="2" placeholder="例：大規模な設計変更・工法変更、自然災害・緊急の補修工事、官公庁の検査対応など"></textarea>
+      </div>
+      <div class="grid2">
+        <div class="input-group"><label>1ヶ月の上限時間（特別条項）</label><input type="text" id="f-toku-tsuki" value="100時間未満"></div>
+        <div class="input-group"><label>1年間の上限時間（特別条項）</label><input type="text" id="f-toku-nen" value="720時間"></div>
+      </div>
+      <div class="grid2">
+        <div class="input-group"><label>限度時間を超えて働かせる回数（年）</label><input type="text" id="f-toku-kaisu" value="6回以内"></div>
+        <div class="input-group"><label>健康福祉確保措置</label><select id="f-fukushi">
+          <option value="医師による面接指導">医師による面接指導</option>
+          <option value="深夜業の回数制限">深夜業の回数制限</option>
+          <option value="終業から始業までの休息時間の確保">終業から始業までの休息時間の確保</option>
+          <option value="連続休暇の取得">連続休暇の取得</option>
+          <option value="心とからだの健康問題についての相談窓口の設置">相談窓口の設置</option>
+        </select></div>
+      </div>
+    </div>
+
+    <!-- 署名欄 -->
+    <p style="font-size:12px;font-weight:700;color:var(--gray500);margin:12px 0 10px;letter-spacing:.06em;">署名・押印欄</p>
+    <div class="grid2">
+      <div class="input-group"><label>使用者 職名</label><input type="text" id="f-shiyosha-shoku" placeholder="例：代表取締役"></div>
+      <div class="input-group"><label>使用者 氏名</label><input type="text" id="f-shiyosha-name" placeholder="例：埼玉 太郎"></div>
+    </div>
+    <div class="grid2">
+      <div class="input-group"><label>労働者代表 選出方法</label><select id="f-daihyo-method">
+        <option value="投票による選出">投票による選出</option>
+        <option value="挙手による選出">挙手による選出</option>
+        <option value="話し合いによる選出">話し合いによる選出</option>
+      </select></div>
+      <div class="input-group"><label>労働者代表 氏名</label><input type="text" id="f-daihyo-name" placeholder="例：建設 花子"></div>
+    </div>
+    <div class="input-group"><label>労基署名称</label><input type="text" id="f-roukisho" placeholder="例：大宮労働基準監督署"></div>
+
+    <button class="btn-primary" onclick="previewKyotei()" style="margin-top:4px;">
+      <i class="ti ti-eye"></i>36協定書をプレビュー・印刷
+    </button>
+  </div>
 </div>
 <footer>埼玉土建一般労働組合 上尾伊奈支部｜TEL 048-773-9863</footer>
 </div>
@@ -289,6 +397,213 @@ function update(){
 
 renderMonths();
 update();
+
+// ===== 36協定書作成 =====
+let kyoteiType = 'ippan';
+
+function setType(t) {
+  kyoteiType = t;
+  document.getElementById('type-ippan').className = t==='ippan' ? 'btn-primary' : 'btn-secondary';
+  document.getElementById('type-tokubetsu').className = t==='tokubetsu' ? 'btn-primary' : 'btn-secondary';
+  document.getElementById('type-ippan').style.cssText = 'flex:1;font-size:13px;padding:10px 8px;display:flex;';
+  document.getElementById('type-tokubetsu').style.cssText = 'flex:1;font-size:13px;padding:10px 8px;display:flex;';
+  document.getElementById('tokubetsu-section').style.display = t==='tokubetsu' ? 'block' : 'none';
+  if(t==='tokubetsu') {
+    document.getElementById('f-1tsuki').value = '45時間';
+    document.getElementById('f-1nen').value = '360時間';
+  }
+}
+document.getElementById('f-kyujitsu').addEventListener('change', function(){
+  document.getElementById('kyujitsu-detail').style.display = this.checked ? 'block' : 'none';
+});
+
+// 今日の日付をデフォルトにセット
+(function(){
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('f-teiketsubi').value = today;
+  document.getElementById('f-todokede').value = today;
+})();
+
+function g(id){ return (document.getElementById(id)||{}).value||''; }
+function chk(id){ return (document.getElementById(id)||{}).checked||false; }
+
+function previewKyotei() {
+  const jigyoshu  = g('f-jigyoshu') || '（記入してください）';
+  const jigyomei  = g('f-jigyomei') || '（記入してください）';
+  const jusho     = g('f-jusho')    || '（記入してください）';
+  const ninzu     = g('f-ninzu')    || '　';
+  const yuko      = g('f-yuko')     || '1年間';
+  const teiketsu  = g('f-teiketsubi') ? new Date(g('f-teiketsubi')).toLocaleDateString('ja-JP',{year:'numeric',month:'long',day:'numeric'}) : '　　年　　月　　日';
+  const todoke    = g('f-todokede')   ? new Date(g('f-todokede')).toLocaleDateString('ja-JP',{year:'numeric',month:'long',day:'numeric'}) : '　　年　　月　　日';
+  const jiyu      = g('f-jiyu')    || '（記入してください）';
+  const gyomu     = g('f-gyomu')   || '（記入してください）';
+  const nichi     = g('f-1nichi')  || '　　時間';
+  const tsuki     = g('f-1tsuki')  || '45時間';
+  const nen       = g('f-1nen')    || '360時間';
+  const shotei    = g('f-shotei')  || '　　時間';
+  const shiyoShoku= g('f-shiyosha-shoku') || '　　　　　　';
+  const shiyoName = g('f-shiyosha-name')  || '　　　　　　';
+  const daihyoM   = g('f-daihyo-method') || '投票による選出';
+  const daihyoName= g('f-daihyo-name')   || '　　　　　　';
+  const roukisho  = g('f-roukisho') || '　　　　労働基準監督署長';
+
+  // 特別条項
+  const tokuJiyu  = g('f-toku-jiyu') || '（記入してください）';
+  const tokuTsuki = g('f-toku-tsuki') || '100時間未満';
+  const tokuNen   = g('f-toku-nen')   || '720時間';
+  const tokuKaisu = g('f-toku-kaisu') || '6回以内';
+  const fukushi   = g('f-fukushi')    || '医師による面接指導';
+
+  // 休日労働
+  const kyujitsuJiyu  = g('f-kyujitsu-jiyu')  || '（記入してください）';
+  const kyujitsuGyomu = g('f-kyujitsu-gyomu') || '（記入してください）';
+  const kyujitsuBi    = g('f-kyujitsu-bi')    || '（記入してください）';
+
+  const isToken = kyoteiType === 'tokubetsu';
+  const hasKyujitsu = chk('f-kyujitsu');
+
+  const title = isToken
+    ? '時間外労働・休日労働に関する協定届（特別条項）<br><small style="font-size:13px;font-weight:400;">（様式第9号の2　建設事業）</small>'
+    : '時間外労働・休日労働に関する協定届<br><small style="font-size:13px;font-weight:400;">（様式第9号　建設事業）</small>';
+
+  const tokubetsuRows = isToken ? `
+    <tr><th colspan="6" style="background:#FFF8E6;color:#7A5500;font-size:13px;">◆ 特別条項（臨時的な特別の事情）</th></tr>
+    <tr>
+      <td colspan="3" style="font-size:12px;">臨時的に限度時間を超えて働かせる必要のある具体的事由<br><span style="color:#333;font-size:13px;">${tokuJiyu}</span></td>
+      <td style="text-align:center;">${gyomu}</td>
+      <td style="text-align:center;">${tokuTsuki}<br><span style="font-size:10px;">（月）</span></td>
+      <td style="text-align:center;">${tokuNen}<br><span style="font-size:10px;">（年）</span></td>
+    </tr>
+    <tr>
+      <td colspan="2" style="font-size:12px;">限度時間を超える回数（年）</td>
+      <td style="text-align:center;">${tokuKaisu}</td>
+      <td colspan="3" style="font-size:12px;">健康福祉確保措置：${fukushi}</td>
+    </tr>` : '';
+
+  const kyujitsuRows = hasKyujitsu ? `
+    <tr><th colspan="6" style="background:#E8F0FB;color:#0C447C;font-size:13px;">◆ 休日労働</th></tr>
+    <tr>
+      <td colspan="3" style="font-size:12px;">休日労働の具体的事由<br><span style="color:#333;font-size:13px;">${kyujitsuJiyu}</span></td>
+      <td style="text-align:center;">${kyujitsuGyomu}</td>
+      <td colspan="2" style="text-align:center;">${kyujitsuBi}</td>
+    </tr>` : '';
+
+  const body = `<!DOCTYPE html>
+<html lang="ja"><head><meta charset="UTF-8">
+<title>36協定届</title>
+<style>
+  @page { size: A4; margin: 15mm 15mm 15mm 15mm; }
+  body { font-family:'Hiragino Sans','Meiryo',sans-serif; font-size:12px; color:#111; margin:0; }
+  h1 { font-size:17px; font-weight:800; text-align:center; margin:0 0 4px; }
+  h1 small { font-size:12px; }
+  .subtitle { text-align:center; font-size:11px; color:#555; margin:0 0 14px; }
+  .meta { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:12px; border:1px solid #ccc; padding:8px 12px; }
+  .meta-item { font-size:12px; }
+  .meta-item span { font-weight:700; }
+  table { width:100%; border-collapse:collapse; margin-bottom:12px; font-size:12px; }
+  th { background:#1B2A3B; color:white; padding:6px 8px; font-weight:700; text-align:left; }
+  td { border:1px solid #aaa; padding:6px 8px; vertical-align:top; }
+  tr td:first-child { background:#f5f5f5; font-weight:600; width:20%; }
+  .sign-table td { border:1px solid #aaa; padding:10px 8px; vertical-align:middle; }
+  .sign-table td:first-child { background:#f5f5f5; font-weight:600; width:22%; }
+  .sign-cell { display:flex; align-items:center; justify-content:space-between; }
+  .hanko { width:36px; height:36px; border:1.5px solid #aaa; border-radius:4px; display:inline-block; }
+  .note { font-size:10px; color:#666; margin:6px 0; line-height:1.6; }
+  .todokede { text-align:right; font-size:12px; margin-bottom:8px; }
+  .law-note { background:#f9f9f9; border:1px solid #ddd; padding:8px 10px; font-size:10px; color:#555; line-height:1.6; margin-bottom:10px; }
+  @media print { .no-print { display:none; } }
+</style>
+</head>
+<body>
+<div class="no-print" style="background:#1B2A3B;color:#fff;padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;border-radius:8px;">
+  <span style="font-weight:700;">📄 36協定届 プレビュー</span>
+  <button onclick="window.print()" style="background:#E8612A;color:#fff;border:none;border-radius:6px;padding:8px 16px;font-size:14px;font-weight:700;cursor:pointer;">🖨️ 印刷・PDF保存</button>
+</div>
+
+<h1>${title}</h1>
+<div class="subtitle">労働基準法第36条第1項の協定届　（${isToken?'特別条項付き':'一般条項'}）</div>
+
+<div class="meta">
+  <div class="meta-item">事業の種類：<span>${jigyoshu}</span></div>
+  <div class="meta-item">事業の名称：<span>${jigyomei}</span></div>
+  <div class="meta-item" style="grid-column:1/-1;">事業の所在地（電話番号）：<span>${jusho}</span></div>
+  <div class="meta-item">労働者数：<span>${ninzu}人</span></div>
+  <div class="meta-item">協定の有効期間：<span>${yuko}</span></div>
+</div>
+
+<div class="law-note">
+  ※ 時間外労働をさせる必要のある場合には、時間外労働・休日労働協定（36協定）を締結し、所轄労働基準監督署長に届け出ることが必要です（労働基準法第36条）。建設事業は2024年4月1日より時間外労働の上限規制が適用されています。
+</div>
+
+<table>
+  <tr>
+    <th colspan="6">◆ 時間外労働（一般条項　限度時間：月45時間・年360時間）</th>
+  </tr>
+  <tr style="background:#f0f0f0;font-weight:700;text-align:center;">
+    <td colspan="3">時間外労働をさせる必要のある具体的事由</td>
+    <td>業務の種類</td>
+    <td>1ヶ月<br>（上限）</td>
+    <td>1年間<br>（上限）</td>
+  </tr>
+  <tr>
+    <td colspan="3" style="font-size:12px;">${jiyu}</td>
+    <td style="text-align:center;">${gyomu}</td>
+    <td style="text-align:center;">${tsuki}</td>
+    <td style="text-align:center;">${nen}</td>
+  </tr>
+  <tr>
+    <td style="background:#f5f5f5;font-weight:600;">所定労働時間</td>
+    <td>${shotei}</td>
+    <td style="background:#f5f5f5;font-weight:600;">1日の延長時間上限</td>
+    <td colspan="3">${nichi}</td>
+  </tr>
+  ${tokubetsuRows}
+  ${kyujitsuRows}
+</table>
+
+<p style="font-size:12px;margin:0 0 4px;">上記の者のうち事業場外において労働する場合（みなし労働時間制・適用あり / なし）</p>
+<p class="note">チェックボックスは印刷後に手書きでご記入ください。</p>
+
+<table>
+  <tr><th colspan="4">◆ 協定の当事者（労働者の過半数を代表する者）</th></tr>
+  <tr>
+    <td>選出方法</td><td>${daihyoM}</td>
+    <td>氏名</td><td><div class="sign-cell">${daihyoName}　<span class="hanko"></span></div></td>
+  </tr>
+</table>
+
+<p style="margin:0 0 8px;font-size:12px;">上記協定の当事者である労働組合が事業場の全ての労働者の過半数で組織する労働組合である場合はその旨、その他の場合は労働者の過半数を代表する者の選出方法を記入</p>
+
+<div class="todokede">締結年月日：${teiketsu}　　届出年月日：${todoke}</div>
+
+<table class="sign-table">
+  <tr>
+    <td>使用者<br>職名・氏名</td>
+    <td>
+      <div class="sign-cell">
+        ${shiyoShoku}　${shiyoName}　<span class="hanko"></span>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<p style="text-align:center;font-size:13px;margin:14px 0 4px;">
+  ${roukisho}　殿
+</p>
+
+<div class="note">
+  ※ 本届出書は控えを1部作成し、会社で保管してください。<br>
+  ※ 提出先：事業場を管轄する労働基準監督署<br>
+  ※ 大宮労働基準監督署：さいたま市大宮区桜木町1-7-5 ソニックシティビル16F　TEL 048-600-4816<br>
+  ※ 本書式は参考様式です。正式な届出は厚生労働省ホームページの様式をご使用ください。<br>
+  ※ 詳細・相談：埼玉土建一般労働組合 上尾伊奈支部 TEL 048-773-9863
+</div>
+</body></html>`;
+
+  const w = window.open('', '_blank', 'width=800,height=900');
+  w.document.write(body);
+  w.document.close();
+}
 </script>
 </body>
 </html>
