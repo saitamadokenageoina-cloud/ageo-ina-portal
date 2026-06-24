@@ -7,440 +7,402 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.47.0/iconfont/tabler-icons.min.css">
 <link rel="stylesheet" href="common.css">
 <style>
-/* ===== HERO ===== */
-.hero{
-  background:linear-gradient(160deg,#0D1F35 0%,#1B3A6B 55%,#1B2A3B 100%);
-  padding:28px 20px 32px;position:relative;overflow:hidden;
+/* ===== 近未来ヒーロー ===== */
+.hero {
+  background: #060E1A;
+  padding: 28px 20px 36px;
+  position: relative;
+  overflow: hidden;
 }
-/* 建設現場シルエット（SVG背景） */
-.hero::before{
-  content:'';position:absolute;bottom:0;left:0;right:0;height:80px;
-  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 80'%3E%3Cpath d='M0,80 L0,50 L40,50 L40,30 L60,30 L60,20 L80,20 L80,30 L100,30 L100,10 L110,10 L110,5 L120,5 L120,10 L130,10 L130,30 L160,30 L160,50 L200,50 L200,35 L220,35 L220,15 L240,15 L240,35 L260,35 L260,50 L300,50 L300,40 L320,40 L320,20 L330,20 L340,5 L350,20 L360,20 L360,40 L380,40 L380,50 L420,50 L420,30 L440,30 L440,15 L460,15 L460,30 L480,30 L480,50 L520,50 L520,35 L540,35 L540,25 L550,25 L550,35 L570,35 L570,50 L640,50 L640,80 Z' fill='rgba(232,97,42,0.08)'/%3E%3C/svg%3E") bottom/cover no-repeat;
+/* グリッド背景 */
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(0,200,255,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,200,255,.04) 1px, transparent 1px);
+  background-size: 32px 32px;
 }
-.hero-eyebrow{font-size:12px;font-weight:600;color:var(--orange);letter-spacing:.12em;text-transform:uppercase;margin:0 0 8px;position:relative;}
-.hero-title{font-size:26px;font-weight:800;color:#fff;margin:0 0 4px;line-height:1.25;position:relative;}
-.hero-sub{font-size:14px;color:rgba(255,255,255,.55);margin:0 0 20px;position:relative;}
-.hero-tel{
-  display:inline-flex;align-items:center;gap:8px;
-  background:var(--orange);color:#fff;
-  padding:10px 18px;border-radius:var(--r12);font-size:15px;font-weight:700;
-  box-shadow:0 4px 16px rgba(232,97,42,.4);position:relative;
+/* 光のリング */
+.hero::after {
+  content: '';
+  position: absolute;
+  top: -80px; right: -80px;
+  width: 260px; height: 260px;
+  background: radial-gradient(circle, rgba(0,180,255,.12) 0%, transparent 70%);
+  border-radius: 50%;
 }
-.hero-tel i{font-size:18px;}
+.hero-glow {
+  position: absolute;
+  bottom: -60px; left: -40px;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(232,97,42,.1) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(0,180,255,.12);
+  border: 1px solid rgba(0,180,255,.25);
+  border-radius: 99px;
+  padding: 4px 12px;
+  font-size: 11px; font-weight: 700; color: #00C8FF;
+  letter-spacing: .1em; text-transform: uppercase;
+  margin-bottom: 12px; position: relative; z-index: 1;
+}
+.hero-tag::before {
+  content: ''; width: 6px; height: 6px;
+  background: #00C8FF; border-radius: 50%;
+  animation: blink 1.8s infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
+.hero-title {
+  font-size: 27px; font-weight: 800; color: #fff;
+  margin: 0 0 6px; line-height: 1.2; position: relative; z-index: 1;
+  letter-spacing: -.02em;
+}
+.hero-title span { color: #00C8FF; }
+.hero-sub {
+  font-size: 13px; color: rgba(255,255,255,.45);
+  margin: 0 0 20px; position: relative; z-index: 1;
+}
+.hero-tel {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: linear-gradient(135deg, #E8612A, #C04E1E);
+  color: #fff; padding: 11px 20px;
+  border-radius: var(--r12); font-size: 16px; font-weight: 700;
+  box-shadow: 0 0 20px rgba(232,97,42,.35), 0 4px 12px rgba(0,0,0,.3);
+  position: relative; z-index: 1;
+}
+.hero-scan-line {
+  position: absolute; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0,200,255,.3), transparent);
+  animation: scan 4s ease-in-out infinite;
+  z-index: 0;
+}
+@keyframes scan { 0%{top:0;opacity:0} 10%{opacity:1} 90%{opacity:1} 100%{top:100%;opacity:0} }
 
-/* ===== SECTION ===== */
-.section{padding:16px 16px 0;}
-.section-title{font-size:12px;font-weight:700;letter-spacing:.1em;color:var(--gray400);text-transform:uppercase;margin:0 0 12px;}
+/* ===== セクションラベル ===== */
+.sec-head {
+  display: flex; align-items: center; gap: 10px;
+  margin: 0 0 12px;
+}
+.sec-head-line {
+  flex: 1; height: 1px;
+  background: linear-gradient(90deg, var(--gray200), transparent);
+}
+.sec-head-label {
+  font-size: 11px; font-weight: 700;
+  color: var(--gray500); letter-spacing: .12em; text-transform: uppercase;
+  white-space: nowrap;
+}
+.sec-head-icon {
+  width: 28px; height: 28px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.sec-head-icon i { font-size: 15px; }
 
-/* ===== NEW FEATURE GRID ===== */
-.feat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
-.feat-card{
-  background:var(--white);border-radius:var(--r16);box-shadow:var(--shadow-sm);
-  overflow:hidden;cursor:pointer;transition:box-shadow .2s,transform .15s;
-  border:2px solid transparent;text-decoration:none;color:inherit;
-  display:flex;flex-direction:column;
-}
-.feat-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px);border-color:var(--orange);}
-.feat-illust{height:88px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;}
-.feat-illust svg{position:absolute;inset:0;width:100%;height:100%;}
-.feat-illust-icon{font-size:36px;position:relative;z-index:1;}
-.feat-body{padding:14px 14px 16px;}
-.feat-badge{margin-bottom:6px;
-  display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;
-  border-radius:99px;margin-bottom:5px;
-}
-.feat-badge.ai{background:#EDE8FE;color:#6B21A8;}
-.feat-badge.new{background:var(--green-lt);color:var(--green);}
-.feat-title{font-size:14px;font-weight:700;color:var(--navy);margin:0 0 5px;line-height:1.3;}
-.feat-desc{font-size:11px;color:var(--gray400);margin:0;line-height:1.5;}
+/* ===== グリッドカード（2列） ===== */
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
 
-/* ===== BASIC LIST ===== */
-.basic-item{
-  background:var(--white);border-radius:var(--r16);box-shadow:var(--shadow-sm);
-  display:flex;align-items:center;gap:0;margin-bottom:8px;
-  text-decoration:none;color:inherit;overflow:hidden;
-  transition:box-shadow .15s,transform .1s;border:2px solid transparent;
+/* ===== メニューカード ===== */
+.mc {
+  background: var(--white); border-radius: var(--r16);
+  box-shadow: var(--shadow-sm); overflow: hidden;
+  text-decoration: none; color: inherit; display: flex; flex-direction: column;
+  border: 2px solid transparent; cursor: pointer;
+  transition: all .18s;
 }
-.basic-item:hover{box-shadow:var(--shadow-md);transform:translateX(3px);border-color:var(--orange);}
-.basic-item-illust{
-  width:72px;height:72px;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;
+.mc:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: var(--orange); }
+.mc-top { height: 80px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+.mc-top svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.mc-emoji { font-size: 32px; position: relative; z-index: 1; }
+.mc-body { padding: 11px 12px 13px; }
+.mc-badge {
+  font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 99px;
+  display: inline-block; margin-bottom: 5px;
 }
-.basic-item-illust svg{position:absolute;inset:0;width:100%;height:100%;}
-.basic-item-illust-icon{font-size:26px;position:relative;z-index:1;}
-.basic-item-body{flex:1;padding:12px 14px 12px 4px;}
-.basic-item-title{font-size:15px;font-weight:700;color:var(--navy);margin:0 0 2px;}
-.basic-item-sub{font-size:12px;color:var(--gray400);margin:0;}
-.basic-item-arrow{font-size:18px;color:var(--gray200);padding-right:12px;flex-shrink:0;}
+.mc-badge.new { background: #E8F5EE; color: #1A7A4A; }
+.mc-badge.ai  { background: #EDE8FE; color: #6B21A8; }
+.mc-badge.tool{ background: #E8F0FB; color: #0C447C; }
+.mc-title { font-size: 13px; font-weight: 700; color: var(--navy); margin: 0 0 3px; line-height: 1.35; }
+.mc-desc  { font-size: 11px; color: var(--gray400); margin: 0; line-height: 1.5; }
 
-/* ===== NOTICE ===== */
-.notice{
-  background:var(--orange-lt);border-radius:var(--r12);border-left:4px solid var(--orange);
-  padding:12px 16px;display:flex;align-items:center;gap:10px;
-  margin:0 16px 16px;
+/* ===== リストカード（1列） ===== */
+.lc {
+  background: var(--white); border-radius: var(--r16);
+  box-shadow: var(--shadow-sm); overflow: hidden;
+  text-decoration: none; color: inherit;
+  display: flex; align-items: center; gap: 0;
+  border: 2px solid transparent; transition: all .15s;
+  margin-bottom: 8px;
 }
-.notice i{font-size:20px;color:var(--orange);flex-shrink:0;}
-.notice p{font-size:13px;color:#7A3010;margin:0;font-weight:500;}
+.lc:hover { border-color: var(--orange); box-shadow: var(--shadow-md); transform: translateX(3px); }
+.lc-thumb {
+  width: 64px; height: 64px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+}
+.lc-thumb svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.lc-thumb-icon { font-size: 26px; position: relative; z-index: 1; }
+.lc-body { flex: 1; padding: 12px 12px 12px 4px; }
+.lc-title { font-size: 15px; font-weight: 700; color: var(--navy); margin: 0 0 2px; }
+.lc-desc  { font-size: 12px; color: var(--gray400); margin: 0; }
+.lc-arrow { font-size: 18px; color: var(--gray200); padding-right: 12px; flex-shrink: 0; }
+
+/* ===== お知らせバナー ===== */
+.notice-bar {
+  background: linear-gradient(90deg, rgba(0,180,255,.08), rgba(0,180,255,.04));
+  border: 1px solid rgba(0,180,255,.2);
+  border-radius: var(--r12);
+  padding: 11px 14px;
+  display: flex; align-items: center; gap: 10px;
+  margin: 12px 16px 0;
+}
+.notice-bar i { font-size: 18px; color: #00C8FF; flex-shrink: 0; }
+.notice-bar p { font-size: 13px; color: var(--navy); margin: 0; font-weight: 500; }
+
+.section { padding: 16px 16px 0; }
 </style>
 </head>
 <body>
 <div class="app">
 
-<!-- ヒーロー -->
+<!-- ===== HERO ===== -->
 <div class="hero">
-  <p class="hero-eyebrow">埼玉土建一般労働組合 上尾伊奈支部</p>
-  <h1 class="hero-title">組合員アプリ</h1>
-  <p class="hero-sub">現場とくらしをまとめてサポート</p>
+  <div class="hero-scan-line"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-tag"><i class="ti ti-wifi"></i>DOKEN SMART PORTAL</div>
+  <h1 class="hero-title">埼玉土建<br><span>上尾伊奈支部</span></h1>
+  <p class="hero-sub">組合員のための現場・くらしサポートアプリ</p>
   <a href="tel:048-773-9863" class="hero-tel">
     <i class="ti ti-phone"></i>048-773-9863
   </a>
 </div>
 
 <!-- お知らせ -->
-<div style="padding:12px 16px 0;">
-  <div class="notice">
-    <i class="ti ti-bell-ringing"></i>
-    <p>2026年度 技能講習日程を公開中。空き状況は支部へお問い合わせください。</p>
+<div class="notice-bar">
+  <i class="ti ti-bell-ringing"></i>
+  <p>2026年度 技能講習日程を公開中。空き状況は支部へお問い合わせください。</p>
+</div>
+
+<!-- ===== 現場で使う ===== -->
+<div class="section">
+  <div class="sec-head">
+    <div class="sec-head-icon" style="background:#FEE8D6;"><i class="ti ti-helmet" style="color:#E8612A;"></i></div>
+    <span class="sec-head-label">現場で使う</span>
+    <div class="sec-head-line"></div>
+  </div>
+  <div class="grid2">
+
+    <!-- 熱中症 -->
+    <a class="mc" href="atsusa.html">
+      <div class="mc-top" style="background:linear-gradient(135deg,#FF8C42,#E8612A);">
+        <svg viewBox="0 0 200 80"><circle cx="160" cy="30" r="20" fill="rgba(255,255,255,.18)"/><circle cx="160" cy="30" r="12" fill="rgba(255,255,255,.3)"/><line x1="160" y1="5" x2="160" y2="0" stroke="rgba(255,255,255,.5)" stroke-width="2"/><line x1="178" y1="13" x2="182" y2="9" stroke="rgba(255,255,255,.4)" stroke-width="2"/><line x1="185" y1="30" x2="192" y2="30" stroke="rgba(255,255,255,.4)" stroke-width="2"/><circle cx="55" cy="28" r="8" fill="rgba(255,255,255,.45)"/><rect x="49" y="38" width="12" height="20" rx="3" fill="rgba(255,255,255,.45)"/><ellipse cx="55" cy="24" rx="11" ry="7" fill="rgba(255,200,0,.6)"/><rect x="88" y="18" width="7" height="34" rx="3.5" fill="rgba(255,255,255,.25)"/><rect x="89.5" y="28" width="4" height="24" rx="2" fill="rgba(255,80,30,.8)"/><circle cx="91.5" cy="54" r="5.5" fill="rgba(255,60,20,.9)"/></svg>
+        <span class="mc-emoji">🌡️</span>
+      </div>
+      <div class="mc-body">
+        <span class="mc-badge ai">AI</span>
+        <p class="mc-title">熱中症AIアラート</p>
+        <p class="mc-desc">現在地の気温・湿度でリスク判定</p>
+      </div>
+    </a>
+
+    <!-- 安全チェック -->
+    <a class="mc" href="anzen_check.html">
+      <div class="mc-top" style="background:linear-gradient(135deg,#7B2F00,#C04E1E);">
+        <svg viewBox="0 0 200 80"><rect x="25" y="10" width="150" height="60" rx="8" fill="rgba(255,255,255,.1)"/><rect x="33" y="20" width="134" height="7" rx="2" fill="rgba(255,255,255,.28)"/><circle cx="38" cy="38" r="5" fill="rgba(100,220,130,.8)"/><rect x="48" y="35" width="80" height="5" rx="2" fill="rgba(255,255,255,.28)"/><circle cx="38" cy="52" r="5" fill="rgba(100,220,130,.8)"/><rect x="48" y="49" width="60" height="5" rx="2" fill="rgba(255,255,255,.28)"/><circle cx="38" cy="63" r="5" fill="rgba(255,200,0,.6)"/><rect x="48" y="60" width="70" height="5" rx="2" fill="rgba(255,255,255,.18)"/><text x="152" y="72" font-size="18" fill="rgba(255,255,255,.6)">🦺</text></svg>
+        <span class="mc-emoji">🦺</span>
+      </div>
+      <div class="mc-body">
+        <span class="mc-badge new">NEW</span>
+        <p class="mc-title">現場安全チェックリスト</p>
+        <p class="mc-desc">着工前の安全確認をPDF出力</p>
+      </div>
+    </a>
+
+    <!-- 建設業許可 -->
+    <a class="mc" href="kensetsu_check.html">
+      <div class="mc-top" style="background:linear-gradient(135deg,#0C3A6B,#1A5FA8);">
+        <svg viewBox="0 0 200 80"><rect x="30" y="12" width="80" height="58" rx="6" fill="rgba(255,255,255,.12)"/><rect x="36" y="18" width="68" height="7" rx="2" fill="rgba(255,255,255,.4)"/><rect x="36" y="30" width="50" height="4" rx="2" fill="rgba(255,255,255,.22)"/><rect x="36" y="38" width="60" height="4" rx="2" fill="rgba(255,255,255,.22)"/><rect x="36" y="46" width="45" height="4" rx="2" fill="rgba(255,255,255,.22)"/><circle cx="148" cy="40" r="22" fill="rgba(255,255,255,.1)"/><text x="148" y="47" text-anchor="middle" font-size="22" fill="rgba(255,255,255,.65)">🏛️</text><circle cx="148" cy="66" r="10" fill="rgba(100,220,130,.7)"/><polyline points="142,66 147,71 155,60" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>
+        <span class="mc-emoji">🏛️</span>
+      </div>
+      <div class="mc-body">
+        <span class="mc-badge new">NEW</span>
+        <p class="mc-title">建設業許可チェッカー</p>
+        <p class="mc-desc">許可の要否・種類・更新期限</p>
+      </div>
+    </a>
+
+    <!-- 36協定 -->
+    <a class="mc" href="rodo36.html">
+      <div class="mc-top" style="background:linear-gradient(135deg,#1A3A6B,#1A5FA8);">
+        <svg viewBox="0 0 200 80"><circle cx="100" cy="38" r="28" fill="rgba(255,255,255,.1)" stroke="rgba(255,255,255,.25)" stroke-width="2"/><circle cx="100" cy="38" r="20" fill="rgba(255,255,255,.06)"/><line x1="100" y1="38" x2="100" y2="20" stroke="white" stroke-width="3" stroke-linecap="round"/><line x1="100" y1="38" x2="116" y2="47" stroke="rgba(255,200,0,.9)" stroke-width="2.5" stroke-linecap="round"/><circle cx="100" cy="12" r="2" fill="rgba(255,255,255,.5)"/><circle cx="126" cy="38" r="2" fill="rgba(255,255,255,.4)"/><circle cx="100" cy="64" r="2" fill="rgba(255,255,255,.4)"/><circle cx="74" cy="38" r="2" fill="rgba(255,255,255,.4)"/><rect x="20" y="66" width="50" height="8" rx="4" fill="rgba(255,255,255,.1)"/><rect x="20" y="66" width="30" height="8" rx="4" fill="rgba(100,220,130,.5)"/><text x="155" y="28" font-size="9" fill="rgba(255,255,255,.5)">年360h</text><text x="32" y="28" font-size="9" fill="rgba(255,255,255,.5)">月45h</text></svg>
+        <span class="mc-emoji">⏱️</span>
+      </div>
+      <div class="mc-body">
+        <span class="mc-badge new">NEW</span>
+        <p class="mc-title">36協定・残業カウンター</p>
+        <p class="mc-desc">月・年の法定上限を可視化</p>
+      </div>
+    </a>
+
   </div>
 </div>
 
-<!-- 新機能 -->
+<!-- ===== 組合員サービス ===== -->
 <div class="section">
-  <p class="section-title">スマート現場支援</p>
-  <div class="feat-grid">
-
-    <!-- 熱中症AI -->
-    <a class="feat-card" href="atsusa.html">
-      <div class="feat-illust" style="background:linear-gradient(135deg,#FF8C42,#E8612A);">
-        <svg viewBox="0 0 200 88" preserveAspectRatio="none">
-          <!-- 太陽 -->
-          <circle cx="160" cy="30" r="22" fill="rgba(255,255,255,.2)"/>
-          <circle cx="160" cy="30" r="14" fill="rgba(255,255,255,.35)"/>
-          <!-- 光線 -->
-          <line x1="160" y1="5" x2="160" y2="0" stroke="rgba(255,255,255,.4)" stroke-width="2"/>
-          <line x1="180" y1="12" x2="185" y2="8" stroke="rgba(255,255,255,.4)" stroke-width="2"/>
-          <line x1="185" y1="30" x2="192" y2="30" stroke="rgba(255,255,255,.4)" stroke-width="2"/>
-          <!-- 人物シルエット -->
-          <circle cx="60" cy="32" r="8" fill="rgba(255,255,255,.5)"/>
-          <rect x="54" y="42" width="12" height="22" rx="3" fill="rgba(255,255,255,.5)"/>
-          <rect x="50" y="44" width="8" height="3" rx="1" fill="rgba(255,255,255,.5)"/>
-          <rect x="62" y="44" width="8" height="3" rx="1" fill="rgba(255,255,255,.5)"/>
-          <!-- ヘルメット -->
-          <ellipse cx="60" cy="27" rx="12" ry="7" fill="rgba(255,200,0,.7)"/>
-          <!-- 温度計 -->
-          <rect x="95" y="20" width="8" height="36" rx="4" fill="rgba(255,255,255,.3)"/>
-          <rect x="96" y="30" width="6" height="26" rx="3" fill="rgba(255,100,50,.8)"/>
-          <circle cx="99" cy="58" r="6" fill="rgba(255,80,30,.9)"/>
-          <!-- 波線（暑さ） -->
-          <path d="M 20 18 Q 28 12 36 18 Q 44 24 52 18" stroke="rgba(255,255,255,.4)" stroke-width="2" fill="none"/>
-          <path d="M 20 26 Q 28 20 36 26 Q 44 32 52 26" stroke="rgba(255,255,255,.3)" stroke-width="1.5" fill="none"/>
-        </svg>
-        <span class="feat-illust-icon">🌡️</span>
-      </div>
-      <div class="feat-body">
-        <span class="feat-badge ai">AI</span>
-        <p class="feat-title">熱中症AIアラート</p>
-        <p class="feat-desc">現在地の気温・湿度からリスクを判定</p>
-      </div>
-    </a>
+  <div class="sec-head">
+    <div class="sec-head-icon" style="background:#EDE8FE;"><i class="ti ti-shield-heart" style="color:#6B21A8;"></i></div>
+    <span class="sec-head-label">組合員サービス</span>
+    <div class="sec-head-line"></div>
+  </div>
+  <div class="grid2">
 
     <!-- DOKENギルド -->
-    <a class="feat-card" href="guild.html">
-      <div class="feat-illust" style="background:linear-gradient(135deg,#1A7A4A,#2EA868);">
-        <svg viewBox="0 0 200 88" preserveAspectRatio="none">
-          <!-- 会話バブル -->
-          <rect x="20" y="15" width="70" height="38" rx="10" fill="rgba(255,255,255,.25)"/>
-          <polygon points="30,53 25,65 42,53" fill="rgba(255,255,255,.25)"/>
-          <rect x="110" y="25" width="70" height="38" rx="10" fill="rgba(255,255,255,.18)"/>
-          <polygon points="170,63 178,75 158,63" fill="rgba(255,255,255,.18)"/>
-          <!-- テキスト線 -->
-          <line x1="30" y1="29" x2="78" y2="29" stroke="rgba(255,255,255,.5)" stroke-width="2" stroke-linecap="round"/>
-          <line x1="30" y1="37" x2="65" y2="37" stroke="rgba(255,255,255,.4)" stroke-width="2" stroke-linecap="round"/>
-          <line x1="30" y1="45" x2="72" y2="45" stroke="rgba(255,255,255,.4)" stroke-width="2" stroke-linecap="round"/>
-          <line x1="120" y1="39" x2="168" y2="39" stroke="rgba(255,255,255,.5)" stroke-width="2" stroke-linecap="round"/>
-          <line x1="120" y1="47" x2="155" y2="47" stroke="rgba(255,255,255,.4)" stroke-width="2" stroke-linecap="round"/>
-          <line x1="120" y1="55" x2="162" y2="55" stroke="rgba(255,255,255,.4)" stroke-width="2" stroke-linecap="round"/>
-          <!-- 人物アイコン2人 -->
-          <circle cx="40" cy="78" r="6" fill="rgba(255,255,255,.6)"/>
-          <path d="M32 88 Q40 82 48 88" stroke="rgba(255,255,255,.6)" stroke-width="2" fill="none"/>
-          <circle cx="160" cy="78" r="6" fill="rgba(255,255,255,.4)"/>
-          <path d="M152 88 Q160 82 168 88" stroke="rgba(255,255,255,.4)" stroke-width="2" fill="none"/>
-          <!-- ハンドシェイク中央 -->
-          <text x="95" y="82" text-anchor="middle" font-size="14" fill="rgba(255,255,255,.7)">🤝</text>
-        </svg>
-        <span class="feat-illust-icon">👥</span>
+    <a class="mc" href="guild.html">
+      <div class="mc-top" style="background:linear-gradient(135deg,#1A7A4A,#2EA868);">
+        <svg viewBox="0 0 200 80"><rect x="18" y="12" width="70" height="36" rx="9" fill="rgba(255,255,255,.22)"/><polygon points="28,48 23,60 40,48" fill="rgba(255,255,255,.22)"/><rect x="112" y="22" width="70" height="36" rx="9" fill="rgba(255,255,255,.16)"/><polygon points="172,58 178,70 158,58" fill="rgba(255,255,255,.16)"/><line x1="28" y1="26" x2="78" y2="26" stroke="rgba(255,255,255,.5)" stroke-width="2" stroke-linecap="round"/><line x1="28" y1="34" x2="65" y2="34" stroke="rgba(255,255,255,.4)" stroke-width="2" stroke-linecap="round"/><line x1="28" y1="42" x2="72" y2="42" stroke="rgba(255,255,255,.4)" stroke-width="2" stroke-linecap="round"/><line x1="122" y1="36" x2="172" y2="36" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"/><line x1="122" y1="44" x2="158" y2="44" stroke="rgba(255,255,255,.35)" stroke-width="2" stroke-linecap="round"/><text x="100" y="76" text-anchor="middle" font-size="14" fill="rgba(255,255,255,.65)">🤝</text></svg>
+        <span class="mc-emoji">👥</span>
       </div>
-      <div class="feat-body">
-        <span class="feat-badge new">NEW</span>
-        <p class="feat-title">DOKENギルド</p>
-        <p class="feat-desc">人材・資材マッチング掲示板</p>
-      </div>
-    </a>
-
-    <!-- 共済申請 -->
-    <a class="feat-card" href="kyosai.html">
-      <div class="feat-illust" style="background:linear-gradient(135deg,#5B21B6,#7B3FC4);">
-        <svg viewBox="0 0 200 88" preserveAspectRatio="none">
-          <!-- スマホ -->
-          <rect x="75" y="8" width="50" height="72" rx="8" fill="rgba(255,255,255,.2)"/>
-          <rect x="78" y="18" width="44" height="46" rx="3" fill="rgba(255,255,255,.15)"/>
-          <!-- カメラアイコン -->
-          <circle cx="100" cy="41" r="12" fill="rgba(255,255,255,.35)"/>
-          <circle cx="100" cy="41" r="7" fill="rgba(255,255,255,.5)"/>
-          <circle cx="100" cy="41" r="3" fill="rgba(255,255,255,.8)"/>
-          <rect x="91" y="27" width="18" height="6" rx="2" fill="rgba(255,255,255,.3)"/>
-          <!-- 書類 -->
-          <rect x="18" y="20" width="44" height="55" rx="4" fill="rgba(255,255,255,.2)"/>
-          <line x1="25" y1="32" x2="55" y2="32" stroke="rgba(255,255,255,.5)" stroke-width="2" stroke-linecap="round"/>
-          <line x1="25" y1="40" x2="48" y2="40" stroke="rgba(255,255,255,.4)" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="25" y1="48" x2="52" y2="48" stroke="rgba(255,255,255,.4)" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="25" y1="56" x2="44" y2="56" stroke="rgba(255,255,255,.4)" stroke-width="1.5" stroke-linecap="round"/>
-          <!-- チェックマーク -->
-          <circle cx="50" cy="62" r="10" fill="rgba(100,220,130,.7)"/>
-          <polyline points="44,62 49,67 57,57" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-          <!-- 矢印 -->
-          <path d="M 62 41 L 75 41" stroke="rgba(255,255,255,.6)" stroke-width="2.5" stroke-linecap="round" marker-end="url(#arr)"/>
-          <!-- AIスパーク -->
-          <text x="158" y="30" font-size="18" fill="rgba(255,255,255,.7)">✨</text>
-          <text x="148" y="55" font-size="12" fill="rgba(255,255,255,.4)">AI</text>
-        </svg>
-        <span class="feat-illust-icon">📸</span>
-      </div>
-      <div class="feat-body">
-        <span class="feat-badge ai">AI</span>
-        <p class="feat-title">ワンタップ共済申請</p>
-        <p class="feat-desc">撮るだけで申請書を自動作成</p>
+      <div class="mc-body">
+        <span class="mc-badge new">NEW</span>
+        <p class="mc-title">DOKENギルド</p>
+        <p class="mc-desc">人材・資材マッチング掲示板</p>
       </div>
     </a>
 
     <!-- 資格手帳 -->
-    <a class="feat-card" href="techno.html">
-      <div class="feat-illust" style="background:linear-gradient(135deg,#1A5FA8,#2E82D4);">
-        <svg viewBox="0 0 200 88" preserveAspectRatio="none">
-          <!-- CCUSカード -->
-          <rect x="20" y="18" width="70" height="48" rx="6" fill="rgba(255,200,0,.4)"/>
-          <rect x="24" y="22" width="62" height="10" rx="2" fill="rgba(255,255,255,.5)"/>
-          <circle cx="36" cy="50" r="10" fill="rgba(255,255,255,.3)"/>
-          <rect x="50" y="42" width="28" height="3" rx="1" fill="rgba(255,255,255,.5)"/>
-          <rect x="50" y="50" width="20" height="3" rx="1" fill="rgba(255,255,255,.4)"/>
-          <!-- 資格バッジ3つ -->
-          <circle cx="120" cy="24" r="14" fill="rgba(255,255,255,.2)" stroke="rgba(255,255,255,.4)" stroke-width="2"/>
-          <text x="120" y="29" text-anchor="middle" font-size="13" fill="rgba(255,255,255,.8)">🔨</text>
-          <circle cx="152" cy="24" r="14" fill="rgba(255,255,255,.15)" stroke="rgba(255,255,255,.3)" stroke-width="2"/>
-          <text x="152" y="29" text-anchor="middle" font-size="13" fill="rgba(255,255,255,.7)">⚡</text>
-          <circle cx="136" cy="52" r="14" fill="rgba(255,255,255,.15)" stroke="rgba(255,255,255,.3)" stroke-width="2"/>
-          <text x="136" y="57" text-anchor="middle" font-size="13" fill="rgba(255,255,255,.7)">🏗️</text>
-          <!-- カウントダウン -->
-          <rect x="100" y="68" width="80" height="16" rx="4" fill="rgba(255,255,255,.15)"/>
-          <text x="140" y="80" text-anchor="middle" font-size="9" fill="rgba(255,255,255,.7)">残 248日 → 更新期限</text>
-        </svg>
-        <span class="feat-illust-icon">🪪</span>
+    <a class="mc" href="techno.html">
+      <div class="mc-top" style="background:linear-gradient(135deg,#1A5FA8,#2E82D4);">
+        <svg viewBox="0 0 200 80"><rect x="18" y="16" width="70" height="48" rx="6" fill="rgba(255,200,0,.38)"/><rect x="22" y="21" width="62" height="9" rx="2" fill="rgba(255,255,255,.5)"/><circle cx="34" cy="48" r="10" fill="rgba(255,255,255,.28)"/><rect x="48" y="42" width="28" height="3" rx="1" fill="rgba(255,255,255,.45)"/><rect x="48" y="49" width="20" height="3" rx="1" fill="rgba(255,255,255,.35)"/><circle cx="120" cy="24" r="14" fill="rgba(255,255,255,.18)" stroke="rgba(255,255,255,.35)" stroke-width="1.5"/><text x="120" y="29" text-anchor="middle" font-size="13">🔨</text><circle cx="152" cy="24" r="14" fill="rgba(255,255,255,.14)" stroke="rgba(255,255,255,.28)" stroke-width="1.5"/><text x="152" y="29" text-anchor="middle" font-size="13">⚡</text><circle cx="136" cy="52" r="14" fill="rgba(255,255,255,.14)" stroke="rgba(255,255,255,.28)" stroke-width="1.5"/><text x="136" y="57" text-anchor="middle" font-size="13">🏗️</text><rect x="100" y="68" width="80" height="10" rx="4" fill="rgba(255,255,255,.12)"/><text x="140" y="76" text-anchor="middle" font-size="7" fill="rgba(255,255,255,.6)">残 248日 → 更新期限</text></svg>
+        <span class="mc-emoji">🪪</span>
       </div>
-      <div class="feat-body">
-        <span class="feat-badge new">NEW</span>
-        <p class="feat-title">資格・CCUSデジタル手帳</p>
-        <p class="feat-desc">資格期限をカウントダウン管理</p>
+      <div class="mc-body">
+        <span class="mc-badge new">NEW</span>
+        <p class="mc-title">資格・CCUSデジタル手帳</p>
+        <p class="mc-desc">資格期限をカウントダウン管理</p>
+      </div>
+    </a>
+
+    <!-- メリット診断 -->
+    <a class="mc" href="merit_check.html">
+      <div class="mc-top" style="background:linear-gradient(135deg,#7B1F4A,#C0392B);">
+        <svg viewBox="0 0 200 80"><circle cx="100" cy="38" r="26" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.2)" stroke-width="1.5"/><circle cx="100" cy="38" r="18" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.16)" stroke-width="1.5"/><circle cx="100" cy="38" r="8" fill="rgba(255,255,255,.18)"/><circle cx="100" cy="38" r="3" fill="rgba(255,200,0,.9)"/><line x1="128" y1="10" x2="103" y2="36" stroke="rgba(255,255,255,.7)" stroke-width="2.5" stroke-linecap="round"/><polygon points="128,10 121,12 126,17" fill="rgba(255,255,255,.7)"/><text x="30" y="24" font-size="10" fill="rgba(255,255,255,.45)">年齢</text><text x="152" y="24" font-size="10" fill="rgba(255,255,255,.45)">職種</text><text x="30" y="70" font-size="10" fill="rgba(255,255,255,.45)">家族</text><text x="150" y="70" font-size="10" fill="rgba(255,255,255,.45)">健保</text></svg>
+        <span class="mc-emoji">🎯</span>
+      </div>
+      <div class="mc-body">
+        <span class="mc-badge new">NEW</span>
+        <p class="mc-title">加入メリット診断</p>
+        <p class="mc-desc">5問であなたに最適な制度を診断</p>
+      </div>
+    </a>
+
+    <!-- どけんカード -->
+    <a class="mc" href="doken_card.html">
+      <div class="mc-top" style="background:linear-gradient(135deg,#3B1F8A,#5B21B6);">
+        <svg viewBox="0 0 200 80"><rect x="20" y="16" width="106" height="50" rx="8" fill="rgba(255,255,255,.15)"/><rect x="20" y="16" width="106" height="18" rx="8" fill="rgba(255,255,255,.22)"/><rect x="26" y="22" width="40" height="6" rx="2" fill="rgba(255,255,255,.5)"/><rect x="26" y="43" width="24" height="12" rx="3" fill="rgba(255,200,0,.4)"/><line x1="56" y1="45" x2="80" y2="45" stroke="rgba(255,255,255,.4)" stroke-width="1.5" stroke-linecap="round"/><line x1="56" y1="51" x2="74" y2="51" stroke="rgba(255,255,255,.3)" stroke-width="1.5" stroke-linecap="round"/><circle cx="158" cy="30" r="14" fill="rgba(255,200,0,.45)"/><circle cx="170" cy="30" r="14" fill="rgba(255,100,50,.38)"/><text x="159" y="68" text-anchor="middle" font-size="9" fill="rgba(255,255,255,.5)">TD2026</text></svg>
+        <span class="mc-emoji">💳</span>
+      </div>
+      <div class="mc-body">
+        <span class="mc-badge tool">優待</span>
+        <p class="mc-title">どけんカード登録店</p>
+        <p class="mc-desc">県内700店以上の優待店を検索</p>
       </div>
     </a>
 
   </div>
 </div>
 
-<!-- 新ツール -->
+<!-- ===== 手続き・情報 ===== -->
 <div class="section">
-  <p class="section-title">業務支援ツール</p>
-  <div class="feat-grid">
-
-    <a class="feat-card" href="kensetsu_check.html">
-      <div class="feat-illust" style="background:linear-gradient(135deg,#0C3A6B,#1A5FA8);">
-        <svg viewBox="0 0 200 88" preserveAspectRatio="none">
-          <rect x="30" y="15" width="80" height="60" rx="6" fill="rgba(255,255,255,.15)"/>
-          <rect x="36" y="22" width="68" height="8" rx="2" fill="rgba(255,255,255,.4)"/>
-          <rect x="36" y="34" width="50" height="4" rx="2" fill="rgba(255,255,255,.25)"/>
-          <rect x="36" y="42" width="60" height="4" rx="2" fill="rgba(255,255,255,.25)"/>
-          <rect x="36" y="50" width="45" height="4" rx="2" fill="rgba(255,255,255,.25)"/>
-          <circle cx="148" cy="44" r="24" fill="rgba(255,255,255,.12)"/>
-          <text x="148" y="50" text-anchor="middle" font-size="24" fill="rgba(255,255,255,.7)">🏛️</text>
-          <circle cx="148" cy="72" r="10" fill="rgba(100,220,130,.7)"/>
-          <text x="148" y="77" text-anchor="middle" font-size="12" fill="white">✓</text>
-        </svg>
-        <span class="feat-illust-icon">🏛️</span>
-      </div>
-      <div class="feat-body">
-        <span class="feat-badge new">NEW</span>
-        <p class="feat-title">建設業許可チェッカー</p>
-        <p class="feat-desc">許可の要否・種類・更新期限を判定</p>
-      </div>
-    </a>
-
-    <a class="feat-card" href="rodo36.html">
-      <div class="feat-illust" style="background:linear-gradient(135deg,#1A3A6B,#1A5FA8);">
-        <svg viewBox="0 0 200 88" preserveAspectRatio="none">
-          <circle cx="100" cy="44" r="32" fill="rgba(255,255,255,.12)" stroke="rgba(255,255,255,.3)" stroke-width="2"/>
-          <circle cx="100" cy="44" r="24" fill="rgba(255,255,255,.08)"/>
-          <line x1="100" y1="44" x2="100" y2="22" stroke="white" stroke-width="3" stroke-linecap="round"/>
-          <line x1="100" y1="44" x2="118" y2="54" stroke="rgba(255,200,0,.9)" stroke-width="2.5" stroke-linecap="round"/>
-          <text x="40" y="28" font-size="9" fill="rgba(255,255,255,.5)">月45h</text>
-          <text x="148" y="28" font-size="9" fill="rgba(255,255,255,.5)">年360h</text>
-          <rect x="20" y="68" width="50" height="10" rx="5" fill="rgba(100,220,130,.5)"/>
-          <rect x="20" y="68" width="30" height="10" rx="5" fill="rgba(100,220,130,.8)"/>
-          <rect x="130" y="68" width="50" height="10" rx="5" fill="rgba(255,100,50,.3)"/>
-          <rect x="130" y="68" width="38" height="10" rx="5" fill="rgba(255,100,50,.7)"/>
-        </svg>
-        <span class="feat-illust-icon">⏱️</span>
-      </div>
-      <div class="feat-body">
-        <span class="feat-badge new">NEW</span>
-        <p class="feat-title">36協定・残業カウンター</p>
-        <p class="feat-desc">月・年の法定上限への到達度を可視化</p>
-      </div>
-    </a>
-
-    <a class="feat-card" href="merit_check.html">
-      <div class="feat-illust" style="background:linear-gradient(135deg,#7B1F4A,#C0392B);">
-        <svg viewBox="0 0 200 88" preserveAspectRatio="none">
-          <circle cx="100" cy="44" r="28" fill="rgba(255,255,255,.15)"/>
-          <text x="100" y="54" text-anchor="middle" font-size="30" fill="rgba(255,255,255,.8)">🎯</text>
-          <text x="35" y="25" font-size="11" fill="rgba(255,255,255,.5)">年齢</text>
-          <text x="150" y="25" font-size="11" fill="rgba(255,255,255,.5)">職種</text>
-          <text x="35" y="72" font-size="11" fill="rgba(255,255,255,.5)">家族</text>
-          <text x="148" y="72" font-size="11" fill="rgba(255,255,255,.5)">健保</text>
-          <line x1="55" y1="26" x2="82" y2="36" stroke="rgba(255,255,255,.3)" stroke-width="1.5"/>
-          <line x1="145" y1="26" x2="118" y2="36" stroke="rgba(255,255,255,.3)" stroke-width="1.5"/>
-          <line x1="55" y1="68" x2="82" y2="56" stroke="rgba(255,255,255,.3)" stroke-width="1.5"/>
-          <line x1="145" y1="68" x2="118" y2="56" stroke="rgba(255,255,255,.3)" stroke-width="1.5"/>
-        </svg>
-        <span class="feat-illust-icon">🎯</span>
-      </div>
-      <div class="feat-body">
-        <span class="feat-badge new">NEW</span>
-        <p class="feat-title">加入メリット診断</p>
-        <p class="feat-desc">あなたに最もお得な制度を5問で診断</p>
-      </div>
-    </a>
-
-    <a class="feat-card" href="anzen_check.html">
-      <div class="feat-illust" style="background:linear-gradient(135deg,#7B2F00,#C04E1E);">
-        <svg viewBox="0 0 200 88" preserveAspectRatio="none">
-          <rect x="25" y="12" width="150" height="64" rx="8" fill="rgba(255,255,255,.12)"/>
-          <rect x="33" y="22" width="134" height="8" rx="2" fill="rgba(255,255,255,.3)"/>
-          <circle cx="38" cy="40" r="5" fill="rgba(100,220,130,.8)"/><rect x="48" y="37" width="80" height="5" rx="2" fill="rgba(255,255,255,.3)"/>
-          <circle cx="38" cy="54" r="5" fill="rgba(100,220,130,.8)"/><rect x="48" y="51" width="60" height="5" rx="2" fill="rgba(255,255,255,.3)"/>
-          <circle cx="38" cy="67" r="5" fill="rgba(255,200,0,.6)"/><rect x="48" y="64" width="70" height="5" rx="2" fill="rgba(255,255,255,.2)"/>
-          <text x="148" y="74" font-size="20" fill="rgba(255,255,255,.7)">🦺</text>
-        </svg>
-        <span class="feat-illust-icon">🦺</span>
-      </div>
-      <div class="feat-body">
-        <span class="feat-badge new">NEW</span>
-        <p class="feat-title">現場安全チェックリスト</p>
-        <p class="feat-desc">着工前の安全確認をPDF出力対応で記録</p>
-      </div>
-    </a>
-
+  <div class="sec-head">
+    <div class="sec-head-icon" style="background:#E8F0FB;"><i class="ti ti-book-2" style="color:#1A5FA8;"></i></div>
+    <span class="sec-head-label">手続き・情報</span>
+    <div class="sec-head-line"></div>
   </div>
-</div>
 
-<!-- 基本機能 -->
-<div class="section">
-  <p class="section-title">基本機能</p>
-
-  <a class="basic-item" href="guide.html">
-    <div class="basic-item-illust" style="background:#E8F5EE;">
+  <a class="lc" href="guide.html">
+    <div class="lc-thumb" style="background:#E8F5EE;">
       <svg viewBox="0 0 64 64"><rect x="14" y="8" width="36" height="48" rx="4" fill="#1A7A4A" opacity=".3"/><rect x="18" y="12" width="28" height="40" rx="3" fill="white"/><line x1="22" y1="22" x2="42" y2="22" stroke="#1A7A4A" stroke-width="2" stroke-linecap="round"/><line x1="22" y1="29" x2="38" y2="29" stroke="#1A7A4A" stroke-width="1.5" stroke-linecap="round"/><line x1="22" y1="36" x2="40" y2="36" stroke="#1A7A4A" stroke-width="1.5" stroke-linecap="round"/><line x1="22" y1="43" x2="35" y2="43" stroke="#1A7A4A" stroke-width="1.5" stroke-linecap="round"/><circle cx="44" cy="44" r="9" fill="#1A7A4A"/><polyline points="39,44 43,48 50,40" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
     </div>
-    <div class="basic-item-body">
-      <p class="basic-item-title">手続き・必要書類ガイド</p>
-      <p class="basic-item-sub">出生・結婚・傷病手当・共済金など19項目</p>
+    <div class="lc-body">
+      <p class="lc-title">手続き・必要書類ガイド</p>
+      <p class="lc-desc">組合加入・国保・共済・労働保険</p>
     </div>
-    <i class="ti ti-chevron-right basic-item-arrow"></i>
+    <i class="ti ti-chevron-right lc-arrow"></i>
   </a>
 
-  <a class="basic-item" href="koushu.html">
-    <div class="basic-item-illust" style="background:#FFF8E6;">
+  <a class="lc" href="koushu.html">
+    <div class="lc-thumb" style="background:#FFF8E6;">
       <svg viewBox="0 0 64 64"><rect x="10" y="14" width="44" height="40" rx="5" fill="#B07800" opacity=".3"/><rect x="13" y="18" width="38" height="33" rx="3" fill="white"/><rect x="13" y="18" width="38" height="10" rx="3" fill="#B07800" opacity=".7"/><line x1="21" y1="23" x2="43" y2="23" stroke="white" stroke-width="1.5" stroke-linecap="round"/><circle cx="20" cy="34" r="3" fill="#B07800" opacity=".6"/><line x1="26" y1="34" x2="42" y2="34" stroke="#B07800" stroke-width="1.5" stroke-linecap="round" opacity=".6"/><circle cx="20" cy="42" r="3" fill="#E8612A" opacity=".8"/><line x1="26" y1="42" x2="42" y2="42" stroke="#E8612A" stroke-width="1.5" stroke-linecap="round" opacity=".8"/><rect x="20" y="8" width="4" height="10" rx="2" fill="#B07800"/><rect x="40" y="8" width="4" height="10" rx="2" fill="#B07800"/></svg>
     </div>
-    <div class="basic-item-body">
-      <p class="basic-item-title">技能講習 日程・案内</p>
-      <p class="basic-item-sub">足場・玉掛け・職長安全など26種類</p>
+    <div class="lc-body">
+      <p class="lc-title">技能講習 日程・案内</p>
+      <p class="lc-desc">足場・玉掛け・職長など全日程＋受講料</p>
     </div>
-    <i class="ti ti-chevron-right basic-item-arrow"></i>
+    <i class="ti ti-chevron-right lc-arrow"></i>
   </a>
 
-  <a class="basic-item" href="calc.html">
-    <div class="basic-item-illust" style="background:#E8F0FB;">
-      <svg viewBox="0 0 64 64"><rect x="12" y="10" width="40" height="48" rx="5" fill="#1A5FA8" opacity=".3"/><rect x="15" y="14" width="34" height="40" rx="3" fill="white"/><rect x="18" y="18" width="28" height="8" rx="2" fill="#1A5FA8" opacity=".3"/><text x="32" y="25" text-anchor="middle" font-size="7" fill="#1A5FA8" font-weight="bold">123,456円</text><rect x="18" y="30" width="12" height="8" rx="2" fill="#E8F0FB"/><rect x="34" y="30" width="12" height="8" rx="2" fill="#E8612A" opacity=".3"/><rect x="18" y="42" width="12" height="8" rx="2" fill="#E8F0FB"/><rect x="34" y="42" width="12" height="8" rx="2" fill="#E8F0FB"/><line x1="32" y1="29" x2="32" y2="53" stroke="#1A5FA8" stroke-width="1" opacity=".3"/></svg>
+  <a class="lc" href="calc.html">
+    <div class="lc-thumb" style="background:#E8F0FB;">
+      <svg viewBox="0 0 64 64"><rect x="12" y="10" width="40" height="48" rx="5" fill="#1A5FA8" opacity=".3"/><rect x="15" y="14" width="34" height="40" rx="3" fill="white"/><rect x="18" y="18" width="28" height="8" rx="2" fill="#1A5FA8" opacity=".3"/><text x="32" y="25" text-anchor="middle" font-size="7" fill="#1A5FA8" font-weight="bold">123,456円</text><rect x="18" y="30" width="12" height="8" rx="2" fill="#E8F0FB"/><rect x="34" y="30" width="12" height="8" rx="2" fill="#E8612A" opacity=".3"/><rect x="18" y="42" width="12" height="8" rx="2" fill="#E8F0FB"/><rect x="34" y="42" width="12" height="8" rx="2" fill="#E8F0FB"/></svg>
     </div>
-    <div class="basic-item-body">
-      <p class="basic-item-title">計算ツール</p>
-      <p class="basic-item-sub">社保比較・国保税シミュ・CCUSレベル確認</p>
+    <div class="lc-body">
+      <p class="lc-title">計算ツール</p>
+      <p class="lc-desc">労務費・国保税シミュ・CCUSレベル</p>
     </div>
-    <i class="ti ti-chevron-right basic-item-arrow"></i>
+    <i class="ti ti-chevron-right lc-arrow"></i>
   </a>
 
-  <a class="basic-item" href="calendar.html">
-    <div class="basic-item-illust" style="background:#FFF0E9;">
+  <a class="lc" href="calendar.html">
+    <div class="lc-thumb" style="background:#FFF0E9;">
       <svg viewBox="0 0 64 64"><rect x="8" y="14" width="48" height="44" rx="5" fill="#E8612A" opacity=".25"/><rect x="11" y="20" width="42" height="35" rx="3" fill="white"/><rect x="11" y="20" width="42" height="12" rx="3" fill="#E8612A" opacity=".7"/><line x1="22" y1="26" x2="42" y2="26" stroke="white" stroke-width="1.5" stroke-linecap="round"/><rect x="17" y="8" width="5" height="12" rx="2.5" fill="#E8612A"/><rect x="42" y="8" width="5" height="12" rx="2.5" fill="#E8612A"/><circle cx="20" cy="40" r="3" fill="#E8612A" opacity=".5"/><circle cx="32" cy="40" r="3" fill="#E8612A" opacity=".7"/><circle cx="44" cy="40" r="3" fill="#E8612A" opacity=".5"/><circle cx="20" cy="49" r="3" fill="#E8612A" opacity=".4"/><circle cx="32" cy="49" r="3" fill="#1A7A4A" opacity=".7"/></svg>
     </div>
-    <div class="basic-item-body">
-      <p class="basic-item-title">支部カレンダー</p>
-      <p class="basic-item-sub">班会議・行事・講習などの支部予定を確認</p>
+    <div class="lc-body">
+      <p class="lc-title">支部カレンダー</p>
+      <p class="lc-desc">班会議・行事・講習などの支部予定</p>
     </div>
-    <i class="ti ti-chevron-right basic-item-arrow"></i>
+    <i class="ti ti-chevron-right lc-arrow"></i>
   </a>
 
-  <a class="basic-item" href="merit.html">
-    <div class="basic-item-illust" style="background:#FEF0ED;">
+  <a class="lc" href="merit.html">
+    <div class="lc-thumb" style="background:#FEF0ED;">
       <svg viewBox="0 0 64 64"><polygon points="32,8 37,24 54,24 40,34 45,50 32,40 19,50 24,34 10,24 27,24" fill="#E8612A" opacity=".3"/><polygon points="32,13 36,25 50,25 39,32 43,45 32,38 21,45 25,32 14,25 28,25" fill="#E8612A" opacity=".6"/><circle cx="32" cy="31" r="8" fill="#E8612A"/><text x="32" y="35" text-anchor="middle" font-size="10" fill="white" font-weight="bold">★</text></svg>
     </div>
-    <div class="basic-item-body">
-      <p class="basic-item-title">加入のメリット</p>
-      <p class="basic-item-sub">共済・国保・資格支援・生活サポート16項目</p>
+    <div class="lc-body">
+      <p class="lc-title">加入のメリット</p>
+      <p class="lc-desc">共済・国保・資格支援・生活サポート</p>
     </div>
-    <i class="ti ti-chevron-right basic-item-arrow"></i>
+    <i class="ti ti-chevron-right lc-arrow"></i>
   </a>
 
-  <a class="basic-item" href="doken_card.html">
-    <div class="basic-item-illust" style="background:#EDE8FE;">
-      <svg viewBox="0 0 64 64"><rect x="6" y="16" width="52" height="34" rx="6" fill="#5B21B6" opacity=".3"/><rect x="9" y="20" width="46" height="26" rx="4" fill="white"/><rect x="9" y="20" width="46" height="10" rx="4" fill="#5B21B6" opacity=".6"/><rect x="12" y="36" width="16" height="7" rx="2" fill="#5B21B6" opacity=".3"/><line x1="32" y1="37" x2="50" y2="37" stroke="#5B21B6" stroke-width="1.5" opacity=".5" stroke-linecap="round"/><line x1="32" y1="41" x2="44" y2="41" stroke="#5B21B6" stroke-width="1.5" opacity=".4" stroke-linecap="round"/><circle cx="46" cy="26" r="5" fill="rgba(255,200,0,.6)"/><circle cx="51" cy="26" r="5" fill="rgba(255,100,50,.5)"/></svg>
-    </div>
-    <div class="basic-item-body">
-      <p class="basic-item-title">どけんカード登録店</p>
-      <p class="basic-item-sub">上尾市・伊奈町エリアの優待店をカテゴリ検索</p>
-    </div>
-    <i class="ti ti-chevron-right basic-item-arrow"></i>
-  </a>
-
-  <a class="basic-item" href="https://www.youtube.com/@%E5%9F%BC%E7%8E%89%E5%9C%9F%E5%BB%BA%E4%B8%8A%E5%B0%BE%E4%BC%8A%E5%A5%88%E6%94%AF%E9%83%A8" onclick="openYouTube(event)" target="_blank" rel="noopener">
-    <div class="basic-item-illust" style="background:#FEE8E8;">
+  <a class="lc" href="https://www.youtube.com/@%E5%9F%BC%E7%8E%89%E5%9C%9F%E5%BB%BA%E4%B8%8A%E5%B0%BE%E4%BC%8A%E5%A5%88%E6%94%AF%E9%83%A8" onclick="openYouTube(event)" target="_blank" rel="noopener">
+    <div class="lc-thumb" style="background:#FEE8E8;">
       <svg viewBox="0 0 64 64"><rect x="6" y="14" width="52" height="36" rx="8" fill="#FF0000" opacity=".2"/><rect x="9" y="18" width="46" height="28" rx="6" fill="#FF0000" opacity=".5"/><polygon points="24,26 24,38 42,32" fill="white"/><circle cx="48" cy="48" r="9" fill="#FF0000"/><polygon points="45,44 45,52 53,48" fill="white"/></svg>
     </div>
-    <div class="basic-item-body">
-      <p class="basic-item-title">YouTube チャンネル</p>
-      <p class="basic-item-sub">タップでYouTubeへ移動・登録チャンネル</p>
+    <div class="lc-body">
+      <p class="lc-title">YouTubeチャンネル</p>
+      <p class="lc-desc">活動動画・講習案内を視聴</p>
     </div>
-    <i class="ti ti-external-link basic-item-arrow"></i>
+    <i class="ti ti-external-link lc-arrow"></i>
   </a>
 
 </div>
 
-<div style="height:24px;"></div>
+<div style="height:28px;"></div>
 <footer>埼玉土建一般労働組合 上尾伊奈支部｜〒362-0003 上尾市菅谷295｜TEL 048-773-9863</footer>
 </div>
+
 <script>
 function openYouTube(e) {
   e.preventDefault();
-  const url = 'https://www.youtube.com/@埼玉土建上尾伊奈支部';
-  // YouTubeアプリを試みる（iOS/Android対応）
   const appUrl = 'youtube://www.youtube.com/channel/UCl-kAtNcthcVmAZT2jK3JrA';
-  const webUrl = url;
-  // アプリを開こうとして失敗したらブラウザで開く
+  const webUrl = 'https://www.youtube.com/@埼玉土建上尾伊奈支部';
   const start = Date.now();
   window.location.href = appUrl;
   setTimeout(function() {
-    if (Date.now() - start < 2000) {
-      window.open(webUrl, '_blank');
-    }
+    if (Date.now() - start < 2000) window.open(webUrl, '_blank');
   }, 1000);
 }
 </script>
