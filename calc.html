@@ -535,6 +535,28 @@ function kkCalc(){
     <div class="winner-banner ${wc}">
       <i class="ti ti-trending-down" style="font-size:16px;vertical-align:-3px;margin-right:6px;" aria-hidden="true"></i>
       月額では<strong>${cheaper}</strong>が <strong>${Math.abs(diffM).toLocaleString()}円/月</strong>（年間 <strong>${yn(Math.abs(diffM)*12)}</strong>）安い試算です。
+    </div>
+    <div style="background:linear-gradient(135deg,#1B2A3B,#0D3A6B);border-radius:var(--r12);padding:16px;margin-top:10px;">
+      <p style="font-size:12px;font-weight:700;color:var(--orange);margin:0 0 10px;letter-spacing:.06em;">🏆 上尾市・伊奈町の国保にはない土建国保だけのメリット</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <div style="background:rgba(255,255,255,.07);border-radius:8px;padding:10px;border-top:3px solid #E8612A;">
+          <p style="font-size:13px;font-weight:800;color:#fff;margin:0 0 4px;">💊 医療費が実質ゼロ</p>
+          <p style="font-size:11px;color:rgba(255,255,255,.65);margin:0;line-height:1.5;">一部負担払戻金制度により、入院・通院の自己負担を全額払い戻し。市区町村国保には存在しない独自制度。</p>
+        </div>
+        <div style="background:rgba(255,255,255,.07);border-radius:8px;padding:10px;border-top:3px solid #5DCAA5;">
+          <p style="font-size:13px;font-weight:800;color:#fff;margin:0 0 4px;">🏥 休んでも収入が続く</p>
+          <p style="font-size:11px;color:rgba(255,255,255,.65);margin:0;line-height:1.5;">傷病手当金：ケガ・病気で4日以上休業したら給付基礎日額の60%を最大180日間支給。市区町村国保にはない制度。</p>
+        </div>
+        <div style="background:rgba(255,255,255,.07);border-radius:8px;padding:10px;border-top:3px solid #B5D4F4;">
+          <p style="font-size:13px;font-weight:800;color:#fff;margin:0 0 4px;">👶 出産 50万円給付</p>
+          <p style="font-size:11px;color:rgba(255,255,255,.65);margin:0;line-height:1.5;">出産育児一時金50万円。直接支払制度で窓口負担も軽減。手続きは支部で完結するので安心。</p>
+        </div>
+        <div style="background:rgba(255,255,255,.07);border-radius:8px;padding:10px;border-top:3px solid #FAC775;">
+          <p style="font-size:13px;font-weight:800;color:#fff;margin:0 0 4px;">🌸 葬祭費 7万円</p>
+          <p style="font-size:11px;color:rgba(255,255,255,.65);margin:0;line-height:1.5;">市区町村国保より手厚い7万円。組合員・家族が対象。</p>
+        </div>
+      </div>
+      <p style="font-size:11px;color:rgba(255,255,255,.4);margin:10px 0 0;">※ 保険料の安さだけでなく、これらの給付が受けられることが土建国保の大きな強みです。詳細は支部へご相談ください。</p>
     </div>`;
 
   const hasKaigo=mems.some(m=>m.age>=40&&m.age<65);
