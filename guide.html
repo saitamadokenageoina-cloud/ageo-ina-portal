@@ -501,7 +501,7 @@ function doSearch(q) {
 
 // ===== 初期レンダリング =====
 for(const [key, items] of Object.entries(DATA)){
-  const el = document.getElementById(key.replace('-','-'));
+  const el = document.getElementById('p' + key.replace('-','-'));
   if(el) el.innerHTML = items.map(d=>card(d)).join('');
 }
 </script>
