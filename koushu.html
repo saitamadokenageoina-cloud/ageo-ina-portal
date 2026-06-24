@@ -254,14 +254,13 @@ function renderKoushu(){
 
       <p style="font-size:11px;font-weight:700;color:var(--gray500);margin:8px 0 6px;letter-spacing:.06em;">📅 2026年度 開催日程</p>
       <div class="date-list">
-        ${k.days.slice(0,4).map(d=>`
+        ${k.days.map(d=>`
           <div class="date-row">
             <div>
               <p class="date-main">📅 ${d}</p>
-              <p class="date-sub">埼玉土建技術研修センター</p>
+              <p class="date-sub">埼玉土建技術研修センター（北浦和）</p>
             </div>
           </div>`).join('')}
-        ${k.days.length > 4 ? `<p style="font-size:13px;color:var(--gray400);text-align:center;margin:4px 0 0;">他${k.days.length-4}回開催予定 → 支部へお問い合わせください</p>` : ''}
       </div>
       <p class="fee-note"><i class="ti ti-info-circle"></i>受講料は参考値です。正確な金額・申込方法は支部事務所（048-773-9863）へ。組合員は受講料が祝金として給付されます。</p>
     </div>`).join('');
