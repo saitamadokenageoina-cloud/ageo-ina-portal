@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>支部カレンダー｜埼玉土建 上尾伊奈支部</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.47.0/iconfont/tabler-icons.min.css">
+<link rel="stylesheet" href="common.css">
+<style>
+.cal-header{
+  background:linear-gradient(135deg,var(--navy-dk),#1A3A6B);
+  border-radius:var(--r16);padding:18px 20px;margin-bottom:16px;
+  display:flex;align-items:center;gap:14px;
+}
+.cal-header i{font-size:44px;color:var(--orange);}
+.cal-header h2{font-size:19px;font-weight:800;color:#fff;margin:0 0 3px;}
+.cal-header p{font-size:13px;color:rgba(255,255,255,.6);margin:0;}
+
+.cal-wrap{
+  background:var(--white);border-radius:var(--r16);
+  box-shadow:var(--shadow-sm);overflow:hidden;margin-bottom:12px;
+}
+.cal-wrap iframe{
+  width:100%;border:none;display:block;
+  min-height:520px;
+}
+
+.view-btns{display:flex;gap:8px;margin-bottom:12px;}
+.view-btn{
+  flex:1;padding:10px;border-radius:var(--r12);
+  border:2px solid var(--gray200);background:var(--white);
+  color:var(--gray700);font-size:13px;font-weight:600;
+  cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:6px;
+}
+.view-btn.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+.view-btn:hover:not(.active){border-color:var(--orange);color:var(--orange);}
+.view-btn i{font-size:16px;}
+
+.upcoming-list{display:flex;flex-direction:column;gap:8px;}
+.event-card{
+  background:var(--white);border-radius:var(--r12);box-shadow:var(--shadow-sm);
+  padding:14px 16px;display:flex;align-items:flex-start;gap:12px;
+  border-left:4px solid var(--orange);
+}
+.event-date-box{
+  background:var(--navy);border-radius:var(--r8);
+  padding:8px 10px;text-align:center;flex-shrink:0;min-width:48px;
+}
+.event-month{font-size:10px;font-weight:700;color:rgba(255,255,255,.6);margin:0;line-height:1;}
+.event-day{font-size:22px;font-weight:800;color:#fff;margin:0;line-height:1.1;}
+.event-wday{font-size:10px;color:rgba(255,255,255,.5);margin:0;}
+.event-title{font-size:14px;font-weight:700;color:var(--navy);margin:0 0 3px;}
+.event-desc{font-size:13px;color:var(--gray500);margin:0;}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="hdr">
+  <button class="hdr-back" onclick="location.href='index.html'">
+    <i class="ti ti-arrow-left"></i>ホーム
+  </button>
+  <div style="text-align:right;">
+    <p class="hdr-org" style="margin:0;">埼玉土建 上尾伊奈支部</p>
+    <p class="hdr-title" style="margin:0;font-size:14px;">支部カレンダー</p>
+  </div>
+</header>
+
+<div class="content">
+
+  <div class="cal-header">
+    <i class="ti ti-calendar-event"></i>
+    <div>
+      <h2>支部カレンダー</h2>
+      <p>班会議・行事・講習など支部の予定を確認できます</p>
+    </div>
+  </div>
+
+  <!-- 表示切替 -->
+  <div class="view-btns" id="view-btns">
+    <button class="view-btn active" onclick="switchView('month',this)">
+      <i class="ti ti-calendar-month"></i>月表示
+    </button>
+    <button class="view-btn" onclick="switchView('week',this)">
+      <i class="ti ti-calendar-week"></i>週表示
+    </button>
+    <button class="view-btn" onclick="switchView('agenda',this)">
+      <i class="ti ti-list"></i>一覧表示
+    </button>
+  </div>
+
+  <!-- Googleカレンダー埋め込み -->
+  <div class="cal-wrap">
+    <iframe
+      id="gcal"
+      src="https://calendar.google.com/calendar/embed?src=saitamadokenageoina%40gmail.com&ctz=Asia%2FTokyo&hl=ja&showTitle=0&showNav=1&showDate=1&showPrint=0&showTabs=0&showCalendars=0&showTz=0&mode=MONTH"
+      frameborder="0"
+      scrolling="no"
+      title="埼玉土建 上尾伊奈支部 カレンダー">
+    </iframe>
+  </div>
+
+  <!-- 直近の予定（手入力） -->
+  <p class="sec-label" style="margin-top:4px;">直近の主な予定</p>
+  <div class="upcoming-list" id="upcoming-list">
+    <div class="event-card">
+      <div class="event-date-box">
+        <p class="event-month">7月</p>
+        <p class="event-day">1</p>
+        <p class="event-wday">水</p>
+      </div>
+      <div>
+        <p class="event-title">班長・分会長会議</p>
+        <p class="event-desc">支部事務所｜18:30〜</p>
+      </div>
+    </div>
+    <div class="event-card">
+      <div class="event-date-box">
+        <p class="event-month">7月</p>
+        <p class="event-day">7</p>
+        <p class="event-wday">火</p>
+      </div>
+      <div>
+        <p class="event-title">玉掛け技能講習（1日目）</p>
+        <p class="event-desc">埼玉土建技術研修センター｜9:00〜</p>
+      </div>
+    </div>
+    <div class="event-card">
+      <div class="event-date-box">
+        <p class="event-month">7月</p>
+        <p class="event-day">10</p>
+        <p class="event-wday">金</p>
+      </div>
+      <div>
+        <p class="event-title">足場特別教育</p>
+        <p class="event-desc">埼玉土建技術研修センター｜9:00〜</p>
+      </div>
+    </div>
+    <div class="event-card">
+      <div class="event-date-box">
+        <p class="event-month">7月</p>
+        <p class="event-day">20</p>
+        <p class="event-wday">日</p>
+      </div>
+      <div>
+        <p class="event-title">支部大会（第52回定期大会）</p>
+        <p class="event-desc">上尾市内｜13:00〜 詳細は支部へ</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert alert-info" style="margin-top:14px;">
+    <i class="ti ti-info-circle"></i>
+    <span>カレンダーの内容についてはこちらをご確認いただくか、支部（048-773-9863）までお問い合わせください。</span>
+  </div>
+
+  <a href="tel:048-773-9863" class="btn-primary" style="display:flex;margin-top:12px;">
+    <i class="ti ti-phone"></i>支部に電話する（048-773-9863）
+  </a>
+</div>
+
+<footer>埼玉土建一般労働組合 上尾伊奈支部｜TEL 048-773-9863</footer>
+</div>
+
+<script>
+const VIEWS = {
+  month: 'MONTH',
+  week:  'WEEK',
+  agenda:'AGENDA',
+};
+const BASE = 'https://calendar.google.com/calendar/embed?src=saitamadokenageoina%40gmail.com&ctz=Asia%2FTokyo&hl=ja&showTitle=0&showNav=1&showDate=1&showPrint=0&showTabs=0&showCalendars=0&showTz=0&mode=';
+
+function switchView(view, btn){
+  document.querySelectorAll('.view-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('gcal').src = BASE + VIEWS[view];
+}
+</script>
+</body>
+</html>

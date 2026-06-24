@@ -7,60 +7,82 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.47.0/iconfont/tabler-icons.min.css">
 <link rel="stylesheet" href="common.css">
 <style>
+/* ===== タブ ===== */
 .tab-row{display:flex;gap:4px;background:var(--gray100);border-radius:var(--r12);padding:4px;margin-bottom:16px;}
-.tab-btn{flex:1;border:none;border-radius:var(--r8);padding:9px 4px;font-size:13px;font-weight:600;color:var(--gray600);background:none;cursor:pointer;transition:all .15s;}
-.tab-btn.active{background:var(--white);color:var(--navy);box-shadow:var(--shadow-sm);}
-.post-card{
-  background:var(--white);border-radius:var(--r16);box-shadow:var(--shadow-sm);
-  padding:16px;margin-bottom:10px;
-}
+.t-btn{flex:1;border:none;border-radius:var(--r8);padding:9px 4px;font-size:13px;font-weight:600;color:var(--gray600);background:none;cursor:pointer;transition:all .15s;}
+.t-btn.active{background:var(--white);color:var(--navy);box-shadow:var(--shadow-sm);}
+
+/* ===== 投稿カード ===== */
+.post-card{background:var(--white);border-radius:var(--r16);box-shadow:var(--shadow-sm);padding:16px;margin-bottom:10px;border-left:4px solid transparent;}
+.post-card.jinzai{border-left-color:#E8612A;}
+.post-card.shizai{border-left-color:#1A7A4A;}
+.post-card.soudan{border-left-color:#6B21A8;}
 .post-header{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
-.post-avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.post-avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;background:var(--gray100);}
 .post-author{font-size:14px;font-weight:700;color:var(--navy);margin:0 0 1px;}
-.post-time{font-size:12px;color:var(--gray400);margin:0;}
-.post-badge{
-  margin-left:auto;font-size:11px;font-weight:700;padding:3px 10px;
-  border-radius:99px;white-space:nowrap;
-}
-.badge-jinzai{background:#FEE8D6;color:#C04E1E;}
-.badge-shizai{background:#E8F5EE;color:#1A7A4A;}
-.badge-soudan{background:#EDE8FE;color:#6B21A8;}
+.post-meta{font-size:12px;color:var(--gray400);margin:0;}
+.post-badge{margin-left:auto;font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;white-space:nowrap;flex-shrink:0;}
+.badge-jinzai{background:#FEE8D6;color:#9B3A1A;}
+.badge-shizai{background:#E8F5EE;color:#1A4A2A;}
+.badge-soudan{background:#EDE8FE;color:#4A1A9B;}
 .post-body{font-size:15px;color:var(--gray900);margin:0 0 10px;line-height:1.65;}
 .post-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
-.post-tag{font-size:12px;background:var(--gray100);color:var(--gray600);padding:3px 10px;border-radius:99px;font-weight:500;}
+.post-tag{font-size:12px;background:var(--gray50);color:var(--gray600);padding:3px 10px;border-radius:99px;font-weight:500;}
 .post-actions{display:flex;gap:8px;}
-.post-action-btn{
-  flex:1;padding:9px;border-radius:var(--r8);border:1.5px solid var(--gray200);
-  background:none;font-size:13px;font-weight:600;color:var(--gray600);
-  display:flex;align-items:center;justify-content:center;gap:5px;
-  transition:all .15s;cursor:pointer;
-}
-.post-action-btn:hover{border-color:var(--orange);color:var(--orange);}
-.post-action-btn.primary{background:var(--orange);color:var(--white);border-color:var(--orange);}
-.post-action-btn.primary:hover{background:var(--orange-dk);}
+.post-btn{flex:1;padding:9px;border-radius:var(--r8);border:1.5px solid var(--gray200);background:none;font-size:13px;font-weight:600;color:var(--gray600);display:flex;align-items:center;justify-content:center;gap:5px;transition:all .15s;cursor:pointer;}
+.post-btn:hover{border-color:var(--orange);color:var(--orange);}
+.post-btn.primary{background:var(--orange);color:#fff;border-color:var(--orange);}
+.post-btn.primary:hover{background:var(--orange-dk);}
+.post-btn i{font-size:15px;}
+
+/* コメント */
+.comment-area{display:none;margin-top:10px;padding-top:10px;border-top:1px solid var(--gray100);}
+.comment-area.open{display:block;}
+.comment-item{display:flex;gap:8px;margin-bottom:8px;}
+.comment-avatar{width:28px;height:28px;border-radius:50%;background:var(--gray100);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+.comment-body{background:var(--gray50);border-radius:var(--r8);padding:8px 12px;flex:1;}
+.comment-author{font-size:12px;font-weight:700;color:var(--navy);margin:0 0 2px;}
+.comment-text{font-size:13px;color:var(--gray700);margin:0;}
+.comment-input-row{display:flex;gap:8px;margin-top:8px;}
+.comment-input{flex:1;padding:8px 12px;border-radius:var(--r8);border:1.5px solid var(--gray200);font-size:13px;background:var(--white);color:var(--gray900);outline:none;}
+.comment-input:focus{border-color:var(--orange);}
+.comment-send{background:var(--orange);border:none;border-radius:var(--r8);color:#fff;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;flex-shrink:0;}
+
+/* ===== 投稿ボタン ===== */
 .fab{
-  position:fixed;bottom:24px;right:50%;transform:translateX(50%);
-  max-width:300px;width:calc(100% - 32px);
-  background:var(--orange);color:var(--white);border:none;border-radius:var(--r16);
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+  width:calc(100% - 32px);max-width:608px;
+  background:var(--orange);color:#fff;border:none;border-radius:var(--r16);
   padding:15px 20px;font-size:16px;font-weight:700;
   display:flex;align-items:center;justify-content:center;gap:8px;
-  box-shadow:0 8px 24px rgba(232,97,42,.4);cursor:pointer;
-  transition:all .15s;
+  box-shadow:0 8px 24px rgba(232,97,42,.4);cursor:pointer;transition:all .15s;
 }
-.fab:hover{background:var(--orange-dk);transform:translateX(50%) translateY(-2px);}
-.modal-overlay{
-  position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:300;
-  display:flex;align-items:flex-end;justify-content:center;
-  opacity:0;pointer-events:none;transition:opacity .2s;
-}
+.fab:hover{background:var(--orange-dk);}
+
+/* ===== モーダル ===== */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:300;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;}
 .modal-overlay.open{opacity:1;pointer-events:all;}
-.modal-sheet{
-  background:var(--white);border-radius:var(--r24) var(--r24) 0 0;
-  padding:24px 20px;width:100%;max-width:640px;
-  transform:translateY(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);
-}
+.modal-sheet{background:var(--white);border-radius:var(--r24) var(--r24) 0 0;padding:24px 20px 40px;width:100%;max-width:640px;transform:translateY(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);}
 .modal-overlay.open .modal-sheet{transform:translateY(0);}
 .modal-title{font-size:18px;font-weight:800;color:var(--navy);margin:0 0 16px;}
+.modal-close{position:absolute;top:20px;right:20px;background:var(--gray100);border:none;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;}
+
+/* カテゴリ選択チップ */
+.cat-chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+.cat-chip{padding:8px 16px;border-radius:99px;border:2px solid var(--gray200);font-size:13px;font-weight:600;color:var(--gray600);cursor:pointer;background:var(--white);transition:all .15s;}
+.cat-chip.jinzai.sel{background:#FEE8D6;color:#9B3A1A;border-color:#E8612A;}
+.cat-chip.shizai.sel{background:#E8F5EE;color:#1A4A2A;border-color:#1A7A4A;}
+.cat-chip.soudan.sel{background:#EDE8FE;color:#4A1A9B;border-color:#6B21A8;}
+
+/* 空状態 */
+.empty-state{text-align:center;padding:40px 20px;color:var(--gray400);}
+.empty-state i{font-size:48px;display:block;margin-bottom:12px;opacity:.4;}
+.empty-state p{font-size:15px;margin:0;}
+
+/* 注意バナー */
+.guild-notice{background:var(--navy);border-radius:var(--r12);padding:12px 16px;display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+.guild-notice i{font-size:20px;color:var(--orange);flex-shrink:0;}
+.guild-notice p{font-size:13px;color:rgba(255,255,255,.8);margin:0;font-weight:500;}
 </style>
 </head>
 <body>
@@ -75,46 +97,63 @@
   </div>
 </header>
 
-<div class="content" style="padding-bottom:100px;">
-  <div class="alert alert-info" style="margin-bottom:16px;">
+<div class="content" style="padding-bottom:90px;">
+
+  <div class="guild-notice">
     <i class="ti ti-lock"></i>
-    <span>組合員限定のクローズド掲示板です。情報は支部内でのみ共有されます。</span>
+    <p>組合員限定の掲示板です。投稿・連絡先は支部内でのみ共有されます。</p>
   </div>
 
-  <div class="tab-row" id="tabs">
-    <button class="tab-btn active" onclick="switchTab('all')">すべて</button>
-    <button class="tab-btn" onclick="switchTab('jinzai')">人材募集</button>
-    <button class="tab-btn" onclick="switchTab('shizai')">資材・道具</button>
-    <button class="tab-btn" onclick="switchTab('soudan')">相談</button>
+  <!-- フィルタータブ -->
+  <div class="tab-row">
+    <button class="t-btn active" onclick="switchTab('all',this)">すべて</button>
+    <button class="t-btn" onclick="switchTab('jinzai',this)">👷 人材募集</button>
+    <button class="t-btn" onclick="switchTab('shizai',this)">🔧 資材・道具</button>
+    <button class="t-btn" onclick="switchTab('soudan',this)">💬 相談</button>
   </div>
 
   <div id="post-list"></div>
 </div>
 
+<!-- 投稿FAB -->
 <button class="fab" onclick="openModal()">
-  <i class="ti ti-plus"></i>投稿する
+  <i class="ti ti-pencil-plus"></i>投稿する
 </button>
 
 <!-- 投稿モーダル -->
-<div class="modal-overlay" id="modal" onclick="closeModal(event)">
-  <div class="modal-sheet">
+<div class="modal-overlay" id="modal" onclick="bgClose(event)">
+  <div class="modal-sheet" style="position:relative;">
+    <button class="modal-close" onclick="closeModal()"><i class="ti ti-x" style="font-size:16px;"></i></button>
     <p class="modal-title">新しく投稿する</p>
-    <div class="input-group">
-      <label>カテゴリ</label>
-      <select id="post-cat">
-        <option value="jinzai">人材募集・お手伝い依頼</option>
-        <option value="shizai">資材・道具の譲渡・貸出</option>
-        <option value="soudan">現場の悩み・相談</option>
-      </select>
+
+    <p style="font-size:12px;font-weight:700;color:var(--gray500);margin:0 0 8px;letter-spacing:.06em;">カテゴリを選択</p>
+    <div class="cat-chips">
+      <button class="cat-chip jinzai" onclick="selCat('jinzai',this)">👷 人材募集・お手伝い</button>
+      <button class="cat-chip shizai" onclick="selCat('shizai',this)">🔧 資材・道具</button>
+      <button class="cat-chip soudan" onclick="selCat('soudan',this)">💬 相談・情報共有</button>
     </div>
+
     <div class="input-group">
-      <label>内容</label>
-      <textarea id="post-body" rows="4" placeholder="例：明日、上尾市の現場で左官が1人足りません。日給2万円。午前7時〜。" style="resize:none;"></textarea>
+      <label>投稿内容</label>
+      <textarea id="post-body" rows="5" placeholder="例：明日、上尾市内の現場で左官が1人足りません。日給2万円、午前7時〜17時。ご連絡ください。" style="resize:none;font-size:15px;"></textarea>
     </div>
+
+    <div class="grid2">
+      <div class="input-group">
+        <label>地域（任意）</label>
+        <input type="text" id="post-area" placeholder="例：上尾市、伊奈町">
+      </div>
+      <div class="input-group">
+        <label>お名前・職種（任意）</label>
+        <input type="text" id="post-name" placeholder="例：大工 鈴木">
+      </div>
+    </div>
+
     <div class="input-group">
-      <label>地域（任意）</label>
-      <input type="text" id="post-area" placeholder="例：上尾市、伊奈町">
+      <label>連絡先（任意・組合員のみ閲覧）</label>
+      <input type="text" id="post-tel" placeholder="例：090-XXXX-XXXX">
     </div>
+
     <button class="btn-primary" onclick="submitPost()">
       <i class="ti ti-send"></i>投稿する
     </button>
@@ -126,90 +165,166 @@
 </div>
 
 <script>
-const POSTS = [
-  {id:1,cat:'jinzai',avatar:'🪚',author:'大工 鈴木',area:'上尾市',time:'5分前',
-   body:'明日（6/25）、上尾市内の現場で大工が1人足りません。床張り作業です。日給2万円、午前7時〜17時。心当たりある方、直接連絡ください。',
-   tags:['上尾市','大工','急募','1日'],replies:3},
-  {id:2,cat:'shizai',avatar:'🏗️',author:'鳶 田中組',area:'伊奈町',time:'2時間前',
-   body:'単管パイプ（6m×50本）と足場板（2m×30枚）を安く譲ります。引き取りに来てくれる方限定。状態良好です。詳細はご連絡を。',
-   tags:['足場材','譲渡','伊奈町'],replies:1},
-  {id:3,cat:'soudan',avatar:'🔧',author:'設備 山本',area:'上尾市',time:'昨日',
-   body:'一人親方で確定申告を初めてやります。経費の書き方で迷っています。アドバイスいただける先輩いますか？支部に聞けばいいですかね？',
-   tags:['確定申告','相談','一人親方'],replies:5},
-  {id:4,cat:'jinzai',avatar:'🧱',author:'左官 小川',area:'桶川市',time:'昨日',
-   body:'来月から2週間、桶川の現場で左官・タイル工各1名募集。単価応相談。経験者優遇。埼玉土建組合員の方を優先します。',
-   tags:['左官','タイル','桶川市','長期'],replies:2},
+// ===== 初期サンプルデータ =====
+const SAMPLE_POSTS = [
+  {id:1, cat:'jinzai', emoji:'🪚', name:'大工 鈴木', area:'上尾市', time:'5分前',
+   body:'明日（6/25）上尾市内の現場で大工が1名足りません。床張り作業です。日給2万円、朝7時〜17時。経験者歓迎。', tags:['上尾市','大工','急募','1日'], tel:'090-XXXX-XXXX', comments:[
+    {emoji:'👷', name:'左官 田中', text:'自分、大工もできます！連絡してもいいですか？'},
+  ]},
+  {id:2, cat:'shizai', emoji:'🏗️', name:'鳶 田中組', area:'伊奈町', time:'2時間前',
+   body:'単管パイプ（6m×50本）と足場板（2m×30枚）を格安で譲ります。引取り限定。状態良好。詳細はご連絡を。', tags:['足場材','譲渡','伊奈町'], tel:'048-XXX-XXXX', comments:[]},
+  {id:3, cat:'soudan', emoji:'🔧', name:'設備 山本', area:'上尾市', time:'昨日',
+   body:'一人親方で今年初めて確定申告をします。組合費や労災保険料って経費に入れていいんでしょうか？アドバイスお願いします。', tags:['確定申告','相談','一人親方'], tel:'', comments:[
+    {emoji:'📋', name:'事務 佐藤', text:'組合費は経費になりますよ！詳しくは支部へ相談ください。048-773-9863'},
+    {emoji:'🏗️', name:'鳶 田中組', text:'私も去年同じで迷いました。支部で教えてもらいました。'},
+  ]},
+  {id:4, cat:'jinzai', emoji:'🧱', name:'左官 小川', area:'桶川市', time:'昨日',
+   body:'来月から2週間、桶川の現場で左官・タイル工を各1名募集。単価応相談。経験者優遇。埼玉土建組合員の方優先します。', tags:['左官','タイル','桶川市','長期'], tel:'090-XXXX-XXXX', comments:[]},
 ];
 
+let posts = JSON.parse(localStorage.getItem('guild_posts') || 'null') || SAMPLE_POSTS;
+let nextId = Math.max(...posts.map(p=>p.id)) + 1;
 let currentTab = 'all';
-let localPosts = [...POSTS];
+let selectedCat = '';
 
-const CAT_INFO = {
-  jinzai:{label:'人材募集',cls:'badge-jinzai'},
-  shizai:{label:'資材・道具',cls:'badge-shizai'},
-  soudan:{label:'相談',cls:'badge-soudan'},
+const CAT = {
+  jinzai:{label:'人材募集',badge:'badge-jinzai'},
+  shizai:{label:'資材・道具',badge:'badge-shizai'},
+  soudan:{label:'相談',badge:'badge-soudan'},
 };
 
-function renderPosts(){
+function save(){ localStorage.setItem('guild_posts', JSON.stringify(posts)); }
+
+// ===== 描画 =====
+function render(){
   const list = document.getElementById('post-list');
-  const filtered = currentTab === 'all' ? localPosts : localPosts.filter(p=>p.cat===currentTab);
+  const filtered = currentTab==='all' ? posts : posts.filter(p=>p.cat===currentTab);
   if(!filtered.length){
-    list.innerHTML='<p style="text-align:center;color:var(--gray400);padding:40px 0;">投稿がありません</p>';return;
+    list.innerHTML=`<div class="empty-state"><i class="ti ti-message-circle-off"></i><p>投稿がありません<br>最初に投稿してみましょう！</p></div>`;
+    return;
   }
   list.innerHTML = filtered.map(p=>`
-    <div class="post-card">
+    <div class="post-card ${p.cat}" id="pc-${p.id}">
       <div class="post-header">
-        <div class="post-avatar" style="background:var(--gray100);">${p.avatar}</div>
-        <div>
-          <p class="post-author">${p.author}${p.area?` <span style="font-size:11px;color:var(--gray400);">📍${p.area}</span>`:''}</p>
-          <p class="post-time">${p.time}</p>
+        <div class="post-avatar">${p.emoji||'👤'}</div>
+        <div style="flex:1;">
+          <p class="post-author">${esc(p.name||'匿名')}${p.area?` <span style="font-size:11px;color:var(--gray400);">📍${esc(p.area)}</span>`:''}</p>
+          <p class="post-meta">${p.time}</p>
         </div>
-        <span class="post-badge ${CAT_INFO[p.cat].cls}">${CAT_INFO[p.cat].label}</span>
+        <span class="post-badge ${CAT[p.cat].badge}">${CAT[p.cat].label}</span>
       </div>
-      <p class="post-body">${p.body}</p>
-      <div class="post-tags">${p.tags.map(t=>`<span class="post-tag">${t}</span>`).join('')}</div>
+      <p class="post-body">${esc(p.body)}</p>
+      <div class="post-tags">${(p.tags||[]).map(t=>`<span class="post-tag">${esc(t)}</span>`).join('')}</div>
       <div class="post-actions">
-        <button class="post-action-btn" onclick="alert('💬 コメント機能は支部確認後に本番実装します。')">
-          <i class="ti ti-message-circle"></i>返信（${p.replies}）
+        <button class="post-btn" onclick="toggleComment(${p.id})">
+          <i class="ti ti-message-circle"></i>コメント（${(p.comments||[]).length}）
         </button>
-        <button class="post-action-btn primary" onclick="alert('📞 相手の連絡先は支部経由でお伝えします。048-773-9863')">
+        ${p.tel ? `<button class="post-btn primary" onclick="callPost(${p.id})">
           <i class="ti ti-phone"></i>連絡する
-        </button>
+        </button>` : ''}
+      </div>
+      <div class="comment-area" id="ca-${p.id}">
+        <div id="cl-${p.id}">
+          ${(p.comments||[]).map(c=>`
+            <div class="comment-item">
+              <div class="comment-avatar">${c.emoji||'💬'}</div>
+              <div class="comment-body">
+                <p class="comment-author">${esc(c.name||'匿名')}</p>
+                <p class="comment-text">${esc(c.text)}</p>
+              </div>
+            </div>`).join('')}
+        </div>
+        <div class="comment-input-row">
+          <input class="comment-input" id="ci-${p.id}" placeholder="コメントを入力…" onkeydown="if(event.key==='Enter')sendComment(${p.id})">
+          <button class="comment-send" onclick="sendComment(${p.id})">送信</button>
+        </div>
       </div>
     </div>`).join('');
 }
 
-function switchTab(tab){
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function switchTab(tab, btn){
   currentTab = tab;
-  document.querySelectorAll('.tab-btn').forEach((b,i)=>{
-    b.classList.toggle('active',['all','jinzai','shizai','soudan'][i]===tab);
-  });
-  renderPosts();
+  document.querySelectorAll('.t-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
 }
 
+// ===== コメント =====
+function toggleComment(id){
+  const el = document.getElementById('ca-'+id);
+  el.classList.toggle('open');
+  if(el.classList.contains('open')) document.getElementById('ci-'+id)?.focus();
+}
+
+function sendComment(postId){
+  const input = document.getElementById('ci-'+postId);
+  const text = input.value.trim();
+  if(!text) return;
+  const p = posts.find(p=>p.id===postId);
+  if(!p) return;
+  if(!p.comments) p.comments=[];
+  p.comments.push({emoji:'👤', name:'あなた', text});
+  input.value='';
+  save();
+  render();
+  // コメント欄を再オープン
+  setTimeout(()=>{
+    const el=document.getElementById('ca-'+postId);
+    if(el) el.classList.add('open');
+  },50);
+}
+
+// ===== 連絡する =====
+function callPost(id){
+  const p = posts.find(p=>p.id===id);
+  if(!p) return;
+  if(p.tel && (p.tel.startsWith('0') || p.tel.startsWith('+'))) {
+    if(confirm(`${p.name||'投稿者'}に電話しますか？\n${p.tel}`)){
+      location.href = 'tel:' + p.tel.replace(/-/g,'');
+    }
+  } else {
+    alert(`📞 連絡先：${p.tel||'支部経由でお問い合わせください（048-773-9863）'}`);
+  }
+}
+
+// ===== 投稿 =====
 function openModal(){ document.getElementById('modal').classList.add('open'); }
-function closeModal(e){
-  if(!e||e.target===document.getElementById('modal')) document.getElementById('modal').classList.remove('open');
+function closeModal(){ document.getElementById('modal').classList.remove('open'); selectedCat=''; document.querySelectorAll('.cat-chip').forEach(c=>c.classList.remove('sel')); }
+function bgClose(e){ if(e.target===document.getElementById('modal')) closeModal(); }
+
+function selCat(cat, btn){
+  selectedCat = cat;
+  document.querySelectorAll('.cat-chip').forEach(c=>c.classList.remove('sel'));
+  btn.classList.add('sel');
 }
 
 function submitPost(){
-  const cat = document.getElementById('post-cat').value;
+  if(!selectedCat){ alert('カテゴリを選択してください'); return; }
   const body = document.getElementById('post-body').value.trim();
+  if(!body){ alert('投稿内容を入力してください'); return; }
   const area = document.getElementById('post-area').value.trim();
-  if(!body){ alert('内容を入力してください'); return; }
-  localPosts.unshift({
-    id:Date.now(),cat,avatar:'👤',author:'あなた',area,time:'たった今',
-    body,tags:[area||'上尾・伊奈'],replies:0
+  const name = document.getElementById('post-name').value.trim() || '匿名';
+  const tel  = document.getElementById('post-tel').value.trim();
+  const tags = [area, CAT[selectedCat].label].filter(Boolean);
+
+  const EMOJIS = {jinzai:'👷',shizai:'🔧',soudan:'💬'};
+  posts.unshift({
+    id: nextId++, cat: selectedCat,
+    emoji: EMOJIS[selectedCat], name, area, time:'たった今',
+    body, tags, tel, comments:[]
   });
+  save();
   closeModal();
   currentTab='all';
-  switchTab('all');
-  document.getElementById('post-body').value='';
-  document.getElementById('post-area').value='';
-  alert('✅ 投稿しました！');
+  document.querySelectorAll('.t-btn')[0].click();
+  // フォームリセット
+  ['post-body','post-area','post-name','post-tel'].forEach(id=>{ document.getElementById(id).value=''; });
+  render();
 }
 
-renderPosts();
+render();
 </script>
 </body>
 </html>
