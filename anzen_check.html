@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<title>現場安全チェックリスト｜埼玉土建 上尾伊奈支部</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.47.0/iconfont/tabler-icons.min.css">
+<link rel="stylesheet" href="common.css">
+<style>
+.az-hero{background:linear-gradient(135deg,#7B2F00,#C04E1E);border-radius:var(--r16);padding:20px;margin-bottom:16px;display:flex;align-items:center;gap:14px;}
+.az-hero i{font-size:44px;color:#FAC775;flex-shrink:0;}
+.az-hero h2{font-size:18px;font-weight:800;color:#fff;margin:0 0 4px;}
+.az-hero p{font-size:13px;color:rgba(255,255,255,.65);margin:0;}
+/* 現場情報 */
+.site-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+/* カテゴリ */
+.check-section{background:var(--white);border-radius:var(--r16);box-shadow:var(--shadow-sm);margin-bottom:12px;overflow:hidden;}
+.check-section-head{padding:14px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;}
+.check-section-head i.cat-icon{font-size:22px;flex-shrink:0;}
+.check-section-title{font-size:15px;font-weight:700;color:var(--navy);flex:1;}
+.check-section-badge{font-size:12px;font-weight:700;padding:3px 10px;border-radius:99px;}
+.check-section-body{padding:0 16px 14px;}
+/* チェック項目 */
+.check-item{display:flex;align-items:flex-start;gap:12px;padding:11px 0;border-bottom:1px solid var(--gray100);}
+.check-item:last-child{border:none;}
+.check-item input[type=checkbox]{width:22px;height:22px;flex-shrink:0;margin-top:1px;cursor:pointer;accent-color:var(--orange);}
+.check-item-label{font-size:14px;color:var(--navy);line-height:1.55;flex:1;cursor:pointer;}
+.check-item.checked .check-item-label{color:var(--gray400);text-decoration:line-through;}
+.check-required{font-size:10px;font-weight:700;background:var(--red-lt);color:var(--red);padding:2px 7px;border-radius:99px;margin-left:6px;vertical-align:1px;}
+/* 集計バー */
+.progress-header{background:var(--navy);border-radius:var(--r16);padding:16px 20px;margin-bottom:14px;position:sticky;top:64px;z-index:10;box-shadow:var(--shadow-md);}
+.progress-title{color:rgba(255,255,255,.7);font-size:13px;margin:0 0 6px;display:flex;justify-content:space-between;}
+.progress-bar-wrap{background:rgba(255,255,255,.15);border-radius:99px;height:12px;overflow:hidden;}
+.progress-bar-fill{height:100%;border-radius:99px;transition:width .4s;background:var(--orange);}
+.progress-fraction{color:#fff;font-size:20px;font-weight:800;margin:6px 0 0;}
+/* ボタン */
+.action-row{display:flex;gap:8px;margin-top:4px;}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="hdr">
+  <button class="hdr-back" onclick="location.href='index.html'"><i class="ti ti-arrow-left"></i>ホーム</button>
+  <div style="text-align:right;">
+    <p class="hdr-org" style="margin:0;">労働安全衛生法</p>
+    <p class="hdr-title" style="margin:0;font-size:14px;">現場安全チェックリスト</p>
+  </div>
+</header>
+
+<div class="content">
+  <div class="az-hero">
+    <i class="ti ti-clipboard-check"></i>
+    <div>
+      <h2>現場安全チェックリスト</h2>
+      <p>着工前・作業前の安全確認をスマホで記録</p>
+    </div>
+  </div>
+
+  <!-- 現場情報 -->
+  <div class="card">
+    <p class="sec-label">現場情報（任意）</p>
+    <div class="site-info-grid">
+      <div class="input-group"><label>現場名・工事名</label><input type="text" id="site-name" placeholder="例：〇〇新築工事"></div>
+      <div class="input-group"><label>確認日</label><input type="date" id="check-date"></div>
+      <div class="input-group"><label>確認者名</label><input type="text" id="checker" placeholder="例：鈴木"></div>
+      <div class="input-group"><label>天気</label>
+        <select id="weather">
+          <option value="晴">☀️ 晴</option><option value="曇">⛅ 曇</option>
+          <option value="雨">🌧️ 雨</option><option value="強風">💨 強風</option><option value="雪">❄️ 雪</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- 進捗バー -->
+  <div class="progress-header">
+    <div class="progress-title"><span>安全確認の進捗</span><span id="prog-pct">0%</span></div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="prog-fill" style="width:0%"></div></div>
+    <p class="progress-fraction" id="prog-frac">0 / 0 項目</p>
+  </div>
+
+  <!-- チェックリスト本体 -->
+  <div id="checklist"></div>
+
+  <!-- 操作ボタン -->
+  <div class="action-row">
+    <button class="btn-secondary" style="flex:1;" onclick="resetAll()"><i class="ti ti-refresh"></i>リセット</button>
+    <button class="btn-primary" style="flex:2;" onclick="printSummary()"><i class="ti ti-printer"></i>結果を印刷・PDF保存</button>
+  </div>
+
+  <div class="alert alert-info" style="margin-top:10px;">
+    <i class="ti ti-info-circle"></i>
+    <span>このチェックリストは労働安全衛生法に基づく一般的な点検項目です。現場の種類・規模により必要な点検項目は異なります。</span>
+  </div>
+</div>
+<footer>埼玉土建一般労働組合 上尾伊奈支部｜TEL 048-773-9863</footer>
+</div>
+
+<script>
+const SECTIONS = [
+  {
+    id:'s1', icon:'ti-users', color:'#1A5FA8', bg:'#E8F0FB',
+    title:'作業員・体制の確認',
+    items:[
+      {id:'s1-1', text:'作業員全員の健康状態・体調を確認した', required:true},
+      {id:'s1-2', text:'作業主任者・職長が配置されている', required:true},
+      {id:'s1-3', text:'必要な資格・技能講習修了者が担当業務に就いている', required:true},
+      {id:'s1-4', text:'新規入場者への安全教育を実施した', required:false},
+      {id:'s1-5', text:'作業員の一人親方労災保険の加入を確認した', required:false},
+      {id:'s1-6', text:'CCUSカードの登録・記録を確認した', required:false},
+    ]
+  },
+  {
+    id:'s2', icon:'ti-helmet', color:'#1A7A4A', bg:'#E8F5EE',
+    title:'保護具・安全装備',
+    items:[
+      {id:'s2-1', text:'ヘルメット（安全帽）を全員が着用している', required:true},
+      {id:'s2-2', text:'フルハーネス型安全帯を着用し、取付設備に連結している（2m以上高所）', required:true},
+      {id:'s2-3', text:'安全靴を全員が着用している', required:true},
+      {id:'s2-4', text:'必要な作業では保護手袋・防塵マスク・耳栓を着用している', required:false},
+      {id:'s2-5', text:'高視認性ベスト（夜間・道路工事等）を着用している', required:false},
+    ]
+  },
+  {
+    id:'s3', icon:'ti-stairs', color:'#9B3A1A', bg:'#FEF0ED',
+    title:'足場・高所作業',
+    items:[
+      {id:'s3-1', text:'足場の組立・変更後、点検を実施した（組立作業主任者による）', required:true},
+      {id:'s3-2', text:'手すり・中桟・幅木が設置されている', required:true},
+      {id:'s3-3', text:'足場の踏み板に隙間・欠け・ぐらつきがない', required:true},
+      {id:'s3-4', text:'昇降設備（はしご・階段）が安全に設置されている', required:true},
+      {id:'s3-5', text:'強風・大雨・大雪時の作業中止基準を確認した', required:false},
+      {id:'s3-6', text:'高所作業車のアウトリガーが安全に展開されている', required:false},
+    ]
+  },
+  {
+    id:'s4', icon:'ti-crane', color:'#7B2FBE', bg:'#EDE8FE',
+    title:'クレーン・重機',
+    items:[
+      {id:'s4-1', text:'クレーン・移動式クレーンの始業前点検を実施した', required:true},
+      {id:'s4-2', text:'玉掛けは有資格者が行っている（1t以上：技能講習修了者）', required:true},
+      {id:'s4-3', text:'作業半径内への立入禁止措置を設けた', required:true},
+      {id:'s4-4', text:'合図者を指定し、作業員全員が合図を確認している', required:true},
+      {id:'s4-5', text:'アウトリガーの設置状況・地盤の確認をした', required:false},
+    ]
+  },
+  {
+    id:'s5', icon:'ti-bolt', color:'#B07800', bg:'#FFF8E6',
+    title:'電気・溶接作業',
+    items:[
+      {id:'s5-1', text:'仮設電気の漏電遮断器・アース接続を確認した', required:true},
+      {id:'s5-2', text:'低圧電気取扱の有資格者が作業している', required:true},
+      {id:'s5-3', text:'溶接・溶断作業の近くに消火器を設置した', required:true},
+      {id:'s5-4', text:'アーク溶接では溶接ヒューム対策（換気・マスク）を実施した', required:true},
+      {id:'s5-5', text:'ガス溶接のボンベは転倒防止措置をしている', required:false},
+    ]
+  },
+  {
+    id:'s6', icon:'ti-skull', color:'#555', bg:'#F5F5F5',
+    title:'危険物・酸素欠乏',
+    items:[
+      {id:'s6-1', text:'酸素欠乏危険場所での作業前に酸素濃度を測定した（18%以上）', required:true},
+      {id:'s6-2', text:'有機溶剤等使用時の換気・保護具を確認した', required:true},
+      {id:'s6-3', text:'石綿（アスベスト）含有建材の事前調査・除去計画を確認した', required:false},
+      {id:'s6-4', text:'危険物・有害物の保管場所・取扱い方法を周知した', required:false},
+    ]
+  },
+  {
+    id:'s7', icon:'ti-temperature-sun', color:'#C04E1E', bg:'#FEE8D6',
+    title:'熱中症・健康管理',
+    items:[
+      {id:'s7-1', text:'WBGT値（暑さ指数）を確認し、高温時は作業中止基準を設けた', required:false},
+      {id:'s7-2', text:'水分・塩分補給できる環境（給水場所・スポーツ飲料等）を整えた', required:false},
+      {id:'s7-3', text:'日陰・冷房付きの休憩場所を確保した', required:false},
+      {id:'s7-4', text:'熱中症の初期症状が出た場合の対処・搬送手順を共有した', required:false},
+    ]
+  },
+  {
+    id:'s8', icon:'ti-phone-call', color:'#1A7A4A', bg:'#E8F5EE',
+    title:'緊急時対応',
+    items:[
+      {id:'s8-1', text:'緊急連絡先（救急119・警察110・現場責任者）を掲示した', required:true},
+      {id:'s8-2', text:'救急箱の設置場所と内容物を確認した', required:true},
+      {id:'s8-3', text:'AEDの設置場所を確認した（近隣施設含む）', required:false},
+      {id:'s8-4', text:'労災発生時の報告・連絡ルートを確認した（支部048-773-9863）', required:false},
+    ]
+  },
+];
+
+let checked = {};
+
+function render(){
+  const list = document.getElementById('checklist');
+  list.innerHTML = SECTIONS.map(sec=>{
+    const total = sec.items.length;
+    const done  = sec.items.filter(it=>checked[it.id]).length;
+    const badgeColor = done===total ? '#1A7A4A' : done>0 ? '#B07800' : '#8B90A0';
+    const badgeBg    = done===total ? '#E6F5ED' : done>0 ? '#FFF8E6' : '#F5F6F8';
+    return `<div class="check-section">
+      <div class="check-section-head" onclick="toggleSection('${sec.id}')">
+        <i class="ti ${sec.icon} cat-icon" style="color:${sec.color};"></i>
+        <span class="check-section-title">${sec.title}</span>
+        <span class="check-section-badge" style="background:${badgeBg};color:${badgeColor};">${done}/${total}</span>
+        <i class="ti ti-chevron-down" id="arr-${sec.id}" style="font-size:18px;color:var(--gray400);transition:transform .2s;"></i>
+      </div>
+      <div class="check-section-body" id="body-${sec.id}">
+        ${sec.items.map(it=>`
+          <div class="check-item${checked[it.id]?' checked':''}" id="row-${it.id}">
+            <input type="checkbox" id="${it.id}" ${checked[it.id]?'checked':''} onchange="toggle('${it.id}')">
+            <label class="check-item-label" for="${it.id}">${it.text}${it.required?'<span class="check-required">必須</span>':''}</label>
+          </div>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
+  updateProgress();
+}
+
+function toggleSection(id){
+  const body = document.getElementById('body-'+id);
+  const arr  = document.getElementById('arr-'+id);
+  const open = body.style.display !== 'none' && body.style.display !== '';
+  body.style.display = open ? 'none' : 'block';
+  arr.style.transform = open ? 'rotate(-90deg)' : '';
+}
+
+function toggle(id){
+  checked[id] = !checked[id];
+  const row = document.getElementById('row-'+id);
+  row.classList.toggle('checked', checked[id]);
+  updateProgress();
+  // セクションバッジを更新
+  render();
+}
+
+function updateProgress(){
+  const allItems = SECTIONS.flatMap(s=>s.items);
+  const total = allItems.length;
+  const done  = allItems.filter(it=>checked[it.id]).length;
+  const pct   = total ? Math.round(done/total*100) : 0;
+  const color = pct===100 ? '#1A7A4A' : pct>=70 ? '#F0B429' : 'var(--orange)';
+  document.getElementById('prog-pct').textContent  = pct + '%';
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('prog-fill').style.background = color;
+  document.getElementById('prog-frac').textContent = `${done} / ${total} 項目`;
+}
+
+function resetAll(){
+  if(!confirm('チェック内容をすべてリセットしますか？')) return;
+  checked = {};
+  render();
+}
+
+function printSummary(){
+  const siteName = document.getElementById('site-name').value || '未入力';
+  const checkDate = document.getElementById('check-date').value || new Date().toLocaleDateString('ja-JP');
+  const checker = document.getElementById('checker').value || '未入力';
+  const weather = document.getElementById('weather').value;
+
+  const allItems = SECTIONS.flatMap(s=>s.items);
+  const total = allItems.length;
+  const done  = allItems.filter(it=>checked[it.id]).length;
+
+  let body = `<html><head><meta charset="UTF-8"><title>現場安全チェックリスト</title>
+  <style>
+    body{font-family:'Hiragino Sans','Meiryo',sans-serif;font-size:13px;margin:20px;}
+    h1{font-size:18px;border-bottom:2px solid #333;padding-bottom:6px;}
+    .info{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0;background:#f5f5f5;padding:10px;border-radius:6px;}
+    .info-item{font-size:13px;}
+    .info-item span{font-weight:bold;}
+    .section{margin:16px 0;}
+    .section-title{font-size:14px;font-weight:bold;border-left:4px solid #E8612A;padding-left:8px;margin-bottom:8px;}
+    .item{display:flex;align-items:flex-start;gap:8px;padding:5px 0;border-bottom:1px solid #eee;font-size:13px;}
+    .item .chk{font-size:16px;}
+    .ok{color:#1A7A4A;}
+    .ng{color:#C0392B;}
+    .req{font-size:10px;background:#fef0ed;color:#c0392b;padding:1px 5px;border-radius:4px;margin-left:4px;}
+    .summary{background:#1B2A3B;color:#fff;padding:12px 16px;border-radius:8px;margin:16px 0;font-size:16px;font-weight:bold;}
+    @media print{body{margin:10px;}}
+  </style></head><body>
+  <h1>現場安全チェックリスト</h1>
+  <div class="info">
+    <div class="info-item">現場名：<span>${siteName}</span></div>
+    <div class="info-item">確認日：<span>${checkDate}</span></div>
+    <div class="info-item">確認者：<span>${checker}</span></div>
+    <div class="info-item">天気：<span>${weather}</span></div>
+  </div>
+  <div class="summary">確認結果：${done} / ${total} 項目 (${Math.round(done/total*100)}%)</div>`;
+
+  SECTIONS.forEach(sec=>{
+    body += `<div class="section"><div class="section-title">${sec.title}</div>`;
+    sec.items.forEach(it=>{
+      const ok = checked[it.id];
+      body += `<div class="item"><span class="chk ${ok?'ok':'ng'}">${ok?'✅':'⬜'}</span><span>${it.text}${it.required?'<span class="req">必須</span>':''}</span></div>`;
+    });
+    body += '</div>';
+  });
+
+  body += '<p style="font-size:11px;color:#888;margin-top:20px;">埼玉土建一般労働組合 上尾伊奈支部 ｜ TEL 048-773-9863</p></body></html>';
+
+  const w = window.open('','_blank','width=700,height=900');
+  w.document.write(body);
+  w.document.close();
+  setTimeout(()=>w.print(), 500);
+}
+
+// 初期表示
+const today = new Date().toISOString().split('T')[0];
+document.getElementById('check-date').value = today;
+render();
+</script>
+</body>
+</html>

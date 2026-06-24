@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<title>36協定・残業時間カウンター｜埼玉土建 上尾伊奈支部</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.47.0/iconfont/tabler-icons.min.css">
+<link rel="stylesheet" href="common.css">
+<style>
+.r-hero{background:linear-gradient(135deg,#1A3A6B,#1A5FA8);border-radius:var(--r16);padding:20px;margin-bottom:16px;display:flex;align-items:center;gap:14px;}
+.r-hero i{font-size:44px;color:#B5D4F4;flex-shrink:0;}
+.r-hero h2{font-size:18px;font-weight:800;color:#fff;margin:0 0 4px;}
+.r-hero p{font-size:13px;color:rgba(255,255,255,.65);margin:0;}
+/* 月入力グリッド */
+.month-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
+.month-cell{background:var(--white);border-radius:var(--r12);padding:10px 8px;border:1.5px solid var(--gray100);box-shadow:var(--shadow-sm);}
+.month-cell label{font-size:11px;font-weight:700;color:var(--gray500);display:block;margin-bottom:4px;text-align:center;}
+.month-cell input{width:100%;padding:8px 6px;border-radius:8px;border:1.5px solid var(--gray200);font-size:16px;font-weight:700;text-align:center;outline:none;font-family:inherit;}
+.month-cell input:focus{border-color:var(--orange);}
+.month-cell.over input{background:#FEF0ED;border-color:var(--red);color:var(--red);}
+.month-cell.warn input{background:#FFF8E6;border-color:var(--yellow);}
+/* ゲージ */
+.gauge-card{background:var(--white);border-radius:var(--r16);box-shadow:var(--shadow-sm);padding:18px;margin-bottom:10px;}
+.gauge-title{font-size:14px;font-weight:700;color:var(--navy);margin:0 0 12px;display:flex;align-items:center;justify-content:space-between;}
+.gauge-label-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;}
+.gauge-current{font-size:28px;font-weight:800;}
+.gauge-limit{font-size:14px;color:var(--gray500);}
+.gauge-bar{height:18px;background:var(--gray100);border-radius:99px;overflow:hidden;margin-bottom:6px;}
+.gauge-fill{height:100%;border-radius:99px;transition:width .5s cubic-bezier(.4,0,.2,1);}
+.gauge-desc{font-size:12px;color:var(--gray500);}
+/* 月別バーグラフ */
+.bar-chart{display:flex;align-items:flex-end;gap:4px;height:80px;margin-top:8px;}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;}
+.bar-item{width:100%;border-radius:4px 4px 0 0;transition:height .4s;}
+.bar-lbl{font-size:9px;color:var(--gray400);}
+.bar-val{font-size:10px;font-weight:700;color:var(--gray600);}
+/* 法的情報 */
+.law-table{width:100%;border-collapse:collapse;font-size:13px;}
+.law-table th{background:var(--navy);color:#fff;padding:8px 10px;font-weight:700;text-align:left;}
+.law-table td{padding:8px 10px;border-bottom:1px solid var(--gray100);}
+.law-table tr:last-child td{border:none;}
+.law-table .limit{font-weight:700;color:var(--orange);}
+.status-badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;}
+.sb-ok{background:var(--green-lt);color:var(--green);}
+.sb-warn{background:#FFF8E6;color:#7A5500;}
+.sb-over{background:var(--red-lt);color:var(--red);}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="hdr">
+  <button class="hdr-back" onclick="location.href='index.html'"><i class="ti ti-arrow-left"></i>ホーム</button>
+  <div style="text-align:right;">
+    <p class="hdr-org" style="margin:0;">労働基準法 第36条</p>
+    <p class="hdr-title" style="margin:0;font-size:14px;">時間外労働カウンター</p>
+  </div>
+</header>
+<div class="content">
+  <div class="r-hero">
+    <i class="ti ti-clock-hour-3"></i>
+    <div>
+      <h2>36協定・時間外労働カウンター</h2>
+      <p>月・年の残業時間を入力して法定上限への到達度を確認</p>
+    </div>
+  </div>
+
+  <div class="alert alert-info" style="margin-bottom:14px;">
+    <i class="ti ti-info-circle"></i>
+    <span>建設業は2024年4月より時間外労働の上限規制が適用されました（月45h・年360h等）。</span>
+  </div>
+
+  <!-- 年・月入力 -->
+  <div class="card">
+    <p class="sec-label">対象年を選択</p>
+    <div class="grid2" style="margin-bottom:14px;">
+      <div class="input-group">
+        <label>対象年</label>
+        <select id="year-sel" onchange="renderMonths()">
+          <option value="2024">2024年</option>
+          <option value="2025">2025年</option>
+          <option value="2026" selected>2026年</option>
+          <option value="2027">2027年</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label>雇用形態</label>
+        <select id="emp-type" onchange="update()">
+          <option value="ippan">一般（月45h・年360h）</option>
+          <option value="tokubetsu">特別条項あり（月100h・年720h）</option>
+        </select>
+      </div>
+    </div>
+    <p class="sec-label">月ごとの時間外労働時間（時間）</p>
+    <div class="month-grid" id="month-grid"></div>
+    <button class="btn-primary" onclick="update()"><i class="ti ti-refresh"></i>集計・更新</button>
+  </div>
+
+  <!-- 年間集計 -->
+  <div class="gauge-card" id="year-gauge">
+    <p class="gauge-title">年間合計 <span id="year-status" class="status-badge sb-ok">問題なし</span></p>
+    <div class="gauge-label-row">
+      <span class="gauge-current" id="year-total" style="color:var(--green);">0h</span>
+      <span class="gauge-limit">上限 <strong id="year-limit">360h</strong></span>
+    </div>
+    <div class="gauge-bar"><div class="gauge-fill" id="year-fill" style="width:0%;background:var(--green);"></div></div>
+    <p class="gauge-desc" id="year-desc">残り360時間</p>
+    <!-- 月別バーグラフ -->
+    <div class="bar-chart" id="bar-chart"></div>
+  </div>
+
+  <!-- 直近月の集計 -->
+  <div class="gauge-card" id="month-gauge">
+    <p class="gauge-title">最新月（<span id="cur-month-lbl"></span>）<span id="month-status" class="status-badge sb-ok">問題なし</span></p>
+    <div class="gauge-label-row">
+      <span class="gauge-current" id="month-current" style="color:var(--green);">0h</span>
+      <span class="gauge-limit">月上限 <strong id="month-limit">45h</strong></span>
+    </div>
+    <div class="gauge-bar"><div class="gauge-fill" id="month-fill" style="width:0%;background:var(--green);"></div></div>
+    <p class="gauge-desc" id="month-desc"></p>
+  </div>
+
+  <!-- 2ヶ月〜6ヶ月平均チェック -->
+  <div class="gauge-card" id="avg-gauge" style="display:none;">
+    <p class="gauge-title">複数月平均（特別条項チェック）</p>
+    <p style="font-size:13px;color:var(--gray600);margin:0 0 10px;">特別条項適用時は2〜6ヶ月の平均が80h以内、かつ月100h未満が必要です。</p>
+    <div id="avg-result"></div>
+  </div>
+
+  <!-- 法定上限表 -->
+  <div class="card">
+    <p class="sec-label">建設業 時間外労働の上限規制（2024年4月〜）</p>
+    <table class="law-table">
+      <tr><th>区分</th><th>上限時間</th></tr>
+      <tr><td>月の上限（原則）</td><td class="limit">45時間</td></tr>
+      <tr><td>年の上限（原則）</td><td class="limit">360時間</td></tr>
+      <tr><td>臨時的な特別の事情（特別条項）月</td><td class="limit">100時間未満</td></tr>
+      <tr><td>臨時的な特別の事情（特別条項）年</td><td class="limit">720時間</td></tr>
+      <tr><td>2〜6ヶ月の月平均（特別条項）</td><td class="limit">80時間以内</td></tr>
+      <tr><td>45h超え可能な月数（特別条項）</td><td class="limit">年6回まで</td></tr>
+    </table>
+    <p style="font-size:12px;color:var(--gray400);margin:10px 0 0;">※ 違反した場合は6ヶ月以下の懲役または30万円以下の罰金の対象となります。</p>
+  </div>
+
+  <div class="alert alert-warn">
+    <i class="ti ti-alert-triangle"></i>
+    <span>この計算は目安です。36協定の内容・休日労働の扱い等により実際の上限は異なります。詳細は支部または最寄りの労働基準監督署にご相談ください。</span>
+  </div>
+</div>
+<footer>埼玉土建一般労働組合 上尾伊奈支部｜TEL 048-773-9863</footer>
+</div>
+<script>
+const MONTHS = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+let hours = new Array(12).fill(0);
+
+function renderMonths(){
+  const grid = document.getElementById('month-grid');
+  grid.innerHTML = MONTHS.map((m,i)=>`
+    <div class="month-cell" id="mc-${i}">
+      <label>${m}</label>
+      <input type="number" id="h-${i}" min="0" max="744" value="${hours[i]||''}" placeholder="0"
+        oninput="hours[${i}]=parseFloat(this.value)||0;update()" onchange="update()">
+    </div>`).join('');
+}
+
+function getColor(pct){
+  if(pct >= 100) return '#C0392B';
+  if(pct >= 80)  return '#F0B429';
+  return '#1A7A4A';
+}
+
+function update(){
+  // 入力値を同期
+  for(let i=0;i<12;i++){
+    const el = document.getElementById('h-'+i);
+    if(el) hours[i] = parseFloat(el.value)||0;
+  }
+
+  const isTokenbetsu = document.getElementById('emp-type').value === 'tokubetsu';
+  const yearLimit  = isTokenbetsu ? 720 : 360;
+  const monthLimit = isTokenbetsu ? 100 : 45;
+  document.getElementById('year-limit').textContent  = yearLimit + 'h';
+  document.getElementById('month-limit').textContent = monthLimit + 'h';
+
+  const total = hours.reduce((s,h)=>s+h,0);
+  const yearPct = Math.min(100, Math.round(total / yearLimit * 100));
+  const yColor = getColor(yearPct);
+
+  document.getElementById('year-total').textContent = total + 'h';
+  document.getElementById('year-total').style.color = yColor;
+  document.getElementById('year-fill').style.width = yearPct + '%';
+  document.getElementById('year-fill').style.background = yColor;
+  document.getElementById('year-desc').textContent = total <= yearLimit
+    ? `あと${yearLimit - total}時間 使用可能（${yearPct}%消費）`
+    : `⚠️ 上限を${total - yearLimit}時間超過しています`;
+
+  const ySt = document.getElementById('year-status');
+  if(total > yearLimit){ ySt.className='status-badge sb-over'; ySt.textContent='上限超過'; }
+  else if(yearPct >= 80){ ySt.className='status-badge sb-warn'; ySt.textContent='注意'; }
+  else { ySt.className='status-badge sb-ok'; ySt.textContent='問題なし'; }
+
+  // 最新の入力がある月を特定
+  let lastIdx = -1;
+  for(let i=11;i>=0;i--){ if(hours[i]>0){lastIdx=i;break;} }
+  if(lastIdx < 0) lastIdx = new Date().getMonth();
+  const curH = hours[lastIdx];
+  const mPct = Math.min(100, Math.round(curH / monthLimit * 100));
+  const mColor = getColor(mPct);
+
+  document.getElementById('cur-month-lbl').textContent = MONTHS[lastIdx];
+  document.getElementById('month-current').textContent = curH + 'h';
+  document.getElementById('month-current').style.color = mColor;
+  document.getElementById('month-fill').style.width = mPct + '%';
+  document.getElementById('month-fill').style.background = mColor;
+  document.getElementById('month-desc').textContent = curH <= monthLimit
+    ? `あと${monthLimit - curH}時間（${mPct}%消費）`
+    : `⚠️ 上限を${curH - monthLimit}時間超過`;
+
+  const mSt = document.getElementById('month-status');
+  if(curH > monthLimit){ mSt.className='status-badge sb-over'; mSt.textContent='上限超過'; }
+  else if(mPct >= 80){ mSt.className='status-badge sb-warn'; mSt.textContent='注意'; }
+  else { mSt.className='status-badge sb-ok'; mSt.textContent='問題なし'; }
+
+  // 月ごとの色付け
+  for(let i=0;i<12;i++){
+    const cell = document.getElementById('mc-'+i);
+    const inp  = document.getElementById('h-'+i);
+    if(!cell||!inp) continue;
+    const h = hours[i];
+    if(h > monthLimit){ cell.className='month-cell over'; }
+    else if(h > monthLimit*0.8){ cell.className='month-cell warn'; }
+    else { cell.className='month-cell'; }
+  }
+
+  // バーグラフ
+  const maxH = Math.max(...hours, monthLimit);
+  document.getElementById('bar-chart').innerHTML = hours.map((h,i)=>{
+    const ht = Math.round(h / maxH * 70);
+    const c = h > monthLimit ? '#C0392B' : h > monthLimit*0.8 ? '#F0B429' : '#1A7A4A';
+    return `<div class="bar-col">
+      <span class="bar-val">${h>0?h:''}</span>
+      <div class="bar-item" style="height:${ht}px;background:${c};min-height:${h>0?4:0}px;"></div>
+      <span class="bar-lbl">${i+1}月</span>
+    </div>`;
+  }).join('');
+
+  // 特別条項時の複数月平均チェック
+  if(isTokenbetsu){
+    document.getElementById('avg-gauge').style.display = 'block';
+    const overMonths = hours.filter(h=>h>45);
+    let avgHtml = '';
+    for(let n=2;n<=6;n++){
+      const last = hours.slice(Math.max(0,lastIdx-n+1), lastIdx+1);
+      if(last.length < 2) continue;
+      const avg = last.reduce((s,h)=>s+h,0) / last.length;
+      const ac = avg > 80 ? '#C0392B' : avg > 60 ? '#F0B429' : '#1A7A4A';
+      avgHtml += `<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--gray100);font-size:13px;">
+        <span>直近${last.length}ヶ月平均</span>
+        <span style="font-weight:700;color:${ac};">${avg.toFixed(1)}h ${avg>80?'⚠️超過':avg>60?'⚠️注意':'✅'}</span>
+      </div>`;
+    }
+    const overCount = overMonths.length;
+    avgHtml += `<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-size:13px;">
+      <span>45h超え月数</span>
+      <span style="font-weight:700;color:${overCount>6?'#C0392B':overCount>4?'#F0B429':'#1A7A4A'};">${overCount}回 ${overCount>6?'⚠️年6回超':'（上限6回）'}</span>
+    </div>`;
+    document.getElementById('avg-result').innerHTML = avgHtml;
+  } else {
+    document.getElementById('avg-gauge').style.display = 'none';
+  }
+}
+
+renderMonths();
+update();
+</script>
+</body>
+</html>

@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<title>建設業許可チェッカー｜埼玉土建 上尾伊奈支部</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.47.0/iconfont/tabler-icons.min.css">
+<link rel="stylesheet" href="common.css">
+<style>
+.check-hero{background:linear-gradient(135deg,#0C447C,#1A5FA8);border-radius:var(--r16);padding:20px;margin-bottom:16px;display:flex;align-items:center;gap:14px;}
+.check-hero i{font-size:44px;color:#B5D4F4;flex-shrink:0;}
+.check-hero h2{font-size:18px;font-weight:800;color:#fff;margin:0 0 4px;}
+.check-hero p{font-size:13px;color:rgba(255,255,255,.65);margin:0;}
+/* ステップ */
+.step-wrap{position:relative;}
+.step{background:var(--white);border-radius:var(--r16);box-shadow:var(--shadow-sm);padding:20px;margin-bottom:12px;display:none;}
+.step.active{display:block;}
+.step-num{font-size:11px;font-weight:700;color:var(--orange);letter-spacing:.1em;margin:0 0 6px;}
+.step-q{font-size:17px;font-weight:800;color:var(--navy);margin:0 0 6px;line-height:1.45;}
+.step-hint{font-size:13px;color:var(--gray500);margin:0 0 16px;line-height:1.6;}
+.choice-btn{width:100%;padding:14px 18px;border-radius:var(--r12);border:2px solid var(--gray200);background:var(--white);color:var(--navy);font-size:15px;font-weight:600;text-align:left;margin-bottom:8px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:10px;}
+.choice-btn:hover{border-color:var(--orange);color:var(--orange);}
+.choice-btn i{font-size:20px;flex-shrink:0;}
+.choice-btn.yes{background:var(--orange);color:#fff;border-color:var(--orange);}
+.choice-btn.no{background:var(--gray50);color:var(--gray700);border-color:var(--gray200);}
+/* 金額入力 */
+.amount-input-wrap{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+.amount-input-wrap input{flex:1;font-size:18px;font-weight:700;text-align:right;}
+.amount-input-wrap span{font-size:16px;font-weight:600;color:var(--gray600);white-space:nowrap;}
+/* 結果 */
+.result-card{border-radius:var(--r16);padding:20px;margin-bottom:12px;}
+.result-card.danger{background:var(--red-lt);border:2px solid #E74C3C;}
+.result-card.warn{background:#FFF8E6;border:2px solid var(--yellow);}
+.result-card.ok{background:var(--green-lt);border:2px solid var(--green);}
+.result-icon{font-size:44px;margin-bottom:10px;}
+.result-title{font-size:20px;font-weight:800;margin:0 0 8px;}
+.result-card.danger .result-title{color:#C0392B;}
+.result-card.warn .result-title{color:#7A5500;}
+.result-card.ok .result-title{color:var(--green);}
+.result-body{font-size:14px;line-height:1.7;margin:0;}
+.info-box-blue{background:var(--blue-lt);border-radius:var(--r12);padding:14px 16px;font-size:14px;color:var(--blue);margin-bottom:12px;line-height:1.7;}
+.permit-types{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;}
+.permit-type{background:var(--white);border-radius:var(--r8);padding:10px 12px;border:1.5px solid var(--gray200);}
+.permit-type-title{font-size:13px;font-weight:700;color:var(--navy);margin:0 0 3px;}
+.permit-type-desc{font-size:11px;color:var(--gray500);margin:0;line-height:1.5;}
+/* 更新期限 */
+.expiry-box{background:var(--white);border-radius:var(--r16);box-shadow:var(--shadow-sm);padding:18px;margin-bottom:12px;}
+.expiry-title{font-size:15px;font-weight:700;color:var(--navy);margin:0 0 12px;}
+.expiry-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--gray100);font-size:14px;}
+.expiry-row:last-child{border:none;}
+.expiry-days{font-size:20px;font-weight:800;}
+.expiry-days.ok{color:var(--green);}
+.expiry-days.warn{color:var(--yellow);}
+.expiry-days.danger{color:var(--red);}
+/* 進捗バー */
+.prog-wrap{margin-top:6px;}
+.prog-bar{height:8px;background:var(--gray100);border-radius:99px;overflow:hidden;}
+.prog-fill{height:100%;border-radius:99px;transition:width .5s;}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="hdr">
+  <button class="hdr-back" onclick="location.href='index.html'"><i class="ti ti-arrow-left"></i>ホーム</button>
+  <div style="text-align:right;">
+    <p class="hdr-org" style="margin:0;">建設業法 第3条</p>
+    <p class="hdr-title" style="margin:0;font-size:14px;">建設業許可チェッカー</p>
+  </div>
+</header>
+<div class="content">
+  <div class="check-hero">
+    <i class="ti ti-building-bank"></i>
+    <div>
+      <h2>建設業許可チェッカー</h2>
+      <p>「自分は許可が必要？」を質問形式で判定します</p>
+    </div>
+  </div>
+
+  <div class="step-wrap" id="steps">
+    <!-- Q1 -->
+    <div class="step active" id="q1">
+      <p class="step-num">STEP 1 / 4</p>
+      <p class="step-q">請け負う工事は建設工事ですか？</p>
+      <p class="step-hint">土木・建築・電気・管・大工・左官・とび・石・屋根・内装・機械器具・ガラス・塗装・防水・解体・鋼構造物・鉄筋・舗装・しゅんせつ・板金・造園・さく井・建具・水道施設・消防施設・清掃施設・熱絶縁・電気通信・航空・造船などが対象です。</p>
+      <button class="choice-btn" onclick="next(2,'yes')"><i class="ti ti-check" style="color:var(--green);"></i>はい、建設工事です</button>
+      <button class="choice-btn" onclick="showResult('not_target')"><i class="ti ti-x" style="color:var(--red);"></i>いいえ、建設工事ではない</button>
+    </div>
+    <!-- Q2 -->
+    <div class="step" id="q2">
+      <p class="step-num">STEP 2 / 4</p>
+      <p class="step-q">元請として工事を受注しますか？<br>それとも下請ですか？</p>
+      <p class="step-hint">元請とは、発注者（施主・建築主）から直接工事を受注する場合です。下請とは、元請業者から工事を請け負う場合です。</p>
+      <button class="choice-btn" onclick="next(3,'genuke')"><i class="ti ti-building" style="color:var(--orange);"></i>元請（発注者から直接受注）</button>
+      <button class="choice-btn" onclick="next(3,'shita')"><i class="ti ti-arrow-down-right" style="color:var(--blue);"></i>下請（元請から受注）</button>
+    </div>
+    <!-- Q3 -->
+    <div class="step" id="q3">
+      <p class="step-num">STEP 3 / 4</p>
+      <p class="step-q" id="q3-text">1件の工事の請負金額はいくらですか？</p>
+      <p class="step-hint" id="q3-hint"></p>
+      <div class="amount-input-wrap">
+        <input type="number" id="amount" placeholder="0" min="0" step="10">
+        <span>万円（税込）</span>
+      </div>
+      <button class="btn-primary" onclick="checkAmount()"><i class="ti ti-calculator"></i>判定する</button>
+    </div>
+    <!-- Q4（下請の場合のみ）：元請の下請発注総額 -->
+    <div class="step" id="q4">
+      <p class="step-num">STEP 4 / 4</p>
+      <p class="step-q">元請として受注した場合、下請に出す工事の合計額はいくらになりますか？</p>
+      <p class="step-hint">特定建設業許可が必要かを判定します。1件の工事で複数の下請業者に発注する場合は合計額を入力してください。</p>
+      <div class="amount-input-wrap">
+        <input type="number" id="sub-amount" placeholder="0" min="0" step="10">
+        <span>万円（税込）</span>
+      </div>
+      <button class="btn-primary" onclick="checkSubAmount()"><i class="ti ti-calculator"></i>判定する</button>
+    </div>
+    <!-- 結果 -->
+    <div class="step" id="result"></div>
+  </div>
+
+  <!-- 更新期限管理 -->
+  <div class="expiry-box">
+    <p class="expiry-title"><i class="ti ti-calendar-check" style="font-size:16px;vertical-align:-2px;margin-right:6px;color:var(--orange);"></i>許可更新期限の管理</p>
+    <p style="font-size:13px;color:var(--gray500);margin:0 0 10px;">建設業許可の有効期間は<strong>5年間</strong>です。許可取得日を入力してください。</p>
+    <div class="input-group">
+      <label>許可取得日（または直近の更新日）</label>
+      <input type="date" id="permit-date" onchange="calcExpiry()">
+    </div>
+    <div id="expiry-result" style="display:none;">
+      <div class="expiry-row">
+        <span>許可取得日</span><span id="e-from" style="font-weight:600;"></span>
+      </div>
+      <div class="expiry-row">
+        <span>更新期限</span><span id="e-to" style="font-weight:600;color:var(--orange);"></span>
+      </div>
+      <div class="expiry-row">
+        <span>期限まで</span>
+        <span class="expiry-days" id="e-days"></span>
+      </div>
+      <div class="prog-wrap">
+        <div class="prog-bar"><div class="prog-fill" id="e-prog"></div></div>
+        <p style="font-size:11px;color:var(--gray400);margin:4px 0 0;">5年間の経過状況</p>
+      </div>
+      <div id="e-alert" style="margin-top:10px;"></div>
+    </div>
+  </div>
+
+  <div class="alert alert-info">
+    <i class="ti ti-info-circle"></i>
+    <span>この判定はあくまで目安です。正確な判断は埼玉県知事許可なら県土整備事務所、国土交通大臣許可なら関東地方整備局にご確認ください。支部でも相談を受け付けています（048-773-9863）。</span>
+  </div>
+</div>
+<footer>埼玉土建一般労働組合 上尾伊奈支部｜TEL 048-773-9863</footer>
+</div>
+<script>
+let mode = ''; // 'genuke' or 'shita'
+let curStep = 'q1';
+
+function showStep(id){
+  document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  curStep = id;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function next(n, m){
+  if(m) mode = m;
+  if(n === 3){
+    if(mode === 'genuke'){
+      document.getElementById('q3-text').textContent = '1件の工事の請負金額はいくらですか？';
+      document.getElementById('q3-hint').textContent = '元請として発注者から受け取る請負金額を入力してください。この金額で一般・特定建設業の許可要否が変わります。';
+    } else {
+      document.getElementById('q3-text').textContent = '1件の工事の請負金額（下請単価）はいくらですか？';
+      document.getElementById('q3-hint').textContent = '元請から受け取る請負金額を入力してください。';
+    }
+  }
+  showStep('q'+n);
+}
+
+function checkAmount(){
+  const amt = parseFloat(document.getElementById('amount').value);
+  if(isNaN(amt)||amt<0){alert('金額を入力してください');return;}
+  if(mode === 'shita'){
+    // 下請：500万円以上で許可必要（建築一式は1500万円）
+    if(amt < 500){
+      showResult('shita_ok', amt);
+    } else {
+      showResult('shita_need', amt);
+    }
+  } else {
+    // 元請：まず金額確認、次にQ4（下請発注額）へ
+    if(amt < 500){
+      showResult('genuke_ok', amt);
+    } else {
+      showStep('q4');
+    }
+  }
+}
+
+function checkSubAmount(){
+  const sub = parseFloat(document.getElementById('sub-amount').value);
+  if(isNaN(sub)||sub<0){alert('金額を入力してください');return;}
+  const mainAmt = parseFloat(document.getElementById('amount').value)||0;
+  if(sub >= 4500){
+    showResult('tokutei', mainAmt, sub);
+  } else {
+    showResult('ippan', mainAmt, sub);
+  }
+}
+
+function showResult(type, amt, sub){
+  let html = '';
+  switch(type){
+    case 'not_target':
+      html = `<div class="result-card ok"><div class="result-icon">✅</div><p class="result-title">許可は不要です</p><p class="result-body">建設工事に該当しない作業（清掃・警備・資材のみの納品など）は建設業法の適用外です。</p></div>`;
+      break;
+    case 'shita_ok':
+      html = `<div class="result-card ok"><div class="result-icon">✅</div><p class="result-title">現時点では許可は不要です</p><p class="result-body">1件の請負金額が<strong>500万円未満（税込）</strong>の場合、建設業の許可がなくても工事を請け負えます（軽微な建設工事）。<br><br>ただし今後金額が増えた場合は許可が必要になります。また、許可を持っていることで信頼性が上がり受注につながるケースもあります。</p></div>
+      <div class="info-box-blue"><i class="ti ti-info-circle" style="font-size:15px;vertical-align:-2px;margin-right:4px;"></i>建築一式工事は<strong>1,500万円未満</strong>または延床面積150㎡未満の木造住宅が軽微な工事の基準です。</div>`;
+      break;
+    case 'shita_need':
+      html = `<div class="result-card danger"><div class="result-icon">⚠️</div><p class="result-title">建設業許可が必要です</p><p class="result-body">1件の請負金額が<strong>500万円以上（税込）</strong>の場合、建設業の許可が必要です。<br>無許可で工事を請け負うと、<strong>3年以下の懲役または300万円以下の罰金</strong>の対象になります。</p></div>
+      <div class="info-box-blue">
+        <p style="font-weight:700;margin:0 0 8px;">必要な許可の種類</p>
+        <div class="permit-types">
+          <div class="permit-type"><p class="permit-type-title">知事許可</p><p class="permit-type-desc">1つの都道府県のみに営業所がある場合</p></div>
+          <div class="permit-type"><p class="permit-type-title">大臣許可</p><p class="permit-type-desc">2つ以上の都道府県に営業所がある場合</p></div>
+        </div>
+        <p style="font-size:13px;margin:10px 0 0;">→ 埼玉県内のみの場合は<strong>埼玉県知事許可</strong>。支部でも相談受付中（048-773-9863）</p>
+      </div>`;
+      break;
+    case 'genuke_ok':
+      html = `<div class="result-card ok"><div class="result-icon">✅</div><p class="result-title">現時点では許可は不要です</p><p class="result-body">1件の元請工事の請負金額が<strong>500万円未満（税込）</strong>のため、軽微な建設工事として許可なく請け負えます。<br>下請に出す合計額が4,500万円未満であれば一般建設業許可で対応できます。</p></div>`;
+      break;
+    case 'ippan':
+      html = `<div class="result-card warn"><div class="result-icon">🔶</div><p class="result-title">一般建設業許可が必要です</p><p class="result-body">元請工事の請負金額が500万円以上、かつ下請発注総額が<strong>4,500万円未満</strong>のため、<strong>一般建設業許可</strong>が必要です。<br><br>有効期間は<strong>5年間</strong>（更新が必要）。許可取得まで3〜6ヶ月かかる場合があります。</p></div>
+      <div class="info-box-blue">
+        <div class="permit-types">
+          <div class="permit-type"><p class="permit-type-title">知事許可</p><p class="permit-type-desc">1つの都道府県内のみ</p></div>
+          <div class="permit-type"><p class="permit-type-title">大臣許可</p><p class="permit-type-desc">複数都道府県に営業所あり</p></div>
+        </div>
+        <p style="font-size:13px;margin:8px 0 0;">支部に相談すると行政書士を紹介できます（048-773-9863）</p>
+      </div>`;
+      break;
+    case 'tokutei':
+      html = `<div class="result-card danger"><div class="result-icon">🚨</div><p class="result-title">特定建設業許可が必要です</p><p class="result-body">下請業者への発注総額が<strong>4,500万円以上（建築一式は7,000万円以上）</strong>のため、より厳しい要件の<strong>特定建設業許可</strong>が必要です。<br><br>資本金・純資産・財務比率・流動比率など財務要件も審査されます。早めの準備が必要です。</p></div>
+      <div class="info-box-blue"><i class="ti ti-alert-triangle" style="font-size:15px;vertical-align:-2px;margin-right:4px;"></i>特定建設業許可は一般より要件が厳しく、専任技術者・財産的基礎の要件が強化されています。支部の行政書士紹介をご利用ください。</div>`;
+      break;
+  }
+  html += `<button class="btn-secondary" onclick="resetCheck()" style="margin-top:8px;display:flex;"><i class="ti ti-refresh"></i>最初からやり直す</button>`;
+  document.getElementById('result').innerHTML = html;
+  showStep('result');
+}
+
+function resetCheck(){
+  mode = '';
+  document.getElementById('amount').value = '';
+  document.getElementById('sub-amount').value = '';
+  showStep('q1');
+}
+
+// 更新期限計算
+function calcExpiry(){
+  const d = document.getElementById('permit-date').value;
+  if(!d) return;
+  const from = new Date(d);
+  const to = new Date(from);
+  to.setFullYear(to.getFullYear() + 5);
+  to.setDate(to.getDate() - 1); // 5年後の前日が期限
+
+  const today = new Date();
+  const daysLeft = Math.round((to - today) / 86400000);
+  const totalDays = Math.round((to - from) / 86400000);
+  const elapsed = totalDays - daysLeft;
+  const pct = Math.min(100, Math.max(0, Math.round(elapsed / totalDays * 100)));
+
+  const cls = daysLeft < 90 ? 'danger' : daysLeft < 180 ? 'warn' : 'ok';
+  const progColor = daysLeft < 90 ? '#C0392B' : daysLeft < 180 ? '#F0B429' : '#1A7A4A';
+
+  document.getElementById('e-from').textContent = from.toLocaleDateString('ja-JP');
+  document.getElementById('e-to').textContent = to.toLocaleDateString('ja-JP');
+  document.getElementById('e-days').textContent = daysLeft > 0 ? `残${daysLeft}日` : `${Math.abs(daysLeft)}日超過`;
+  document.getElementById('e-days').className = `expiry-days ${cls}`;
+  document.getElementById('e-prog').style.cssText = `width:${pct}%;background:${progColor};`;
+
+  let alert = '';
+  if(daysLeft < 0){
+    alert = `<div class="alert alert-danger"><i class="ti ti-alert-triangle"></i><span>許可期限が切れています。至急、許可行政庁にご連絡ください。</span></div>`;
+  } else if(daysLeft < 90){
+    alert = `<div class="alert alert-danger"><i class="ti ti-alert-triangle"></i><span>更新期限まで残り<strong>${daysLeft}日</strong>です。期限の<strong>30日前まで</strong>に更新申請が必要です。至急手続きを。</span></div>`;
+  } else if(daysLeft < 180){
+    alert = `<div class="alert alert-warn"><i class="ti ti-alert-triangle"></i><span>更新期限まで残り<strong>${daysLeft}日</strong>です。そろそろ更新の準備を始めましょう。</span></div>`;
+  } else {
+    alert = `<div class="alert alert-ok"><i class="ti ti-check"></i><span>更新期限まで余裕があります（残${daysLeft}日）。</span></div>`;
+  }
+  document.getElementById('e-alert').innerHTML = alert;
+  document.getElementById('expiry-result').style.display = 'block';
+}
+</script>
+</body>
+</html>
