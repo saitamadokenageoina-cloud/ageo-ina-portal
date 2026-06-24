@@ -83,9 +83,25 @@
         <i class="ti ti-refresh" id="reload-icon"></i>更新する
       </button>
     </div>
-    <div class="weather-right">
-      <span class="weather-icon" id="w-icon">🌤️</span>
-      <p class="weather-hum">湿度 <span id="w-hum">--%</span></p>
+    <div class="weather-right" style="text-align:center;">
+      <svg viewBox="0 0 70 70" width="64" height="64" style="display:block;margin:0 auto 4px;">
+        <circle cx="38" cy="26" r="16" fill="rgba(255,200,0,.35)"/>
+        <circle cx="38" cy="26" r="10" fill="rgba(255,200,0,.55)"/>
+        <line x1="38" y1="6" x2="38" y2="1" stroke="rgba(255,200,0,.7)" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="55" y1="26" x2="60" y2="26" stroke="rgba(255,200,0,.7)" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="50" y1="14" x2="54" y2="10" stroke="rgba(255,200,0,.6)" stroke-width="2" stroke-linecap="round"/>
+        <line x1="50" y1="38" x2="54" y2="42" stroke="rgba(255,200,0,.6)" stroke-width="2" stroke-linecap="round"/>
+        <line x1="26" y1="14" x2="22" y2="10" stroke="rgba(255,200,0,.6)" stroke-width="2" stroke-linecap="round"/>
+        <!-- 温度計 -->
+        <rect x="17" y="30" width="8" height="28" rx="4" fill="rgba(255,255,255,.3)"/>
+        <rect x="18.5" y="40" width="5" height="18" rx="2.5" fill="rgba(255,80,30,.8)"/>
+        <circle cx="21" cy="60" r="7" fill="rgba(255,60,20,.9)"/>
+        <!-- 雫 -->
+        <ellipse cx="8" cy="52" rx="5" ry="7" fill="rgba(100,160,255,.5)"/>
+        <ellipse cx="8" cy="49" rx="3" ry="4" fill="rgba(150,200,255,.4)"/>
+      </svg>
+      <span class="weather-icon" id="w-icon" style="font-size:0;position:absolute;">🌤️</span>
+      <p class="weather-hum" style="font-size:13px;color:rgba(255,255,255,.6);margin:0;">湿度 <span id="w-hum">--%</span></p>
     </div>
   </div>
 

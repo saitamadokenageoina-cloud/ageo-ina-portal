@@ -57,7 +57,25 @@
 </header>
 <div class="content">
   <div class="r-hero">
-    <i class="ti ti-clock-hour-3"></i>
+    <div style="position:relative;width:70px;height:70px;flex-shrink:0;">
+          <svg viewBox="0 0 70 70" width="70" height="70">
+            <!-- 時計 -->
+            <circle cx="35" cy="32" r="24" fill="rgba(255,255,255,.15)" stroke="rgba(255,255,255,.4)" stroke-width="2"/>
+            <circle cx="35" cy="32" r="17" fill="rgba(255,255,255,.08)"/>
+            <!-- 針 -->
+            <line x1="35" y1="32" x2="35" y2="16" stroke="white" stroke-width="3" stroke-linecap="round"/>
+            <line x1="35" y1="32" x2="48" y2="40" stroke="rgba(255,200,0,.9)" stroke-width="2.5" stroke-linecap="round"/>
+            <!-- 目盛 -->
+            <circle cx="35" cy="11" r="2" fill="rgba(255,255,255,.5)"/>
+            <circle cx="56" cy="32" r="2" fill="rgba(255,255,255,.4)"/>
+            <circle cx="35" cy="53" r="2" fill="rgba(255,255,255,.4)"/>
+            <circle cx="14" cy="32" r="2" fill="rgba(255,255,255,.4)"/>
+            <!-- 上限バー -->
+            <rect x="5" y="62" width="60" height="7" rx="3" fill="rgba(255,255,255,.1)"/>
+            <rect x="5" y="62" width="42" height="7" rx="3" fill="rgba(100,220,130,.6)"/>
+            <text x="48" y="69" font-size="6" fill="rgba(255,255,255,.6)">360h</text>
+          </svg>
+        </div>
     <div>
       <h2>36協定・時間外労働カウンター</h2>
       <p>月・年の残業時間を入力して法定上限への到達度を確認</p>
