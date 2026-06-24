@@ -26,13 +26,9 @@
 .cat-tokubetsu{background:#E8F0FB;color:#0C447C;}
 .cat-yobo{background:#E8F5EE;color:#1A4A2A;}
 .date-list{display:flex;flex-direction:column;gap:6px;}
-.date-row{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--gray50);border-radius:var(--r8);}
+.date-row{display:flex;align-items:center;padding:8px 12px;background:var(--gray50);border-radius:var(--r8);}
 .date-main{font-size:14px;font-weight:600;color:var(--navy);}
 .date-sub{font-size:12px;color:var(--gray400);}
-.date-status{font-size:12px;font-weight:700;padding:3px 10px;border-radius:99px;}
-.status-ok{background:var(--green-lt);color:var(--green);}
-.status-few{background:#FFF8E6;color:#B07800;}
-.status-full{background:var(--red-lt);color:var(--red);}
 .filter-scroll{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-bottom:14px;scrollbar-width:none;}
 .filter-scroll::-webkit-scrollbar{display:none;}
 .filter-chip{
@@ -119,29 +115,29 @@
 <script>
 const KOUSHU = [
   {cat:'gino',name:'玉掛け技能講習',days:['2026-07-07〜09','2026-08-04〜06','2026-09-08〜10','2026-10-06〜08','2026-11-10〜12','2026-12-01〜03'],
-   note:'つり上げ荷重1t以上のクレーン等の玉掛け作業に必要',statuses:['ok','ok','ok','few','ok','ok']},
+   note:'つり上げ荷重1t以上のクレーン等の玉掛け作業に必要'},
   {cat:'gino',name:'足場の組立て等作業主任者技能講習',days:['2026-07-21〜22','2026-09-01〜02','2026-10-20〜21','2026-12-08〜09'],
-   note:'つり足場・張出し足場等の組立・解体・変更の作業主任者に必要',statuses:['ok','few','ok','ok']},
+   note:'つり足場・張出し足場等の組立・解体・変更の作業主任者に必要'},
   {cat:'gino',name:'小型移動式クレーン運転技能講習',days:['2026-07-14〜16','2026-09-15〜17','2026-11-17〜19'],
-   note:'つり上げ荷重5t未満の移動式クレーンの運転に必要',statuses:['ok','ok','few']},
+   note:'つり上げ荷重5t未満の移動式クレーンの運転に必要'},
   {cat:'gino',name:'高所作業車運転技能講習（10m以上）',days:['2026-08-18〜19','2026-10-13〜14','2026-12-15〜16'],
-   note:'作業床の高さが10m以上の高所作業車の運転に必要',statuses:['ok','ok','ok']},
+   note:'作業床の高さが10m以上の高所作業車の運転に必要'},
   {cat:'gino',name:'フォークリフト運転技能講習',days:['2026-07-28〜31','2026-09-22〜25','2026-11-24〜27'],
-   note:'最大荷重1t以上のフォークリフトの運転に必要',statuses:['few','ok','ok']},
+   note:'最大荷重1t以上のフォークリフトの運転に必要'},
   {cat:'gino',name:'ガス溶接技能講習',days:['2026-08-25〜26','2026-10-27〜28'],
-   note:'可燃性ガス及び酸素を用いて行う金属の溶接・溶断等の業務に必要',statuses:['ok','ok']},
+   note:'可燃性ガス及び酸素を用いて行う金属の溶接・溶断等の業務に必要'},
   {cat:'tokubetsu',name:'足場の組立て等作業従事者特別教育',days:['2026-07-03','2026-08-07','2026-09-04','2026-10-02','2026-11-06','2026-12-04'],
-   note:'足場の組立・解体・変更の作業に従事する労働者に必要（1日）',statuses:['ok','ok','ok','ok','few','ok']},
+   note:'足場の組立・解体・変更の作業に従事する労働者に必要（1日）'},
   {cat:'tokubetsu',name:'丸のこ等取扱作業者安全衛生教育',days:['2026-07-10','2026-09-11','2026-11-13'],
-   note:'携帯用丸のこ盤を使用する作業に必要（1日）',statuses:['ok','ok','ok']},
+   note:'携帯用丸のこ盤を使用する作業に必要（1日）'},
   {cat:'tokubetsu',name:'フルハーネス型墜落制止用器具特別教育',days:['2026-07-17','2026-08-28','2026-09-25','2026-10-23','2026-11-20'],
-   note:'2m以上の高所作業に必要（1日）。義務化済み',statuses:['ok','ok','ok','few','ok']},
+   note:'2m以上の高所作業に必要（1日）。義務化済み'},
   {cat:'tokubetsu',name:'アーク溶接等特別教育',days:['2026-08-20〜21','2026-10-29〜30'],
-   note:'アーク溶接機を用いて行う溶接・溶断業務に必要',statuses:['ok','ok']},
+   note:'アーク溶接機を用いて行う溶接・溶断業務に必要'},
   {cat:'yobo',name:'職長・安全衛生責任者教育',days:['2026-07-23〜24','2026-09-17〜18','2026-11-19〜20'],
-   note:'建設現場の職長・安全衛生責任者に必要（2日間）',statuses:['ok','ok','few']},
+   note:'建設現場の職長・安全衛生責任者に必要（2日間）'},
   {cat:'yobo',name:'刈払機取扱作業者安全衛生教育',days:['2026-08-05','2026-10-07'],
-   note:'刈払機を使用する作業に必要（1日）',statuses:['ok','ok']},
+   note:'刈払機を使用する作業に必要（1日）'},
 ];
 
 const CAT_INFO = {
@@ -149,11 +145,7 @@ const CAT_INFO = {
   tokubetsu:{label:'特別教育',cls:'cat-tokubetsu'},
   yobo:{label:'安全教育',cls:'cat-yobo'},
 };
-const STATUS_INFO = {
-  ok:{label:'空きあり',cls:'status-ok'},
-  few:{label:'残りわずか',cls:'status-few'},
-  full:{label:'満員',cls:'status-full'},
-};
+
 
 let currentCat = 'all';
 
@@ -175,13 +167,12 @@ function renderKoushu(){
       </div>
       <p style="font-size:12px;color:var(--gray400);margin:0 0 10px;">${k.note}</p>
       <div class="date-list">
-        ${k.days.slice(0,3).map((d,i)=>`
+        ${k.days.slice(0,3).map(d=>`
           <div class="date-row">
             <div>
               <p class="date-main">📅 ${d}</p>
               <p class="date-sub">埼玉土建技術研修センター</p>
             </div>
-            <span class="date-status ${STATUS_INFO[k.statuses[i]||'ok'].cls}">${STATUS_INFO[k.statuses[i]||'ok'].label}</span>
           </div>`).join('')}
         ${k.days.length > 3 ? `<p style="font-size:13px;color:var(--gray400);text-align:center;margin:4px 0 0;">他${k.days.length-3}回 開催予定 → 支部へお問い合わせください</p>` : ''}
       </div>

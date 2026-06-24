@@ -80,10 +80,10 @@
   <!-- ホーム -->
   <div id="calc-home">
     <div class="tool-grid">
-      <div class="tool-card" onclick="openTool('shakai')">
-        <div class="tool-card-icon" style="color:var(--blue);"><i class="ti ti-chart-bar"></i></div>
-        <p class="tool-card-title">社会保険料比較</p>
-        <p class="tool-card-desc">協会けんぽ vs 土建国保</p>
+      <div class="tool-card" onclick="openTool('romu')">
+        <div class="tool-card-icon" style="color:var(--blue);"><i class="ti ti-receipt-2"></i></div>
+        <p class="tool-card-title">労務費シミュ</p>
+        <p class="tool-card-desc">雇用保険・厚生年金・介護保険</p>
       </div>
       <div class="tool-card" onclick="openTool('kokuho')">
         <div class="tool-card-icon" style="color:var(--orange);"><i class="ti ti-building-community"></i></div>
@@ -98,17 +98,53 @@
     </div>
   </div>
 
-  <!-- 社保比較 -->
-  <div id="tool-shakai" class="tool-detail">
-    <p style="font-size:17px;font-weight:800;color:var(--navy);margin:0 0 14px;">社会保険料比較（令和8年度）</p>
+  <!-- 労務費シミュ -->
+  <div id="tool-romu" class="tool-detail">
+    <p style="font-size:17px;font-weight:800;color:var(--navy);margin:0 0 14px;">労務費シミュレーター（令和8年度）</p>
     <div class="card">
+      <p class="sec-label">基本情報を入力</p>
       <div class="grid2">
-        <div class="input-group"><label>標準報酬月額（円）</label><input type="number" id="hyojun" value="320000" step="1000" oninput="calcShakai()"></div>
-        <div class="input-group"><label>年齢区分</label><select id="ageband" onchange="calcShakai()"><option value="under40">40歳未満</option><option value="40to64" selected>40〜64歳</option><option value="65plus">65歳以上</option></select></div>
-        <div class="input-group"><label>雇用区分</label><select id="koyokubun" onchange="calcShakai()"><option value="normal" selected>一般従業員</option><option value="officer">役員（雇用保険対象外）</option><option value="family">家族従事者</option></select></div>
-        <div class="input-group"><label>土建国保 区分</label><select id="dokenkubun" onchange="calcShakai()"><option value="1">第1種</option><option value="2">第2種</option><option value="3" selected>第3種</option><option value="4">第4種</option><option value="5">第5種</option><option value="6">第6種</option></select></div>
+        <div class="input-group">
+          <label>標準報酬月額（円）</label>
+          <input type="number" id="rm-hyojun" value="300000" step="1000" min="58000" max="1390000" oninput="calcRoumu()">
+        </div>
+        <div class="input-group">
+          <label>年齢区分</label>
+          <select id="rm-age" onchange="calcRoumu()">
+            <option value="u40">40歳未満</option>
+            <option value="4064" selected>40〜64歳（介護保険あり）</option>
+            <option value="o65">65歳以上</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>雇用保険の対象</label>
+          <select id="rm-koyo" onchange="calcRoumu()">
+            <option value="ippan" selected>一般の事業（建設業等）</option>
+            <option value="nashi">対象外（役員・家族従事者等）</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>事業の種類（雇用保険）</label>
+          <select id="rm-jigyoshu" onchange="calcRoumu()">
+            <option value="kensetsu" selected>建設の事業</option>
+            <option value="ippan">一般の事業</option>
+            <option value="nourinn">農林水産・清酒製造</option>
+          </select>
+        </div>
       </div>
-      <div id="shakai-result"></div>
+      <button class="btn-primary" onclick="calcRoumu()" style="margin-top:4px;">
+        <i class="ti ti-calculator"></i>計算する
+      </button>
+    </div>
+    <div id="romu-result" style="display:none;">
+      <div class="card">
+        <p class="sec-label">計算結果</p>
+        <div id="romu-result-inner"></div>
+      </div>
+      <div style="background:var(--blue-lt);border-radius:var(--r12);padding:12px 16px;font-size:13px;color:var(--blue);margin-top:4px;">
+        <i class="ti ti-info-circle" style="font-size:14px;vertical-align:-2px;margin-right:4px;"></i>
+        標準報酬月額は毎年4〜6月の平均給与をもとに決定されます。実際の保険料は加入する健康保険組合や年金事務所にご確認ください。
+      </div>
     </div>
   </div>
 
@@ -172,9 +208,9 @@ function openTool(name){
   document.querySelectorAll('.tool-detail').forEach(d=>d.classList.remove('active'));
   document.getElementById('tool-'+name).classList.add('active');
   document.getElementById('back-label').textContent='計算ツール';
-  const titles={shakai:'社会保険料比較',kokuho:'国保税シミュ',ccus:'CCUSレベル確認'};
+  const titles={romu:'労務費シミュ',kokuho:'国保税シミュ',ccus:'CCUSレベル確認'};
   document.getElementById('page-title').textContent=titles[name]||'計算ツール';
-  if(name==='shakai')calcShakai();
+  if(name==='romu'){calcRoumu();}
   if(name==='ccus')initCcus();
 }
 function closeTool(){
@@ -184,63 +220,90 @@ function closeTool(){
   document.getElementById('back-label').textContent='ホーム';
   document.getElementById('page-title').textContent='計算ツール';
 }
-// ========== 社会保険料比較 ==========
-const KENPO_R=0.0967,KAIGO_R=0.0162,SHIEN_R=0.0023,NENKIN_R=0.183;
-const KOYO_H=0.006,KOYO_K=0.0105;
-const NENKIN_MIN_H=8052,NENKIN_MIN_K=8052;
-const DOKEN_HOKEN_S={"1":43200,"2":41300,"3":38700,"4":31400,"5":27700,"6":15400};
-const DOKEN_SHIEN_S={"1":700,"2":600,"3":600,"4":500,"5":500,"6":200};
-const DOKEN_KAIGO_S=2700;
+// ========== 労務費シミュレーター ==========
+// 令和8年度 料率
+const RM = {
+  nenkin:  { rate: 0.183,  min: 16104 }, // 厚生年金 18.3%（労使折半）月額最低16,104円
+  kaigo:   { rate: 0.0162 },              // 介護保険 1.62%（労使折半）
+  koyo: {
+    kensetsu: { h: 0.004+0.002, k: 0.004+0.008+0.003 }, // 建設：本人0.6%、会社1.5%
+    ippan:    { h: 0.006,       k: 0.006+0.0095       }, // 一般：本人0.6%、会社1.55%
+    nourinn:  { h: 0.007,       k: 0.007+0.011        }, // 農林等：本人0.7%、会社1.8%
+  }
+};
 
 function yen(n){return Math.round(n).toLocaleString('ja-JP')+'円';}
 
-function calcShakai(){
-  const hyojun=parseFloat(document.getElementById('hyojun').value)||0;
-  const age=document.getElementById('ageband').value;
-  const koyo=document.getElementById('koyokubun').value;
-  const dkubun=document.getElementById('dokenkubun').value;
-  const hasKaigo=age==='40to64';
-  const koyoExempt=koyo!=='normal';
-  const kH=hyojun*KENPO_R/2;
-  const kaH=hasKaigo?hyojun*KAIGO_R/2:0;
-  const shH=hyojun*SHIEN_R/2;
-  const nH=Math.max(hyojun*NENKIN_R/2,NENKIN_MIN_H);
-  const nK=Math.max(hyojun*NENKIN_R/2,NENKIN_MIN_K);
-  const yH=koyoExempt?0:hyojun*KOYO_H;
-  const yK=koyoExempt?0:hyojun*KOYO_K;
-  const kTotal=kH+kaH+shH+nH+yH;
-  const dHoken=DOKEN_HOKEN_S[dkubun];
-  const dShien=DOKEN_SHIEN_S[dkubun];
-  const dKaigo=hasKaigo?DOKEN_KAIGO_S:0;
-  const dTotal=dHoken+dShien+dKaigo+nH+yH;
-  const diff=kTotal-dTotal;
-  document.getElementById('shakai-result').innerHTML=`
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
-      <div style="background:var(--gray50);border-radius:var(--r12);padding:12px;border:2px solid var(--gray100);">
-        <p style="font-size:12px;font-weight:700;color:var(--gray500);margin:0 0 5px;">協会けんぽ（埼玉）</p>
-        <div class="comp-row"><span>健康保険料</span><span style="font-weight:600;">${yen(kH)}</span></div>
-        ${hasKaigo?`<div class="comp-row"><span>介護保険料</span><span style="font-weight:600;">${yen(kaH)}</span></div>`:''}
-        <div class="comp-row"><span>子育て支援金</span><span style="font-weight:600;">${yen(shH)}</span></div>
-        <div class="comp-row"><span>厚生年金</span><span style="font-weight:600;">${yen(nH)}</span></div>
-        <div class="comp-row"><span>雇用保険</span><span style="font-weight:600;">${yen(yH)}</span></div>
-        <div class="comp-row comp-row-total"><span>本人負担計</span><span>${yen(kTotal)}</span></div>
-      </div>
-      <div style="background:var(--gray50);border-radius:var(--r12);padding:12px;border:2px solid var(--gray100);">
-        <p style="font-size:12px;font-weight:700;color:var(--gray500);margin:0 0 5px;">埼玉土建国保</p>
-        <div class="comp-row"><span>国保料</span><span style="font-weight:600;">${yen(dHoken)}</span></div>
-        <div class="comp-row"><span>子育て支援金</span><span style="font-weight:600;">${yen(dShien)}</span></div>
-        ${hasKaigo?`<div class="comp-row"><span>介護保険料</span><span style="font-weight:600;">${yen(dKaigo)}</span></div>`:''}
-        <div class="comp-row"><span>厚生年金</span><span style="font-weight:600;">${yen(nH)}</span></div>
-        <div class="comp-row"><span>雇用保険</span><span style="font-weight:600;">${yen(yH)}</span></div>
-        <div class="comp-row comp-row-total"><span>本人負担計</span><span>${yen(dTotal)}</span></div>
-      </div>
+function resultRow(label, honninVal, kaishaVal, noteHtml=''){
+  return `<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--gray100);font-size:14px;">
+    <span style="flex:1;color:var(--gray600);">${label}${noteHtml}</span>
+    <div style="text-align:right;">
+      <p style="margin:0;font-weight:600;color:var(--navy);">本人 ${honninVal}</p>
+      <p style="margin:0;font-size:12px;color:var(--gray400);">会社 ${kaishaVal}</p>
     </div>
-    <div class="winner-banner ${diff>0?'doken':'city'}">
-      <i class="ti ti-info-circle" style="font-size:15px;vertical-align:-2px;margin-right:4px;" aria-hidden="true"></i>
-      <strong>${diff>0?'土建国保':'協会けんぽ'}</strong>が月額 <strong>${yen(Math.abs(diff))}</strong> 安い試算です。
-      <span style="font-size:12px;display:block;margin-top:2px;opacity:.8;">※土建国保の保険料は前年度データ。詳細は公式シミュレーションで要確認。</span>
+  </div>`;
+}
+
+function totalRow(honninTotal, kaishaTotal){
+  return `<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;font-size:15px;font-weight:700;">
+    <span style="color:var(--navy);">合計（月額）</span>
+    <div style="text-align:right;">
+      <p style="margin:0;color:var(--orange);">本人 ${honninTotal}</p>
+      <p style="margin:0;font-size:13px;color:var(--navy);">会社 ${kaishaTotal}</p>
+    </div>
+  </div>`;
+}
+
+function calcRoumu(){
+  const h     = parseFloat(document.getElementById('rm-hyojun').value)||300000;
+  const age   = document.getElementById('rm-age').value;
+  const koyo  = document.getElementById('rm-koyo').value;
+  const jshu  = document.getElementById('rm-jigyoshu').value;
+  const hasKaigo = age === '4064';
+  const hasKoyo  = koyo === 'ippan';
+
+  // 厚生年金
+  const nenkinH = Math.max(h * RM.nenkin.rate / 2, RM.nenkin.min / 2);
+  const nenkinK = nenkinH;
+
+  // 介護保険（40〜64歳のみ）
+  const kaigoH = hasKaigo ? h * RM.kaigo.rate / 2 : 0;
+  const kaigoK = kaigoH;
+
+  // 雇用保険
+  const koyoRates = RM.koyo[jshu] || RM.koyo.ippan;
+  const koyoH = hasKoyo ? h * koyoRates.h : 0;
+  const koyoK = hasKoyo ? h * koyoRates.k : 0;
+
+  const honninTotal = nenkinH + kaigoH + koyoH;
+  const kaishaTotal = nenkinK + kaigoK + koyoK;
+
+  const kaigoNote = hasKaigo
+    ? '<span style="font-size:11px;background:#E8F0FB;color:#1A5FA8;padding:1px 6px;border-radius:4px;margin-left:4px;">40〜64歳</span>'
+    : '';
+  const koyoJshuLabel = {kensetsu:'建設',ippan:'一般',nourinn:'農林等'}[jshu]||'';
+
+  document.getElementById('romu-result').style.display = 'block';
+  document.getElementById('romu-result-inner').innerHTML =
+    `<div style="background:var(--gray50);border-radius:var(--r8);padding:10px 14px;margin-bottom:12px;font-size:13px;color:var(--gray600);">
+      標準報酬月額 <strong style="color:var(--navy);font-size:15px;">${h.toLocaleString()}円</strong>・${age==='u40'?'40歳未満':age==='4064'?'40〜64歳':'65歳以上'}
+     ${ hasKoyo ? '・'+koyoJshuLabel+'の雇用保険あり' : '・雇用保険なし（役員等）'}
+    </div>` +
+    resultRow('厚生年金保険料', yen(nenkinH), yen(nenkinK),
+      '<span style="font-size:11px;color:var(--gray400);display:block;">18.3%を労使折半</span>') +
+    (hasKaigo ? resultRow('介護保険料'+kaigoNote, yen(kaigoH), yen(kaigoK),
+      '<span style="font-size:11px;color:var(--gray400);display:block;">1.62%を労使折半</span>') : '') +
+    (hasKoyo  ? resultRow('雇用保険料', yen(koyoH), yen(koyoK),
+      `<span style="font-size:11px;color:var(--gray400);display:block;">本人${(koyoRates.h*100).toFixed(1)}%／会社${(koyoRates.k*100).toFixed(1)}%</span>`) : '') +
+    `<div style="border-top:2px solid var(--navy);margin-top:4px;">` +
+    totalRow(yen(honninTotal), yen(kaishaTotal)) +
+    `</div>
+    <div style="background:var(--yellow-lt);border-radius:var(--r8);padding:10px 14px;margin-top:4px;font-size:12px;color:#7A5500;">
+      <i class="ti ti-info-circle" style="font-size:13px;vertical-align:-2px;margin-right:4px;"></i>
+      ※ 健康保険料（協会けんぽ・土建国保等）は含まれていません。別途「国保税シミュ」でご確認ください。
     </div>`;
 }
+
 // ========== CCUS ==========
 const SHOKU_DATA={
   daiku:{name:"建築大工",org:"全建総連・JBN等",
@@ -411,7 +474,7 @@ function kkAddMember(){
       </div>
       <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
         <label style="font-size:13px;font-weight:600;color:var(--gray700);white-space:nowrap;">前年所得額</label>
-        <input type="number" id="kkinc-${id}" min="0" value="${isFirst?3000000:0}" style="width:130px;font-size:14px;padding:6px 8px;">
+        <input type="number" id="kkinc-${id}" min="0" value="${isFirst?5000000:0}" style="width:130px;font-size:14px;padding:6px 8px;">
         <span style="font-size:12px;color:var(--gray500);">円（給与収入×約0.8が目安）</span>
       </div>
     </div>
@@ -494,9 +557,26 @@ function kkCalc(){
     ${famRows}
     <div class="result-row total"><span class="result-label">月額合計</span><span class="result-val" style="font-size:18px;">${doken.monthTotal.toLocaleString()}円/月</span></div>
     <div class="result-row total"><span class="result-label">年間合計</span><span class="result-val">${yn(doken.yearTotal)}</span></div>
-    <div class="info-box" style="margin-top:10px;">
-      <i class="ti ti-star" style="font-size:15px;vertical-align:-2px;margin-right:4px;" aria-hidden="true"></i>
-      土建国保：入院医療費全額払戻し・傷病手当金（最大180日）・出産育児一時金50万円・葬祭費7万円
+    <div style="background:linear-gradient(135deg,#1B2A3B,#1A3A6B);border-radius:var(--r12);padding:14px 16px;margin-top:10px;">
+      <p style="font-size:13px;font-weight:700;color:var(--orange);margin:0 0 10px;letter-spacing:.06em;">🏆 上尾市・伊奈町の国保にはないメリット</p>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="background:rgba(255,255,255,.08);border-radius:var(--r8);padding:10px 12px;border-left:3px solid var(--orange);">
+          <p style="font-size:13px;font-weight:700;color:#fff;margin:0 0 3px;">💊 一部負担払戻金（全額払い戻し）</p>
+          <p style="font-size:12px;color:rgba(255,255,255,.7);margin:0;">入院・通院の医療費自己負担分を全額払い戻し。市区町村国保にはない土建国保独自の制度。高額な医療費でも実質ゼロ負担になります。</p>
+        </div>
+        <div style="background:rgba(255,255,255,.08);border-radius:var(--r8);padding:10px 12px;border-left:3px solid #5DCAA5;">
+          <p style="font-size:13px;font-weight:700;color:#fff;margin:0 0 3px;">🏥 傷病手当金（最大180日分）</p>
+          <p style="font-size:12px;color:rgba(255,255,255,.7);margin:0;">ケガや病気で4日以上仕事を休んだ場合、1日あたり給付基礎日額の60%を最大180日間支給。市区町村国保にはない制度です。</p>
+        </div>
+        <div style="background:rgba(255,255,255,.08);border-radius:var(--r8);padding:10px 12px;border-left:3px solid #B5D4F4;">
+          <p style="font-size:13px;font-weight:700;color:#fff;margin:0 0 3px;">👶 出産育児一時金 50万円</p>
+          <p style="font-size:12px;color:rgba(255,255,255,.7);margin:0;">1児につき50万円。手続きは支部窓口で完結。直接支払制度で窓口負担も軽減できます。</p>
+        </div>
+        <div style="background:rgba(255,255,255,.08);border-radius:var(--r8);padding:10px 12px;border-left:3px solid #FAC775;">
+          <p style="font-size:13px;font-weight:700;color:#fff;margin:0 0 3px;">🌸 葬祭費 7万円</p>
+          <p style="font-size:12px;color:rgba(255,255,255,.7);margin:0;">組合員・家族が亡くなった際に7万円を支給。市区町村国保の3〜5万円より手厚い内容です。</p>
+        </div>
+      </div>
     </div>`;
 
   kkTab('compare');
