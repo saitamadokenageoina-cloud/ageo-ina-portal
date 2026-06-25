@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>デジタルブック｜埼玉土建 上尾伊奈支部</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.47.0/iconfont/tabler-icons.min.css">
+<link rel="stylesheet" href="common.css">
+<style>
+body{background:#111b27;color:#fff;min-height:100vh;overflow:hidden;}
+.book-app{height:100vh;display:grid;grid-template-rows:auto 1fr auto;background:radial-gradient(circle at 50% 0,#243648 0,#111b27 54%,#0b1119 100%);}
+.bookbar{
+  display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px;
+  padding:10px 12px;background:rgba(17,27,39,.94);border-bottom:1px solid rgba(255,255,255,.1);z-index:5;
+}
+.back-btn,.icon-btn,.book-link{
+  border:none;border-radius:8px;background:rgba(255,255,255,.1);color:#fff;
+  display:flex;align-items:center;justify-content:center;gap:6px;font-weight:700;
+}
+.back-btn{padding:8px 10px;font-size:13px;}
+.icon-btn{width:40px;height:40px;font-size:20px;}
+.book-link{height:40px;padding:0 10px;font-size:13px;}
+.book-title{min-width:0;}
+.book-title strong{display:block;font-size:14px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.book-title span{display:block;font-size:11px;color:rgba(255,255,255,.58);line-height:1.2;margin-top:2px;}
+.bar-actions{display:flex;gap:6px;align-items:center;}
+.stage{
+  position:relative;min-height:0;display:flex;align-items:center;justify-content:center;
+  padding:14px 12px 8px;overflow:hidden;
+}
+.book{
+  display:flex;align-items:center;justify-content:center;gap:10px;width:100%;height:100%;
+  perspective:1600px;transition:transform .18s ease, opacity .18s ease;
+}
+.book.flipping{transform:translateX(8px) rotateY(-3deg);opacity:.62;}
+.page-wrap{
+  max-width:calc(50vw - 22px);max-height:100%;background:#fff;border-radius:5px;
+  box-shadow:0 16px 44px rgba(0,0,0,.45);overflow:hidden;position:relative;
+}
+.page-wrap.single{max-width:min(100%,780px);}
+.page-wrap canvas{display:block;background:#fff;max-width:100%;max-height:100%;}
+.page-label{
+  position:absolute;right:8px;bottom:6px;background:rgba(17,27,39,.72);color:#fff;
+  border-radius:99px;padding:2px 7px;font-size:11px;font-weight:700;
+}
+.nav-hit{
+  position:absolute;top:72px;bottom:72px;width:30%;border:none;background:transparent;color:transparent;z-index:3;
+}
+.nav-hit.prev{left:0;}
+.nav-hit.next{right:0;}
+.nav-hit:active{background:rgba(255,255,255,.04);}
+.loader,.error{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;
+  padding:24px;color:rgba(255,255,255,.82);font-weight:700;
+}
+.error{display:none;color:#fff;}
+.thumbbar{
+  display:flex;gap:6px;align-items:center;overflow-x:auto;padding:8px 10px 11px;
+  background:rgba(17,27,39,.96);border-top:1px solid rgba(255,255,255,.1);scrollbar-width:none;
+}
+.thumbbar::-webkit-scrollbar{display:none;}
+.page-chip{
+  flex:0 0 auto;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.08);
+  color:rgba(255,255,255,.8);border-radius:8px;padding:6px 9px;font-size:12px;font-weight:800;
+}
+.page-chip.active{background:#E8612A;border-color:#E8612A;color:#fff;}
+.zoom-label{font-size:12px;font-weight:800;color:rgba(255,255,255,.72);min-width:42px;text-align:center;}
+@media (max-width:899px){
+  .bookbar{grid-template-columns:auto 1fr;grid-template-areas:"back title" "actions actions";padding:8px 10px;}
+  .back-btn{grid-area:back;}
+  .book-title{grid-area:title;}
+  .bar-actions{grid-area:actions;justify-content:space-between;margin-top:4px;}
+  .stage{padding:10px 8px 6px;}
+  .book{gap:0;}
+  .page-wrap{max-width:100%;}
+  .nav-hit{top:112px;bottom:64px;width:28%;}
+  .book-link span,.back-btn span{display:none;}
+}
+</style>
+</head>
+<body>
+<div class="book-app">
+  <header class="bookbar">
+    <button class="back-btn" onclick="location.href='shiryo.html'"><i class="ti ti-arrow-left"></i><span>本棚</span></button>
+    <div class="book-title">
+      <strong id="book-title">デジタルブック</strong>
+      <span id="book-sub">読み込み中...</span>
+    </div>
+    <div class="bar-actions">
+      <button class="icon-btn" id="prev-btn" title="前のページ"><i class="ti ti-chevron-left"></i></button>
+      <span class="zoom-label" id="page-label">--/--</span>
+      <button class="icon-btn" id="next-btn" title="次のページ"><i class="ti ti-chevron-right"></i></button>
+      <button class="icon-btn" id="zoom-out" title="縮小"><i class="ti ti-zoom-out"></i></button>
+      <button class="icon-btn" id="zoom-in" title="拡大"><i class="ti ti-zoom-in"></i></button>
+      <a class="book-link" id="pdf-link" href="#" target="_blank" rel="noopener"><i class="ti ti-file-type-pdf"></i><span>PDF</span></a>
+      <a class="book-link" id="save-link" href="#" download><i class="ti ti-download"></i><span>保存</span></a>
+    </div>
+  </header>
+
+  <main class="stage">
+    <button class="nav-hit prev" id="prev-hit" aria-label="前のページ"></button>
+    <div class="book" id="book">
+      <div class="page-wrap" id="left-wrap"><canvas id="left-page"></canvas><span class="page-label" id="left-label"></span></div>
+      <div class="page-wrap" id="right-wrap"><canvas id="right-page"></canvas><span class="page-label" id="right-label"></span></div>
+    </div>
+    <button class="nav-hit next" id="next-hit" aria-label="次のページ"></button>
+    <div class="loader" id="loader">PDFを読み込んでいます...</div>
+    <div class="error" id="error">デジタルブックを表示できませんでした。PDFボタンから直接開いてください。</div>
+  </main>
+
+  <nav class="thumbbar" id="page-list" aria-label="ページ一覧"></nav>
+</div>
+
+<script src="assets/js/bookshelf.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+if(window.pdfjsLib){
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+}
+
+const params = new URLSearchParams(location.search);
+const doc = (window.BOOKSHELF_DOCS || []).find(item => item.id === params.get('book')) || (window.BOOKSHELF_DOCS || [])[0];
+const state = { pdf:null, page:1, zoom:1, token:0 };
+const els = {
+  title:document.getElementById('book-title'),
+  sub:document.getElementById('book-sub'),
+  pageLabel:document.getElementById('page-label'),
+  book:document.getElementById('book'),
+  loader:document.getElementById('loader'),
+  error:document.getElementById('error'),
+  leftWrap:document.getElementById('left-wrap'),
+  rightWrap:document.getElementById('right-wrap'),
+  leftCanvas:document.getElementById('left-page'),
+  rightCanvas:document.getElementById('right-page'),
+  leftLabel:document.getElementById('left-label'),
+  rightLabel:document.getElementById('right-label'),
+  list:document.getElementById('page-list'),
+  pdfLink:document.getElementById('pdf-link'),
+  saveLink:document.getElementById('save-link')
+};
+
+function isSpread(){
+  return window.innerWidth >= 900;
+}
+
+function clampPage(page){
+  if(!state.pdf) return 1;
+  return Math.min(Math.max(1, page), state.pdf.numPages);
+}
+
+function pageStep(){
+  return isSpread() ? 2 : 1;
+}
+
+async function renderPage(pageNo, canvas, label, wrap, token){
+  if(pageNo > state.pdf.numPages){
+    wrap.style.display = 'none';
+    return;
+  }
+  wrap.style.display = '';
+  wrap.classList.toggle('single', !isSpread());
+  const page = await state.pdf.getPage(pageNo);
+  if(token !== state.token) return;
+  const base = page.getViewport({scale:1});
+  const stage = document.querySelector('.stage').getBoundingClientRect();
+  const usableWidth = isSpread() ? (stage.width - 34) / 2 : stage.width - 20;
+  const usableHeight = stage.height - 12;
+  const fit = Math.min(usableWidth / base.width, usableHeight / base.height);
+  const scale = Math.max(.25, fit * state.zoom);
+  const viewport = page.getViewport({scale});
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  canvas.width = Math.floor(viewport.width * dpr);
+  canvas.height = Math.floor(viewport.height * dpr);
+  canvas.style.width = `${Math.floor(viewport.width)}px`;
+  canvas.style.height = `${Math.floor(viewport.height)}px`;
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  await page.render({canvasContext:ctx, viewport}).promise;
+  label.textContent = `${pageNo}`;
+}
+
+function updateChips(){
+  const chips = els.list.querySelectorAll('.page-chip');
+  chips.forEach(chip => {
+    const p = Number(chip.dataset.page);
+    const active = isSpread() ? p === state.page || p === state.page + 1 : p === state.page;
+    chip.classList.toggle('active', active);
+    if(active) chip.scrollIntoView({block:'nearest', inline:'center'});
+  });
+}
+
+async function render(){
+  if(!state.pdf) return;
+  state.page = clampPage(state.page);
+  const token = ++state.token;
+  els.book.classList.add('flipping');
+  els.loader.style.display = 'flex';
+  els.error.style.display = 'none';
+  els.rightWrap.style.display = isSpread() ? '' : 'none';
+  try{
+    await renderPage(state.page, els.leftCanvas, els.leftLabel, els.leftWrap, token);
+    if(isSpread()) await renderPage(state.page + 1, els.rightCanvas, els.rightLabel, els.rightWrap, token);
+    if(token !== state.token) return;
+    els.pageLabel.textContent = isSpread() && state.page < state.pdf.numPages
+      ? `${state.page}-${Math.min(state.page + 1, state.pdf.numPages)} / ${state.pdf.numPages}`
+      : `${state.page} / ${state.pdf.numPages}`;
+    updateChips();
+  }catch(e){
+    console.error(e);
+    els.error.style.display = 'flex';
+  }finally{
+    if(token === state.token){
+      els.loader.style.display = 'none';
+      setTimeout(()=>els.book.classList.remove('flipping'), 120);
+    }
+  }
+}
+
+function go(delta){
+  state.page = clampPage(state.page + delta);
+  render();
+}
+
+function buildPageList(){
+  els.list.innerHTML = Array.from({length:state.pdf.numPages}, (_, i) => {
+    const p = i + 1;
+    return `<button class="page-chip" data-page="${p}">${p}</button>`;
+  }).join('');
+  els.list.querySelectorAll('.page-chip').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.page = Number(btn.dataset.page);
+      render();
+    });
+  });
+}
+
+async function boot(){
+  if(!doc){
+    els.error.style.display = 'flex';
+    els.loader.style.display = 'none';
+    return;
+  }
+  document.title = `${doc.title}｜デジタルブック`;
+  els.title.textContent = doc.title;
+  els.sub.textContent = doc.category;
+  els.pdfLink.href = doc.file;
+  els.saveLink.href = doc.file;
+  if(!window.pdfjsLib){
+    els.loader.style.display = 'none';
+    els.error.style.display = 'flex';
+    return;
+  }
+  try{
+    state.pdf = await pdfjsLib.getDocument(doc.file).promise;
+    els.sub.textContent = `${doc.category} / ${state.pdf.numPages}ページ`;
+    buildPageList();
+    render();
+  }catch(e){
+    console.error(e);
+    els.loader.style.display = 'none';
+    els.error.style.display = 'flex';
+  }
+}
+
+document.getElementById('prev-btn').addEventListener('click', () => go(-pageStep()));
+document.getElementById('next-btn').addEventListener('click', () => go(pageStep()));
+document.getElementById('prev-hit').addEventListener('click', () => go(-pageStep()));
+document.getElementById('next-hit').addEventListener('click', () => go(pageStep()));
+document.getElementById('zoom-out').addEventListener('click', () => { state.zoom = Math.max(.65, state.zoom - .15); render(); });
+document.getElementById('zoom-in').addEventListener('click', () => { state.zoom = Math.min(2, state.zoom + .15); render(); });
+window.addEventListener('resize', () => render());
+window.addEventListener('keydown', e => {
+  if(e.key === 'ArrowLeft') go(-pageStep());
+  if(e.key === 'ArrowRight') go(pageStep());
+});
+
+boot();
+</script>
+</body>
+</html>

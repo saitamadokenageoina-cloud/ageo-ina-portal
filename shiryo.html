@@ -87,7 +87,7 @@
 
   <div class="alert alert-info">
     <i class="ti ti-info-circle"></i>
-    <span>PDFは別タブで開きます。スマホでは「保存」から端末へダウンロードできます。</span>
+    <span>「読む」でデジタルブック形式で開きます。PDF保存もできます。</span>
   </div>
 
   <div id="doc-list"></div>
@@ -100,34 +100,9 @@
 <footer>埼玉土建一般労働組合 上尾伊奈支部｜TEL 048-773-9863</footer>
 </div>
 
+<script src="assets/js/bookshelf.js"></script>
 <script>
-const DOCS = [
-  {
-    title:'2026 組合パンフレット',
-    category:'組合案内',
-    pages:null,
-    file:'assets/pdfs/bookshelf/kumiai-pamphlet-2026.pdf',
-    desc:'埼玉土建の活動、組合加入、制度案内を確認できるパンフレットです。',
-    tags:['組合','パンフレット','加入案内']
-  },
-  {
-    title:'埼玉土建国保ガイド 2026',
-    category:'国保',
-    pages:null,
-    file:'assets/pdfs/bookshelf/saitama-doken-kokuho-guide-2026.pdf',
-    desc:'埼玉土建国保の保険料、給付、手続きなどを確認できるガイドです。',
-    tags:['国保','保険料','給付','手続き']
-  },
-  {
-    title:'見積り学習リーフレット',
-    category:'学習資料',
-    pages:null,
-    file:'assets/pdfs/bookshelf/mitsumori-learning-leaflet.pdf',
-    desc:'見積りの考え方や学習に使えるリーフレットです。',
-    tags:['見積り','学習','リーフレット']
-  }
-];
-
+const DOCS = window.BOOKSHELF_DOCS || [];
 let currentFilter = 'all';
 
 function setFilter(cat, btn){
@@ -159,7 +134,7 @@ function renderDocs(){
         </div>
       </div>
       <div class="doc-actions">
-        <a class="open-btn" href="${d.file}" target="_blank" rel="noopener"><i class="ti ti-external-link"></i>開く</a>
+        <a class="open-btn" href="book.html?book=${encodeURIComponent(d.id)}"><i class="ti ti-book-2"></i>読む</a>
         <a class="save-btn" href="${d.file}" download><i class="ti ti-download"></i>保存</a>
       </div>
     </article>
