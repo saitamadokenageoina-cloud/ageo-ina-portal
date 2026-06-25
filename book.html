@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.47.0/iconfont/tabler-icons.min.css">
 <link rel="stylesheet" href="common.css">
 <style>
-body{background:#111b27;color:#fff;min-height:100vh;overflow:hidden;}
+body{background:#111b27;color:#fff;min-height:100vh;overflow:hidden;overscroll-behavior:none;}
 .book-app{height:100vh;display:grid;grid-template-rows:auto 1fr auto;background:radial-gradient(circle at 50% 0,#243648 0,#111b27 54%,#0b1119 100%);}
 .bookbar{
   display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px;
@@ -26,7 +26,7 @@ body{background:#111b27;color:#fff;min-height:100vh;overflow:hidden;}
 .bar-actions{display:flex;gap:6px;align-items:center;}
 .stage{
   position:relative;min-height:0;display:flex;align-items:center;justify-content:center;
-  padding:14px 12px 8px;overflow:hidden;
+  padding:14px 12px 8px;overflow:hidden;touch-action:pan-y;
 }
 .book{
   display:flex;align-items:center;justify-content:center;gap:10px;width:100%;height:100%;
@@ -49,6 +49,13 @@ body{background:#111b27;color:#fff;min-height:100vh;overflow:hidden;}
 .nav-hit.prev{left:0;}
 .nav-hit.next{right:0;}
 .nav-hit:active{background:rgba(255,255,255,.04);}
+.turn-cue{
+  position:absolute;top:50%;transform:translateY(-50%);width:42px;height:72px;border-radius:8px;
+  border:1px solid rgba(255,255,255,.18);background:rgba(17,27,39,.48);color:#fff;z-index:4;
+  display:flex;align-items:center;justify-content:center;font-size:28px;opacity:.7;
+}
+.turn-cue.prev{left:10px;}
+.turn-cue.next{right:10px;}
 .loader,.error{
   position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;
   padding:24px;color:rgba(255,255,255,.82);font-weight:700;
@@ -65,6 +72,28 @@ body{background:#111b27;color:#fff;min-height:100vh;overflow:hidden;}
 }
 .page-chip.active{background:#E8612A;border-color:#E8612A;color:#fff;}
 .zoom-label{font-size:12px;font-weight:800;color:rgba(255,255,255,.72);min-width:42px;text-align:center;}
+.drawer-backdrop{
+  position:fixed;inset:0;background:rgba(0,0,0,.52);z-index:20;display:none;
+}
+.drawer-backdrop.open{display:block;}
+.toc-drawer{
+  position:fixed;top:0;right:0;bottom:0;width:min(86vw,360px);background:#fff;color:#1B1E27;
+  z-index:21;transform:translateX(100%);transition:transform .2s ease;box-shadow:-14px 0 38px rgba(0,0,0,.32);
+  display:flex;flex-direction:column;
+}
+.toc-drawer.open{transform:translateX(0);}
+.toc-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid #ECEEF2;}
+.toc-head strong{font-size:16px;color:#1B2A3B;}
+.toc-close{border:none;background:#ECEEF2;color:#1B2A3B;border-radius:8px;width:36px;height:36px;font-size:20px;}
+.toc-list{overflow:auto;padding:10px 10px 18px;}
+.toc-item{
+  width:100%;border:none;background:#fff;color:#1B2A3B;text-align:left;border-radius:8px;
+  padding:10px 9px;margin-bottom:4px;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;
+}
+.toc-item:active,.toc-item.active{background:#FFF0E9;color:#C04E1E;}
+.toc-item span:first-child{font-size:13px;font-weight:700;line-height:1.35;}
+.toc-item span:last-child{font-size:11px;font-weight:800;color:#5A6070;}
+.toc-empty{padding:18px 12px;color:#5A6070;font-size:13px;line-height:1.6;}
 @media (max-width:899px){
   .bookbar{grid-template-columns:auto 1fr;grid-template-areas:"back title" "actions actions";padding:8px 10px;}
   .back-btn{grid-area:back;}
@@ -74,6 +103,7 @@ body{background:#111b27;color:#fff;min-height:100vh;overflow:hidden;}
   .book{gap:0;}
   .page-wrap{max-width:100%;}
   .nav-hit{top:112px;bottom:64px;width:28%;}
+  .turn-cue{display:none;}
   .book-link span,.back-btn span{display:none;}
 }
 </style>
@@ -92,6 +122,7 @@ body{background:#111b27;color:#fff;min-height:100vh;overflow:hidden;}
       <button class="icon-btn" id="next-btn" title="次のページ"><i class="ti ti-chevron-right"></i></button>
       <button class="icon-btn" id="zoom-out" title="縮小"><i class="ti ti-zoom-out"></i></button>
       <button class="icon-btn" id="zoom-in" title="拡大"><i class="ti ti-zoom-in"></i></button>
+      <button class="icon-btn" id="toc-btn" title="目次"><i class="ti ti-list-tree"></i></button>
       <a class="book-link" id="pdf-link" href="#" target="_blank" rel="noopener"><i class="ti ti-file-type-pdf"></i><span>PDF</span></a>
       <a class="book-link" id="save-link" href="#" download><i class="ti ti-download"></i><span>保存</span></a>
     </div>
@@ -99,10 +130,12 @@ body{background:#111b27;color:#fff;min-height:100vh;overflow:hidden;}
 
   <main class="stage">
     <button class="nav-hit prev" id="prev-hit" aria-label="前のページ"></button>
+    <button class="turn-cue prev" id="prev-cue" aria-label="前のページ"><i class="ti ti-chevron-left"></i></button>
     <div class="book" id="book">
       <div class="page-wrap" id="left-wrap"><canvas id="left-page"></canvas><span class="page-label" id="left-label"></span></div>
       <div class="page-wrap" id="right-wrap"><canvas id="right-page"></canvas><span class="page-label" id="right-label"></span></div>
     </div>
+    <button class="turn-cue next" id="next-cue" aria-label="次のページ"><i class="ti ti-chevron-right"></i></button>
     <button class="nav-hit next" id="next-hit" aria-label="次のページ"></button>
     <div class="loader" id="loader">PDFを読み込んでいます...</div>
     <div class="error" id="error">デジタルブックを表示できませんでした。PDFボタンから直接開いてください。</div>
@@ -110,6 +143,17 @@ body{background:#111b27;color:#fff;min-height:100vh;overflow:hidden;}
 
   <nav class="thumbbar" id="page-list" aria-label="ページ一覧"></nav>
 </div>
+
+<div class="drawer-backdrop" id="toc-backdrop"></div>
+<aside class="toc-drawer" id="toc-drawer" aria-label="目次">
+  <div class="toc-head">
+    <strong>目次</strong>
+    <button class="toc-close" id="toc-close" aria-label="閉じる"><i class="ti ti-x"></i></button>
+  </div>
+  <div class="toc-list" id="toc-list">
+    <div class="toc-empty">PDFを読み込んでいます...</div>
+  </div>
+</aside>
 
 <script src="assets/js/bookshelf.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
@@ -121,6 +165,7 @@ if(window.pdfjsLib){
 const params = new URLSearchParams(location.search);
 const doc = (window.BOOKSHELF_DOCS || []).find(item => item.id === params.get('book')) || (window.BOOKSHELF_DOCS || [])[0];
 const state = { pdf:null, page:1, zoom:1, token:0 };
+let touchStart = null;
 const els = {
   title:document.getElementById('book-title'),
   sub:document.getElementById('book-sub'),
@@ -135,6 +180,10 @@ const els = {
   leftLabel:document.getElementById('left-label'),
   rightLabel:document.getElementById('right-label'),
   list:document.getElementById('page-list'),
+  tocBtn:document.getElementById('toc-btn'),
+  tocDrawer:document.getElementById('toc-drawer'),
+  tocBackdrop:document.getElementById('toc-backdrop'),
+  tocList:document.getElementById('toc-list'),
   pdfLink:document.getElementById('pdf-link'),
   saveLink:document.getElementById('save-link')
 };
@@ -189,6 +238,22 @@ function updateChips(){
   });
 }
 
+function updateTocActive(){
+  els.tocList.querySelectorAll('.toc-item').forEach(item => {
+    item.classList.toggle('active', Number(item.dataset.page) === state.page);
+  });
+}
+
+function escHtml(value){
+  return String(value ?? '').replace(/[&<>"']/g, ch => ({
+    '&':'&amp;',
+    '<':'&lt;',
+    '>':'&gt;',
+    '"':'&quot;',
+    "'":'&#39;'
+  }[ch]));
+}
+
 async function render(){
   if(!state.pdf) return;
   state.page = clampPage(state.page);
@@ -205,6 +270,7 @@ async function render(){
       ? `${state.page}-${Math.min(state.page + 1, state.pdf.numPages)} / ${state.pdf.numPages}`
       : `${state.page} / ${state.pdf.numPages}`;
     updateChips();
+    updateTocActive();
   }catch(e){
     console.error(e);
     els.error.style.display = 'flex';
@@ -217,7 +283,15 @@ async function render(){
 }
 
 function go(delta){
-  state.page = clampPage(state.page + delta);
+  const next = clampPage(state.page + delta);
+  if(next === state.page) return;
+  state.page = next;
+  render();
+}
+
+function jumpTo(page){
+  state.page = clampPage(page);
+  closeToc();
   render();
 }
 
@@ -232,6 +306,70 @@ function buildPageList(){
       render();
     });
   });
+}
+
+async function resolveOutlinePage(item){
+  try{
+    const dest = typeof item.dest === 'string' ? await state.pdf.getDestination(item.dest) : item.dest;
+    if(!dest || !dest[0]) return null;
+    const index = await state.pdf.getPageIndex(dest[0]);
+    return index + 1;
+  }catch(e){
+    return null;
+  }
+}
+
+async function buildTocFromOutline(){
+  const outline = await state.pdf.getOutline();
+  const rows = [];
+  async function walk(items, depth){
+    for(const item of items || []){
+      const page = await resolveOutlinePage(item);
+      if(page) rows.push({ title:item.title || `ページ ${page}`, page, depth });
+      if(item.items && item.items.length) await walk(item.items, depth + 1);
+    }
+  }
+  await walk(outline || [], 0);
+  return rows;
+}
+
+function buildFallbackToc(){
+  const total = state.pdf.numPages;
+  const step = total <= 12 ? 1 : total <= 40 ? 5 : 10;
+  const rows = [{ title:'表紙', page:1, depth:0 }];
+  for(let p = 1 + step; p <= total; p += step){
+    rows.push({ title:`ページ ${p} から`, page:p, depth:0 });
+  }
+  return rows;
+}
+
+async function buildToc(){
+  let rows = [];
+  try{
+    rows = await buildTocFromOutline();
+  }catch(e){
+    rows = [];
+  }
+  if(!rows.length) rows = buildFallbackToc();
+  els.tocList.innerHTML = rows.map(row => `
+    <button class="toc-item" data-page="${row.page}" style="padding-left:${9 + row.depth * 14}px;">
+      <span>${escHtml(row.title)}</span>
+      <span>P.${row.page}</span>
+    </button>
+  `).join('');
+  els.tocList.querySelectorAll('.toc-item').forEach(btn => {
+    btn.addEventListener('click', () => jumpTo(Number(btn.dataset.page)));
+  });
+}
+
+function openToc(){
+  els.tocDrawer.classList.add('open');
+  els.tocBackdrop.classList.add('open');
+}
+
+function closeToc(){
+  els.tocDrawer.classList.remove('open');
+  els.tocBackdrop.classList.remove('open');
 }
 
 async function boot(){
@@ -254,6 +392,7 @@ async function boot(){
     state.pdf = await pdfjsLib.getDocument(doc.file).promise;
     els.sub.textContent = `${doc.category} / ${state.pdf.numPages}ページ`;
     buildPageList();
+    await buildToc();
     render();
   }catch(e){
     console.error(e);
@@ -266,12 +405,33 @@ document.getElementById('prev-btn').addEventListener('click', () => go(-pageStep
 document.getElementById('next-btn').addEventListener('click', () => go(pageStep()));
 document.getElementById('prev-hit').addEventListener('click', () => go(-pageStep()));
 document.getElementById('next-hit').addEventListener('click', () => go(pageStep()));
+document.getElementById('prev-cue').addEventListener('click', () => go(-pageStep()));
+document.getElementById('next-cue').addEventListener('click', () => go(pageStep()));
 document.getElementById('zoom-out').addEventListener('click', () => { state.zoom = Math.max(.65, state.zoom - .15); render(); });
 document.getElementById('zoom-in').addEventListener('click', () => { state.zoom = Math.min(2, state.zoom + .15); render(); });
+els.tocBtn.addEventListener('click', openToc);
+els.tocBackdrop.addEventListener('click', closeToc);
+document.getElementById('toc-close').addEventListener('click', closeToc);
+document.querySelector('.stage').addEventListener('touchstart', e => {
+  if(e.touches.length !== 1) return;
+  const t = e.touches[0];
+  touchStart = { x:t.clientX, y:t.clientY, time:Date.now() };
+}, {passive:true});
+document.querySelector('.stage').addEventListener('touchend', e => {
+  if(!touchStart || !e.changedTouches.length) return;
+  const t = e.changedTouches[0];
+  const dx = t.clientX - touchStart.x;
+  const dy = t.clientY - touchStart.y;
+  const dt = Date.now() - touchStart.time;
+  touchStart = null;
+  if(dt > 700 || Math.abs(dx) < 42 || Math.abs(dx) < Math.abs(dy) * 1.15) return;
+  go(dx < 0 ? pageStep() : -pageStep());
+}, {passive:true});
 window.addEventListener('resize', () => render());
 window.addEventListener('keydown', e => {
   if(e.key === 'ArrowLeft') go(-pageStep());
   if(e.key === 'ArrowRight') go(pageStep());
+  if(e.key === 'Escape') closeToc();
 });
 
 boot();
