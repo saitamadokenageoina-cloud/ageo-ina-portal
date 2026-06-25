@@ -35,6 +35,15 @@
 .progress-fraction{color:#fff;font-size:20px;font-weight:800;margin:6px 0 0;}
 /* ボタン */
 .action-row{display:flex;gap:8px;margin-top:4px;}
+.print-panel{display:grid;gap:10px;margin-top:10px;}
+.print-panel .print-preview,.print-panel .print-submit{
+  width:100%;border:none;border-radius:8px;padding:17px 16px;color:#fff;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  font-size:16px;font-weight:800;box-shadow:0 4px 12px rgba(0,0,0,.16);
+}
+.print-panel .print-preview{background:#147c62;}
+.print-panel .print-submit{background:#1d5b7d;}
+.print-panel .print-note{text-align:center;font-size:12px;color:var(--gray600);margin:0;}
 </style>
 </head>
 <body>
@@ -101,10 +110,11 @@
   <div id="checklist"></div>
 
   <!-- 操作ボタン -->
-  <div class="action-row">
-    <button class="btn-secondary" style="flex:1;" onclick="resetAll()"><i class="ti ti-refresh"></i>リセット</button>
-    <button class="btn-secondary" style="flex:1;" onclick="previewSummary()"><i class="ti ti-eye"></i>プレビュー</button>
-    <button class="btn-primary" style="flex:2;" onclick="printSummary()"><i class="ti ti-printer"></i>印刷・PDF保存</button>
+  <div class="print-panel">
+    <button class="print-preview" onclick="previewSummary()"><i class="ti ti-eye"></i>プレビューを表示する</button>
+    <button class="print-submit" onclick="printSummary()"><i class="ti ti-printer"></i>PDF保存・印刷する</button>
+    <p class="print-note">印刷ボタン押下後 →「PDFに保存」を選択してください</p>
+    <button class="btn-secondary" onclick="resetAll()"><i class="ti ti-refresh"></i>リセット</button>
   </div>
 
   <div class="alert alert-info" style="margin-top:10px;">

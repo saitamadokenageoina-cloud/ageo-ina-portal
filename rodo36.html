@@ -44,6 +44,15 @@
 .sb-ok{background:var(--green-lt);color:var(--green);}
 .sb-warn{background:#FFF8E6;color:#7A5500;}
 .sb-over{background:var(--red-lt);color:var(--red);}
+.print-panel{display:grid;gap:10px;margin-top:10px;}
+.print-panel .print-preview,.print-panel .print-submit{
+  width:100%;border:none;border-radius:8px;padding:17px 16px;color:#fff;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  font-size:16px;font-weight:800;box-shadow:0 4px 12px rgba(0,0,0,.16);
+}
+.print-panel .print-preview{background:#147c62;}
+.print-panel .print-submit{background:#1d5b7d;}
+.print-panel .print-note{text-align:center;font-size:12px;color:var(--gray600);margin:0;}
 </style>
 </head>
 <body>
@@ -286,9 +295,11 @@
       <span>この書式は参考様式です。正式な届出には<strong>厚生労働省の公式様式</strong>をご使用ください。また、内容に不備があると差し戻しになります。事前に支部（048-773-9863）または労働基準監督署にご相談ください。</span>
     </div>
 
-    <button class="btn-primary" onclick="previewKyotei()" style="margin-top:8px;">
-      <i class="ti ti-printer"></i>36協定届をプレビュー・印刷/PDF保存
-    </button>
+    <div class="print-panel">
+      <button class="print-preview" onclick="previewKyotei(false)"><i class="ti ti-eye"></i>プレビューを表示する</button>
+      <button class="print-submit" onclick="previewKyotei(true)"><i class="ti ti-printer"></i>PDF保存・印刷する</button>
+      <p class="print-note">印刷ボタン押下後 →「PDFに保存」を選択してください</p>
+    </div>
   </div></div>
 <footer>埼玉土建一般労働組合 上尾伊奈支部｜TEL 048-773-9863</footer>
 </div>
@@ -445,7 +456,7 @@ document.getElementById('f-kyujitsu').addEventListener('change', function(){
 function g(id){ return (document.getElementById(id)||{}).value||''; }
 function chk(id){ return (document.getElementById(id)||{}).checked||false; }
 
-function previewKyotei() {
+function previewKyotei(autoPrint=false) {
   const formData = {
     type: kyoteiType === 'tokubetsu' ? 'special' : 'general',
     jigyoshu:g('f-jigyoshu'),
@@ -479,8 +490,9 @@ function previewKyotei() {
     kyujitsuBi:g('f-kj-bi')
   };
   sessionStorage.setItem('rodo36FormData', JSON.stringify(formData));
-  const previewWindow = window.open('rodo36_form_preview.html', '_blank', 'width=1100,height=820');
-  if(!previewWindow) location.href = 'rodo36_form_preview.html';
+  const url = `rodo36_form_preview.html${autoPrint ? '?print=1' : ''}`;
+  const previewWindow = window.open(url, '_blank', 'width=1100,height=820');
+  if(!previewWindow) location.href = url;
   return;
 
   const jigyoshu  = g('f-jigyoshu') || '（記入してください）';
