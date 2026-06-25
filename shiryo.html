@@ -69,7 +69,7 @@
     <i class="ti ti-books"></i>
     <div>
       <h2>資料本棚</h2>
-      <p>共済・給付・資格祝金・審査資料をPDFで確認できます</p>
+      <p>組合案内・国保ガイド・学習資料をPDFで確認できます</p>
     </div>
   </div>
 
@@ -80,16 +80,14 @@
 
   <div class="filter-row" id="filters">
     <button class="filter-btn active" onclick="setFilter('all',this)">すべて</button>
-    <button class="filter-btn" onclick="setFilter('制度一覧',this)">制度一覧</button>
-    <button class="filter-btn" onclick="setFilter('申請書類',this)">申請書類</button>
-    <button class="filter-btn" onclick="setFilter('資格祝金',this)">資格祝金</button>
-    <button class="filter-btn" onclick="setFilter('審査',this)">審査</button>
-    <button class="filter-btn" onclick="setFilter('弔慰・見舞',this)">弔慰・見舞</button>
+    <button class="filter-btn" onclick="setFilter('組合案内',this)">組合案内</button>
+    <button class="filter-btn" onclick="setFilter('国保',this)">国保</button>
+    <button class="filter-btn" onclick="setFilter('学習資料',this)">学習資料</button>
   </div>
 
   <div class="alert alert-info">
     <i class="ti ti-info-circle"></i>
-    <span>PDFは別タブで開きます。スマホでは「保存」から端末へダウンロードできます。申請前に最新の扱いを支部へ確認してください。</span>
+    <span>PDFは別タブで開きます。スマホでは「保存」から端末へダウンロードできます。</span>
   </div>
 
   <div id="doc-list"></div>
@@ -105,84 +103,28 @@
 <script>
 const DOCS = [
   {
-    title:'2026年度 総合共済制度一覧表',
-    category:'制度一覧',
-    pages:1,
-    file:'assets/pdfs/kyosai/2026-001-kyosai-list.pdf',
-    desc:'病気見舞金、ケガ見舞金、慶弔給付、特別組合員給付などを一覧で確認できます。',
-    tags:['共済','給付一覧','見舞金']
+    title:'2026 組合パンフレット',
+    category:'組合案内',
+    pages:null,
+    file:'assets/pdfs/bookshelf/kumiai-pamphlet-2026.pdf',
+    desc:'埼玉土建の活動、組合加入、制度案内を確認できるパンフレットです。',
+    tags:['組合','パンフレット','加入案内']
   },
   {
-    title:'給付申請に必要な書類 2026年度版',
-    category:'申請書類',
-    pages:1,
-    file:'assets/pdfs/kyosai/2026-002-kyufu-shorui.pdf',
-    desc:'死亡、入院、ケガ、出産など、給付申請に添付する書類の確認用資料です。',
-    tags:['必要書類','申請','添付書類']
+    title:'埼玉土建国保ガイド 2026',
+    category:'国保',
+    pages:null,
+    file:'assets/pdfs/bookshelf/saitama-doken-kokuho-guide-2026.pdf',
+    desc:'埼玉土建国保の保険料、給付、手続きなどを確認できるガイドです。',
+    tags:['国保','保険料','給付','手続き']
   },
   {
-    title:'資格取得祝金プレミアム',
-    category:'資格祝金',
-    pages:1,
-    file:'assets/pdfs/kyosai/2026-003-shikaku-premium.pdf',
-    desc:'資格取得祝金プレミアムの対象資格や給付内容を確認できます。',
-    tags:['資格','祝金','プレミアム']
-  },
-  {
-    title:'全建総連 資格取得報奨金制度',
-    category:'資格祝金',
-    pages:4,
-    file:'assets/pdfs/kyosai/2026-007-zenken-shikaku-hoshokin.pdf',
-    desc:'全建総連の資格取得報奨金制度の対象資格、受給資格、申請期限などの運用資料です。',
-    tags:['全建総連','資格','報奨金']
-  },
-  {
-    title:'支部審査実務のてびき',
-    category:'審査',
-    pages:6,
-    file:'assets/pdfs/kyosai/2026-008-shibu-shinsa.pdf',
-    desc:'支部共済審査委員会の構成、任務、審査の進め方を確認する実務資料です。',
-    tags:['支部審査','共済審査','実務']
-  },
-  {
-    title:'各種申請書類の記入例',
-    category:'申請書類',
-    pages:12,
-    file:'assets/pdfs/kyosai/2026-010-kisairei.pdf',
-    desc:'支部審査報告書など、共済関連の申請書類の記入例をまとめた資料です。',
-    tags:['記入例','申請書','報告書']
-  },
-  {
-    title:'祝金対象者 年齢早見表 2026年度版',
-    category:'資格祝金',
-    pages:1,
-    file:'assets/pdfs/kyosai/2026-011-nenrei-hayamihyo.pdf',
-    desc:'小学校・中学校就学祝金など、対象生年月日を確認する早見表です。',
-    tags:['祝金','年齢','早見表']
-  },
-  {
-    title:'死亡弔慰金・障害見舞金の申請について',
-    category:'弔慰・見舞',
-    pages:8,
-    file:'assets/pdfs/kyosai/2026-013-chouikin-mimaikin.pdf',
-    desc:'本人死亡時の死亡弔慰金、障害見舞金の対象、金額、申請時の注意点を確認できます。',
-    tags:['死亡弔慰金','障害見舞金','本人死亡']
-  },
-  {
-    title:'班審査のすすめかた 2026年度版',
-    category:'審査',
-    pages:20,
-    file:'assets/pdfs/kyosai/2026-014-han-shinsa-susume.pdf',
-    desc:'班で共済申請を確認するときの進め方、声かけ、審査の流れをまとめた資料です。',
-    tags:['班審査','すすめかた','共済']
-  },
-  {
-    title:'班審査のてびき',
-    category:'審査',
-    pages:11,
-    file:'assets/pdfs/kyosai/2026-015-han-shinsa-tebiki.pdf',
-    desc:'給付制度の内容、必要書類、班長・役員が確認するポイントを説明した資料です。',
-    tags:['班審査','てびき','必要書類']
+    title:'見積り学習リーフレット',
+    category:'学習資料',
+    pages:null,
+    file:'assets/pdfs/bookshelf/mitsumori-learning-leaflet.pdf',
+    desc:'見積りの考え方や学習に使えるリーフレットです。',
+    tags:['見積り','学習','リーフレット']
   }
 ];
 
@@ -211,7 +153,7 @@ function renderDocs(){
           <p class="doc-desc">${d.desc}</p>
           <div class="doc-meta">
             <span class="pill cat">${d.category}</span>
-            <span class="pill">${d.pages}ページ</span>
+            ${d.pages ? `<span class="pill">${d.pages}ページ</span>` : ''}
             ${d.tags.slice(0,2).map(t=>`<span class="pill">${t}</span>`).join('')}
           </div>
         </div>
