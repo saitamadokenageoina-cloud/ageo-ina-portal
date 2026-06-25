@@ -40,7 +40,7 @@
 <body>
 <div class="app">
 <header class="hdr">
-  <button class="hdr-back" onclick="location.href='index.html'"><i class="ti ti-arrow-left"></i>ホーム</button>
+  <button class="hdr-back" onclick="goBack()"><i class="ti ti-arrow-left"></i>戻る</button>
   <div style="text-align:right;">
     <p class="hdr-org" style="margin:0;">労働安全衛生法</p>
     <p class="hdr-title" style="margin:0;font-size:14px;">現場安全チェックリスト</p>
@@ -319,7 +319,9 @@ function openSummary(autoPrint){
     .req{font-size:6.6pt;background:#fef0ed;color:#c0392b;padding:0 3px;border-radius:3px;margin-left:3px;white-space:nowrap;}
     .footer{font-size:7.2pt;color:#666;margin-top:5px;border-top:1px solid #ddd;padding-top:4px;}
     .printbar{background:#1B2A3B;color:#fff;padding:10px 14px;margin:0 auto 12px;display:flex;align-items:center;justify-content:space-between;gap:10px;max-width:210mm;border-radius:8px;}
+    .print-actions{display:flex;align-items:center;gap:8px;}
     .printbar button{background:#E8612A;color:#fff;border:none;border-radius:6px;padding:8px 16px;font-size:14px;font-weight:700;cursor:pointer;}
+    .printbar .back-print{background:rgba(255,255,255,.12);}
     @media print{
       body{background:#fff;}
       .no-print{display:none;}
@@ -328,7 +330,10 @@ function openSummary(autoPrint){
   </style></head><body>
   <div class="no-print printbar">
     <span style="font-weight:700;">現場安全チェックリスト A4プレビュー</span>
-    <button onclick="window.print()">印刷・PDF保存</button>
+    <div class="print-actions">
+      <button class="back-print" onclick="if(window.opener){window.opener.focus();} window.close();">戻る</button>
+      <button onclick="window.print()">印刷・PDF保存</button>
+    </div>
   </div>
   <main class="sheet">
   <h1>現場安全チェックリスト</h1>
@@ -364,5 +369,6 @@ const today = new Date().toISOString().split('T')[0];
 document.getElementById('check-date').value = today;
 render();
 </script>
+<script src="assets/js/navigation.js"></script>
 </body>
 </html>

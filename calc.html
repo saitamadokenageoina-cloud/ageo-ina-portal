@@ -68,7 +68,7 @@
 <div class="app">
 <header class="hdr">
   <button class="hdr-back" onclick="goBack()">
-    <i class="ti ti-arrow-left"></i><span id="back-label">ホーム</span>
+    <i class="ti ti-arrow-left"></i><span id="back-label">戻る</span>
   </button>
   <div style="text-align:right;">
     <p class="hdr-org" style="margin:0;">埼玉土建 上尾伊奈支部</p>
@@ -391,7 +391,9 @@
 <script>
 let currentTool = null;
 function goBack(){
-  if(currentTool){ closeTool(); } else { location.href='index.html'; }
+  if(currentTool){ closeTool(); }
+  else if(window.defaultBack){ window.defaultBack(); }
+  else { location.href='index.html'; }
 }
 function openTool(name){
   currentTool=name;
@@ -409,7 +411,7 @@ function closeTool(){
   currentTool=null;
   document.getElementById('calc-home').style.display='';
   document.querySelectorAll('.tool-detail').forEach(d=>d.classList.remove('active'));
-  document.getElementById('back-label').textContent='ホーム';
+  document.getElementById('back-label').textContent='戻る';
   document.getElementById('page-title').textContent='計算ツール';
 }
 // ========== 労務費シミュレーター ==========
@@ -940,5 +942,6 @@ function kkTab(tab){
   });
 }
 </script>
+<script src="assets/js/navigation.js"></script>
 </body>
 </html>

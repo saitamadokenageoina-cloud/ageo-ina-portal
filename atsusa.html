@@ -59,8 +59,8 @@
 <body>
 <div class="app">
 <header class="hdr">
-  <button class="hdr-back" onclick="location.href='index.html'">
-    <i class="ti ti-arrow-left"></i>ホーム
+  <button class="hdr-back" onclick="goBack()">
+    <i class="ti ti-arrow-left"></i>戻る
   </button>
   <div style="text-align:right;">
     <p class="hdr-org" style="margin:0;">AI搭載</p>
@@ -364,5 +364,6 @@ document.getElementById('hum').value  = 65;
 calcRisk();
 loadWeather();
 </script>
+<script src="assets/js/navigation.js"></script>
 </body>
 </html>
