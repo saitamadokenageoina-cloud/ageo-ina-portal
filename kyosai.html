@@ -95,12 +95,16 @@
     <span>AIが書類を自動解析して申請書の下書きを作成します。最終的な申請は支部への提出が必要です。</span>
   </div>
 
+  <a href="shiryo.html" class="btn-secondary" style="margin-bottom:12px;">
+    <i class="ti ti-books"></i>共済資料・申請書類の本棚を開く
+  </a>
+
   <!-- ステップ説明 -->
   <div class="card">
     <p class="sec-label">かんたん3ステップ</p>
     <div class="step-row">
       <div class="step-num">1</div>
-      <div class="step-body"><h3>申請種別を選ぶ</h3><p>傷病・入院・ケガなど当てはまるものを選択</p></div>
+      <div class="step-body"><h3>申請種別を選ぶ</h3><p>病気見舞金・ケガ見舞金など当てはまるものを選択</p></div>
     </div>
     <div class="step-row">
       <div class="step-num">2</div>
@@ -116,12 +120,12 @@
   <div class="card">
     <p class="sec-label">STEP 1 申請種別を選択</p>
     <div class="kyosai-type" id="chips">
-      <button class="kyosai-chip" onclick="selectChip(this,'病気（入院）')">病気（入院）</button>
-      <button class="kyosai-chip" onclick="selectChip(this,'ケガ（入院）')">ケガ（入院）</button>
-      <button class="kyosai-chip" onclick="selectChip(this,'通院')">通院</button>
-      <button class="kyosai-chip" onclick="selectChip(this,'手術')">手術</button>
-      <button class="kyosai-chip" onclick="selectChip(this,'死亡')">死亡</button>
-      <button class="kyosai-chip" onclick="selectChip(this,'後遺障害')">後遺障害</button>
+      <button class="kyosai-chip" onclick="selectChip(this,'病気見舞金')">病気見舞金</button>
+      <button class="kyosai-chip" onclick="selectChip(this,'ケガ・特定傷病見舞金')">ケガ・特定傷病</button>
+      <button class="kyosai-chip" onclick="selectChip(this,'非私傷病見舞金')">非私傷病</button>
+      <button class="kyosai-chip" onclick="selectChip(this,'死亡弔慰金')">死亡弔慰金</button>
+      <button class="kyosai-chip" onclick="selectChip(this,'障害見舞金')">障害見舞金</button>
+      <button class="kyosai-chip" onclick="selectChip(this,'慶弔・祝金')">慶弔・祝金</button>
     </div>
   </div>
 
@@ -229,7 +233,7 @@ function analyzeDocs(){
     const SAMPLE_DATA = {
       hospital: '上尾中央総合病院',
       date: '2026年6月24日',
-      diag: selectedType.includes('ケガ') ? '右手擦過傷・打撲' : '急性胃腸炎',
+      diag: selectedType.includes('ケガ') ? '右手擦過傷・打撲' : selectedType.includes('非私') ? '労災・交通事故等の確認が必要' : '急性胃腸炎',
       fee: '¥12,480',
     };
     document.getElementById('d-type').textContent = selectedType;

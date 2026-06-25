@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>資料本棚｜埼玉土建 上尾伊奈支部</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.47.0/iconfont/tabler-icons.min.css">
+<link rel="stylesheet" href="common.css">
+<style>
+.shelf-hero{
+  background:linear-gradient(135deg,#1B2A3B,#0D3A6B);
+  border-radius:var(--r16);padding:18px 20px;margin-bottom:14px;
+  display:flex;align-items:center;gap:16px;overflow:hidden;position:relative;
+}
+.shelf-hero::after{content:'';position:absolute;right:-40px;top:-40px;width:130px;height:130px;border-radius:50%;background:rgba(255,255,255,.06);}
+.shelf-hero i{font-size:46px;color:#B5D4F4;flex-shrink:0;position:relative;z-index:1;}
+.shelf-hero h2{font-size:19px;font-weight:800;color:#fff;margin:0 0 3px;position:relative;z-index:1;}
+.shelf-hero p{font-size:13px;color:rgba(255,255,255,.68);margin:0;position:relative;z-index:1;}
+.search-box{position:relative;margin-bottom:12px;}
+.search-box i{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:18px;color:var(--gray400);}
+.search-box input{padding-left:44px;}
+.filter-row{display:flex;gap:7px;overflow-x:auto;padding-bottom:8px;margin-bottom:8px;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.filter-row::-webkit-scrollbar{display:none;}
+.filter-btn{
+  border:2px solid var(--gray200);background:var(--white);color:var(--gray600);
+  border-radius:99px;padding:8px 14px;font-size:13px;font-weight:700;white-space:nowrap;
+}
+.filter-btn.active{background:var(--orange);border-color:var(--orange);color:#fff;}
+.doc-card{
+  background:var(--white);border-radius:var(--r16);box-shadow:var(--shadow-sm);
+  padding:14px 14px 13px;margin-bottom:10px;border:2px solid transparent;
+}
+.doc-card:hover{border-color:var(--orange);box-shadow:var(--shadow-md);}
+.doc-top{display:flex;gap:12px;align-items:flex-start;margin-bottom:10px;}
+.doc-icon{
+  width:44px;height:54px;border-radius:8px;background:var(--red-lt);color:var(--red);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.doc-icon i{font-size:26px;}
+.doc-title{font-size:15px;font-weight:800;color:var(--navy);margin:0 0 4px;line-height:1.4;}
+.doc-desc{font-size:12px;color:var(--gray600);margin:0;line-height:1.55;}
+.doc-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px;}
+.pill{font-size:11px;font-weight:700;border-radius:99px;padding:2px 8px;background:var(--gray100);color:var(--gray600);}
+.pill.cat{background:var(--blue-lt);color:var(--blue);}
+.doc-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.doc-actions a{
+  display:flex;align-items:center;justify-content:center;gap:6px;border-radius:var(--r12);
+  padding:10px 8px;font-size:13px;font-weight:700;
+}
+.open-btn{background:var(--orange);color:#fff;}
+.save-btn{background:var(--white);color:var(--navy);border:2px solid var(--gray200);}
+.empty{display:none;text-align:center;color:var(--gray500);font-size:14px;padding:28px 16px;}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="hdr">
+  <button class="hdr-back" onclick="location.href='index.html'">
+    <i class="ti ti-arrow-left"></i>ホーム
+  </button>
+  <div style="text-align:right;">
+    <p class="hdr-org" style="margin:0;">埼玉土建 上尾伊奈支部</p>
+    <p class="hdr-title" style="margin:0;font-size:14px;">資料本棚</p>
+  </div>
+</header>
+
+<div class="content">
+  <div class="shelf-hero">
+    <i class="ti ti-books"></i>
+    <div>
+      <h2>資料本棚</h2>
+      <p>共済・給付・資格祝金・審査資料をPDFで確認できます</p>
+    </div>
+  </div>
+
+  <div class="search-box">
+    <i class="ti ti-search"></i>
+    <input type="text" id="search" placeholder="資料名・キーワードで検索" oninput="renderDocs()">
+  </div>
+
+  <div class="filter-row" id="filters">
+    <button class="filter-btn active" onclick="setFilter('all',this)">すべて</button>
+    <button class="filter-btn" onclick="setFilter('制度一覧',this)">制度一覧</button>
+    <button class="filter-btn" onclick="setFilter('申請書類',this)">申請書類</button>
+    <button class="filter-btn" onclick="setFilter('資格祝金',this)">資格祝金</button>
+    <button class="filter-btn" onclick="setFilter('審査',this)">審査</button>
+    <button class="filter-btn" onclick="setFilter('弔慰・見舞',this)">弔慰・見舞</button>
+  </div>
+
+  <div class="alert alert-info">
+    <i class="ti ti-info-circle"></i>
+    <span>PDFは別タブで開きます。スマホでは「保存」から端末へダウンロードできます。申請前に最新の扱いを支部へ確認してください。</span>
+  </div>
+
+  <div id="doc-list"></div>
+  <div id="empty" class="empty">
+    <i class="ti ti-file-search" style="font-size:38px;display:block;margin-bottom:8px;"></i>
+    該当する資料がありません。
+  </div>
+</div>
+
+<footer>埼玉土建一般労働組合 上尾伊奈支部｜TEL 048-773-9863</footer>
+</div>
+
+<script>
+const DOCS = [
+  {
+    title:'2026年度 総合共済制度一覧表',
+    category:'制度一覧',
+    pages:1,
+    file:'assets/pdfs/kyosai/2026-001-kyosai-list.pdf',
+    desc:'病気見舞金、ケガ見舞金、慶弔給付、特別組合員給付などを一覧で確認できます。',
+    tags:['共済','給付一覧','見舞金']
+  },
+  {
+    title:'給付申請に必要な書類 2026年度版',
+    category:'申請書類',
+    pages:1,
+    file:'assets/pdfs/kyosai/2026-002-kyufu-shorui.pdf',
+    desc:'死亡、入院、ケガ、出産など、給付申請に添付する書類の確認用資料です。',
+    tags:['必要書類','申請','添付書類']
+  },
+  {
+    title:'資格取得祝金プレミアム',
+    category:'資格祝金',
+    pages:1,
+    file:'assets/pdfs/kyosai/2026-003-shikaku-premium.pdf',
+    desc:'資格取得祝金プレミアムの対象資格や給付内容を確認できます。',
+    tags:['資格','祝金','プレミアム']
+  },
+  {
+    title:'全建総連 資格取得報奨金制度',
+    category:'資格祝金',
+    pages:4,
+    file:'assets/pdfs/kyosai/2026-007-zenken-shikaku-hoshokin.pdf',
+    desc:'全建総連の資格取得報奨金制度の対象資格、受給資格、申請期限などの運用資料です。',
+    tags:['全建総連','資格','報奨金']
+  },
+  {
+    title:'支部審査実務のてびき',
+    category:'審査',
+    pages:6,
+    file:'assets/pdfs/kyosai/2026-008-shibu-shinsa.pdf',
+    desc:'支部共済審査委員会の構成、任務、審査の進め方を確認する実務資料です。',
+    tags:['支部審査','共済審査','実務']
+  },
+  {
+    title:'各種申請書類の記入例',
+    category:'申請書類',
+    pages:12,
+    file:'assets/pdfs/kyosai/2026-010-kisairei.pdf',
+    desc:'支部審査報告書など、共済関連の申請書類の記入例をまとめた資料です。',
+    tags:['記入例','申請書','報告書']
+  },
+  {
+    title:'祝金対象者 年齢早見表 2026年度版',
+    category:'資格祝金',
+    pages:1,
+    file:'assets/pdfs/kyosai/2026-011-nenrei-hayamihyo.pdf',
+    desc:'小学校・中学校就学祝金など、対象生年月日を確認する早見表です。',
+    tags:['祝金','年齢','早見表']
+  },
+  {
+    title:'死亡弔慰金・障害見舞金の申請について',
+    category:'弔慰・見舞',
+    pages:8,
+    file:'assets/pdfs/kyosai/2026-013-chouikin-mimaikin.pdf',
+    desc:'本人死亡時の死亡弔慰金、障害見舞金の対象、金額、申請時の注意点を確認できます。',
+    tags:['死亡弔慰金','障害見舞金','本人死亡']
+  },
+  {
+    title:'班審査のすすめかた 2026年度版',
+    category:'審査',
+    pages:20,
+    file:'assets/pdfs/kyosai/2026-014-han-shinsa-susume.pdf',
+    desc:'班で共済申請を確認するときの進め方、声かけ、審査の流れをまとめた資料です。',
+    tags:['班審査','すすめかた','共済']
+  },
+  {
+    title:'班審査のてびき',
+    category:'審査',
+    pages:11,
+    file:'assets/pdfs/kyosai/2026-015-han-shinsa-tebiki.pdf',
+    desc:'給付制度の内容、必要書類、班長・役員が確認するポイントを説明した資料です。',
+    tags:['班審査','てびき','必要書類']
+  }
+];
+
+let currentFilter = 'all';
+
+function setFilter(cat, btn){
+  currentFilter = cat;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderDocs();
+}
+
+function renderDocs(){
+  const q = document.getElementById('search').value.trim().toLowerCase();
+  const docs = DOCS.filter(d => {
+    const target = [d.title,d.category,d.desc,...d.tags].join(' ').toLowerCase();
+    return (currentFilter === 'all' || d.category === currentFilter) && (!q || target.includes(q));
+  });
+  document.getElementById('empty').style.display = docs.length ? 'none' : 'block';
+  document.getElementById('doc-list').innerHTML = docs.map(d => `
+    <article class="doc-card">
+      <div class="doc-top">
+        <div class="doc-icon"><i class="ti ti-file-type-pdf"></i></div>
+        <div style="flex:1;">
+          <p class="doc-title">${d.title}</p>
+          <p class="doc-desc">${d.desc}</p>
+          <div class="doc-meta">
+            <span class="pill cat">${d.category}</span>
+            <span class="pill">${d.pages}ページ</span>
+            ${d.tags.slice(0,2).map(t=>`<span class="pill">${t}</span>`).join('')}
+          </div>
+        </div>
+      </div>
+      <div class="doc-actions">
+        <a class="open-btn" href="${d.file}" target="_blank" rel="noopener"><i class="ti ti-external-link"></i>開く</a>
+        <a class="save-btn" href="${d.file}" download><i class="ti ti-download"></i>保存</a>
+      </div>
+    </article>
+  `).join('');
+}
+
+renderDocs();
+</script>
+</body>
+</html>

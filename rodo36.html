@@ -510,34 +510,43 @@ function previewKyotei() {
 <html lang="ja"><head><meta charset="UTF-8">
 <title>36協定届</title>
 <style>
-  @page { size: A4; margin: 15mm 15mm 15mm 15mm; }
-  body { font-family:'Hiragino Sans','Meiryo',sans-serif; font-size:12px; color:#111; margin:0; }
-  h1 { font-size:17px; font-weight:800; text-align:center; margin:0 0 4px; }
-  h1 small { font-size:12px; }
-  .subtitle { text-align:center; font-size:11px; color:#555; margin:0 0 14px; }
-  .meta { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:12px; border:1px solid #ccc; padding:8px 12px; }
-  .meta-item { font-size:12px; }
+  @page { size: A4 portrait; margin: 10mm; }
+  * { box-sizing:border-box; }
+  body { font-family:'Hiragino Sans','Meiryo',sans-serif; font-size:10px; color:#111; margin:0; background:#eef1f5; }
+  .sheet { width:210mm; min-height:297mm; margin:0 auto; padding:10mm; background:#fff; box-shadow:0 8px 28px rgba(0,0,0,.12); }
+  h1 { font-size:14px; font-weight:800; text-align:center; margin:0 0 3px; line-height:1.25; }
+  h1 small { font-size:10px; }
+  .subtitle { text-align:center; font-size:9px; color:#555; margin:0 0 7px; }
+  .meta { display:grid; grid-template-columns:1fr 1fr; gap:3px 6px; margin-bottom:7px; border:1px solid #bbb; padding:5px 7px; }
+  .meta-item { font-size:9.5px; }
   .meta-item span { font-weight:700; }
-  table { width:100%; border-collapse:collapse; margin-bottom:12px; font-size:12px; }
-  th { background:#1B2A3B; color:white; padding:6px 8px; font-weight:700; text-align:left; }
-  td { border:1px solid #aaa; padding:6px 8px; vertical-align:top; }
+  table { width:100%; border-collapse:collapse; margin-bottom:7px; font-size:9.5px; line-height:1.35; page-break-inside:avoid; }
+  th { background:#1B2A3B; color:white; padding:4px 5px; font-weight:700; text-align:left; }
+  td { border:1px solid #aaa; padding:4px 5px; vertical-align:top; }
   tr td:first-child { background:#f5f5f5; font-weight:600; width:20%; }
-  .sign-table td { border:1px solid #aaa; padding:10px 8px; vertical-align:middle; }
+  .sign-table td { border:1px solid #aaa; padding:6px 7px; vertical-align:middle; }
   .sign-table td:first-child { background:#f5f5f5; font-weight:600; width:22%; }
   .sign-cell { display:flex; align-items:center; justify-content:space-between; }
-  .hanko { width:36px; height:36px; border:1.5px solid #aaa; border-radius:4px; display:inline-block; }
-  .note { font-size:10px; color:#666; margin:6px 0; line-height:1.6; }
-  .todokede { text-align:right; font-size:12px; margin-bottom:8px; }
-  .law-note { background:#f9f9f9; border:1px solid #ddd; padding:8px 10px; font-size:10px; color:#555; line-height:1.6; margin-bottom:10px; }
-  @media print { .no-print { display:none; } }
+  .hanko { width:26px; height:26px; border:1.2px solid #aaa; border-radius:4px; display:inline-block; }
+  .note { font-size:8.5px; color:#666; margin:4px 0; line-height:1.45; }
+  .todokede { text-align:right; font-size:9.5px; margin-bottom:5px; }
+  .law-note { background:#f9f9f9; border:1px solid #ddd; padding:5px 7px; font-size:8.5px; color:#555; line-height:1.45; margin-bottom:6px; }
+  .printbar { background:#1B2A3B;color:#fff;padding:10px 14px;margin:0 auto 12px;display:flex;align-items:center;justify-content:space-between;gap:10px;max-width:210mm;border-radius:8px; }
+  .printbar button { background:#E8612A;color:#fff;border:none;border-radius:6px;padding:8px 16px;font-size:14px;font-weight:700;cursor:pointer; }
+  @media print {
+    body { background:#fff; }
+    .no-print { display:none; }
+    .sheet { width:auto; min-height:0; margin:0; padding:0; box-shadow:none; }
+  }
 </style>
 </head>
 <body>
-<div class="no-print" style="background:#1B2A3B;color:#fff;padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;border-radius:8px;">
-  <span style="font-weight:700;">📄 36協定届 プレビュー</span>
-  <button onclick="window.print()" style="background:#E8612A;color:#fff;border:none;border-radius:6px;padding:8px 16px;font-size:14px;font-weight:700;cursor:pointer;">🖨️ 印刷・PDF保存</button>
+<div class="no-print printbar">
+  <span style="font-weight:700;">36協定届 A4プレビュー</span>
+  <button onclick="window.print()">印刷・PDF保存</button>
 </div>
 
+<main class="sheet">
 <h1>${title}</h1>
 <div class="subtitle">労働基準法第36条第1項の協定届　（${isToken?'特別条項付き':'一般条項'}）</div>
 
@@ -616,9 +625,11 @@ function previewKyotei() {
   ※ 本書式は参考様式です。正式な届出は厚生労働省ホームページの様式をご使用ください。<br>
   ※ 詳細・相談：埼玉土建一般労働組合 上尾伊奈支部 TEL 048-773-9863
 </div>
+</main>
 </body></html>`;
 
   const w = window.open('', '_blank', 'width=800,height=900');
+  if(!w){ alert('プレビュー画面を開けませんでした。ポップアップ許可を確認してください。'); return; }
   w.document.write(body);
   w.document.close();
 }

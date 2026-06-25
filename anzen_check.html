@@ -103,7 +103,8 @@
   <!-- 操作ボタン -->
   <div class="action-row">
     <button class="btn-secondary" style="flex:1;" onclick="resetAll()"><i class="ti ti-refresh"></i>リセット</button>
-    <button class="btn-primary" style="flex:2;" onclick="printSummary()"><i class="ti ti-printer"></i>結果を印刷・PDF保存</button>
+    <button class="btn-secondary" style="flex:1;" onclick="previewSummary()"><i class="ti ti-eye"></i>プレビュー</button>
+    <button class="btn-primary" style="flex:2;" onclick="printSummary()"><i class="ti ti-printer"></i>印刷・PDF保存</button>
   </div>
 
   <div class="alert alert-info" style="margin-top:10px;">
@@ -268,7 +269,25 @@ function resetAll(){
   render();
 }
 
+function esc(value){
+  return String(value ?? '').replace(/[&<>"']/g, ch => ({
+    '&':'&amp;',
+    '<':'&lt;',
+    '>':'&gt;',
+    '"':'&quot;',
+    "'":'&#39;'
+  }[ch]));
+}
+
+function previewSummary(){
+  openSummary(false);
+}
+
 function printSummary(){
+  openSummary(true);
+}
+
+function openSummary(autoPrint){
   const siteName = document.getElementById('site-name').value || '未入力';
   const checkDate = document.getElementById('check-date').value || new Date().toLocaleDateString('ja-JP');
   const checker = document.getElementById('checker').value || '未入力';
@@ -277,48 +296,67 @@ function printSummary(){
   const allItems = SECTIONS.flatMap(s=>s.items);
   const total = allItems.length;
   const done  = allItems.filter(it=>checked[it.id]).length;
+  const pct = total ? Math.round(done/total*100) : 0;
 
-  let body = `<html><head><meta charset="UTF-8"><title>現場安全チェックリスト</title>
+  let body = `<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><title>現場安全チェックリスト</title>
   <style>
-    body{font-family:'Hiragino Sans','Meiryo',sans-serif;font-size:13px;margin:20px;}
-    h1{font-size:18px;border-bottom:2px solid #333;padding-bottom:6px;}
-    .info{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0;background:#f5f5f5;padding:10px;border-radius:6px;}
-    .info-item{font-size:13px;}
+    @page{size:A4 portrait;margin:9mm;}
+    *{box-sizing:border-box;}
+    body{font-family:'Hiragino Sans','Meiryo',sans-serif;font-size:8.5pt;line-height:1.25;color:#111;margin:0;background:#eef1f5;}
+    .sheet{width:210mm;min-height:297mm;margin:0 auto;padding:9mm;background:#fff;box-shadow:0 8px 28px rgba(0,0,0,.12);}
+    h1{font-size:15pt;line-height:1.2;border-bottom:2px solid #1B2A3B;padding-bottom:4px;margin:0 0 5px;}
+    .info{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:3px 6px;margin:5px 0 6px;background:#f5f6f8;padding:5px 6px;border:1px solid #d7dbe2;}
+    .info-item{font-size:8.2pt;}
     .info-item span{font-weight:bold;}
-    .section{margin:16px 0;}
-    .section-title{font-size:14px;font-weight:bold;border-left:4px solid #E8612A;padding-left:8px;margin-bottom:8px;}
-    .item{display:flex;align-items:flex-start;gap:8px;padding:5px 0;border-bottom:1px solid #eee;font-size:13px;}
-    .item .chk{font-size:16px;}
+    .summary{background:#1B2A3B;color:#fff;padding:5px 8px;margin:5px 0 7px;font-size:10pt;font-weight:bold;display:flex;justify-content:space-between;}
+    .section-grid{display:grid;grid-template-columns:1fr 1fr;gap:4mm;}
+    .section{break-inside:avoid;page-break-inside:avoid;margin:0 0 3mm;}
+    .section-title{font-size:9pt;font-weight:bold;border-left:3px solid #E8612A;padding-left:5px;margin-bottom:3px;color:#1B2A3B;}
+    .item{display:flex;align-items:flex-start;gap:4px;padding:1.6px 0;border-bottom:1px solid #eee;font-size:7.4pt;}
+    .item .chk{width:12px;flex:0 0 12px;font-size:8pt;text-align:center;}
     .ok{color:#1A7A4A;}
     .ng{color:#C0392B;}
-    .req{font-size:10px;background:#fef0ed;color:#c0392b;padding:1px 5px;border-radius:4px;margin-left:4px;}
-    .summary{background:#1B2A3B;color:#fff;padding:12px 16px;border-radius:8px;margin:16px 0;font-size:16px;font-weight:bold;}
-    @media print{body{margin:10px;}}
+    .req{font-size:6.6pt;background:#fef0ed;color:#c0392b;padding:0 3px;border-radius:3px;margin-left:3px;white-space:nowrap;}
+    .footer{font-size:7.2pt;color:#666;margin-top:5px;border-top:1px solid #ddd;padding-top:4px;}
+    .printbar{background:#1B2A3B;color:#fff;padding:10px 14px;margin:0 auto 12px;display:flex;align-items:center;justify-content:space-between;gap:10px;max-width:210mm;border-radius:8px;}
+    .printbar button{background:#E8612A;color:#fff;border:none;border-radius:6px;padding:8px 16px;font-size:14px;font-weight:700;cursor:pointer;}
+    @media print{
+      body{background:#fff;}
+      .no-print{display:none;}
+      .sheet{width:auto;min-height:0;margin:0;padding:0;box-shadow:none;}
+    }
   </style></head><body>
+  <div class="no-print printbar">
+    <span style="font-weight:700;">現場安全チェックリスト A4プレビュー</span>
+    <button onclick="window.print()">印刷・PDF保存</button>
+  </div>
+  <main class="sheet">
   <h1>現場安全チェックリスト</h1>
   <div class="info">
-    <div class="info-item">現場名：<span>${siteName}</span></div>
-    <div class="info-item">確認日：<span>${checkDate}</span></div>
-    <div class="info-item">確認者：<span>${checker}</span></div>
-    <div class="info-item">天気：<span>${weather}</span></div>
+    <div class="info-item">現場名：<span>${esc(siteName)}</span></div>
+    <div class="info-item">確認日：<span>${esc(checkDate)}</span></div>
+    <div class="info-item">確認者：<span>${esc(checker)}</span></div>
+    <div class="info-item">天気：<span>${esc(weather)}</span></div>
   </div>
-  <div class="summary">確認結果：${done} / ${total} 項目 (${Math.round(done/total*100)}%)</div>`;
+  <div class="summary"><span>確認結果：${done} / ${total} 項目</span><span>${pct}%</span></div>
+  <div class="section-grid">`;
 
   SECTIONS.forEach(sec=>{
-    body += `<div class="section"><div class="section-title">${sec.title}</div>`;
+    body += `<div class="section"><div class="section-title">${esc(sec.title)}</div>`;
     sec.items.forEach(it=>{
       const ok = checked[it.id];
-      body += `<div class="item"><span class="chk ${ok?'ok':'ng'}">${ok?'✅':'⬜'}</span><span>${it.text}${it.required?'<span class="req">必須</span>':''}</span></div>`;
+      body += `<div class="item"><span class="chk ${ok?'ok':'ng'}">${ok?'✓':'□'}</span><span>${esc(it.text)}${it.required?'<span class="req">必須</span>':''}</span></div>`;
     });
     body += '</div>';
   });
 
-  body += '<p style="font-size:11px;color:#888;margin-top:20px;">埼玉土建一般労働組合 上尾伊奈支部 ｜ TEL 048-773-9863</p></body></html>';
+  body += '</div><p class="footer">埼玉土建一般労働組合 上尾伊奈支部 ｜ TEL 048-773-9863</p></main></body></html>';
 
   const w = window.open('','_blank','width=700,height=900');
+  if(!w){ alert('プレビュー画面を開けませんでした。ポップアップ許可を確認してください。'); return; }
   w.document.write(body);
   w.document.close();
-  setTimeout(()=>w.print(), 500);
+  if(autoPrint) setTimeout(()=>w.print(), 500);
 }
 
 // 初期表示
