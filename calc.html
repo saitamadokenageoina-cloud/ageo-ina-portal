@@ -119,6 +119,11 @@
         <p class="tool-card-title">CCUSレベル確認</p>
         <p class="tool-card-desc">職種別 能力評価判定</p>
       </div>
+      <div class="tool-card" onclick="openTool('benefit')">
+        <div class="tool-card-icon" style="color:#6B21A8;"><i class="ti ti-heart-handshake"></i></div>
+        <p class="tool-card-title">退職金・給付金</p>
+        <p class="tool-card-desc">建退共目安・国保給付を試算</p>
+      </div>
     </div>
   </div>
 
@@ -186,7 +191,7 @@
     <option value="1">第1種（職人・技術者）</option>
     <option value="2">第2種（職人・技術者）</option>
     <option value="3m" selected>第3種 男性（職人・技術者）</option>
-    <option value="3f">第3種 女性（職人・技術者）</option>
+    <option value="4">第4種 女性・30〜39歳（職人・技術者）</option>
     <option value="5">第5種（家族従事者等）</option>
     <option value="6">第6種（60歳以上・一定条件）</option>
   </select>
@@ -198,28 +203,28 @@
     <p style="font-weight:700;color:var(--orange);margin:0 0 10px;font-size:12px;letter-spacing:.06em;">📋 土建国保 区分の目安</p>
     <div style="display:flex;flex-direction:column;gap:6px;">
       <div style="background:rgba(255,255,255,.07);border-radius:8px;padding:8px 12px;border-left:3px solid #FAC775;">
-        <p style="font-weight:700;color:#FAC775;margin:0 0 2px;">特2種・特1種（月43,200円）</p>
+        <p style="font-weight:700;color:#FAC775;margin:0 0 2px;">特2種（月43,200円）・特1種（月41,300円）</p>
         <p style="margin:0;font-size:12px;color:rgba(255,255,255,.7);">建設業の事業主（一人親方含む）・役員・管理職などの特別職。法人代表者や個人事業主が対象。</p>
       </div>
       <div style="background:rgba(255,255,255,.07);border-radius:8px;padding:8px 12px;border-left:3px solid #B5D4F4;">
-        <p style="font-weight:700;color:#B5D4F4;margin:0 0 2px;">第1種（月43,200円）</p>
-        <p style="margin:0;font-size:12px;color:rgba(255,255,255,.7);">大工・左官・とび・鉄筋などの建設職種で主として働く男性組合員（原則として60歳未満）。</p>
+        <p style="font-weight:700;color:#B5D4F4;margin:0 0 2px;">第1種（月38,700円）</p>
+        <p style="margin:0;font-size:12px;color:rgba(255,255,255,.7);">法人事業所の役員・個人事業所の事業主、40歳〜49歳の法人代表者など。</p>
       </div>
       <div style="background:rgba(255,255,255,.07);border-radius:8px;padding:8px 12px;border-left:3px solid #B5D4F4;">
-        <p style="font-weight:700;color:#B5D4F4;margin:0 0 2px;">第2種（月41,300円）</p>
-        <p style="margin:0;font-size:12px;color:rgba(255,255,255,.7);">建設関連職種に従事する男性組合員。第1種と近い職種だが、区分条件が異なる場合に適用。</p>
+        <p style="font-weight:700;color:#B5D4F4;margin:0 0 2px;">第2種（月31,400円）</p>
+        <p style="margin:0;font-size:12px;color:rgba(255,255,255,.7);">40歳以上の一人親方・手間請者など。</p>
       </div>
       <div style="background:rgba(255,255,255,.07);border-radius:8px;padding:8px 12px;border-left:3px solid #5DCAA5;">
-        <p style="font-weight:700;color:#5DCAA5;margin:0 0 2px;">第3種 男性・女性（月38,700円）</p>
-        <p style="margin:0;font-size:12px;color:rgba(255,255,255,.7);">建設業に従事する一般の職人・技術者。最も多くの組合員が該当する標準的な区分。</p>
+        <p style="font-weight:700;color:#5DCAA5;margin:0 0 2px;">第3種 男性（月27,700円）・第4種 女性（月23,200円）</p>
+        <p style="margin:0;font-size:12px;color:rgba(255,255,255,.7);">40歳以上の労働者・家族専従者・委託契約者、または30歳〜39歳までの組合員。</p>
       </div>
       <div style="background:rgba(255,255,255,.07);border-radius:8px;padding:8px 12px;border-left:3px solid #FAA;">
-        <p style="font-weight:700;color:#FAA;margin:0 0 2px;">第5種（月27,700円）</p>
-        <p style="margin:0;font-size:12px;color:rgba(255,255,255,.7);">家族従事者（配偶者や家族で建設業を手伝う方）、またはパートタイムで建設業に従事する方など。</p>
+        <p style="font-weight:700;color:#FAA;margin:0 0 2px;">第5種（月19,000円）</p>
+        <p style="margin:0;font-size:12px;color:rgba(255,255,255,.7);">25歳〜29歳までの組合員。</p>
       </div>
       <div style="background:rgba(255,255,255,.07);border-radius:8px;padding:8px 12px;border-left:3px solid rgba(255,255,255,.3);">
         <p style="font-weight:700;color:rgba(255,255,255,.7);margin:0 0 2px;">第6種（月15,400円）</p>
-        <p style="margin:0;font-size:12px;color:rgba(255,255,255,.7);">60歳以上で一定の条件を満たす組合員、または軽微な建設作業に従事する方。</p>
+        <p style="margin:0;font-size:12px;color:rgba(255,255,255,.7);">24歳以下の組合員・外国人技能実習生など。</p>
       </div>
     </div>
     <p style="font-size:11px;color:rgba(255,255,255,.4);margin:8px 0 0;">※ 区分の詳細・判定は支部（048-773-9863）にご確認ください。</p>
@@ -237,6 +242,122 @@
       <div class="card hidden" id="kkp-ageo"><div id="kk-ageo-detail"></div></div>
       <div class="card hidden" id="kkp-doken"><div id="kk-doken-detail"></div></div>
       <div class="alert alert-warn"><i class="ti ti-alert-triangle"></i><span>概算試算です。正確には各窓口・<a href="https://www.sai-doken-kokuho.jp/05hoken/04simulation.html" target="_blank" style="color:#7A5500;text-decoration:underline;">公式シミュレーター</a>でご確認ください。</span></div>
+    </div>
+  </div>
+
+  <!-- 退職金・給付金シミュ -->
+  <div id="tool-benefit" class="tool-detail">
+    <p style="font-size:17px;font-weight:800;color:var(--navy);margin:0 0 14px;">退職金・給付金シミュレーター</p>
+    <div class="tab-row">
+      <button class="t-btn active" onclick="benefitTab('retire')" id="bft-retire">退職金</button>
+      <button class="t-btn" onclick="benefitTab('medical')" id="bft-medical">医療費払戻</button>
+      <button class="t-btn" onclick="benefitTab('sick')" id="bft-sick">傷病手当</button>
+      <button class="t-btn" onclick="benefitTab('birth')" id="bft-birth">出産・葬祭</button>
+    </div>
+
+    <div class="card" id="bfp-retire">
+      <p class="sec-label">建退共 退職金の目安</p>
+      <div class="grid2">
+        <div class="input-group">
+          <label>年間就労日数</label>
+          <input type="number" id="bf-workdays" value="220" min="1" max="365" oninput="calcRetire()">
+        </div>
+        <div class="input-group">
+          <label>加入年数</label>
+          <input type="number" id="bf-years" value="10" min="0" max="50" step="0.5" oninput="calcRetire()">
+        </div>
+      </div>
+      <div class="input-group">
+        <label>掛金日額（目安）</label>
+        <input type="number" id="bf-kakekin" value="320" min="1" oninput="calcRetire()">
+      </div>
+      <div id="bf-retire-result"></div>
+      <div class="alert alert-info" style="margin-top:12px;">
+        <i class="ti ti-info-circle"></i>
+        <span>建退共の実際の退職金は掛金納付月数・制度上の計算により決まります。この試算は「掛金総額ベース」の概算です。</span>
+      </div>
+    </div>
+
+    <div class="card hidden" id="bfp-medical">
+      <p class="sec-label">一部負担払戻金の目安（2026国保ガイド）</p>
+      <div class="grid2">
+        <div class="input-group">
+          <label>対象者</label>
+          <select id="bf-med-person" onchange="calcMedicalRefund()">
+            <option value="member">組合員（入院・通院）</option>
+            <option value="family_in">家族（加入7カ月以降の入院）</option>
+            <option value="family_out">家族の通院・対象外</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>窓口自己負担額（月額）</label>
+          <input type="number" id="bf-med-cost" value="60000" min="0" oninput="calcMedicalRefund()">
+        </div>
+      </div>
+      <div id="bf-medical-result"></div>
+      <p style="font-size:12px;color:var(--gray400);margin:10px 0 0;">※ 保険診療分を暦月ごと、医療機関別・入院通院別に算出。中学生以下、加入月から6カ月以内の家族入院、保険診療外などは対象外です。</p>
+    </div>
+
+    <div class="card hidden" id="bfp-sick">
+      <p class="sec-label">傷病手当金の目安（2026国保ガイド）</p>
+      <div class="grid2">
+        <div class="input-group">
+          <label>保険料区分</label>
+          <select id="bf-sick-kubun" onchange="calcSickPay()">
+            <option value="toku2">特2種</option>
+            <option value="toku1">特1種</option>
+            <option value="1">第1種</option>
+            <option value="2">第2種</option>
+            <option value="3">第3種</option>
+            <option value="4">第4種</option>
+            <option value="5">第5種</option>
+            <option value="6">第6種</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>療養区分</label>
+          <select id="bf-sick-type" onchange="calcSickPay()">
+            <option value="illIn">病気・入院日</option>
+            <option value="illHome">病気・自宅療養日</option>
+            <option value="injuryIn">ケガ等・入院日</option>
+            <option value="injuryOut">ケガ等・通院日</option>
+          </select>
+        </div>
+        <div class="input-group" style="grid-column:1/-1;">
+          <label>支給対象日数</label>
+          <input type="number" id="bf-sick-days" value="20" min="1" max="180" oninput="calcSickPay()">
+        </div>
+      </div>
+      <div id="bf-sick-result"></div>
+      <p style="font-size:12px;color:var(--gray400);margin:10px 0 0;">※ 傷病手当金申請書に医師記入欄が必要です。病気・ケガの内容や休業状況により対象可否が異なります。</p>
+    </div>
+
+    <div class="card hidden" id="bfp-birth">
+      <p class="sec-label">出産・葬祭などの給付目安</p>
+      <div class="grid2">
+        <div class="input-group">
+          <label>給付の種類</label>
+          <select id="bf-event" onchange="calcEventPay()">
+            <option value="birth">出産育児一時金</option>
+            <option value="birthNoOb">出産育児一時金（産科医療補償制度なし）</option>
+            <option value="funeral">葬祭費</option>
+            <option value="childcare">出産後の育児休業給付（月額）</option>
+            <option value="childcareFamily">家族専従者等の休業給付（月額）</option>
+            <option value="fluChild">インフルエンザ補助（13歳未満）</option>
+            <option value="hotel">指定宿泊施設利用補助</option>
+            <option value="disney">東京ディズニーリゾート補助</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>人数・月数・回数</label>
+          <input type="number" id="bf-event-count" value="1" min="1" max="20" oninput="calcEventPay()">
+        </div>
+      </div>
+      <div id="bf-event-result"></div>
+      <div class="alert alert-warn" style="margin-top:12px;">
+        <i class="ti ti-alert-triangle"></i>
+        <span>支給には加入期間・申請書類・年度内回数などの条件があります。実際の申請前に支部へ確認してください。</span>
+      </div>
     </div>
   </div>
 
@@ -278,10 +399,11 @@ function openTool(name){
   document.querySelectorAll('.tool-detail').forEach(d=>d.classList.remove('active'));
   document.getElementById('tool-'+name).classList.add('active');
   document.getElementById('back-label').textContent='計算ツール';
-  const titles={romu:'労務費シミュ',kokuho:'国保税シミュ',ccus:'CCUSレベル確認'};
+  const titles={romu:'労務費シミュ',kokuho:'国保税シミュ',ccus:'CCUSレベル確認',benefit:'退職金・給付金'};
   document.getElementById('page-title').textContent=titles[name]||'計算ツール';
   if(name==='romu'){calcRoumu();}
   if(name==='ccus')initCcus();
+  if(name==='benefit'){initBenefit();}
 }
 function closeTool(){
   currentTool=null;
@@ -321,7 +443,105 @@ function totalRow(honninTotal, kaishaTotal){
       <p style="margin:0;color:var(--orange);">本人 ${honninTotal}</p>
       <p style="margin:0;font-size:13px;color:var(--navy);">会社 ${kaishaTotal}</p>
     </div>
-  </div>`;
+    </div>`;
+}
+
+// ========== 退職金・給付金シミュレーター ==========
+const BF_SICK = {
+  toku2:{label:'特2種',illIn:6900,illHome:5000,injuryIn:3300,injuryOut:2200},
+  toku1:{label:'特1種',illIn:6500,illHome:4800,injuryIn:3300,injuryOut:2200},
+  '1':{label:'第1種',illIn:6000,illHome:4300,injuryIn:2900,injuryOut:2000},
+  '2':{label:'第2種',illIn:5500,illHome:3800,injuryIn:2600,injuryOut:1700},
+  '3':{label:'第3種',illIn:5000,illHome:3300,injuryIn:2300,injuryOut:1500},
+  '4':{label:'第4種',illIn:4500,illHome:3000,injuryIn:2000,injuryOut:1300},
+  '5':{label:'第5種',illIn:4300,illHome:2800,injuryIn:1800,injuryOut:1200},
+  '6':{label:'第6種',illIn:4000,illHome:2600,injuryIn:1600,injuryOut:1100}
+};
+
+function money(n){return Math.max(0,Math.round(n)).toLocaleString('ja-JP')+'円';}
+
+function initBenefit(){
+  benefitTab('retire');
+  calcRetire();
+  calcMedicalRefund();
+  calcSickPay();
+  calcEventPay();
+}
+
+function benefitTab(tab){
+  ['retire','medical','sick','birth'].forEach(t=>{
+    document.getElementById('bfp-'+t).classList.toggle('hidden',t!==tab);
+    document.getElementById('bft-'+t).classList.toggle('active',t===tab);
+  });
+}
+
+function calcRetire(){
+  const days=parseFloat(document.getElementById('bf-workdays').value)||0;
+  const years=parseFloat(document.getElementById('bf-years').value)||0;
+  const daily=parseFloat(document.getElementById('bf-kakekin').value)||320;
+  const totalDays=Math.round(days*years);
+  const total=totalDays*daily;
+  const monthly=years>0?total/(years*12):0;
+  document.getElementById('bf-retire-result').innerHTML=`
+    <div style="background:var(--gray50);border-radius:var(--r12);padding:14px 16px;margin-top:4px;">
+      <div class="result-row"><span class="result-label">掛金納付日数の目安</span><span class="result-val">${totalDays.toLocaleString()}日</span></div>
+      <div class="result-row"><span class="result-label">掛金総額ベース</span><span class="result-val">${money(total)}</span></div>
+      <div class="result-row total"><span class="result-label">月あたり積立目安</span><span class="result-val">${money(monthly)}</span></div>
+    </div>`;
+}
+
+function calcMedicalRefund(){
+  const person=document.getElementById('bf-med-person').value;
+  const cost=parseFloat(document.getElementById('bf-med-cost').value)||0;
+  const eligible=person==='member'||person==='family_in';
+  const refund=eligible?Math.max(0,cost-17500):0;
+  const finalPay=eligible?Math.min(cost,17500):cost;
+  const label=person==='member'?'組合員（入院・通院）':person==='family_in'?'家族（加入7カ月以降の入院）':'家族通院など対象外';
+  document.getElementById('bf-medical-result').innerHTML=`
+    <div style="background:var(--gray50);border-radius:var(--r12);padding:14px 16px;margin-top:4px;">
+      <div class="result-row"><span class="result-label">対象</span><span class="result-val">${label}</span></div>
+      <div class="result-row"><span class="result-label">窓口自己負担</span><span class="result-val">${money(cost)}</span></div>
+      <div class="result-row"><span class="result-label">月17,500円控除</span><span class="result-val">${eligible?'-17,500円':'対象外'}</span></div>
+      <div class="result-row total"><span class="result-label">払戻見込額</span><span class="result-val" style="color:var(--orange);">${money(refund)}</span></div>
+      <div class="result-row"><span class="result-label">実質負担目安</span><span class="result-val">${money(finalPay)}</span></div>
+    </div>`;
+}
+
+function calcSickPay(){
+  const kubun=document.getElementById('bf-sick-kubun').value;
+  const type=document.getElementById('bf-sick-type').value;
+  const days=Math.min(180,parseInt(document.getElementById('bf-sick-days').value)||0);
+  const row=BF_SICK[kubun]||BF_SICK['3'];
+  const daily=row[type]||0;
+  const typeLabel={illIn:'病気・入院日',illHome:'病気・自宅療養日',injuryIn:'ケガ等・入院日',injuryOut:'ケガ等・通院日'}[type];
+  document.getElementById('bf-sick-result').innerHTML=`
+    <div style="background:var(--gray50);border-radius:var(--r12);padding:14px 16px;margin-top:4px;">
+      <div class="result-row"><span class="result-label">${row.label} / ${typeLabel}</span><span class="result-val">${money(daily)} / 日</span></div>
+      <div class="result-row"><span class="result-label">支給対象日数</span><span class="result-val">${days}日</span></div>
+      <div class="result-row total"><span class="result-label">支給見込額</span><span class="result-val" style="color:var(--orange);">${money(daily*days)}</span></div>
+    </div>`;
+}
+
+function calcEventPay(){
+  const event=document.getElementById('bf-event').value;
+  const count=parseInt(document.getElementById('bf-event-count').value)||1;
+  const data={
+    birth:{label:'出産育児一時金',unit:500000,note:'1児につき50万円。妊娠満12週（満84日）以上の出産が対象です。'},
+    birthNoOb:{label:'出産育児一時金（産科医療補償制度なし）',unit:488000,note:'産科医療補償制度に該当しない場合は48万8,000円です。'},
+    funeral:{label:'葬祭費',unit:70000,note:'組合員・家族が亡くなり、葬儀を行ったとき喪主へ支給されます。'},
+    childcare:{label:'育児休業給付（月額）',unit:28000,note:'出産手当金支給終了後の育児休業が対象。最長9カ月。'},
+    childcareFamily:{label:'家族専従者等の休業給付（月額）',unit:36000,note:'加入月から7カ月目以降。最長3カ月。'},
+    fluChild:{label:'インフルエンザ補助（13歳未満・1回目）',unit:3000,note:'年度内1回。補助券方式または申請方式。'},
+    hotel:{label:'指定宿泊施設利用補助',unit:3000,note:'1人1泊分まで。宿泊料金が補助額未満の場合は実費補助。'},
+    disney:{label:'東京ディズニーリゾート利用補助',unit:2000,note:'パークチケット購入時の利用補助額。'}
+  }[event];
+  document.getElementById('bf-event-result').innerHTML=`
+    <div style="background:var(--gray50);border-radius:var(--r12);padding:14px 16px;margin-top:4px;">
+      <div class="result-row"><span class="result-label">${data.label}</span><span class="result-val">${money(data.unit)} / 単位</span></div>
+      <div class="result-row"><span class="result-label">人数・月数・回数</span><span class="result-val">${count}</span></div>
+      <div class="result-row total"><span class="result-label">給付・補助見込額</span><span class="result-val" style="color:var(--orange);">${money(data.unit*count)}</span></div>
+      <p style="font-size:12px;color:var(--gray600);margin:10px 0 0;">${data.note}</p>
+    </div>`;
 }
 
 function calcRoumu(){
@@ -508,12 +728,12 @@ function calcCcus(){
 const KUBUN_DESC = {
   toku2: '事業主・役員・代表者など特別職（建設業を営む個人事業主・法人代表者など）',
   toku1: '事業主・役員・代表者など特別職（特2種と同額。区分条件の違いにより適用）',
-  '1':   '大工・左官・とび・鉄筋等の建設職種で主として働く男性組合員（原則60歳未満）',
-  '2':   '建設関連職種に従事する男性組合員。第1種と近い条件だが区分要件が異なる場合に適用',
-  '3m':  '建設業に従事する男性の職人・技術者。最も多くの組合員が該当する標準的な区分',
-  '3f':  '建設業に従事する女性の職人・技術者',
-  '5':   '家族従事者や建設業に従事するパートタイム労働者など',
-  '6':   '60歳以上で一定条件を満たす組合員、または軽微な建設作業に従事する方'
+  '1':   '法人事業所の役員・個人事業所の事業主、40歳〜49歳の法人代表者など',
+  '2':   '40歳以上の一人親方・手間請者など',
+  '3m':  '40歳以上の労働者・家族専従者・委託契約者、または30歳〜39歳までの男性組合員など',
+  '4':   '女性組合員または30歳〜39歳までの組合員など',
+  '5':   '25歳〜29歳までの組合員',
+  '6':   '24歳以下の組合員、または外国人技能実習生など'
 };
 function showKubunDesc() {
   const v = document.getElementById('kk-dkubun').value;
@@ -539,13 +759,17 @@ const KK_RATES={
     kai:{sRate:0.0238,uRate:15500,cap:170000},ko:{sRate:0.0029,uRate:1765,cap:30000}}
 };
 const KK_DOKEN_KUBUN={
-  "toku2":{label:"特2種",hoken:43200,shien:700},"toku1":{label:"特1種",hoken:43200,shien:700},
-  "1":{label:"第1種",hoken:43200,shien:700},"2":{label:"第2種",hoken:41300,shien:600},
-  "3m":{label:"第3種（男）",hoken:38700,shien:600},"3f":{label:"第3種（女）",hoken:38700,shien:600},
-  "5":{label:"第5種",hoken:27700,shien:500},"6":{label:"第6種",hoken:15400,shien:200}
+  "toku2":{label:"特2種",hoken:43200,shien:700,kaigo:6300},
+  "toku1":{label:"特1種",hoken:41300,shien:600,kaigo:6200},
+  "1":{label:"第1種",hoken:38700,shien:600,kaigo:5300},
+  "2":{label:"第2種",hoken:31400,shien:500,kaigo:4800},
+  "3m":{label:"第3種（男）",hoken:27700,shien:500,kaigo:4300},
+  "4":{label:"第4種（女）",hoken:23200,shien:300,kaigo:3900},
+  "5":{label:"第5種",hoken:19000,shien:300,kaigo:0},
+  "6":{label:"第6種",hoken:15400,shien:200,kaigo:0}
 };
-const KK_FAM_HOKEN={tokubetsu:7900,ippan:6200,chuko:4400,shogaku:3200,mishuugaku:2100};
-const KK_FAM_SHIEN={tokubetsu:200,ippan:200,chuko:100,shogaku:0,mishuugaku:0};
+const KK_FAM_HOKEN={tokubetsu:15400,ippan:4600,chuko:4300,shogaku:3800,mishuugaku:1000};
+const KK_FAM_SHIEN={tokubetsu:200,ippan:200,chuko:0,shogaku:0,mishuugaku:0};
 const KK_KAIGO_M=2700;
 let kkMembers=[],kkMemberCount=0;
 
@@ -597,7 +821,7 @@ function kkCalcCity(mems,cityKey){
 
 function kkCalcDoken(mems,dkubun){
   const kd=KK_DOKEN_KUBUN[dkubun];const honnin=mems.find(m=>m.rel==='honnin');const honninAge=honnin?.age||40;
-  const kaigoM=(honninAge>=40&&honninAge<65)?KK_KAIGO_M:0;
+  const kaigoM=(honninAge>=40&&honninAge<65)?(kd.kaigo||0):0;
   const families=mems.filter(m=>m.rel!=='honnin');let famHoken=0,famShien=0,famKaigo=0;const famDetails=[];
   families.forEach((m,i)=>{const exempt=i>=3;const fh=exempt?0:(KK_FAM_HOKEN[m.rel]||7900);const fs=exempt?0:(KK_FAM_SHIEN[m.rel]||200);const fk=(exempt||!['tokubetsu','ippan'].includes(m.rel))?0:(m.age>=40&&m.age<65?KK_KAIGO_M:0);famHoken+=fh;famShien+=fs;famKaigo+=fk;famDetails.push({rel:m.rel,age:m.age,exempt,fh,fs,fk});});
   const monthTotal=kd.hoken+kd.shien+kaigoM+famHoken+famShien+famKaigo;

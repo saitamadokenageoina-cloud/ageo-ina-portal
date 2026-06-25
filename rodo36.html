@@ -287,7 +287,7 @@
     </div>
 
     <button class="btn-primary" onclick="previewKyotei()" style="margin-top:8px;">
-      <i class="ti ti-eye"></i>36協定届をプレビュー・印刷
+      <i class="ti ti-printer"></i>36協定届をプレビュー・印刷/PDF保存
     </button>
   </div></div>
 <footer>埼玉土建一般労働組合 上尾伊奈支部｜TEL 048-773-9863</footer>
@@ -438,8 +438,8 @@ document.getElementById('f-kyujitsu').addEventListener('change', function(){
 // 今日の日付をデフォルトにセット
 (function(){
   const today = new Date().toISOString().split('T')[0];
-  document.getElementById('f-teiketsubi').value = today;
-  document.getElementById('f-todokede').value = today;
+  document.getElementById('f-teiketsu').value = today;
+  document.getElementById('f-todoke').value = today;
 })();
 
 function g(id){ return (document.getElementById(id)||{}).value||''; }
@@ -451,8 +451,8 @@ function previewKyotei() {
   const jusho     = g('f-jusho')    || '（記入してください）';
   const ninzu     = g('f-ninzu')    || '　';
   const yuko      = g('f-yuko')     || '1年間';
-  const teiketsu  = g('f-teiketsubi') ? new Date(g('f-teiketsubi')).toLocaleDateString('ja-JP',{year:'numeric',month:'long',day:'numeric'}) : '　　年　　月　　日';
-  const todoke    = g('f-todokede')   ? new Date(g('f-todokede')).toLocaleDateString('ja-JP',{year:'numeric',month:'long',day:'numeric'}) : '　　年　　月　　日';
+  const teiketsu  = g('f-teiketsu') ? new Date(g('f-teiketsu')).toLocaleDateString('ja-JP',{year:'numeric',month:'long',day:'numeric'}) : '　　年　　月　　日';
+  const todoke    = g('f-todoke')   ? new Date(g('f-todoke')).toLocaleDateString('ja-JP',{year:'numeric',month:'long',day:'numeric'}) : '　　年　　月　　日';
   const jiyu      = g('f-jiyu')    || '（記入してください）';
   const gyomu     = g('f-gyomu')   || '（記入してください）';
   const nichi     = g('f-1nichi')  || '　　時間';
@@ -473,9 +473,9 @@ function previewKyotei() {
   const fukushi   = g('f-fukushi')    || '医師による面接指導';
 
   // 休日労働
-  const kyujitsuJiyu  = g('f-kyujitsu-jiyu')  || '（記入してください）';
-  const kyujitsuGyomu = g('f-kyujitsu-gyomu') || '（記入してください）';
-  const kyujitsuBi    = g('f-kyujitsu-bi')    || '（記入してください）';
+  const kyujitsuJiyu  = g('f-kj-jiyu')  || '（記入してください）';
+  const kyujitsuGyomu = g('f-kj-gyomu') || '（記入してください）';
+  const kyujitsuBi    = g('f-kj-bi')    || '（記入してください）';
 
   const isToken = kyoteiType === 'tokubetsu';
   const hasKyujitsu = chk('f-kyujitsu');

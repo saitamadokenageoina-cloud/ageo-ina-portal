@@ -193,6 +193,12 @@ const WEATHER_ICONS = {
   '晴時々曇': '🌤️', '晴のち曇': '🌤️', '曇時々晴': '⛅',
   '曇時々雨': '🌦️', '晴時々雨': '🌦️'
 };
+const WEATHER_CODES = {
+  0:'晴れ', 1:'概ね晴れ', 2:'一部曇り', 3:'曇り',
+  45:'霧', 48:'霧', 51:'小雨', 53:'小雨', 55:'雨',
+  61:'雨', 63:'雨', 65:'強い雨', 71:'雪', 73:'雪', 75:'強い雪',
+  80:'にわか雨', 81:'にわか雨', 82:'強いにわか雨', 95:'雷雨'
+};
 
 function getWeatherIcon(desc) {
   for (const [k, v] of Object.entries(WEATHER_ICONS)) {
@@ -208,75 +214,52 @@ async function loadWeather() {
   icon.className = 'ti ti-refresh';
 
   try {
-    // GPS取得
+    document.getElementById('loc-name').textContent = '現在地を取得中…';
+
+    // GPS取得（GitHub PagesはHTTPSなので利用可能）
     const pos = await new Promise((res, rej) =>
-      navigator.geolocation.getCurrentPosition(res, rej, {timeout:8000})
+      navigator.geolocation.getCurrentPosition(res, rej, {
+        enableHighAccuracy:true,
+        timeout:10000,
+        maximumAge:10*60*1000
+      })
     );
     const lat = pos.coords.latitude;
     const lon = pos.coords.longitude;
 
-    // 逆ジオコーディング（nominatim）
-    const geoRes = await fetch(
-      `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&accept-language=ja`,
-      {headers:{'User-Agent':'DokenPortalApp/1.0'}}
+    let city = `現在地（${lat.toFixed(3)}, ${lon.toFixed(3)}）`;
+    try {
+      const geoRes = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&accept-language=ja`);
+      const geoData = await geoRes.json();
+      city = geoData.address?.city || geoData.address?.town || geoData.address?.village || geoData.address?.county || city;
+    } catch(e) {}
+
+    // GPS座標に近い現在気象を取得（気温・湿度）
+    const weatherRes = await fetch(
+      `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,weather_code&timezone=Asia%2FTokyo`
     );
-    const geoData = await geoRes.json();
-    const city = geoData.address?.city || geoData.address?.town || geoData.address?.village || '埼玉県';
+    const weatherData = await weatherRes.json();
+    const current = weatherData.current || {};
+    const temp = parseFloat(current.temperature_2m);
+    const hum = parseFloat(current.relative_humidity_2m);
+    const weather = WEATHER_CODES[current.weather_code] || '現在地の気象';
+
     document.getElementById('loc-name').textContent = city + ' 付近';
+    document.getElementById('w-temp').textContent = isNaN(temp) ? '--' : Math.round(temp);
+    document.getElementById('w-desc').textContent = weather;
+    document.getElementById('w-icon').textContent = getWeatherIcon(weather);
 
-    // 気象庁予報取得（埼玉県）
-    const jmaRes = await fetch(JMA_SAITAMA);
-    const jmaData = await jmaRes.json();
-
-    // 今日の予報を取得
-    const timeSeriesArr = jmaData[0]?.timeSeries || [];
-    let tempMax = null, weather = null;
-
-    // 天気
-    const weatherSeries = timeSeriesArr.find(ts =>
-      ts.areas?.[0]?.weathers?.length > 0
-    );
-    if (weatherSeries) {
-      weather = weatherSeries.areas[0]?.weathers?.[0] || null;
+    if (!isNaN(temp)) document.getElementById('temp').value = Math.round(temp);
+    if (!isNaN(hum)) {
+      document.getElementById('hum').value = Math.round(hum);
+      document.getElementById('w-hum').textContent = Math.round(hum) + '%';
     }
-
-    // 気温（今日の最高気温）
-    const tempSeries = timeSeriesArr.find(ts =>
-      ts.areas?.[0]?.tempsMax?.length > 0 || ts.areas?.[0]?.temps?.length > 0
-    );
-    if (tempSeries) {
-      const area = tempSeries.areas[0];
-      tempMax = parseFloat(area?.tempsMax?.[0] || area?.temps?.[0] || null);
-    }
-
-    // 週間予報から補完
-    if (!tempMax) {
-      const weekly = jmaData[1]?.timeSeries || [];
-      const wTemp = weekly.find(ts => ts.areas?.[0]?.tempsMax?.length > 0);
-      if (wTemp) tempMax = parseFloat(wTemp.areas[0]?.tempsMax?.[0]);
-    }
-
-    // 表示更新
-    const displayTemp = tempMax ? Math.round(tempMax) : '--';
-    document.getElementById('w-temp').textContent = displayTemp;
-    document.getElementById('w-desc').textContent = weather ? weather.replace(/　/g,'') : '埼玉県の予報';
-    document.getElementById('w-icon').textContent = getWeatherIcon(weather || '');
-
-    // 気温を入力欄にセット
-    if (tempMax) {
-      document.getElementById('temp').value = Math.round(tempMax);
-      // 湿度は季節・天気から推定
-      const estHum = weather && weather.includes('雨') ? 85 :
-                     weather && weather.includes('曇') ? 70 : 55;
-      document.getElementById('hum').value = estHum;
-      document.getElementById('w-hum').textContent = estHum + '%';
-      calcRisk();
-    }
+    calcRisk();
 
   } catch(err) {
     // GPS拒否・APIエラー時は上尾市の固定予報表示
-    document.getElementById('loc-name').textContent = '上尾市（GPSオフ）';
-    document.getElementById('w-desc').textContent = '位置情報またはAPIを取得できませんでした';
+    document.getElementById('loc-name').textContent = '上尾市（位置情報オフ）';
+    document.getElementById('w-desc').textContent = '位置情報を許可すると現在地で自動判定します';
     try {
       const jmaRes = await fetch(JMA_SAITAMA);
       const jmaData = await jmaRes.json();

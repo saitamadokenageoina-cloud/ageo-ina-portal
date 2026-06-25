@@ -371,7 +371,7 @@
     <i class="ti ti-chevron-right lc-arrow"></i>
   </a>
 
-  <a class="lc" href="https://www.youtube.com/@%E5%9F%BC%E7%8E%89%E5%9C%9F%E5%BB%BA%E4%B8%8A%E5%B0%BE%E4%BC%8A%E5%A5%88%E6%94%AF%E9%83%A8" onclick="openYouTube(event)" target="_blank" rel="noopener">
+  <a class="lc" href="youtube.html">
     <div class="lc-thumb" style="background:#FEE8E8;">
       <svg viewBox="0 0 64 64"><rect x="6" y="14" width="52" height="36" rx="8" fill="#FF0000" opacity=".2"/><rect x="9" y="18" width="46" height="28" rx="6" fill="#FF0000" opacity=".5"/><polygon points="24,26 24,38 42,32" fill="white"/><circle cx="48" cy="48" r="9" fill="#FF0000"/><polygon points="45,44 45,52 53,48" fill="white"/></svg>
     </div>
@@ -379,7 +379,7 @@
       <p class="lc-title">YouTubeチャンネル</p>
       <p class="lc-desc">活動動画・講習案内を視聴</p>
     </div>
-    <i class="ti ti-external-link lc-arrow"></i>
+    <i class="ti ti-chevron-right lc-arrow"></i>
   </a>
 
 </div>
@@ -388,17 +388,5 @@
 <footer>埼玉土建一般労働組合 上尾伊奈支部｜〒362-0003 上尾市菅谷295｜TEL 048-773-9863</footer>
 </div>
 
-<script>
-function openYouTube(e) {
-  e.preventDefault();
-  const appUrl = 'youtube://www.youtube.com/channel/UCl-kAtNcthcVmAZT2jK3JrA';
-  const webUrl = 'https://www.youtube.com/@埼玉土建上尾伊奈支部';
-  const start = Date.now();
-  window.location.href = appUrl;
-  setTimeout(function() {
-    if (Date.now() - start < 2000) window.open(webUrl, '_blank');
-  }, 1000);
-}
-</script>
 </body>
 </html>
