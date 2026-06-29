@@ -190,6 +190,33 @@ html[data-theme="dark"] textarea{
   border-color:rgba(255,255,255,.16)!important;
   color:#F8FAFC!important;
 }
+html[data-theme="dark"] input::placeholder,
+html[data-theme="dark"] textarea::placeholder{color:#AFC1D6!important;opacity:1;}
+html[data-theme="dark"] select option{
+  background:#071426!important;
+  color:#F8FAFC!important;
+}
+html[data-theme="dark"] [style*="color:var(--navy)"],
+html[data-theme="dark"] [style*="color: var(--navy)"],
+html[data-theme="dark"] [style*="color:var(--gray600)"],
+html[data-theme="dark"] [style*="color: var(--gray600)"],
+html[data-theme="dark"] [style*="color:var(--gray400)"],
+html[data-theme="dark"] [style*="color: var(--gray400)"],
+html[data-theme="dark"] [style*="color:var(--gray500)"],
+html[data-theme="dark"] [style*="color: var(--gray500)"],
+html[data-theme="dark"] [style*="color:var(--gray700)"],
+html[data-theme="dark"] [style*="color: var(--gray700)"]{color:#E8EEF7!important;}
+html[data-theme="dark"] [style*="background:var(--gray50)"],
+html[data-theme="dark"] [style*="background: var(--gray50)"],
+html[data-theme="dark"] [style*="background:var(--white)"],
+html[data-theme="dark"] [style*="background: var(--white)"]{
+  background:#10213A!important;
+  border-color:rgba(255,255,255,.14)!important;
+}
+html[data-theme="light"] [style*="color:var(--gray400)"],
+html[data-theme="light"] [style*="color: var(--gray400)"],
+html[data-theme="light"] [style*="color:var(--gray500)"],
+html[data-theme="light"] [style*="color: var(--gray500)"]{color:#334155!important;}
 html[data-theme="dark"] .alert-info{background:#102A4A;color:#B5D4F4;}
 html[data-theme="dark"] .alert-warn{background:#3B2D0A;color:#FFE39A;}
 html[data-theme="dark"] .alert-ok{background:#0D3324;color:#B8F0D0;}
