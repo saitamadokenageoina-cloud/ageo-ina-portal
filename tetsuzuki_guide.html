@@ -77,6 +77,7 @@
   .card-head-left { display: flex; align-items: center; gap: 10px; }
   .icon-circle { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .icon-circle i { font-size: 18px; }
+  .icon-glyph { font-size: 21px; line-height: 1; display: block; }
   .card-title { font-size: 14px; font-weight: 500; margin: 0; }
   .badge { font-size: 11px; padding: 3px 10px; border-radius: var(--border-radius-md); white-space: nowrap; }
   .badge.ok { background: var(--color-background-success); color: var(--color-text-success); }
@@ -241,6 +242,15 @@ const MERITS = [
   { cat:"仲間づくり", icon:"ti-users", bg:"var(--c-teal-50)", fg:"var(--c-teal-800)", title:"班会議・青年部・主婦の会・シニア友の会", desc:"地域の仲間とつながり、現場の悩みを共有できる場。コンビニ・スマホ払いへの移行も進行中。" }
 ];
 
+const MERIT_GLYPHS = {
+  "総合共済":"🛡️","埼玉土建国保":"🏥","じん肺・アスベスト対策":"🫁","建設業退職金共済（建退共）":"💰",
+  "労働保険（労災・雇用保険）":"⛑️","CCUS（建設キャリアアップシステム）":"🪪","労働者供給事業":"🤝",
+  "住推協（住宅リフォーム推進サポート協議会）":"🏠","資格取得支援":"📜","建築支援センター":"🏛️",
+  "総合賠償責任補償":"🔒","自動車共済":"🚗","サイクるん（自転車保険）":"🚲","どけん火災共済・地震共済":"🔥",
+  "DOKENカード":"💳","宿帳（指定宿泊施設利用補助）":"🛏️","各種相談（弁護士・税理士等）":"⚖️",
+  "班会議・青年部・主婦の会・シニア友の会":"👥"
+};
+
 let currentMode = "tetsuzuki";
 
 function setMode(mode){
@@ -274,10 +284,11 @@ function renderMerits(){
       card.className = 'card';
       card.style.padding = '0.85rem 1.1rem';
       card.style.marginBottom = '10px';
+      const glyph = MERIT_GLYPHS[m.title] || '✅';
       card.innerHTML = `
         <div style="display:flex; align-items:flex-start; gap:10px;">
           <div class="icon-circle" style="width:32px; height:32px; background:${m.bg}; color:${m.fg};">
-            <i class="ti ${m.icon}" style="font-size:16px;" aria-hidden="true"></i>
+            <span class="icon-glyph" style="font-size:18px;" aria-hidden="true">${glyph}</span>
           </div>
           <div>
             <p style="font-size:14px; font-weight:500; margin:0 0 4px;">${m.title}</p>

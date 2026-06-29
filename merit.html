@@ -12,6 +12,7 @@
 .merit-card:hover{box-shadow:var(--shadow-md);}
 .merit-icon{width:44px;height:44px;border-radius:var(--r12);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .merit-icon i{font-size:22px;}
+.merit-glyph{font-size:24px;line-height:1;display:block;}
 .merit-title{font-size:15px;font-weight:700;margin:0 0 3px;color:var(--navy);}
 .merit-desc{font-size:13px;color:var(--gray600);margin:0;line-height:1.6;}
 </style>
@@ -74,28 +75,26 @@ const MERITS=[
   {cat:"仲間づくり",icon:"ti-users",bg:"#E8F5EE",fg:"#1A7A4A",title:"班会議・青年部・主婦の会・シニア友の会",desc:"地域の仲間とつながり、現場の悩みを共有できる場。コンビニ・スマホ払いへの移行も進行中。"}
 ];
 
+const ICON_GLYPHS={
+  "総合共済":"🛡️","埼玉土建国保":"🏥","じん肺・アスベスト対策":"🫁","建設業退職金共済（建退共）":"💰",
+  "労働保険（労災・雇用保険）":"⛑️","CCUS（建設キャリアアップシステム）":"🪪","労働者供給事業":"🤝",
+  "住推協（住宅リフォーム推進サポート協議会）":"🏠","資格取得支援":"📜","建築支援センター":"🏛️",
+  "自動車共済":"🚗","サイクるん（自転車保険）":"🚲","どけん火災共済・地震共済":"🔥",
+  "DOKENカード":"💳","宿帳（指定宿泊施設利用補助）":"🛏️","各種相談（弁護士・税理士等）":"⚖️",
+  "班会議・青年部・主婦の会・シニア友の会":"👥"
+};
 function renderMerits(){
   const el=document.getElementById('merit-list');
+  el.innerHTML='';
   const cats=[...new Set(MERITS.map(m=>m.cat))];
   cats.forEach(cat=>{
     const h=document.createElement('p');h.className='cat-heading';h.textContent=cat;el.appendChild(h);
     MERITS.filter(m=>m.cat===cat).forEach(m=>{
       const card=document.createElement('div');card.className='merit-card';
+      const glyph=ICON_GLYPHS[m.title] || '✅';
       card.innerHTML=`
-        <div class="merit-icon" style="background:${m.bg};"><i class="ti ${m.icon}" style="color:${m.fg};font-size:22px;" aria-hidden="true"></i></div>
+        <div class="merit-icon" style="background:${m.bg}; color:${m.fg};"><span class="merit-glyph" aria-hidden="true">${glyph}</span></div>
         <div><p class="merit-title">${m.title}</p><p class="merit-desc">${m.desc}</p></div>`;
-      el.appendChild(card);
-    });
-  });
-}
-function renderMerits(){
-  const el=document.getElementById("merit-list");
-  const cats=[...new Set(MERITS.map(m=>m.cat))];
-  cats.forEach(cat=>{
-    const h=document.createElement("p");h.className="cat-heading";h.textContent=cat;el.appendChild(h);
-    MERITS.filter(m=>m.cat===cat).forEach(m=>{
-      const card=document.createElement("div");card.className="merit-card";
-      card.innerHTML=`<div class="merit-icon" style="background:${m.bg};"><i class="ti ${m.icon}" style="color:${m.fg};font-size:22px;"></i></div><div><p class="merit-title">${m.title}</p><p class="merit-desc">${m.desc}</p></div>`;
       el.appendChild(card);
     });
   });
