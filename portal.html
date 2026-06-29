@@ -465,7 +465,7 @@ footer {
         <div class="tool-card-icon" style="color:#E8612A;">
           <i class="ti ti-building-community" aria-hidden="true"></i>
         </div>
-        <p class="tool-card-title">国保税シミュ</p>
+        <p class="tool-card-title">国保料シミュ</p>
         <p class="tool-card-desc">上尾市・伊奈町 vs 土建国保</p>
       </div>
       <div class="tool-card" onclick="openTool('ccus')">
@@ -508,10 +508,12 @@ footer {
         <div class="input-group">
           <label>土建国保 組合員区分</label>
           <select id="dokenkubun" onchange="calcShakai()">
-            <option value="1">第1種（法人代表 40〜64歳）</option>
-            <option value="2">第2種（法人代表 65歳以上）</option>
-            <option value="3" selected>第3種（一般 40歳以上）</option>
-            <option value="4">第4種（30〜39歳）</option>
+            <option value="toku2">特2種（50歳以上の法人代表）</option>
+            <option value="toku1">特1種（50歳以上の法人代表）</option>
+            <option value="1">第1種（法人役員・個人事業主）</option>
+            <option value="2">第2種（一人親方・手間請者）</option>
+            <option value="3m" selected>第3種 男性（労働者等）</option>
+            <option value="4">第4種 女性（労働者等）</option>
             <option value="5">第5種（25〜29歳）</option>
             <option value="6">第6種（24歳以下）</option>
           </select>
@@ -521,10 +523,10 @@ footer {
     </div>
   </div>
 
-  <!-- 国保税シミュ -->
+  <!-- 国保料シミュ -->
   <div id="tool-kokuho" class="tool-detail">
     <button class="tool-back" onclick="closeTool()"><i class="ti ti-arrow-left" aria-hidden="true"></i>ツール一覧へ</button>
-    <p class="panel-title" style="font-size:17px;">国保税シミュレーター（令和8年度）</p>
+    <p class="panel-title" style="font-size:17px;">国保料シミュレーター（令和8年度）</p>
     <div class="card">
       <div class="grid2">
         <div class="input-group">
@@ -542,7 +544,7 @@ footer {
             <option value="1">第1種</option>
             <option value="2">第2種</option>
             <option value="3m" selected>第3種 男性</option>
-            <option value="3f">第3種 女性</option>
+            <option value="4">第4種 女性</option>
             <option value="5">第5種</option>
             <option value="6">第6種</option>
           </select>
@@ -713,9 +715,9 @@ function closeTool() {
 const KENPO_R=0.0967,KAIGO_R=0.0162,SHIEN_R=0.0023,NENKIN_R=0.183;
 const KOYO_H=0.006,KOYO_K=0.0105;
 const NENKIN_MIN_H=8052,NENKIN_MIN_K=8052;
-const DOKEN_HOKEN_S={"1":43200,"2":41300,"3":38700,"4":31400,"5":27700,"6":15400};
-const DOKEN_SHIEN_S={"1":700,"2":600,"3":600,"4":500,"5":500,"6":200};
-const DOKEN_KAIGO_S=2700;
+const DOKEN_HOKEN_S={"toku2":43200,"toku1":41300,"1":38700,"2":31400,"3m":27700,"4":23200,"5":19000,"6":15400};
+const DOKEN_SHIEN_S={"toku2":700,"toku1":600,"1":600,"2":500,"3m":500,"4":300,"5":300,"6":200};
+const DOKEN_KAIGO_S={"toku2":6300,"toku1":6200,"1":5300,"2":4800,"3m":4300,"4":3900,"5":0,"6":0};
 
 function yen(n){return Math.round(n).toLocaleString('ja-JP')+'円';}
 
@@ -736,7 +738,7 @@ function calcShakai(){
   const kTotal=kH+kaH+shH+nH+yH;
   const dHoken=DOKEN_HOKEN_S[dkubun];
   const dShien=DOKEN_SHIEN_S[dkubun];
-  const dKaigo=hasKaigo?DOKEN_KAIGO_S:0;
+  const dKaigo=hasKaigo?(DOKEN_KAIGO_S[dkubun]||0):0;
   const dTotal=dHoken+dShien+dKaigo+nH+yH;
   const diff=kTotal-dTotal;
   document.getElementById('shakai-result').innerHTML=`
@@ -914,7 +916,7 @@ const ITEMS=[
   {id:6,tag:"加入",title:"法人化・従業員5人以上化（適用除外申請）",icon:"ti-building",bg:"#E8F5EE",fg:"#1A7A4A",docs:["まずは支部事務所に要相談"],where:"支部事務所に要相談",deadline:"要相談",note:"適用除外をした場合、総合共済から5万円の支援金あり"},
   {id:7,tag:"労働保険",title:"労働保険（労災・雇用保険）の新規加入",icon:"ti-shield-check",bg:"#E8F5EE",fg:"#1A7A4A",docs:["【労災】代表者印・通帳・銀行印・初年度保険料","【雇用】登記簿謄本または住民票・事業実態書類・労働者名簿・賃金台帳等"],where:"支部事務所（厚生労働大臣認可の労働保険事務組合）",deadline:"労働者を雇った場合は強制加入",note:"事業主・一人親方は別途「特別加入」が必要"},
   {id:8,tag:"労働保険",title:"一人親方労災保険（特別加入）",icon:"ti-helmet",bg:"#E8F5EE",fg:"#1A7A4A",docs:["本人確認書類（顔写真付き）","認め印","通帳・銀行印","初年度保険料"],where:"支部事務所",deadline:"現場に入る前の加入を推奨",note:"医療費全額無料、休業補償額は給付基礎日額の約8割"},
-  {id:15,tag:"国保給付",title:"病気・ケガで4日以上休業（傷病手当金）",icon:"ti-bandage",bg:"#EDE8FE",fg:"#4A1A9B",docs:["傷病手当金申請書（支部事務所から受取り）","医師による「労務不能の意見」の記入"],where:"支部事務所",deadline:"4日以上連続休業した場合、1日目から支給対象",note:"最大180日分。交通事故・労災は対象外"},
+  {id:15,tag:"国保給付",title:"病気・ケガで4日以上連続して休んだ（傷病手当金）",icon:"ti-bandage",bg:"#EDE8FE",fg:"#4A1A9B",docs:["傷病手当金申請書（医師による「医師記入欄」が記入されているもの）","手続きする方の本人確認書類","組合員と申請対象者のマイナンバーがわかるもの"],where:"支部事務所",deadline:"休業4日目から申請可（1日目から支給対象）",note:"交通事故・暴力行為、仕事中・通勤途中のケガや病気、加入月と労務不能発生月が同じ場合などは支給できません。"},
   {id:16,tag:"国保給付",title:"出産した（出産育児一時金）",icon:"ti-baby-carriage",bg:"#EDE8FE",fg:"#4A1A9B",docs:["出産育児一時金等支給申請書","（直接支払制度利用時）合意文書の原本＋領収書"],where:"支部事務所",deadline:"妊娠12週以上の出産が条件",note:"1児につき50万円。直接支払制度で窓口負担を軽減可能"},
   {id:17,tag:"国保給付",title:"医療費が高額になりそう（限度額適用認定証）",icon:"ti-receipt",bg:"#EDE8FE",fg:"#4A1A9B",docs:["限度額適用・標準負担額減額認定申請書","資格確認書または資格情報のお知らせ","マイナンバーと本人確認書類"],where:"支部事務所（書類確認後、国保本部へ送付）",deadline:"事前申請が必要（受診前に窓口へ）",note:"書類に不備がなければ本部到着の翌日に交付"},
   {id:18,tag:"国保給付",title:"組合員・家族が亡くなった（葬祭費）",icon:"ti-flower",bg:"#EDE8FE",fg:"#4A1A9B",docs:["葬祭費申請書","葬儀の領収書（または「会葬御礼」）"],where:"支部事務所",deadline:"特になし",note:"7万円を喪主へ支給。喪主が国保未加入でも受給可"},
@@ -1011,7 +1013,7 @@ function renderMerits(){
   });
 }
 
-// ========== 国保税シミュレーター ==========
+// ========== 国保料シミュレーター ==========
 const KK_RATES={
   ageo:{name:"上尾市",year:"令和8年度",
     iry:{sRate:0.081,uRate:49233,cap:660000},shi:{sRate:0.0283,uRate:17105,cap:260000},
@@ -1021,13 +1023,13 @@ const KK_RATES={
     kai:{sRate:0.0238,uRate:15500,cap:170000},ko:{sRate:0.0029,uRate:1765,cap:30000}}
 };
 const KK_DOKEN_KUBUN={
-  "toku2":{label:"特2種",hoken:43200,shien:700},"toku1":{label:"特1種",hoken:43200,shien:700},
-  "1":{label:"第1種",hoken:43200,shien:700},"2":{label:"第2種",hoken:41300,shien:600},
-  "3m":{label:"第3種（男）",hoken:38700,shien:600},"3f":{label:"第3種（女）",hoken:38700,shien:600},
-  "5":{label:"第5種",hoken:27700,shien:500},"6":{label:"第6種",hoken:15400,shien:200}
+  "toku2":{label:"特2種",hoken:43200,shien:700,kaigo:6300},"toku1":{label:"特1種",hoken:41300,shien:600,kaigo:6200},
+  "1":{label:"第1種",hoken:38700,shien:600,kaigo:5300},"2":{label:"第2種",hoken:31400,shien:500,kaigo:4800},
+  "3m":{label:"第3種（男）",hoken:27700,shien:500,kaigo:4300},"4":{label:"第4種（女）",hoken:23200,shien:300,kaigo:3900},
+  "5":{label:"第5種",hoken:19000,shien:300,kaigo:0},"6":{label:"第6種",hoken:15400,shien:200,kaigo:0}
 };
-const KK_FAM_HOKEN={tokubetsu:7900,ippan:6200,chuko:4400,shogaku:3200,mishuugaku:2100};
-const KK_FAM_SHIEN={tokubetsu:200,ippan:200,chuko:100,shogaku:0,mishuugaku:0};
+const KK_FAM_HOKEN={tokubetsu:15400,ippan:4600,chuko:4300,shogaku:3800,mishuugaku:1000};
+const KK_FAM_SHIEN={tokubetsu:200,ippan:200,chuko:0,shogaku:0,mishuugaku:0};
 const KK_KAIGO_M=2700;
 let kkMembers=[],kkMemberCount=0;
 
@@ -1079,9 +1081,9 @@ function kkCalcCity(mems,cityKey){
 
 function kkCalcDoken(mems,dkubun){
   const kd=KK_DOKEN_KUBUN[dkubun];const honnin=mems.find(m=>m.rel==='honnin');const honninAge=honnin?.age||40;
-  const kaigoM=(honninAge>=40&&honninAge<65)?KK_KAIGO_M:0;
+  const kaigoM=(honninAge>=40&&honninAge<65)?(kd.kaigo||0):0;
   const families=mems.filter(m=>m.rel!=='honnin');let famHoken=0,famShien=0,famKaigo=0;const famDetails=[];
-  families.forEach((m,i)=>{const exempt=i>=3;const fh=exempt?0:(KK_FAM_HOKEN[m.rel]||7900);const fs=exempt?0:(KK_FAM_SHIEN[m.rel]||200);const fk=(exempt||!['tokubetsu','ippan'].includes(m.rel))?0:(m.age>=40&&m.age<65?KK_KAIGO_M:0);famHoken+=fh;famShien+=fs;famKaigo+=fk;famDetails.push({rel:m.rel,age:m.age,exempt,fh,fs,fk});});
+  families.forEach((m,i)=>{const exempt=i>=3;const fh=exempt?0:(KK_FAM_HOKEN[m.rel]||0);const fs=exempt?0:(KK_FAM_SHIEN[m.rel]||0);const fk=(exempt||!['tokubetsu','ippan'].includes(m.rel))?0:(m.age>=40&&m.age<65?KK_KAIGO_M:0);famHoken+=fh;famShien+=fs;famKaigo+=fk;famDetails.push({rel:m.rel,age:m.age,exempt,fh,fs,fk});});
   const monthTotal=kd.hoken+kd.shien+kaigoM+famHoken+famShien+famKaigo;
   return{hokenM:kd.hoken,shienM:kd.shien,kaigoM,famHoken,famShien,famKaigo,famDetails,monthTotal,yearTotal:monthTotal*12,kubunLabel:kd.label};
 }

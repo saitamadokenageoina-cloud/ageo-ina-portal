@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>国民健康保険税シミュレーター｜埼玉土建上尾伊奈支部</title>
+<title>国保料比較シミュレーター｜埼玉土建上尾伊奈支部</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.47.0/iconfont/tabler-icons.min.css">
 <style>
 :root{
@@ -72,8 +72,8 @@ footer{margin-top:2rem;font-size:11px;color:var(--tx3);text-align:center;}
 <div class="wrap">
 <header>
   <p class="eyebrow">埼玉土建一般労働組合 上尾伊奈支部</p>
-  <h1><i class="ti ti-calculator" style="font-size:20px;vertical-align:-3px;margin-right:6px;" aria-hidden="true"></i>国民健康保険税シミュレーター</h1>
-  <p class="lead">上尾市・伊奈町の国保税と埼玉土建国保を比較します。家族全員の情報を入力してください。</p>
+  <h1><i class="ti ti-calculator" style="font-size:20px;vertical-align:-3px;margin-right:6px;" aria-hidden="true"></i>国保料比較シミュレーター</h1>
+  <p class="lead">上尾市・伊奈町の国民健康保険と埼玉土建国保料を比較します。家族全員の情報を入力してください。</p>
 </header>
 
 <!-- 世帯入力 -->
@@ -94,8 +94,8 @@ footer{margin-top:2rem;font-size:11px;color:var(--tx3);text-align:center;}
         <option value="toku1">特1種（妻以外には従業員を使わない株式以外の法人代表）</option>
         <option value="1">第1種（40歳以上の法人役員・個人事業主・40〜49歳の法人代表）</option>
         <option value="2">第2種（40歳以上の一人親方・手間請者）</option>
-        <option value="3m" selected>第3種 男性（40歳以上の労働者・家族専従者・30〜39歳）</option>
-        <option value="3f">第3種 女性（40歳以上の労働者・家族専従者・30〜39歳）</option>
+        <option value="3m" selected>第3種 男性（40歳以上の労働者・家族専従者・委託契約者・30〜39歳）</option>
+        <option value="4">第4種 女性（40歳以上の労働者・家族専従者・委託契約者・30〜39歳）</option>
         <option value="5">第5種（25〜29歳）</option>
         <option value="6">第6種（外国人技能実習生・18〜24歳）</option>
       </select>
@@ -106,7 +106,7 @@ footer{margin-top:2rem;font-size:11px;color:var(--tx3);text-align:center;}
   <div id="members"></div>
   <button class="add-btn" onclick="addMember()"><i class="ti ti-plus" aria-hidden="true"></i> 家族を追加</button>
 
-  <button class="calc-btn" onclick="calc()">保険税を計算する</button>
+  <button class="calc-btn" onclick="calc()">保険料を計算する</button>
 </div>
 
 <!-- 結果タブ -->
@@ -171,34 +171,32 @@ const RATES = {
 };
 
 // 埼玉土建国保 保険料（月額・2026年4月分から）
-// ※特1・特2の金額は公式サイトで確認できていないため支部にてご確認ください
 const DOKEN_KUBUN = {
-  "toku2": { label:"特2種", hoken:43200, shien:700 },
-  "toku1": { label:"特1種", hoken:43200, shien:700 },
-  "1":     { label:"第1種", hoken:43200, shien:700 },
-  "2":     { label:"第2種", hoken:41300, shien:600 },
-  "3m":    { label:"第3種（男）", hoken:38700, shien:600 },
-  "3f":    { label:"第3種（女）", hoken:38700, shien:600 },
-  "5":     { label:"第5種", hoken:27700, shien:500 },
-  "6":     { label:"第6種", hoken:15400, shien:200 },
+  "toku2": { label:"特2種", hoken:43200, shien:700, kaigo:6300 },
+  "toku1": { label:"特1種", hoken:41300, shien:600, kaigo:6200 },
+  "1":     { label:"第1種", hoken:38700, shien:600, kaigo:5300 },
+  "2":     { label:"第2種", hoken:31400, shien:500, kaigo:4800 },
+  "3m":    { label:"第3種（男）", hoken:27700, shien:500, kaigo:4300 },
+  "4":     { label:"第4種（女）", hoken:23200, shien:300, kaigo:3900 },
+  "5":     { label:"第5種", hoken:19000, shien:300, kaigo:0 },
+  "6":     { label:"第6種", hoken:15400, shien:200, kaigo:0 },
 };
 // 家族保険料（月額）
-// ※金額は公式サイトJSから取得できていないため概算。正確には公式シミュレーターでご確認を
 const DOKEN_FAMILY_HOKEN = {
-  "tokubetsu": 7900,
-  "ippan":     6200,
-  "chuko":     4400,
-  "shogaku":   3200,
-  "mishuugaku":2100,
+  "tokubetsu": 15400,
+  "ippan":     4600,
+  "chuko":     4300,
+  "shogaku":   3800,
+  "mishuugaku":1000,
 };
 const DOKEN_FAMILY_SHIEN = {
   "tokubetsu": 200,
   "ippan":     200,
-  "chuko":     100,
+  "chuko":     0,
   "shogaku":   0,
   "mishuugaku":0,
 };
-// 介護保険料（40〜64歳・月額）
+// 家族の介護保険料（40〜64歳・月額）
 const DOKEN_KAIGO_M = 2700;
 
 // ========== 世帯員管理 ==========
@@ -286,7 +284,7 @@ function calcCityTax(mems, cityKey) {
   ko  += n * r.ko.uRate;
 
   // 高校生以下の子ども分均等割は無料
-  const koFreeKids = mems.filter(m => m.age <= 18 && (m.rel === 'ko')).length;
+  const koFreeKids = mems.filter(m => m.age <= 18 && m.rel !== 'honnin').length;
   ko -= koFreeKids * r.ko.uRate;
 
   // 賦課限度額
@@ -307,7 +305,7 @@ function calcDokenTax(mems, dkubun) {
   // 組合員本人
   const hokenM = kd.hoken;
   const shienM = kd.shien;
-  const kaigoM = (honninAge >= 40 && honninAge < 65) ? DOKEN_KAIGO_M : 0;
+  const kaigoM = (honninAge >= 40 && honninAge < 65) ? (kd.kaigo || 0) : 0;
 
   // 家族（4人目以降は保険料免除のため3名まで）
   const families = mems.filter(m => m.rel !== 'honnin');

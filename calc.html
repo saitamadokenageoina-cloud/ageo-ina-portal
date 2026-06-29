@@ -98,7 +98,7 @@
     </svg>
     <div>
       <p style="font-size:18px;font-weight:800;color:#fff;margin:0 0 3px;">計算ツール</p>
-      <p style="font-size:13px;color:rgba(255,255,255,.7);margin:0;">労務費・国保税・CCUSレベルをかんたん計算</p>
+      <p style="font-size:13px;color:rgba(255,255,255,.7);margin:0;">労務費・国保料・CCUSレベルをかんたん計算</p>
     </div>
   </div>
   <!-- ホーム -->
@@ -111,7 +111,7 @@
       </div>
       <div class="tool-card" onclick="openTool('kokuho')">
         <div class="tool-card-icon" style="color:var(--orange);"><i class="ti ti-building-community"></i></div>
-        <p class="tool-card-title">国保税シミュ</p>
+        <p class="tool-card-title">国保料シミュ</p>
         <p class="tool-card-desc">上尾市・伊奈町 vs 土建国保</p>
       </div>
       <div class="tool-card" onclick="openTool('ccus')">
@@ -179,21 +179,21 @@
 
   <!-- 国保シミュ -->
   <div id="tool-kokuho" class="tool-detail">
-    <p style="font-size:17px;font-weight:800;color:var(--navy);margin:0 0 14px;">国保税シミュレーター（令和8年度）</p>
+    <p style="font-size:17px;font-weight:800;color:var(--navy);margin:0 0 14px;">国保料シミュレーター（令和8年度）</p>
     <div class="card">
       <div class="grid2">
         <div class="input-group"><label>市町村</label><select id="kk-city"><option value="ageo">上尾市</option><option value="ina">伊奈町</option></select></div>
         <div class="input-group" style="grid-column:1/-1;">
   <label>土建国保 区分 <span id="kubun-change-btn" onclick="toggleKubunGuide()" style="font-size:11px;font-weight:600;color:var(--orange);cursor:pointer;text-decoration:underline;margin-left:6px;">区分の見方 ▼</span></label>
   <select id="kk-dkubun" onchange="showKubunDesc()">
-    <option value="toku2">特2種（事業主・特別職）</option>
-    <option value="toku1">特1種（事業主・特別職）</option>
-    <option value="1">第1種（職人・技術者）</option>
-    <option value="2">第2種（職人・技術者）</option>
-    <option value="3m" selected>第3種 男性（職人・技術者）</option>
-    <option value="4">第4種 女性・30〜39歳（職人・技術者）</option>
-    <option value="5">第5種（家族従事者等）</option>
-    <option value="6">第6種（60歳以上・一定条件）</option>
+    <option value="toku2">特2種（50歳以上の法人代表／株式と妻以外にも従業員）</option>
+    <option value="toku1">特1種（50歳以上の法人代表／妻以外を使わない株式以外）</option>
+    <option value="1">第1種（法人役員・個人事業主・40〜49歳の法人代表）</option>
+    <option value="2">第2種（40歳以上の一人親方・手間請者）</option>
+    <option value="3m" selected>第3種 男性（40歳以上の労働者等・30〜39歳）</option>
+    <option value="4">第4種 女性（40歳以上の労働者等・30〜39歳）</option>
+    <option value="5">第5種（25〜29歳）</option>
+    <option value="6">第6種（24歳以下・外国人技能実習生）</option>
   </select>
   <p id="kubun-desc" style="font-size:13px;color:var(--gray600);margin:6px 0 0;background:var(--gray50);border-radius:8px;padding:8px 10px;display:none;"></p>
 </div>
@@ -204,7 +204,7 @@
     <div style="display:flex;flex-direction:column;gap:6px;">
       <div style="background:rgba(255,255,255,.07);border-radius:8px;padding:8px 12px;border-left:3px solid #FAC775;">
         <p style="font-weight:700;color:#FAC775;margin:0 0 2px;">特2種（月43,200円）・特1種（月41,300円）</p>
-        <p style="margin:0;font-size:12px;color:rgba(255,255,255,.7);">建設業の事業主（一人親方含む）・役員・管理職などの特別職。法人代表者や個人事業主が対象。</p>
+        <p style="margin:0;font-size:12px;color:rgba(255,255,255,.7);">50歳以上の法人代表者。特2種は株式と妻以外にも従業員を使う法人代表、特1種は妻以外には従業員を使わない株式以外の法人代表。</p>
       </div>
       <div style="background:rgba(255,255,255,.07);border-radius:8px;padding:8px 12px;border-left:3px solid #B5D4F4;">
         <p style="font-weight:700;color:#B5D4F4;margin:0 0 2px;">第1種（月38,700円）</p>
@@ -216,7 +216,7 @@
       </div>
       <div style="background:rgba(255,255,255,.07);border-radius:8px;padding:8px 12px;border-left:3px solid #5DCAA5;">
         <p style="font-weight:700;color:#5DCAA5;margin:0 0 2px;">第3種 男性（月27,700円）・第4種 女性（月23,200円）</p>
-        <p style="margin:0;font-size:12px;color:rgba(255,255,255,.7);">40歳以上の労働者・家族専従者・委託契約者、または30歳〜39歳までの組合員。</p>
+        <p style="margin:0;font-size:12px;color:rgba(255,255,255,.7);">40歳以上の労働者・家族専従者・委託契約者、及び30歳〜39歳までの組合員。男性は第3種、女性は第4種。</p>
       </div>
       <div style="background:rgba(255,255,255,.07);border-radius:8px;padding:8px 12px;border-left:3px solid #FAA;">
         <p style="font-weight:700;color:#FAA;margin:0 0 2px;">第5種（月19,000円）</p>
@@ -401,7 +401,7 @@ function openTool(name){
   document.querySelectorAll('.tool-detail').forEach(d=>d.classList.remove('active'));
   document.getElementById('tool-'+name).classList.add('active');
   document.getElementById('back-label').textContent='計算ツール';
-  const titles={romu:'労務費シミュ',kokuho:'国保税シミュ',ccus:'CCUSレベル確認',benefit:'退職金・給付金'};
+  const titles={romu:'労務費シミュ',kokuho:'国保料シミュ',ccus:'CCUSレベル確認',benefit:'退職金・給付金'};
   document.getElementById('page-title').textContent=titles[name]||'計算ツール';
   if(name==='romu'){calcRoumu();}
   if(name==='ccus')initCcus();
@@ -592,7 +592,7 @@ function calcRoumu(){
     `</div>
     <div style="background:var(--yellow-lt);border-radius:var(--r8);padding:10px 14px;margin-top:4px;font-size:12px;color:#7A5500;">
       <i class="ti ti-info-circle" style="font-size:13px;vertical-align:-2px;margin-right:4px;"></i>
-      ※ 健康保険料（協会けんぽ・土建国保等）は含まれていません。別途「国保税シミュ」でご確認ください。
+      ※ 健康保険料（協会けんぽ・土建国保等）は含まれていません。別途「国保料シミュ」でご確認ください。
     </div>`;
 }
 
@@ -728,12 +728,12 @@ function calcCcus(){
 }
 // ===== 土建国保区分の説明 =====
 const KUBUN_DESC = {
-  toku2: '事業主・役員・代表者など特別職（建設業を営む個人事業主・法人代表者など）',
-  toku1: '事業主・役員・代表者など特別職（特2種と同額。区分条件の違いにより適用）',
+  toku2: '50歳以上の法人代表者で、株式と妻以外にも従業員を使う法人代表',
+  toku1: '50歳以上の法人代表者で、妻以外には従業員を使わない株式以外の法人代表',
   '1':   '法人事業所の役員・個人事業所の事業主、40歳〜49歳の法人代表者など',
   '2':   '40歳以上の一人親方・手間請者など',
-  '3m':  '40歳以上の労働者・家族専従者・委託契約者、または30歳〜39歳までの男性組合員など',
-  '4':   '女性組合員または30歳〜39歳までの組合員など',
+  '3m':  '40歳以上の労働者・家族専従者・委託契約者、及び30歳〜39歳までの男性組合員',
+  '4':   '40歳以上の労働者・家族専従者・委託契約者、及び30歳〜39歳までの女性組合員',
   '5':   '25歳〜29歳までの組合員',
   '6':   '24歳以下の組合員、または外国人技能実習生など'
 };
@@ -751,7 +751,7 @@ function toggleKubunGuide() {
   btn.textContent = open ? '区分の見方 ▲' : '区分の見方 ▼';
 }
 
-// ========== 国保税シミュレーター ==========
+// ========== 国保料シミュレーター ==========
 const KK_RATES={
   ageo:{name:"上尾市",year:"令和8年度",
     iry:{sRate:0.081,uRate:49233,cap:660000},shi:{sRate:0.0283,uRate:17105,cap:260000},
@@ -825,7 +825,7 @@ function kkCalcDoken(mems,dkubun){
   const kd=KK_DOKEN_KUBUN[dkubun];const honnin=mems.find(m=>m.rel==='honnin');const honninAge=honnin?.age||40;
   const kaigoM=(honninAge>=40&&honninAge<65)?(kd.kaigo||0):0;
   const families=mems.filter(m=>m.rel!=='honnin');let famHoken=0,famShien=0,famKaigo=0;const famDetails=[];
-  families.forEach((m,i)=>{const exempt=i>=3;const fh=exempt?0:(KK_FAM_HOKEN[m.rel]||7900);const fs=exempt?0:(KK_FAM_SHIEN[m.rel]||200);const fk=(exempt||!['tokubetsu','ippan'].includes(m.rel))?0:(m.age>=40&&m.age<65?KK_KAIGO_M:0);famHoken+=fh;famShien+=fs;famKaigo+=fk;famDetails.push({rel:m.rel,age:m.age,exempt,fh,fs,fk});});
+  families.forEach((m,i)=>{const exempt=i>=3;const fh=exempt?0:(KK_FAM_HOKEN[m.rel]||0);const fs=exempt?0:(KK_FAM_SHIEN[m.rel]||0);const fk=(exempt||!['tokubetsu','ippan'].includes(m.rel))?0:(m.age>=40&&m.age<65?KK_KAIGO_M:0);famHoken+=fh;famShien+=fs;famKaigo+=fk;famDetails.push({rel:m.rel,age:m.age,exempt,fh,fs,fk});});
   const monthTotal=kd.hoken+kd.shien+kaigoM+famHoken+famShien+famKaigo;
   return{hokenM:kd.hoken,shienM:kd.shien,kaigoM,famHoken,famShien,famKaigo,famDetails,monthTotal,yearTotal:monthTotal*12,kubunLabel:kd.label};
 }
@@ -866,7 +866,7 @@ function kkCalc(){
         </div>
         <div style="background:rgba(255,255,255,.07);border-radius:8px;padding:10px;border-top:3px solid #5DCAA5;">
           <p style="font-size:13px;font-weight:800;color:#fff;margin:0 0 4px;">🏥 休んでも収入が続く</p>
-          <p style="font-size:11px;color:rgba(255,255,255,.65);margin:0;line-height:1.5;">傷病手当金：ケガ・病気で4日以上休業したら給付基礎日額の60%を最大180日間支給。市区町村国保にはない制度。</p>
+          <p style="font-size:11px;color:rgba(255,255,255,.65);margin:0;line-height:1.5;">傷病手当金：病気やケガで4日以上連続して休業した場合、1日目から区分・療養状況に応じた日額を支給。市区町村国保にはない制度。</p>
         </div>
         <div style="background:rgba(255,255,255,.07);border-radius:8px;padding:10px;border-top:3px solid #B5D4F4;">
           <p style="font-size:13px;font-weight:800;color:#fff;margin:0 0 4px;">👶 出産 50万円給付</p>
@@ -909,7 +909,7 @@ function kkCalc(){
         </div>
         <div style="background:rgba(255,255,255,.08);border-radius:var(--r8);padding:10px 12px;border-left:3px solid #5DCAA5;">
           <p style="font-size:13px;font-weight:700;color:#fff;margin:0 0 3px;">🏥 傷病手当金（最大180日分）</p>
-          <p style="font-size:12px;color:rgba(255,255,255,.7);margin:0;">ケガや病気で4日以上仕事を休んだ場合、1日あたり給付基礎日額の60%を最大180日間支給。市区町村国保にはない制度です。</p>
+          <p style="font-size:12px;color:rgba(255,255,255,.7);margin:0;">病気やケガで4日以上連続して仕事を休んだ場合、1日目から区分・療養状況に応じた日額を支給。市区町村国保にはない制度です。</p>
         </div>
         <div style="background:rgba(255,255,255,.08);border-radius:var(--r8);padding:10px 12px;border-left:3px solid #B5D4F4;">
           <p style="font-size:13px;font-weight:700;color:#fff;margin:0 0 3px;">👶 出産育児一時金 50万円</p>
