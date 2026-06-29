@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>説明書・ヘルプ｜埼玉土建 上尾伊奈支部</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.47.0/iconfont/tabler-icons.min.css">
+<link rel="stylesheet" href="common.css">
+<style>
+.guide-hero{background:linear-gradient(135deg,#1B2A3B,#1A5FA8);border-radius:var(--r16);padding:20px;margin-bottom:16px;color:#fff;display:flex;gap:14px;align-items:center;box-shadow:var(--shadow-md);}
+.guide-hero i{font-size:40px;color:#F0B429;flex-shrink:0;}
+.guide-hero h1{font-size:22px;line-height:1.3;margin:0 0 4px;font-weight:800;}
+.guide-hero p{font-size:13px;margin:0;color:rgba(255,255,255,.75);}
+.guide-tabs{display:flex;gap:0;margin-bottom:16px;border:1px solid var(--gray200);border-radius:var(--r12);overflow:hidden;background:var(--white);box-shadow:var(--shadow-sm);flex-wrap:wrap;}
+.guide-tab{flex:1;min-width:96px;border:none;border-right:1px solid var(--gray200);background:var(--white);color:var(--gray600);padding:11px 6px;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:5px;}
+.guide-tab:last-child{border-right:none;}
+.guide-tab.active{background:linear-gradient(135deg,#E8612A,#C04E1E);color:#fff;}
+.guide-content{display:none;}
+.guide-content.active{display:block;}
+.acc{background:var(--white);border:1px solid var(--gray200);border-radius:var(--r16);margin-bottom:10px;overflow:hidden;box-shadow:var(--shadow-sm);}
+.acc-head{display:flex;align-items:center;gap:10px;padding:14px 15px;background:var(--white);cursor:pointer;}
+.acc-head:hover{background:var(--gray50);}
+.acc-icon{width:32px;height:32px;border-radius:var(--r8);display:flex;align-items:center;justify-content:center;flex-shrink:0;background:var(--orange-lt);color:var(--orange);}
+.acc-title{font-size:14px;font-weight:800;color:var(--navy);line-height:1.35;flex:1;margin:0;}
+.acc-arrow{color:var(--gray400);transition:.2s;}
+.acc.open .acc-arrow{transform:rotate(90deg);}
+.acc-body{display:none;padding:0 15px 15px;border-top:1px solid var(--gray100);}
+.acc.open .acc-body{display:block;}
+.steps{list-style:none;margin:12px 0 0;padding:0;counter-reset:step;}
+.steps li{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--gray100);font-size:14px;line-height:1.65;color:var(--gray700);}
+.steps li:last-child{border-bottom:none;}
+.steps li::before{counter-increment:step;content:counter(step);width:22px;height:22px;min-width:22px;border-radius:50%;background:var(--orange);color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;margin-top:2px;}
+.tip{border-radius:var(--r12);padding:12px 14px;margin:12px 0 0;font-size:13px;line-height:1.7;border-left:4px solid var(--blue);background:var(--blue-lt);color:#0C447C;}
+.tip.green{border-left-color:var(--green);background:var(--green-lt);color:var(--green);}
+.tip.warn{border-left-color:var(--yellow);background:var(--yellow-lt);color:#735400;}
+.tip.danger{border-left-color:var(--red);background:var(--red-lt);color:var(--red);}
+.feature-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:12px;background:#fff;border-radius:var(--r12);overflow:hidden;}
+.feature-table th{background:var(--navy);color:#fff;text-align:left;padding:9px 10px;font-size:12px;}
+.feature-table td{border-bottom:1px solid var(--gray100);padding:9px 10px;vertical-align:top;color:var(--gray700);}
+.feature-table tr:last-child td{border-bottom:none;}
+.feature-table td:first-child{font-weight:800;color:var(--navy);white-space:nowrap;}
+.codebox{background:#111B27;color:#E8F0FB;border-radius:var(--r12);padding:12px;margin-top:10px;font-size:12px;line-height:1.6;overflow:auto;white-space:pre-wrap;}
+.quick-link{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px;padding:12px;border-radius:var(--r12);background:var(--orange);color:#fff;font-size:14px;font-weight:800;box-shadow:0 4px 12px rgba(232,97,42,.28);}
+.mini-label{font-size:12px;font-weight:800;color:var(--orange);letter-spacing:.08em;margin:14px 0 4px;}
+@media(max-width:420px){.guide-tab{min-width:50%;}.guide-hero{align-items:flex-start;}.guide-hero h1{font-size:20px;}.feature-table{font-size:12px;}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="hdr">
+  <button class="hdr-back" onclick="goBack()"><i class="ti ti-arrow-left"></i>戻る</button>
+  <div style="text-align:right;">
+    <p class="hdr-org">埼玉土建 上尾伊奈支部</p>
+    <p class="hdr-title">説明書・ヘルプ</p>
+  </div>
+</header>
+
+<main class="content">
+  <section class="guide-hero">
+    <i class="ti ti-book"></i>
+    <div>
+      <h1>このアプリの使い方</h1>
+      <p>組合員さんが迷わず使えるよう、目的別に操作方法をまとめました。</p>
+    </div>
+  </section>
+
+  <nav class="guide-tabs" aria-label="説明書メニュー">
+    <button class="guide-tab active" onclick="switchGuide('basic',this)"><i class="ti ti-home"></i>基本</button>
+    <button class="guide-tab" onclick="switchGuide('features',this)"><i class="ti ti-apps"></i>機能一覧</button>
+    <button class="guide-tab" onclick="switchGuide('print',this)"><i class="ti ti-printer"></i>印刷</button>
+    <button class="guide-tab" onclick="switchGuide('install',this)"><i class="ti ti-device-mobile"></i>追加</button>
+    <button class="guide-tab" onclick="switchGuide('guild',this)"><i class="ti ti-cloud"></i>ギルド設定</button>
+    <button class="guide-tab" onclick="switchGuide('trouble',this)"><i class="ti ti-help"></i>困った時</button>
+  </nav>
+
+  <section class="guide-content active" id="tab-basic">
+    <article class="acc open">
+      <div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-info-circle"></i></div><p class="acc-title">このポータルとは？</p><i class="ti ti-chevron-right acc-arrow"></i></div>
+      <div class="acc-body">
+        <ol class="steps">
+          <li>埼玉土建一般労働組合 上尾伊奈支部の組合員向けサポートアプリです。</li>
+          <li>スマートフォンのブラウザで開くだけで使えます。アプリストアからのインストールは不要です。</li>
+          <li>現場の安全確認、熱中症アラート、36協定、手続き書類、資料本棚などをまとめて確認できます。</li>
+        </ol>
+        <div class="tip">公開URL：<strong>https://saitamadokenageoina-cloud.github.io/ageo-ina-portal/</strong></div>
+      </div>
+    </article>
+
+    <article class="acc">
+      <div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-pointer"></i></div><p class="acc-title">ホーム画面の使い方</p><i class="ti ti-chevron-right acc-arrow"></i></div>
+      <div class="acc-body">
+        <table class="feature-table">
+          <thead><tr><th>区分</th><th>できること</th></tr></thead>
+          <tbody>
+            <tr><td>現場で使う</td><td>熱中症AIアラート、安全チェック、36協定、DOKENギルドを開きます。</td></tr>
+            <tr><td>組合員サービス</td><td>どけんカード、加入メリット診断、CCUS能力評価サポート、建設業許可チェッカーを使います。</td></tr>
+            <tr><td>手続き・情報</td><td>必要書類、加入メリット、計算ツール、講習日程、資料本棚、YouTube、支部カレンダーを確認します。</td></tr>
+          </tbody>
+        </table>
+        <div class="tip green">迷ったときは、目的に近いカードをタップしてください。各ページの左上「戻る」から前の画面へ戻れます。</div>
+      </div>
+    </article>
+  </section>
+
+  <section class="guide-content" id="tab-features">
+    <article class="acc open">
+      <div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-temperature-sun"></i></div><p class="acc-title">熱中症AIアラート</p><i class="ti ti-chevron-right acc-arrow"></i></div>
+      <div class="acc-body">
+        <ol class="steps">
+          <li>ホーム画面の「熱中症AIアラート」をタップします。</li>
+          <li>位置情報の許可が出たら「許可」を選びます。</li>
+          <li>現在地の気象情報から危険度を確認します。</li>
+        </ol>
+        <div class="tip warn">位置情報を拒否した場合は、ブラウザや端末設定から位置情報の許可を戻してください。</div>
+      </div>
+    </article>
+
+    <article class="acc">
+      <div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-checklist"></i></div><p class="acc-title">現場安全チェックリスト</p><i class="ti ti-chevron-right acc-arrow"></i></div>
+      <div class="acc-body">
+        <ol class="steps">
+          <li>現場名、点検者、日付を入力します。</li>
+          <li>該当する安全項目にチェックを入れます。</li>
+          <li>プレビューで確認してから印刷またはPDF保存します。</li>
+        </ol>
+      </div>
+    </article>
+
+    <article class="acc">
+      <div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-file-search"></i></div><p class="acc-title">手続き・必要書類ガイド</p><i class="ti ti-chevron-right acc-arrow"></i></div>
+      <div class="acc-body">
+        <ol class="steps">
+          <li>「手続き・情報」から「手続き・必要書類ガイド」を開きます。</li>
+          <li>国保、共済、加入、労働保険など目的に近い項目を選びます。</li>
+          <li>必要書類と問い合わせ先を確認します。</li>
+        </ol>
+      </div>
+    </article>
+
+    <article class="acc">
+      <div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-books"></i></div><p class="acc-title">資料本棚</p><i class="ti ti-chevron-right acc-arrow"></i></div>
+      <div class="acc-body">
+        <ol class="steps">
+          <li>「資料本棚」を開き、読みたい資料を選びます。</li>
+          <li>デジタルブックで読みづらい場合は「PDF表示」を選びます。</li>
+          <li>端末標準のPDFビューアで拡大・検索・共有ができます。</li>
+        </ol>
+      </div>
+    </article>
+  </section>
+
+  <section class="guide-content" id="tab-print">
+    <article class="acc open">
+      <div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-printer"></i></div><p class="acc-title">印刷・PDF保存の基本</p><i class="ti ti-chevron-right acc-arrow"></i></div>
+      <div class="acc-body">
+        <ol class="steps">
+          <li>36協定や安全チェックで必要事項を入力します。</li>
+          <li>「プレビューを表示」をタップして内容を確認します。</li>
+          <li>「印刷・PDF保存」をタップします。</li>
+          <li>印刷画面でプリンターを選ぶか、「PDFに保存」を選びます。</li>
+        </ol>
+        <div class="tip">iPhoneはSafari、AndroidはChromeでの利用がおすすめです。</div>
+      </div>
+    </article>
+
+    <article class="acc">
+      <div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-brand-apple"></i></div><p class="acc-title">iPhoneでPDF保存する</p><i class="ti ti-chevron-right acc-arrow"></i></div>
+      <div class="acc-body">
+        <ol class="steps">
+          <li>Safariで対象ページを開きます。</li>
+          <li>印刷プレビューを開きます。</li>
+          <li>プレビュー画面を2本指で広げる操作をします。</li>
+          <li>共有ボタンから「ファイルに保存」を選びます。</li>
+        </ol>
+      </div>
+    </article>
+
+    <article class="acc">
+      <div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-brand-android"></i></div><p class="acc-title">AndroidでPDF保存する</p><i class="ti ti-chevron-right acc-arrow"></i></div>
+      <div class="acc-body">
+        <ol class="steps">
+          <li>Chromeで対象ページを開きます。</li>
+          <li>印刷画面を開きます。</li>
+          <li>送信先を「PDF形式で保存」に変更します。</li>
+          <li>保存先を選び、保存します。</li>
+        </ol>
+      </div>
+    </article>
+  </section>
+
+  <section class="guide-content" id="tab-install">
+    <article class="acc open">
+      <div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-device-mobile-plus"></i></div><p class="acc-title">ホーム画面に追加する</p><i class="ti ti-chevron-right acc-arrow"></i></div>
+      <div class="acc-body">
+        <p class="mini-label">iPhone / Safari</p>
+        <ol class="steps">
+          <li>Safariで公開URLを開きます。</li>
+          <li>画面下の共有ボタンをタップします。</li>
+          <li>「ホーム画面に追加」を選びます。</li>
+          <li>名前を確認して「追加」をタップします。</li>
+        </ol>
+        <p class="mini-label">Android / Chrome</p>
+        <ol class="steps">
+          <li>Chromeで公開URLを開きます。</li>
+          <li>右上のメニューをタップします。</li>
+          <li>「アプリをインストール」または「ホーム画面に追加」を選びます。</li>
+          <li>確認画面で「追加」または「インストール」をタップします。</li>
+        </ol>
+      </div>
+    </article>
+  </section>
+
+  <section class="guide-content" id="tab-guild">
+    <article class="acc open">
+      <div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-cloud-up"></i></div><p class="acc-title">DOKENギルドのクラウド保存・メール通知を有効にする</p><i class="ti ti-chevron-right acc-arrow"></i></div>
+      <div class="acc-body">
+        <div class="tip danger">GitHub Pagesだけでは、投稿データの保存やメール送信はできません。支部のGoogleアカウントでGoogle Apps Scriptを発行し、そのURLを設定します。</div>
+        <ol class="steps">
+          <li>支部のGoogleアカウントでGoogleスプレッドシートを新規作成します。名前は「DOKENギルド投稿管理」などにします。</li>
+          <li>スプレッドシートURLの <strong>/d/</strong> と <strong>/edit</strong> の間にある長い文字列を控えます。これがスプレッドシートIDです。</li>
+          <li>スプレッドシートの「拡張機能」から「Apps Script」を開きます。</li>
+          <li>このリポジトリの <strong>docs/guild-apps-script-template.js</strong> の内容をApps Scriptに貼り付けます。</li>
+          <li>Apps Scriptの「プロジェクトの設定」からスクリプトプロパティを追加します。</li>
+        </ol>
+        <div class="codebox">SPREADSHEET_ID = 手順2で控えたスプレッドシートID
+ADMIN_PIN = 投稿削除に使う管理者PIN</div>
+        <ol class="steps" start="6">
+          <li>「デプロイ」→「新しいデプロイ」を選びます。</li>
+          <li>種類は「ウェブアプリ」、実行ユーザーは「自分」、アクセスできるユーザーは「全員」にします。</li>
+          <li>初回はGoogleの承認画面が出ます。支部アカウントで許可します。</li>
+          <li>発行されたウェブアプリURLをコピーします。</li>
+          <li><strong>assets/js/guild-config.js</strong> の <strong>apiUrl</strong> にURLを入れて、GitHubへpushします。</li>
+        </ol>
+        <div class="codebox">window.DOKEN_GUILD_CONFIG = {
+  apiUrl: 'https://script.google.com/macros/s/発行されたURL/exec',
+  notifyEmail: 'ageoina@saitama-doken.or.jp'
+};</div>
+        <div class="tip green">設定後は、全員が同じ投稿を見られます。新しい投稿があると支部メール <strong>ageoina@saitama-doken.or.jp</strong> に通知されます。</div>
+      </div>
+    </article>
+
+    <article class="acc">
+      <div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-shield-lock"></i></div><p class="acc-title">管理者として投稿を削除する</p><i class="ti ti-chevron-right acc-arrow"></i></div>
+      <div class="acc-body">
+        <ol class="steps">
+          <li>DOKENギルド画面で「管理者」をタップします。</li>
+          <li>Apps Scriptに設定した <strong>ADMIN_PIN</strong> を入力します。</li>
+          <li>各投稿に表示される「削除」ボタンから不要な投稿を削除します。</li>
+        </ol>
+        <div class="tip warn">管理者PINは支部内の管理者だけで共有してください。公開ページや資料には載せないでください。</div>
+      </div>
+    </article>
+  </section>
+
+  <section class="guide-content" id="tab-trouble">
+    <article class="acc open">
+      <div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-refresh"></i></div><p class="acc-title">古い画面が表示される</p><i class="ti ti-chevron-right acc-arrow"></i></div>
+      <div class="acc-body">
+        <ol class="steps">
+          <li>画面を下に引っ張って更新します。</li>
+          <li>改善しない場合はブラウザの履歴・キャッシュを削除します。</li>
+          <li>ホーム画面に追加したアイコンから開いている場合は、一度ブラウザから直接URLを開き直します。</li>
+        </ol>
+      </div>
+    </article>
+
+    <article class="acc">
+      <div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-map-pin-off"></i></div><p class="acc-title">位置情報が取得できない</p><i class="ti ti-chevron-right acc-arrow"></i></div>
+      <div class="acc-body">
+        <ol class="steps">
+          <li>端末の設定でSafariまたはChromeの位置情報を許可します。</li>
+          <li>ブラウザでこのサイトの位置情報許可をオンにします。</li>
+          <li>ページを開き直して再取得します。</li>
+        </ol>
+      </div>
+    </article>
+
+    <article class="acc">
+      <div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-cloud-x"></i></div><p class="acc-title">DOKENギルドが「ローカル表示中」になる</p><i class="ti ti-chevron-right acc-arrow"></i></div>
+      <div class="acc-body">
+        <ol class="steps">
+          <li><strong>assets/js/guild-config.js</strong> の <strong>apiUrl</strong> が空欄でないか確認します。</li>
+          <li>Apps ScriptのデプロイURLが <strong>/exec</strong> で終わっているか確認します。</li>
+          <li>Apps Scriptのアクセス権限が「全員」になっているか確認します。</li>
+          <li>スクリプトプロパティの <strong>SPREADSHEET_ID</strong> が正しいか確認します。</li>
+        </ol>
+      </div>
+    </article>
+  </section>
+
+  <a class="quick-link" href="index.html"><i class="ti ti-home"></i>ホームへ戻る</a>
+</main>
+
+<footer>埼玉土建一般労働組合 上尾伊奈支部｜TEL 048-773-9863</footer>
+</div>
+
+<script src="assets/js/navigation.js"></script>
+<script>
+function switchGuide(id, btn){
+  document.querySelectorAll('.guide-content').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.guide-tab').forEach(el=>el.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function toggleAcc(head){
+  head.closest('.acc').classList.toggle('open');
+}
+</script>
+</body>
+</html>
