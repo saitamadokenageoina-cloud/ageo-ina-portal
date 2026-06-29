@@ -15,7 +15,9 @@
 /* ===== 投稿カード ===== */
 .post-card{background:var(--white);border-radius:var(--r16);box-shadow:var(--shadow-sm);padding:16px;margin-bottom:10px;border-left:4px solid transparent;}
 .post-card.jinzai{border-left-color:#E8612A;}
+.post-card.ouen{border-left-color:#1A5FA8;}
 .post-card.shizai{border-left-color:#1A7A4A;}
+.post-card.kashikari{border-left-color:#B07800;}
 .post-card.soudan{border-left-color:#6B21A8;}
 .post-header{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
 .post-avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;background:var(--gray100);}
@@ -23,8 +25,11 @@
 .post-meta{font-size:12px;color:var(--gray400);margin:0;}
 .post-badge{margin-left:auto;font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;white-space:nowrap;flex-shrink:0;}
 .badge-jinzai{background:#FEE8D6;color:#9B3A1A;}
+.badge-ouen{background:#E8F0FB;color:#0C447C;}
 .badge-shizai{background:#E8F5EE;color:#1A4A2A;}
+.badge-kashikari{background:#FFF8E6;color:#7A5500;}
 .badge-soudan{background:#EDE8FE;color:#4A1A9B;}
+.verified-badge{display:inline-flex;align-items:center;gap:4px;margin-left:6px;background:#E8F5EE;color:#1A7A4A;border-radius:99px;padding:2px 7px;font-size:10px;font-weight:800;}
 .post-body{font-size:15px;color:var(--gray900);margin:0 0 10px;line-height:1.65;}
 .post-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
 .post-tag{font-size:12px;background:var(--gray50);color:var(--gray600);padding:3px 10px;border-radius:99px;font-weight:500;}
@@ -73,8 +78,14 @@
 .cat-chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
 .cat-chip{padding:8px 16px;border-radius:99px;border:2px solid var(--gray200);font-size:13px;font-weight:600;color:var(--gray600);cursor:pointer;background:var(--white);transition:all .15s;}
 .cat-chip.jinzai.sel{background:#FEE8D6;color:#9B3A1A;border-color:#E8612A;}
+.cat-chip.ouen.sel{background:#E8F0FB;color:#0C447C;border-color:#1A5FA8;}
 .cat-chip.shizai.sel{background:#E8F5EE;color:#1A4A2A;border-color:#1A7A4A;}
+.cat-chip.kashikari.sel{background:#FFF8E6;color:#7A5500;border-color:#F0B429;}
 .cat-chip.soudan.sel{background:#EDE8FE;color:#4A1A9B;border-color:#6B21A8;}
+.guild-warning{background:#FFF8E6;border-left:4px solid #F0B429;border-radius:var(--r12);padding:11px 13px;margin-bottom:12px;color:#735400;font-size:13px;line-height:1.6;}
+.post-examples{background:#fff;border:1px solid var(--gray200);border-radius:var(--r12);padding:12px;margin-bottom:12px;}
+.post-examples b{display:block;font-size:13px;color:var(--navy);margin-bottom:6px;}
+.post-examples ul{margin:0;padding-left:1.2em;color:var(--gray600);font-size:12px;line-height:1.7;}
 
 /* 空状態 */
 .empty-state{text-align:center;padding:40px 20px;color:var(--gray400);}
@@ -134,6 +145,17 @@
     <i class="ti ti-lock"></i>
     <p>投稿はクラウド設定後、全員の画面に共有されます。新規投稿は支部メールへ通知します。</p>
   </div>
+  <div class="guild-warning">
+    <strong>個人情報に注意：</strong>住所、現場詳細、金額、電話番号は必要最小限にしてください。迷う内容は投稿前に支部へ相談してください。
+  </div>
+  <div class="post-examples">
+    <b><i class="ti ti-bulb"></i> 投稿例</b>
+    <ul>
+      <li>明日午前だけ応援できる大工さんを探しています。</li>
+      <li>余った資材を組合員さんに譲りたいです。</li>
+      <li>脚立を1日だけ借りられる方を探しています。</li>
+    </ul>
+  </div>
   <div class="guild-toolbar">
     <button id="sync-mode" onclick="syncPosts()"><i class="ti ti-refresh"></i> 最新に更新</button>
     <button id="admin-toggle" onclick="toggleAdmin()"><i class="ti ti-shield-lock"></i> 管理者</button>
@@ -144,7 +166,9 @@
   <div class="tab-row">
     <button class="t-btn active" onclick="switchTab('all',this)">すべて</button>
     <button class="t-btn" onclick="switchTab('jinzai',this)">👷 人材募集</button>
+    <button class="t-btn" onclick="switchTab('ouen',this)">🤝 応援依頼</button>
     <button class="t-btn" onclick="switchTab('shizai',this)">🔧 資材・道具</button>
+    <button class="t-btn" onclick="switchTab('kashikari',this)">🧰 道具貸借</button>
     <button class="t-btn" onclick="switchTab('soudan',this)">💬 相談</button>
   </div>
 
@@ -165,7 +189,9 @@
     <p style="font-size:12px;font-weight:700;color:var(--gray500);margin:0 0 8px;letter-spacing:.06em;">カテゴリを選択</p>
     <div class="cat-chips">
       <button class="cat-chip jinzai" onclick="selCat('jinzai',this)">👷 人材募集・お手伝い</button>
+      <button class="cat-chip ouen" onclick="selCat('ouen',this)">🤝 応援依頼</button>
       <button class="cat-chip shizai" onclick="selCat('shizai',this)">🔧 資材・道具</button>
+      <button class="cat-chip kashikari" onclick="selCat('kashikari',this)">🧰 道具貸借</button>
       <button class="cat-chip soudan" onclick="selCat('soudan',this)">💬 相談・情報共有</button>
     </div>
 
@@ -208,12 +234,14 @@ let adminPinValue = '';
 
 // ===== 初期サンプルデータ =====
 const SAMPLE_POSTS = [
-  {id:1, cat:'jinzai', emoji:'🪚', name:'大工 鈴木', area:'上尾市', time:'5分前',
-   body:'明日（6/25）上尾市内の現場で大工が1名足りません。床張り作業です。日給2万円、朝7時〜17時。経験者歓迎。', tags:['上尾市','大工','急募','1日'], tel:'090-XXXX-XXXX', comments:[
+  {id:1, cat:'ouen', emoji:'🤝', name:'大工 鈴木', area:'上尾市', time:'5分前', verified:true,
+   body:'明日（6/25）上尾市内の現場で大工が1名足りません。床張り作業です。詳細は電話で相談希望です。', tags:['上尾市','大工','急募','1日'], tel:'090-XXXX-XXXX', comments:[
     {emoji:'👷', name:'左官 田中', text:'自分、大工もできます！連絡してもいいですか？'},
   ]},
   {id:2, cat:'shizai', emoji:'🏗️', name:'鳶 田中組', area:'伊奈町', time:'2時間前',
    body:'単管パイプ（6m×50本）と足場板（2m×30枚）を格安で譲ります。引取り限定。状態良好。詳細はご連絡を。', tags:['足場材','譲渡','伊奈町'], tel:'048-XXX-XXXX', comments:[]},
+  {id:5, cat:'kashikari', emoji:'🧰', name:'内装 佐々木', area:'上尾市', time:'3時間前',
+   body:'レーザー墨出し器を明日1日だけ貸していただける方を探しています。受け渡し場所は相談でお願いします。', tags:['道具貸借','上尾市','1日'], tel:'', comments:[]},
   {id:3, cat:'soudan', emoji:'🔧', name:'設備 山本', area:'上尾市', time:'昨日',
    body:'一人親方で今年初めて確定申告をします。組合費や労災保険料って経費に入れていいんでしょうか？アドバイスお願いします。', tags:['確定申告','相談','一人親方'], tel:'', comments:[
     {emoji:'📋', name:'事務 佐藤', text:'組合費は経費になりますよ！詳しくは支部へ相談ください。048-773-9863'},
@@ -230,7 +258,9 @@ let selectedCat = '';
 
 const CAT = {
   jinzai:{label:'人材募集',badge:'badge-jinzai'},
+  ouen:{label:'応援依頼',badge:'badge-ouen'},
   shizai:{label:'資材・道具',badge:'badge-shizai'},
+  kashikari:{label:'道具貸借',badge:'badge-kashikari'},
   soudan:{label:'相談',badge:'badge-soudan'},
 };
 
@@ -291,9 +321,9 @@ function render(){
           <p class="post-author">${esc(p.name||'匿名')}${p.area?` <span style="font-size:11px;color:var(--gray400);">📍${esc(p.area)}</span>`:''}</p>
           <p class="post-meta">${p.time}</p>
         </div>
-        <span class="post-badge ${CAT[p.cat].badge}">${CAT[p.cat].label}</span>
+        <span class="post-badge ${(CAT[p.cat]||CAT.soudan).badge}">${(CAT[p.cat]||CAT.soudan).label}</span>
       </div>
-      <p class="post-body">${esc(p.body)}</p>
+      <p class="post-body">${esc(p.body)}${p.verified?'<span class="verified-badge"><i class="ti ti-shield-check"></i>支部確認済み</span>':''}</p>
       <div class="post-tags">${(p.tags||[]).map(t=>`<span class="post-tag">${esc(t)}</span>`).join('')}</div>
       <div class="post-actions">
         <button class="post-btn" onclick="toggleComment(${p.id})">
@@ -408,7 +438,7 @@ async function submitPost(){
   const tel  = document.getElementById('post-tel').value.trim();
   const tags = [area, CAT[selectedCat].label].filter(Boolean);
 
-  const EMOJIS = {jinzai:'👷',shizai:'🔧',soudan:'💬'};
+  const EMOJIS = {jinzai:'👷',ouen:'🤝',shizai:'🔧',kashikari:'🧰',soudan:'💬'};
   const newPost = {
     id: nextId++, cat: selectedCat,
     emoji: EMOJIS[selectedCat], name, area, time:'たった今',
