@@ -10,12 +10,12 @@
 .r-hero{background:linear-gradient(135deg,#1A3A6B,#1A5FA8);border-radius:var(--r16);padding:20px;margin-bottom:16px;display:flex;align-items:center;gap:14px;}
 .r-hero i{font-size:44px;color:#B5D4F4;flex-shrink:0;}
 .r-hero h2{font-size:18px;font-weight:800;color:#fff;margin:0 0 4px;}
-.r-hero p{font-size:13px;color:rgba(255,255,255,.65);margin:0;}
+.r-hero p{font-size:13px;color:rgba(255,255,255,.94);margin:0;font-weight:700;}
 /* 月入力グリッド */
 .month-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
 .month-cell{background:var(--white);border-radius:var(--r12);padding:10px 8px;border:1.5px solid var(--gray100);box-shadow:var(--shadow-sm);}
-.month-cell label{font-size:11px;font-weight:700;color:var(--gray500);display:block;margin-bottom:4px;text-align:center;}
-.month-cell input{width:100%;padding:8px 6px;border-radius:8px;border:1.5px solid var(--gray200);font-size:16px;font-weight:700;text-align:center;outline:none;font-family:inherit;}
+.month-cell label{font-size:11px;font-weight:900;color:var(--navy);display:block;margin-bottom:4px;text-align:center;}
+.month-cell input{width:100%;padding:8px 6px;border-radius:8px;border:1.5px solid var(--gray200);font-size:16px;font-weight:900;text-align:center;outline:none;font-family:inherit;color:var(--navy);background:#F8FAFC;}
 .month-cell input:focus{border-color:var(--orange);}
 .month-cell.over input{background:#FEF0ED;border-color:var(--red);color:var(--red);}
 .month-cell.warn input{background:#FFF8E6;border-color:var(--yellow);}
@@ -24,15 +24,15 @@
 .gauge-title{font-size:14px;font-weight:700;color:var(--navy);margin:0 0 12px;display:flex;align-items:center;justify-content:space-between;}
 .gauge-label-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;}
 .gauge-current{font-size:28px;font-weight:800;}
-.gauge-limit{font-size:14px;color:var(--gray500);}
+.gauge-limit{font-size:14px;color:var(--gray600);font-weight:700;}
 .gauge-bar{height:18px;background:var(--gray100);border-radius:99px;overflow:hidden;margin-bottom:6px;}
 .gauge-fill{height:100%;border-radius:99px;transition:width .5s cubic-bezier(.4,0,.2,1);}
-.gauge-desc{font-size:12px;color:var(--gray500);}
+.gauge-desc{font-size:12px;color:var(--gray600);font-weight:700;}
 /* 月別バーグラフ */
 .bar-chart{display:flex;align-items:flex-end;gap:4px;height:80px;margin-top:8px;}
 .bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;}
 .bar-item{width:100%;border-radius:4px 4px 0 0;transition:height .4s;}
-.bar-lbl{font-size:9px;color:var(--gray400);}
+.bar-lbl{font-size:9px;color:var(--gray600);font-weight:800;}
 .bar-val{font-size:10px;font-weight:700;color:var(--gray600);}
 /* 法的情報 */
 .law-table{width:100%;border-collapse:collapse;font-size:13px;}
@@ -53,6 +53,46 @@
 .print-panel .print-preview{background:#147c62;}
 .print-panel .print-submit{background:#1d5b7d;}
 .print-panel .print-note{text-align:center;font-size:12px;color:var(--gray600);margin:0;}
+.rodo-note{font-size:13px;color:var(--gray600);margin:0 0 10px;font-weight:700;line-height:1.65;}
+.rodo-warning{font-size:12px;color:var(--gray600);margin:10px 0 0;font-weight:700;}
+.form-sec-title{font-size:11px;font-weight:900;color:var(--navy);margin:10px 0 8px;letter-spacing:.06em;}
+.holiday-box{background:var(--gray50);border-radius:var(--r8);padding:10px 12px;margin:8px 0;}
+.holiday-box label{display:flex;align-items:center;gap:8px;cursor:pointer;font-size:14px;font-weight:800;color:var(--navy);}
+html[data-theme="dark"] .r-hero p{color:#F8FAFC;}
+html[data-theme="dark"] .month-cell{
+  background:#10213A!important;
+  border-color:rgba(255,255,255,.16)!important;
+}
+html[data-theme="dark"] .month-cell label{color:#FFFFFF!important;}
+html[data-theme="dark"] .month-cell input{
+  background:#071426!important;
+  color:#FFFFFF!important;
+  border-color:rgba(255,255,255,.22)!important;
+}
+html[data-theme="dark"] .month-cell.warn input{
+  background:#3B2D0A!important;
+  color:#FFE39A!important;
+  border-color:#F0B429!important;
+}
+html[data-theme="dark"] .month-cell.over input{
+  background:#3B1515!important;
+  color:#FFC3C3!important;
+  border-color:#C0392B!important;
+}
+html[data-theme="dark"] .gauge-limit,
+html[data-theme="dark"] .gauge-desc,
+html[data-theme="dark"] .bar-lbl,
+html[data-theme="dark"] .bar-val,
+html[data-theme="dark"] .print-panel .print-note,
+html[data-theme="dark"] .rodo-note,
+html[data-theme="dark"] .rodo-warning,
+html[data-theme="dark"] .form-sec-title{color:#E8EEF7!important;}
+html[data-theme="dark"] .holiday-box{background:#071426!important;border:1px solid rgba(255,255,255,.12);}
+html[data-theme="dark"] .holiday-box label{color:#F8FAFC!important;}
+html[data-theme="dark"] .gauge-bar{background:#071426;}
+html[data-theme="dark"] .status-badge.sb-ok{background:#0D3324;color:#B8F0D0;}
+html[data-theme="dark"] .status-badge.sb-warn{background:#3B2D0A;color:#FFE39A;}
+html[data-theme="dark"] .status-badge.sb-over{background:#3B1515;color:#FFC3C3;}
 </style>
 </head>
 <body>
@@ -149,7 +189,7 @@
   <!-- 2ヶ月〜6ヶ月平均チェック -->
   <div class="gauge-card" id="avg-gauge" style="display:none;">
     <p class="gauge-title">複数月平均（特別条項チェック）</p>
-    <p style="font-size:13px;color:var(--gray600);margin:0 0 10px;">特別条項適用時は2〜6ヶ月の平均が80h以内、かつ月100h未満が必要です。</p>
+    <p class="rodo-note">特別条項適用時は2〜6ヶ月の平均が80h以内、かつ月100h未満が必要です。</p>
     <div id="avg-result"></div>
   </div>
 
@@ -165,7 +205,7 @@
       <tr><td>2〜6ヶ月の月平均（特別条項）</td><td class="limit">80時間以内</td></tr>
       <tr><td>45h超え可能な月数（特別条項）</td><td class="limit">年6回まで</td></tr>
     </table>
-    <p style="font-size:12px;color:var(--gray400);margin:10px 0 0;">※ 違反した場合は6ヶ月以下の懲役または30万円以下の罰金の対象となります。</p>
+    <p class="rodo-warning">※ 違反した場合は6ヶ月以下の懲役または30万円以下の罰金の対象となります。</p>
   </div>
 
   <div class="alert alert-warn">
@@ -176,7 +216,7 @@
   <!-- ===== 36協定届 作成 ===== -->
   <div class="card" style="margin-top:4px;">
     <p class="sec-label">📄 36協定届の作成（様式第9号・第9号の2 準拠）</p>
-    <p style="font-size:13px;color:var(--gray600);margin:0 0 14px;line-height:1.65;">必要事項を入力してプレビュー・印刷できます。印刷後に署名・押印のうえ、所轄の労働基準監督署へ届け出てください。</p>
+    <p class="rodo-note" style="margin-bottom:14px;">必要事項を入力してプレビュー・印刷できます。印刷後に署名・押印のうえ、所轄の労働基準監督署へ届け出てください。</p>
 
     <div style="display:flex;gap:8px;margin-bottom:14px;">
       <button id="type-ippan" class="btn-primary" style="flex:1;font-size:13px;padding:10px 8px;display:flex;" onclick="setType('ippan')">
@@ -188,7 +228,7 @@
     </div>
 
     <!-- 事業場・届出情報 -->
-    <p style="font-size:11px;font-weight:700;color:var(--gray500);margin:0 0 8px;letter-spacing:.06em;">▶ 事業場情報</p>
+    <p class="form-sec-title" style="margin-top:0;">▶ 事業場情報</p>
     <div class="grid2">
       <div class="input-group"><label>事業の種類</label><input type="text" id="f-jigyoshu" placeholder="例：建築工事業"></div>
       <div class="input-group"><label>事業の名称</label><input type="text" id="f-jigyomei" placeholder="例：〇〇建設（有）"></div>
@@ -204,7 +244,7 @@
     </div>
 
     <!-- 時間外労働の内容 -->
-    <p style="font-size:11px;font-weight:700;color:var(--gray500);margin:10px 0 8px;letter-spacing:.06em;">▶ 時間外労働の内容</p>
+    <p class="form-sec-title">▶ 時間外労働の内容</p>
     <div class="input-group">
       <label>時間外労働をさせる必要のある具体的事由</label>
       <textarea id="f-jiyu" rows="3" placeholder="例：工期の短縮を必要とする場合、機械・設備の緊急修理、予期せぬ設計変更・追加工事への対応、年末工事完了対応など&#10;※「業務の都合」「繁忙期」など抽象的な事由は認められません"></textarea>
@@ -220,8 +260,8 @@
     </div>
 
     <!-- 休日労働 -->
-    <div style="background:var(--gray50);border-radius:var(--r8);padding:10px 12px;margin:8px 0;">
-      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:14px;font-weight:600;color:var(--navy);">
+    <div class="holiday-box">
+      <label>
         <input type="checkbox" id="f-kyujitsu" style="width:18px;height:18px;accent-color:var(--orange);">
         休日労働あり（法定休日に労働させる場合）
       </label>
@@ -263,7 +303,7 @@
     </div>
 
     <!-- 協定・届出情報 -->
-    <p style="font-size:11px;font-weight:700;color:var(--gray500);margin:10px 0 8px;letter-spacing:.06em;">▶ 協定・届出情報</p>
+    <p class="form-sec-title">▶ 協定・届出情報</p>
     <div class="grid2">
       <div class="input-group"><label>協定の締結年月日</label><input type="date" id="f-teiketsu"></div>
       <div class="input-group"><label>届出年月日（提出日）</label><input type="date" id="f-todoke"></div>
@@ -272,7 +312,7 @@
     <div class="input-group"><label>提出先 労働基準監督署</label><input type="text" id="f-roukisho" placeholder="例：大宮労働基準監督署長"></div>
 
     <!-- 署名情報 -->
-    <p style="font-size:11px;font-weight:700;color:var(--gray500);margin:10px 0 8px;letter-spacing:.06em;">▶ 署名・押印（協定書兼用の場合は必要）</p>
+    <p class="form-sec-title">▶ 署名・押印（協定書兼用の場合は必要）</p>
     <div class="grid2">
       <div class="input-group"><label>使用者 職名</label><input type="text" id="f-shiyosha-shoku" placeholder="例：代表取締役"></div>
       <div class="input-group"><label>使用者 氏名</label><input type="text" id="f-shiyosha-name" placeholder="例：埼玉 太郎"></div>
