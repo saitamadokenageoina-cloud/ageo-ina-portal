@@ -42,14 +42,18 @@
 .doc-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px;}
 .pill{font-size:11px;font-weight:700;border-radius:99px;padding:2px 8px;background:var(--gray100);color:var(--gray600);}
 .pill.cat{background:var(--blue-lt);color:var(--blue);}
-.doc-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.doc-actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
 .doc-actions a{
   display:flex;align-items:center;justify-content:center;gap:6px;border-radius:var(--r12);
   padding:10px 8px;font-size:13px;font-weight:700;
 }
 .open-btn{background:var(--orange);color:#fff;}
+.pdf-btn{background:var(--red);color:#fff;}
 .save-btn{background:var(--white);color:var(--navy);border:2px solid var(--gray200);}
 .empty{display:none;text-align:center;color:var(--gray500);font-size:14px;padding:28px 16px;}
+@media (max-width:420px){
+  .doc-actions{grid-template-columns:1fr;}
+}
 </style>
 </head>
 <body>
@@ -135,6 +139,7 @@ function renderDocs(){
       </div>
       <div class="doc-actions">
         <a class="open-btn" href="book.html?book=${encodeURIComponent(d.id)}"><i class="ti ti-book-2"></i>読む</a>
+        <a class="pdf-btn" href="${d.file}" target="_blank" rel="noopener"><i class="ti ti-file-type-pdf"></i>PDF表示</a>
         <a class="save-btn" href="${d.file}" download><i class="ti ti-download"></i>保存</a>
       </div>
     </article>
