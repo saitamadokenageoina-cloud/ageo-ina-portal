@@ -66,14 +66,15 @@
   display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
 }
 .hero-calendar {
-  flex-shrink: 0; min-width: 92px; margin-top: 2px;
+  flex-shrink: 0; min-width: 104px; margin-top: 2px;
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
-  padding: 10px 8px; border-radius: var(--r12);
-  background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.18);
-  color: #fff; box-shadow: 0 10px 24px rgba(0,0,0,.22);
+  padding: 11px 9px; border-radius: 14px;
+  background: linear-gradient(145deg,rgba(11,128,67,.95),rgba(20,124,98,.86));
+  border: 1px solid rgba(255,255,255,.24);
+  color: #fff; box-shadow: 0 14px 28px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.22);
 }
-.hero-calendar i { font-size: 24px; color: #00C8FF; }
-.hero-calendar span { font-size: 11px; font-weight: 800; line-height: 1.2; text-align: center; }
+.hero-calendar svg{width:42px;height:42px;filter:drop-shadow(0 8px 12px rgba(0,0,0,.22));}
+.hero-calendar span { font-size: 11px; font-weight: 900; line-height: 1.2; text-align: center; letter-spacing:.02em; }
 .hero-sub {
   font-size: 18px; color: rgba(255,255,255,.9);
   margin: 12px 0 20px; position: relative; z-index: 1;
@@ -196,33 +197,55 @@
 
 .section { padding: 16px 16px 0; }
 .app-manual{
-  margin: 18px 16px 0; padding: 16px;
-  background: linear-gradient(135deg,#fff,#F5F6F8);
-  border: 1px solid var(--gray100); border-radius: var(--r16); box-shadow: var(--shadow-sm);
+  margin: 18px 16px 0; padding: 14px;
+  background:
+    linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px),
+    radial-gradient(circle at 100% 0,rgba(232,97,42,.22),transparent 42%),
+    linear-gradient(135deg,#071426,#111A36 62%,#17112E);
+  background-size: 28px 28px,28px 28px,100% 100%,100% 100%;
+  border: 1px solid rgba(255,255,255,.12); border-radius: var(--r16);
+  box-shadow: 0 18px 42px rgba(0,0,0,.22); color:#fff;
 }
-.app-manual h2{font-size:16px;color:var(--navy);margin:0 0 10px;display:flex;align-items:center;gap:8px;}
+.app-manual h2{font-size:16px;color:#fff;margin:0 0 12px;display:flex;align-items:center;gap:8px;}
+.manual-label{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  background:linear-gradient(90deg,#16651F,#1F8429);border-radius:7px;padding:8px 10px;
+  color:#fff;font-size:11px;font-weight:900;letter-spacing:.08em;margin:12px 0;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.16);
+}
+.manual-label small{font-size:9px;color:rgba(255,255,255,.68);letter-spacing:.14em;}
 .manual-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
 .manual-tab{
-  border:1.5px solid var(--gray100);background:var(--white);border-radius:var(--r12);
+  border:1px solid rgba(255,255,255,.14);background:rgba(12,30,64,.82);border-radius:var(--r12);
   padding:10px 8px;text-align:left;display:flex;align-items:center;gap:8px;
-  color:var(--gray600);font-size:12px;font-weight:800;
+  color:rgba(255,255,255,.8);font-size:12px;font-weight:900;
+  box-shadow:0 10px 22px rgba(0,0,0,.22), inset 0 2px 0 rgba(232,97,42,.7);
 }
 .manual-tab i{font-size:18px;color:var(--orange);}
-.manual-tab.active{background:var(--navy);color:#fff;border-color:var(--navy);box-shadow:var(--shadow-md);}
-.manual-tab.active i{color:#00C8FF;}
-.manual-panel{background:var(--white);border:1px solid var(--gray100);border-radius:var(--r12);padding:14px;}
-.manual-panel-title{font-size:15px;font-weight:800;color:var(--navy);margin:0 0 4px;}
-.manual-panel-lead{font-size:12px;color:var(--gray600);margin:0 0 10px;line-height:1.55;}
+.manual-tab.active{background:linear-gradient(145deg,#143267,#102454);color:#fff;border-color:rgba(99,176,255,.34);box-shadow:0 12px 26px rgba(0,0,0,.3), inset 0 2px 0 #E8612A;}
+.manual-tab.active i{color:#48C8FF;}
+.manual-panel{background:rgba(8,22,49,.68);border:1px solid rgba(255,255,255,.13);border-radius:var(--r12);padding:14px;}
+.manual-panel-title{font-size:15px;font-weight:900;color:#fff;margin:0 0 4px;}
+.manual-panel-lead{font-size:12px;color:rgba(255,255,255,.7);margin:0 0 10px;line-height:1.55;}
 .manual-steps{display:grid;gap:7px;margin-bottom:12px;}
-.manual-step{display:grid;grid-template-columns:24px 1fr;gap:8px;align-items:start;font-size:12px;color:var(--gray700);line-height:1.5;}
-.manual-step b{width:24px;height:24px;border-radius:8px;background:var(--orange-lt);color:var(--orange);display:flex;align-items:center;justify-content:center;font-size:12px;}
+.manual-step{display:grid;grid-template-columns:24px 1fr;gap:8px;align-items:start;font-size:12px;color:rgba(255,255,255,.82);line-height:1.5;}
+.manual-step b{width:24px;height:24px;border-radius:8px;background:#F79B2E;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;}
 .manual-open{
   display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:11px;
   border-radius:var(--r12);background:var(--orange);color:#fff;font-size:14px;font-weight:800;
 }
+.manual-faq{display:grid;gap:8px;margin-top:12px;}
+.manual-faq details{border:1px solid rgba(232,97,42,.45);border-radius:10px;background:rgba(13,38,83,.76);overflow:hidden;}
+.manual-faq summary{list-style:none;padding:11px 12px;font-size:12px;font-weight:900;color:#fff;display:flex;justify-content:space-between;align-items:center;gap:8px;}
+.manual-faq summary::-webkit-details-marker{display:none;}
+.manual-faq summary::after{content:'▼';color:#48C8FF;font-size:12px;}
+.manual-faq details[open] summary::after{content:'▲';}
+.manual-faq p{margin:0;padding:0 12px 12px;font-size:12px;color:rgba(255,255,255,.7);line-height:1.6;border-top:1px solid rgba(255,255,255,.1);}
 @media (max-width:380px){
   .hero-main{align-items:flex-start;}
-  .hero-calendar{min-width:78px;padding:8px 6px;}
+  .hero-calendar{min-width:86px;padding:8px 6px;}
+  .hero-calendar svg{width:34px;height:34px;}
   .info-grid,.manual-tabs{gap:8px;}
   .hero-sub{font-size:16px;}
   .hero-sub span{font-size:14px;}
@@ -240,7 +263,17 @@
   <div class="hero-main">
     <h1 class="hero-title">埼玉土建<br><span>上尾伊奈支部</span></h1>
     <a class="hero-calendar" href="calendar.html">
-      <i class="ti ti-calendar-month"></i>
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <rect x="8" y="12" width="48" height="44" rx="10" fill="rgba(255,255,255,.2)"/>
+        <rect x="12" y="20" width="40" height="32" rx="6" fill="#fff"/>
+        <rect x="12" y="20" width="40" height="12" rx="6" fill="#E8612A"/>
+        <rect x="20" y="7" width="6" height="15" rx="3" fill="#B5D4F4"/>
+        <rect x="38" y="7" width="6" height="15" rx="3" fill="#B5D4F4"/>
+        <circle cx="23" cy="39" r="4" fill="#1A7A4A"/>
+        <circle cx="32" cy="39" r="4" fill="#E8612A"/>
+        <circle cx="41" cy="39" r="4" fill="#1A5FA8"/>
+        <path d="M19 49h26" stroke="#D8DBE3" stroke-width="3" stroke-linecap="round"/>
+      </svg>
       <span>支部<br>カレンダー</span>
     </a>
   </div>
@@ -464,7 +497,14 @@
     <button class="manual-tab" onclick="showManual('paper',this)"><i class="ti ti-file-description"></i>手続き</button>
     <button class="manual-tab" onclick="showManual('print',this)"><i class="ti ti-printer"></i>印刷・保存</button>
   </div>
+  <div class="manual-label"><i class="ti ti-route"></i> アプリとして使う方法 <small>HOW TO USE</small></div>
   <div class="manual-panel" id="manual-panel"></div>
+  <div class="manual-label"><i class="ti ti-tool"></i> うまく表示されないとき <small>TROUBLESHOOTING</small></div>
+  <div class="manual-faq">
+    <details open><summary>ページが古い・正しく表示されない</summary><p>ブラウザの再読み込みをしてください。スマホでは画面を下に引っ張ると更新できます。</p></details>
+    <details><summary>印刷・PDF保存ボタンを押しても何も起きない</summary><p>ポップアップがブロックされている場合があります。ブラウザの設定でこのサイトのポップアップを許可してください。</p></details>
+    <details><summary>資料本棚の文字が欠ける</summary><p>デジタルブック画面の「PDF表示」ボタンから直接PDFを開くと、端末標準のPDFビューアで読めます。</p></details>
+  </div>
 </section>
 
 <div style="height:28px;"></div>
