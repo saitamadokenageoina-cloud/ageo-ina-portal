@@ -30,13 +30,30 @@ body{background:#111b27;color:#fff;min-height:100vh;overflow:hidden;overscroll-b
 }
 .book{
   display:flex;align-items:center;justify-content:center;gap:10px;width:100%;height:100%;
-  perspective:1600px;transition:transform .18s ease, opacity .18s ease;
+  perspective:1800px;transition:transform .18s ease, opacity .18s ease;transform-style:preserve-3d;
 }
-.book.flipping{transform:translateX(8px) rotateY(-3deg);opacity:.62;}
+.book.flipping{transform:translateX(4px);opacity:.9;}
+.book.turning-next .right-page-shell{transform:rotateY(-18deg) translateX(-10px);box-shadow:-26px 18px 42px rgba(0,0,0,.42);}
+.book.turning-prev .left-page-shell{transform:rotateY(18deg) translateX(10px);box-shadow:26px 18px 42px rgba(0,0,0,.42);}
 .page-wrap{
   max-width:calc(50vw - 22px);max-height:100%;background:#fff;border-radius:5px;
   box-shadow:0 16px 44px rgba(0,0,0,.45);overflow:hidden;position:relative;
+  transform-origin:left center;transition:transform .24s cubic-bezier(.2,.75,.2,1), box-shadow .24s ease;
+  backface-visibility:hidden;
 }
+.left-page-shell{transform-origin:right center;}
+.right-page-shell{transform-origin:left center;}
+.page-wrap::before{
+  content:"";position:absolute;top:0;bottom:0;width:16px;z-index:2;pointer-events:none;opacity:.42;
+}
+.left-page-shell::before{right:0;background:linear-gradient(90deg,rgba(0,0,0,0),rgba(0,0,0,.22));}
+.right-page-shell::before{left:0;background:linear-gradient(90deg,rgba(0,0,0,.22),rgba(0,0,0,0));}
+.page-wrap::after{
+  content:"";position:absolute;top:8px;bottom:8px;width:10px;z-index:-1;background:rgba(255,255,255,.72);
+  box-shadow:0 0 0 1px rgba(255,255,255,.16),0 6px 18px rgba(0,0,0,.22);
+}
+.left-page-shell::after{left:-7px;border-radius:5px 0 0 5px;}
+.right-page-shell::after{right:-7px;border-radius:0 5px 5px 0;}
 .page-wrap.single{max-width:min(100%,780px);}
 .page-wrap canvas{display:block;background:#fff;max-width:100%;max-height:100%;}
 .page-label{
@@ -123,7 +140,7 @@ body{background:#111b27;color:#fff;min-height:100vh;overflow:hidden;overscroll-b
       <button class="icon-btn" id="zoom-out" title="縮小"><i class="ti ti-zoom-out"></i></button>
       <button class="icon-btn" id="zoom-in" title="拡大"><i class="ti ti-zoom-in"></i></button>
       <button class="icon-btn" id="toc-btn" title="目次"><i class="ti ti-list-tree"></i></button>
-      <a class="book-link" id="pdf-link" href="#" target="_blank" rel="noopener"><i class="ti ti-file-type-pdf"></i><span>PDF</span></a>
+      <a class="book-link" id="pdf-link" href="#" target="_blank" rel="noopener"><i class="ti ti-file-type-pdf"></i><span>PDF表示</span></a>
       <a class="book-link" id="save-link" href="#" download><i class="ti ti-download"></i><span>保存</span></a>
     </div>
   </header>
@@ -132,8 +149,8 @@ body{background:#111b27;color:#fff;min-height:100vh;overflow:hidden;overscroll-b
     <button class="nav-hit prev" id="prev-hit" aria-label="前のページ"></button>
     <button class="turn-cue prev" id="prev-cue" aria-label="前のページ"><i class="ti ti-chevron-left"></i></button>
     <div class="book" id="book">
-      <div class="page-wrap" id="left-wrap"><canvas id="left-page"></canvas><span class="page-label" id="left-label"></span></div>
-      <div class="page-wrap" id="right-wrap"><canvas id="right-page"></canvas><span class="page-label" id="right-label"></span></div>
+      <div class="page-wrap left-page-shell" id="left-wrap"><canvas id="left-page"></canvas><span class="page-label" id="left-label"></span></div>
+      <div class="page-wrap right-page-shell" id="right-wrap"><canvas id="right-page"></canvas><span class="page-label" id="right-label"></span></div>
     </div>
     <button class="turn-cue next" id="next-cue" aria-label="次のページ"><i class="ti ti-chevron-right"></i></button>
     <button class="nav-hit next" id="next-hit" aria-label="次のページ"></button>
@@ -217,14 +234,14 @@ async function renderPage(pageNo, canvas, label, wrap, token){
   const fit = Math.min(usableWidth / base.width, usableHeight / base.height);
   const scale = Math.max(.25, fit * state.zoom);
   const viewport = page.getViewport({scale});
-  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
   canvas.width = Math.floor(viewport.width * dpr);
   canvas.height = Math.floor(viewport.height * dpr);
   canvas.style.width = `${Math.floor(viewport.width)}px`;
   canvas.style.height = `${Math.floor(viewport.height)}px`;
   const ctx = canvas.getContext('2d');
   ctx.setTransform(dpr,0,0,dpr,0,0);
-  await page.render({canvasContext:ctx, viewport}).promise;
+  await page.render({canvasContext:ctx, viewport, intent:'display'}).promise;
   label.textContent = `${pageNo}`;
 }
 
@@ -277,7 +294,7 @@ async function render(){
   }finally{
     if(token === state.token){
       els.loader.style.display = 'none';
-      setTimeout(()=>els.book.classList.remove('flipping'), 120);
+      setTimeout(()=>els.book.classList.remove('flipping','turning-next','turning-prev'), 180);
     }
   }
 }
@@ -285,6 +302,8 @@ async function render(){
 function go(delta){
   const next = clampPage(state.page + delta);
   if(next === state.page) return;
+  els.book.classList.remove('turning-next','turning-prev');
+  els.book.classList.add(delta > 0 ? 'turning-next' : 'turning-prev');
   state.page = next;
   render();
 }
@@ -389,7 +408,12 @@ async function boot(){
     return;
   }
   try{
-    state.pdf = await pdfjsLib.getDocument(doc.file).promise;
+    state.pdf = await pdfjsLib.getDocument({
+      url:doc.file,
+      cMapUrl:'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/',
+      cMapPacked:true,
+      standardFontDataUrl:'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/standard_fonts/'
+    }).promise;
     els.sub.textContent = `${doc.category} / ${state.pdf.numPages}ページ`;
     buildPageList();
     await buildToc();

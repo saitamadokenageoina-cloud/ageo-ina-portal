@@ -7,6 +7,8 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.47.0/iconfont/tabler-icons.min.css">
 <link rel="stylesheet" href="common.css">
 <style>
+.calendar-page{max-width:1080px;}
+.calendar-page .content{padding-left:20px;padding-right:20px;}
 .cal-header{
   background:linear-gradient(135deg,var(--navy-dk),#1A3A6B);
   border-radius:var(--r16);padding:18px 20px;margin-bottom:16px;
@@ -22,7 +24,7 @@
 }
 .cal-wrap iframe{
   width:100%;border:none;display:block;
-  min-height:600px;
+  min-height:680px;
 }
 
 .view-btns{display:flex;gap:8px;margin-bottom:12px;}
@@ -35,12 +37,16 @@
 .view-btn.active{background:var(--navy);color:#fff;border-color:var(--navy);}
 .view-btn:hover:not(.active){border-color:var(--orange);color:var(--orange);}
 .view-btn i{font-size:16px;}
-
+@media (max-width:720px){
+  .calendar-page{max-width:640px;}
+  .calendar-page .content{padding-left:16px;padding-right:16px;}
+  .cal-wrap iframe{min-height:620px;}
+}
 
 </style>
 </head>
 <body>
-<div class="app">
+<div class="app calendar-page">
 <header class="hdr">
   <button class="hdr-back" onclick="goBack()">
     <i class="ti ti-arrow-left"></i>戻る

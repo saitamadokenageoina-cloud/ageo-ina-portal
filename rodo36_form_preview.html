@@ -30,12 +30,15 @@ body{background:#0f1720;color:#fff;margin:0;}
 }
 .pdf-page canvas{width:100%;height:100%;display:block;}
 .fill{
-  position:absolute;color:#111;font-weight:700;line-height:1.2;white-space:pre-wrap;overflow:hidden;
-  font-family:"Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif;font-size:9px;
+  position:absolute;color:#111;font-weight:600;line-height:1.14;white-space:pre-wrap;overflow:hidden;
+  font-family:"Yu Gothic UI","Meiryo","Hiragino Sans",sans-serif;font-size:7.1px;
+  letter-spacing:-.01em;text-align:center;display:flex;align-items:center;justify-content:center;
 }
-.fill.small{font-size:8px;}
-.fill.tiny{font-size:7px;}
-.checkmark{font-size:14px;font-weight:900;color:#111;}
+.fill.small{font-size:6.3px;}
+.fill.tiny{font-size:5.6px;}
+.fill.left{text-align:left;justify-content:flex-start;}
+.fill.top{align-items:flex-start;}
+.checkmark{font-size:10px;font-weight:900;color:#111;line-height:1;}
 .loading,.error{padding:40px 18px;text-align:center;font-weight:800;color:rgba(255,255,255,.8);}
 .error{display:none;color:#fff;}
 @media print{
@@ -115,63 +118,75 @@ function addFill(page, item){
   el.style.top = p(item.y, pageH);
   el.style.width = p(item.w || 80, pageW);
   el.style.height = p(item.h || 18, pageH);
+  if(item.fontSize) el.style.fontSize = `${item.fontSize}px`;
   el.innerHTML = esc(item.text);
   page.appendChild(el);
+  fitFill(el);
+}
+
+function fitFill(el){
+  let size = parseFloat(getComputedStyle(el).fontSize);
+  const min = 4.4;
+  for(let i = 0; i < 12 && size > min; i++){
+    if(el.scrollWidth <= el.clientWidth + 1 && el.scrollHeight <= el.clientHeight + 1) break;
+    size -= .35;
+    el.style.fontSize = `${size}px`;
+  }
 }
 
 function basePageOne(){
   return [
-    {x:94,y:82,w:185,text:data.jigyoshu},
-    {x:300,y:82,w:205,text:data.jigyomei},
-    {x:432,y:86,w:285,h:34,text:data.jusho,className:'small'},
-    {x:740,y:83,w:82,text:data.yuko,className:'small'},
-    {x:92,y:224,w:220,h:50,text:data.jiyu,className:'small'},
-    {x:318,y:226,w:68,text:data.gyomu,className:'small'},
-    {x:392,y:226,w:38,text:data.ninzu,className:'small'},
-    {x:438,y:226,w:40,text:data.shotei,className:'small'},
-    {x:488,y:226,w:48,text:data.nichi,className:'small'},
-    {x:600,y:226,w:48,text:data.tsuki,className:'small'},
-    {x:714,y:226,w:50,text:data.nen,className:'small'},
-    {x:718,y:190,w:82,text:data.kisan || '',className:'tiny'},
-    {x:92,y:360,w:220,h:42,text:data.kyujitsuJiyu,className:'small'},
-    {x:318,y:362,w:68,text:data.kyujitsuGyomu,className:'small'},
-    {x:392,y:362,w:38,text:data.ninzu,className:'small'},
-    {x:500,y:362,w:72,text:'週1日',className:'small'},
-    {x:610,y:362,w:58,text:data.kyujitsuBi,className:'small'},
-    {x:774,y:396,w:18,text:'✓',className:'checkmark'},
-    {x:148,y:430,w:110,text:data.teiketsu,className:'tiny'},
-    {x:472,y:444,w:115,text:data.daihyoShoku || '',className:'tiny'},
-    {x:472,y:456,w:130,text:data.daihyoName,className:'tiny'},
-    {x:252,y:470,w:220,text:data.daihyoMethod,className:'tiny'},
-    {x:347,y:513,w:18,text:'✓',className:'checkmark'},
-    {x:792,y:477,w:18,text:'✓',className:'checkmark'},
-    {x:132,y:529,w:110,text:data.todoke,className:'tiny'},
-    {x:472,y:541,w:115,text:data.shiyoShoku,className:'tiny'},
-    {x:472,y:552,w:130,text:data.shiyoName,className:'tiny'},
-    {x:248,y:570,w:250,text:data.roukisho,className:'tiny'}
+    {x:96,y:80,w:184,h:18,text:data.jigyoshu,fontSize:6.7},
+    {x:304,y:80,w:196,h:18,text:data.jigyomei,fontSize:6.7},
+    {x:435,y:85,w:280,h:30,text:data.jusho,className:'small'},
+    {x:742,y:82,w:78,h:18,text:data.yuko,className:'small'},
+    {x:95,y:222,w:214,h:47,text:data.jiyu,className:'small top left'},
+    {x:319,y:224,w:66,h:30,text:data.gyomu,className:'small'},
+    {x:394,y:224,w:34,h:18,text:data.ninzu,className:'small'},
+    {x:440,y:224,w:36,h:18,text:data.shotei,className:'small'},
+    {x:489,y:224,w:44,h:18,text:data.nichi,className:'small'},
+    {x:600,y:224,w:44,h:18,text:data.tsuki,className:'small'},
+    {x:714,y:224,w:46,h:18,text:data.nen,className:'small'},
+    {x:719,y:187,w:78,h:18,text:data.kisan || '',className:'tiny'},
+    {x:95,y:359,w:214,h:39,text:data.kyujitsuJiyu,className:'small top left'},
+    {x:319,y:360,w:66,h:26,text:data.kyujitsuGyomu,className:'small'},
+    {x:394,y:360,w:34,h:18,text:data.ninzu,className:'small'},
+    {x:500,y:360,w:68,h:18,text:'週1日',className:'small'},
+    {x:610,y:360,w:54,h:18,text:data.kyujitsuBi,className:'small'},
+    {x:776,y:396,w:12,h:12,text:'✓',className:'checkmark'},
+    {x:148,y:428,w:104,h:16,text:data.teiketsu,className:'tiny'},
+    {x:474,y:441,w:106,h:13,text:data.daihyoShoku || '',className:'tiny'},
+    {x:474,y:454,w:122,h:14,text:data.daihyoName,className:'tiny'},
+    {x:254,y:469,w:210,h:14,text:data.daihyoMethod,className:'tiny'},
+    {x:349,y:513,w:12,h:12,text:'✓',className:'checkmark'},
+    {x:794,y:477,w:12,h:12,text:'✓',className:'checkmark'},
+    {x:132,y:527,w:104,h:15,text:data.todoke,className:'tiny'},
+    {x:474,y:539,w:106,h:13,text:data.shiyoShoku,className:'tiny'},
+    {x:474,y:550,w:122,h:14,text:data.shiyoName,className:'tiny'},
+    {x:250,y:569,w:238,h:14,text:data.roukisho,className:'tiny'}
   ];
 }
 
 function specialPageThree(){
   return [
-    {x:28,y:181,w:205,h:78,text:data.tokuJiyu,className:'small'},
-    {x:242,y:181,w:58,text:data.gyomu,className:'small'},
-    {x:302,y:181,w:36,text:data.ninzu,className:'small'},
-    {x:348,y:181,w:54,text:data.nichi,className:'small'},
-    {x:462,y:181,w:52,text:data.tokuKaisu,className:'small'},
-    {x:520,y:181,w:54,text:data.tokuTsuki,className:'small'},
-    {x:678,y:181,w:56,text:data.tokuNen,className:'small'},
-    {x:72,y:371,w:170,text:'9',className:'small'},
-    {x:300,y:371,w:440,h:32,text:data.fukushi,className:'small'},
-    {x:774,y:405,w:18,text:'✓',className:'checkmark'},
-    {x:140,y:438,w:110,text:data.teiketsu,className:'tiny'},
-    {x:462,y:448,w:115,text:data.daihyoShoku || '',className:'tiny'},
-    {x:462,y:459,w:130,text:data.daihyoName,className:'tiny'},
-    {x:245,y:470,w:220,text:data.daihyoMethod,className:'tiny'},
-    {x:132,y:529,w:110,text:data.todoke,className:'tiny'},
-    {x:462,y:541,w:115,text:data.shiyoShoku,className:'tiny'},
-    {x:462,y:552,w:130,text:data.shiyoName,className:'tiny'},
-    {x:248,y:570,w:250,text:data.roukisho,className:'tiny'}
+    {x:30,y:179,w:198,h:74,text:data.tokuJiyu,className:'small top left'},
+    {x:244,y:179,w:54,h:26,text:data.gyomu,className:'small'},
+    {x:304,y:179,w:32,h:18,text:data.ninzu,className:'small'},
+    {x:350,y:179,w:50,h:18,text:data.nichi,className:'small'},
+    {x:463,y:179,w:48,h:18,text:data.tokuKaisu,className:'small'},
+    {x:522,y:179,w:50,h:18,text:data.tokuTsuki,className:'small'},
+    {x:679,y:179,w:52,h:18,text:data.tokuNen,className:'small'},
+    {x:74,y:370,w:162,h:16,text:'9',className:'small'},
+    {x:302,y:370,w:430,h:30,text:data.fukushi,className:'small left'},
+    {x:776,y:405,w:12,h:12,text:'✓',className:'checkmark'},
+    {x:140,y:436,w:104,h:15,text:data.teiketsu,className:'tiny'},
+    {x:464,y:446,w:106,h:13,text:data.daihyoShoku || '',className:'tiny'},
+    {x:464,y:457,w:122,h:14,text:data.daihyoName,className:'tiny'},
+    {x:247,y:469,w:210,h:14,text:data.daihyoMethod,className:'tiny'},
+    {x:132,y:527,w:104,h:15,text:data.todoke,className:'tiny'},
+    {x:464,y:539,w:106,h:13,text:data.shiyoShoku,className:'tiny'},
+    {x:464,y:550,w:122,h:14,text:data.shiyoName,className:'tiny'},
+    {x:250,y:569,w:238,h:14,text:data.roukisho,className:'tiny'}
   ];
 }
 
