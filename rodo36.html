@@ -455,6 +455,12 @@ document.getElementById('f-kyujitsu').addEventListener('change', function(){
 
 function g(id){ return (document.getElementById(id)||{}).value||''; }
 function chk(id){ return (document.getElementById(id)||{}).checked||false; }
+function warekiDate(value){
+  if(!value) return '';
+  const d = new Date(value);
+  if(Number.isNaN(d.getTime())) return value;
+  return `令和${d.getFullYear()-2018}年${d.getMonth()+1}月${d.getDate()}日`;
+}
 
 function previewKyotei(autoPrint=false) {
   const formData = {
@@ -464,8 +470,8 @@ function previewKyotei(autoPrint=false) {
     jusho:g('f-jusho'),
     ninzu:g('f-ninzu'),
     yuko:g('f-yuko'),
-    teiketsu:g('f-teiketsu'),
-    todoke:g('f-todoke'),
+    teiketsu:warekiDate(g('f-teiketsu')),
+    todoke:warekiDate(g('f-todoke')),
     jiyu:g('f-jiyu'),
     gyomu:g('f-gyomu'),
     nichi:g('f-1nichi'),

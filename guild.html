@@ -33,6 +33,8 @@
 .post-btn:hover{border-color:var(--orange);color:var(--orange);}
 .post-btn.primary{background:var(--orange);color:#fff;border-color:var(--orange);}
 .post-btn.primary:hover{background:var(--orange-dk);}
+.post-btn.danger{color:var(--red);border-color:#F2C8C2;}
+.post-btn.danger:hover{background:var(--red-lt);border-color:var(--red);}
 .post-btn i{font-size:15px;}
 
 /* コメント */
@@ -83,6 +85,10 @@
 .guild-notice{background:var(--navy);border-radius:var(--r12);padding:12px 16px;display:flex;align-items:center;gap:10px;margin-bottom:16px;}
 .guild-notice i{font-size:20px;color:var(--orange);flex-shrink:0;}
 .guild-notice p{font-size:13px;color:rgba(255,255,255,.8);margin:0;font-weight:500;}
+.guild-toolbar{display:flex;gap:8px;margin-bottom:12px;}
+.guild-toolbar button{flex:1;border:1.5px solid var(--gray200);background:var(--white);border-radius:var(--r12);padding:9px 10px;font-size:13px;font-weight:700;color:var(--gray600);}
+.guild-toolbar button.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+.sync-status{font-size:12px;color:var(--gray500);margin:-6px 0 12px;text-align:right;}
 </style>
 </head>
 <body>
@@ -126,8 +132,13 @@
 
   <div class="guild-notice">
     <i class="ti ti-lock"></i>
-    <p>組合員限定の掲示板です。投稿・連絡先は支部内でのみ共有されます。</p>
+    <p>投稿はクラウド設定後、全員の画面に共有されます。新規投稿は支部メールへ通知します。</p>
   </div>
+  <div class="guild-toolbar">
+    <button id="sync-mode" onclick="syncPosts()"><i class="ti ti-refresh"></i> 最新に更新</button>
+    <button id="admin-toggle" onclick="toggleAdmin()"><i class="ti ti-shield-lock"></i> 管理者</button>
+  </div>
+  <p class="sync-status" id="sync-status">ローカル表示中</p>
 
   <!-- フィルタータブ -->
   <div class="tab-row">
@@ -189,7 +200,12 @@
 <footer>埼玉土建一般労働組合 上尾伊奈支部｜TEL 048-773-9863</footer>
 </div>
 
+<script src="assets/js/guild-config.js"></script>
 <script>
+const GUILD_CONFIG = window.DOKEN_GUILD_CONFIG || {};
+let isAdmin = false;
+let adminPinValue = '';
+
 // ===== 初期サンプルデータ =====
 const SAMPLE_POSTS = [
   {id:1, cat:'jinzai', emoji:'🪚', name:'大工 鈴木', area:'上尾市', time:'5分前',
@@ -207,8 +223,8 @@ const SAMPLE_POSTS = [
    body:'来月から2週間、桶川の現場で左官・タイル工を各1名募集。単価応相談。経験者優遇。埼玉土建組合員の方優先します。', tags:['左官','タイル','桶川市','長期'], tel:'090-XXXX-XXXX', comments:[]},
 ];
 
-let posts = JSON.parse(localStorage.getItem('guild_posts') || 'null') || SAMPLE_POSTS;
-let nextId = Math.max(...posts.map(p=>p.id)) + 1;
+let posts = [];
+let nextId = 1;
 let currentTab = 'all';
 let selectedCat = '';
 
@@ -218,7 +234,46 @@ const CAT = {
   soudan:{label:'相談',badge:'badge-soudan'},
 };
 
+function hasCloud(){ return Boolean(GUILD_CONFIG.apiUrl); }
+function setStatus(text){ document.getElementById('sync-status').textContent = text; }
 function save(){ localStorage.setItem('guild_posts', JSON.stringify(posts)); }
+function loadLocal(){
+  posts = JSON.parse(localStorage.getItem('guild_posts') || 'null') || SAMPLE_POSTS;
+  nextId = Math.max(...posts.map(p=>Number(p.id)||0),0) + 1;
+}
+
+async function guildApi(action, payload={}){
+  if(!hasCloud()) throw new Error('クラウドURLが未設定です');
+  const res = await fetch(GUILD_CONFIG.apiUrl, {
+    method:'POST',
+    headers:{'Content-Type':'text/plain;charset=utf-8'},
+    body:JSON.stringify({action, notifyEmail:GUILD_CONFIG.notifyEmail, ...payload})
+  });
+  if(!res.ok) throw new Error('通信に失敗しました');
+  return res.json();
+}
+
+async function syncPosts(){
+  if(!hasCloud()){
+    loadLocal();
+    setStatus('クラウド未設定のため、この端末内の投稿を表示中');
+    render();
+    return;
+  }
+  try{
+    setStatus('クラウドから読み込み中...');
+    const data = await guildApi('list');
+    posts = Array.isArray(data.posts) ? data.posts : [];
+    nextId = Math.max(...posts.map(p=>Number(p.id)||0),0) + 1;
+    setStatus('クラウド共有中 / 投稿通知先: ' + (GUILD_CONFIG.notifyEmail || '未設定'));
+    render();
+  }catch(e){
+    console.error(e);
+    loadLocal();
+    setStatus('クラウド接続失敗。ローカル表示に切替中');
+    render();
+  }
+}
 
 // ===== 描画 =====
 function render(){
@@ -246,6 +301,9 @@ function render(){
         </button>
         ${p.tel ? `<button class="post-btn primary" onclick="callPost(${p.id})">
           <i class="ti ti-phone"></i>連絡する
+        </button>` : ''}
+        ${isAdmin ? `<button class="post-btn danger" onclick="deletePost(${p.id})">
+          <i class="ti ti-trash"></i>削除
         </button>` : ''}
       </div>
       <div class="comment-area" id="ca-${p.id}">
@@ -292,13 +350,29 @@ function sendComment(postId){
   if(!p.comments) p.comments=[];
   p.comments.push({emoji:'👤', name:'あなた', text});
   input.value='';
-  save();
-  render();
+  saveComment(postId, text);
   // コメント欄を再オープン
   setTimeout(()=>{
     const el=document.getElementById('ca-'+postId);
     if(el) el.classList.add('open');
   },50);
+}
+
+async function saveComment(postId, text){
+  const p = posts.find(p=>p.id===postId);
+  if(hasCloud()){
+    try{
+      await guildApi('comment', {postId, comment:{emoji:'👤', name:'あなた', text}});
+      await syncPosts();
+    }catch(e){
+      console.error(e);
+      save();
+      render();
+    }
+  }else{
+    save();
+    render();
+  }
 }
 
 // ===== 連絡する =====
@@ -325,7 +399,7 @@ function selCat(cat, btn){
   btn.classList.add('sel');
 }
 
-function submitPost(){
+async function submitPost(){
   if(!selectedCat){ alert('カテゴリを選択してください'); return; }
   const body = document.getElementById('post-body').value.trim();
   if(!body){ alert('投稿内容を入力してください'); return; }
@@ -335,12 +409,26 @@ function submitPost(){
   const tags = [area, CAT[selectedCat].label].filter(Boolean);
 
   const EMOJIS = {jinzai:'👷',shizai:'🔧',soudan:'💬'};
-  posts.unshift({
+  const newPost = {
     id: nextId++, cat: selectedCat,
     emoji: EMOJIS[selectedCat], name, area, time:'たった今',
     body, tags, tel, comments:[]
-  });
-  save();
+  };
+  posts.unshift(newPost);
+  if(hasCloud()){
+    try{
+      setStatus('クラウドへ投稿中...');
+      await guildApi('create', {post:newPost});
+      setStatus('投稿しました。支部へメール通知します。');
+      await syncPosts();
+    }catch(e){
+      console.error(e);
+      alert('クラウド投稿に失敗しました。この端末内に一時保存します。');
+      save();
+    }
+  }else{
+    save();
+  }
   closeModal();
   currentTab='all';
   document.querySelectorAll('.t-btn')[0].click();
@@ -349,7 +437,43 @@ function submitPost(){
   render();
 }
 
-render();
+function toggleAdmin(){
+  if(isAdmin){
+    isAdmin = false;
+    document.getElementById('admin-toggle').classList.remove('active');
+    render();
+    return;
+  }
+  const pin = prompt('管理者PINを入力してください');
+  if(!pin) return;
+  adminPinValue = pin;
+  isAdmin = true;
+  document.getElementById('admin-toggle').classList.add('active');
+  render();
+}
+
+async function deletePost(id){
+  if(!isAdmin) return;
+  if(!confirm('この投稿を削除しますか？')) return;
+  const old = posts;
+  posts = posts.filter(p=>p.id!==id);
+  if(hasCloud()){
+    try{
+      await guildApi('delete', {postId:id, adminPin:adminPinValue});
+      await syncPosts();
+    }catch(e){
+      console.error(e);
+      alert('クラウド削除に失敗しました。');
+      posts = old;
+      render();
+    }
+  }else{
+    save();
+    render();
+  }
+}
+
+syncPosts();
 </script>
 <script src="assets/js/navigation.js"></script>
 </body>
