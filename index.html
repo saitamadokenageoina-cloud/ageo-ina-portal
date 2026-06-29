@@ -3,281 +3,594 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>埼玉土建 上尾伊奈支部｜現場・暮らしサポートアプリ</title>
+<title>埼玉土建 上尾伊奈支部｜組合員アプリ</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.47.0/iconfont/tabler-icons.min.css">
 <link rel="stylesheet" href="common.css">
-<link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#1A5FA8">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="上尾伊奈支部">
 <style>
-body{background:#EAF0F7;}
-.app{padding-bottom:92px;}
-.home-hero{background:linear-gradient(155deg,#102742 0%,#1A5FA8 58%,#E8612A 160%);color:#fff;padding:22px 16px 18px;border-radius:0 0 24px 24px;box-shadow:0 18px 38px rgba(18,45,80,.28);}
-.hero-kicker{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.24);border-radius:999px;padding:5px 10px;font-size:12px;font-weight:800;margin-bottom:10px;}
-.home-hero h1{font-size:24px;line-height:1.25;margin:0 0 8px;font-weight:900;letter-spacing:0;}
-.home-hero h1 span{display:block;color:#FFE6CC;font-size:17px;margin-top:2px;}
-.home-hero p{font-size:14px;line-height:1.7;color:rgba(255,255,255,.82);margin:0;}
-.hero-actions{display:grid;grid-template-columns:1.1fr .9fr;gap:10px;margin-top:14px;}
-.hero-action{display:flex;align-items:center;justify-content:center;gap:7px;border-radius:14px;padding:12px 10px;font-size:15px;font-weight:900;color:#fff;background:#E8612A;box-shadow:0 8px 18px rgba(232,97,42,.32);}
-.hero-action.secondary{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.22);box-shadow:none;}
-.search-wrap{position:sticky;top:0;z-index:120;background:rgba(234,240,247,.94);backdrop-filter:blur(10px);padding:12px 16px 10px;border-bottom:1px solid rgba(27,42,59,.08);}
-.search-box{display:flex;align-items:center;gap:10px;background:#fff;border:2px solid #D8E2EE;border-radius:16px;padding:12px 13px;box-shadow:0 8px 20px rgba(27,42,59,.08);}
-.search-box i{font-size:21px;color:#1A5FA8;}
-.search-box input{border:none!important;padding:0!important;font-size:16px!important;background:transparent!important;}
-.quick-words{display:flex;gap:7px;overflow:auto;padding:9px 0 0;scrollbar-width:none;}
-.quick-words button{white-space:nowrap;border:none;border-radius:999px;background:#fff;color:#1A5FA8;font-size:12px;font-weight:800;padding:7px 10px;box-shadow:0 2px 8px rgba(27,42,59,.07);}
-.home-section{padding:16px 16px 0;}
-.section-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
-.section-title h2{display:flex;align-items:center;gap:8px;font-size:17px;color:#1B2A3B;margin:0;font-weight:900;}
-.section-title small{font-size:12px;color:#6A7280;font-weight:700;}
-.urgent-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.urgent-card{min-height:116px;display:flex;flex-direction:column;justify-content:space-between;border-radius:18px;padding:14px;color:#fff;box-shadow:0 12px 24px rgba(27,42,59,.16);position:relative;overflow:hidden;}
-.urgent-card::after{content:'';position:absolute;right:-28px;top:-28px;width:88px;height:88px;border-radius:50%;background:rgba(255,255,255,.16);}
-.urgent-card i{font-size:26px;position:relative;z-index:1;}
-.urgent-card b{font-size:15px;line-height:1.35;position:relative;z-index:1;}
-.urgent-card span{font-size:12px;line-height:1.45;color:rgba(255,255,255,.82);position:relative;z-index:1;}
-.u-hot{background:linear-gradient(135deg,#E8612A,#C0392B);}
-.u-safe{background:linear-gradient(135deg,#1A5FA8,#143A6B);}
-.u-injury{background:linear-gradient(135deg,#F0B429,#B07800);}
-.u-tel{background:linear-gradient(135deg,#1A7A4A,#105E38);}
-.category-tabs{display:flex;gap:8px;overflow:auto;padding:2px 16px 12px;scrollbar-width:none;}
-.category-tabs button{white-space:nowrap;border:2px solid #D8E2EE;background:#fff;color:#1B2A3B;border-radius:999px;padding:9px 12px;font-size:13px;font-weight:900;}
-.category-tabs button.active{background:#1A5FA8;color:#fff;border-color:#1A5FA8;}
-.feature-list{display:grid;gap:10px;}
-.feature-card{display:grid;grid-template-columns:48px 1fr auto;gap:12px;align-items:center;background:#fff;border:1px solid #DDE5EF;border-radius:18px;padding:13px 12px;color:inherit;box-shadow:0 5px 16px rgba(27,42,59,.07);}
-.feature-card:active{transform:scale(.99);}
-.feature-icon{width:48px;height:48px;border-radius:15px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:24px;}
-.feature-main b{display:block;font-size:16px;color:#1B2A3B;line-height:1.35;margin-bottom:2px;}
-.feature-main span{display:block;font-size:13px;color:#5A6070;line-height:1.45;}
-.feature-meta{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px;}
-.chip{font-size:11px;font-weight:800;border-radius:999px;background:#E8F0FB;color:#1A5FA8;padding:3px 7px;}
-.chip.warn{background:#FFF8E6;color:#7A5500;}
-.chip.danger{background:#FEF0ED;color:#C0392B;}
-.feature-card .ti-chevron-right{font-size:20px;color:#A0A5B4;}
-.empty-search{display:none;background:#fff;border:1px dashed #B8C4D4;border-radius:18px;padding:18px;text-align:center;color:#5A6070;font-size:14px;}
-.support-panel{background:#fff;border-radius:20px;padding:15px;box-shadow:0 8px 20px rgba(27,42,59,.08);border:1px solid #DDE5EF;}
-.support-hours{display:flex;gap:10px;align-items:flex-start;border-left:5px solid #F0B429;background:#FFF8E6;border-radius:14px;padding:12px;color:#735400;font-size:13px;line-height:1.6;margin-bottom:12px;}
-.support-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
-.support-actions a{display:flex;align-items:center;justify-content:center;gap:7px;border-radius:14px;padding:12px 8px;font-size:14px;font-weight:900;color:#fff;background:#1A5FA8;}
-.support-actions a:nth-child(1){background:#E8612A;}
-.support-actions a:nth-child(2){background:#06C755;}
-.support-actions a:nth-child(3){background:#1A7A4A;}
-.support-actions a:nth-child(4){background:#1B2A3B;}
-.manual-strip{background:#111B27;color:#fff;border-radius:20px;padding:15px;margin:16px;box-shadow:0 12px 28px rgba(17,27,39,.24);}
-.manual-strip h2{font-size:17px;margin:0 0 8px;display:flex;align-items:center;gap:8px;}
-.manual-strip p{font-size:13px;color:rgba(255,255,255,.72);line-height:1.6;margin:0 0 12px;}
-.manual-strip a{display:flex;align-items:center;justify-content:center;gap:8px;background:#E8612A;color:#fff;border-radius:14px;padding:12px;font-size:15px;font-weight:900;}
-.recent-row{display:flex;gap:8px;overflow:auto;scrollbar-width:none;}
-.recent-row a{min-width:150px;background:#fff;border:1px solid #DDE5EF;border-radius:16px;padding:11px;color:#1B2A3B;box-shadow:0 4px 12px rgba(27,42,59,.06);}
-.recent-row b{display:block;font-size:13px;line-height:1.35;}
-.recent-row span{font-size:11px;color:#6A7280;}
-.notice-box{background:#fff;border-radius:18px;padding:14px;border:1px solid #DDE5EF;box-shadow:0 5px 16px rgba(27,42,59,.07);}
-.notice-box b{display:flex;align-items:center;gap:7px;color:#1B2A3B;font-size:15px;margin-bottom:5px;}
-.notice-box p{font-size:13px;color:#5A6070;line-height:1.6;margin:0;}
-.notice-box strong{color:#C0392B;}
-@media(max-width:380px){.home-hero h1{font-size:22px}.urgent-grid{grid-template-columns:1fr}.feature-card{grid-template-columns:44px 1fr auto}.feature-icon{width:44px;height:44px}.support-actions{grid-template-columns:1fr}}
+/* ===== 近未来ヒーロー ===== */
+.hero {
+  background: #060E1A;
+  padding: 28px 20px 36px;
+  position: relative;
+  overflow: hidden;
+}
+/* グリッド背景 */
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(0,200,255,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,200,255,.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+/* 光のリング */
+.hero::after {
+  content: '';
+  position: absolute;
+  top: -80px; right: -80px;
+  width: 260px; height: 260px;
+  background: radial-gradient(circle, rgba(0,180,255,.12) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.hero-glow {
+  position: absolute;
+  bottom: -60px; left: -40px;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(232,97,42,.1) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(0,180,255,.12);
+  border: 1px solid rgba(0,180,255,.25);
+  border-radius: 99px;
+  padding: 4px 12px;
+  font-size: 11px; font-weight: 700; color: #00C8FF;
+  letter-spacing: .1em; text-transform: uppercase;
+  margin-bottom: 12px; position: relative; z-index: 1;
+}
+.hero-tag::before {
+  content: ''; width: 6px; height: 6px;
+  background: #00C8FF; border-radius: 50%;
+  animation: blink 1.8s infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
+.hero-title {
+  font-size: 27px; font-weight: 800; color: #fff;
+  margin: 0 0 6px; line-height: 1.2; position: relative; z-index: 1;
+  letter-spacing: -.02em;
+}
+.hero-title span { color: #00C8FF; }
+.hero-main {
+  position: relative; z-index: 1;
+}
+.hero-sub {
+  font-size: 18px; color: rgba(255,255,255,.9);
+  margin: 12px 0 20px; position: relative; z-index: 1;
+  line-height: 1.45; font-weight: 800; letter-spacing: 0;
+  text-shadow: 0 2px 14px rgba(0,200,255,.16);
+}
+.hero-sub span{display:block;color:rgba(255,255,255,.72);font-size:15px;font-weight:700;}
+.hero-tel {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: linear-gradient(135deg, #E8612A, #C04E1E);
+  color: #fff; padding: 11px 20px;
+  border-radius: var(--r12); font-size: 16px; font-weight: 700;
+  box-shadow: 0 0 20px rgba(232,97,42,.35), 0 4px 12px rgba(0,0,0,.3);
+  position: relative; z-index: 1;
+}
+.hero-scan-line {
+  position: absolute; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0,200,255,.3), transparent);
+  animation: scan 4s ease-in-out infinite;
+  z-index: 0;
+}
+@keyframes scan { 0%{top:0;opacity:0} 10%{opacity:1} 90%{opacity:1} 100%{top:100%;opacity:0} }
+
+/* ===== セクションラベル ===== */
+.sec-head {
+  display: flex; align-items: center; gap: 10px;
+  margin: 0 0 12px;
+}
+.sec-head-line {
+  flex: 1; height: 1px;
+  background: linear-gradient(90deg, var(--gray200), transparent);
+}
+.sec-head-label {
+  font-size: 11px; font-weight: 700;
+  color: var(--gray500); letter-spacing: .12em; text-transform: uppercase;
+  white-space: nowrap;
+}
+.sec-head-icon {
+  width: 34px; height: 34px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; position: relative; overflow: hidden;
+  box-shadow: 0 8px 18px rgba(0,0,0,.1);
+}
+.sec-head-icon::after{
+  content:''; position:absolute; inset:-40% -60%; background:linear-gradient(120deg,transparent,rgba(255,255,255,.42),transparent);
+  transform:rotate(18deg);
+}
+.sec-head-icon i { font-size: 18px; position: relative; z-index: 1; }
+.sec-head-icon.orange{background:linear-gradient(135deg,#FEE8D6,#FFF8E6);}
+.sec-head-icon.purple{background:linear-gradient(135deg,#EDE8FE,#FEE8F0);}
+.sec-head-icon.blue{background:linear-gradient(135deg,#E8F0FB,#E8F5EE);}
+
+/* ===== グリッドカード（2列） ===== */
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+
+/* ===== メニューカード ===== */
+.mc {
+  background: var(--white); border-radius: var(--r16);
+  box-shadow: var(--shadow-sm); overflow: hidden;
+  text-decoration: none; color: inherit; display: flex; flex-direction: column;
+  border: 2px solid transparent; cursor: pointer;
+  transition: all .18s;
+}
+.mc:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: var(--orange); }
+.mc-top { height: 80px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+.mc-top svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.mc-emoji { font-size: 32px; position: relative; z-index: 1; }
+.mc-body { padding: 11px 12px 13px; }
+.mc-badge {
+  font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 99px;
+  display: inline-block; margin-bottom: 5px;
+}
+.mc-badge.new { background: #E8F5EE; color: #1A7A4A; }
+.mc-badge.ai  { background: #EDE8FE; color: #6B21A8; }
+.mc-badge.tool{ background: #E8F0FB; color: #0C447C; }
+.mc-title { font-size: 13px; font-weight: 700; color: var(--navy); margin: 0 0 3px; line-height: 1.35; }
+.mc-desc  { font-size: 11px; color: var(--gray400); margin: 0; line-height: 1.5; }
+
+/* ===== リストカード（1列） ===== */
+.lc {
+  background: var(--white); border-radius: var(--r16);
+  box-shadow: var(--shadow-sm); overflow: hidden;
+  text-decoration: none; color: inherit;
+  display: flex; align-items: center; gap: 0;
+  border: 2px solid transparent; transition: all .15s;
+  margin-bottom: 8px;
+}
+.lc:hover { border-color: var(--orange); box-shadow: var(--shadow-md); transform: translateX(3px); }
+.lc-thumb {
+  width: 64px; height: 64px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+}
+.lc-thumb svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.lc-thumb-icon { font-size: 26px; position: relative; z-index: 1; }
+.lc-body { flex: 1; padding: 12px 12px 12px 4px; }
+.lc-title { font-size: 15px; font-weight: 700; color: var(--navy); margin: 0 0 2px; }
+.lc-desc  { font-size: 12px; color: var(--gray400); margin: 0; }
+.lc-arrow { font-size: 18px; color: var(--gray200); padding-right: 12px; flex-shrink: 0; }
+
+/* ===== お知らせバナー ===== */
+.notice-bar {
+  background: linear-gradient(90deg, rgba(0,180,255,.08), rgba(0,180,255,.04));
+  border: 1px solid rgba(0,180,255,.2);
+  border-radius: var(--r12);
+  padding: 11px 14px;
+  display: flex; align-items: center; gap: 10px;
+  margin: 12px 16px 0;
+}
+.notice-bar i { font-size: 18px; color: #00C8FF; flex-shrink: 0; }
+.notice-bar p { font-size: 13px; color: var(--navy); margin: 0; font-weight: 500; }
+
+.section { padding: 16px 16px 0; }
+.app-manual{
+  margin: 18px 16px 0; padding: 14px;
+  background:
+    linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px),
+    radial-gradient(circle at 100% 0,rgba(232,97,42,.22),transparent 42%),
+    linear-gradient(135deg,#071426,#111A36 62%,#17112E);
+  background-size: 28px 28px,28px 28px,100% 100%,100% 100%;
+  border: 1px solid rgba(255,255,255,.12); border-radius: var(--r16);
+  box-shadow: 0 18px 42px rgba(0,0,0,.22); color:#fff;
+}
+.app-manual h2{font-size:16px;color:#fff;margin:0 0 12px;display:flex;align-items:center;gap:8px;}
+.manual-label{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  background:linear-gradient(90deg,#16651F,#1F8429);border-radius:7px;padding:8px 10px;
+  color:#fff;font-size:11px;font-weight:900;letter-spacing:.08em;margin:12px 0;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.16);
+}
+.manual-label-button{width:100%;border:none;cursor:pointer;font-family:inherit;}
+.manual-label-button:active{transform:translateY(1px);}
+.manual-label small{font-size:9px;color:rgba(255,255,255,.68);letter-spacing:.14em;}
+.manual-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+.manual-tab{
+  border:1px solid rgba(255,255,255,.14);background:rgba(12,30,64,.82);border-radius:var(--r12);
+  padding:10px 8px;text-align:left;display:flex;align-items:center;gap:8px;
+  color:rgba(255,255,255,.8);font-size:12px;font-weight:900;
+  box-shadow:0 10px 22px rgba(0,0,0,.22), inset 0 2px 0 rgba(232,97,42,.7);
+}
+.manual-tab i{font-size:18px;color:var(--orange);}
+.manual-tab.active{background:linear-gradient(145deg,#143267,#102454);color:#fff;border-color:rgba(99,176,255,.34);box-shadow:0 12px 26px rgba(0,0,0,.3), inset 0 2px 0 #E8612A;}
+.manual-tab.active i{color:#48C8FF;}
+.manual-panel{background:rgba(8,22,49,.68);border:1px solid rgba(255,255,255,.13);border-radius:var(--r12);padding:14px;}
+.manual-panel-title{font-size:15px;font-weight:900;color:#fff;margin:0 0 4px;}
+.manual-panel-lead{font-size:12px;color:rgba(255,255,255,.7);margin:0 0 10px;line-height:1.55;}
+.manual-steps{display:grid;gap:7px;margin-bottom:12px;}
+.manual-step{display:grid;grid-template-columns:24px 1fr;gap:8px;align-items:start;font-size:12px;color:rgba(255,255,255,.82);line-height:1.5;}
+.manual-step b{width:24px;height:24px;border-radius:8px;background:#F79B2E;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;}
+.manual-open{
+  display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:11px;
+  border-radius:var(--r12);background:var(--orange);color:#fff;font-size:14px;font-weight:800;
+}
+.manual-faq{display:grid;gap:8px;margin-top:12px;}
+.manual-faq details{border:1px solid rgba(232,97,42,.45);border-radius:10px;background:rgba(13,38,83,.76);overflow:hidden;}
+.manual-faq summary{list-style:none;padding:11px 12px;font-size:12px;font-weight:900;color:#fff;display:flex;justify-content:space-between;align-items:center;gap:8px;}
+.manual-faq summary::-webkit-details-marker{display:none;}
+.manual-faq summary::after{content:'▼';color:#48C8FF;font-size:12px;}
+.manual-faq details[open] summary::after{content:'▲';}
+.manual-faq p{margin:0;padding:0 12px 12px;font-size:12px;color:rgba(255,255,255,.7);line-height:1.6;border-top:1px solid rgba(255,255,255,.1);}
+@media (max-width:380px){
+  .manual-tabs{gap:8px;}
+  .hero-sub{font-size:16px;}
+  .hero-sub span{font-size:14px;}
+}
 </style>
 </head>
 <body>
 <div class="app">
-  <header class="home-hero">
-    <div class="hero-kicker"><i class="ti ti-hard-hat"></i> 埼玉土建 上尾伊奈支部</div>
-    <h1>現場・暮らしサポートアプリ<span>困った時に、まずここを見る。</span></h1>
-    <p>安全確認、手続き、国保・共済、講習、計算、相談窓口までスマホで迷わず確認できます。</p>
-    <div class="hero-actions">
-      <a class="hero-action" href="tel:048-773-9863"><i class="ti ti-phone"></i>支部へ電話</a>
-      <a class="hero-action secondary" href="app_guide.html"><i class="ti ti-book"></i>使い方</a>
-    </div>
-  </header>
 
-  <section class="search-wrap" aria-label="機能検索">
-    <label class="search-box">
-      <i class="ti ti-search"></i>
-      <input id="home-search" type="search" placeholder="国保・労災・共済・講習で検索">
-    </label>
-    <div class="quick-words">
-      <button type="button" data-keyword="国保">国保</button>
-      <button type="button" data-keyword="労災">労災</button>
-      <button type="button" data-keyword="共済">共済</button>
-      <button type="button" data-keyword="熱中症">熱中症</button>
-      <button type="button" data-keyword="36協定">36協定</button>
-      <button type="button" data-keyword="建設業許可">建設業許可</button>
-      <button type="button" data-keyword="講習">講習</button>
-    </div>
-  </section>
+<!-- ===== HERO ===== -->
+<div class="hero">
+  <div class="hero-scan-line"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-tag"><i class="ti ti-wifi"></i>DOKEN SMART PORTAL</div>
+  <div class="hero-main">
+    <h1 class="hero-title">埼玉土建<br><span>上尾伊奈支部</span></h1>
+  </div>
+  <p class="hero-sub">組合員のための現場<span>暮らしサポートアプリ</span></p>
+  <a href="tel:048-773-9863" class="hero-tel">
+    <i class="ti ti-phone"></i>048-773-9863
+  </a>
+</div>
 
-  <main>
-    <section class="home-section" id="home">
-      <div class="section-title">
-        <h2><i class="ti ti-alert-triangle"></i> すぐ使う</h2>
-        <small>緊急・現場優先</small>
+<!-- ===== 現場で使う ===== -->
+<div class="section">
+  <div class="sec-head">
+    <div class="sec-head-icon orange"><i class="ti ti-helmet" style="color:#E8612A;"></i></div>
+    <span class="sec-head-label">現場で使う</span>
+    <div class="sec-head-line"></div>
+  </div>
+  <div class="grid2">
+
+    <!-- 熱中症 -->
+    <a class="mc" href="atsusa.html">
+      <div class="mc-top" style="background:linear-gradient(135deg,#FF8C42,#E8612A);">
+        <svg viewBox="0 0 200 80"><circle cx="160" cy="30" r="20" fill="rgba(255,255,255,.18)"/><circle cx="160" cy="30" r="12" fill="rgba(255,255,255,.3)"/><line x1="160" y1="5" x2="160" y2="0" stroke="rgba(255,255,255,.5)" stroke-width="2"/><line x1="178" y1="13" x2="182" y2="9" stroke="rgba(255,255,255,.4)" stroke-width="2"/><line x1="185" y1="30" x2="192" y2="30" stroke="rgba(255,255,255,.4)" stroke-width="2"/><circle cx="55" cy="28" r="8" fill="rgba(255,255,255,.45)"/><rect x="49" y="38" width="12" height="20" rx="3" fill="rgba(255,255,255,.45)"/><ellipse cx="55" cy="24" rx="11" ry="7" fill="rgba(255,200,0,.6)"/><rect x="88" y="18" width="7" height="34" rx="3.5" fill="rgba(255,255,255,.25)"/><rect x="89.5" y="28" width="4" height="24" rx="2" fill="rgba(255,80,30,.8)"/><circle cx="91.5" cy="54" r="5.5" fill="rgba(255,60,20,.9)"/></svg>
+        <span class="mc-emoji">🌡️</span>
       </div>
-      <div class="urgent-grid">
-        <a class="urgent-card u-hot" href="atsusa.html" data-track="熱中症AIアラート"><i class="ti ti-temperature-sun"></i><b>熱中症AIアラート</b><span>危険度と作業中止目安を確認</span></a>
-        <a class="urgent-card u-safe" href="anzen_check.html" data-track="現場安全チェック"><i class="ti ti-checklist"></i><b>現場安全チェック</b><span>足場・脚立・保護具を点検</span></a>
-        <a class="urgent-card u-injury" href="guide.html" data-track="労災・ケガ相談"><i class="ti ti-first-aid-kit"></i><b>労災・ケガの相談</b><span>必要書類と相談先を確認</span></a>
-        <a class="urgent-card u-tel" href="tel:048-773-9863" data-track="支部へ電話"><i class="ti ti-phone-call"></i><b>支部へ電話</b><span>048-773-9863</span></a>
+      <div class="mc-body">
+        <span class="mc-badge ai">AI</span>
+        <p class="mc-title">熱中症AIアラート</p>
+        <p class="mc-desc">現在地の気温・湿度でリスク判定</p>
       </div>
-    </section>
+    </a>
 
-    <section class="home-section">
-      <div class="section-title">
-        <h2><i class="ti ti-layout-grid"></i> 目的から探す</h2>
-        <small id="result-count">全機能</small>
+    <!-- 安全チェック -->
+    <a class="mc" href="anzen_check.html">
+      <div class="mc-top" style="background:linear-gradient(135deg,#7B2F00,#C04E1E);">
+        <svg viewBox="0 0 200 80"><rect x="25" y="10" width="150" height="60" rx="8" fill="rgba(255,255,255,.1)"/><rect x="33" y="20" width="134" height="7" rx="2" fill="rgba(255,255,255,.28)"/><circle cx="38" cy="38" r="5" fill="rgba(100,220,130,.8)"/><rect x="48" y="35" width="80" height="5" rx="2" fill="rgba(255,255,255,.28)"/><circle cx="38" cy="52" r="5" fill="rgba(100,220,130,.8)"/><rect x="48" y="49" width="60" height="5" rx="2" fill="rgba(255,255,255,.28)"/><circle cx="38" cy="63" r="5" fill="rgba(255,200,0,.6)"/><rect x="48" y="60" width="70" height="5" rx="2" fill="rgba(255,255,255,.18)"/><text x="152" y="72" font-size="18" fill="rgba(255,255,255,.6)">🦺</text></svg>
+        <span class="mc-emoji">🦺</span>
       </div>
-    </section>
-    <nav class="category-tabs" aria-label="目的別カテゴリ">
-      <button class="active" type="button" data-filter="all">すべて</button>
-      <button type="button" data-filter="現場">現場で使う</button>
-      <button type="button" data-filter="手続き">手続きする</button>
-      <button type="button" data-filter="制度">制度を調べる</button>
-      <button type="button" data-filter="計算">お金を計算</button>
-      <button type="button" data-filter="講習">講習・資格</button>
-      <button type="button" data-filter="相談">相談</button>
-      <button type="button" data-filter="資料">資料を見る</button>
-    </nav>
-
-    <section class="home-section" style="padding-top:0;">
-      <div class="feature-list" id="feature-list"></div>
-      <div class="empty-search" id="empty-search">
-        <i class="ti ti-search-off" style="font-size:28px;color:#A0A5B4;"></i>
-        <p>見つかりませんでした。言葉を変えるか、支部へお問い合わせください。</p>
+      <div class="mc-body">
+        <span class="mc-badge new">NEW</span>
+        <p class="mc-title">現場安全チェックリスト</p>
+        <p class="mc-desc">着工前の安全確認をPDF出力</p>
       </div>
-    </section>
+    </a>
 
-    <section class="home-section" id="recent-section" hidden>
-      <div class="section-title"><h2><i class="ti ti-history"></i> 最近使った機能</h2><small>この端末のみ</small></div>
-      <div class="recent-row" id="recent-row"></div>
-    </section>
-
-    <section class="home-section">
-      <div class="section-title"><h2><i class="ti ti-speakerphone"></i> お知らせ</h2><small>重要</small></div>
-      <div class="notice-box">
-        <b><i class="ti ti-info-circle"></i> 困ったら支部へ相談してください</b>
-        <p>アプリの診断や計算は一次確認です。国保・共済・労災・許可・36協定などは、最終確認を支部へお願いします。</p>
+    <!-- DOKENギルド -->
+    <a class="mc" href="guild.html">
+      <div class="mc-top" style="background:linear-gradient(135deg,#1A7A4A,#2EA868);">
+        <svg viewBox="0 0 200 80"><rect x="18" y="12" width="70" height="36" rx="9" fill="rgba(255,255,255,.22)"/><polygon points="28,48 23,60 40,48" fill="rgba(255,255,255,.22)"/><rect x="112" y="22" width="70" height="36" rx="9" fill="rgba(255,255,255,.16)"/><polygon points="172,58 178,70 158,58" fill="rgba(255,255,255,.16)"/><line x1="28" y1="26" x2="78" y2="26" stroke="rgba(255,255,255,.5)" stroke-width="2" stroke-linecap="round"/><line x1="28" y1="34" x2="65" y2="34" stroke="rgba(255,255,255,.4)" stroke-width="2" stroke-linecap="round"/><line x1="28" y1="42" x2="72" y2="42" stroke="rgba(255,255,255,.4)" stroke-width="2" stroke-linecap="round"/><line x1="122" y1="36" x2="172" y2="36" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"/><line x1="122" y1="44" x2="158" y2="44" stroke="rgba(255,255,255,.35)" stroke-width="2" stroke-linecap="round"/><text x="100" y="76" text-anchor="middle" font-size="14" fill="rgba(255,255,255,.65)">🤝</text></svg>
+        <span class="mc-emoji">👥</span>
       </div>
-    </section>
-
-    <section class="home-section" id="consult">
-      <div class="section-title"><h2><i class="ti ti-message-circle"></i> 相談・問い合わせ</h2><small>上尾伊奈支部</small></div>
-      <div class="support-panel">
-        <div class="support-hours">
-          <i class="ti ti-clock" style="font-size:22px;"></i>
-          <div><b>支部窓口</b><br>〒362-0003 上尾市菅谷295<br>電話 048-773-9863</div>
-        </div>
-        <div class="support-actions">
-          <a href="tel:048-773-9863"><i class="ti ti-phone"></i>電話する</a>
-          <a href="https://line.me/R/" target="_blank" rel="noopener"><i class="ti ti-brand-line"></i>LINE相談</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=%E4%B8%8A%E5%B0%BE%E5%B8%82%E8%8F%85%E8%B0%B7295" target="_blank" rel="noopener"><i class="ti ti-map-pin"></i>地図を見る</a>
-          <a href="guide.html"><i class="ti ti-file-check"></i>必要書類</a>
-        </div>
+      <div class="mc-body">
+        <span class="mc-badge new">NEW</span>
+        <p class="mc-title">DOKENギルド</p>
+        <p class="mc-desc">人材・資材マッチング掲示板</p>
       </div>
-    </section>
+    </a>
 
-    <section class="manual-strip">
-      <h2><i class="ti ti-book"></i> 初めて使う方へ</h2>
-      <p>ホーム画面への追加、PDF保存、DOKENギルドの使い方、困ったときの対処をまとめています。</p>
-      <a href="app_guide.html"><i class="ti ti-arrow-right"></i>説明書・ヘルプを開く</a>
-    </section>
-  </main>
+    <!-- 36協定 -->
+    <a class="mc" href="rodo36.html">
+      <div class="mc-top" style="background:linear-gradient(135deg,#1A3A6B,#1A5FA8);">
+        <svg viewBox="0 0 200 80"><circle cx="100" cy="38" r="28" fill="rgba(255,255,255,.1)" stroke="rgba(255,255,255,.25)" stroke-width="2"/><circle cx="100" cy="38" r="20" fill="rgba(255,255,255,.06)"/><line x1="100" y1="38" x2="100" y2="20" stroke="white" stroke-width="3" stroke-linecap="round"/><line x1="100" y1="38" x2="116" y2="47" stroke="rgba(255,200,0,.9)" stroke-width="2.5" stroke-linecap="round"/><circle cx="100" cy="12" r="2" fill="rgba(255,255,255,.5)"/><circle cx="126" cy="38" r="2" fill="rgba(255,255,255,.4)"/><circle cx="100" cy="64" r="2" fill="rgba(255,255,255,.4)"/><circle cx="74" cy="38" r="2" fill="rgba(255,255,255,.4)"/><rect x="20" y="66" width="50" height="8" rx="4" fill="rgba(255,255,255,.1)"/><rect x="20" y="66" width="30" height="8" rx="4" fill="rgba(100,220,130,.5)"/><text x="155" y="28" font-size="9" fill="rgba(255,255,255,.5)">年360h</text><text x="32" y="28" font-size="9" fill="rgba(255,255,255,.5)">月45h</text></svg>
+        <span class="mc-emoji">⏱️</span>
+      </div>
+      <div class="mc-body">
+        <span class="mc-badge new">NEW</span>
+        <p class="mc-title">36協定・残業カウンター</p>
+        <p class="mc-desc">月・年の法定上限を可視化</p>
+      </div>
+    </a>
 
-  <footer>埼玉土建一般労働組合 上尾伊奈支部｜〒362-0003 上尾市菅谷295｜TEL 048-773-9863</footer>
+  </div>
+</div>
+
+<!-- ===== 組合員サービス ===== -->
+<div class="section">
+  <div class="sec-head">
+    <div class="sec-head-icon purple"><i class="ti ti-shield-heart" style="color:#6B21A8;"></i></div>
+    <span class="sec-head-label">組合員サービス</span>
+    <div class="sec-head-line"></div>
+  </div>
+  <div class="grid2">
+
+    <!-- どけんカード -->
+    <a class="mc" href="doken_card.html">
+      <div class="mc-top" style="background:linear-gradient(135deg,#3B1F8A,#5B21B6);">
+        <svg viewBox="0 0 200 80"><rect x="20" y="16" width="106" height="50" rx="8" fill="rgba(255,255,255,.15)"/><rect x="20" y="16" width="106" height="18" rx="8" fill="rgba(255,255,255,.22)"/><rect x="26" y="22" width="40" height="6" rx="2" fill="rgba(255,255,255,.5)"/><rect x="26" y="43" width="24" height="12" rx="3" fill="rgba(255,200,0,.4)"/><line x1="56" y1="45" x2="80" y2="45" stroke="rgba(255,255,255,.4)" stroke-width="1.5" stroke-linecap="round"/><line x1="56" y1="51" x2="74" y2="51" stroke="rgba(255,255,255,.3)" stroke-width="1.5" stroke-linecap="round"/><circle cx="158" cy="30" r="14" fill="rgba(255,200,0,.45)"/><circle cx="170" cy="30" r="14" fill="rgba(255,100,50,.38)"/><text x="159" y="68" text-anchor="middle" font-size="9" fill="rgba(255,255,255,.5)">TD2026</text></svg>
+        <span class="mc-emoji">💳</span>
+      </div>
+      <div class="mc-body">
+        <span class="mc-badge tool">優待</span>
+        <p class="mc-title">どけんカード登録店</p>
+        <p class="mc-desc">県内700店以上の優待店を検索</p>
+      </div>
+    </a>
+
+    <!-- メリット診断 -->
+    <a class="mc" href="merit_check.html">
+      <div class="mc-top" style="background:linear-gradient(135deg,#7B1F4A,#C0392B);">
+        <svg viewBox="0 0 200 80"><circle cx="100" cy="38" r="26" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.2)" stroke-width="1.5"/><circle cx="100" cy="38" r="18" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.16)" stroke-width="1.5"/><circle cx="100" cy="38" r="8" fill="rgba(255,255,255,.18)"/><circle cx="100" cy="38" r="3" fill="rgba(255,200,0,.9)"/><line x1="128" y1="10" x2="103" y2="36" stroke="rgba(255,255,255,.7)" stroke-width="2.5" stroke-linecap="round"/><polygon points="128,10 121,12 126,17" fill="rgba(255,255,255,.7)"/><text x="30" y="24" font-size="10" fill="rgba(255,255,255,.45)">年齢</text><text x="152" y="24" font-size="10" fill="rgba(255,255,255,.45)">職種</text><text x="30" y="70" font-size="10" fill="rgba(255,255,255,.45)">家族</text><text x="150" y="70" font-size="10" fill="rgba(255,255,255,.45)">健保</text></svg>
+        <span class="mc-emoji">🎯</span>
+      </div>
+      <div class="mc-body">
+        <span class="mc-badge new">NEW</span>
+        <p class="mc-title">加入メリット診断</p>
+        <p class="mc-desc">5問であなたに最適な制度を診断</p>
+      </div>
+    </a>
+
+    <!-- CCUS能力評価サポート診断 -->
+    <a class="mc" href="https://lv-asses-sup.ccus.jp/" target="_blank" rel="noopener">
+      <div class="mc-top" style="background:linear-gradient(135deg,#1A5FA8,#2E82D4);">
+        <svg viewBox="0 0 200 80"><rect x="18" y="16" width="70" height="48" rx="6" fill="rgba(255,200,0,.38)"/><rect x="22" y="21" width="62" height="9" rx="2" fill="rgba(255,255,255,.5)"/><circle cx="34" cy="48" r="10" fill="rgba(255,255,255,.28)"/><rect x="48" y="42" width="28" height="3" rx="1" fill="rgba(255,255,255,.45)"/><rect x="48" y="49" width="20" height="3" rx="1" fill="rgba(255,255,255,.35)"/><circle cx="120" cy="24" r="14" fill="rgba(255,255,255,.18)" stroke="rgba(255,255,255,.35)" stroke-width="1.5"/><text x="120" y="29" text-anchor="middle" font-size="13">🔨</text><circle cx="152" cy="24" r="14" fill="rgba(255,255,255,.14)" stroke="rgba(255,255,255,.28)" stroke-width="1.5"/><text x="152" y="29" text-anchor="middle" font-size="13">⚡</text><circle cx="136" cy="52" r="14" fill="rgba(255,255,255,.14)" stroke="rgba(255,255,255,.28)" stroke-width="1.5"/><text x="136" y="57" text-anchor="middle" font-size="13">🏗️</text><rect x="100" y="68" width="80" height="10" rx="4" fill="rgba(255,255,255,.12)"/><text x="140" y="76" text-anchor="middle" font-size="7" fill="rgba(255,255,255,.6)">残 248日 → 更新期限</text></svg>
+        <span class="mc-emoji">🪪</span>
+      </div>
+      <div class="mc-body">
+        <span class="mc-badge new">NEW</span>
+        <p class="mc-title">CCUS能力評価サポート診断</p>
+        <p class="mc-desc">能力評価の申請条件を確認</p>
+      </div>
+    </a>
+
+    <!-- 建設業許可 -->
+    <a class="mc" href="kensetsu_check.html">
+      <div class="mc-top" style="background:linear-gradient(135deg,#0C3A6B,#1A5FA8);">
+        <svg viewBox="0 0 200 80"><rect x="30" y="12" width="80" height="58" rx="6" fill="rgba(255,255,255,.12)"/><rect x="36" y="18" width="68" height="7" rx="2" fill="rgba(255,255,255,.4)"/><rect x="36" y="30" width="50" height="4" rx="2" fill="rgba(255,255,255,.22)"/><rect x="36" y="38" width="60" height="4" rx="2" fill="rgba(255,255,255,.22)"/><rect x="36" y="46" width="45" height="4" rx="2" fill="rgba(255,255,255,.22)"/><circle cx="148" cy="40" r="22" fill="rgba(255,255,255,.1)"/><text x="148" y="47" text-anchor="middle" font-size="22" fill="rgba(255,255,255,.65)">🏛️</text><circle cx="148" cy="66" r="10" fill="rgba(100,220,130,.7)"/><polyline points="142,66 147,71 155,60" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>
+        <span class="mc-emoji">🏛️</span>
+      </div>
+      <div class="mc-body">
+        <span class="mc-badge new">NEW</span>
+        <p class="mc-title">建設業許可チェッカー</p>
+        <p class="mc-desc">許可の要否・種類・更新期限</p>
+      </div>
+    </a>
+
+  </div>
+</div>
+
+<!-- ===== 手続き・情報 ===== -->
+<div class="section">
+  <div class="sec-head">
+    <div class="sec-head-icon blue"><i class="ti ti-book-2" style="color:#1A5FA8;"></i></div>
+    <span class="sec-head-label">手続き・情報</span>
+    <div class="sec-head-line"></div>
+  </div>
+
+  <div class="grid2">
+    <a class="mc" href="guide.html">
+      <div class="mc-top" style="background:linear-gradient(135deg,#1A7A4A,#21A36B);">
+        <svg viewBox="0 0 200 80" aria-hidden="true">
+          <rect x="30" y="14" width="70" height="52" rx="8" fill="rgba(255,255,255,.23)"/>
+          <rect x="42" y="20" width="54" height="42" rx="6" fill="white"/>
+          <path d="M54 34h30M54 44h24M54 54h28" stroke="#1A7A4A" stroke-width="4" stroke-linecap="round"/>
+          <circle cx="127" cy="46" r="18" fill="#fff"/>
+          <path d="M118 46l7 7 14-18" stroke="#1A7A4A" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="mc-emoji"><i class="ti ti-clipboard-check"></i></span>
+      </div>
+      <div class="mc-body">
+        <span class="mc-badge health">手続き</span>
+        <p class="mc-title">手続き・必要書類ガイド</p>
+        <p class="mc-desc">組合加入・国保・共済・労働保険</p>
+      </div>
+    </a>
+
+    <a class="mc" href="merit.html">
+      <div class="mc-top" style="background:linear-gradient(135deg,#E8612A,#F0A23A);">
+        <svg viewBox="0 0 200 80" aria-hidden="true">
+          <path d="M86 10l11 23h25l-20 16 7 25-23-14-22 14 7-25-20-16h25z" fill="rgba(255,255,255,.34)"/>
+          <circle cx="118" cy="42" r="22" fill="rgba(255,255,255,.94)"/>
+          <path d="M109 42l7 8 16-19" stroke="#E8612A" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="mc-emoji"><i class="ti ti-sparkles"></i></span>
+      </div>
+      <div class="mc-body">
+        <span class="mc-badge biz">メリット</span>
+        <p class="mc-title">加入のメリット</p>
+        <p class="mc-desc">共済・国保・資格支援を確認</p>
+      </div>
+    </a>
+
+    <a class="mc" href="calc.html">
+      <div class="mc-top" style="background:linear-gradient(135deg,#1A5FA8,#00A6C8);">
+        <svg viewBox="0 0 200 80" aria-hidden="true">
+          <rect x="48" y="10" width="72" height="58" rx="10" fill="rgba(255,255,255,.24)"/>
+          <rect x="58" y="18" width="52" height="14" rx="4" fill="white"/>
+          <rect x="58" y="40" width="16" height="12" rx="3" fill="white"/>
+          <rect x="81" y="40" width="16" height="12" rx="3" fill="white"/>
+          <rect x="104" y="40" width="16" height="12" rx="3" fill="#F0A23A"/>
+          <path d="M135 30h26M148 17v26" stroke="white" stroke-width="7" stroke-linecap="round"/>
+        </svg>
+        <span class="mc-emoji"><i class="ti ti-calculator"></i></span>
+      </div>
+      <div class="mc-body">
+        <span class="mc-badge tool">計算</span>
+        <p class="mc-title">計算ツール</p>
+        <p class="mc-desc">労務費・国保税・退職金など</p>
+      </div>
+    </a>
+
+    <a class="mc" href="koushu.html">
+      <div class="mc-top" style="background:linear-gradient(135deg,#B07800,#F0A23A);">
+        <svg viewBox="0 0 200 80" aria-hidden="true">
+          <rect x="42" y="20" width="82" height="44" rx="9" fill="rgba(255,255,255,.28)"/>
+          <rect x="52" y="26" width="62" height="32" rx="6" fill="white"/>
+          <path d="M64 38h38M64 49h28" stroke="#B07800" stroke-width="4" stroke-linecap="round"/>
+          <path d="M139 21h28v38h-28z" fill="rgba(255,255,255,.9)"/>
+          <path d="M145 32h16M145 43h16M145 54h10" stroke="#E8612A" stroke-width="4" stroke-linecap="round"/>
+        </svg>
+        <span class="mc-emoji"><i class="ti ti-school"></i></span>
+      </div>
+      <div class="mc-body">
+        <span class="mc-badge money">講習</span>
+        <p class="mc-title">技能講習日程案内</p>
+        <p class="mc-desc">講習日程・受講料を確認</p>
+      </div>
+    </a>
+
+    <a class="mc" href="shiryo.html">
+      <div class="mc-top" style="background:linear-gradient(135deg,#6B21A8,#1A5FA8);">
+        <svg viewBox="0 0 200 80" aria-hidden="true">
+          <rect x="38" y="18" width="26" height="48" rx="5" fill="rgba(255,255,255,.45)"/>
+          <rect x="72" y="12" width="26" height="54" rx="5" fill="rgba(255,255,255,.68)"/>
+          <rect x="106" y="22" width="26" height="44" rx="5" fill="#F0A23A"/>
+          <path d="M44 32h14M78 29h14M112 40h14M34 68h106" stroke="white" stroke-width="4" stroke-linecap="round" opacity=".72"/>
+        </svg>
+        <span class="mc-emoji"><i class="ti ti-books"></i></span>
+      </div>
+      <div class="mc-body">
+        <span class="mc-badge biz">資料</span>
+        <p class="mc-title">資料本棚</p>
+        <p class="mc-desc">PDF資料をまとめて確認</p>
+      </div>
+    </a>
+
+    <a class="mc" href="https://www.youtube.com/channel/UCl-kAtNcthcVmAZT2jK3JrA" target="_blank" rel="noopener">
+      <div class="mc-top" style="background:linear-gradient(135deg,#FF0000,#E8612A);">
+        <svg viewBox="0 0 200 80" aria-hidden="true">
+          <rect x="42" y="19" width="92" height="48" rx="14" fill="rgba(255,255,255,.28)"/>
+          <rect x="54" y="27" width="68" height="32" rx="10" fill="white"/>
+          <path d="M80 35v16l18-8z" fill="#FF0000"/>
+          <circle cx="146" cy="54" r="16" fill="rgba(255,255,255,.9)"/>
+          <path d="M142 47v14l12-7z" fill="#E8612A"/>
+        </svg>
+        <span class="mc-emoji"><i class="ti ti-brand-youtube"></i></span>
+      </div>
+      <div class="mc-body">
+        <span class="mc-badge biz">動画</span>
+        <p class="mc-title">YouTubeチャンネル</p>
+        <p class="mc-desc">活動動画・講習案内を視聴</p>
+      </div>
+    </a>
+
+    <a class="mc" href="calendar.html">
+      <div class="mc-top" style="background:linear-gradient(135deg,#147C62,#1A7A4A);">
+        <svg viewBox="0 0 200 80" aria-hidden="true">
+          <rect x="44" y="17" width="86" height="50" rx="10" fill="rgba(255,255,255,.3)"/>
+          <rect x="54" y="25" width="66" height="35" rx="7" fill="white"/>
+          <path d="M54 34h66" stroke="#E8612A" stroke-width="8"/>
+          <path d="M70 13v14M104 13v14" stroke="white" stroke-width="7" stroke-linecap="round"/>
+          <circle cx="70" cy="47" r="5" fill="#147C62"/>
+          <circle cx="88" cy="47" r="5" fill="#E8612A"/>
+          <circle cx="106" cy="47" r="5" fill="#1A5FA8"/>
+          <path d="M142 25l10 10 18-20" stroke="white" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="mc-emoji"><i class="ti ti-calendar-month"></i></span>
+      </div>
+      <div class="mc-body">
+        <span class="mc-badge health">予定</span>
+        <p class="mc-title">支部カレンダー</p>
+        <p class="mc-desc">行事・講習・支部予定を確認</p>
+      </div>
+    </a>
+  </div>
+
+</div>
+
+<section class="app-manual">
+  <h2><i class="ti ti-help-circle"></i>このアプリの使い方</h2>
+  <div class="manual-tabs" id="manual-tabs">
+    <button class="manual-tab active" onclick="showManual('first',this)"><i class="ti ti-sparkles"></i>はじめて</button>
+    <button class="manual-tab" onclick="showManual('site',this)"><i class="ti ti-helmet"></i>現場で使う</button>
+    <button class="manual-tab" onclick="showManual('paper',this)"><i class="ti ti-file-description"></i>手続き</button>
+    <button class="manual-tab" onclick="showManual('print',this)"><i class="ti ti-printer"></i>印刷・保存</button>
+  </div>
+  <button class="manual-label manual-label-button" onclick="showManual('install',this)" type="button"><i class="ti ti-route"></i> アプリとして使う方法 <small>HOW TO USE</small></button>
+  <div class="manual-panel" id="manual-panel"></div>
+  <a class="manual-open" href="app_guide.html" style="margin-bottom:12px;"><i class="ti ti-book"></i>詳しい説明書・ヘルプを開く</a>
+  <div class="manual-label"><i class="ti ti-tool"></i> うまく表示されないとき <small>TROUBLESHOOTING</small></div>
+  <div class="manual-faq">
+    <details open><summary>ページが古い・正しく表示されない</summary><p>ブラウザの再読み込みをしてください。スマホでは画面を下に引っ張ると更新できます。</p></details>
+    <details><summary>印刷・PDF保存ボタンを押しても何も起きない</summary><p>ポップアップがブロックされている場合があります。ブラウザの設定でこのサイトのポップアップを許可してください。</p></details>
+    <details><summary>資料本棚の文字が欠ける</summary><p>デジタルブック画面の「PDF表示」ボタンから直接PDFを開くと、端末標準のPDFビューアで読めます。</p></details>
+  </div>
+</section>
+
+<div style="height:28px;"></div>
+<footer>埼玉土建一般労働組合 上尾伊奈支部｜〒362-0003 上尾市菅谷295｜TEL 048-773-9863</footer>
 </div>
 
 <script>
-const FEATURES = [
-  {title:'熱中症AIアラート',desc:'現場の暑さ危険度を判定。作業中止目安を確認。',href:'atsusa.html',icon:'ti-temperature-sun',color:'#E8612A',cat:['現場'],tags:['職人','家族','熱中症','WBGT','水分補給'],chips:['緊急','現場']},
-  {title:'現場安全チェックリスト',desc:'足場・脚立・工具・保護具をカテゴリ別に点検。',href:'anzen_check.html',icon:'ti-checklist',color:'#1A5FA8',cat:['現場'],tags:['安全','足場','脚立','電動工具','保護具','PDF'],chips:['PDF','現場']},
-  {title:'DOKENギルド',desc:'応援依頼、人材募集、資材譲渡、仕事相談を投稿。',href:'guild.html',icon:'ti-users-group',color:'#1A7A4A',cat:['現場','相談'],tags:['人材','応援','資材','道具','仕事相談'],chips:['クラウド','相談']},
-  {title:'36協定・残業カウンター',desc:'月45時間・年360時間の上限を見える化。',href:'rodo36.html',icon:'ti-clock-hour-4',color:'#143A6B',cat:['現場','手続き'],tags:['36協定','残業','特別条項','労務'],chips:['警告','PDF']},
-  {title:'労災・ケガ相談ナビ',desc:'仕事中のケガ、必要書類、支部相談先を確認。',href:'guide.html',icon:'ti-first-aid-kit',color:'#C0392B',cat:['手続き','相談'],tags:['労災','ケガ','事故','必要書類'],chips:['重要','相談']},
-  {title:'手続き・必要書類ガイド',desc:'加入・国保・共済・労働保険の持ち物を確認。',href:'guide.html',icon:'ti-clipboard-check',color:'#1A7A4A',cat:['手続き','制度'],tags:['加入','国保','共済','労働保険','必要書類'],chips:['書類','制度']},
-  {title:'国保・共済の給付検索',desc:'傷病手当金、出産、死亡などの制度を一次確認。',href:'guide.html',icon:'ti-heart-handshake',color:'#6B21A8',cat:['制度','手続き'],tags:['国保','共済','給付','傷病手当','出産','死亡'],chips:['給付','確認']},
-  {title:'加入のメリット',desc:'土建国保、共済、労災、資格支援の強みを確認。',href:'merit.html',icon:'ti-award',color:'#E8612A',cat:['制度'],tags:['加入','メリット','国保','共済','資格'],chips:['制度']},
-  {title:'加入メリット診断',desc:'家族構成や働き方から使える制度を診断。',href:'merit_check.html',icon:'ti-target-arrow',color:'#C0392B',cat:['制度'],tags:['診断','加入','家族','一人親方'],chips:['診断']},
-  {title:'計算ツール',desc:'労務費、国保税、退職金、給付金を試算。',href:'calc.html',icon:'ti-calculator',color:'#1A5FA8',cat:['計算'],tags:['労務費','国保税','退職金','給付金','計算'],chips:['試算']},
-  {title:'建設業許可チェッカー',desc:'500万円未満、軽微な工事、許可要否を確認。',href:'kensetsu_check.html',icon:'ti-building-bank',color:'#1B2A3B',cat:['制度','相談'],tags:['建設業許可','500万円','税込','軽微な工事'],chips:['許可','相談']},
-  {title:'CCUS能力評価サポート診断',desc:'能力評価の申請条件と次の確認先へ移動。',href:'https://lv-asses-sup.ccus.jp/',external:true,icon:'ti-id-badge-2',color:'#1A5FA8',cat:['講習','制度'],tags:['CCUS','能力評価','資格'],chips:['外部']},
-  {title:'技能講習日程案内',desc:'講習名、日程、受講料、対象者を確認。',href:'koushu.html',icon:'ti-school',color:'#B07800',cat:['講習'],tags:['講習','資格','日程','受講料','申込'],chips:['申込']},
-  {title:'どけんカード登録店',desc:'組合員優待の登録店を探す。',href:'doken_card.html',icon:'ti-credit-card',color:'#6B21A8',cat:['制度'],tags:['どけんカード','優待','登録店'],chips:['優待']},
-  {title:'資料本棚',desc:'国保ガイド、パンフレット、資料PDFを検索。',href:'shiryo.html',icon:'ti-books',color:'#6B21A8',cat:['資料'],tags:['資料','PDF','国保ガイド','パンフレット'],chips:['PDF']},
-  {title:'支部カレンダー',desc:'講習、行事、相談日などの予定を確認。',href:'calendar.html',icon:'ti-calendar-month',color:'#1A7A4A',cat:['講習','相談'],tags:['カレンダー','講習','行事','相談日'],chips:['予定']},
-  {title:'YouTubeチャンネル',desc:'活動動画、講習案内、支部からのお知らせを視聴。',href:'https://www.youtube.com/channel/UCl-kAtNcthcVmAZT2jK3JrA',external:true,icon:'ti-brand-youtube',color:'#FF0000',cat:['資料'],tags:['YouTube','動画','講習案内'],chips:['動画']},
-  {title:'説明書・ヘルプ',desc:'ホーム画面追加、PDF保存、困った時の対処を確認。',href:'app_guide.html',icon:'ti-book',color:'#1B2A3B',cat:['相談','資料'],tags:['使い方','ヘルプ','ホーム画面追加','PDF保存'],chips:['初めて']}
-];
-
-const list = document.getElementById('feature-list');
-const search = document.getElementById('home-search');
-const empty = document.getElementById('empty-search');
-const count = document.getElementById('result-count');
-let currentFilter = 'all';
-
-function normalize(text){ return String(text || '').toLowerCase().replace(/\s+/g,''); }
-function remember(item){
-  const recent = JSON.parse(localStorage.getItem('doken_recent') || '[]').filter(x => x.title !== item.title);
-  recent.unshift({title:item.title, href:item.href, desc:item.cat[0]});
-  localStorage.setItem('doken_recent', JSON.stringify(recent.slice(0,6)));
+const MANUALS = {
+  first:{
+    title:'まずはここから',
+    lead:'迷ったら、目的に近いカードをタップするだけで大丈夫です。',
+    href:'guide.html',
+    button:'手続きガイドを開く',
+    steps:['上のカテゴリから「現場」「サービス」「手続き」を選びます。','必要なカードをタップすると詳しいページへ移動します。','戻るボタンでトップへ戻れます。']
+  },
+  site:{
+    title:'現場で困ったとき',
+    lead:'暑さ、安全確認、残業時間、応援探しを現場で素早く確認できます。',
+    href:'atsusa.html',
+    button:'熱中症AIアラートを開く',
+    steps:['熱中症AIアラートで現在地の危険度を確認します。','安全チェックリストで現場確認を記録します。','DOKENギルドで人材・資材の相談を投稿できます。']
+  },
+  paper:{
+    title:'手続きや資料を探す',
+    lead:'必要書類、加入メリット、資料PDF、講習日程をまとめて確認できます。',
+    href:'shiryo.html',
+    button:'資料本棚を開く',
+    steps:['手続き・必要書類ガイドで必要な書類を確認します。','資料本棚でPDFを読みます。','技能講習日程案内で日程と受講料を確認します。']
+  },
+  print:{
+    title:'印刷・PDF保存をする',
+    lead:'36協定や安全チェックは、入力後にプレビューしてPDF保存できます。',
+    href:'rodo36.html',
+    button:'36協定作成を開く',
+    steps:['必要事項を入力します。','プレビューを表示して内容を確認します。','印刷画面で「PDFに保存」またはプリンターを選びます。']
+  },
+  install:{
+    title:'アプリとして使う方法',
+    lead:'ホーム画面に追加すると、アイコンをタップするだけで全画面アプリのように開けます。',
+    href:'app_guide.html#install',
+    button:'詳しい追加方法を開く',
+    steps:['iPhoneはSafariで公開URLを開き、共有ボタンから「ホーム画面に追加」を選びます。','AndroidはChromeで公開URLを開き、メニューから「アプリをインストール」または「ホーム画面に追加」を選びます。','追加後はホーム画面のアイコンから起動できます。古い画面が出る場合はブラウザで再読み込みしてください。']
+  }
+};
+function showManual(key, btn){
+  const data = MANUALS[key] || MANUALS.first;
+  document.querySelectorAll('.manual-tab').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  document.getElementById('manual-panel').innerHTML = `
+    <p class="manual-panel-title">${data.title}</p>
+    <p class="manual-panel-lead">${data.lead}</p>
+    <div class="manual-steps">
+      ${data.steps.map((s,i)=>`<div class="manual-step"><b>${i+1}</b><span>${s}</span></div>`).join('')}
+    </div>
+    <a class="manual-open" href="${data.href}"><i class="ti ti-arrow-right"></i>${data.button}</a>
+  `;
 }
-function renderFeatures(){
-  const q = normalize(search.value);
-  const items = FEATURES.filter(item => {
-    const byCat = currentFilter === 'all' || item.cat.includes(currentFilter);
-    const hay = normalize([item.title,item.desc,item.cat.join(' '),item.tags.join(' ')].join(' '));
-    return byCat && (!q || hay.includes(q));
-  });
-  count.textContent = q ? `${items.length}件` : (currentFilter === 'all' ? '全機能' : currentFilter);
-  list.innerHTML = items.map(item => `
-    <a class="feature-card" href="${item.href}" ${item.external ? 'target="_blank" rel="noopener"' : ''} data-title="${item.title}">
-      <div class="feature-icon" style="background:${item.color};"><i class="ti ${item.icon}"></i></div>
-      <div class="feature-main">
-        <b>${item.title}</b>
-        <span>${item.desc}</span>
-        <div class="feature-meta">${item.chips.map((chip,i)=>`<em class="chip ${chip==='緊急'||chip==='重要'?'danger':chip==='警告'?'warn':''}">${chip}</em>`).join('')}</div>
-      </div>
-      <i class="ti ti-chevron-right"></i>
-    </a>
-  `).join('');
-  empty.style.display = items.length ? 'none' : 'block';
-  document.querySelectorAll('.feature-card').forEach(a => {
-    a.addEventListener('click', () => {
-      const item = FEATURES.find(f => f.title === a.dataset.title);
-      if(item) remember(item);
-    });
-  });
-}
-function renderRecent(){
-  const recent = JSON.parse(localStorage.getItem('doken_recent') || '[]');
-  const wrap = document.getElementById('recent-row');
-  const sec = document.getElementById('recent-section');
-  if(!recent.length){ sec.hidden = true; return; }
-  sec.hidden = false;
-  wrap.innerHTML = recent.map(item => `<a href="${item.href}"><b>${item.title}</b><span>${item.desc || '最近使用'}</span></a>`).join('');
-}
-document.querySelectorAll('.category-tabs button').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.category-tabs button').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    currentFilter = btn.dataset.filter;
-    renderFeatures();
-  });
-});
-document.querySelectorAll('.quick-words button').forEach(btn => {
-  btn.addEventListener('click', () => {
-    search.value = btn.dataset.keyword;
-    search.focus();
-    renderFeatures();
-  });
-});
-document.querySelectorAll('[data-track]').forEach(a => {
-  a.addEventListener('click', () => {
-    const item = FEATURES.find(f => a.dataset.track && f.title.includes(a.dataset.track.replace('労災・ケガ相談','手続き')));
-    if(item) remember(item);
-  });
-});
-search.addEventListener('input', renderFeatures);
-renderFeatures();
-renderRecent();
+showManual('first');
 </script>
 <script src="assets/js/navigation.js"></script>
 </body>
