@@ -41,8 +41,10 @@
     btn.setAttribute('aria-label','ダークモードとライトモードを切り替え');
     function paint(){
       const theme = document.documentElement.getAttribute('data-theme') || 'dark';
-      btn.innerHTML = theme === 'dark' ? '<i class="ti ti-sun"></i>' : '<i class="ti ti-moon"></i>';
-      btn.title = theme === 'dark' ? 'ライトモードに切替' : 'ダークモードに切替';
+      const isDark = theme === 'dark';
+      btn.innerHTML = isDark ? '<span class="theme-symbol" aria-hidden="true">☀</span>' : '<span class="theme-symbol" aria-hidden="true">☾</span>';
+      btn.title = isDark ? 'ライトモードに切替' : 'ダークモードに切替';
+      btn.setAttribute('aria-label', isDark ? 'ライトモードに切り替え' : 'ダークモードに切り替え');
     }
     btn.addEventListener('click', function(){
       const next = (document.documentElement.getAttribute('data-theme') || 'dark') === 'dark' ? 'light' : 'dark';

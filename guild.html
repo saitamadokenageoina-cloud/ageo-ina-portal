@@ -89,6 +89,35 @@
 .guild-toolbar button{flex:1;border:1.5px solid var(--gray200);background:var(--white);border-radius:var(--r12);padding:9px 10px;font-size:13px;font-weight:700;color:var(--gray600);}
 .guild-toolbar button.active{background:var(--navy);color:#fff;border-color:var(--navy);}
 .sync-status{font-size:12px;color:var(--gray500);margin:-6px 0 12px;text-align:right;}
+html[data-theme="dark"] .tab-row{background:#071426;border:1px solid rgba(255,255,255,.12);}
+html[data-theme="dark"] .t-btn{color:#D8E4F2;background:#13243A;}
+html[data-theme="dark"] .t-btn.active{background:#E8612A;color:#fff;box-shadow:none;}
+html[data-theme="dark"] .post-card{background:#0F1F35;border-color:rgba(255,255,255,.12);}
+html[data-theme="dark"] .post-author,
+html[data-theme="dark"] .comment-author{color:#fff!important;}
+html[data-theme="dark"] .post-meta,
+html[data-theme="dark"] .sync-status{color:#B8C7DA!important;}
+html[data-theme="dark"] .post-body,
+html[data-theme="dark"] .comment-text{color:#E8EEF7!important;}
+html[data-theme="dark"] .post-tag{background:#071426;color:#D8E4F2!important;border:1px solid rgba(255,255,255,.12);}
+html[data-theme="dark"] .comment-body{background:#071426!important;border:1px solid rgba(255,255,255,.12);}
+html[data-theme="dark"] .comment-input{background:#071426;color:#fff;border-color:rgba(255,255,255,.22);}
+html[data-theme="dark"] .post-btn{background:#071426;color:#E8EEF7;border-color:rgba(255,255,255,.18);}
+html[data-theme="dark"] .post-btn:hover{background:#13243A;color:#FFB15C;border-color:#FFB15C;}
+html[data-theme="dark"] .post-btn.primary{background:#E8612A;color:#fff;border-color:#E8612A;}
+html[data-theme="dark"] .post-btn.danger{background:#2A1010;color:#FFD1D1;border-color:#D76A6A;}
+html[data-theme="dark"] .modal-sheet{background:#0F1F35;border:1px solid rgba(255,255,255,.12);}
+html[data-theme="dark"] .modal-close{background:#243A56;color:#fff;}
+html[data-theme="dark"] .cat-chip{background:#071426!important;color:#E8EEF7!important;border-color:rgba(255,255,255,.22)!important;}
+.cat-chip.sel{font-weight:900;}
+html[data-theme="dark"] .cat-chip.jinzai.sel{background:#5A240F!important;color:#FFE7D8!important;border-color:#FF8A4C!important;}
+html[data-theme="dark"] .cat-chip.shizai.sel{background:#103822!important;color:#C9FAD9!important;border-color:#37C878!important;}
+html[data-theme="dark"] .cat-chip.soudan.sel{background:#27184A!important;color:#E6D7FF!important;border-color:#9B6DFF!important;}
+html[data-theme="light"] .post-btn{background:#fff;color:#334155;border-color:#CBD5E1;}
+html[data-theme="light"] .post-btn.primary{background:#E8612A;color:#fff;border-color:#E8612A;}
+html[data-theme="light"] .post-btn.danger{background:#FFF5F5;color:#9B1C1C;border-color:#F2B8B5;}
+html[data-theme="light"] .comment-body{background:#F7FAFC;color:#1B2A3B;}
+html[data-theme="light"] .comment-input{background:#fff;color:#1B2A3B;}
 </style>
 </head>
 <body>
@@ -253,6 +282,18 @@ async function guildApi(action, payload={}){
   return res.json();
 }
 
+async function guildWrite(action, payload={}){
+  if(!hasCloud()) throw new Error('クラウドURLが未設定です');
+  await fetch(GUILD_CONFIG.apiUrl, {
+    method:'POST',
+    mode:'no-cors',
+    keepalive:true,
+    headers:{'Content-Type':'text/plain;charset=utf-8'},
+    body:JSON.stringify({action, notifyEmail:GUILD_CONFIG.notifyEmail, ...payload})
+  });
+  return {ok:true};
+}
+
 async function syncPosts(){
   if(!hasCloud()){
     loadLocal();
@@ -362,8 +403,9 @@ async function saveComment(postId, text){
   const p = posts.find(p=>p.id===postId);
   if(hasCloud()){
     try{
-      await guildApi('comment', {postId, comment:{emoji:'👤', name:'あなた', text}});
-      await syncPosts();
+      await guildWrite('comment', {postId, comment:{emoji:'👤', name:'あなた', text}});
+      setStatus('コメントを送信しました。反映まで数秒かかる場合があります。');
+      setTimeout(syncPosts, 1400);
     }catch(e){
       console.error(e);
       save();
@@ -418,9 +460,9 @@ async function submitPost(){
   if(hasCloud()){
     try{
       setStatus('クラウドへ投稿中...');
-      await guildApi('create', {post:newPost});
-      setStatus('投稿しました。支部へメール通知します。');
-      await syncPosts();
+      await guildWrite('create', {post:newPost});
+      setStatus('投稿しました。支部へメール通知します。反映まで数秒かかる場合があります。');
+      setTimeout(syncPosts, 1600);
     }catch(e){
       console.error(e);
       alert('クラウド投稿に失敗しました。この端末内に一時保存します。');
@@ -459,8 +501,9 @@ async function deletePost(id){
   posts = posts.filter(p=>p.id!==id);
   if(hasCloud()){
     try{
-      await guildApi('delete', {postId:id, adminPin:adminPinValue});
-      await syncPosts();
+      await guildWrite('delete', {postId:id, adminPin:adminPinValue});
+      setStatus('削除を送信しました。反映まで数秒かかる場合があります。');
+      setTimeout(syncPosts, 1400);
     }catch(e){
       console.error(e);
       alert('クラウド削除に失敗しました。');
