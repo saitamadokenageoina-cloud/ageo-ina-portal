@@ -96,6 +96,33 @@ input:focus,select:focus,textarea:focus{border-color:var(--orange);}
 /* FOOTER */
 footer{background:var(--navy);color:rgba(255,255,255,.4);font-size:12px;text-align:center;padding:16px;}
 
+/* LIGHT MODE CONTRAST */
+html[data-theme="light"] body{background:#F4F7FB;color:#111827;}
+html[data-theme="light"] .app{background:#F4F7FB;}
+html[data-theme="light"] .card,
+html[data-theme="light"] .mc,
+html[data-theme="light"] .lc,
+html[data-theme="light"] .post-card,
+html[data-theme="light"] .gauge-card,
+html[data-theme="light"] .check-section,
+html[data-theme="light"] .acc,
+html[data-theme="light"] .install-card{
+  background:#FFFFFF!important;
+  color:#111827;
+}
+html[data-theme="light"] .mc-title,
+html[data-theme="light"] .lc-title,
+html[data-theme="light"] .post-author,
+html[data-theme="light"] .check-section-title,
+html[data-theme="light"] .gauge-title,
+html[data-theme="light"] .acc-title{color:#111827!important;}
+html[data-theme="light"] .mc-desc,
+html[data-theme="light"] .lc-desc,
+html[data-theme="light"] .post-meta,
+html[data-theme="light"] .post-body,
+html[data-theme="light"] .check-item-label,
+html[data-theme="light"] .gauge-desc{color:#374151!important;}
+
 /* DARK / LIGHT MODE */
 html[data-theme="dark"] body{background:#071426;color:#EAF0F7;}
 html[data-theme="dark"] .app{background:#071426;}
@@ -137,9 +164,13 @@ html[data-theme="dark"] .post-body,
 html[data-theme="dark"] .comment-text,
 html[data-theme="dark"] .check-item-label,
 html[data-theme="dark"] .gauge-desc,
-html[data-theme="dark"] .acc-body,
-html[data-theme="dark"] p,
-html[data-theme="dark"] td{color:#C8D6E8;}
+html[data-theme="dark"] .acc-body{color:#D8E4F2!important;}
+html[data-theme="dark"] .card p,
+html[data-theme="dark"] .gauge-card p,
+html[data-theme="dark"] .check-section p,
+html[data-theme="dark"] .post-card p,
+html[data-theme="dark"] .acc p{color:#D8E4F2;}
+html[data-theme="dark"] td{color:#E8EEF7;}
 html[data-theme="dark"] input,
 html[data-theme="dark"] select,
 html[data-theme="dark"] textarea{
@@ -151,13 +182,36 @@ html[data-theme="dark"] .alert-info{background:#102A4A;color:#B5D4F4;}
 html[data-theme="dark"] .alert-warn{background:#3B2D0A;color:#FFE39A;}
 html[data-theme="dark"] .alert-ok{background:#0D3324;color:#B8F0D0;}
 html[data-theme="dark"] .alert-danger{background:#3B1515;color:#FFC3C3;}
+html[data-theme="dark"] .alert span,
+html[data-theme="dark"] .alert p{color:inherit!important;}
+html[data-theme="dark"] .sec-label,
+html[data-theme="dark"] .input-group label{color:#FFB15C!important;}
+html[data-theme="dark"] .hdr-org{color:rgba(255,255,255,.72)!important;}
+html[data-theme="dark"] .hdr-title{color:#FFFFFF!important;}
+html[data-theme="dark"] footer{color:rgba(255,255,255,.72);}
+html[data-theme="dark"] .post-tag,
+html[data-theme="dark"] .comment-author{color:#E8EEF7!important;}
+html[data-theme="light"] .hdr-org{color:rgba(255,255,255,.78)!important;}
+html[data-theme="light"] .hdr-title{color:#FFFFFF!important;}
+html[data-theme="dark"] .law-table th{background:#0A1627;color:#fff;}
+html[data-theme="dark"] .law-table td{background:#10213A;color:#E8EEF7;border-color:rgba(255,255,255,.12);}
+html[data-theme="dark"] .law-table .limit{color:#FFB15C;}
+html[data-theme="dark"] .comment-body,
+html[data-theme="dark"] .empty-state,
+html[data-theme="dark"] .guild-toolbar button,
+html[data-theme="dark"] .cat-chip{
+  background:#071426!important;
+  color:#E8EEF7!important;
+  border-color:rgba(255,255,255,.14)!important;
+}
 .theme-toggle{
-  position:fixed;right:12px;bottom:calc(84px + env(safe-area-inset-bottom));
-  z-index:470;width:44px;height:44px;border:none;border-radius:50%;
-  background:#fff;color:#1A5FA8;box-shadow:0 8px 24px rgba(0,0,0,.22);
+  position:fixed;right:14px;top:12px;
+  z-index:900;width:46px;height:46px;border:2px solid rgba(255,255,255,.45);border-radius:50%;
+  background:#FFFFFF;color:#1A5FA8;box-shadow:0 8px 24px rgba(0,0,0,.28);
   display:flex;align-items:center;justify-content:center;font-size:20px;
 }
-html[data-theme="dark"] .theme-toggle{background:#E8612A;color:#fff;}
+html[data-theme="dark"] .theme-toggle{background:#E8612A;color:#fff;border-color:rgba(255,255,255,.35);}
+html[data-theme="light"] .theme-toggle{background:#fff;color:#1A5FA8;border-color:#D8DBE3;}
 
 /* FIXED CONTACT BAR */
 .doken-contact-rail{
