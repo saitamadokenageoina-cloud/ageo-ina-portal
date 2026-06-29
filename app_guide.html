@@ -306,6 +306,11 @@ function switchGuide(id, btn){
 function toggleAcc(head){
   head.closest('.acc').classList.toggle('open');
 }
+const initialGuide = location.hash.replace('#','');
+if(initialGuide && document.getElementById('tab-' + initialGuide)){
+  const tabButton = Array.from(document.querySelectorAll('.guide-tab')).find(btn => (btn.getAttribute('onclick') || '').includes("'" + initialGuide + "'"));
+  if(tabButton) switchGuide(initialGuide, tabButton);
+}
 </script>
 </body>
 </html>

@@ -195,6 +195,8 @@
   color:#fff;font-size:11px;font-weight:900;letter-spacing:.08em;margin:12px 0;
   box-shadow: inset 0 1px 0 rgba(255,255,255,.16);
 }
+.manual-label-button{width:100%;border:none;cursor:pointer;font-family:inherit;}
+.manual-label-button:active{transform:translateY(1px);}
 .manual-label small{font-size:9px;color:rgba(255,255,255,.68);letter-spacing:.14em;}
 .manual-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
 .manual-tab{
@@ -522,7 +524,7 @@
     <button class="manual-tab" onclick="showManual('paper',this)"><i class="ti ti-file-description"></i>手続き</button>
     <button class="manual-tab" onclick="showManual('print',this)"><i class="ti ti-printer"></i>印刷・保存</button>
   </div>
-  <div class="manual-label"><i class="ti ti-route"></i> アプリとして使う方法 <small>HOW TO USE</small></div>
+  <button class="manual-label manual-label-button" onclick="showManual('install',this)" type="button"><i class="ti ti-route"></i> アプリとして使う方法 <small>HOW TO USE</small></button>
   <div class="manual-panel" id="manual-panel"></div>
   <a class="manual-open" href="app_guide.html" style="margin-bottom:12px;"><i class="ti ti-book"></i>詳しい説明書・ヘルプを開く</a>
   <div class="manual-label"><i class="ti ti-tool"></i> うまく表示されないとき <small>TROUBLESHOOTING</small></div>
@@ -566,6 +568,13 @@ const MANUALS = {
     href:'rodo36.html',
     button:'36協定作成を開く',
     steps:['必要事項を入力します。','プレビューを表示して内容を確認します。','印刷画面で「PDFに保存」またはプリンターを選びます。']
+  },
+  install:{
+    title:'アプリとして使う方法',
+    lead:'ホーム画面に追加すると、アイコンをタップするだけで全画面アプリのように開けます。',
+    href:'app_guide.html#install',
+    button:'詳しい追加方法を開く',
+    steps:['iPhoneはSafariで公開URLを開き、共有ボタンから「ホーム画面に追加」を選びます。','AndroidはChromeで公開URLを開き、メニューから「アプリをインストール」または「ホーム画面に追加」を選びます。','追加後はホーム画面のアイコンから起動できます。古い画面が出る場合はブラウザで再読み込みしてください。']
   }
 };
 function showManual(key, btn){
