@@ -3,7 +3,7 @@
   --orange:#E8612A;--orange-lt:#FFF0E9;--orange-dk:#C04E1E;
   --white:#FFFFFF;
   --gray50:#F5F6F8;--gray100:#ECEEF2;--gray200:#D8DBE3;
-  --gray400:#A0A5B4;--gray600:#5A6070;--gray900:#1B1E27;
+  --gray400:#64748B;--gray600:#334155;--gray900:#1B1E27;
   --green:#1A7A4A;--green-lt:#E6F5ED;
   --red:#C0392B;--red-lt:#FEF0ED;
   --blue:#1A5FA8;--blue-lt:#E8F0FB;
@@ -122,6 +122,12 @@ html[data-theme="light"] .post-meta,
 html[data-theme="light"] .post-body,
 html[data-theme="light"] .check-item-label,
 html[data-theme="light"] .gauge-desc{color:#374151!important;}
+html[data-theme="light"] .glabel,
+html[data-theme="light"] .gmeta-item p,
+html[data-theme="light"] .sync-status,
+html[data-theme="light"] .empty-state,
+html[data-theme="light"] .input-group label,
+html[data-theme="light"] small{color:#334155!important;}
 
 /* DARK / LIGHT MODE */
 html[data-theme="dark"] body{background:#071426;color:#EAF0F7;}
@@ -165,6 +171,12 @@ html[data-theme="dark"] .comment-text,
 html[data-theme="dark"] .check-item-label,
 html[data-theme="dark"] .gauge-desc,
 html[data-theme="dark"] .acc-body{color:#D8E4F2!important;}
+html[data-theme="dark"] .glabel,
+html[data-theme="dark"] .gmeta-item p,
+html[data-theme="dark"] .sync-status,
+html[data-theme="dark"] .empty-state,
+html[data-theme="dark"] .input-group label,
+html[data-theme="dark"] small{color:#D8E4F2!important;}
 html[data-theme="dark"] .card p,
 html[data-theme="dark"] .gauge-card p,
 html[data-theme="dark"] .check-section p,

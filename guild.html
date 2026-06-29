@@ -20,7 +20,7 @@
 .post-header{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
 .post-avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;background:var(--gray100);}
 .post-author{font-size:14px;font-weight:700;color:var(--navy);margin:0 0 1px;}
-.post-meta{font-size:12px;color:var(--gray400);margin:0;}
+.post-meta{font-size:12px;color:var(--gray600);margin:0;font-weight:600;}
 .post-badge{margin-left:auto;font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;white-space:nowrap;flex-shrink:0;}
 .badge-jinzai{background:#FEE8D6;color:#9B3A1A;}
 .badge-shizai{background:#E8F5EE;color:#1A4A2A;}
@@ -52,7 +52,7 @@
 
 /* ===== 投稿ボタン ===== */
 .fab{
-  position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+  position:fixed;bottom:104px;left:50%;transform:translateX(-50%);
   width:calc(100% - 32px);max-width:608px;
   background:var(--orange);color:#fff;border:none;border-radius:var(--r16);
   padding:15px 20px;font-size:16px;font-weight:700;
@@ -77,7 +77,7 @@
 .cat-chip.soudan.sel{background:#EDE8FE;color:#4A1A9B;border-color:#6B21A8;}
 
 /* 空状態 */
-.empty-state{text-align:center;padding:40px 20px;color:var(--gray400);}
+.empty-state{text-align:center;padding:40px 20px;color:var(--gray600);font-weight:700;}
 .empty-state i{font-size:48px;display:block;margin-bottom:12px;opacity:.4;}
 .empty-state p{font-size:15px;margin:0;}
 
@@ -88,7 +88,7 @@
 .guild-toolbar{display:flex;gap:8px;margin-bottom:12px;}
 .guild-toolbar button{flex:1;border:1.5px solid var(--gray200);background:var(--white);border-radius:var(--r12);padding:9px 10px;font-size:13px;font-weight:700;color:var(--gray600);}
 .guild-toolbar button.active{background:var(--navy);color:#fff;border-color:var(--navy);}
-.sync-status{font-size:12px;color:var(--gray500);margin:-6px 0 12px;text-align:right;}
+.sync-status{font-size:12px;color:var(--gray600);margin:-6px 0 12px;text-align:right;font-weight:700;}
 html[data-theme="dark"] .tab-row{background:#071426;border:1px solid rgba(255,255,255,.12);}
 html[data-theme="dark"] .t-btn{color:#D8E4F2;background:#13243A;}
 html[data-theme="dark"] .t-btn.active{background:#E8612A;color:#fff;box-shadow:none;}
@@ -265,10 +265,34 @@ const CAT = {
 
 function hasCloud(){ return Boolean(GUILD_CONFIG.apiUrl); }
 function setStatus(text){ document.getElementById('sync-status').textContent = text; }
-function save(){ localStorage.setItem('guild_posts', JSON.stringify(posts)); }
+function readSavedPosts(){
+  try{ return JSON.parse(localStorage.getItem('guild_posts') || '[]') || []; }
+  catch(e){ return []; }
+}
+function savePosts(items){ localStorage.setItem('guild_posts', JSON.stringify(items)); }
+function save(){ savePosts(posts); }
+function postKey(post){
+  return post.clientId || [post.cat, post.name, post.area, post.tel, post.body].map(v=>String(v||'').trim()).join('|');
+}
+function mergePosts(cloudPosts, localPosts){
+  const merged = [];
+  const seen = new Set();
+  [...cloudPosts, ...localPosts].forEach(post=>{
+    if(!post || !post.body) return;
+    const key = postKey(post);
+    if(seen.has(key)) return;
+    seen.add(key);
+    merged.push(post);
+  });
+  return merged;
+}
+function updateNextId(){
+  nextId = Math.max(0, ...posts.map(p=>Number(p.id)||0)) + 1;
+}
 function loadLocal(){
-  posts = JSON.parse(localStorage.getItem('guild_posts') || 'null') || SAMPLE_POSTS;
-  nextId = Math.max(...posts.map(p=>Number(p.id)||0),0) + 1;
+  const saved = readSavedPosts();
+  posts = saved.length ? saved : (hasCloud() ? [] : SAMPLE_POSTS);
+  updateNextId();
 }
 
 async function guildApi(action, payload={}){
@@ -284,12 +308,17 @@ async function guildApi(action, payload={}){
 
 async function guildWrite(action, payload={}){
   if(!hasCloud()) throw new Error('クラウドURLが未設定です');
+  const body = JSON.stringify({action, notifyEmail:GUILD_CONFIG.notifyEmail, ...payload});
+  if(navigator.sendBeacon){
+    const sent = navigator.sendBeacon(GUILD_CONFIG.apiUrl, new Blob([body], {type:'text/plain;charset=utf-8'}));
+    if(sent) return {ok:true};
+  }
   await fetch(GUILD_CONFIG.apiUrl, {
     method:'POST',
     mode:'no-cors',
     keepalive:true,
     headers:{'Content-Type':'text/plain;charset=utf-8'},
-    body:JSON.stringify({action, notifyEmail:GUILD_CONFIG.notifyEmail, ...payload})
+    body
   });
   return {ok:true};
 }
@@ -304,9 +333,11 @@ async function syncPosts(){
   try{
     setStatus('クラウドから読み込み中...');
     const data = await guildApi('list');
-    posts = Array.isArray(data.posts) ? data.posts : [];
-    nextId = Math.max(...posts.map(p=>Number(p.id)||0),0) + 1;
-    setStatus('クラウド共有中 / 投稿通知先: ' + (GUILD_CONFIG.notifyEmail || '未設定'));
+    const cloudPosts = Array.isArray(data.posts) ? data.posts : [];
+    posts = mergePosts(cloudPosts, readSavedPosts());
+    save();
+    updateNextId();
+    setStatus(posts.length ? 'クラウド共有中 / 投稿通知先: ' + (GUILD_CONFIG.notifyEmail || '未設定') : 'クラウド共有中 / まだ投稿はありません');
     render();
   }catch(e){
     console.error(e);
@@ -391,6 +422,7 @@ function sendComment(postId){
   if(!p.comments) p.comments=[];
   p.comments.push({emoji:'👤', name:'あなた', text});
   input.value='';
+  save();
   saveComment(postId, text);
   // コメント欄を再オープン
   setTimeout(()=>{
@@ -452,11 +484,12 @@ async function submitPost(){
 
   const EMOJIS = {jinzai:'👷',shizai:'🔧',soudan:'💬'};
   const newPost = {
-    id: nextId++, cat: selectedCat,
+    id: nextId++, clientId:'local-' + Date.now() + '-' + Math.random().toString(36).slice(2), cat: selectedCat,
     emoji: EMOJIS[selectedCat], name, area, time:'たった今',
     body, tags, tel, comments:[]
   };
   posts.unshift(newPost);
+  save();
   if(hasCloud()){
     try{
       setStatus('クラウドへ投稿中...');
@@ -499,6 +532,7 @@ async function deletePost(id){
   if(!confirm('この投稿を削除しますか？')) return;
   const old = posts;
   posts = posts.filter(p=>p.id!==id);
+  save();
   if(hasCloud()){
     try{
       await guildWrite('delete', {postId:id, adminPin:adminPinValue});
@@ -508,6 +542,7 @@ async function deletePost(id){
       console.error(e);
       alert('クラウド削除に失敗しました。');
       posts = old;
+      save();
       render();
     }
   }else{
