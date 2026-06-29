@@ -41,7 +41,12 @@
 .feature-table td:first-child{font-weight:800;color:var(--navy);white-space:nowrap;}
 .codebox{background:#111B27;color:#E8F0FB;border-radius:var(--r12);padding:12px;margin-top:10px;font-size:12px;line-height:1.6;overflow:auto;white-space:pre-wrap;}
 .quick-link{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px;padding:12px;border-radius:var(--r12);background:var(--orange);color:#fff;font-size:14px;font-weight:800;box-shadow:0 4px 12px rgba(232,97,42,.28);}
-.mini-label{font-size:12px;font-weight:800;color:var(--orange);letter-spacing:.08em;margin:14px 0 4px;}
+.mini-label{font-size:15px;font-weight:900;color:var(--orange);letter-spacing:.08em;margin:18px 0 8px;}
+.install-card{background:var(--white);border:1px solid var(--gray200);border-radius:var(--r16);box-shadow:var(--shadow-sm);overflow:hidden;}
+.install-card-head{display:flex;align-items:center;gap:12px;padding:16px;border-bottom:1px solid var(--gray100);}
+.install-card-mark{width:44px;height:44px;border-radius:12px;background:var(--orange-lt);display:flex;align-items:center;justify-content:center;color:var(--orange);font-size:24px;}
+.install-card h2{font-size:18px;color:var(--navy);margin:0;font-weight:900;}
+.install-block{padding:4px 16px 18px;}
 @media(max-width:420px){.guide-tab{min-width:50%;}.guide-hero{align-items:flex-start;}.guide-hero h1{font-size:20px;}.feature-table{font-size:12px;}}
 </style>
 </head>
@@ -189,9 +194,12 @@
   </section>
 
   <section class="guide-content" id="tab-install">
-    <article class="acc open">
-      <div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-device-mobile-plus"></i></div><p class="acc-title">ホーム画面に追加する</p><i class="ti ti-chevron-right acc-arrow"></i></div>
-      <div class="acc-body">
+    <article class="install-card">
+      <div class="install-card-head">
+        <div class="install-card-mark"><i class="ti ti-device-mobile-plus"></i></div>
+        <h2>ホーム画面に追加する</h2>
+      </div>
+      <div class="install-block">
         <p class="mini-label">iPhone / Safari</p>
         <ol class="steps">
           <li>Safariで公開URLを開きます。</li>

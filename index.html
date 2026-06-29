@@ -570,11 +570,14 @@ const MANUALS = {
     steps:['必要事項を入力します。','プレビューを表示して内容を確認します。','印刷画面で「PDFに保存」またはプリンターを選びます。']
   },
   install:{
-    title:'アプリとして使う方法',
-    lead:'ホーム画面に追加すると、アイコンをタップするだけで全画面アプリのように開けます。',
+    title:'ホーム画面に追加する',
+    lead:'スマホのホーム画面に追加すると、アイコンからすぐ起動できます。',
     href:'app_guide.html#install',
     button:'詳しい追加方法を開く',
-    steps:['iPhoneはSafariで公開URLを開き、共有ボタンから「ホーム画面に追加」を選びます。','AndroidはChromeで公開URLを開き、メニューから「アプリをインストール」または「ホーム画面に追加」を選びます。','追加後はホーム画面のアイコンから起動できます。古い画面が出る場合はブラウザで再読み込みしてください。']
+    groups:[
+      {label:'iPhone / Safari', steps:['Safariで公開URLを開きます。','画面下の共有ボタンをタップします。','「ホーム画面に追加」を選びます。','名前を確認して「追加」をタップします。']},
+      {label:'Android / Chrome', steps:['Chromeで公開URLを開きます。','右上のメニューをタップします。','「アプリをインストール」または「ホーム画面に追加」を選びます。','確認画面で「追加」または「インストール」をタップします。']}
+    ]
   }
 };
 function showManual(key, btn){
@@ -584,9 +587,16 @@ function showManual(key, btn){
   document.getElementById('manual-panel').innerHTML = `
     <p class="manual-panel-title">${data.title}</p>
     <p class="manual-panel-lead">${data.lead}</p>
-    <div class="manual-steps">
-      ${data.steps.map((s,i)=>`<div class="manual-step"><b>${i+1}</b><span>${s}</span></div>`).join('')}
-    </div>
+    ${data.groups ? data.groups.map(group=>`
+      <p class="manual-panel-title" style="font-size:13px;color:#F79B2E;margin-top:12px;">${group.label}</p>
+      <div class="manual-steps">
+        ${group.steps.map((s,i)=>`<div class="manual-step"><b>${i+1}</b><span>${s}</span></div>`).join('')}
+      </div>
+    `).join('') : `
+      <div class="manual-steps">
+        ${data.steps.map((s,i)=>`<div class="manual-step"><b>${i+1}</b><span>${s}</span></div>`).join('')}
+      </div>
+    `}
     <a class="manual-open" href="${data.href}"><i class="ti ti-arrow-right"></i>${data.button}</a>
   `;
 }
