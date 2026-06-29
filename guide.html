@@ -34,7 +34,7 @@
   box-shadow: 0 1px 4px rgba(0,0,0,.06) !important;
   width: 100% !important;
 }
-.mtab i { font-size: 22px !important; display: block !important; }
+.mtab-glyph { font-size: 22px !important; display: block !important; line-height: 1 !important; }
 .mtab.on { color: #fff !important; border-color: transparent !important; }
 .mtab.on.c1 { background: #1A7A4A !important; }
 .mtab.on.c2 { background: #4A1A9B !important; }
@@ -69,7 +69,7 @@
 
 /* ===== 検索 ===== */
 .sbox { position: relative; margin-bottom: 14px; }
-.sbox i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 18px; color: #A0A5B4; pointer-events: none; }
+.sbox i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 18px; color: #334155; pointer-events: none; }
 .sbox input { width: 100%; padding: 13px 16px 13px 44px; border-radius: 12px; border: 2px solid #ECEEF2; background: #fff; color: #1B1E27; font-size: 16px; font-family: inherit; outline: none; }
 .sbox input:focus { border-color: #E8612A; }
 
@@ -85,9 +85,10 @@
 .gcard-head { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
 .gicon { width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .gicon i { font-size: 20px; }
+.gicon-glyph { font-size: 23px; line-height: 1; display: block; }
 .gtitle { font-size: 15px; font-weight: 700; color: #1B2A3B; margin: 0; line-height: 1.4; padding-top: 2px; }
 .gbody { padding-left: 54px; }
-.glabel { font-size: 11px; font-weight: 700; color: #A0A5B4; margin: 0 0 4px; letter-spacing: .05em; }
+.glabel { font-size: 11px; font-weight: 800; color: #334155; margin: 0 0 4px; letter-spacing: .05em; }
 .gdocs { font-size: 14px; margin: 0 0 10px; padding-left: 18px; color: #1B1E27; }
 .gdocs li { margin-bottom: 4px; line-height: 1.5; }
 .gmeta { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 4px; }
@@ -95,7 +96,7 @@
 .gnote { font-size: 13px; color: #5A6070; margin: 8px 0 0; display: flex; align-items: flex-start; gap: 6px; background: #F5F6F8; border-radius: 8px; padding: 8px 10px; line-height: 1.6; }
 .gnote i { font-size: 14px; flex-shrink: 0; margin-top: 2px; color: #E8612A; }
 .gamount { font-size: 15px; font-weight: 800; color: #E8612A; background: #FFF0E9; border-radius: 8px; padding: 7px 12px; display: inline-block; margin-bottom: 10px; }
-.empty { text-align: center; padding: 40px 20px; color: #A0A5B4; }
+.empty { text-align: center; padding: 40px 20px; color: #334155; font-weight: 700; }
 .empty i { font-size: 44px; display: block; margin-bottom: 10px; opacity: .4; }
 .empty p { font-size: 15px; margin: 0; }
 .panel { display: none; }
@@ -133,23 +134,23 @@
     </svg>
     <div>
       <p style="font-size:18px;font-weight:800;color:#fff;margin:0 0 3px;">手続き・必要書類ガイド</p>
-      <p style="font-size:13px;color:rgba(255,255,255,.7);margin:0;">組合加入・国保・共済・労働保険の手続きをまとめて確認</p>
+      <p style="font-size:13px;color:rgba(255,255,255,.92);margin:0;">組合加入・国保・共済・労働保険の手続きをまとめて確認</p>
     </div>
   </div>
 
   <!-- ===== メインタブ ===== -->
   <div class="mtab-wrap">
     <button class="mtab on c1" id="mt1" onclick="mTab(1)">
-      <i class="ti ti-users"></i>組合加入
+      <span class="mtab-glyph" aria-hidden="true">👥</span>組合加入
     </button>
     <button class="mtab c2" id="mt2" onclick="mTab(2)">
-      <i class="ti ti-heart-plus"></i>土建国保
+      <span class="mtab-glyph" aria-hidden="true">🏥</span>土建国保
     </button>
     <button class="mtab c3" id="mt3" onclick="mTab(3)">
-      <i class="ti ti-shield-heart"></i>総合共済
+      <span class="mtab-glyph" aria-hidden="true">🛡️</span>総合共済
     </button>
     <button class="mtab c4" id="mt4" onclick="mTab(4)">
-      <i class="ti ti-helmet"></i>労働保険
+      <span class="mtab-glyph" aria-hidden="true">⛑️</span>労働保険
     </button>
   </div>
 
@@ -211,7 +212,7 @@
 
 
 
-  <div style="background:#F5F6F8;border-radius:8px;padding:10px 14px;font-size:12px;color:#8B90A0;margin-top:8px;">
+  <div style="background:#F5F6F8;border-radius:8px;padding:10px 14px;font-size:12px;color:#334155;margin-top:8px;font-weight:700;">
     <i class="ti ti-info-circle" style="font-size:13px;vertical-align:-2px;margin-right:4px;"></i>
     最新の制度・金額は支部窓口（048-773-9863）でご確認ください。
   </div>
@@ -221,11 +222,24 @@
 
 <script>
 // ===== カード生成関数 =====
+const GUIDE_GLYPHS = {
+  'ti-user-plus':'👤','ti-users-group':'👨‍👩‍👧','ti-building':'🏢','ti-baby-carriage':'👶','ti-heart':'💍',
+  'ti-users-minus':'➖','ti-door-exit':'🚪','ti-home-move':'🏠','ti-signature':'✍️','ti-id':'🪪',
+  'ti-bandage':'🤕','ti-coin':'💴','ti-receipt':'🧾','ti-flower':'💐','ti-heart-plus':'🏥',
+  'ti-shield-heart':'🛡️','ti-first-aid-kit':'🏥','ti-alert-triangle':'⚠️','ti-heart-broken':'🕯️',
+  'ti-ribbon-health':'🎗️','ti-cake':'🎂','ti-school':'🎒','ti-certificate':'📜','ti-lungs':'🫁',
+  'ti-lung':'🫁','ti-home-shield':'🏚️','ti-bed':'🛏️','ti-helmet':'⛑️','ti-shield-check':'✅',
+  'ti-road':'🛣️','ti-calendar-stats':'📅','ti-briefcase':'💼','ti-file-certificate':'📄',
+  'ti-replace':'🔁'
+};
+function guideGlyph(d){
+  return GUIDE_GLYPHS[d.icon] || '📌';
+}
 function card(d, overrideColor, badge) {
   const borderColor = overrideColor || d.color || '#E8612A';
   return `<div class="gcard" style="border-left-color:${borderColor};">
     <div class="gcard-head">
-      <div class="gicon" style="background:${d.bg};"><i class="ti ${d.icon}" style="color:${d.fg};"></i></div>
+      <div class="gicon" style="background:${d.bg}; color:${d.fg};"><span class="gicon-glyph" aria-hidden="true">${guideGlyph(d)}</span></div>
       <p class="gtitle">${d.title}${badge||''}</p>
     </div>
     <div class="gbody">
@@ -577,7 +591,7 @@ function doSearch(q) {
     if(!visible && panel.querySelector('.gcard')){
       const msg = document.createElement('p');
       msg.className = 'no-match-msg';
-      msg.style.cssText = 'text-align:center;padding:20px;color:#A0A5B4;font-size:13px;';
+      msg.style.cssText = 'text-align:center;padding:20px;color:#334155;font-size:13px;font-weight:700;';
       msg.textContent = '「' + q + '」に一致する項目はありません';
       panel.appendChild(msg);
     }
@@ -586,7 +600,7 @@ function doSearch(q) {
   // 検索件数バナー
   sr.innerHTML = totalHit > 0
     ? `<div style="font-size:13px;font-weight:600;color:#E8612A;background:#FFF0E9;border-radius:8px;padding:8px 14px;margin-bottom:4px;"><i class="ti ti-search" style="font-size:14px;vertical-align:-2px;margin-right:4px;"></i>全カテゴリで <strong>${totalHit}件</strong> 見つかりました</div>`
-    : `<div style="font-size:13px;font-weight:600;color:#8B90A0;background:#F5F6F8;border-radius:8px;padding:8px 14px;margin-bottom:4px;"><i class="ti ti-search-off" style="font-size:14px;vertical-align:-2px;margin-right:4px;"></i>「${q}」に一致する項目がありませんでした</div>`;
+    : `<div style="font-size:13px;font-weight:800;color:#334155;background:#F5F6F8;border-radius:8px;padding:8px 14px;margin-bottom:4px;"><i class="ti ti-search-off" style="font-size:14px;vertical-align:-2px;margin-right:4px;"></i>「${q}」に一致する項目がありませんでした</div>`;
   sr.classList.add('on');
 }
 
