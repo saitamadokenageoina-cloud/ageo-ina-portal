@@ -12,7 +12,7 @@
 .tool-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px);border-color:var(--orange);}
 .tool-card-icon{font-size:28px;margin-bottom:8px;}
 .tool-card-title{font-size:14px;font-weight:700;margin:0 0 3px;color:var(--navy);}
-.tool-card-desc{font-size:12px;color:var(--gray400);margin:0;}
+.tool-card-desc{font-size:12px;color:var(--gray600);margin:0;font-weight:700;}
 .tool-detail{display:none;}
 .tool-detail.active{display:block;}
 .tool-back{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:600;color:var(--orange);background:none;border:none;padding:0;margin-bottom:16px;cursor:pointer;}
@@ -23,19 +23,19 @@
 .compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
 .compare-box{background:var(--gray50);border-radius:var(--r12);padding:14px;border:2px solid var(--gray100);}
 .compare-box.winner{border-color:var(--orange);background:var(--orange-lt);}
-.compare-box-label{font-size:12px;font-weight:700;color:var(--gray400);margin:0 0 4px;}
+.compare-box-label{font-size:12px;font-weight:900;color:var(--gray600);margin:0 0 4px;}
 .compare-box-amount{font-size:26px;font-weight:800;color:var(--navy);margin:0;line-height:1.1;}
 .compare-box-unit{font-size:13px;font-weight:600;}
-.compare-box-year{font-size:12px;color:var(--gray400);margin:3px 0 0;}
+.compare-box-year{font-size:12px;color:var(--gray600);margin:3px 0 0;font-weight:700;}
 .winner-banner{border-radius:var(--r12);padding:12px 16px;font-size:14px;font-weight:600;margin-top:4px;}
 .winner-banner.doken{background:var(--green-lt);color:var(--green);}
 .winner-banner.city{background:var(--blue-lt);color:var(--blue);}
 .result-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--gray100);font-size:15px;}
 .result-row:last-child{border:none;}
 .result-row.total{font-weight:700;font-size:16px;}
-.result-label{flex:1;color:var(--gray600);}
-.result-val{text-align:right;font-weight:600;color:var(--navy);}
-.result-sub{font-size:12px;color:var(--gray400);font-weight:400;}
+.result-label{flex:1;color:var(--gray600);font-weight:700;}
+.result-val{text-align:right;font-weight:800;color:var(--navy);}
+.result-sub{font-size:12px;color:var(--gray600);font-weight:700;}
 .member-row{display:flex;align-items:center;gap:10px;background:var(--gray50);border-radius:var(--r12);padding:12px 14px;margin-bottom:8px;border:1.5px solid var(--gray100);}
 .add-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--r12);border:2px dashed var(--gray200);background:none;color:var(--gray600);font-size:14px;font-weight:600;margin-bottom:12px;cursor:pointer;transition:all .15s;}
 .add-btn:hover{border-color:var(--orange);color:var(--orange);}
@@ -44,9 +44,9 @@
 .ccus-card-icon{width:52px;height:68px;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:10px;font-weight:700;gap:4px;flex-shrink:0;border:3px solid rgba(255,255,255,.3);}
 .ccus-card-icon i{font-size:22px;}
 .lv-info h3{font-size:18px;font-weight:800;color:#fff;margin:0 0 3px;}
-.lv-info p{font-size:13px;color:rgba(255,255,255,.65);margin:0;}
+.lv-info p{font-size:13px;color:rgba(255,255,255,.94);margin:0;font-weight:700;}
 .prog-wrap{margin-bottom:10px;}
-.prog-label{display:flex;justify-content:space-between;font-size:13px;color:var(--gray600);margin-bottom:5px;font-weight:500;}
+.prog-label{display:flex;justify-content:space-between;font-size:13px;color:var(--gray600);margin-bottom:5px;font-weight:800;}
 .prog-bar{height:10px;background:var(--gray100);border-radius:99px;overflow:hidden;}
 .prog-fill{height:100%;border-radius:99px;transition:width .6s;}
 .req{display:flex;align-items:flex-start;gap:8px;font-size:14px;margin-bottom:8px;}
@@ -62,6 +62,41 @@
 .comp-row-total{font-weight:700;font-size:15px;}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 .hidden{display:none!important;}
+.calc-note{font-size:12px;color:var(--gray600);margin:10px 0 0;font-weight:700;line-height:1.65;}
+.calc-small{font-size:11px;color:var(--gray600);display:block;font-weight:700;}
+.calc-muted{color:var(--gray600)!important;font-weight:700!important;}
+html[data-theme="dark"] .tool-card,
+html[data-theme="dark"] .compare-box,
+html[data-theme="dark"] .member-row,
+html[data-theme="dark"] .card{
+  background:#10213A!important;
+  color:#E8EEF7!important;
+  border-color:rgba(255,255,255,.14)!important;
+}
+html[data-theme="dark"] .tool-card-title,
+html[data-theme="dark"] .compare-box-amount,
+html[data-theme="dark"] .result-val,
+html[data-theme="dark"] .result-label,
+html[data-theme="dark"] .comp-row,
+html[data-theme="dark"] .prog-label,
+html[data-theme="dark"] .table-row,
+html[data-theme="dark"] .req,
+html[data-theme="dark"] .calc-note,
+html[data-theme="dark"] .calc-small,
+html[data-theme="dark"] .calc-muted{color:#E8EEF7!important;}
+html[data-theme="dark"] .tool-card-desc,
+html[data-theme="dark"] .compare-box-label,
+html[data-theme="dark"] .compare-box-year,
+html[data-theme="dark"] .result-sub{color:#D8E4F2!important;}
+html[data-theme="dark"] .tab-row{background:#071426!important;border:1px solid rgba(255,255,255,.12);}
+html[data-theme="dark"] .tab-row .t-btn{color:#E8EEF7!important;background:#10213A!important;}
+html[data-theme="dark"] .tab-row .t-btn.active{background:#E8612A!important;color:#FFFFFF!important;}
+html[data-theme="dark"] .compare-box.winner{background:#3B2416!important;border-color:#E8612A!important;}
+html[data-theme="dark"] .prog-bar{background:#071426!important;}
+html[data-theme="dark"] .add-btn{color:#E8EEF7!important;border-color:rgba(255,255,255,.22)!important;background:#071426!important;}
+html[data-theme="dark"] .comp-row,
+html[data-theme="dark"] .result-row,
+html[data-theme="dark"] .table-row{border-color:rgba(255,255,255,.12)!important;}
 </style>
 </head>
 <body>
@@ -227,7 +262,7 @@
         <p style="margin:0;font-size:12px;color:rgba(255,255,255,.7);">24歳以下の組合員・外国人技能実習生など。</p>
       </div>
     </div>
-    <p style="font-size:11px;color:rgba(255,255,255,.4);margin:8px 0 0;">※ 区分の詳細・判定は支部（048-773-9863）にご確認ください。</p>
+    <p style="font-size:11px;color:rgba(255,255,255,.9);font-weight:700;margin:8px 0 0;">※ 区分の詳細・判定は支部（048-773-9863）にご確認ください。</p>
   </div>
 </div>
       </div>
@@ -295,7 +330,7 @@
         </div>
       </div>
       <div id="bf-medical-result"></div>
-      <p style="font-size:12px;color:var(--gray400);margin:10px 0 0;">※ 保険診療分を暦月ごと、医療機関別・入院通院別に算出。中学生以下、加入月から6カ月以内の家族入院、保険診療外などは対象外です。</p>
+      <p class="calc-note">※ 保険診療分を暦月ごと、医療機関別・入院通院別に算出。中学生以下、加入月から6カ月以内の家族入院、保険診療外などは対象外です。</p>
     </div>
 
     <div class="card hidden" id="bfp-sick">
@@ -329,7 +364,7 @@
         </div>
       </div>
       <div id="bf-sick-result"></div>
-      <p style="font-size:12px;color:var(--gray400);margin:10px 0 0;">※ 傷病手当金申請書に医師記入欄が必要です。病気・ケガの内容や休業状況により対象可否が異なります。</p>
+      <p class="calc-note">※ 傷病手当金申請書に医師記入欄が必要です。病気・ケガの内容や休業状況により対象可否が異なります。</p>
     </div>
 
     <div class="card hidden" id="bfp-birth">
@@ -371,7 +406,7 @@
         <div class="input-group"><label>職長・班長の就労日数</label><input type="number" id="leader" min="0" value="" placeholder="例：200"></div>
       </div>
       <p class="sec-label" style="margin-top:4px;">保有資格</p>
-      <div id="qual-area" style="margin-bottom:8px;"><p style="font-size:14px;color:var(--gray400);">職種を選ぶと表示されます。</p></div>
+      <div id="qual-area" style="margin-bottom:8px;"><p class="calc-note" style="font-size:14px;">職種を選ぶと表示されます。</p></div>
       <button class="btn-primary" onclick="calcCcus()"><i class="ti ti-search"></i>レベルを判定する</button>
     </div>
     <div id="ccus-result" class="hidden">
@@ -430,10 +465,10 @@ function yen(n){return Math.round(n).toLocaleString('ja-JP')+'円';}
 
 function resultRow(label, honninVal, kaishaVal, noteHtml=''){
   return `<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--gray100);font-size:14px;">
-    <span style="flex:1;color:var(--gray600);">${label}${noteHtml}</span>
+    <span class="result-label">${label}${noteHtml}</span>
     <div style="text-align:right;">
-      <p style="margin:0;font-weight:600;color:var(--navy);">本人 ${honninVal}</p>
-      <p style="margin:0;font-size:12px;color:var(--gray400);">会社 ${kaishaVal}</p>
+      <p class="result-val" style="margin:0;">本人 ${honninVal}</p>
+      <p class="result-sub" style="margin:0;">会社 ${kaishaVal}</p>
     </div>
   </div>`;
 }
@@ -577,16 +612,16 @@ function calcRoumu(){
 
   document.getElementById('romu-result').style.display = 'block';
   document.getElementById('romu-result-inner').innerHTML =
-    `<div style="background:var(--gray50);border-radius:var(--r8);padding:10px 14px;margin-bottom:12px;font-size:13px;color:var(--gray600);">
+    `<div class="calc-muted" style="background:var(--gray50);border-radius:var(--r8);padding:10px 14px;margin-bottom:12px;font-size:13px;">
       標準報酬月額 <strong style="color:var(--navy);font-size:15px;">${h.toLocaleString()}円</strong>・${age==='u40'?'40歳未満':age==='4064'?'40〜64歳':'65歳以上'}
      ${ hasKoyo ? '・'+koyoJshuLabel+'の雇用保険あり' : '・雇用保険なし（役員等）'}
     </div>` +
     resultRow('厚生年金保険料', yen(nenkinH), yen(nenkinK),
-      '<span style="font-size:11px;color:var(--gray400);display:block;">18.3%を労使折半</span>') +
+      '<span class="calc-small">18.3%を労使折半</span>') +
     (hasKaigo ? resultRow('介護保険料'+kaigoNote, yen(kaigoH), yen(kaigoK),
-      '<span style="font-size:11px;color:var(--gray400);display:block;">1.62%を労使折半</span>') : '') +
+      '<span class="calc-small">1.62%を労使折半</span>') : '') +
     (hasKoyo  ? resultRow('雇用保険料', yen(koyoH), yen(koyoK),
-      `<span style="font-size:11px;color:var(--gray400);display:block;">本人${(koyoRates.h*100).toFixed(1)}%／会社${(koyoRates.k*100).toFixed(1)}%</span>`) : '') +
+      `<span class="calc-small">本人${(koyoRates.h*100).toFixed(1)}%／会社${(koyoRates.k*100).toFixed(1)}%</span>`) : '') +
     `<div style="border-top:2px solid var(--navy);margin-top:4px;">` +
     totalRow(yen(honninTotal), yen(kaishaTotal)) +
     `</div>
@@ -662,7 +697,7 @@ function initCcus(){
 function onShokuChange(){
   const key=document.getElementById('shoku').value;
   const area=document.getElementById('qual-area');
-  if(!key||!SHOKU_DATA[key]){area.innerHTML='<p style="font-size:14px;color:var(--gray500);">職種を選ぶと表示されます。</p>';return;}
+  if(!key||!SHOKU_DATA[key]){area.innerHTML='<p class="calc-note" style="font-size:14px;">職種を選ぶと表示されます。</p>';return;}
   const d=SHOKU_DATA[key];
   area.innerHTML=d.qids.map((id,i)=>`
     <label style="display:flex;align-items:flex-start;gap:8px;font-size:14px;cursor:pointer;margin-bottom:8px;">
@@ -702,7 +737,7 @@ function calcCcus(){
     const next=d.levels[lv];
     progs+=`<div class="prog-wrap"><div class="prog-label"><span>就労日数</span><span>${days.toLocaleString()} / ${next.days.toLocaleString()}日（${pct(days,next.days)}%）</span></div><div class="prog-bar"><div class="prog-fill" style="width:${pct(days,next.days)}%;background:var(--orange);"></div></div></div>`;
     if(next.leader>0)progs+=`<div class="prog-wrap"><div class="prog-label"><span>職長日数</span><span>${leader.toLocaleString()} / ${next.leader.toLocaleString()}日（${pct(leader,next.leader)}%）</span></div><div class="prog-bar"><div class="prog-fill" style="width:${pct(leader,next.leader)}%;background:var(--blue);"></div></div></div>`;
-  }else{progs='<p style="font-size:15px;color:var(--gray700);margin:0;">最上位レベル（金カード）に到達しています。</p>';}
+  }else{progs='<p class="calc-note" style="font-size:15px;margin:0;">最上位レベル（金カード）に到達しています。</p>';}
   document.getElementById('ccus-progs').innerHTML=progs;
 
   const nextWrap=document.getElementById('ccus-next-wrap');
@@ -712,7 +747,7 @@ function calcCcus(){
     document.getElementById('ccus-next').innerHTML=`
       <p style="font-size:15px;font-weight:700;margin:0 0 10px;color:var(--navy);">→ レベル${lv+1}（${CARD[lv].label}カード）への条件</p>
       ${reqs.map(r=>`<div class="req ${r.ok?'ok':'ng'}"><i class="ti ${r.ok?'ti-circle-check':'ti-circle-x'}" aria-hidden="true"></i><span>${r.txt}</span></div>`).join('')}
-      <p style="font-size:13px;color:var(--gray500);margin:10px 0 0;">申請先：${d.org}（埼玉土建各支部でも相談可）</p>`;
+      <p class="calc-note" style="font-size:13px;">申請先：${d.org}（埼玉土建各支部でも相談可）</p>`;
   }else{nextWrap.classList.add('hidden');}
 
   document.getElementById('ccus-table').innerHTML=d.levels.map(l=>`
@@ -722,7 +757,7 @@ function calcCcus(){
       </div>
       <div style="flex:1;">
         <p style="font-size:14px;font-weight:700;margin:0 0 2px;color:var(--navy);">レベル${l.lv}（${CARD[l.lv-1].label}）${l.lv===lv?'<span class="cur-tag">現在</span>':''}</p>
-        <p style="font-size:13px;color:var(--gray700);margin:0;">${l.desc}</p>
+        <p class="calc-muted" style="font-size:13px;margin:0;">${l.desc}</p>
       </div>
     </div>`).join('');
 }
@@ -781,7 +816,7 @@ function kkAddMember(){
   div.innerHTML=`
     <div style="display:flex;flex-direction:column;gap:6px;flex:1;">
       <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-        <label style="font-size:13px;font-weight:600;color:var(--gray700);white-space:nowrap;">続柄</label>
+        <label class="calc-muted" style="font-size:13px;white-space:nowrap;">続柄</label>
         <select id="kkrel-${id}" style="font-size:14px;padding:6px 8px;flex:1;min-width:160px;">
           <option value="honnin" ${isFirst?'selected':''}>本人（組合員）</option>
           <option value="tokubetsu" ${!isFirst?'selected':''}>特別家族（20〜59歳）</option>
@@ -790,13 +825,13 @@ function kkAddMember(){
           <option value="shogaku">小学生相当（6〜11歳）</option>
           <option value="mishuugaku">未就学児（5歳以下）</option>
         </select>
-        <label style="font-size:13px;font-weight:600;color:var(--gray700);white-space:nowrap;">年齢</label>
+        <label class="calc-muted" style="font-size:13px;white-space:nowrap;">年齢</label>
         <input type="number" id="kkage-${id}" min="0" max="100" value="${isFirst?40:35}" style="width:64px;font-size:14px;padding:6px 8px;">
       </div>
       <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-        <label style="font-size:13px;font-weight:600;color:var(--gray700);white-space:nowrap;">前年所得額</label>
+        <label class="calc-muted" style="font-size:13px;white-space:nowrap;">前年所得額</label>
         <input type="number" id="kkinc-${id}" min="0" value="${isFirst?5000000:0}" style="width:130px;font-size:14px;padding:6px 8px;">
-        <span style="font-size:12px;color:var(--gray500);">円（給与収入×約0.8が目安）</span>
+        <span class="calc-small">円（給与収入×約0.8が目安）</span>
       </div>
     </div>
     ${!isFirst?`<button class="rm-btn" onclick="kkRemoveMember(${id})"><i class="ti ti-x" aria-hidden="true"></i></button>`:''}
@@ -862,22 +897,22 @@ function kkCalc(){
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
         <div style="background:rgba(255,255,255,.07);border-radius:8px;padding:10px;border-top:3px solid #E8612A;">
           <p style="font-size:13px;font-weight:800;color:#fff;margin:0 0 4px;">💊 医療費が実質ゼロ</p>
-          <p style="font-size:11px;color:rgba(255,255,255,.65);margin:0;line-height:1.5;">一部負担払戻金制度により、入院・通院の自己負担を全額払い戻し。市区町村国保には存在しない独自制度。</p>
+          <p style="font-size:11px;color:rgba(255,255,255,.92);font-weight:700;margin:0;line-height:1.5;">一部負担払戻金制度により、入院・通院の自己負担を全額払い戻し。市区町村国保には存在しない独自制度。</p>
         </div>
         <div style="background:rgba(255,255,255,.07);border-radius:8px;padding:10px;border-top:3px solid #5DCAA5;">
           <p style="font-size:13px;font-weight:800;color:#fff;margin:0 0 4px;">🏥 休んでも収入が続く</p>
-          <p style="font-size:11px;color:rgba(255,255,255,.65);margin:0;line-height:1.5;">傷病手当金：病気やケガで4日以上連続して休業した場合、1日目から区分・療養状況に応じた日額を支給。市区町村国保にはない制度。</p>
+          <p style="font-size:11px;color:rgba(255,255,255,.92);font-weight:700;margin:0;line-height:1.5;">傷病手当金：病気やケガで4日以上連続して休業した場合、1日目から区分・療養状況に応じた日額を支給。市区町村国保にはない制度。</p>
         </div>
         <div style="background:rgba(255,255,255,.07);border-radius:8px;padding:10px;border-top:3px solid #B5D4F4;">
           <p style="font-size:13px;font-weight:800;color:#fff;margin:0 0 4px;">👶 出産 50万円給付</p>
-          <p style="font-size:11px;color:rgba(255,255,255,.65);margin:0;line-height:1.5;">出産育児一時金50万円。直接支払制度で窓口負担も軽減。手続きは支部で完結するので安心。</p>
+          <p style="font-size:11px;color:rgba(255,255,255,.92);font-weight:700;margin:0;line-height:1.5;">出産育児一時金50万円。直接支払制度で窓口負担も軽減。手続きは支部で完結するので安心。</p>
         </div>
         <div style="background:rgba(255,255,255,.07);border-radius:8px;padding:10px;border-top:3px solid #FAC775;">
           <p style="font-size:13px;font-weight:800;color:#fff;margin:0 0 4px;">🌸 葬祭費 7万円</p>
-          <p style="font-size:11px;color:rgba(255,255,255,.65);margin:0;line-height:1.5;">市区町村国保より手厚い7万円。組合員・家族が対象。</p>
+          <p style="font-size:11px;color:rgba(255,255,255,.92);font-weight:700;margin:0;line-height:1.5;">市区町村国保より手厚い7万円。組合員・家族が対象。</p>
         </div>
       </div>
-      <p style="font-size:11px;color:rgba(255,255,255,.4);margin:10px 0 0;">※ 保険料の安さだけでなく、これらの給付が受けられることが土建国保の大きな強みです。詳細は支部へご相談ください。</p>
+      <p style="font-size:11px;color:rgba(255,255,255,.9);font-weight:700;margin:10px 0 0;">※ 保険料の安さだけでなく、これらの給付が受けられることが土建国保の大きな強みです。詳細は支部へご相談ください。</p>
     </div>`;
 
   const hasKaigo=mems.some(m=>m.age>=40&&m.age<65);
@@ -888,7 +923,7 @@ function kkCalc(){
     ${hasKaigo?`<div class="result-row"><span class="result-label">介護分（40〜64歳）</span><span class="result-val">${yn(city.kai)}<br><span class="result-sub">月 ${yn(city.kai/12)}</span></span></div>`:''}
     <div class="result-row"><span class="result-label">子ども・子育て支援金分</span><span class="result-val">${yn(city.ko)}<br><span class="result-sub">月 ${yn(city.ko/12)}</span></span></div>
     <div class="result-row total"><span class="result-label">年間合計</span><span class="result-val">${yn(city.total)}</span></div>
-    <div class="result-row"><span class="result-label" style="color:var(--gray500);">月額換算</span><span class="result-val" style="font-size:18px;">${cityM.toLocaleString()}円/月</span></div>`;
+    <div class="result-row"><span class="result-label">月額換算</span><span class="result-val" style="font-size:18px;">${cityM.toLocaleString()}円/月</span></div>`;
 
   const famRows=doken.famDetails.map(f=>{const rl={tokubetsu:'特別家族',ippan:'一般家族',chuko:'中高生',shogaku:'小学生',mishuugaku:'未就学児'}[f.rel]||f.rel;const tm=f.fh+f.fs+f.fk;return f.exempt?`<div class="result-row" style="opacity:.5;"><span class="result-label">${rl}（${f.age}歳）</span><span class="result-val">免除（4人目以降）</span></div>`:`<div class="result-row"><span class="result-label">${rl}（${f.age}歳）${f.fk>0?' +介護':''}</span><span class="result-val">${yn(tm*12)}<br><span class="result-sub">月 ${tm.toLocaleString()}円</span></span></div>`;}).join('');
 
