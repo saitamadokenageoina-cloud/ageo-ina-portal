@@ -75,9 +75,12 @@
 .hero-calendar i { font-size: 24px; color: #00C8FF; }
 .hero-calendar span { font-size: 11px; font-weight: 800; line-height: 1.2; text-align: center; }
 .hero-sub {
-  font-size: 13px; color: rgba(255,255,255,.45);
-  margin: 0 0 20px; position: relative; z-index: 1;
+  font-size: 18px; color: rgba(255,255,255,.9);
+  margin: 12px 0 20px; position: relative; z-index: 1;
+  line-height: 1.45; font-weight: 800; letter-spacing: 0;
+  text-shadow: 0 2px 14px rgba(0,200,255,.16);
 }
+.hero-sub span{display:block;color:rgba(255,255,255,.72);font-size:15px;font-weight:700;}
 .hero-tel {
   display: inline-flex; align-items: center; gap: 8px;
   background: linear-gradient(135deg, #E8612A, #C04E1E);
@@ -109,11 +112,19 @@
   white-space: nowrap;
 }
 .sec-head-icon {
-  width: 28px; height: 28px; border-radius: 8px;
+  width: 34px; height: 34px; border-radius: 10px;
   display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
+  flex-shrink: 0; position: relative; overflow: hidden;
+  box-shadow: 0 8px 18px rgba(0,0,0,.1);
 }
-.sec-head-icon i { font-size: 15px; }
+.sec-head-icon::after{
+  content:''; position:absolute; inset:-40% -60%; background:linear-gradient(120deg,transparent,rgba(255,255,255,.42),transparent);
+  transform:rotate(18deg);
+}
+.sec-head-icon i { font-size: 18px; position: relative; z-index: 1; }
+.sec-head-icon.orange{background:linear-gradient(135deg,#FEE8D6,#FFF8E6);}
+.sec-head-icon.purple{background:linear-gradient(135deg,#EDE8FE,#FEE8F0);}
+.sec-head-icon.blue{background:linear-gradient(135deg,#E8F0FB,#E8F5EE);}
 
 /* ===== グリッドカード（2列） ===== */
 .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
@@ -190,15 +201,31 @@
   border: 1px solid var(--gray100); border-radius: var(--r16); box-shadow: var(--shadow-sm);
 }
 .app-manual h2{font-size:16px;color:var(--navy);margin:0 0 10px;display:flex;align-items:center;gap:8px;}
-.manual-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.manual-item{background:var(--white);border-radius:var(--r12);padding:10px;border:1px solid var(--gray100);}
-.manual-item i{font-size:18px;color:var(--orange);display:block;margin-bottom:5px;}
-.manual-item strong{display:block;font-size:12px;color:var(--navy);margin-bottom:2px;}
-.manual-item span{display:block;font-size:11px;color:var(--gray600);line-height:1.45;}
+.manual-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+.manual-tab{
+  border:1.5px solid var(--gray100);background:var(--white);border-radius:var(--r12);
+  padding:10px 8px;text-align:left;display:flex;align-items:center;gap:8px;
+  color:var(--gray600);font-size:12px;font-weight:800;
+}
+.manual-tab i{font-size:18px;color:var(--orange);}
+.manual-tab.active{background:var(--navy);color:#fff;border-color:var(--navy);box-shadow:var(--shadow-md);}
+.manual-tab.active i{color:#00C8FF;}
+.manual-panel{background:var(--white);border:1px solid var(--gray100);border-radius:var(--r12);padding:14px;}
+.manual-panel-title{font-size:15px;font-weight:800;color:var(--navy);margin:0 0 4px;}
+.manual-panel-lead{font-size:12px;color:var(--gray600);margin:0 0 10px;line-height:1.55;}
+.manual-steps{display:grid;gap:7px;margin-bottom:12px;}
+.manual-step{display:grid;grid-template-columns:24px 1fr;gap:8px;align-items:start;font-size:12px;color:var(--gray700);line-height:1.5;}
+.manual-step b{width:24px;height:24px;border-radius:8px;background:var(--orange-lt);color:var(--orange);display:flex;align-items:center;justify-content:center;font-size:12px;}
+.manual-open{
+  display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:11px;
+  border-radius:var(--r12);background:var(--orange);color:#fff;font-size:14px;font-weight:800;
+}
 @media (max-width:380px){
   .hero-main{align-items:flex-start;}
   .hero-calendar{min-width:78px;padding:8px 6px;}
-  .info-grid,.manual-grid{gap:8px;}
+  .info-grid,.manual-tabs{gap:8px;}
+  .hero-sub{font-size:16px;}
+  .hero-sub span{font-size:14px;}
 }
 </style>
 </head>
@@ -217,7 +244,7 @@
       <span>支部<br>カレンダー</span>
     </a>
   </div>
-  <p class="hero-sub">組合員のための現場・くらしサポートアプリ</p>
+  <p class="hero-sub">組合員のための現場<span>暮らしサポートアプリ</span></p>
   <a href="tel:048-773-9863" class="hero-tel">
     <i class="ti ti-phone"></i>048-773-9863
   </a>
@@ -226,7 +253,7 @@
 <!-- ===== 現場で使う ===== -->
 <div class="section">
   <div class="sec-head">
-    <div class="sec-head-icon" style="background:#FEE8D6;"><i class="ti ti-helmet" style="color:#E8612A;"></i></div>
+    <div class="sec-head-icon orange"><i class="ti ti-helmet" style="color:#E8612A;"></i></div>
     <span class="sec-head-label">現場で使う</span>
     <div class="sec-head-line"></div>
   </div>
@@ -290,7 +317,7 @@
 <!-- ===== 組合員サービス ===== -->
 <div class="section">
   <div class="sec-head">
-    <div class="sec-head-icon" style="background:#EDE8FE;"><i class="ti ti-shield-heart" style="color:#6B21A8;"></i></div>
+    <div class="sec-head-icon purple"><i class="ti ti-shield-heart" style="color:#6B21A8;"></i></div>
     <span class="sec-head-label">組合員サービス</span>
     <div class="sec-head-line"></div>
   </div>
@@ -354,7 +381,7 @@
 <!-- ===== 手続き・情報 ===== -->
 <div class="section">
   <div class="sec-head">
-    <div class="sec-head-icon" style="background:#E8F0FB;"><i class="ti ti-book-2" style="color:#1A5FA8;"></i></div>
+    <div class="sec-head-icon blue"><i class="ti ti-book-2" style="color:#1A5FA8;"></i></div>
     <span class="sec-head-label">手続き・情報</span>
     <div class="sec-head-line"></div>
   </div>
@@ -431,18 +458,65 @@
 
 <section class="app-manual">
   <h2><i class="ti ti-help-circle"></i>このアプリの使い方</h2>
-  <div class="manual-grid">
-    <div class="manual-item"><i class="ti ti-search"></i><strong>探す</strong><span>手続き・資料・講習をタップして、必要な情報をすぐ確認できます。</span></div>
-    <div class="manual-item"><i class="ti ti-calculator"></i><strong>計算する</strong><span>労務費や国保料などを入力するだけで目安を確認できます。</span></div>
-    <div class="manual-item"><i class="ti ti-printer"></i><strong>印刷する</strong><span>36協定や安全チェックはプレビューしてPDF保存・印刷できます。</span></div>
-    <div class="manual-item"><i class="ti ti-phone"></i><strong>相談する</strong><span>迷ったら上の電話ボタンから支部へ連絡してください。</span></div>
+  <div class="manual-tabs" id="manual-tabs">
+    <button class="manual-tab active" onclick="showManual('first',this)"><i class="ti ti-sparkles"></i>はじめて</button>
+    <button class="manual-tab" onclick="showManual('site',this)"><i class="ti ti-helmet"></i>現場で使う</button>
+    <button class="manual-tab" onclick="showManual('paper',this)"><i class="ti ti-file-description"></i>手続き</button>
+    <button class="manual-tab" onclick="showManual('print',this)"><i class="ti ti-printer"></i>印刷・保存</button>
   </div>
+  <div class="manual-panel" id="manual-panel"></div>
 </section>
 
 <div style="height:28px;"></div>
 <footer>埼玉土建一般労働組合 上尾伊奈支部｜〒362-0003 上尾市菅谷295｜TEL 048-773-9863</footer>
 </div>
 
+<script>
+const MANUALS = {
+  first:{
+    title:'まずはここから',
+    lead:'迷ったら、目的に近いカードをタップするだけで大丈夫です。',
+    href:'guide.html',
+    button:'手続きガイドを開く',
+    steps:['上のカテゴリから「現場」「サービス」「手続き」を選びます。','必要なカードをタップすると詳しいページへ移動します。','戻るボタンでトップへ戻れます。']
+  },
+  site:{
+    title:'現場で困ったとき',
+    lead:'暑さ、安全確認、残業時間、応援探しを現場で素早く確認できます。',
+    href:'atsusa.html',
+    button:'熱中症AIアラートを開く',
+    steps:['熱中症AIアラートで現在地の危険度を確認します。','安全チェックリストで現場確認を記録します。','DOKENギルドで人材・資材の相談を投稿できます。']
+  },
+  paper:{
+    title:'手続きや資料を探す',
+    lead:'必要書類、加入メリット、資料PDF、講習日程をまとめて確認できます。',
+    href:'shiryo.html',
+    button:'資料本棚を開く',
+    steps:['手続き・必要書類ガイドで必要な書類を確認します。','資料本棚でPDFを読みます。','技能講習日程案内で日程と受講料を確認します。']
+  },
+  print:{
+    title:'印刷・PDF保存をする',
+    lead:'36協定や安全チェックは、入力後にプレビューしてPDF保存できます。',
+    href:'rodo36.html',
+    button:'36協定作成を開く',
+    steps:['必要事項を入力します。','プレビューを表示して内容を確認します。','印刷画面で「PDFに保存」またはプリンターを選びます。']
+  }
+};
+function showManual(key, btn){
+  const data = MANUALS[key] || MANUALS.first;
+  document.querySelectorAll('.manual-tab').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  document.getElementById('manual-panel').innerHTML = `
+    <p class="manual-panel-title">${data.title}</p>
+    <p class="manual-panel-lead">${data.lead}</p>
+    <div class="manual-steps">
+      ${data.steps.map((s,i)=>`<div class="manual-step"><b>${i+1}</b><span>${s}</span></div>`).join('')}
+    </div>
+    <a class="manual-open" href="${data.href}"><i class="ti ti-arrow-right"></i>${data.button}</a>
+  `;
+}
+showManual('first');
+</script>
 <script src="assets/js/navigation.js"></script>
 </body>
 </html>
