@@ -26,8 +26,8 @@
   background: #fff !important;
   cursor: pointer !important;
   font-size: 11px !important;
-  font-weight: 700 !important;
-  color: #5A6070 !important;
+  font-weight: 900 !important;
+  color: #1B2A3B !important;
   line-height: 1.3 !important;
   text-align: center !important;
   transition: all .15s !important;
@@ -57,9 +57,9 @@
   border-radius: 99px !important;
   border: 2px solid #D8DBE3 !important;
   background: #fff !important;
-  color: #5A6070 !important;
+  color: #1B2A3B !important;
   font-size: 13px !important;
-  font-weight: 700 !important;
+  font-weight: 900 !important;
   cursor: pointer !important;
   white-space: nowrap !important;
   flex-shrink: 0 !important;
@@ -88,12 +88,12 @@
 .gicon-glyph { font-size: 23px; line-height: 1; display: block; }
 .gtitle { font-size: 15px; font-weight: 700; color: #1B2A3B; margin: 0; line-height: 1.4; padding-top: 2px; }
 .gbody { padding-left: 54px; }
-.glabel { font-size: 11px; font-weight: 800; color: #334155; margin: 0 0 4px; letter-spacing: .05em; }
-.gdocs { font-size: 14px; margin: 0 0 10px; padding-left: 18px; color: #1B1E27; }
+.glabel { font-size: 11px; font-weight: 900; color: #1B2A3B; margin: 0 0 4px; letter-spacing: .05em; }
+.gdocs { font-size: 14px; margin: 0 0 10px; padding-left: 18px; color: #111827; font-weight: 600; }
 .gdocs li { margin-bottom: 4px; line-height: 1.5; }
 .gmeta { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 4px; }
-.gmeta-item p { margin: 0; font-size: 14px; }
-.gnote { font-size: 13px; color: #5A6070; margin: 8px 0 0; display: flex; align-items: flex-start; gap: 6px; background: #F5F6F8; border-radius: 8px; padding: 8px 10px; line-height: 1.6; }
+.gmeta-item p { margin: 0; font-size: 14px; color:#111827; font-weight:700; }
+.gnote { font-size: 13px; color: #1F2937; margin: 8px 0 0; display: flex; align-items: flex-start; gap: 6px; background: #EEF2F7; border-radius: 8px; padding: 8px 10px; line-height: 1.6; font-weight:700; }
 .gnote i { font-size: 14px; flex-shrink: 0; margin-top: 2px; color: #E8612A; }
 .gamount { font-size: 15px; font-weight: 800; color: #E8612A; background: #FFF0E9; border-radius: 8px; padding: 7px 12px; display: inline-block; margin-bottom: 10px; }
 .empty { text-align: center; padding: 40px 20px; color: #334155; font-weight: 700; }
@@ -101,6 +101,11 @@
 .empty p { font-size: 15px; margin: 0; }
 .panel { display: none; }
 .panel.on { display: block; }
+html[data-theme="dark"] .glabel,
+html[data-theme="dark"] .gdocs,
+html[data-theme="dark"] .gmeta-item p,
+html[data-theme="dark"] .gnote{color:#E8EEF7!important;}
+html[data-theme="dark"] .gnote{background:#071426!important;border:1px solid rgba(255,255,255,.12);}
 /* 検索件数バナー */
 #search-result.on { display: block; margin-bottom: 10px; }
 </style>
