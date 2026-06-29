@@ -61,6 +61,19 @@
   letter-spacing: -.02em;
 }
 .hero-title span { color: #00C8FF; }
+.hero-main {
+  position: relative; z-index: 1;
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+}
+.hero-calendar {
+  flex-shrink: 0; min-width: 92px; margin-top: 2px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+  padding: 10px 8px; border-radius: var(--r12);
+  background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.18);
+  color: #fff; box-shadow: 0 10px 24px rgba(0,0,0,.22);
+}
+.hero-calendar i { font-size: 24px; color: #00C8FF; }
+.hero-calendar span { font-size: 11px; font-weight: 800; line-height: 1.2; text-align: center; }
 .hero-sub {
   font-size: 13px; color: rgba(255,255,255,.45);
   margin: 0 0 20px; position: relative; z-index: 1;
@@ -104,6 +117,7 @@
 
 /* ===== グリッドカード（2列） ===== */
 .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+.info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
 
 /* ===== メニューカード ===== */
 .mc {
@@ -137,7 +151,14 @@
   border: 2px solid transparent; transition: all .15s;
   margin-bottom: 8px;
 }
+.info-grid .lc{margin-bottom:0;align-items:stretch;flex-direction:column;min-height:132px;}
+.info-grid .lc-thumb{width:100%;height:56px;}
+.info-grid .lc-body{padding:10px 10px 11px;min-height:62px;}
+.info-grid .lc-title{font-size:13px;line-height:1.35;}
+.info-grid .lc-desc{font-size:11px;line-height:1.4;}
+.info-grid .lc-arrow{display:none;}
 .lc:hover { border-color: var(--orange); box-shadow: var(--shadow-md); transform: translateX(3px); }
+.info-grid .lc:hover{transform:translateY(-2px);}
 .lc-thumb {
   width: 64px; height: 64px; flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
@@ -163,6 +184,22 @@
 .notice-bar p { font-size: 13px; color: var(--navy); margin: 0; font-weight: 500; }
 
 .section { padding: 16px 16px 0; }
+.app-manual{
+  margin: 18px 16px 0; padding: 16px;
+  background: linear-gradient(135deg,#fff,#F5F6F8);
+  border: 1px solid var(--gray100); border-radius: var(--r16); box-shadow: var(--shadow-sm);
+}
+.app-manual h2{font-size:16px;color:var(--navy);margin:0 0 10px;display:flex;align-items:center;gap:8px;}
+.manual-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.manual-item{background:var(--white);border-radius:var(--r12);padding:10px;border:1px solid var(--gray100);}
+.manual-item i{font-size:18px;color:var(--orange);display:block;margin-bottom:5px;}
+.manual-item strong{display:block;font-size:12px;color:var(--navy);margin-bottom:2px;}
+.manual-item span{display:block;font-size:11px;color:var(--gray600);line-height:1.45;}
+@media (max-width:380px){
+  .hero-main{align-items:flex-start;}
+  .hero-calendar{min-width:78px;padding:8px 6px;}
+  .info-grid,.manual-grid{gap:8px;}
+}
 </style>
 </head>
 <body>
@@ -173,7 +210,13 @@
   <div class="hero-scan-line"></div>
   <div class="hero-glow"></div>
   <div class="hero-tag"><i class="ti ti-wifi"></i>DOKEN SMART PORTAL</div>
-  <h1 class="hero-title">埼玉土建<br><span>上尾伊奈支部</span></h1>
+  <div class="hero-main">
+    <h1 class="hero-title">埼玉土建<br><span>上尾伊奈支部</span></h1>
+    <a class="hero-calendar" href="calendar.html">
+      <i class="ti ti-calendar-month"></i>
+      <span>支部<br>カレンダー</span>
+    </a>
+  </div>
   <p class="hero-sub">組合員のための現場・くらしサポートアプリ</p>
   <a href="tel:048-773-9863" class="hero-tel">
     <i class="ti ti-phone"></i>048-773-9863
@@ -215,16 +258,16 @@
       </div>
     </a>
 
-    <!-- 建設業許可 -->
-    <a class="mc" href="kensetsu_check.html">
-      <div class="mc-top" style="background:linear-gradient(135deg,#0C3A6B,#1A5FA8);">
-        <svg viewBox="0 0 200 80"><rect x="30" y="12" width="80" height="58" rx="6" fill="rgba(255,255,255,.12)"/><rect x="36" y="18" width="68" height="7" rx="2" fill="rgba(255,255,255,.4)"/><rect x="36" y="30" width="50" height="4" rx="2" fill="rgba(255,255,255,.22)"/><rect x="36" y="38" width="60" height="4" rx="2" fill="rgba(255,255,255,.22)"/><rect x="36" y="46" width="45" height="4" rx="2" fill="rgba(255,255,255,.22)"/><circle cx="148" cy="40" r="22" fill="rgba(255,255,255,.1)"/><text x="148" y="47" text-anchor="middle" font-size="22" fill="rgba(255,255,255,.65)">🏛️</text><circle cx="148" cy="66" r="10" fill="rgba(100,220,130,.7)"/><polyline points="142,66 147,71 155,60" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>
-        <span class="mc-emoji">🏛️</span>
+    <!-- DOKENギルド -->
+    <a class="mc" href="guild.html">
+      <div class="mc-top" style="background:linear-gradient(135deg,#1A7A4A,#2EA868);">
+        <svg viewBox="0 0 200 80"><rect x="18" y="12" width="70" height="36" rx="9" fill="rgba(255,255,255,.22)"/><polygon points="28,48 23,60 40,48" fill="rgba(255,255,255,.22)"/><rect x="112" y="22" width="70" height="36" rx="9" fill="rgba(255,255,255,.16)"/><polygon points="172,58 178,70 158,58" fill="rgba(255,255,255,.16)"/><line x1="28" y1="26" x2="78" y2="26" stroke="rgba(255,255,255,.5)" stroke-width="2" stroke-linecap="round"/><line x1="28" y1="34" x2="65" y2="34" stroke="rgba(255,255,255,.4)" stroke-width="2" stroke-linecap="round"/><line x1="28" y1="42" x2="72" y2="42" stroke="rgba(255,255,255,.4)" stroke-width="2" stroke-linecap="round"/><line x1="122" y1="36" x2="172" y2="36" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"/><line x1="122" y1="44" x2="158" y2="44" stroke="rgba(255,255,255,.35)" stroke-width="2" stroke-linecap="round"/><text x="100" y="76" text-anchor="middle" font-size="14" fill="rgba(255,255,255,.65)">🤝</text></svg>
+        <span class="mc-emoji">👥</span>
       </div>
       <div class="mc-body">
         <span class="mc-badge new">NEW</span>
-        <p class="mc-title">建設業許可チェッカー</p>
-        <p class="mc-desc">許可の要否・種類・更新期限</p>
+        <p class="mc-title">DOKENギルド</p>
+        <p class="mc-desc">人材・資材マッチング掲示板</p>
       </div>
     </a>
 
@@ -253,29 +296,16 @@
   </div>
   <div class="grid2">
 
-    <!-- DOKENギルド -->
-    <a class="mc" href="guild.html">
-      <div class="mc-top" style="background:linear-gradient(135deg,#1A7A4A,#2EA868);">
-        <svg viewBox="0 0 200 80"><rect x="18" y="12" width="70" height="36" rx="9" fill="rgba(255,255,255,.22)"/><polygon points="28,48 23,60 40,48" fill="rgba(255,255,255,.22)"/><rect x="112" y="22" width="70" height="36" rx="9" fill="rgba(255,255,255,.16)"/><polygon points="172,58 178,70 158,58" fill="rgba(255,255,255,.16)"/><line x1="28" y1="26" x2="78" y2="26" stroke="rgba(255,255,255,.5)" stroke-width="2" stroke-linecap="round"/><line x1="28" y1="34" x2="65" y2="34" stroke="rgba(255,255,255,.4)" stroke-width="2" stroke-linecap="round"/><line x1="28" y1="42" x2="72" y2="42" stroke="rgba(255,255,255,.4)" stroke-width="2" stroke-linecap="round"/><line x1="122" y1="36" x2="172" y2="36" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"/><line x1="122" y1="44" x2="158" y2="44" stroke="rgba(255,255,255,.35)" stroke-width="2" stroke-linecap="round"/><text x="100" y="76" text-anchor="middle" font-size="14" fill="rgba(255,255,255,.65)">🤝</text></svg>
-        <span class="mc-emoji">👥</span>
+    <!-- どけんカード -->
+    <a class="mc" href="doken_card.html">
+      <div class="mc-top" style="background:linear-gradient(135deg,#3B1F8A,#5B21B6);">
+        <svg viewBox="0 0 200 80"><rect x="20" y="16" width="106" height="50" rx="8" fill="rgba(255,255,255,.15)"/><rect x="20" y="16" width="106" height="18" rx="8" fill="rgba(255,255,255,.22)"/><rect x="26" y="22" width="40" height="6" rx="2" fill="rgba(255,255,255,.5)"/><rect x="26" y="43" width="24" height="12" rx="3" fill="rgba(255,200,0,.4)"/><line x1="56" y1="45" x2="80" y2="45" stroke="rgba(255,255,255,.4)" stroke-width="1.5" stroke-linecap="round"/><line x1="56" y1="51" x2="74" y2="51" stroke="rgba(255,255,255,.3)" stroke-width="1.5" stroke-linecap="round"/><circle cx="158" cy="30" r="14" fill="rgba(255,200,0,.45)"/><circle cx="170" cy="30" r="14" fill="rgba(255,100,50,.38)"/><text x="159" y="68" text-anchor="middle" font-size="9" fill="rgba(255,255,255,.5)">TD2026</text></svg>
+        <span class="mc-emoji">💳</span>
       </div>
       <div class="mc-body">
-        <span class="mc-badge new">NEW</span>
-        <p class="mc-title">DOKENギルド</p>
-        <p class="mc-desc">人材・資材マッチング掲示板</p>
-      </div>
-    </a>
-
-    <!-- CCUS能力評価サポート診断 -->
-    <a class="mc" href="https://lv-asses-sup.ccus.jp/" target="_blank" rel="noopener">
-      <div class="mc-top" style="background:linear-gradient(135deg,#1A5FA8,#2E82D4);">
-        <svg viewBox="0 0 200 80"><rect x="18" y="16" width="70" height="48" rx="6" fill="rgba(255,200,0,.38)"/><rect x="22" y="21" width="62" height="9" rx="2" fill="rgba(255,255,255,.5)"/><circle cx="34" cy="48" r="10" fill="rgba(255,255,255,.28)"/><rect x="48" y="42" width="28" height="3" rx="1" fill="rgba(255,255,255,.45)"/><rect x="48" y="49" width="20" height="3" rx="1" fill="rgba(255,255,255,.35)"/><circle cx="120" cy="24" r="14" fill="rgba(255,255,255,.18)" stroke="rgba(255,255,255,.35)" stroke-width="1.5"/><text x="120" y="29" text-anchor="middle" font-size="13">🔨</text><circle cx="152" cy="24" r="14" fill="rgba(255,255,255,.14)" stroke="rgba(255,255,255,.28)" stroke-width="1.5"/><text x="152" y="29" text-anchor="middle" font-size="13">⚡</text><circle cx="136" cy="52" r="14" fill="rgba(255,255,255,.14)" stroke="rgba(255,255,255,.28)" stroke-width="1.5"/><text x="136" y="57" text-anchor="middle" font-size="13">🏗️</text><rect x="100" y="68" width="80" height="10" rx="4" fill="rgba(255,255,255,.12)"/><text x="140" y="76" text-anchor="middle" font-size="7" fill="rgba(255,255,255,.6)">残 248日 → 更新期限</text></svg>
-        <span class="mc-emoji">🪪</span>
-      </div>
-      <div class="mc-body">
-        <span class="mc-badge new">NEW</span>
-        <p class="mc-title">CCUS能力評価サポート診断</p>
-        <p class="mc-desc">能力評価の申請条件を確認</p>
+        <span class="mc-badge tool">優待</span>
+        <p class="mc-title">どけんカード登録店</p>
+        <p class="mc-desc">県内700店以上の優待店を検索</p>
       </div>
     </a>
 
@@ -292,16 +322,29 @@
       </div>
     </a>
 
-    <!-- どけんカード -->
-    <a class="mc" href="doken_card.html">
-      <div class="mc-top" style="background:linear-gradient(135deg,#3B1F8A,#5B21B6);">
-        <svg viewBox="0 0 200 80"><rect x="20" y="16" width="106" height="50" rx="8" fill="rgba(255,255,255,.15)"/><rect x="20" y="16" width="106" height="18" rx="8" fill="rgba(255,255,255,.22)"/><rect x="26" y="22" width="40" height="6" rx="2" fill="rgba(255,255,255,.5)"/><rect x="26" y="43" width="24" height="12" rx="3" fill="rgba(255,200,0,.4)"/><line x1="56" y1="45" x2="80" y2="45" stroke="rgba(255,255,255,.4)" stroke-width="1.5" stroke-linecap="round"/><line x1="56" y1="51" x2="74" y2="51" stroke="rgba(255,255,255,.3)" stroke-width="1.5" stroke-linecap="round"/><circle cx="158" cy="30" r="14" fill="rgba(255,200,0,.45)"/><circle cx="170" cy="30" r="14" fill="rgba(255,100,50,.38)"/><text x="159" y="68" text-anchor="middle" font-size="9" fill="rgba(255,255,255,.5)">TD2026</text></svg>
-        <span class="mc-emoji">💳</span>
+    <!-- CCUS能力評価サポート診断 -->
+    <a class="mc" href="https://lv-asses-sup.ccus.jp/" target="_blank" rel="noopener">
+      <div class="mc-top" style="background:linear-gradient(135deg,#1A5FA8,#2E82D4);">
+        <svg viewBox="0 0 200 80"><rect x="18" y="16" width="70" height="48" rx="6" fill="rgba(255,200,0,.38)"/><rect x="22" y="21" width="62" height="9" rx="2" fill="rgba(255,255,255,.5)"/><circle cx="34" cy="48" r="10" fill="rgba(255,255,255,.28)"/><rect x="48" y="42" width="28" height="3" rx="1" fill="rgba(255,255,255,.45)"/><rect x="48" y="49" width="20" height="3" rx="1" fill="rgba(255,255,255,.35)"/><circle cx="120" cy="24" r="14" fill="rgba(255,255,255,.18)" stroke="rgba(255,255,255,.35)" stroke-width="1.5"/><text x="120" y="29" text-anchor="middle" font-size="13">🔨</text><circle cx="152" cy="24" r="14" fill="rgba(255,255,255,.14)" stroke="rgba(255,255,255,.28)" stroke-width="1.5"/><text x="152" y="29" text-anchor="middle" font-size="13">⚡</text><circle cx="136" cy="52" r="14" fill="rgba(255,255,255,.14)" stroke="rgba(255,255,255,.28)" stroke-width="1.5"/><text x="136" y="57" text-anchor="middle" font-size="13">🏗️</text><rect x="100" y="68" width="80" height="10" rx="4" fill="rgba(255,255,255,.12)"/><text x="140" y="76" text-anchor="middle" font-size="7" fill="rgba(255,255,255,.6)">残 248日 → 更新期限</text></svg>
+        <span class="mc-emoji">🪪</span>
       </div>
       <div class="mc-body">
-        <span class="mc-badge tool">優待</span>
-        <p class="mc-title">どけんカード登録店</p>
-        <p class="mc-desc">県内700店以上の優待店を検索</p>
+        <span class="mc-badge new">NEW</span>
+        <p class="mc-title">CCUS能力評価サポート診断</p>
+        <p class="mc-desc">能力評価の申請条件を確認</p>
+      </div>
+    </a>
+
+    <!-- 建設業許可 -->
+    <a class="mc" href="kensetsu_check.html">
+      <div class="mc-top" style="background:linear-gradient(135deg,#0C3A6B,#1A5FA8);">
+        <svg viewBox="0 0 200 80"><rect x="30" y="12" width="80" height="58" rx="6" fill="rgba(255,255,255,.12)"/><rect x="36" y="18" width="68" height="7" rx="2" fill="rgba(255,255,255,.4)"/><rect x="36" y="30" width="50" height="4" rx="2" fill="rgba(255,255,255,.22)"/><rect x="36" y="38" width="60" height="4" rx="2" fill="rgba(255,255,255,.22)"/><rect x="36" y="46" width="45" height="4" rx="2" fill="rgba(255,255,255,.22)"/><circle cx="148" cy="40" r="22" fill="rgba(255,255,255,.1)"/><text x="148" y="47" text-anchor="middle" font-size="22" fill="rgba(255,255,255,.65)">🏛️</text><circle cx="148" cy="66" r="10" fill="rgba(100,220,130,.7)"/><polyline points="142,66 147,71 155,60" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>
+        <span class="mc-emoji">🏛️</span>
+      </div>
+      <div class="mc-body">
+        <span class="mc-badge new">NEW</span>
+        <p class="mc-title">建設業許可チェッカー</p>
+        <p class="mc-desc">許可の要否・種類・更新期限</p>
       </div>
     </a>
 
@@ -316,6 +359,7 @@
     <div class="sec-head-line"></div>
   </div>
 
+  <div class="info-grid">
   <a class="lc" href="guide.html">
     <div class="lc-thumb" style="background:#E8F5EE;">
       <svg viewBox="0 0 64 64"><rect x="14" y="8" width="36" height="48" rx="4" fill="#1A7A4A" opacity=".3"/><rect x="18" y="12" width="28" height="40" rx="3" fill="white"/><line x1="22" y1="22" x2="42" y2="22" stroke="#1A7A4A" stroke-width="2" stroke-linecap="round"/><line x1="22" y1="29" x2="38" y2="29" stroke="#1A7A4A" stroke-width="1.5" stroke-linecap="round"/><line x1="22" y1="36" x2="40" y2="36" stroke="#1A7A4A" stroke-width="1.5" stroke-linecap="round"/><line x1="22" y1="43" x2="35" y2="43" stroke="#1A7A4A" stroke-width="1.5" stroke-linecap="round"/><circle cx="44" cy="44" r="9" fill="#1A7A4A"/><polyline points="39,44 43,48 50,40" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
@@ -327,24 +371,13 @@
     <i class="ti ti-chevron-right lc-arrow"></i>
   </a>
 
-  <a class="lc" href="shiryo.html">
-    <div class="lc-thumb" style="background:#EDE8FE;">
-      <svg viewBox="0 0 64 64"><rect x="10" y="14" width="12" height="40" rx="3" fill="#6B21A8" opacity=".45"/><rect x="25" y="10" width="12" height="44" rx="3" fill="#6B21A8" opacity=".65"/><rect x="40" y="18" width="12" height="36" rx="3" fill="#E8612A" opacity=".65"/><line x1="13" y1="24" x2="19" y2="24" stroke="white" stroke-width="1.5"/><line x1="28" y1="22" x2="34" y2="22" stroke="white" stroke-width="1.5"/><line x1="43" y1="30" x2="49" y2="30" stroke="white" stroke-width="1.5"/><rect x="8" y="54" width="48" height="4" rx="2" fill="#1B2A3B" opacity=".35"/></svg>
+  <a class="lc" href="merit.html">
+    <div class="lc-thumb" style="background:#FEF0ED;">
+      <svg viewBox="0 0 64 64"><polygon points="32,8 37,24 54,24 40,34 45,50 32,40 19,50 24,34 10,24 27,24" fill="#E8612A" opacity=".3"/><polygon points="32,13 36,25 50,25 39,32 43,45 32,38 21,45 25,32 14,25 28,25" fill="#E8612A" opacity=".6"/><circle cx="32" cy="31" r="8" fill="#E8612A"/><text x="32" y="35" text-anchor="middle" font-size="10" fill="white" font-weight="bold">★</text></svg>
     </div>
     <div class="lc-body">
-      <p class="lc-title">資料本棚</p>
-      <p class="lc-desc">共済・給付・資格祝金PDFを検索</p>
-    </div>
-    <i class="ti ti-chevron-right lc-arrow"></i>
-  </a>
-
-  <a class="lc" href="koushu.html">
-    <div class="lc-thumb" style="background:#FFF8E6;">
-      <svg viewBox="0 0 64 64"><rect x="10" y="14" width="44" height="40" rx="5" fill="#B07800" opacity=".3"/><rect x="13" y="18" width="38" height="33" rx="3" fill="white"/><rect x="13" y="18" width="38" height="10" rx="3" fill="#B07800" opacity=".7"/><line x1="21" y1="23" x2="43" y2="23" stroke="white" stroke-width="1.5" stroke-linecap="round"/><circle cx="20" cy="34" r="3" fill="#B07800" opacity=".6"/><line x1="26" y1="34" x2="42" y2="34" stroke="#B07800" stroke-width="1.5" stroke-linecap="round" opacity=".6"/><circle cx="20" cy="42" r="3" fill="#E8612A" opacity=".8"/><line x1="26" y1="42" x2="42" y2="42" stroke="#E8612A" stroke-width="1.5" stroke-linecap="round" opacity=".8"/><rect x="20" y="8" width="4" height="10" rx="2" fill="#B07800"/><rect x="40" y="8" width="4" height="10" rx="2" fill="#B07800"/></svg>
-    </div>
-    <div class="lc-body">
-      <p class="lc-title">技能講習 日程・案内</p>
-      <p class="lc-desc">足場・玉掛け・職長など全日程＋受講料</p>
+      <p class="lc-title">加入のメリット</p>
+      <p class="lc-desc">共済・国保・資格支援</p>
     </div>
     <i class="ti ti-chevron-right lc-arrow"></i>
   </a>
@@ -355,29 +388,29 @@
     </div>
     <div class="lc-body">
       <p class="lc-title">計算ツール</p>
-      <p class="lc-desc">労務費・国保料シミュ・CCUSレベル</p>
+      <p class="lc-desc">労務費・国保料など</p>
     </div>
     <i class="ti ti-chevron-right lc-arrow"></i>
   </a>
 
-  <a class="lc" href="calendar.html">
-    <div class="lc-thumb" style="background:#FFF0E9;">
-      <svg viewBox="0 0 64 64"><rect x="8" y="14" width="48" height="44" rx="5" fill="#E8612A" opacity=".25"/><rect x="11" y="20" width="42" height="35" rx="3" fill="white"/><rect x="11" y="20" width="42" height="12" rx="3" fill="#E8612A" opacity=".7"/><line x1="22" y1="26" x2="42" y2="26" stroke="white" stroke-width="1.5" stroke-linecap="round"/><rect x="17" y="8" width="5" height="12" rx="2.5" fill="#E8612A"/><rect x="42" y="8" width="5" height="12" rx="2.5" fill="#E8612A"/><circle cx="20" cy="40" r="3" fill="#E8612A" opacity=".5"/><circle cx="32" cy="40" r="3" fill="#E8612A" opacity=".7"/><circle cx="44" cy="40" r="3" fill="#E8612A" opacity=".5"/><circle cx="20" cy="49" r="3" fill="#E8612A" opacity=".4"/><circle cx="32" cy="49" r="3" fill="#1A7A4A" opacity=".7"/></svg>
+  <a class="lc" href="koushu.html">
+    <div class="lc-thumb" style="background:#FFF8E6;">
+      <svg viewBox="0 0 64 64"><rect x="10" y="14" width="44" height="40" rx="5" fill="#B07800" opacity=".3"/><rect x="13" y="18" width="38" height="33" rx="3" fill="white"/><rect x="13" y="18" width="38" height="10" rx="3" fill="#B07800" opacity=".7"/><line x1="21" y1="23" x2="43" y2="23" stroke="white" stroke-width="1.5" stroke-linecap="round"/><circle cx="20" cy="34" r="3" fill="#B07800" opacity=".6"/><line x1="26" y1="34" x2="42" y2="34" stroke="#B07800" stroke-width="1.5" stroke-linecap="round" opacity=".6"/><circle cx="20" cy="42" r="3" fill="#E8612A" opacity=".8"/><line x1="26" y1="42" x2="42" y2="42" stroke="#E8612A" stroke-width="1.5" stroke-linecap="round" opacity=".8"/><rect x="20" y="8" width="4" height="10" rx="2" fill="#B07800"/><rect x="40" y="8" width="4" height="10" rx="2" fill="#B07800"/></svg>
     </div>
     <div class="lc-body">
-      <p class="lc-title">支部カレンダー</p>
-      <p class="lc-desc">班会議・行事・講習などの支部予定</p>
+      <p class="lc-title">技能講習日程案内</p>
+      <p class="lc-desc">講習日程・受講料</p>
     </div>
     <i class="ti ti-chevron-right lc-arrow"></i>
   </a>
 
-  <a class="lc" href="merit.html">
-    <div class="lc-thumb" style="background:#FEF0ED;">
-      <svg viewBox="0 0 64 64"><polygon points="32,8 37,24 54,24 40,34 45,50 32,40 19,50 24,34 10,24 27,24" fill="#E8612A" opacity=".3"/><polygon points="32,13 36,25 50,25 39,32 43,45 32,38 21,45 25,32 14,25 28,25" fill="#E8612A" opacity=".6"/><circle cx="32" cy="31" r="8" fill="#E8612A"/><text x="32" y="35" text-anchor="middle" font-size="10" fill="white" font-weight="bold">★</text></svg>
+  <a class="lc" href="shiryo.html">
+    <div class="lc-thumb" style="background:#EDE8FE;">
+      <svg viewBox="0 0 64 64"><rect x="10" y="14" width="12" height="40" rx="3" fill="#6B21A8" opacity=".45"/><rect x="25" y="10" width="12" height="44" rx="3" fill="#6B21A8" opacity=".65"/><rect x="40" y="18" width="12" height="36" rx="3" fill="#E8612A" opacity=".65"/><line x1="13" y1="24" x2="19" y2="24" stroke="white" stroke-width="1.5"/><line x1="28" y1="22" x2="34" y2="22" stroke="white" stroke-width="1.5"/><line x1="43" y1="30" x2="49" y2="30" stroke="white" stroke-width="1.5"/><rect x="8" y="54" width="48" height="4" rx="2" fill="#1B2A3B" opacity=".35"/></svg>
     </div>
     <div class="lc-body">
-      <p class="lc-title">加入のメリット</p>
-      <p class="lc-desc">共済・国保・資格支援・生活サポート</p>
+      <p class="lc-title">資料本棚</p>
+      <p class="lc-desc">PDF資料を確認</p>
     </div>
     <i class="ti ti-chevron-right lc-arrow"></i>
   </a>
@@ -392,8 +425,19 @@
     </div>
     <i class="ti ti-brand-youtube lc-arrow" style="color:#FF0000;"></i>
   </a>
+  </div>
 
 </div>
+
+<section class="app-manual">
+  <h2><i class="ti ti-help-circle"></i>このアプリの使い方</h2>
+  <div class="manual-grid">
+    <div class="manual-item"><i class="ti ti-search"></i><strong>探す</strong><span>手続き・資料・講習をタップして、必要な情報をすぐ確認できます。</span></div>
+    <div class="manual-item"><i class="ti ti-calculator"></i><strong>計算する</strong><span>労務費や国保料などを入力するだけで目安を確認できます。</span></div>
+    <div class="manual-item"><i class="ti ti-printer"></i><strong>印刷する</strong><span>36協定や安全チェックはプレビューしてPDF保存・印刷できます。</span></div>
+    <div class="manual-item"><i class="ti ti-phone"></i><strong>相談する</strong><span>迷ったら上の電話ボタンから支部へ連絡してください。</span></div>
+  </div>
+</section>
 
 <div style="height:28px;"></div>
 <footer>埼玉土建一般労働組合 上尾伊奈支部｜〒362-0003 上尾市菅谷295｜TEL 048-773-9863</footer>
