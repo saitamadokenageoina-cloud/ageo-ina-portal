@@ -358,6 +358,7 @@ html[data-theme="light"] .agenda-meta{color:#334155;}
 <script>
 const CALENDAR_QUERY = 'height=600&wkst=1&ctz=Asia%2FTokyo&showPrint=0&showTabs=0&showCalendars=0&showTz=0&src=c2FpdGFtYWRva2VuYWdlb2luYUBnbWFpbC5jb20&src=OTIwZGY5NzEyMmJjNjJjYjg0ODUyNDI4ZjAxOTI4NTAwZDQzMGIwMGE1YWNlZjQ0OGQ2ZWI2NzlkOGNkZjFmYkBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=NTQxNjFiNDgzY2ZhYTEzZjA1NjQ4MjRmNGZhZWZiMjlkZTE0MGRiOWVkYWYxMTM1NGE3ZTdhYjFlYTg0YTliYkBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=ZTAxOGRmZTE0Njc1MGI3YzkxNTI2NzAzYTBiZDg3OTQ2NDAzYzU0YTcyZjRjY2FlOWQ1ZDNhZDdmNGJhYTA4OUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=YjA3N2RjOGQzYzRhMzI5MjZhMTdjYTdhYjU1ZmIwZDdmM2ExY2JkYTMwMDAxMmVhNmE0MDg2MWQyNmU3MjI4ZEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=ZmVkNzhiZWJhZmFkYjNjNDZkMmEwMjNhMDI1NDllNWNkYWRmMzJhZDU2ZTU0NDRmNDBhNWFjOTljM2I2OGJkOEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=amEuamFwYW5lc2Uub2ZmaWNpYWwjaG9saWRheUBncm91cC52LmNhbGVuZGFyLmdvb2dsZS5jb20&color=%23616161&color=%230b8043&color=%23d81b60&color=%23f4511e&color=%23f09300&color=%238e24aa&color=%234285f4';
 const CALENDAR_BASE = 'https://calendar.google.com/calendar/embed?' + CALENDAR_QUERY + '&mode=';
+const APPS_SCRIPT_EVENTS_URL = 'https://script.google.com/macros/s/AKfycbw_CPXjPVA4MqfNG8328tN0XonK4A28zTUk2cybXFPRW6lMfuZTcPC96nezgO2WsziV/exec';
 const UPCOMING_CALENDARS = [
   {id:'saitamadokenageoina@gmail.com', type:'branch'},
   {id:'920df97122bc62cb84852428f01928500d430b00a5acef448d6eb679d8cdf1fb@group.calendar.google.com', type:'branch'},
@@ -481,10 +482,39 @@ function renderAgendaIframeFallback(){
   `;
 }
 
+function normalizeScriptEvents(data){
+  const rawEvents = Array.isArray(data) ? data : (Array.isArray(data?.events) ? data.events : []);
+  return rawEvents.map(item => {
+    const start = new Date(item.start || item.startTime || item.date);
+    if(Number.isNaN(start.getTime())) return null;
+    return {
+      title:item.title || item.summary || '予定',
+      location:item.location || '',
+      start,
+      allDay:Boolean(item.allDay || item.isAllDay),
+      type:item.type || 'branch'
+    };
+  }).filter(Boolean);
+}
+
 async function loadUpcoming(){
   const now = new Date();
   const end = new Date(now);
   end.setDate(end.getDate() + 7);
+  try{
+    const scriptData = await fetch(APPS_SCRIPT_EVENTS_URL, {cache:'no-store'}).then(res => {
+      if(!res.ok) throw new Error('apps script fetch failed');
+      return res.json();
+    });
+    const scriptEvents = normalizeScriptEvents(scriptData)
+      .filter(event => sameOrAfter(event.start, now) && event.start < end)
+      .sort((a,b) => a.start - b.start)
+      .slice(0, 10);
+    renderUpcoming(scriptEvents);
+    return;
+  }catch(e){
+    console.warn('Apps Script calendar API fallback:', e);
+  }
   try{
     const results = await Promise.allSettled(UPCOMING_CALENDARS.map(async cal => {
       const url = `https://calendar.google.com/calendar/ical/${encodeURIComponent(cal.id)}/public/basic.ics`;
