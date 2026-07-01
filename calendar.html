@@ -149,43 +149,6 @@ body{
   color:#fff;
 }
 .view-btn i{font-size:18px;}
-.legend{
-  display:flex;
-  gap:9px;
-  overflow-x:auto;
-  padding:12px 14px;
-  margin-bottom:14px;
-  border:1px solid rgba(255,255,255,.12);
-  border-radius:14px;
-  background:rgba(22,48,91,.72);
-  scrollbar-width:none;
-}
-.legend::-webkit-scrollbar{display:none;}
-.legend span{
-  flex:0 0 auto;
-  display:flex;
-  align-items:center;
-  gap:6px;
-  color:#C9D6E9;
-  font-size:13px;
-  font-weight:800;
-  white-space:nowrap;
-}
-.dot{
-  width:14px;
-  height:14px;
-  border-radius:4px;
-  display:inline-block;
-  background:#64748B;
-  box-shadow:0 0 0 1px rgba(255,255,255,.18) inset;
-}
-.dot.meeting{background:#616161;}
-.dot.branch{background:#0B8043;}
-.dot.training{background:#D81B60;}
-.dot.deadline{background:#F4511E;}
-.dot.consult{background:#F09300;}
-.dot.event{background:#8E24AA;}
-.dot.holiday{background:#4285F4;}
 .calendar-shell{
   margin-bottom:18px;
   overflow:hidden;
@@ -211,50 +174,84 @@ body{
   margin:6px 0 12px;
 }
 .agenda-shell{
-  display:none;
-  overflow:hidden;
-  border-radius:18px;
-  border:1px solid rgba(232,97,42,.38);
-  background:#112B55;
-}
-.agenda-shell.active{display:block;}
-.agenda-frame{
-  width:100%;
-  height:620px;
-  border:0;
   display:block;
-  background:#fff;
+  border-radius:18px;
+  border:1px solid rgba(232,97,42,.48);
+  background:rgba(17,43,85,.74);
+  box-shadow:0 16px 36px rgba(0,0,0,.22);
+  padding:0;
 }
-.tips{
-  margin-top:14px;
+.agenda-list{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  padding:14px;
+}
+.agenda-card{
+  display:grid;
+  grid-template-columns:72px 1fr;
+  gap:14px;
+  align-items:center;
+  min-height:96px;
   padding:14px 16px;
-  border-radius:16px;
-  background:rgba(255,255,255,.08);
-  border:1px solid rgba(255,255,255,.12);
-  color:#D8E4F2;
-  font-size:13px;
-  font-weight:700;
-  line-height:1.7;
+  border:1px solid rgba(232,97,42,.42);
+  background:rgba(23,50,97,.9);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.035);
 }
-.tips i{color:#FFB15C;margin-right:4px;}
+.agenda-date{text-align:center;color:#fff;line-height:1;}
+.agenda-date strong{display:block;font-size:34px;font-weight:950;}
+.agenda-date span{display:block;margin-top:6px;color:#B8C8DC;font-size:14px;font-weight:900;}
+.agenda-body{
+  position:relative;
+  padding-left:18px;
+  border-left:7px solid #8A8F99;
+}
+.agenda-body.branch{border-left-color:#0B8043;}
+.agenda-body.training{border-left-color:#D81B60;}
+.agenda-body.deadline{border-left-color:#F4511E;}
+.agenda-body.consult{border-left-color:#F09300;}
+.agenda-body.event{border-left-color:#8E24AA;}
+.agenda-body.holiday{border-left-color:#4285F4;}
+.agenda-title{
+  margin:0 0 5px;
+  color:#fff;
+  font-size:18px;
+  font-weight:950;
+  line-height:1.35;
+}
+.agenda-meta{
+  margin:0;
+  color:#AFC1D6;
+  font-size:14px;
+  font-weight:700;
+  line-height:1.6;
+}
+.agenda-empty{
+  padding:22px 18px;
+  color:#D8E4F2;
+  font-size:14px;
+  font-weight:800;
+  line-height:1.7;
+  text-align:center;
+}
 html[data-theme="light"] .calendar-page{
   background:#F4F7FB;
 }
 html[data-theme="light"] .today-card,
-html[data-theme="light"] .legend,
 html[data-theme="light"] .view-tabs{
   background:#FFFFFF;
   border-color:#D8DBE3;
 }
 html[data-theme="light"] .date-block strong{color:#1B2A3B;}
-html[data-theme="light"] .today-text p,
-html[data-theme="light"] .legend span{color:#334155;}
+html[data-theme="light"] .today-text p{color:#334155;}
 html[data-theme="light"] .view-btn{color:#334155;}
-html[data-theme="light"] .tips{
+html[data-theme="light"] .agenda-shell{
   background:#FFFFFF;
-  color:#334155;
   border-color:#D8DBE3;
 }
+html[data-theme="light"] .agenda-card{background:#F8FAFC;}
+html[data-theme="light"] .agenda-title{color:#172638;}
+html[data-theme="light"] .agenda-meta{color:#334155;}
 @media (max-width:520px){
   .calendar-page .content{padding:16px 12px 92px;}
   .calendar-hero{grid-template-columns:70px 1fr;padding:18px 16px;border-radius:22px;}
@@ -266,7 +263,8 @@ html[data-theme="light"] .tips{
   .date-block strong{font-size:36px;}
   .view-btn{font-size:14px;min-height:52px;}
   .calendar-frame{height:620px;}
-  .agenda-frame{height:560px;}
+  .agenda-card{grid-template-columns:58px 1fr;padding:12px;}
+  .agenda-date strong{font-size:30px;}
 }
 </style>
 </head>
@@ -287,7 +285,7 @@ html[data-theme="light"] .tips{
     <div class="calendar-icon"><i class="ti ti-calendar-event"></i></div>
     <div>
       <h1>支部カレンダー</h1>
-      <p>会議・講習・行事・相談日を確認できます。Googleカレンダー側で更新すると自動反映されます。</p>
+      <p>会議・行事・相談日を確認できます。Googleカレンダー側で更新すると自動反映されます。</p>
     </div>
   </section>
 
@@ -308,16 +306,6 @@ html[data-theme="light"] .tips{
     <button class="view-btn" type="button" onclick="switchView('AGENDA',this)"><i class="ti ti-clipboard-list"></i>リスト</button>
   </nav>
 
-  <div class="legend" aria-label="カレンダー分類">
-    <span><i class="dot meeting"></i>全体</span>
-    <span><i class="dot branch"></i>支部</span>
-    <span><i class="dot training"></i>講習</span>
-    <span><i class="dot deadline"></i>締切</span>
-    <span><i class="dot consult"></i>相談</span>
-    <span><i class="dot event"></i>行事</span>
-    <span><i class="dot holiday"></i>祝日</span>
-  </div>
-
   <section class="calendar-shell" id="calendar-shell">
     <iframe
       id="gcal"
@@ -329,20 +317,11 @@ html[data-theme="light"] .tips{
   </section>
 
   <div class="section-label"><i class="ti ti-clipboard-list"></i>今後の予定</div>
-  <section class="agenda-shell active" id="agenda-shell">
-    <iframe
-      id="agenda"
-      class="agenda-frame"
-      title="埼玉土建 上尾伊奈支部 今後の予定"
-      frameborder="0"
-      scrolling="no">
-    </iframe>
+  <section class="agenda-shell" id="agenda-shell">
+    <div class="agenda-list" id="agenda-list">
+      <div class="agenda-empty">今後1週間の予定を読み込んでいます。</div>
+    </div>
   </section>
-
-  <div class="tips">
-    <i class="ti ti-info-circle"></i>
-    カレンダーが表示されない場合は、通信状況を確認してページを再読み込みしてください。予定の詳細は各予定をタップすると確認できます。
-  </div>
 </div>
 
 <footer>埼玉土建一般労働組合 上尾伊奈支部｜TEL 048-773-9863</footer>
@@ -351,6 +330,15 @@ html[data-theme="light"] .tips{
 <script>
 const CALENDAR_QUERY = 'height=600&wkst=1&ctz=Asia%2FTokyo&showPrint=0&showTabs=0&showCalendars=0&showTz=0&src=c2FpdGFtYWRva2VuYWdlb2luYUBnbWFpbC5jb20&src=OTIwZGY5NzEyMmJjNjJjYjg0ODUyNDI4ZjAxOTI4NTAwZDQzMGIwMGE1YWNlZjQ0OGQ2ZWI2NzlkOGNkZjFmYkBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=NTQxNjFiNDgzY2ZhYTEzZjA1NjQ4MjRmNGZhZWZiMjlkZTE0MGRiOWVkYWYxMTM1NGE3ZTdhYjFlYTg0YTliYkBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=ZTAxOGRmZTE0Njc1MGI3YzkxNTI2NzAzYTBiZDg3OTQ2NDAzYzU0YTcyZjRjY2FlOWQ1ZDNhZDdmNGJhYTA4OUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=YjA3N2RjOGQzYzRhMzI5MjZhMTdjYTdhYjU1ZmIwZDdmM2ExY2JkYTMwMDAxMmVhNmE0MDg2MWQyNmU3MjI4ZEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=ZmVkNzhiZWJhZmFkYjNjNDZkMmEwMjNhMDI1NDllNWNkYWRmMzJhZDU2ZTU0NDRmNDBhNWFjOTljM2I2OGJkOEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=amEuamFwYW5lc2Uub2ZmaWNpYWwjaG9saWRheUBncm91cC52LmNhbGVuZGFyLmdvb2dsZS5jb20&color=%23616161&color=%230b8043&color=%23d81b60&color=%23f4511e&color=%23f09300&color=%238e24aa&color=%234285f4';
 const CALENDAR_BASE = 'https://calendar.google.com/calendar/embed?' + CALENDAR_QUERY + '&mode=';
+const UPCOMING_CALENDARS = [
+  {id:'saitamadokenageoina@gmail.com', type:'branch'},
+  {id:'920df97122bc62cb84852428f01928500d430b00a5acef448d6eb679d8cdf1fb@group.calendar.google.com', type:'branch'},
+  {id:'54161b483cfaa13f0564824f4faefb29de140db9edaf11354a7e7ab1ea84a9bb@group.calendar.google.com', type:'event'},
+  {id:'e018dfe146750b7c91526703a0bd87946403c54a72f4ccae9d5d3ad7f4baa089@group.calendar.google.com', type:'consult'},
+  {id:'b077dc8d3c4a32926a17ca7ab55fb0d7f3a1cbda300012ea6a40861d26e7228d@group.calendar.google.com', type:'deadline'},
+  {id:'fed78bebafadb3c46d2a023a02549e5cdadf32ad56e5444f40a5ac99c3b68bd8@group.calendar.google.com', type:'event'},
+  {id:'ja.japanese.official#holiday@group.v.calendar.google.com', type:'holiday'}
+];
 
 function setToday(){
   const now = new Date();
@@ -364,13 +352,116 @@ function switchView(mode, btn){
   btn.classList.add('active');
   document.getElementById('gcal').src = CALENDAR_BASE + mode;
   document.getElementById('calendar-shell').style.display = mode === 'AGENDA' ? 'none' : '';
-  document.getElementById('agenda-shell').classList.add('active');
-  document.getElementById('agenda').src = CALENDAR_BASE + 'AGENDA';
+}
+
+function unfoldIcsLine(text){
+  return text.replace(/\r?\n[ \t]/g, '');
+}
+
+function parseIcsDate(value){
+  if(!value) return null;
+  if(/^\d{8}$/.test(value)){
+    return {date:new Date(`${value.slice(0,4)}-${value.slice(4,6)}-${value.slice(6,8)}T00:00:00`), allDay:true};
+  }
+  const m = value.match(/^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})Z?$/);
+  if(!m) return null;
+  const date = value.endsWith('Z')
+    ? new Date(Date.UTC(+m[1], +m[2]-1, +m[3], +m[4], +m[5], +m[6]))
+    : new Date(+m[1], +m[2]-1, +m[3], +m[4], +m[5], +m[6]);
+  return {date, allDay:false};
+}
+
+function cleanIcsText(value){
+  return String(value || '')
+    .replace(/\\n/g, ' ')
+    .replace(/\\,/g, ',')
+    .replace(/\\;/g, ';')
+    .replace(/\\\\/g, '\\')
+    .trim();
+}
+
+function parseIcs(text, type){
+  const body = unfoldIcsLine(text);
+  const blocks = body.match(/BEGIN:VEVENT[\s\S]*?END:VEVENT/g) || [];
+  return blocks.map(block => {
+    const lines = block.split(/\r?\n/);
+    const get = key => {
+      const line = lines.find(item => item.startsWith(key + ':') || item.startsWith(key + ';'));
+      return line ? line.slice(line.indexOf(':') + 1) : '';
+    };
+    const start = parseIcsDate(get('DTSTART'));
+    if(!start) return null;
+    return {
+      title:cleanIcsText(get('SUMMARY')) || '予定',
+      location:cleanIcsText(get('LOCATION')),
+      start:start.date,
+      allDay:start.allDay,
+      type
+    };
+  }).filter(Boolean);
+}
+
+function sameOrAfter(date, base){
+  const d = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  const b = new Date(base.getFullYear(), base.getMonth(), base.getDate());
+  return d >= b;
+}
+
+function formatTime(event){
+  if(event.allDay) return '終日';
+  return event.start.toLocaleTimeString('ja-JP', {hour:'2-digit', minute:'2-digit'});
+}
+
+function renderUpcoming(events){
+  const list = document.getElementById('agenda-list');
+  const week = ['日','月','火','水','木','金','土'];
+  if(!events.length){
+    list.innerHTML = '<div class="agenda-empty">今後1週間の予定はありません。</div>';
+    return;
+  }
+  list.innerHTML = events.map(event => `
+    <article class="agenda-card">
+      <div class="agenda-date">
+        <strong>${event.start.getDate()}</strong>
+        <span>${week[event.start.getDay()]}</span>
+      </div>
+      <div class="agenda-body ${event.type}">
+        <p class="agenda-title">${event.title}</p>
+        <p class="agenda-meta">${formatTime(event)}${event.location ? '　' + event.location : ''}</p>
+      </div>
+    </article>
+  `).join('');
+}
+
+async function loadUpcoming(){
+  const now = new Date();
+  const end = new Date(now);
+  end.setDate(end.getDate() + 7);
+  try{
+    const results = await Promise.allSettled(UPCOMING_CALENDARS.map(async cal => {
+      const url = `https://calendar.google.com/calendar/ical/${encodeURIComponent(cal.id)}/public/basic.ics`;
+      const text = await fetch(url).then(res => {
+        if(!res.ok) throw new Error('calendar fetch failed');
+        return res.text();
+      });
+      return parseIcs(text, cal.type);
+    }));
+    if(!results.some(result => result.status === 'fulfilled')){
+      throw new Error('all calendar fetches failed');
+    }
+    const events = results.flatMap(result => result.status === 'fulfilled' ? result.value : [])
+      .filter(event => sameOrAfter(event.start, now) && event.start < end)
+      .sort((a,b) => a.start - b.start)
+      .slice(0, 10);
+    renderUpcoming(events);
+  }catch(e){
+    document.getElementById('agenda-list').innerHTML = '<div class="agenda-empty">予定リストを読み込めませんでした。月表示または週表示でGoogleカレンダーをご確認ください。</div>';
+  }
 }
 
 setToday();
 document.getElementById('gcal').src = CALENDAR_BASE + 'MONTH';
-document.getElementById('agenda').src = CALENDAR_BASE + 'AGENDA';
+loadUpcoming();
 </script>
 <script src="assets/js/navigation.js"></script>
 </body>
