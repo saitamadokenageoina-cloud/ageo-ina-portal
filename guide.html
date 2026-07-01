@@ -191,26 +191,26 @@ html[data-theme="dark"] .stab.on{
   <div class="panel on" id="p1">
     <div class="stab-wrap">
       <button class="stab on" id="s1-1" onclick="sTab(1,1)">新規加入</button>
-      <button class="stab" id="s1-2" onclick="sTab(1,2)">家族の異動</button>
-      <button class="stab" id="s1-3" onclick="sTab(1,3)">住所・氏名変更</button>
-      <button class="stab" id="s1-4" onclick="sTab(1,4)">脱退・喪失</button>
+      <button class="stab" id="s1-2" onclick="sTab(1,2)">脱退・喪失</button>
     </div>
     <div id="p1-1" class="panel on"></div>
     <div id="p1-2" class="panel"></div>
-    <div id="p1-3" class="panel"></div>
-    <div id="p1-4" class="panel"></div>
   </div>
 
   <!-- ===== パネル2：土建国保 ===== -->
   <div class="panel" id="p2">
     <div class="stab-wrap">
-      <button class="stab on" id="s2-1" onclick="sTab(2,1)">給付を受ける</button>
+      <button class="stab on" id="s2-1" onclick="sTab(2,1)">新規加入</button>
       <button class="stab" id="s2-2" onclick="sTab(2,2)">家族の加入・脱退</button>
-      <button class="stab" id="s2-3" onclick="sTab(2,3)">証明書・再発行</button>
+      <button class="stab" id="s2-3" onclick="sTab(2,3)">氏名・住所変更</button>
+      <button class="stab" id="s2-4" onclick="sTab(2,4)">給付を受ける</button>
+      <button class="stab" id="s2-5" onclick="sTab(2,5)">証明書・再発行</button>
     </div>
     <div id="p2-1" class="panel on"></div>
     <div id="p2-2" class="panel"></div>
     <div id="p2-3" class="panel"></div>
+    <div id="p2-4" class="panel"></div>
+    <div id="p2-5" class="panel"></div>
   </div>
 
   <!-- ===== パネル3：総合共済 ===== -->
@@ -283,75 +283,78 @@ function card(d, overrideColor, badge) {
 // ===== データ =====
 // [cat, sub, icon, bg, fg, title, docs[], where, deadline, note, amount(optional), color(optional)]
 const DATA = {
-  '1-1': [ // 組合加入 > 新規加入
+  '1-1': [ // 組合加入 > 新規加入（組合のみ）
     {icon:'ti-user-plus',bg:'#E8F5EE',fg:'#1A7A4A',color:'#1A7A4A',
      title:'新規加入（組合のみ）',
      docs:['加入申込書','加入金 1,000円','翌月分の組合費'],
      where:'支部事務所（または近所の組合員経由）',deadline:'いつでも',
-     note:'建設業で働く人なら事業主・一人親方・職人を問わず誰でも加入できます。'},
-    {icon:'ti-user-plus',bg:'#E8F5EE',fg:'#1A7A4A',color:'#1A7A4A',
-     title:'新規加入（組合＋土建国保 同時）',
-     docs:['加入申込書','加入金 1,000円','翌月分の組合費','世帯全員の住民票（個人番号入り・原本）','就業形態のわかるもの（仕事の内容がわかる書類）'],
-     where:'支部事務所',deadline:'いつでも',
-     note:'組合加入と同時に土建国保にも加入できます。国保の申請は別途手続きが必要です。'},
-    {icon:'ti-building',bg:'#E8F5EE',fg:'#1A7A4A',color:'#1A7A4A',
-     title:'法人化・従業員5人以上化（適用除外申請）',
-     docs:['まずは支部事務所に要相談'],
-     where:'支部事務所',deadline:'法人化・雇用前に相談を',
-     note:'適用除外が認められた場合、総合共済から支援金5万円が給付されます。'},
+     note:'建設業で働く人なら事業主・一人親方・職人を問わず誰でも加入できます。組合加入と同時に土建国保への加入も可能です（土建国保タブ「新規加入」参照）。'},
   ],
-  '1-2': [ // 組合加入 > 家族の異動
-    {icon:'ti-baby-carriage',bg:'#FEE8F0',fg:'#9B1A4A',color:'#1A7A4A',
+  '1-2': [ // 組合加入 > 脱退・喪失
+    {icon:'ti-door-exit',bg:'#FEF0ED',fg:'#9B3A1A',color:'#9B3A1A',
+     title:'脱退・喪失',
+     docs:['まず支部事務所にご連絡ください'],
+     where:'支部事務所',deadline:'特になし',
+     note:'脱退をご希望の場合は、まず支部事務所（048-773-9863）にご連絡ください。担当者が必要な手続きをご案内します。'},
+  ],
+
+  '2-1': [ // 土建国保 > 新規加入
+    {icon:'ti-user-plus',bg:'#EDE8FE',fg:'#4A1A9B',color:'#4A1A9B',
+     title:'新規加入（組合＋土建国保 同時）',
+     docs:['加入申込書','加入金 1,000円','翌月分の組合費','世帯全員の住民票（個人番号入り・原本）','現在加入している健康保険の資格確認書等（または資格喪失証明書）','就業証明書（働き方のわかる書類）','保険料口座振替依頼書（記入・捺印）'],
+     where:'支部事務所',deadline:'いつでも',
+     note:'組合加入と土建国保加入を同時に手続きできます。現在の健康保険の脱退手続きも合わせてご相談ください。'},
+    {icon:'ti-building',bg:'#EDE8FE',fg:'#4A1A9B',color:'#4A1A9B',
+     title:'法人化・従業員5人以上化（健保適用除外申請）',
+     docs:['まずは支部事務所に要相談（手続きは法人化・雇用前に）'],
+     where:'支部事務所 → 年金事務所',deadline:'法人化・雇用開始前に必ず相談を',
+     note:'適用除外が認められると引き続き土建国保に加入できます。手続きが遅れると土建国保の資格を継続できない場合があります。適用除外が認められた場合、総合共済から支援金5万円が給付されます。'},
+  ],
+  '2-2': [ // 土建国保 > 家族の加入・脱退（旧1-2＋旧2-2統合）
+    {icon:'ti-baby-carriage',bg:'#EDE8FE',fg:'#4A1A9B',color:'#4A1A9B',
      title:'出生（子どもが生まれたとき）',
      docs:['世帯全員の住民票（個人番号入り・原本）'],
      where:'支部事務所',deadline:'原則14日以内',
-     note:'総合共済の出生祝金2万円が別途給付されます。'},
-    {icon:'ti-heart',bg:'#FEE8F0',fg:'#9B1A4A',color:'#1A7A4A',
+     note:'国保の家族加入手続きと同時に、総合共済の出生祝金（2万円）の申請もできます。'},
+    {icon:'ti-heart',bg:'#EDE8FE',fg:'#4A1A9B',color:'#4A1A9B',
      title:'結婚（配偶者を国保に追加）',
      docs:['世帯全員の住民票（個人番号入り・原本）'],
      where:'支部事務所',deadline:'原則14日以内',
-     note:'総合共済の結婚祝金3万円が別途給付されます。'},
-    {icon:'ti-briefcase',bg:'#FEE8F0',fg:'#9B1A4A',color:'#1A7A4A',
-     title:'家族が就職して社保に加入（扶養から外す）',
+     note:'社会保険に加入している配偶者は対象外です。総合共済の結婚祝金の申請も同時にできます。'},
+    {icon:'ti-user-plus',bg:'#EDE8FE',fg:'#4A1A9B',color:'#4A1A9B',
+     title:'その他の家族を国保に追加したい',
+     docs:['世帯全員の住民票（個人番号入り・原本）','社会保険を脱退した場合は資格喪失証明書'],
+     where:'支部事務所',deadline:'原則14日以内',
+     note:'健康保険・共済組合の加入者以外は全員が家族として加入します（国保法による包括加入）。'},
+    {icon:'ti-briefcase',bg:'#EDE8FE',fg:'#4A1A9B',color:'#4A1A9B',
+     title:'家族が就職して社保に加入（国保から外す）',
      docs:['就職先の健康保険証コピーまたは資格取得確認書','土建国保の資格確認書を本人から回収'],
      where:'支部事務所',deadline:'社保加入が確認できたらすぐに',
      note:'二重加入にならないよう早めの手続きをお願いします。'},
-    {icon:'ti-users-minus',bg:'#FEE8F0',fg:'#9B1A4A',color:'#1A7A4A',
+    {icon:'ti-users-minus',bg:'#EDE8FE',fg:'#4A1A9B',color:'#4A1A9B',
      title:'家族が他の世帯へ移った／亡くなった',
      docs:['資格確認書等（対象家族分）','住民票の除票（対象家族分）'],
      where:'支部事務所',deadline:'原則14日以内',
      note:'「家族減少届」として扱います。死亡の場合は国保の葬祭費申請も同時にできます。'},
   ],
-  '1-3': [ // 組合加入 > 住所・氏名変更
-    {icon:'ti-home-move',bg:'#E8F0FB',fg:'#1A5FA8',color:'#1A7A4A',
+  '2-3': [ // 土建国保 > 氏名・住所変更（旧1-3から移動）
+    {icon:'ti-home-move',bg:'#EDE8FE',fg:'#4A1A9B',color:'#4A1A9B',
      title:'住所が変わった（転居）',
-     docs:['個人番号記載の世帯全員の住民票（原本）','資格確認書等'],
-     where:'支部事務所',deadline:'できるだけ早めに',
-     note:'引越し後は必ず支部に届け出てください。'},
-    {icon:'ti-signature',bg:'#E8F0FB',fg:'#1A5FA8',color:'#1A7A4A',
+     docs:['個人番号記載の世帯全員の住民票（原本）','資格確認書等（全員分）'],
+     where:'支部事務所',deadline:'できるだけ早めに（14日以内が目安）',
+     note:'引越し後は必ず支部に届け出てください。支部管轄が変わる場合は移転手続きが必要です。'},
+    {icon:'ti-signature',bg:'#EDE8FE',fg:'#4A1A9B',color:'#4A1A9B',
      title:'氏名が変わった（結婚・離婚等）',
-     docs:['個人番号記載の世帯全員の住民票（原本）','資格確認書等'],
-     where:'支部事務所',deadline:'できるだけ早めに',note:''},
-    {icon:'ti-school',bg:'#E8F0FB',fg:'#1A5FA8',color:'#1A7A4A',
+     docs:['個人番号記載の世帯全員の住民票（原本）','資格確認書等（変更対象者分）'],
+     where:'支部事務所',deadline:'できるだけ早めに（14日以内が目安）',
+     note:'家族だけの変更の場合は該当者の資格確認書等のみで可。'},
+    {icon:'ti-school',bg:'#EDE8FE',fg:'#4A1A9B',color:'#4A1A9B',
      title:'修学のため住民票を移動したとき',
-     docs:['在学証明書','転居先の住民票'],
+     docs:['在学証明書','転居先の住民票','住所地特例届（支部事務所にあります）','20歳以上の場合：家族区分変更申請書'],
      where:'支部事務所',deadline:'できるだけ早めに',
-     note:'進学・就学で住所が変わっても国保の資格はそのまま継続できます。'},
-    {icon:'ti-replace',bg:'#FFF8E6',fg:'#7A5500',color:'#1A7A4A',
-     title:'資格確認書等の紛失・破損',
-     docs:['本人確認書類（運転免許証等）','マイナンバーがわかるもの'],
-     where:'支部事務所',deadline:'気づいたらすぐに',
-     note:'盗難・外出先での紛失は警察への届出も行ってください。'},
+     note:'進学・就学で住所が変わっても国保の資格はそのまま継続できます（住所地特例）。卒業・退学後も届出が必要です。'},
   ],
-  '1-4': [ // 組合加入 > 脱退・喪失
-    {icon:'ti-door-exit',bg:'#FEF0ED',fg:'#9B3A1A',color:'#1A7A4A',
-     title:'土建国保をやめるとき',
-     docs:['資格喪失（脱退）届','資格確認書等の返還'],
-     where:'支部事務所',deadline:'特になし',
-     note:'死亡の場合は住民票を添えて葬祭費の手続きも同時に行えます。'},
-  ],
-
-  '2-1': [ // 土建国保 > 給付を受ける
+  '2-4': [ // 土建国保 > 給付を受ける（旧2-1から移動）
     {icon:'ti-bandage',bg:'#EDE8FE',fg:'#4A1A9B',color:'#4A1A9B',
      title:'病気・ケガで4日以上連続して休んだ（傷病手当金）',
      amount:'区分・療養状況に応じて1日1,100円〜6,900円（病気180日分／ケガ等180日分まで）',
@@ -361,10 +364,10 @@ const DATA = {
     {icon:'ti-coin',bg:'#EDE8FE',fg:'#4A1A9B',color:'#4A1A9B',
      title:'一部負担払戻金制度',
      amount:'病院窓口で負担した保険診療分から、月17,500円を引いた金額が対象',
-     docs:['通常は申請不要（国保組合が自動計算し、登録口座へ払戻し）','入院：組合員本人・家族が対象','通院：組合員本人のみ対象（家族の通院は対象外）','診療月から4か月以上たっても払戻しがない場合は支部へ相談'],
+     docs:['通常は申請不要（国保組合が自動計算し、登録口座へ払戻し）','入院：組合員本人・家族が対象','通院：組合員本人のみ対象（家族の通院は対象外）'],
      where:'原則自動払戻し／確認が必要な場合は支部事務所',
      deadline:'診療月のおおむね4か月後以降に支給（毎月25日頃）',
-     note:'入院は病院ごと、通院は暦月ごと・病院/医科/歯科別に計算します。2024年6月受診分から、中学生以下の家族は対象外です。'},
+     note:'入院は病院ごと、通院は暦月ごと・病院/医科/歯科別に計算します。'},
     {icon:'ti-receipt',bg:'#EDE8FE',fg:'#4A1A9B',color:'#4A1A9B',
      title:'医療費が高額になりそう（限度額適用認定証）',
      docs:['限度額適用・標準負担額減額認定申請書','資格確認書または資格情報のお知らせ','マイナンバーと本人確認書類'],
@@ -383,24 +386,12 @@ const DATA = {
      where:'支部事務所',deadline:'2年以内',
      note:'喪主が国保未加入でも受給できます。市区町村国保（3〜5万円）より手厚い金額です。'},
   ],
-  '2-2': [ // 土建国保 > 家族の加入・脱退
-    {icon:'ti-user-plus',bg:'#EDE8FE',fg:'#4A1A9B',color:'#4A1A9B',
-     title:'家族を国保に追加したい',
-     docs:['世帯全員の住民票（個人番号入り・原本）','追加する家族の本人確認書類'],
-     where:'支部事務所',deadline:'原則14日以内',
-     note:'扶養に入れる家族は原則同一世帯が条件。別世帯の場合は要相談。'},
-    {icon:'ti-users-minus',bg:'#EDE8FE',fg:'#4A1A9B',color:'#4A1A9B',
-     title:'家族を国保から外したい（就職・独立等）',
-     docs:['資格喪失の事実がわかる書類（就職先の保険証コピー等）','土建国保の資格確認書'],
-     where:'支部事務所',deadline:'事実発生後できるだけ早く',
-     note:'二重加入の期間は保険料が二重にかかる場合があります。'},
-  ],
-  '2-3': [ // 土建国保 > 証明書・再発行
+  '2-5': [ // 土建国保 > 証明書・再発行（旧2-3）
     {icon:'ti-id',bg:'#EDE8FE',fg:'#4A1A9B',color:'#4A1A9B',
      title:'資格確認書・医療証の再発行',
      docs:['本人確認書類（運転免許証等）','マイナンバーカードまたは通知カード'],
      where:'支部事務所',deadline:'気づいたらすぐに',
-     note:'新しい資格確認書が届くまでの間の対応は支部にご相談ください。'},
+     note:'盗難・外出先での紛失は警察への届出も行ってください。新しい資格確認書が届くまでの間の対応は支部にご相談ください。'},
     {icon:'ti-file-certificate',bg:'#EDE8FE',fg:'#4A1A9B',color:'#4A1A9B',
      title:'国保の加入証明書が欲しい（在籍確認等）',
      docs:['本人確認書類'],
@@ -549,7 +540,7 @@ const DATA = {
      title:'労働保険の年度更新（毎年6〜7月）',
      docs:['確定保険料申告書（支部から送付）','前年度の賃金台帳・出勤簿','印鑑・通帳'],
      where:'支部事務所',deadline:'毎年7月10日まで',
-     note:'毎年6月頃に支部から連絡が届きます。保険料の精算・翌年度概算保険料の申告を行います。'},
+     note:'2〜3月ごろに支部から連絡が届きます。前年度の確定保険料の精算と翌年度概算保険料の申告を行います。書類を揃えて支部事務所にお越しください。'},
   ],
 };
 
@@ -611,7 +602,7 @@ function doSearch(q) {
 
   // 各サブパネルに「該当なし」メッセージを出す
   document.querySelectorAll('.no-match-msg').forEach(e => e.remove());
-  document.querySelectorAll('[id^="p"][id$="-1"],[id^="p"][id$="-2"],[id^="p"][id$="-3"],[id^="p"][id$="-4"]').forEach(panel => {
+  document.querySelectorAll('[id^="p"][id$="-1"],[id^="p"][id$="-2"],[id^="p"][id$="-3"],[id^="p"][id$="-4"],[id^="p"][id$="-5"]').forEach(panel => {
     const visible = [...panel.querySelectorAll('.gcard')].some(c => c.style.display !== 'none');
     if(!visible && panel.querySelector('.gcard')){
       const msg = document.createElement('p');
