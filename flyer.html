@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>埼玉土建 上尾伊奈支部 組合員アプリ チラシ</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.47.0/iconfont/tabler-icons.min.css">
+<style>
+:root{
+  --navy:#172638;
+  --blue:#1f74c9;
+  --blue2:#0d4d91;
+  --orange:#e8612a;
+  --yellow:#ffd166;
+  --green:#17824e;
+  --ink:#142033;
+  --muted:#4b5a6b;
+  --paper:#f6f8fb;
+  --white:#fff;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:#dfe5ee;
+  color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif;
+  line-height:1.55;
+}
+.sheet{
+  width:210mm;
+  min-height:297mm;
+  margin:0 auto;
+  background:var(--paper);
+  position:relative;
+  overflow:hidden;
+  padding:15mm 14mm 12mm;
+  box-shadow:0 18px 50px rgba(20,32,51,.25);
+}
+.sheet::before{
+  content:"";
+  position:absolute;
+  inset:0 0 auto 0;
+  height:112mm;
+  background:
+    radial-gradient(circle at 88% 14%,rgba(255,209,102,.34),transparent 24mm),
+    linear-gradient(135deg,var(--navy),var(--blue2) 58%,var(--blue));
+  z-index:0;
+}
+.sheet::after{
+  content:"";
+  position:absolute;
+  right:-24mm;
+  top:72mm;
+  width:110mm;
+  height:110mm;
+  background:rgba(232,97,42,.08);
+  border-radius:999px;
+  z-index:0;
+}
+.top,.main,.footer{position:relative;z-index:1}
+.brand{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  color:#fff;
+  margin-bottom:11mm;
+}
+.brand-name{font-size:13px;font-weight:800;letter-spacing:.03em}
+.brand-sub{font-size:10px;color:rgba(255,255,255,.78);margin-top:1mm}
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:6px 10px;
+  border-radius:999px;
+  background:rgba(255,255,255,.14);
+  border:1px solid rgba(255,255,255,.22);
+  color:#fff;
+  font-size:11px;
+  font-weight:800;
+}
+.hero{
+  display:grid;
+  grid-template-columns:1fr 51mm;
+  gap:11mm;
+  align-items:end;
+  color:#fff;
+}
+.eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  padding:6px 10px;
+  background:var(--orange);
+  border-radius:8px;
+  font-size:12px;
+  font-weight:900;
+  margin-bottom:5mm;
+}
+h1{
+  margin:0;
+  font-size:38px;
+  line-height:1.1;
+  letter-spacing:.01em;
+  font-weight:950;
+}
+h1 span{display:block;color:var(--yellow)}
+.lead{
+  margin:5mm 0 0;
+  font-size:15px;
+  font-weight:700;
+  color:rgba(255,255,255,.9);
+}
+.qr-card{
+  background:#fff;
+  border-radius:18px;
+  padding:8mm 6mm 6mm;
+  color:var(--ink);
+  box-shadow:0 20px 40px rgba(0,0,0,.24);
+  text-align:center;
+}
+.qr-title{
+  font-size:14px;
+  font-weight:950;
+  margin:0 0 4mm;
+}
+.qr-box{
+  width:38mm;
+  height:38mm;
+  margin:0 auto;
+  border-radius:10px;
+  background:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:3px solid var(--navy);
+}
+.qr-box img{width:34mm;height:34mm;display:block}
+.qr-url{
+  margin:4mm 0 0;
+  font-size:9px;
+  line-height:1.35;
+  color:var(--muted);
+  overflow-wrap:anywhere;
+}
+.main{padding-top:12mm}
+.intro{
+  display:grid;
+  grid-template-columns:1fr 52mm;
+  gap:8mm;
+  align-items:stretch;
+  margin-bottom:7mm;
+}
+.message,.contact{
+  background:#fff;
+  border-radius:18px;
+  padding:7mm;
+  box-shadow:0 8px 24px rgba(20,32,51,.08);
+}
+.message h2,.contact h2,.section-title{
+  margin:0 0 4mm;
+  font-size:18px;
+  line-height:1.25;
+  color:var(--navy);
+  font-weight:950;
+}
+.message p{
+  margin:0;
+  font-size:13px;
+  color:#243348;
+  font-weight:650;
+}
+.contact{
+  background:linear-gradient(180deg,#fff,#fff8f4);
+  border:2px solid rgba(232,97,42,.18);
+}
+.tel{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  color:var(--orange);
+  font-size:21px;
+  font-weight:950;
+  margin:3mm 0;
+}
+.address{
+  font-size:11px;
+  color:#334155;
+  font-weight:700;
+}
+.features{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:4mm;
+  margin-bottom:7mm;
+}
+.feature{
+  background:#fff;
+  border-radius:16px;
+  padding:5mm 4.5mm;
+  min-height:35mm;
+  box-shadow:0 8px 22px rgba(20,32,51,.08);
+  border-top:5px solid var(--blue);
+}
+.feature.orange{border-color:var(--orange)}
+.feature.green{border-color:var(--green)}
+.feature i{
+  width:10mm;
+  height:10mm;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#e9f3ff;
+  color:var(--blue);
+  font-size:22px;
+  margin-bottom:3mm;
+}
+.feature.orange i{background:#fff0e9;color:var(--orange)}
+.feature.green i{background:#e7f6ee;color:var(--green)}
+.feature b{
+  display:block;
+  font-size:14px;
+  color:var(--navy);
+  line-height:1.3;
+  margin-bottom:1.5mm;
+}
+.feature p{
+  margin:0;
+  font-size:11px;
+  color:#334155;
+  font-weight:650;
+  line-height:1.45;
+}
+.use-cases{
+  background:var(--navy);
+  border-radius:20px;
+  padding:7mm;
+  color:#fff;
+  margin-bottom:7mm;
+  position:relative;
+  overflow:hidden;
+}
+.use-cases::after{
+  content:"";
+  position:absolute;
+  right:-18mm;
+  bottom:-22mm;
+  width:66mm;
+  height:66mm;
+  border-radius:999px;
+  background:rgba(255,255,255,.06);
+}
+.use-cases .section-title{color:#fff;margin-bottom:5mm}
+.chips{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:3mm;
+}
+.chip{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  min-height:12mm;
+  padding:3mm;
+  border-radius:12px;
+  background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.14);
+  font-size:11px;
+  font-weight:850;
+}
+.chip i{color:var(--yellow);font-size:17px}
+.bottom{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:5mm;
+}
+.notice,.install{
+  background:#fff;
+  border-radius:18px;
+  padding:6mm;
+  box-shadow:0 8px 22px rgba(20,32,51,.08);
+}
+.notice strong,.install strong{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  font-size:15px;
+  color:var(--navy);
+  margin-bottom:3mm;
+}
+.notice p,.install ol{
+  margin:0;
+  color:#334155;
+  font-size:11px;
+  font-weight:650;
+}
+.install ol{padding-left:5mm}
+.install li{margin-bottom:1mm}
+.footer{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8mm;
+  margin-top:7mm;
+  padding-top:4mm;
+  border-top:2px solid rgba(23,38,56,.12);
+  color:#334155;
+  font-size:10px;
+  font-weight:800;
+}
+.print-button{
+  position:fixed;
+  right:18px;
+  bottom:18px;
+  z-index:10;
+  border:none;
+  background:var(--orange);
+  color:#fff;
+  border-radius:999px;
+  padding:12px 18px;
+  font-weight:900;
+  box-shadow:0 12px 28px rgba(0,0,0,.25);
+}
+@media print{
+  body{background:#fff}
+  .sheet{width:210mm;min-height:297mm;margin:0;box-shadow:none}
+  .print-button{display:none}
+  @page{size:A4;margin:0}
+}
+</style>
+</head>
+<body>
+<button class="print-button" onclick="window.print()"><i class="ti ti-printer"></i> 印刷・PDF保存</button>
+<main class="sheet">
+  <section class="top">
+    <div class="brand">
+      <div>
+        <div class="brand-name">埼玉土建一般労働組合 上尾伊奈支部</div>
+        <div class="brand-sub">〒362-0003 上尾市菅谷295 / TEL 048-773-9863</div>
+      </div>
+      <div class="badge"><i class="ti ti-device-mobile"></i> スマホで使える組合員アプリ</div>
+    </div>
+
+    <div class="hero">
+      <div>
+        <div class="eyebrow"><i class="ti ti-helmet"></i> 現場でも、家でも、すぐ確認</div>
+        <h1>組合員のための<br><span>現場・暮らしサポートアプリ</span></h1>
+        <p class="lead">熱中症、安全確認、手続き、国保・共済、講習、相談先まで。支部に相談する前の一次確認を、スマホで迷わず。</p>
+      </div>
+      <aside class="qr-card">
+        <p class="qr-title">QRからすぐ開く</p>
+        <div class="qr-box">
+          <img alt="アプリ公開URLのQRコード" src="https://api.qrserver.com/v1/create-qr-code/?size=320x320&margin=12&data=https%3A%2F%2Fsaitamadokenageoina-cloud.github.io%2Fageo-ina-portal%2F">
+        </div>
+        <p class="qr-url">https://saitamadokenageoina-cloud.github.io/ageo-ina-portal/</p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="main">
+    <div class="intro">
+      <div class="message">
+        <h2>「困った」をその場で確認できる、支部の入口です。</h2>
+        <p>建設職人・一人親方・小規模事業主・ご家族が、制度や必要書類を探しやすいようにまとめました。電話・LINE・地図・書類確認にもすぐ進めます。</p>
+      </div>
+      <div class="contact">
+        <h2>相談は支部へ</h2>
+        <div class="tel"><i class="ti ti-phone"></i>048-773-9863</div>
+        <div class="address">埼玉土建 上尾伊奈支部<br>上尾市菅谷295</div>
+      </div>
+    </div>
+
+    <div class="features">
+      <div class="feature orange">
+        <i class="ti ti-temperature-sun"></i>
+        <b>熱中症AIアラート</b>
+        <p>現在地の暑さ危険度を確認。作業中止目安と水分補給を見える化。</p>
+      </div>
+      <div class="feature">
+        <i class="ti ti-clipboard-check"></i>
+        <b>現場安全チェック</b>
+        <p>足場・脚立・工具・保護具などをカテゴリ別に点検。印刷にも対応。</p>
+      </div>
+      <div class="feature green">
+        <i class="ti ti-users-group"></i>
+        <b>DOKENギルド</b>
+        <p>人材募集、応援依頼、資材・道具、仕事相談を支部とつなぐ掲示板。</p>
+      </div>
+      <div class="feature">
+        <i class="ti ti-file-description"></i>
+        <b>手続き・必要書類</b>
+        <p>加入、国保、共済、労働保険などの対象者・持ち物を確認。</p>
+      </div>
+      <div class="feature orange">
+        <i class="ti ti-calculator"></i>
+        <b>計算ツール</b>
+        <p>労務費、国保料、退職金、給付金の目安をかんたん試算。</p>
+      </div>
+      <div class="feature green">
+        <i class="ti ti-books"></i>
+        <b>資料本棚</b>
+        <p>国保ガイド、組合パンフ、学習資料をPDF・デジタルブックで確認。</p>
+      </div>
+    </div>
+
+    <div class="use-cases">
+      <h2 class="section-title">こんな時に使えます</h2>
+      <div class="chips">
+        <div class="chip"><i class="ti ti-first-aid-kit"></i> ケガ・労災の相談前確認</div>
+        <div class="chip"><i class="ti ti-calendar-event"></i> 講習日程を確認</div>
+        <div class="chip"><i class="ti ti-file-pencil"></i> 36協定・残業確認</div>
+        <div class="chip"><i class="ti ti-id-badge-2"></i> CCUS能力評価サポート</div>
+        <div class="chip"><i class="ti ti-building-bank"></i> 建設業許可チェック</div>
+        <div class="chip"><i class="ti ti-discount-2"></i> どけんカード登録店</div>
+        <div class="chip"><i class="ti ti-heart-handshake"></i> 加入メリット診断</div>
+        <div class="chip"><i class="ti ti-brand-youtube"></i> 支部YouTube</div>
+      </div>
+    </div>
+
+    <div class="bottom">
+      <div class="notice">
+        <strong><i class="ti ti-shield-check"></i> 安心して使える支部アプリ</strong>
+        <p>制度の最終確認や申請前の相談は支部へ。アプリは「探す・調べる・相談につなぐ」ための入口として活用できます。</p>
+      </div>
+      <div class="install">
+        <strong><i class="ti ti-home-plus"></i> ホーム画面に追加できます</strong>
+        <ol>
+          <li>スマホでQRコードを読み取る</li>
+          <li>ブラウザの共有・メニューを開く</li>
+          <li>「ホーム画面に追加」を選ぶ</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <span>埼玉土建一般労働組合 上尾伊奈支部</span>
+    <span>公開URL: saitamadokenageoina-cloud.github.io/ageo-ina-portal/</span>
+  </footer>
+</main>
+</body>
+</html>
