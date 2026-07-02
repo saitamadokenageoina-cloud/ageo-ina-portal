@@ -28,7 +28,7 @@
       '<a href="tel:048-773-9863"><i class="ti ti-phone"></i><span>電話</span></a>',
       '<a href="https://lin.ee/QqbqtCy" target="_blank" rel="noopener"><i class="ti ti-brand-line"></i><span>LINE</span></a>',
       '<a href="https://www.google.com/maps/search/?api=1&query=%E4%B8%8A%E5%B0%BE%E5%B8%82%E8%8F%85%E8%B0%B7295" target="_blank" rel="noopener"><i class="ti ti-map-pin"></i><span>地図</span></a>',
-      '<a href="guide.html"><i class="ti ti-file-check"></i><span>書類</span></a>'
+      '<a href="guide.html"><i class="ti ti-file-check"></i><span>ガイド</span></a>'
     ].join('');
     document.body.appendChild(rail);
   }
