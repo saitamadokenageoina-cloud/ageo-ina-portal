@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>資料本棚｜埼玉土建 上尾伊奈支部</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.47.0/iconfont/tabler-icons.min.css">
+<link rel="stylesheet" href="common.css">
+<style>
+.search-wrap{position:relative;margin-bottom:14px;}
+.search-wrap i{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:18px;color:var(--gray400);pointer-events:none;}
+.search-input{width:100%;padding:11px 14px 11px 40px;border:1.5px solid var(--gray200);border-radius:var(--r12);font-size:14px;background:var(--white);}
+.search-input:focus{outline:none;border-color:var(--orange);}
+.filter-row{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:14px;-webkit-overflow-scrolling:touch;}
+.filter-row::-webkit-scrollbar{display:none;}
+.filter-chip{flex-shrink:0;padding:6px 14px;border-radius:99px;border:1.5px solid var(--gray200);background:var(--white);font-size:12px;font-weight:600;color:var(--gray600);cursor:pointer;transition:all .15s;}
+.filter-chip.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+.shelf{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px;}
+.book-card{background:var(--white);border-radius:var(--r16);box-shadow:var(--shadow-sm);overflow:hidden;cursor:pointer;transition:box-shadow .2s,transform .15s;position:relative;}
+.book-card:active{transform:scale(.98);}
+.book-card.hidden{display:none;}
+.book-spine{height:8px;width:100%;}
+.book-body{padding:12px 12px 10px;}
+.book-icon{font-size:28px;margin-bottom:6px;display:block;}
+.book-title{font-size:13px;font-weight:700;color:var(--navy);margin:0 0 3px;line-height:1.35;}
+.book-meta{font-size:11px;color:var(--gray400);margin:0;}
+.book-badge{position:absolute;top:16px;right:8px;background:var(--orange);color:#fff;font-size:10px;font-weight:700;padding:2px 6px;border-radius:99px;}
+.book-footer{display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding-top:8px;border-top:1px solid var(--gray100);}
+.book-size{font-size:10px;color:var(--gray400);}
+.book-btn{display:flex;align-items:center;gap:4px;font-size:11px;font-weight:700;color:var(--orange);}
+.empty-state{text-align:center;padding:48px 20px;color:var(--gray400);}
+.empty-state i{font-size:48px;display:block;margin-bottom:12px;}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:500;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .2s;}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal{background:var(--white);border-radius:var(--r24) var(--r24) 0 0;padding:24px 20px 32px;width:100%;max-width:640px;margin:0 auto;transform:translateY(40px);transition:transform .25s cubic-bezier(.4,0,.2,1);}
+.modal-overlay.open .modal{transform:translateY(0);}
+.modal-handle{width:40px;height:4px;background:var(--gray200);border-radius:99px;margin:0 auto 20px;}
+.modal-spine{height:8px;border-radius:var(--r8);margin-bottom:16px;}
+.modal-title{font-size:18px;font-weight:800;color:var(--navy);margin:0 0 4px;}
+.modal-sub{font-size:13px;color:var(--gray400);margin:0 0 16px;}
+.modal-desc{font-size:14px;color:var(--gray600);line-height:1.7;margin:0 0 20px;}
+.modal-actions{display:flex;flex-direction:column;gap:8px;}
+.modal-btn-primary{display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;border-radius:var(--r12);background:var(--orange);color:#fff;font-size:15px;font-weight:700;border:none;cursor:pointer;text-decoration:none;}
+.modal-btn-sec{display:flex;align-items:center;justify-content:center;gap:8px;padding:13px;border-radius:var(--r12);background:var(--gray100);color:var(--navy);font-size:14px;font-weight:600;border:none;cursor:pointer;}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="hdr">
+  <button class="hdr-back" onclick="location.href='index.html'">
+    <i class="ti ti-arrow-left"></i>ホーム
+  </button>
+  <div style="text-align:right;">
+    <p class="hdr-org" style="margin:0;">埼玉土建 上尾伊奈支部</p>
+    <p class="hdr-title" style="margin:0;font-size:14px;">📚 資料本棚</p>
+  </div>
+</header>
+<div class="content">
+  <div class="search-wrap">
+    <i class="ti ti-search"></i>
+    <input type="text" class="search-input" id="search-input" placeholder="資料名・キーワードで検索…" oninput="filterBooks()">
+  </div>
+  <div class="filter-row">
+    <button class="filter-chip active" onclick="setFilter('all',this)">すべて</button>
+    <button class="filter-chip" onclick="setFilter('kyosai',this)">総合共済</button>
+    <button class="filter-chip" onclick="setFilter('kokuho',this)">土建国保</button>
+    <button class="filter-chip" onclick="setFilter('roudou',this)">労働・安全</button>
+    <button class="filter-chip" onclick="setFilter('ccus',this)">CCUS・資格</button>
+    <button class="filter-chip" onclick="setFilter('jimu',this)">事務・財政</button>
+  </div>
+  <div class="shelf" id="shelf">
+    <div class="book-card" data-cat="kyosai" data-id="001" onclick="openBook('001')">
+      <div class="book-spine" style="background:linear-gradient(90deg,#7C3AED,#A855F7);"></div>
+      <div class="book-body">
+        <span class="book-icon">📋</span>
+        <p class="book-title">総合共済制度一覧表</p>
+        <p class="book-meta">2026年6月1日現在</p>
+        <div class="book-footer"><span class="book-size">PDF</span><span class="book-btn"><i class="ti ti-eye" style="font-size:14px;"></i>開く</span></div>
+      </div>
+      <span class="book-badge">NEW</span>
+    </div>
+    <div class="book-card" data-cat="kyosai" data-id="002" onclick="openBook('002')">
+      <div class="book-spine" style="background:linear-gradient(90deg,#1A7A4A,#2EA868);"></div>
+      <div class="book-body">
+        <span class="book-icon">📄</span>
+        <p class="book-title">給付に必要な書類</p>
+        <p class="book-meta">2026年度版</p>
+        <div class="book-footer"><span class="book-size">PDF</span><span class="book-btn"><i class="ti ti-eye" style="font-size:14px;"></i>開く</span></div>
+      </div>
+      <span class="book-badge">NEW</span>
+    </div>
+    <div class="book-card" data-cat="kyosai" data-id="003" onclick="openBook('003')">
+      <div class="book-spine" style="background:linear-gradient(90deg,#C04E1E,#E8612A);"></div>
+      <div class="book-body">
+        <span class="book-icon">🏆</span>
+        <p class="book-title">資格取得祝金プレミアム</p>
+        <p class="book-meta">2026年4月現在</p>
+        <div class="book-footer"><span class="book-size">PDF</span><span class="book-btn"><i class="ti ti-eye" style="font-size:14px;"></i>開く</span></div>
+      </div>
+      <span class="book-badge">NEW</span>
+    </div>
+    <div class="book-card" data-cat="ccus" data-id="004" onclick="openBook('004')">
+      <div class="book-spine" style="background:linear-gradient(90deg,#1A5FA8,#2E82D4);"></div>
+      <div class="book-body">
+        <span class="book-icon">🎓</span>
+        <p class="book-title">全建総連 資格取得報奨金制度</p>
+        <p class="book-meta">2026年4月現在</p>
+        <div class="book-footer"><span class="book-size">PDF</span><span class="book-btn"><i class="ti ti-eye" style="font-size:14px;"></i>開く</span></div>
+      </div>
+      <span class="book-badge">NEW</span>
+    </div>
+    <div class="book-card" data-cat="kokuho" data-id="005" onclick="openBook('005')">
+      <div class="book-spine" style="background:linear-gradient(90deg,#B07800,#E8A800);"></div>
+      <div class="book-body">
+        <span class="book-icon">🏥</span>
+        <p class="book-title">埼玉土建 国保ガイド</p>
+        <p class="book-meta">2026年3月現在</p>
+        <div class="book-footer"><span class="book-size">PDF</span><span class="book-btn"><i class="ti ti-eye" style="font-size:14px;"></i>開く</span></div>
+      </div>
+      <span class="book-badge">NEW</span>
+    </div>
+  </div>
+  <div class="empty-state" id="empty-state" style="display:none;">
+    <i class="ti ti-search"></i>
+    <p style="font-size:16px;font-weight:700;margin:0 0 4px;">見つかりませんでした</p>
+    <p style="font-size:13px;margin:0;">別のキーワードで検索してみてください</p>
+  </div>
+  <div style="background:var(--navy);border-radius:var(--r16);padding:16px 18px;margin-top:8px;">
+    <p style="font-size:14px;font-weight:700;color:#fff;margin:0 0 6px;display:flex;align-items:center;gap:8px;">
+      <i class="ti ti-plus" style="color:var(--orange);"></i>資料を追加するには
+    </p>
+    <p style="font-size:12px;color:rgba(255,255,255,.65);margin:0 0 10px;line-height:1.7;">
+      PDFを <code style="background:rgba(255,255,255,.1);padding:2px 6px;border-radius:4px;">docs/</code> フォルダに追加し、book-cardリストに1行追加するだけで拡充できます。
+    </p>
+    <a href="tel:048-773-9863" style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);border-radius:var(--r8);padding:10px 14px;color:rgba(255,255,255,.8);font-size:13px;font-weight:600;">
+      <i class="ti ti-phone"></i>追加依頼は支部まで
+    </a>
+  </div>
+</div>
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-spine" id="modal-spine"></div>
+    <p class="modal-title" id="modal-title"></p>
+    <p class="modal-sub" id="modal-sub"></p>
+    <p class="modal-desc" id="modal-desc"></p>
+    <div class="modal-actions">
+      <a class="modal-btn-primary" id="modal-open-btn" href="#" target="_blank" rel="noopener">
+        <i class="ti ti-external-link"></i>PDFを開く
+      </a>
+      <button class="modal-btn-sec" onclick="closeModal()"><i class="ti ti-x"></i>閉じる</button>
+    </div>
+  </div>
+</div>
+<footer>埼玉土建一般労働組合 上尾伊奈支部｜TEL 048-773-9863</footer>
+</div>
+<script>
+const BOOKS = {
+  '001':{title:'総合共済制度一覧表',sub:'2026年6月1日現在 / 共済制度',desc:'傷病見舞金・慶弔見舞金・資格取得祝金など、総合共済制度の給付額・条件を一覧表形式でまとめた資料です。',file:'docs/2026-001_総合共済制度一覧表.pdf',spine:'linear-gradient(90deg,#7C3AED,#A855F7)'},
+  '002':{title:'給付に必要な書類',sub:'2026年度版 / 共済制度',desc:'各種給付申請に必要な書類を事由別にまとめた一覧です。2026年6月1日以降の制度変更も反映済み。',file:'docs/2026-002_給付に必要な書類.pdf',spine:'linear-gradient(90deg,#1A7A4A,#2EA868)'},
+  '003':{title:'資格取得祝金プレミアム',sub:'2026年4月現在 / 共済制度・資格',desc:'埼玉土建技術研修センター主催の各種講習（特別教育・技能講習・予防教育・作業主任者講習）の受講料給付について詳細をまとめた資料です。',file:'docs/2026-003_資格取得祝金プレミアム.pdf',spine:'linear-gradient(90deg,#C04E1E,#E8612A)'},
+  '004':{title:'全建総連 資格取得報奨金制度',sub:'2026年4月現在 / CCUS・資格',desc:'全建総連の資格取得報奨金制度の対象資格（区分1：10,000円、区分2：5,000円）、申請方法・給付スケジュールを詳しく解説。',file:'docs/2026-007_全建総連_資格取得報奨金制度.pdf',spine:'linear-gradient(90deg,#1A5FA8,#2E82D4)'},
+  '005':{title:'埼玉土建 国保ガイド 2026',sub:'2026年3月現在 / 土建国保',desc:'埼玉土建国民健康保険組合の制度・手続き・給付金・健診事業をまとめた総合ガイドです。保険料表・高額療養費・傷病手当金など全制度を網羅。',file:'docs/2026_国保ガイド.pdf',spine:'linear-gradient(90deg,#B07800,#E8A800)'},
+};
+let currentFilter='all';
+function setFilter(cat,el){
+  currentFilter=cat;
+  document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  filterBooks();
+}
+function filterBooks(){
+  const q=document.getElementById('search-input').value.toLowerCase();
+  let visible=0;
+  document.querySelectorAll('.book-card').forEach(card=>{
+    const b=BOOKS[card.dataset.id];
+    const matchCat=currentFilter==='all'||card.dataset.cat===currentFilter;
+    const matchQ=!q||b.title.toLowerCase().includes(q)||(b.desc||'').toLowerCase().includes(q)||(b.sub||'').toLowerCase().includes(q);
+    const show=matchCat&&matchQ;
+    card.classList.toggle('hidden',!show);
+    if(show)visible++;
+  });
+  document.getElementById('empty-state').style.display=visible===0?'block':'none';
+}
+function openBook(id){
+  const b=BOOKS[id];if(!b)return;
+  document.getElementById('modal-spine').style.background=b.spine;
+  document.getElementById('modal-title').textContent=b.title;
+  document.getElementById('modal-sub').textContent=b.sub;
+  document.getElementById('modal-desc').textContent=b.desc;
+  document.getElementById('modal-open-btn').href=b.file;
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeModal(e){
+  if(e&&e.target!==document.getElementById('modal-overlay'))return;
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+</script>
+<script src="assets/js/navigation.js"></script>
+</body>
+</html>

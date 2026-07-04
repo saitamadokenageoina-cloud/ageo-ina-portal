@@ -3,253 +3,459 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>ワンタップ共済申請｜埼玉土建 上尾伊奈支部</title>
+<title>総合共済制度｜埼玉土建 上尾伊奈支部</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.47.0/iconfont/tabler-icons.min.css">
 <link rel="stylesheet" href="common.css">
 <style>
-.step-row{display:flex;gap:12px;align-items:flex-start;margin-bottom:16px;}
-.step-num{
-  width:32px;height:32px;border-radius:50%;
-  background:var(--orange);color:var(--white);
-  font-size:15px;font-weight:700;
-  display:flex;align-items:center;justify-content:center;flex-shrink:0;
-}
-.step-body h3{font-size:15px;font-weight:700;color:var(--navy);margin:0 0 3px;}
-.step-body p{font-size:13px;color:var(--gray600);margin:0;}
-.upload-zone{
-  border:2.5px dashed var(--gray200);border-radius:var(--r16);
-  padding:32px 20px;text-align:center;cursor:pointer;
-  transition:all .2s;position:relative;overflow:hidden;margin-bottom:12px;
-}
-.upload-zone:hover{border-color:var(--orange);background:var(--orange-lt);}
-.upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;}
-.upload-zone i{font-size:40px;color:var(--gray200);display:block;margin-bottom:8px;}
-.upload-zone p{font-size:14px;color:var(--gray400);margin:0;}
-.preview-box{
-  background:var(--gray50);border-radius:var(--r12);padding:16px;
-  margin-bottom:12px;display:none;
-}
-.draft-box{
-  background:var(--navy);border-radius:var(--r16);padding:20px;color:var(--white);
-  margin-bottom:12px;display:none;
-}
-.draft-title{font-size:16px;font-weight:700;margin:0 0 14px;display:flex;align-items:center;gap:8px;}
-.draft-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.1);font-size:14px;}
-.draft-row:last-child{border:none;}
-.draft-key{color:rgba(255,255,255,.6);}
-.draft-val{font-weight:600;}
-.kyosai-type{
-  display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;
-}
-.kyosai-chip{
-  padding:8px 14px;border-radius:99px;border:2px solid var(--gray200);
-  font-size:13px;font-weight:600;color:var(--gray600);cursor:pointer;
-  transition:all .15s;background:var(--white);
-}
-.kyosai-chip.selected{background:var(--orange);color:var(--white);border-color:var(--orange);}
+.tab-sticky{position:sticky;top:56px;z-index:100;background:var(--gray50);padding:10px 18px;border-bottom:1px solid var(--gray100);}
+.tab-row{display:flex;gap:4px;background:var(--gray100);border-radius:var(--r12);padding:4px;}
+.t-btn{flex:1;border:none;border-radius:var(--r8);font-size:12px;font-weight:600;padding:8px 2px;color:var(--gray600);background:none;cursor:pointer;transition:all .15s;}
+.t-btn.active{background:var(--white);color:var(--navy);box-shadow:var(--shadow-sm);}
+.kyufu-card{background:var(--white);border-radius:var(--r16);box-shadow:var(--shadow-sm);overflow:hidden;margin-bottom:10px;}
+.kyufu-card-hdr{padding:12px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;gap:10px;}
+.kyufu-card-hdr-left{display:flex;align-items:center;gap:10px;flex:1;}
+.kyufu-card-icon{width:38px;height:38px;border-radius:var(--r8);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.kyufu-card-icon i{font-size:20px;color:#fff;}
+.kyufu-card-title{font-size:14px;font-weight:700;color:var(--navy);margin:0 0 1px;}
+.kyufu-card-sub{font-size:11px;color:var(--gray400);margin:0;}
+.kyufu-card-badge{font-size:13px;font-weight:800;color:var(--orange);white-space:nowrap;flex-shrink:0;}
+.kyufu-card-arrow{font-size:18px;color:var(--gray200);transition:transform .2s;flex-shrink:0;}
+.kyufu-card-arrow.open{transform:rotate(180deg);}
+.kyufu-card-body{display:none;border-top:1px solid var(--gray100);padding:14px 16px;}
+.kyufu-card-body.open{display:block;}
+.amt-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px;}
+.amt-box{background:var(--gray50);border-radius:var(--r8);padding:10px 8px;text-align:center;border:1.5px solid var(--gray100);}
+.amt-box.hl{border-color:var(--orange);background:var(--orange-lt);}
+.amt-label{font-size:10px;font-weight:700;color:var(--gray400);margin:0 0 4px;}
+.amt-val{font-size:15px;font-weight:800;color:var(--navy);margin:0;}
+.amt-box.hl .amt-val{color:var(--orange);}
+.amt-unit{font-size:11px;font-weight:400;}
+.docs-list{display:flex;flex-direction:column;gap:6px;margin-top:10px;}
+.docs-item{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--gray600);line-height:1.5;}
+.docs-item i{font-size:16px;color:var(--orange);flex-shrink:0;margin-top:1px;}
+.note-box{background:var(--yellow-lt);border-radius:var(--r8);padding:10px 12px;font-size:12px;color:var(--gray600);margin-top:8px;display:flex;gap:8px;align-items:flex-start;}
+.note-box i{color:var(--yellow);font-size:16px;flex-shrink:0;margin-top:1px;}
+.shikaku-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:99px;font-size:11px;font-weight:700;margin:2px 3px 2px 0;}
+.sb-p{background:linear-gradient(135deg,#7C3AED,#A855F7);color:#fff;}
+.sb-s{background:linear-gradient(135deg,#1A5FA8,#2E82D4);color:#fff;}
+.sb-c{background:linear-gradient(135deg,#1A7A4A,#2EA868);color:#fff;}
+.shikaku-list{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;}
+.shikaku-tag{padding:5px 12px;border-radius:99px;font-size:12px;font-weight:600;border:1.5px solid transparent;}
+.shikaku-tag.p{background:rgba(168,85,247,.1);color:#7C3AED;border-color:rgba(168,85,247,.2);}
+.shikaku-tag.s{background:var(--blue-lt);color:var(--blue);border-color:rgba(26,95,168,.2);}
+.shikaku-tag.c{background:var(--green-lt);color:var(--green);border-color:rgba(26,122,74,.2);}
+.result-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--gray100);font-size:13px;}
+.result-row:last-child{border-bottom:none;}
+.result-label{color:var(--gray600);}
+.result-val{font-weight:700;color:var(--navy);}
+.tab-sec{display:none;}
+.tab-sec.active{display:block;}
 </style>
 </head>
 <body>
 <div class="app">
 <header class="hdr">
-  <button class="hdr-back" onclick="goBack()">
-    <i class="ti ti-arrow-left"></i>戻る
+  <button class="hdr-back" onclick="location.href='index.html'">
+    <i class="ti ti-arrow-left"></i>ホーム
   </button>
   <div style="text-align:right;">
-    <p class="hdr-org" style="margin:0;">AI搭載</p>
-    <p class="hdr-title" style="margin:0;font-size:14px;">ワンタップ共済申請</p>
+    <p class="hdr-org" style="margin:0;">埼玉土建 上尾伊奈支部</p>
+    <p class="hdr-title" style="margin:0;font-size:14px;">総合共済制度</p>
   </div>
 </header>
 
-<div class="content">
-  <!-- Hero -->
-  <div style="background:linear-gradient(135deg,#5B21B6,#7B3FC4);border-radius:16px;padding:18px 20px;margin-bottom:14px;display:flex;align-items:center;gap:16px;">
-    <svg viewBox="0 0 70 70" width="60" height="60" style="flex-shrink:0;">
-      <!-- スマホ -->
-      <rect x="22" y="6" width="26" height="44" rx="6" fill="rgba(255,255,255,.2)"/>
-      <rect x="25" y="13" width="20" height="26" rx="2" fill="rgba(255,255,255,.15)"/>
-      <!-- カメラレンズ -->
-      <circle cx="35" cy="26" r="8" fill="rgba(255,255,255,.3)"/>
-      <circle cx="35" cy="26" r="5" fill="rgba(255,255,255,.5)"/>
-      <circle cx="35" cy="26" r="2.5" fill="rgba(255,255,255,.8)"/>
-      <rect x="28" y="14" width="14" height="4" rx="2" fill="rgba(255,255,255,.25)"/>
-      <!-- 書類 -->
-      <rect x="6" y="30" width="26" height="32" rx="4" fill="rgba(255,255,255,.18)"/>
-      <line x1="10" y1="38" x2="28" y2="38" stroke="rgba(255,255,255,.4)" stroke-width="1.5" stroke-linecap="round"/>
-      <line x1="10" y1="44" x2="24" y2="44" stroke="rgba(255,255,255,.35)" stroke-width="1.5" stroke-linecap="round"/>
-      <line x1="10" y1="50" x2="26" y2="50" stroke="rgba(255,255,255,.3)" stroke-width="1.5" stroke-linecap="round"/>
-      <!-- チェック -->
-      <circle cx="56" cy="56" r="11" fill="rgba(100,220,130,.75)"/>
-      <polyline points="50,56 55,61 63,50" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-      <!-- AI -->
-      <text x="52" y="18" font-size="10" fill="rgba(255,255,255,.5)" font-weight="bold">AI</text>
-      <text x="51" y="28" font-size="8" fill="rgba(255,255,255,.4)">✨</text>
-    </svg>
-    <div>
-      <p style="font-size:18px;font-weight:800;color:#fff;margin:0 0 3px;">ワンタップ共済申請</p>
-      <p style="font-size:13px;color:rgba(255,255,255,.7);margin:0;">撮るだけでAIが申請書を自動作成</p>
-    </div>
+<div class="tab-sticky">
+  <div class="tab-row">
+    <button class="t-btn active" id="t-shobyou" onclick="switchTab('shobyou')">傷病見舞金</button>
+    <button class="t-btn" id="t-keijo" onclick="switchTab('keijo')">慶弔・災害</button>
+    <button class="t-btn" id="t-shikaku" onclick="switchTab('shikaku')">資格取得</button>
+    <button class="t-btn" id="t-docs" onclick="switchTab('docs')">必要書類</button>
   </div>
-  <div class="alert alert-info" style="margin-bottom:16px;">
-    <i class="ti ti-sparkles"></i>
-    <span>AIが書類を自動解析して申請書の下書きを作成します。最終的な申請は支部への提出が必要です。</span>
+</div>
+
+<div class="content" style="padding-top:8px;">
+
+<!-- ①傷病見舞金 -->
+<div class="tab-sec active" id="sec-shobyou">
+  <div class="alert alert-info" style="margin-bottom:12px;">
+    <i class="ti ti-info-circle"></i>
+    <span>連続4日以上仕事ができなかったとき、1日目から給付対象。医師の労務不能証明が必要。</span>
   </div>
 
-  <a href="shiryo.html" class="btn-secondary" style="margin-bottom:12px;">
-    <i class="ti ti-books"></i>共済資料・申請書類の本棚を開く
-  </a>
-
-  <!-- ステップ説明 -->
-  <div class="card">
-    <p class="sec-label">かんたん3ステップ</p>
-    <div class="step-row">
-      <div class="step-num">1</div>
-      <div class="step-body"><h3>申請種別を選ぶ</h3><p>病気見舞金・ケガ見舞金など当てはまるものを選択</p></div>
+  <div class="kyufu-card">
+    <div class="kyufu-card-hdr" onclick="toggle('byo')">
+      <div class="kyufu-card-hdr-left">
+        <div class="kyufu-card-icon" style="background:linear-gradient(135deg,#1A5FA8,#2E82D4);"><i class="ti ti-pill"></i></div>
+        <div><p class="kyufu-card-title">病気見舞金</p><p class="kyufu-card-sub">入院・通院・自宅療養</p></div>
+      </div>
+      <span class="kyufu-card-badge">最大180日</span>
+      <i class="ti ti-chevron-down kyufu-card-arrow" id="arr-byo"></i>
     </div>
-    <div class="step-row">
-      <div class="step-num">2</div>
-      <div class="step-body"><h3>書類を撮影・アップロード</h3><p>領収書・診断書・診療明細書など</p></div>
-    </div>
-    <div class="step-row" style="margin-bottom:0;">
-      <div class="step-num">3</div>
-      <div class="step-body"><h3>AIが下書きを作成 → 支部に提出</h3><p>内容を確認して支部事務所にお持ちください</p></div>
+    <div class="kyufu-card-body" id="body-byo">
+      <div class="amt-grid">
+        <div class="amt-box hl"><p class="amt-label">A型 入院</p><p class="amt-val">5,000<span class="amt-unit">円/日</span></p></div>
+        <div class="amt-box"><p class="amt-label">B型 入院</p><p class="amt-val">2,500<span class="amt-unit">円/日</span></p></div>
+        <div class="amt-box"><p class="amt-label">C型・共済なし</p><p class="amt-val" style="font-size:11px;">入院のみ<br>4〜7日→1万<br>8〜14日→2万<br>15日以上→3万</p></div>
+      </div>
+      <div class="amt-grid" style="grid-template-columns:1fr 1fr;">
+        <div class="amt-box"><p class="amt-label">A型 通院/自宅</p><p class="amt-val">2,000<span class="amt-unit">円/日</span></p></div>
+        <div class="amt-box"><p class="amt-label">B型 通院/自宅</p><p class="amt-val">1,000<span class="amt-unit">円/日</span></p></div>
+      </div>
+      <div class="note-box"><i class="ti ti-clock"></i>残日数が10日未満になった時点から5年後に60日付加（最高180日）。C型は150日が上限。</div>
     </div>
   </div>
 
-  <!-- STEP1 -->
-  <div class="card">
-    <p class="sec-label">STEP 1 申請種別を選択</p>
-    <div class="kyosai-type" id="chips">
-      <button class="kyosai-chip" onclick="selectChip(this,'病気見舞金')">病気見舞金</button>
-      <button class="kyosai-chip" onclick="selectChip(this,'ケガ・特定傷病見舞金')">ケガ・特定傷病</button>
-      <button class="kyosai-chip" onclick="selectChip(this,'非私傷病見舞金')">非私傷病</button>
-      <button class="kyosai-chip" onclick="selectChip(this,'死亡弔慰金')">死亡弔慰金</button>
-      <button class="kyosai-chip" onclick="selectChip(this,'障害見舞金')">障害見舞金</button>
-      <button class="kyosai-chip" onclick="selectChip(this,'慶弔・祝金')">慶弔・祝金</button>
+  <div class="kyufu-card">
+    <div class="kyufu-card-hdr" onclick="toggle('kega')">
+      <div class="kyufu-card-hdr-left">
+        <div class="kyufu-card-icon" style="background:linear-gradient(135deg,#C04E1E,#E8612A);"><i class="ti ti-bandage"></i></div>
+        <div><p class="kyufu-card-title">ケガ・特定傷病見舞金</p><p class="kyufu-card-sub">頚椎・関節等の疾病も含む</p></div>
+      </div>
+      <span class="kyufu-card-badge">最大180日</span>
+      <i class="ti ti-chevron-down kyufu-card-arrow" id="arr-kega"></i>
+    </div>
+    <div class="kyufu-card-body" id="body-kega">
+      <div class="amt-grid">
+        <div class="amt-box hl"><p class="amt-label">A型 入院</p><p class="amt-val">2,000<span class="amt-unit">円/日</span></p></div>
+        <div class="amt-box"><p class="amt-label">B型 入院</p><p class="amt-val">1,000<span class="amt-unit">円/日</span></p></div>
+        <div class="amt-box"><p class="amt-label">C型・共済なし</p><p class="amt-val" style="font-size:11px;">入院のみ<br>4〜14日→1万<br>15日以上→2万</p></div>
+      </div>
+      <div class="amt-grid" style="grid-template-columns:1fr 1fr;">
+        <div class="amt-box"><p class="amt-label">A型 実通院</p><p class="amt-val">1,000<span class="amt-unit">円/日</span></p></div>
+        <div class="amt-box"><p class="amt-label">B型 実通院</p><p class="amt-val">1,000<span class="amt-unit">円/日</span></p></div>
+      </div>
+      <div class="note-box"><i class="ti ti-info-circle"></i>固定器具装着期間は実通院日として扱う。接骨院・整骨院・鍼灸院は医師の指示がある場合のみ。</div>
     </div>
   </div>
 
-  <!-- STEP2 -->
-  <div class="card">
-    <p class="sec-label">STEP 2 書類をアップロード</p>
-    <div class="upload-zone" onclick="document.getElementById('file-input').click()">
-      <input type="file" id="file-input" accept="image/*" capture="environment" onchange="previewFile(event)">
-      <div style="position:relative;width:70px;height:70px;flex-shrink:0;">
-          <svg viewBox="0 0 70 70" width="70" height="70">
-            <!-- スマホ -->
-            <rect x="20" y="8" width="30" height="50" rx="6" fill="rgba(255,255,255,.2)"/>
-            <rect x="23" y="16" width="24" height="28" rx="2" fill="rgba(255,255,255,.15)"/>
-            <!-- カメラ -->
-            <circle cx="35" cy="30" r="9" fill="rgba(255,255,255,.3)"/>
-            <circle cx="35" cy="30" r="5" fill="rgba(255,255,255,.5)"/>
-            <circle cx="35" cy="30" r="2.5" fill="rgba(255,255,255,.8)"/>
-            <rect x="28" y="19" width="14" height="5" rx="2" fill="rgba(255,255,255,.25)"/>
-            <!-- チェック -->
-            <circle cx="54" cy="52" r="10" fill="rgba(100,220,130,.8)"/>
-            <polyline points="48,52 53,57 61,46" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-            <!-- AI -->
-            <text x="10" y="20" font-size="9" fill="rgba(255,255,255,.5)" font-weight="bold">AI</text>
-            <text x="9" y="29" font-size="8" fill="rgba(255,255,255,.35)">✨</text>
-          </svg>
-        </div>
-      <p>タップしてカメラで撮影<br>または写真を選択</p>
+  <div class="kyufu-card">
+    <div class="kyufu-card-hdr" onclick="toggle('hihi')">
+      <div class="kyufu-card-hdr-left">
+        <div class="kyufu-card-icon" style="background:linear-gradient(135deg,#6B21A8,#A855F7);"><i class="ti ti-virus"></i></div>
+        <div><p class="kyufu-card-title">非私傷病見舞金</p><p class="kyufu-card-sub">組合指定感染症・業務上傷病</p></div>
+      </div>
+      <span class="kyufu-card-badge" style="color:#A855F7;">最大150日</span>
+      <i class="ti ti-chevron-down kyufu-card-arrow" id="arr-hihi"></i>
     </div>
-    <div class="preview-box" id="preview-box">
-      <p style="font-size:13px;font-weight:600;color:var(--green);margin:0 0 8px;">
-        <i class="ti ti-check" style="font-size:15px;vertical-align:-2px;margin-right:4px;"></i>書類を読み込みました
-      </p>
-      <img id="preview-img" style="border-radius:var(--r8);width:100%;">
+    <div class="kyufu-card-body" id="body-hihi">
+      <div class="amt-grid" style="grid-template-columns:1fr 1fr;">
+        <div class="amt-box hl"><p class="amt-label">組合指定感染症</p><p class="amt-val">5,000<span class="amt-unit">円/日</span></p></div>
+        <div class="amt-box"><p class="amt-label">その他</p><p class="amt-val">3,000<span class="amt-unit">円/日</span></p></div>
+      </div>
+      <div class="amt-grid" style="grid-template-columns:1fr 1fr;margin-top:6px;">
+        <div class="amt-box"><p class="amt-label">A型 通院</p><p class="amt-val">2,000<span class="amt-unit">円</span></p></div>
+        <div class="amt-box"><p class="amt-label">B型 通院</p><p class="amt-val">1,000<span class="amt-unit">円</span></p></div>
+      </div>
+      <div class="note-box"><i class="ti ti-clock"></i>C型は入院期間のみ対象。最高150日（残日数10日未満から5年後30日付加）。</div>
     </div>
-
-    <button class="btn-primary" onclick="analyzeDocs()" id="analyze-btn" style="display:none;">
-      <i class="ti ti-sparkles"></i>AIで解析・下書きを作成する
-    </button>
   </div>
 
-  <!-- STEP3 結果 -->
-  <div class="draft-box" id="draft-box">
-    <p class="draft-title"><i class="ti ti-file-check" style="font-size:20px;color:var(--orange);"></i>申請書 下書き（AIが作成）</p>
-    <div class="draft-row"><span class="draft-key">申請種別</span><span class="draft-val" id="d-type">—</span></div>
-    <div class="draft-row"><span class="draft-key">氏名</span><span class="draft-val">（要記入）</span></div>
-    <div class="draft-row"><span class="draft-key">組合員番号</span><span class="draft-val">（要記入）</span></div>
-    <div class="draft-row"><span class="draft-key">診療機関</span><span class="draft-val" id="d-hospital">（書類から読取中）</span></div>
-    <div class="draft-row"><span class="draft-key">受診日</span><span class="draft-val" id="d-date">（書類から読取中）</span></div>
-    <div class="draft-row"><span class="draft-key">診断名</span><span class="draft-val" id="d-diag">（書類から読取中）</span></div>
-    <div class="draft-row"><span class="draft-key">医療費（本人負担）</span><span class="draft-val" id="d-fee">（書類から読取中）</span></div>
-    <div class="draft-row"><span class="draft-key">振込先口座</span><span class="draft-val">（要記入）</span></div>
+  <div class="kyufu-card">
+    <div class="kyufu-card-hdr" onclick="toggle('soshiki')">
+      <div class="kyufu-card-hdr-left">
+        <div class="kyufu-card-icon" style="background:linear-gradient(135deg,#B07800,#E8A800);"><i class="ti ti-shield-check"></i></div>
+        <div><p class="kyufu-card-title">組合活動中の事故見舞金</p><p class="kyufu-card-sub">組合員本人・家族が対象</p></div>
+      </div>
+      <i class="ti ti-chevron-down kyufu-card-arrow" id="arr-soshiki"></i>
+    </div>
+    <div class="kyufu-card-body" id="body-soshiki">
+      <div class="amt-grid" style="grid-template-columns:1fr 1fr;">
+        <div class="amt-box hl"><p class="amt-label">本人死亡（A型）</p><p class="amt-val" style="font-size:12px;">100万+供物</p></div>
+        <div class="amt-box"><p class="amt-label">本人死亡（C型）</p><p class="amt-val" style="font-size:12px;">200万+供物</p></div>
+      </div>
+      <div class="note-box"><i class="ti ti-info-circle"></i>共済型・共済加入の有無に関わらず、組合員ならびに同一生計の家族が対象。活動中事故（死亡）と死亡弔慰金の併給はなし。</div>
+    </div>
+  </div>
+</div>
+
+<!-- ②慶弔・災害 -->
+<div class="tab-sec" id="sec-keijo">
+  <div class="kyufu-card" style="margin-top:4px;">
+    <div class="kyufu-card-hdr" onclick="toggle('choui')">
+      <div class="kyufu-card-hdr-left">
+        <div class="kyufu-card-icon" style="background:linear-gradient(135deg,#374151,#6B7280);"><i class="ti ti-rosette"></i></div>
+        <div><p class="kyufu-card-title">死亡弔慰金</p><p class="kyufu-card-sub">組合員本人・配偶者・家族</p></div>
+      </div>
+      <span class="kyufu-card-badge">最大300万円</span>
+      <i class="ti ti-chevron-down kyufu-card-arrow" id="arr-choui"></i>
+    </div>
+    <div class="kyufu-card-body" id="body-choui">
+      <div class="amt-grid">
+        <div class="amt-box hl"><p class="amt-label">本人（A型）</p><p class="amt-val" style="font-size:12px;">300万+供物</p></div>
+        <div class="amt-box"><p class="amt-label">配偶者</p><p class="amt-val" style="font-size:12px;">50万+供物</p></div>
+        <div class="amt-box"><p class="amt-label">家族</p><p class="amt-val" style="font-size:12px;">30,000円+供物</p></div>
+      </div>
+      <div class="note-box"><i class="ti ti-info-circle"></i>申請期限は本人死亡・重度障害は3年以内、その他は1年以内。</div>
+    </div>
   </div>
 
-  <div id="next-step" style="display:none;">
-    <div class="alert alert-ok">
-      <i class="ti ti-check-circle"></i>
-      <span>下書きが完成しました。内容を確認の上、支部事務所（048-773-9863）にお越しください。<br>班審査が必要な場合は役員にご相談ください。</span>
+  <div class="kyufu-card">
+    <div class="kyufu-card-hdr" onclick="toggle('keishuku')">
+      <div class="kyufu-card-hdr-left">
+        <div class="kyufu-card-icon" style="background:linear-gradient(135deg,#1A7A4A,#2EA868);"><i class="ti ti-confetti"></i></div>
+        <div><p class="kyufu-card-title">慶祝・お祝い金</p><p class="kyufu-card-sub">結婚・出生・就学・長寿など</p></div>
+      </div>
+      <i class="ti ti-chevron-down kyufu-card-arrow" id="arr-keishuku"></i>
     </div>
-    <a href="tel:048-773-9863" class="btn-primary" style="display:flex;margin-top:8px;">
-      <i class="ti ti-phone"></i>支部に電話する
+    <div class="kyufu-card-body" id="body-keishuku">
+      <div class="result-row"><span class="result-label">🎊 結婚祝金</span><span class="result-val">50,000円</span></div>
+      <div class="result-row"><span class="result-label">👶 出生祝金</span><span class="result-val">20,000円</span></div>
+      <div class="result-row"><span class="result-label">🎒 就学祝金（小学入学）</span><span class="result-val">10,000円</span></div>
+      <div class="result-row"><span class="result-label">📚 就学祝金（中学入学）</span><span class="result-val">5,000円</span></div>
+      <div class="result-row"><span class="result-label">🎓 中学卒業祝金</span><span class="result-val">10,000円</span></div>
+      <div class="result-row"><span class="result-label">🎂 ハタチのお祝い金</span><span class="result-val">20,000円</span></div>
+      <div class="result-row"><span class="result-label">🎉 長寿祝金（77・80・83・88歳）</span><span class="result-val">10,000円</span></div>
+      <div class="result-row"><span class="result-label">💗 臓器提供見舞金</span><span class="result-val">30,000円</span></div>
+      <div class="result-row"><span class="result-label">🫁 じん肺・アスベスト申請支援金</span><span class="result-val">30,000円</span></div>
+      <div class="result-row"><span class="result-label">🏢 適用除外法人事業主支援金</span><span class="result-val">50,000円</span></div>
+      <div class="result-row"><span class="result-label">🏨 宿泊補助金（60歳以上）</span><span class="result-val">3,000円/回（年2回）</span></div>
+      <div class="note-box" style="margin-top:8px;"><i class="ti ti-heart"></i>2026年6月1日以降：同性パートナーシップ宣誓受領証のある同性パートナーは配偶者に準じて取り扱い。就学・卒業は別居の子も対象（現戸籍を追加添付）。</div>
+    </div>
+  </div>
+
+  <div class="kyufu-card">
+    <div class="kyufu-card-hdr" onclick="toggle('shogai')">
+      <div class="kyufu-card-hdr-left">
+        <div class="kyufu-card-icon" style="background:linear-gradient(135deg,#C04E1E,#E8612A);"><i class="ti ti-wheelchair"></i></div>
+        <div><p class="kyufu-card-title">重度障害・障害見舞金</p><p class="kyufu-card-sub">1〜14級が対象</p></div>
+      </div>
+      <span class="kyufu-card-badge">最大200万円</span>
+      <i class="ti ti-chevron-down kyufu-card-arrow" id="arr-shogai"></i>
+    </div>
+    <div class="kyufu-card-body" id="body-shogai">
+      <div class="amt-grid">
+        <div class="amt-box hl"><p class="amt-label">重度障害（病気）</p><p class="amt-val" style="font-size:12px;">100万円</p></div>
+        <div class="amt-box hl"><p class="amt-label">重度障害（事故）</p><p class="amt-val" style="font-size:12px;">200万円</p></div>
+        <div class="amt-box"><p class="amt-label">障害（3〜14級）</p><p class="amt-val" style="font-size:11px;">4万〜90万円（等級別）</p></div>
+      </div>
+      <div class="note-box"><i class="ti ti-info-circle"></i>重度障害は1〜2級および3級の2・3・4が対象。重度障害給付後に同一事由で死亡した場合は死亡弔慰金の対象外。</div>
+    </div>
+  </div>
+
+  <div class="kyufu-card">
+    <div class="kyufu-card-hdr" onclick="toggle('saigai')">
+      <div class="kyufu-card-hdr-left">
+        <div class="kyufu-card-icon" style="background:linear-gradient(135deg,#B07800,#E8A800);"><i class="ti ti-home-off"></i></div>
+        <div><p class="kyufu-card-title">住宅災害見舞金</p><p class="kyufu-card-sub">火災・落雷・自然災害（3万円以上の損害）</p></div>
+      </div>
+      <span class="kyufu-card-badge" style="color:#B07800;">最大15万円</span>
+      <i class="ti ti-chevron-down kyufu-card-arrow" id="arr-saigai"></i>
+    </div>
+    <div class="kyufu-card-body" id="body-saigai">
+      <div class="amt-grid">
+        <div class="amt-box hl"><p class="amt-label">全焼損（70%以上）</p><p class="amt-val" style="font-size:12px;">150,000円</p></div>
+        <div class="amt-box"><p class="amt-label">半焼損（20%以上）</p><p class="amt-val" style="font-size:12px;">75,000円</p></div>
+        <div class="amt-box"><p class="amt-label">一部焼損（20%未満）</p><p class="amt-val" style="font-size:12px;">50,000円</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ③資格取得 -->
+<div class="tab-sec" id="sec-shikaku">
+  <div style="background:var(--white);border-radius:var(--r16);padding:14px 16px;margin-bottom:10px;box-shadow:var(--shadow-sm);">
+    <p class="sec-label" style="margin-bottom:8px;">給付の種類</p>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <div style="display:flex;align-items:center;gap:10px;"><span class="shikaku-badge sb-p">プレミアム</span><span style="font-size:13px;color:var(--gray600);">技術研修センターの講習受講料を<strong>全額</strong>（または半額）給付</span></div>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="shikaku-badge sb-s">スペシャル</span><span style="font-size:13px;color:var(--gray600);">組合が定めた資格取得で <strong>20,000円</strong></span></div>
+      <div style="display:flex;align-items:center;gap:10px;"><span class="shikaku-badge sb-c">クラシック</span><span style="font-size:13px;color:var(--gray600);">全建総連対象資格：区分1（<strong>10,000円</strong>）・区分2（<strong>5,000円</strong>）</span></div>
+    </div>
+  </div>
+
+  <div class="kyufu-card">
+    <div class="kyufu-card-hdr" onclick="toggle('premium')">
+      <div class="kyufu-card-hdr-left">
+        <div class="kyufu-card-icon" style="background:linear-gradient(135deg,#7C3AED,#A855F7);"><i class="ti ti-certificate"></i></div>
+        <div><p class="kyufu-card-title">資格取得祝金プレミアム</p><p class="kyufu-card-sub">埼玉土建技術研修センター主催の講習</p></div>
+      </div>
+      <span class="kyufu-card-badge" style="color:#7C3AED;">受講料全額〜半額</span>
+      <i class="ti ti-chevron-down kyufu-card-arrow" id="arr-premium"></i>
+    </div>
+    <div class="kyufu-card-body" id="body-premium">
+      <div class="amt-grid" style="grid-template-columns:1fr 1fr;">
+        <div class="amt-box" style="border-color:#A855F7;background:rgba(168,85,247,.05);"><p class="amt-label">予防教育・作業主任者講習</p><p class="amt-val" style="color:#7C3AED;font-size:13px;">受講料全額</p></div>
+        <div class="amt-box" style="border-color:rgba(168,85,247,.2);"><p class="amt-label">特別教育・技能講習</p><p class="amt-val" style="font-size:13px;">受講料半額相当</p></div>
+      </div>
+      <div class="note-box" style="border-color:rgba(168,85,247,.2);background:rgba(168,85,247,.05);">
+        <i class="ti ti-info-circle" style="color:#A855F7;"></i>
+        <span>熱中症予防教育は単独開催の場合に適用（他講習との同時開催時は対象外）。免除コース・連続講座で複数講習を同時受講した場合は支部発行の領収書コピーも添付。</span>
+      </div>
+      <div class="docs-list" style="margin-top:10px;">
+        <div class="docs-item"><i class="ti ti-file-text"></i><span>対象講習・特別教育・予防教育の<strong>修了証・証明書</strong>のコピー</span></div>
+        <div class="docs-item"><i class="ti ti-receipt"></i><span>支部発行の領収書のコピー（免除コース・連続講座の場合）</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="kyufu-card">
+    <div class="kyufu-card-hdr" onclick="toggle('special')">
+      <div class="kyufu-card-hdr-left">
+        <div class="kyufu-card-icon" style="background:linear-gradient(135deg,#1A5FA8,#2E82D4);"><i class="ti ti-award"></i></div>
+        <div><p class="kyufu-card-title">資格取得祝金スペシャル</p><p class="kyufu-card-sub">組合が定めた対象資格</p></div>
+      </div>
+      <span class="kyufu-card-badge">20,000円</span>
+      <i class="ti ti-chevron-down kyufu-card-arrow" id="arr-special"></i>
+    </div>
+    <div class="kyufu-card-body" id="body-special">
+      <div class="amt-box hl" style="text-align:center;padding:14px;margin-bottom:10px;"><p class="amt-label">給付額</p><p class="amt-val" style="font-size:28px;">20,000<span class="amt-unit">円</span></p></div>
+      <div class="docs-list">
+        <div class="docs-item"><i class="ti ti-file-text"></i><span>資格名・取得日が確認できる<strong>合格証書・資格証明書</strong>のコピー</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="kyufu-card">
+    <div class="kyufu-card-hdr" onclick="toggle('classic')">
+      <div class="kyufu-card-hdr-left">
+        <div class="kyufu-card-icon" style="background:linear-gradient(135deg,#1A7A4A,#2EA868);"><i class="ti ti-star"></i></div>
+        <div><p class="kyufu-card-title">資格取得祝金クラシック（全建総連）</p><p class="kyufu-card-sub">区分1：10,000円 / 区分2：5,000円</p></div>
+      </div>
+      <i class="ti ti-chevron-down kyufu-card-arrow" id="arr-classic"></i>
+    </div>
+    <div class="kyufu-card-body" id="body-classic">
+      <div class="amt-grid" style="grid-template-columns:1fr 1fr;margin-bottom:12px;">
+        <div class="amt-box hl"><p class="amt-label">区分1（一級・主要資格）</p><p class="amt-val">10,000<span class="amt-unit">円</span></p></div>
+        <div class="amt-box"><p class="amt-label">区分2（二級・その他）</p><p class="amt-val">5,000<span class="amt-unit">円</span></p></div>
+      </div>
+      <p class="sec-label">区分1 主な対象資格</p>
+      <div class="shikaku-list">
+        <span class="shikaku-tag c">一級建築士</span><span class="shikaku-tag c">設備設計一級建築士</span><span class="shikaku-tag c">構造設計一級建築士</span><span class="shikaku-tag c">単一等級技能士</span><span class="shikaku-tag c">一級技能士</span><span class="shikaku-tag c">一級施工管理技士</span><span class="shikaku-tag c">第一種電気工事士</span><span class="shikaku-tag c">第一〜二種電気主任技術者</span><span class="shikaku-tag c">電気通信主任技術者</span><span class="shikaku-tag c">給水装置工事主任技術者</span><span class="shikaku-tag c">登録基幹技能者（全職種）</span>
+      </div>
+      <p class="sec-label" style="margin-top:8px;">区分2 主な対象資格</p>
+      <div class="shikaku-list">
+        <span class="shikaku-tag s">二級建築士</span><span class="shikaku-tag s">木造建築士</span><span class="shikaku-tag s">二級技能士（43職種）</span><span class="shikaku-tag s">二級施工管理技士</span><span class="shikaku-tag s">第二種電気工事士</span><span class="shikaku-tag s">測量士</span><span class="shikaku-tag s">建築設備士</span><span class="shikaku-tag s">消防設備士</span><span class="shikaku-tag s">発破技士</span><span class="shikaku-tag s">解体工事施工技士</span><span class="shikaku-tag s">職業訓練指導員免許（36科目）</span><span class="shikaku-tag s">1級エクステリアプランナー</span><span class="shikaku-tag s">PVマスター施工技術者</span><span class="shikaku-tag s">窯業系サイディング施工士</span>
+      </div>
+      <div class="note-box" style="margin-top:8px;"><i class="ti ti-clock"></i>申請期限：資格取得日の翌日から<strong>1年以内</strong>（班受付）。全建総連への申請は毎月15日締め。給付は申請月の<strong>3ヶ月後</strong>（総合共済給付とは別日）。</div>
+      <div class="docs-list" style="margin-top:10px;">
+        <div class="docs-item"><i class="ti ti-file-text"></i><span>合格証書・修了証・資格証明書のいずれかのコピー（資格名と取得日が確認できるもの）</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ④必要書類 -->
+<div class="tab-sec" id="sec-docs">
+  <div class="alert alert-info" style="margin-bottom:12px;">
+    <i class="ti ti-info-circle"></i>
+    <span>申請期限は事由発生の翌日から<strong>1年以内</strong>（本人死亡・重度障害は3年以内）。マイナンバー記載の住民票は番号を隠した上で添付。</span>
+  </div>
+
+  <div class="kyufu-card">
+    <div class="kyufu-card-hdr" onclick="toggle('d-family')">
+      <div class="kyufu-card-hdr-left">
+        <div class="kyufu-card-icon" style="background:linear-gradient(135deg,#374151,#6B7280);"><i class="ti ti-users"></i></div>
+        <div><p class="kyufu-card-title">配偶者・家族 死亡</p><p class="kyufu-card-sub">必要書類</p></div>
+      </div>
+      <i class="ti ti-chevron-down kyufu-card-arrow" id="arr-d-family"></i>
+    </div>
+    <div class="kyufu-card-body" id="body-d-family">
+      <p class="sec-label">配偶者死亡</p>
+      <div class="docs-list">
+        <div class="docs-item"><i class="ti ti-file-text"></i><span>戸籍謄本・抄本または住民票の除票（本人と配偶者の続柄記載）のいずれか1通</span></div>
+        <div class="docs-item"><i class="ti ti-alert-circle" style="color:var(--red);"></i><span>内縁の妻（夫）の場合：双方の戸籍謄本と住民票を別に添付</span></div>
+      </div>
+      <p class="sec-label" style="margin-top:12px;">家族死亡</p>
+      <div class="docs-list">
+        <div class="docs-item"><i class="ti ti-file-text"></i><span>住民票・戸籍謄本か抄本・死亡診断書・会葬礼状のいずれか1通</span></div>
+        <div class="docs-item"><i class="ti ti-baby"></i><span>死産の場合：医師の証明書か母子手帳</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="kyufu-card">
+    <div class="kyufu-card-hdr" onclick="toggle('d-kekkon')">
+      <div class="kyufu-card-hdr-left">
+        <div class="kyufu-card-icon" style="background:linear-gradient(135deg,#1A7A4A,#2EA868);"><i class="ti ti-heart"></i></div>
+        <div><p class="kyufu-card-title">結婚・出生</p><p class="kyufu-card-sub">必要書類</p></div>
+      </div>
+      <i class="ti ti-chevron-down kyufu-card-arrow" id="arr-d-kekkon"></i>
+    </div>
+    <div class="kyufu-card-body" id="body-d-kekkon">
+      <p class="sec-label">結婚</p>
+      <div class="docs-list">
+        <div class="docs-item"><i class="ti ti-file-text"></i><span>戸籍謄本か抄本・住民票（続柄入り）のいずれか1通</span></div>
+        <div class="docs-item"><i class="ti ti-certificate"></i><span>同性カップル：パートナーシップ宣誓受領証を添付</span></div>
+      </div>
+      <p class="sec-label" style="margin-top:12px;">出生</p>
+      <div class="docs-list">
+        <div class="docs-item"><i class="ti ti-file-text"></i><span>戸籍謄本・住民票・母子手帳（出生届出済証明欄）のいずれか1通</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="kyufu-card">
+    <div class="kyufu-card-hdr" onclick="toggle('d-gakko')">
+      <div class="kyufu-card-hdr-left">
+        <div class="kyufu-card-icon" style="background:linear-gradient(135deg,#1A5FA8,#2E82D4);"><i class="ti ti-school"></i></div>
+        <div><p class="kyufu-card-title">就学・卒業祝金</p><p class="kyufu-card-sub">必要書類</p></div>
+      </div>
+      <i class="ti ti-chevron-down kyufu-card-arrow" id="arr-d-gakko"></i>
+    </div>
+    <div class="kyufu-card-body" id="body-d-gakko">
+      <div class="docs-list">
+        <div class="docs-item"><i class="ti ti-file-text"></i><span>住民票（続柄入り）・入学通知書・健康保険証のいずれか1通</span></div>
+        <div class="docs-item"><i class="ti ti-alert-circle" style="color:var(--orange);"></i><span><strong>2026年6月1日以降：</strong>別居の子も対象。子の現戸籍（事由発生日以降）を追加添付。</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="kyufu-card">
+    <div class="kyufu-card-hdr" onclick="toggle('d-other')">
+      <div class="kyufu-card-hdr-left">
+        <div class="kyufu-card-icon" style="background:linear-gradient(135deg,#6B21A8,#A855F7);"><i class="ti ti-list-check"></i></div>
+        <div><p class="kyufu-card-title">その他（宿泊・災害・じん肺等）</p><p class="kyufu-card-sub">必要書類</p></div>
+      </div>
+      <i class="ti ti-chevron-down kyufu-card-arrow" id="arr-d-other"></i>
+    </div>
+    <div class="kyufu-card-body" id="body-d-other">
+      <p class="sec-label">宿泊補助金</p>
+      <div class="docs-list"><div class="docs-item"><i class="ti ti-receipt"></i><span>宿泊施設の証明、または施設名・住所・電話番号が確認できる領収書（本人氏名入り）</span></div></div>
+      <p class="sec-label" style="margin-top:12px;">住宅災害見舞金</p>
+      <div class="docs-list">
+        <div class="docs-item"><i class="ti ti-file-certificate"></i><span>罹災証明書</span></div>
+        <div class="docs-item"><i class="ti ti-camera"></i><span>被害状況がわかる写真</span></div>
+        <div class="docs-item"><i class="ti ti-file-invoice"></i><span>一部損壊の場合：損害額・程度のわかる見積書・領収書</span></div>
+        <div class="docs-item"><i class="ti ti-forms"></i><span>申請書裏面の被災状況報告書</span></div>
+      </div>
+      <p class="sec-label" style="margin-top:12px;">じん肺・アスベスト申請支援金</p>
+      <div class="docs-list">
+        <div class="docs-item"><i class="ti ti-file-text"></i><span>労災休業補償給付支給請求書（様式8号）または救済給付調整金請求書</span></div>
+      </div>
+      <p class="sec-label" style="margin-top:12px;">適用除外法人事業主支援金</p>
+      <div class="docs-list">
+        <div class="docs-item"><i class="ti ti-id"></i><span>本人の健康保険証・適用通知書・健康保険被保険者適用除外承認証</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:linear-gradient(135deg,#1B2A3B,#1A3A6B);border-radius:var(--r16);padding:18px;margin-top:4px;">
+    <p style="font-size:15px;font-weight:700;color:#fff;margin:0 0 10px;display:flex;align-items:center;gap:8px;">
+      <i class="ti ti-send" style="color:var(--orange);"></i>申請書の提出先
+    </p>
+    <p style="font-size:13px;color:rgba(255,255,255,.7);margin:0 0 12px;">申請書に必要事項を記入し、証明書類と一緒に<strong style="color:#fff;">所属の班</strong>へ提出してください。</p>
+    <a href="tel:048-773-9863" style="display:flex;align-items:center;gap:8px;background:var(--orange);border-radius:var(--r12);padding:12px 16px;color:#fff;font-size:15px;font-weight:700;">
+      <i class="ti ti-phone"></i>上尾伊奈支部　048-773-9863
     </a>
   </div>
 </div>
 
+</div>
 <footer>埼玉土建一般労働組合 上尾伊奈支部｜TEL 048-773-9863</footer>
 </div>
-
 <script>
-let selectedType = '';
-
-function selectChip(el, type){
-  document.querySelectorAll('.kyosai-chip').forEach(c=>c.classList.remove('selected'));
-  el.classList.add('selected');
-  selectedType = type;
-  checkReady();
+function switchTab(tab){
+  ['shobyou','keijo','shikaku','docs'].forEach(t=>{
+    document.getElementById('sec-'+t).classList.toggle('active',t===tab);
+    document.getElementById('t-'+t).classList.toggle('active',t===tab);
+  });
 }
-
-let fileLoaded = false;
-
-function previewFile(e){
-  const file = e.target.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    document.getElementById('preview-img').src = ev.target.result;
-    document.getElementById('preview-box').style.display = 'block';
-    fileLoaded = true;
-    checkReady();
-  };
-  reader.readAsDataURL(file);
+function toggle(id){
+  const body=document.getElementById('body-'+id);
+  const arr=document.getElementById('arr-'+id);
+  const open=body.classList.contains('open');
+  body.classList.toggle('open',!open);
+  if(arr)arr.classList.toggle('open',!open);
 }
-
-function checkReady(){
-  const btn = document.getElementById('analyze-btn');
-  btn.style.display = (selectedType && fileLoaded) ? 'flex' : 'none';
-}
-
-function analyzeDocs(){
-  const btn = document.getElementById('analyze-btn');
-  btn.innerHTML = '<i class="ti ti-loader" style="animation:spin 1s linear infinite;"></i>AIが解析中…';
-  btn.disabled = true;
-
-  // デモ：2秒後に仮データを表示
-  setTimeout(()=>{
-    const SAMPLE_DATA = {
-      hospital: '上尾中央総合病院',
-      date: '2026年6月24日',
-      diag: selectedType.includes('ケガ') ? '右手擦過傷・打撲' : selectedType.includes('非私') ? '労災・交通事故等の確認が必要' : '急性胃腸炎',
-      fee: '¥12,480',
-    };
-    document.getElementById('d-type').textContent = selectedType;
-    document.getElementById('d-hospital').textContent = SAMPLE_DATA.hospital;
-    document.getElementById('d-date').textContent = SAMPLE_DATA.date;
-    document.getElementById('d-diag').textContent = SAMPLE_DATA.diag;
-    document.getElementById('d-fee').textContent = SAMPLE_DATA.fee;
-    document.getElementById('draft-box').style.display = 'block';
-    document.getElementById('next-step').style.display = 'block';
-    btn.style.display = 'none';
-  }, 2000);
-}
-
-const style = document.createElement('style');
-style.textContent = '@keyframes spin{to{transform:rotate(360deg)}}';
-document.head.appendChild(style);
 </script>
 <script src="assets/js/navigation.js"></script>
 </body>
