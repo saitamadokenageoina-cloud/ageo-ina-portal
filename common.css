@@ -12,12 +12,14 @@
   --shadow-md:0 4px 16px rgba(0,0,0,.12);
   --shadow-lg:0 8px 32px rgba(0,0,0,.18);
   --r8:8px;--r12:12px;--r16:16px;--r24:24px;
+  --font-base:"M PLUS 1p",-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic UI",sans-serif;
 }
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+1p:wght@400;500;700;800;900&display=swap');
 *,*::before,*::after{box-sizing:border-box;}
 html{-webkit-text-size-adjust:100%;}
 body{
   margin:0;
-  font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif;
+  font-family:var(--font-base);
   font-size:16px;line-height:1.65;
   background:var(--gray50);color:var(--gray900);
   -webkit-font-smoothing:antialiased;
