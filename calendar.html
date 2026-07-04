@@ -209,12 +209,15 @@ body{
   padding-left:18px;
   border-left:7px solid #8A8F99;
 }
-.agenda-body.branch{border-left-color:#0B8043;}
-.agenda-body.training{border-left-color:#D81B60;}
-.agenda-body.deadline{border-left-color:#F4511E;}
-.agenda-body.consult{border-left-color:#F09300;}
-.agenda-body.event{border-left-color:#8E24AA;}
-.agenda-body.holiday{border-left-color:#4285F4;}
+/* Googleカレンダーの色と完全一致 */
+.agenda-body.branch{border-left-color:#616161;}   /* #616161 グレー  saitamadokenageoina */
+.agenda-body.branch2{border-left-color:#0B8043;}  /* #0b8043 緑      班会議等 */
+.agenda-body.event{border-left-color:#D81B60;}    /* #d81b60 ピンク  行事・大会 */
+.agenda-body.training{border-left-color:#F4511E;} /* #f4511e オレンジ 研修・講習 */
+.agenda-body.consult{border-left-color:#F09300;}  /* #f09300 黄      役員会議 */
+.agenda-body.other{border-left-color:#8E24AA;}    /* #8e24aa 紫      その他 */
+.agenda-body.deadline{border-left-color:#F4511E;} /* 互換用 */
+.agenda-body.holiday{border-left-color:#4285F4;}  /* #4285f4 青      祝日 */
 .agenda-title{
   margin:0 0 5px;
   color:#fff;
@@ -361,11 +364,11 @@ const CALENDAR_BASE = 'https://calendar.google.com/calendar/embed?' + CALENDAR_Q
 const APPS_SCRIPT_EVENTS_URL = 'https://script.google.com/macros/s/AKfycbw_CPXjPVA4MqfNG8328tN0XonK4A28zTUk2cybXFPRW6lMfuZTcPC96nezgO2WsziV/exec';
 const UPCOMING_CALENDARS = [
   {id:'saitamadokenageoina@gmail.com', type:'branch'},
-  {id:'920df97122bc62cb84852428f01928500d430b00a5acef448d6eb679d8cdf1fb@group.calendar.google.com', type:'branch'},
+  {id:'920df97122bc62cb84852428f01928500d430b00a5acef448d6eb679d8cdf1fb@group.calendar.google.com', type:'branch2'},
   {id:'54161b483cfaa13f0564824f4faefb29de140db9edaf11354a7e7ab1ea84a9bb@group.calendar.google.com', type:'event'},
-  {id:'e018dfe146750b7c91526703a0bd87946403c54a72f4ccae9d5d3ad7f4baa089@group.calendar.google.com', type:'consult'},
-  {id:'b077dc8d3c4a32926a17ca7ab55fb0d7f3a1cbda300012ea6a40861d26e7228d@group.calendar.google.com', type:'deadline'},
-  {id:'fed78bebafadb3c46d2a023a02549e5cdadf32ad56e5444f40a5ac99c3b68bd8@group.calendar.google.com', type:'event'},
+  {id:'e018dfe146750b7c91526703a0bd87946403c54a72f4ccae9d5d3ad7f4baa089@group.calendar.google.com', type:'training'},
+  {id:'b077dc8d3c4a32926a17ca7ab55fb0d7f3a1cbda300012ea6a40861d26e7228d@group.calendar.google.com', type:'consult'},
+  {id:'fed78bebafadb3c46d2a023a02549e5cdadf32ad56e5444f40a5ac99c3b68bd8@group.calendar.google.com', type:'other'},
   {id:'ja.japanese.official#holiday@group.v.calendar.google.com', type:'holiday'}
 ];
 
