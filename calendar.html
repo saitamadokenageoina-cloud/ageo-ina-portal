@@ -243,6 +243,7 @@ body{
   line-height:1.7;
   text-align:center;
 }
+@keyframes spin{to{transform:rotate(360deg)}}
 .agenda-fallback{
   padding:8px;
 }
@@ -353,7 +354,10 @@ html[data-theme="light"] .agenda-meta{color:#334155;}
   <div class="section-label"><i class="ti ti-clipboard-list"></i>今後の予定</div>
   <section class="agenda-shell" id="agenda-shell">
     <div class="agenda-list" id="agenda-list">
-      <div class="agenda-empty">今後1週間の予定を読み込んでいます。</div>
+      <div class="agenda-empty" id="agenda-loading" style="display:flex;align-items:center;justify-content:center;gap:10px;">
+        <i class="ti ti-loader-2" style="font-size:22px;animation:spin 1s linear infinite;"></i>
+        今後1週間の予定を読み込んでいます…
+      </div>
     </div>
   </section>
 </div>
@@ -471,6 +475,9 @@ function formatTime(event){
 function renderUpcoming(events){
   const list = document.getElementById('agenda-list');
   const week = ['日','月','火','水','木','金','土'];
+  // ローディング非表示
+  const loading = document.getElementById('agenda-loading');
+  if(loading) loading.style.display = 'none';
   if(!events.length){
     list.innerHTML = '<div class="agenda-empty">今後1週間の予定はありません。</div>';
     return;
@@ -497,6 +504,8 @@ function formatDateParam(date){
 }
 
 function renderAgendaIframeFallback(){
+  const loading = document.getElementById('agenda-loading');
+  if(loading) loading.style.display = 'none';
   const now = new Date();
   const end = new Date(now);
   end.setDate(end.getDate() + 7);
@@ -533,50 +542,71 @@ function normalizeScriptEvents(data){
   }).filter(Boolean);
 }
 
-async function fetchIcal(calId, type){
-  // CORS回避：allorigins.win プロキシ経由でiCalを取得
-  const icalUrl = `https://calendar.google.com/calendar/ical/${encodeURIComponent(calId)}/public/basic.ics`;
-  const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(icalUrl)}`;
-  const res = await fetch(proxyUrl, {cache:'no-store'});
-  if(!res.ok) throw new Error('proxy fetch failed: ' + calId);
-  const json = await res.json();
-  return parseIcs(json.contents || '', type);
-}
-
 async function loadUpcoming(){
   const now = new Date();
   const end = new Date(now);
-  end.setDate(end.getDate() + 7); // 1週間
+  end.setDate(end.getDate() + 7);
 
-  // 全カレンダーを並列取得
-  const results = await Promise.allSettled(
-    UPCOMING_CALENDARS.map(cal => fetchIcal(cal.id, cal.type))
-  );
-
-  const succeeded = results.filter(r => r.status === 'fulfilled');
-
-  if(succeeded.length === 0){
-    // 全失敗 → Apps Script fallback
-    try{
-      const scriptData = await fetch(APPS_SCRIPT_EVENTS_URL, {cache:'no-store'}).then(r => r.json());
-      const scriptEvents = normalizeScriptEvents(scriptData)
-        .filter(ev => sameOrAfter(ev.start, now) && ev.start < end)
-        .sort((a,b) => a.start - b.start)
-        .slice(0, 20);
-      renderUpcoming(scriptEvents);
-    }catch(e){
-      renderAgendaIframeFallback();
+  // Step1: Apps Script（全カレンダー対応版）を試みる
+  try{
+    const scriptData = await fetch(APPS_SCRIPT_EVENTS_URL, {cache:'no-store'}).then(res => {
+      if(!res.ok) throw new Error('script failed');
+      return res.json();
+    });
+    const events = normalizeScriptEvents(scriptData)
+      .filter(ev => sameOrAfter(ev.start, now) && ev.start < end)
+      .sort((a,b) => a.start - b.start)
+      .slice(0, 20);
+    if(events.length > 0){
+      renderUpcoming(events);
+      return;
     }
+    // データ0件でも続行してiCal取得を試みる
+    console.warn('[calendar] Apps Script returned 0 events, trying iCal');
+  }catch(e){
+    console.warn('[calendar] Apps Script failed:', e.message);
+  }
+
+  // Step2: iCalを複数プロキシ経由で並列取得
+  const PROXIES = [
+    id => `https://api.allorigins.win/get?url=${encodeURIComponent('https://calendar.google.com/calendar/ical/'+encodeURIComponent(id)+'/public/basic.ics')}`,
+    id => `https://corsproxy.io/?${encodeURIComponent('https://calendar.google.com/calendar/ical/'+encodeURIComponent(id)+'/public/basic.ics')}`,
+  ];
+
+  async function tryFetchIcal(calId, type){
+    for(const proxyFn of PROXIES){
+      try{
+        const res = await fetch(proxyFn(calId), {cache:'no-store', signal: AbortSignal.timeout(8000)});
+        if(!res.ok) continue;
+        const text = proxyFn(calId).includes('allorigins')
+          ? (await res.json()).contents
+          : await res.text();
+        if(!text) continue;
+        const events = parseIcs(text, type);
+        if(events.length >= 0) return events; // 0件でも成功扱い
+      }catch(e){
+        continue;
+      }
+    }
+    throw new Error('all proxies failed for ' + calId);
+  }
+
+  const results = await Promise.allSettled(
+    UPCOMING_CALENDARS.map(cal => tryFetchIcal(cal.id, cal.type))
+  );
+  const ok = results.filter(r => r.status === 'fulfilled');
+
+  if(ok.length > 0){
+    const events = ok.flatMap(r => r.value)
+      .filter(ev => sameOrAfter(ev.start, now) && ev.start < end)
+      .sort((a,b) => a.start - b.start)
+      .slice(0, 20);
+    renderUpcoming(events);
     return;
   }
 
-  const events = succeeded
-    .flatMap(r => r.value)
-    .filter(ev => sameOrAfter(ev.start, now) && ev.start < end)
-    .sort((a,b) => a.start - b.start)
-    .slice(0, 20);
-
-  renderUpcoming(events);
+  // Step3: 全失敗 → iframeフォールバック
+  renderAgendaIframeFallback();
 }
 
 setToday();
