@@ -368,7 +368,7 @@ html[data-theme="light"] .agenda-meta{color:#334155;}
 <script>
 const CALENDAR_QUERY = 'height=600&wkst=1&ctz=Asia%2FTokyo&showPrint=0&showTabs=0&showCalendars=0&showTz=0&src=c2FpdGFtYWRva2VuYWdlb2luYUBnbWFpbC5jb20&src=OTIwZGY5NzEyMmJjNjJjYjg0ODUyNDI4ZjAxOTI4NTAwZDQzMGIwMGE1YWNlZjQ0OGQ2ZWI2NzlkOGNkZjFmYkBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=NTQxNjFiNDgzY2ZhYTEzZjA1NjQ4MjRmNGZhZWZiMjlkZTE0MGRiOWVkYWYxMTM1NGE3ZTdhYjFlYTg0YTliYkBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=ZTAxOGRmZTE0Njc1MGI3YzkxNTI2NzAzYTBiZDg3OTQ2NDAzYzU0YTcyZjRjY2FlOWQ1ZDNhZDdmNGJhYTA4OUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=YjA3N2RjOGQzYzRhMzI5MjZhMTdjYTdhYjU1ZmIwZDdmM2ExY2JkYTMwMDAxMmVhNmE0MDg2MWQyNmU3MjI4ZEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=ZmVkNzhiZWJhZmFkYjNjNDZkMmEwMjNhMDI1NDllNWNkYWRmMzJhZDU2ZTU0NDRmNDBhNWFjOTljM2I2OGJkOEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=amEuamFwYW5lc2Uub2ZmaWNpYWwjaG9saWRheUBncm91cC52LmNhbGVuZGFyLmdvb2dsZS5jb20&color=%23616161&color=%230b8043&color=%23d81b60&color=%23f4511e&color=%23f09300&color=%238e24aa&color=%234285f4';
 const CALENDAR_BASE = 'https://calendar.google.com/calendar/embed?' + CALENDAR_QUERY + '&mode=';
-const APPS_SCRIPT_EVENTS_URL = 'https://script.google.com/macros/s/AKfycbw_CPXjPVA4MqfNG8328tN0XonK4A28zTUk2cybXFPRW6lMfuZTcPC96nezgO2WsziV/exec';
+const APPS_SCRIPT_EVENTS_URL = 'https://script.google.com/macros/s/AKfycbw7QiMa1jyMxi_LlFZGtDN67VKdWlPo5f1YkapAroTtNk0J2wwUEvE5W0VFnfacJNSc/exec';
 
 // カレンダーID → type マッピング（Googleカレンダーの色と完全一致）
 const CALENDAR_ID_TO_TYPE = {
@@ -545,68 +545,27 @@ function normalizeScriptEvents(data){
 async function loadUpcoming(){
   const now = new Date();
   const end = new Date(now);
-  end.setDate(end.getDate() + 7);
+  end.setDate(end.getDate() + 7); // 1週間
 
-  // Step1: Apps Script（全カレンダー対応版）を試みる
   try{
-    const scriptData = await fetch(APPS_SCRIPT_EVENTS_URL, {cache:'no-store'}).then(res => {
-      if(!res.ok) throw new Error('script failed');
+    const data = await fetch(APPS_SCRIPT_EVENTS_URL, {
+      cache: 'no-store',
+      signal: AbortSignal.timeout(10000)
+    }).then(res => {
+      if(!res.ok) throw new Error('HTTP ' + res.status);
       return res.json();
     });
-    const events = normalizeScriptEvents(scriptData)
+
+    const events = normalizeScriptEvents(data)
       .filter(ev => sameOrAfter(ev.start, now) && ev.start < end)
       .sort((a,b) => a.start - b.start)
       .slice(0, 20);
-    if(events.length > 0){
-      renderUpcoming(events);
-      return;
-    }
-    // データ0件でも続行してiCal取得を試みる
-    console.warn('[calendar] Apps Script returned 0 events, trying iCal');
+
+    renderUpcoming(events);
   }catch(e){
     console.warn('[calendar] Apps Script failed:', e.message);
+    renderAgendaIframeFallback();
   }
-
-  // Step2: iCalを複数プロキシ経由で並列取得
-  const PROXIES = [
-    id => `https://api.allorigins.win/get?url=${encodeURIComponent('https://calendar.google.com/calendar/ical/'+encodeURIComponent(id)+'/public/basic.ics')}`,
-    id => `https://corsproxy.io/?${encodeURIComponent('https://calendar.google.com/calendar/ical/'+encodeURIComponent(id)+'/public/basic.ics')}`,
-  ];
-
-  async function tryFetchIcal(calId, type){
-    for(const proxyFn of PROXIES){
-      try{
-        const res = await fetch(proxyFn(calId), {cache:'no-store', signal: AbortSignal.timeout(8000)});
-        if(!res.ok) continue;
-        const text = proxyFn(calId).includes('allorigins')
-          ? (await res.json()).contents
-          : await res.text();
-        if(!text) continue;
-        const events = parseIcs(text, type);
-        if(events.length >= 0) return events; // 0件でも成功扱い
-      }catch(e){
-        continue;
-      }
-    }
-    throw new Error('all proxies failed for ' + calId);
-  }
-
-  const results = await Promise.allSettled(
-    UPCOMING_CALENDARS.map(cal => tryFetchIcal(cal.id, cal.type))
-  );
-  const ok = results.filter(r => r.status === 'fulfilled');
-
-  if(ok.length > 0){
-    const events = ok.flatMap(r => r.value)
-      .filter(ev => sameOrAfter(ev.start, now) && ev.start < end)
-      .sort((a,b) => a.start - b.start)
-      .slice(0, 20);
-    renderUpcoming(events);
-    return;
-  }
-
-  // Step3: 全失敗 → iframeフォールバック
-  renderAgendaIframeFallback();
 }
 
 setToday();
