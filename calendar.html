@@ -533,44 +533,50 @@ function normalizeScriptEvents(data){
   }).filter(Boolean);
 }
 
+async function fetchIcal(calId, type){
+  // CORS回避：allorigins.win プロキシ経由でiCalを取得
+  const icalUrl = `https://calendar.google.com/calendar/ical/${encodeURIComponent(calId)}/public/basic.ics`;
+  const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(icalUrl)}`;
+  const res = await fetch(proxyUrl, {cache:'no-store'});
+  if(!res.ok) throw new Error('proxy fetch failed: ' + calId);
+  const json = await res.json();
+  return parseIcs(json.contents || '', type);
+}
+
 async function loadUpcoming(){
   const now = new Date();
   const end = new Date(now);
   end.setDate(end.getDate() + 7); // 1週間
-  try{
-    const scriptData = await fetch(APPS_SCRIPT_EVENTS_URL, {cache:'no-store'}).then(res => {
-      if(!res.ok) throw new Error('apps script fetch failed');
-      return res.json();
-    });
-    const scriptEvents = normalizeScriptEvents(scriptData)
-      .filter(event => sameOrAfter(event.start, now) && event.start < end)
-      .sort((a,b) => a.start - b.start)
-      .slice(0, 15);
-    renderUpcoming(scriptEvents);
-    return;
-  }catch(e){
-    console.warn('Apps Script calendar API fallback:', e);
-  }
-  try{
-    const results = await Promise.allSettled(UPCOMING_CALENDARS.map(async cal => {
-      const url = `https://calendar.google.com/calendar/ical/${encodeURIComponent(cal.id)}/public/basic.ics`;
-      const text = await fetch(url).then(res => {
-        if(!res.ok) throw new Error('calendar fetch failed');
-        return res.text();
-      });
-      return parseIcs(text, cal.type);
-    }));
-    if(!results.some(result => result.status === 'fulfilled')){
-      throw new Error('all calendar fetches failed');
+
+  // 全カレンダーを並列取得
+  const results = await Promise.allSettled(
+    UPCOMING_CALENDARS.map(cal => fetchIcal(cal.id, cal.type))
+  );
+
+  const succeeded = results.filter(r => r.status === 'fulfilled');
+
+  if(succeeded.length === 0){
+    // 全失敗 → Apps Script fallback
+    try{
+      const scriptData = await fetch(APPS_SCRIPT_EVENTS_URL, {cache:'no-store'}).then(r => r.json());
+      const scriptEvents = normalizeScriptEvents(scriptData)
+        .filter(ev => sameOrAfter(ev.start, now) && ev.start < end)
+        .sort((a,b) => a.start - b.start)
+        .slice(0, 20);
+      renderUpcoming(scriptEvents);
+    }catch(e){
+      renderAgendaIframeFallback();
     }
-    const events = results.flatMap(result => result.status === 'fulfilled' ? result.value : [])
-      .filter(event => sameOrAfter(event.start, now) && event.start < end)
-      .sort((a,b) => a.start - b.start)
-      .slice(0, 15);
-    renderUpcoming(events);
-  }catch(e){
-    renderAgendaIframeFallback();
+    return;
   }
+
+  const events = succeeded
+    .flatMap(r => r.value)
+    .filter(ev => sameOrAfter(ev.start, now) && ev.start < end)
+    .sort((a,b) => a.start - b.start)
+    .slice(0, 20);
+
+  renderUpcoming(events);
 }
 
 setToday();
