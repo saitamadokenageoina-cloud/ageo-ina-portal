@@ -1,6 +1,6 @@
 (function(){
   const THEME_KEY = 'doken_theme';
-  const initialTheme = localStorage.getItem(THEME_KEY) || 'dark';
+  const initialTheme = localStorage.getItem(THEME_KEY) || 'light';
   document.documentElement.setAttribute('data-theme', initialTheme);
 
   function defaultBack(fallback){
