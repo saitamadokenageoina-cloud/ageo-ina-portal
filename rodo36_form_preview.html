@@ -43,10 +43,10 @@ body{background:#0f1720;color:#fff;margin:0;}
 .error{display:none;color:#fff;}
 @media print{
   @page{size:A4 landscape;margin:0;}
-  body{background:#fff;}
+  html,body{background:#fff;margin:0;padding:0;}
   .preview-bar{display:none;}
   .preview-body{padding:0;overflow:visible;}
-  .pdf-page{width:297mm;height:210mm;margin:0;box-shadow:none;page-break-after:always;}
+  .pdf-page{width:295.6mm;height:209mm;margin:0 auto;box-shadow:none;overflow:hidden;break-inside:avoid;page-break-after:always;}
   .pdf-page:last-child{page-break-after:auto;}
 }
 @media (max-width:720px){
@@ -136,34 +136,41 @@ function fitFill(el){
 
 function basePageOne(){
   return [
-    {x:96,y:80,w:184,h:18,text:data.jigyoshu,fontSize:6.7},
-    {x:304,y:80,w:196,h:18,text:data.jigyomei,fontSize:6.7},
-    {x:435,y:85,w:280,h:30,text:data.jusho,className:'small'},
-    {x:742,y:82,w:78,h:18,text:data.yuko,className:'small'},
-    {x:95,y:222,w:214,h:47,text:data.jiyu,className:'small top left'},
-    {x:319,y:224,w:66,h:30,text:data.gyomu,className:'small'},
-    {x:394,y:224,w:34,h:18,text:data.ninzu,className:'small'},
-    {x:440,y:224,w:36,h:18,text:data.shotei,className:'small'},
-    {x:493,y:222,w:36,h:17,text:data.nichi,className:'small',fontSize:5.8},
-    {x:604,y:222,w:38,h:17,text:data.tsuki,className:'small',fontSize:5.8},
-    {x:718,y:222,w:40,h:17,text:data.nen,className:'small',fontSize:5.8},
-    {x:719,y:187,w:78,h:18,text:data.kisan || '',className:'tiny'},
-    {x:95,y:359,w:214,h:39,text:data.kyujitsuJiyu,className:'small top left'},
-    {x:319,y:360,w:66,h:26,text:data.kyujitsuGyomu,className:'small'},
-    {x:394,y:360,w:34,h:18,text:data.ninzu,className:'small'},
-    {x:500,y:360,w:68,h:18,text:'週1日',className:'small'},
-    {x:610,y:360,w:54,h:18,text:data.kyujitsuBi,className:'small'},
-    {x:776,y:396,w:12,h:12,text:'✓',className:'checkmark'},
-    {x:151,y:429,w:94,h:12,text:data.teiketsu,className:'tiny',fontSize:5.0},
-    {x:474,y:441,w:106,h:13,text:data.daihyoShoku || '',className:'tiny'},
-    {x:474,y:454,w:122,h:14,text:data.daihyoName,className:'tiny'},
-    {x:254,y:469,w:210,h:14,text:data.daihyoMethod,className:'tiny'},
-    {x:349,y:513,w:12,h:12,text:'✓',className:'checkmark'},
-    {x:794,y:477,w:12,h:12,text:'✓',className:'checkmark'},
-    {x:135,y:529,w:94,h:12,text:data.todoke,className:'tiny',fontSize:5.0},
-    {x:474,y:539,w:106,h:13,text:data.shiyoShoku,className:'tiny'},
-    {x:474,y:550,w:122,h:14,text:data.shiyoName,className:'tiny'},
-    {x:250,y:569,w:238,h:14,text:data.roukisho,className:'tiny'}
+    // 上部表（種類17-219 / 名称219-433 / 所在地433-711 / 期間711-825）
+    {x:25,y:82,w:186,h:18,text:data.jigyoshu,fontSize:6.7},
+    {x:227,y:82,w:198,h:18,text:data.jigyomei,fontSize:6.7},
+    {x:440,y:79,w:266,h:15,text:data.jusho,className:'small left'},
+    {x:714,y:80,w:106,h:24,text:data.yuko,className:'tiny'},
+    // 時間外①行（事由145-293 / 業務293-393 / 労働者数393-433 / 所定433-485 / 1日法定485-542 / 1箇月法定598-655 / 1年法定712-768）
+    {x:149,y:195,w:141,h:62,text:data.jiyu,className:'small top left'},
+    {x:298,y:214,w:90,h:20,text:data.gyomu,className:'small'},
+    {x:395,y:214,w:36,h:20,text:data.ninzu,className:'small'},
+    {x:435,y:214,w:48,h:20,text:data.shotei,className:'small'},
+    {x:487,y:214,w:53,h:20,text:data.nichi,className:'small',fontSize:5.8},
+    {x:600,y:214,w:53,h:20,text:data.tsuki,className:'small',fontSize:5.8},
+    {x:714,y:214,w:52,h:20,text:data.nen,className:'small',fontSize:5.8},
+    {x:747,y:143,w:76,h:16,text:data.kisan || '',className:'tiny'},
+    // 休日労働行（事由35-293 / 業務293-393 / 労働者数393-433 / 所定休日433-598 / 法定休日日数598-711）
+    {x:40,y:333,w:250,h:54,text:data.kyujitsuJiyu,className:'small top left'},
+    {x:298,y:362,w:90,h:20,text:data.kyujitsuGyomu,className:'small'},
+    {x:395,y:362,w:36,h:20,text:data.ninzu,className:'small'},
+    {x:440,y:362,w:150,h:20,text:'週1日',className:'small'},
+    {x:600,y:362,w:110,h:20,text:data.kyujitsuBi,className:'small'},
+    // 100時間チェック
+    {x:773,y:397,w:13,h:13,text:'✓',className:'checkmark'},
+    // 協定成立年月日・労働者代表
+    {x:151,y:424,w:95,h:12,text:data.teiketsu,className:'tiny',fontSize:5.4},
+    {x:496,y:440,w:95,h:12,text:data.daihyoShoku || '',className:'tiny left'},
+    {x:496,y:451,w:110,h:13,text:data.daihyoName,className:'tiny left'},
+    {x:498,y:464,w:200,h:12,text:data.daihyoMethod,className:'tiny left'},
+    // 下部チェック2つ
+    {x:350,y:512,w:13,h:13,text:'✓',className:'checkmark'},
+    {x:802,y:476,w:13,h:13,text:'✓',className:'checkmark'},
+    // 届出年月日・使用者・提出先
+    {x:135,y:523,w:185,h:12,text:data.todoke,className:'tiny left',fontSize:5.4},
+    {x:496,y:536,w:95,h:12,text:data.shiyoShoku,className:'tiny left'},
+    {x:496,y:547,w:110,h:13,text:data.shiyoName,className:'tiny left'},
+    {x:58,y:561,w:92,h:13,text:data.roukisho,className:'tiny'}
   ];
 }
 
