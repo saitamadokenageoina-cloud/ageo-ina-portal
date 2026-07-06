@@ -45,9 +45,10 @@ body{background:#0f1720;color:#fff;margin:0;}
   @page{size:A4 landscape;margin:0;}
   html,body{background:#fff;margin:0;padding:0;}
   .preview-bar{display:none;}
-  .preview-body{padding:0;overflow:visible;}
-  .pdf-page{width:295.6mm;height:209mm;margin:0 auto;box-shadow:none;overflow:hidden;break-inside:avoid;page-break-after:always;}
-  .pdf-page:last-child{page-break-after:auto;}
+  .preview-shell{margin:0;padding:0;}
+  .preview-body{padding:0;margin:0;overflow:visible;}
+  .pdf-page{width:280mm;height:197.98mm;margin:0 auto;box-shadow:none;overflow:hidden;break-inside:avoid;}
+  .pdf-page + .pdf-page{break-before:page;}
 }
 @media (max-width:720px){
   .preview-bar{align-items:flex-start;flex-direction:column;}
