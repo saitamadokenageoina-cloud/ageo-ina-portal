@@ -336,9 +336,9 @@ html[data-theme="light"] .agenda-meta{color:#334155;}
   </section>
 
   <nav class="view-tabs" aria-label="表示切替">
-    <button class="view-btn" type="button" onclick="switchView('MONTH',this)"><i class="ti ti-calendar-month"></i>月表示</button>
+    <button class="view-btn active" type="button" onclick="switchView('MONTH',this)"><i class="ti ti-calendar-month"></i>月表示</button>
     <button class="view-btn" type="button" onclick="switchView('WEEK',this)"><i class="ti ti-calendar-week"></i>週表示</button>
-    <button class="view-btn active" type="button" onclick="switchView('AGENDA',this)"><i class="ti ti-clipboard-list"></i>リスト</button>
+    <button class="view-btn" type="button" onclick="switchView('AGENDA',this)"><i class="ti ti-clipboard-list"></i>リスト</button>
   </nav>
 
   <section class="calendar-shell" id="calendar-shell">
@@ -486,7 +486,7 @@ function escHtml(s){
 }
 
 setToday();
-document.getElementById('gcal').src = CALENDAR_BASE + 'AGENDA';
+document.getElementById('gcal').src = CALENDAR_BASE + 'MONTH';
 loadUpcoming();
 </script>
 <script src="assets/js/navigation.js"></script>
