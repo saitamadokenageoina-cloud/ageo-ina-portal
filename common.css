@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+1p:wght@400;500;700;800;900&display=swap');
 :root {
   --navy:#1B2A3B;--navy-lt:#243648;--navy-dk:#111B27;
   --orange:#E8612A;--orange-lt:#FFF0E9;--orange-dk:#C04E1E;
@@ -12,13 +13,14 @@
   --shadow-md:0 4px 16px rgba(0,0,0,.12);
   --shadow-lg:0 8px 32px rgba(0,0,0,.18);
   --r8:8px;--r12:12px;--r16:16px;--r24:24px;
-  --font-base:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic","Meiryo",sans-serif;
+  --font-base:"M PLUS 1p",-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic UI",sans-serif;
 }
 *,*::before,*::after{box-sizing:border-box;}
 html{-webkit-text-size-adjust:100%;}
 body{
   margin:0;
   font-family:var(--font-base);
+  font-weight:500;
   font-size:16px;line-height:1.65;
   background:var(--gray50);color:var(--gray900);
   -webkit-font-smoothing:antialiased;
