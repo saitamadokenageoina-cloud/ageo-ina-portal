@@ -26,19 +26,19 @@ body{background:#0f1720;color:#fff;margin:0;}
 .preview-body{padding:18px;overflow:auto;}
 .pdf-page{
   width:min(100%,1123px);aspect-ratio:841.92/595.32;margin:0 auto 18px;position:relative;background:#fff;
-  box-shadow:0 18px 50px rgba(0,0,0,.42);overflow:hidden;
+  box-shadow:0 18px 50px rgba(0,0,0,.42);overflow:hidden;container-type:inline-size;
 }
 .pdf-page canvas{width:100%;height:100%;display:block;}
 .fill{
   position:absolute;color:#111;font-weight:600;line-height:1.14;white-space:pre-wrap;overflow:hidden;
-  font-family:"Yu Gothic UI","Meiryo","Hiragino Sans",sans-serif;font-size:7.1px;
+  font-family:"Yu Gothic UI","Meiryo","Hiragino Sans",sans-serif;font-size:0.843cqw;
   letter-spacing:-.01em;text-align:center;display:flex;align-items:center;justify-content:center;
 }
-.fill.small{font-size:6.3px;}
-.fill.tiny{font-size:5.6px;}
+.fill.small{font-size:0.748cqw;}
+.fill.tiny{font-size:0.665cqw;}
 .fill.left{text-align:left;justify-content:flex-start;}
 .fill.top{align-items:flex-start;}
-.checkmark{font-size:10px;font-weight:900;color:#111;line-height:1;}
+.checkmark{font-size:1.188cqw;font-weight:900;color:#111;line-height:1;}
 .loading,.error{padding:40px 18px;text-align:center;font-weight:800;color:rgba(255,255,255,.8);}
 .error{display:none;color:#fff;}
 @media print{
@@ -118,19 +118,24 @@ function addFill(page, item){
   el.style.top = p(item.y, pageH);
   el.style.width = p(item.w || 80, pageW);
   el.style.height = p(item.h || 18, pageH);
-  if(item.fontSize) el.style.fontSize = `${item.fontSize}px`;
+  if(item.fontSize) el.style.fontSize = `${(item.fontSize / pageW * 100).toFixed(3)}cqw`;
   el.innerHTML = esc(item.text);
   page.appendChild(el);
   fitFill(el);
 }
 
 function fitFill(el){
-  let size = parseFloat(getComputedStyle(el).fontSize);
-  const min = 4.4;
-  for(let i = 0; i < 12 && size > min; i++){
+  const pageEl = el.closest('.pdf-page');
+  const pageWidthPx = (pageEl && pageEl.clientWidth) ? pageEl.clientWidth : 1123;
+  // 現在の実効pxを cqw（=ページ幅の%）へ換算。以降は cqw で縮小し、
+  // 画面・保存・印刷のどのサイズでも文字とマスの比率を一定に保つ。
+  let cqw = parseFloat(getComputedStyle(el).fontSize) / pageWidthPx * 100;
+  const minCqw = 4.4 / pageW * 100;    // 最小4.4px(設計)相当
+  const stepCqw = 0.35 / pageW * 100;  // 縮小ステップ .35px(設計)相当
+  for(let i = 0; i < 12 && cqw > minCqw; i++){
     if(el.scrollWidth <= el.clientWidth + 1 && el.scrollHeight <= el.clientHeight + 1) break;
-    size -= .35;
-    el.style.fontSize = `${size}px`;
+    cqw -= stepCqw;
+    el.style.fontSize = `${cqw.toFixed(3)}cqw`;
   }
 }
 
