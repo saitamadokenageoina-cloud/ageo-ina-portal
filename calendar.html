@@ -224,7 +224,7 @@ body{
   font-size:17px;
   font-weight:800;
   line-height:1.35;
-  font-family:"M PLUS 1p",-apple-system,BlinkMacSystemFont,"Hiragino Sans",sans-serif;
+  font-family:var(--font-base);
   letter-spacing:.01em;
 }
 .agenda-meta{
@@ -233,7 +233,7 @@ body{
   font-size:13px;
   font-weight:700;
   line-height:1.6;
-  font-family:"M PLUS 1p",-apple-system,BlinkMacSystemFont,"Hiragino Sans",sans-serif;
+  font-family:var(--font-base);
 }
 .agenda-empty{
   padding:22px 18px;
@@ -336,9 +336,9 @@ html[data-theme="light"] .agenda-meta{color:#334155;}
   </section>
 
   <nav class="view-tabs" aria-label="表示切替">
-    <button class="view-btn active" type="button" onclick="switchView('AGENDA',this)"><i class="ti ti-clipboard-list"></i>リスト</button>
     <button class="view-btn" type="button" onclick="switchView('MONTH',this)"><i class="ti ti-calendar-month"></i>月表示</button>
     <button class="view-btn" type="button" onclick="switchView('WEEK',this)"><i class="ti ti-calendar-week"></i>週表示</button>
+    <button class="view-btn active" type="button" onclick="switchView('AGENDA',this)"><i class="ti ti-clipboard-list"></i>リスト</button>
   </nav>
 
   <section class="calendar-shell" id="calendar-shell">
