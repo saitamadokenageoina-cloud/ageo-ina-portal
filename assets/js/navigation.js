@@ -1,7 +1,10 @@
 (function(){
   const THEME_KEY = 'doken_theme';
-  const initialTheme = localStorage.getItem(THEME_KEY) || 'light';
+  // ダークテーマは一部ページの独自カードが未対応で文字が読みづらいため、当面ライトに統一する。
+  // 端末に残る旧設定(dark)も上書きして確実にライトで表示する。
+  const initialTheme = 'light';
   document.documentElement.setAttribute('data-theme', initialTheme);
+  try { localStorage.setItem(THEME_KEY, initialTheme); } catch (e) {}
 
   function defaultBack(fallback){
     const fallbackUrl = fallback || 'index.html';
@@ -34,6 +37,7 @@
   }
 
   function injectThemeToggle(){
+    return; // 当面ライトテーマに統一するため切替ボタンは無効化
     if (document.querySelector('.theme-toggle') || isPreviewPage()) return;
     const btn = document.createElement('button');
     btn.className = 'theme-toggle';
