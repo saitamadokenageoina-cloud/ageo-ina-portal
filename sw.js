@@ -1,69 +1,69 @@
-// Service Worker - キャッシュ自動更新
-// バージョンを変えるたびに全キャッシュが自動削除・再取得される
-const CACHE_VERSION = 'v' + new Date().toISOString().slice(0,10).replace(/-/g,'');
+// Service Worker - キャッシュ制御
+// ★重要★ 変更をデプロイするたびに CACHE_VERSION の末尾番号を必ず1つ上げること。
+//   このファイルのバイトが変わることでブラウザが更新を検知し、
+//   新SWを再インストール → 古いキャッシュを全削除 → ページ自動リロードとなる。
+const CACHE_VERSION = 'v20260706-01';
 const CACHE_NAME = 'ageo-ina-portal-' + CACHE_VERSION;
 
-// キャッシュするファイル一覧
+// GitHub Pages プロジェクトページのため、配信は /ageo-ina-portal/ 配下
+const BASE = '/ageo-ina-portal/';
+
+// 事前キャッシュするファイル一覧（オフライン用）
 const CACHE_FILES = [
-  '/',
-  '/index.html',
-  '/common.css',
-  '/guide.html',
-  '/kyosai.html',
-  '/library.html',
-  '/calendar.html',
-  '/calc.html',
-  '/atsusa.html',
-  '/koushu.html',
-  '/rodo36.html',
-  '/rodo36_preview.html',
-  '/anzen_check.html',
+  BASE,
+  BASE + 'index.html',
+  BASE + 'common.css',
+  BASE + 'guide.html',
+  BASE + 'kyosai.html',
+  BASE + 'library.html',
+  BASE + 'calendar.html',
+  BASE + 'calc.html',
+  BASE + 'atsusa.html',
+  BASE + 'koushu.html',
+  BASE + 'rodo36.html',
+  BASE + 'rodo36_preview.html',
+  BASE + 'anzen_check.html',
 ];
 
-// インストール：新しいキャッシュを作成
+// インストール：新キャッシュを作成（1ファイル失敗してもinstall全体は成功させる）
 self.addEventListener('install', event => {
   console.log('[SW] Install:', CACHE_NAME);
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(CACHE_FILES))
+    caches.open(CACHE_NAME)
+      .then(cache => Promise.allSettled(CACHE_FILES.map(f => cache.add(f))))
+      .then(() => self.skipWaiting()) // 即座に有効化
   );
-  self.skipWaiting(); // 即座に有効化
 });
 
-// アクティベート：古いキャッシュを全削除
+// アクティベート：古いキャッシュを全削除して全タブを掌握
 self.addEventListener('activate', event => {
   console.log('[SW] Activate:', CACHE_NAME);
   event.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(
+    caches.keys()
+      .then(keys => Promise.all(
         keys.filter(k => k !== CACHE_NAME).map(k => {
           console.log('[SW] Delete old cache:', k);
           return caches.delete(k);
         })
-      )
-    )
+      ))
+      .then(() => self.clients.claim())
   );
-  self.clients.claim(); // 全タブに即適用
 });
 
-// フェッチ：Network First（常に最新を優先、失敗時のみキャッシュ）
+// フェッチ：Network First（常に最新を優先、ネットワーク失敗時のみキャッシュ）
 self.addEventListener('fetch', event => {
-  // GETリクエスト以外はスルー
   if (event.request.method !== 'GET') return;
-  // 外部APIはスルー（Googleカレンダー等）
   const url = new URL(event.request.url);
-  if (!url.origin.includes('github.io')) return;
+  // 外部リクエスト（Googleカレンダー・API・CDN等）はSWを介さずそのまま通す
+  if (url.origin !== self.location.origin) return;
 
   event.respondWith(
     fetch(event.request)
       .then(response => {
-        // 成功したらキャッシュも更新
         const clone = response.clone();
         caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
         return response;
       })
-      .catch(() => {
-        // ネットワーク失敗時はキャッシュから返す
-        return caches.match(event.request);
-      })
+      .catch(() => caches.match(event.request))
   );
 });
