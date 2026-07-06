@@ -466,7 +466,7 @@ function renderUpcoming(events){
       ? ev.location.replace(/,?\s*日本.*/, '').replace(/〒\d{3}-\d{4}\s*/, '').split(',')[0].trim().slice(0, 20)
       : '';
 
-    const dowClass = dow === 0 ? ' style="color:#e88;" ' : dow === 6 ? ' style="color:#88e;" ' : '';
+    const dowClass = dow === 0 ? ' style="color:#CC3B3B;" ' : dow === 6 ? ' style="color:#3A66C0;" ' : '';
 
     return `<article class="agenda-card">
       <div class="agenda-date">
