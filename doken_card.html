@@ -47,9 +47,21 @@
 .pw-toggle i{font-size:16px;}
 .pw-hint{font-size:12px;color:rgba(255,255,255,.4);margin:0;display:flex;align-items:center;gap:5px;}
 .pw-hint i{font-size:13px;}
+.pw-actions{display:flex;flex-direction:column;gap:8px;flex-shrink:0;}
+.pw-copy.copied{background:rgba(26,122,74,.9);color:#fff;}
 
 .dc-member{font-size:16px;font-weight:700;color:#fff;margin:12px 0 2px;}
 .dc-org{font-size:12px;color:rgba(255,255,255,.45);margin:0;}
+.dc-link{
+  margin-top:16px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:13px 14px;border-radius:var(--r12);
+  background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.18);
+  color:#fff;text-decoration:none;position:relative;z-index:1;
+}
+.dc-link i{font-size:22px;color:#fff;flex-shrink:0;}
+.dc-link-title{font-size:14px;font-weight:800;margin:0 0 2px;color:#fff;}
+.dc-link-sub{font-size:11px;margin:0;color:rgba(255,255,255,.66);}
 
 /* クイックリンク */
 .quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
@@ -143,14 +155,27 @@
         <p class="pw-label"><i class="ti ti-lock" style="font-size:12px;vertical-align:-1px;margin-right:3px;"></i>サイトパスワード</p>
         <p class="pw-value" id="pw-val" onclick="togglePw()">TD2026</p>
       </div>
-      <button class="pw-toggle" onclick="togglePw()" id="pw-btn">
-        <i class="ti ti-eye" id="pw-icon"></i>表示
-      </button>
+      <div class="pw-actions">
+        <button class="pw-toggle" onclick="togglePw()" id="pw-btn">
+          <i class="ti ti-eye" id="pw-icon"></i>表示
+        </button>
+        <button class="pw-toggle pw-copy" onclick="copyPw()" id="pw-copy-btn">
+          <i class="ti ti-copy"></i>コピー
+        </button>
+      </div>
     </div>
     <p class="pw-hint"><i class="ti ti-info-circle"></i>タップでパスワードを表示。組合員と家族のみ利用可。</p>
 
     <p class="dc-member" style="margin-top:14px;">上尾伊奈支部 組合員</p>
     <p class="dc-org">埼玉土建一般労働組合</p>
+    <a href="https://doken-card.jp/dc/card" target="_blank" rel="noopener" class="dc-link">
+      <i class="ti ti-id"></i>
+      <div style="flex:1;">
+        <p class="dc-link-title">デジタルどけんカードを開く</p>
+        <p class="dc-link-sub">公式サイトのカード表示ページへ移動します</p>
+      </div>
+      <i class="ti ti-external-link" style="font-size:18px;color:rgba(255,255,255,.72);"></i>
+    </a>
   </div>
 
   <div class="caution">
@@ -185,10 +210,6 @@
     <a href="https://doken-card.jp/dc/favorite" target="_blank" class="quick-btn">
       <i class="ti ti-heart" style="color:var(--red);"></i>
       <div><p class="quick-btn-title">お気に入り</p><p class="quick-btn-sub">保存したリスト</p></div>
-    </a>
-    <a href="https://doken-card.jp/dc/card" target="_blank" class="quick-btn">
-      <i class="ti ti-id" style="color:var(--green);"></i>
-      <div><p class="quick-btn-title">デジタルカード</p><p class="quick-btn-sub">公式アプリ版</p></div>
     </a>
   </div>
 
@@ -275,6 +296,37 @@ function togglePw(){
   val.classList.toggle('show', pwVisible);
   icon.className = pwVisible ? 'ti ti-eye-off' : 'ti ti-eye';
   btn.innerHTML = `<i class="${icon.className}" id="pw-icon"></i>${pwVisible ? '隠す' : '表示'}`;
+}
+
+async function copyPw(){
+  const password = document.getElementById('pw-val').textContent.trim();
+  const btn = document.getElementById('pw-copy-btn');
+  try{
+    if(navigator.clipboard && window.isSecureContext){
+      await navigator.clipboard.writeText(password);
+    }else{
+      const input = document.createElement('input');
+      input.value = password;
+      input.setAttribute('readonly','');
+      input.style.position = 'fixed';
+      input.style.opacity = '0';
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand('copy');
+      input.remove();
+    }
+    btn.classList.add('copied');
+    btn.innerHTML = '<i class="ti ti-check"></i>コピー済';
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = '<i class="ti ti-copy"></i>コピー';
+    }, 1800);
+  }catch(e){
+    btn.innerHTML = '<i class="ti ti-alert-circle"></i>失敗';
+    setTimeout(() => {
+      btn.innerHTML = '<i class="ti ti-copy"></i>コピー';
+    }, 1800);
+  }
 }
 
 function openCat(cat){ window.open(`https://doken-card.jp/dc/result?category=${cat}`, '_blank'); }
