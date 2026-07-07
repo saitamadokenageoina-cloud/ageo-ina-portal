@@ -82,10 +82,18 @@
 .msum-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:9px;}
 .msum-month{font-size:15px;font-weight:900;color:var(--navy);}
 .msum-days{font-size:12.5px;font-weight:800;color:#0E7C5A;background:rgba(20,124,98,.12);border-radius:99px;padding:3px 12px;}
+.msum-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.msum-del{background:rgba(214,69,69,.12);border:none;border-radius:8px;width:30px;height:30px;color:var(--red);font-size:15px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
 .msum-hz{display:flex;flex-wrap:wrap;gap:6px;}
 .msum-hz .mh{font-size:11.5px;font-weight:800;color:#C04E1E;background:rgba(232,97,42,.1);border-radius:7px;padding:3px 9px;}
 .msum-hz .mh-none{font-size:11.5px;color:var(--gray400);font-weight:700;}
 .pr-h2{font-size:11pt;font-weight:800;margin:14px 0 5px;color:#111;}
+/* PDFの文字色を強制（ダークテーマの td 色に負けない） */
+#print-area{color:#111 !important;-webkit-text-fill-color:#111 !important;}
+#print-area .pr-h1,#print-area .pr-h2{color:#111 !important;-webkit-text-fill-color:#111 !important;}
+#print-area .pr-sub,#print-area .pr-foot{color:#555 !important;-webkit-text-fill-color:#555 !important;}
+#print-area .pr-table td{color:#111 !important;-webkit-text-fill-color:#111 !important;}
+#print-area .pr-table th{color:#fff !important;-webkit-text-fill-color:#fff !important;}
 
 .backup-box{background:var(--white);border:1px solid var(--gray200);border-radius:14px;padding:14px 16px;margin:14px 0 4px;box-shadow:0 3px 14px rgba(0,0,0,.06);}
 .bk-title{display:flex;align-items:center;gap:7px;font-size:14px;font-weight:800;color:var(--navy);margin:0 0 6px;}
@@ -382,6 +390,25 @@ function fillLast(){
   toast('前回の内容を入れました');
 }
 
+function deleteYear(y){
+  const arr=load();
+  const cnt=arr.filter(r=>(r.date||'').slice(0,4)===y).length;
+  if(!cnt) return;
+  if(!confirm(y+'年の記録をすべて削除しますか？\n（'+cnt+'件）\n※元に戻せません')) return;
+  store(arr.filter(r=>(r.date||'').slice(0,4)!==y));
+  if(editId) resetForm();
+  render(); toast(y+'年の記録を削除しました');
+}
+function deleteMonth(ym){
+  const arr=load();
+  const cnt=arr.filter(r=>(r.date||'').slice(0,7)===ym).length;
+  if(!cnt) return;
+  const y=ym.slice(0,4), mo=+ym.slice(5,7), label=y+'年'+mo+'月';
+  if(!confirm(label+'の記録をすべて削除しますか？\n（'+cnt+'件）\n※元に戻せません')) return;
+  store(arr.filter(r=>(r.date||'').slice(0,7)!==ym));
+  if(editId) resetForm();
+  render(); toast(label+'の記録を削除しました');
+}
 function render(){
   const arr=load().slice().sort((a,b)=> b.date.localeCompare(a.date) || b.id.localeCompare(a.id));
   document.getElementById('rec-count').textContent=arr.length+'件';
@@ -471,7 +498,8 @@ function renderYearly(arr){
                             : '<span class="mh-none">有害作業の記録なし</span>';
     return '<div class="msum"><div class="msum-top">'
       +'<span class="msum-month">'+m.y+'年</span>'
-      +'<span class="msum-days">記録 '+m.days+'日</span></div>'
+      +'<span class="msum-right"><span class="msum-days">記録 '+m.days+'日</span>'
+      +'<button class="msum-del" onclick="deleteYear(\''+m.y+'\')" aria-label="この年を削除"><i class="ti ti-trash"></i></button></span></div>'
       +'<div class="msum-hz">'+chips+'</div></div>';
   }).join('');
 }
@@ -486,7 +514,8 @@ function renderMonthly(arr){
                             : '<span class="mh-none">有害作業の記録なし</span>';
     return '<div class="msum"><div class="msum-top">'
       +'<span class="msum-month">'+y+'年'+mo+'月</span>'
-      +'<span class="msum-days">記録 '+m.days+'日</span></div>'
+      +'<span class="msum-right"><span class="msum-days">記録 '+m.days+'日</span>'
+      +'<button class="msum-del" onclick="deleteMonth(\''+m.ym+'\')" aria-label="この月を削除"><i class="ti ti-trash"></i></button></span></div>'
       +'<div class="msum-hz">'+chips+'</div></div>';
   }).join('');
 }
@@ -541,19 +570,31 @@ function buildPrint(arr){
     +'職業病・労災（じん肺、石綿関連疾患、騒音性難聴、振動障害、腰痛・頸肩腕障害、熱中症 等）の認定資料の一助にご活用ください。</p>';
 }
 
-function exportBackup(){
+async function exportBackup(){
+  const data={ app:'ageo-ina-worklog', version:1, exported:new Date().toISOString(),
+    name:getName(), records:load(), customHazards:loadCustom() };
+  const json=JSON.stringify(data,null,2);
+  const d=new Date();
+  const fn='作業記録バックアップ_'+d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate())+'.json';
+  // iOSなどでは共有シートから「ファイルに保存」できる
   try{
-    const data={ app:'ageo-ina-worklog', version:1, exported:new Date().toISOString(),
-      name:getName(), records:load(), customHazards:loadCustom() };
-    const blob=new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
+    if(navigator.canShare){
+      const file=new File([json], fn, {type:'application/json'});
+      if(navigator.canShare({files:[file]})){
+        await navigator.share({files:[file], title:'作業記録バックアップ'});
+        toast('保存しました'); return;
+      }
+    }
+  }catch(e){ if(e && e.name==='AbortError') return; }
+  // フォールバック（PC等）
+  try{
+    const blob=new Blob([json],{type:'application/json'});
     const url=URL.createObjectURL(blob);
-    const d=new Date();
-    const fn='作業記録バックアップ_'+d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate())+'.json';
     const a=document.createElement('a');
     a.href=url; a.download=fn; document.body.appendChild(a); a.click();
     setTimeout(()=>{ document.body.removeChild(a); URL.revokeObjectURL(url); },120);
-    toast('バックアップを保存しました');
-  }catch(e){ alert('バックアップの保存に失敗しました。'); }
+    toast('保存しました');
+  }catch(e){ alert('保存に失敗しました。'); }
 }
 function importBackup(input){
   const file=input.files && input.files[0];
