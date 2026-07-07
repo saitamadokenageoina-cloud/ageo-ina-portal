@@ -112,6 +112,18 @@
 .caution{background:var(--gray50);border-radius:var(--r12);padding:14px 16px;font-size:13px;color:var(--gray600);border-left:4px solid var(--gray200);margin-bottom:16px;}
 .caution p{margin:0 0 5px;}
 .caution p:last-child{margin:0;}
+
+/* ===== 使い方ガイド（かんたん手順）===== */
+.usage-guide{background:var(--white);border:1px solid var(--gray200);border-radius:16px;padding:16px 16px 14px;margin:16px 0 4px;box-shadow:0 3px 14px rgba(0,0,0,.06);}
+.ug-head{display:flex;align-items:center;gap:7px;font-size:16px;font-weight:800;color:var(--navy);margin:0 0 13px;}
+.ug-head i{color:var(--orange);font-size:21px;}
+.ug-steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:13px;}
+.ug-steps li{display:flex;gap:12px;align-items:flex-start;}
+.ug-num{flex:0 0 28px;width:28px;height:28px;border-radius:50%;background:var(--orange);color:#fff;font-weight:900;font-size:16px;display:flex;align-items:center;justify-content:center;margin-top:1px;}
+.ug-body{font-size:14.5px;line-height:1.65;color:var(--gray700);}
+.ug-body b{display:block;color:var(--navy);font-size:15.5px;margin-bottom:2px;}
+.ug-note{display:flex;align-items:flex-start;gap:7px;margin:14px 0 0;padding-top:12px;border-top:1px solid var(--gray200);font-size:13px;line-height:1.6;color:var(--gray600);}
+.ug-note i{color:var(--orange);font-size:17px;margin-top:1px;flex:0 0 auto;}
 </style>
 </head>
 <body>
@@ -168,7 +180,7 @@
 
     <p class="dc-member" style="margin-top:14px;">上尾伊奈支部 組合員</p>
     <p class="dc-org">埼玉土建一般労働組合</p>
-    <a href="https://doken-card.jp/dc/card" target="_blank" rel="noopener" class="dc-link">
+    <a href="https://doken-card.jp/dc/card" target="_blank" rel="noopener" class="dc-link" onclick="copyForSite()">
       <i class="ti ti-id"></i>
       <div style="flex:1;">
         <p class="dc-link-title">デジタルどけんカードを開く</p>
@@ -176,6 +188,17 @@
       </div>
       <i class="ti ti-external-link" style="font-size:18px;color:rgba(255,255,255,.72);"></i>
     </a>
+  </div>
+
+  <!-- ===== 使い方ガイド（機械が苦手な方向け）===== -->
+  <div class="usage-guide">
+    <p class="ug-head"><i class="ti ti-help-circle"></i>はじめての方へ（かんたん3ステップ）</p>
+    <ol class="ug-steps">
+      <li><span class="ug-num">1</span><div class="ug-body"><b>「コピー」ボタンを押す</b>上にある青いパスワード欄の「コピー」を押すと、パスワード（TD2026）が自動で控えられます。</div></li>
+      <li><span class="ug-num">2</span><div class="ug-body"><b>「デジタルどけんカードを開く」を押す</b>公式サイトが開きます（開いた時にもパスワードは自動でコピーされます）。</div></li>
+      <li><span class="ug-num">3</span><div class="ug-body"><b>パスワード欄を長押し →「ペースト」→「認証」</b>サイトのパスワード入力欄を指で<strong>長押し</strong>すると「ペースト（貼り付け）」が出ます。それを押すとパスワードが入ります。最後に「認証」を押せば完了です。</div></li>
+    </ol>
+    <p class="ug-note"><i class="ti ti-bulb"></i>一度パスワードを入れると、次回から入れ直さずに使えることがあります。うまくいかない時は支部（048-773-9863）へお気軽にお電話ください。</p>
   </div>
 
   <div class="caution">
@@ -288,6 +311,13 @@
 
 <script>
 let pwVisible = false;
+function copyForSite(){
+  // 「デジタルどけんカードを開く」を押した時にパスワードを自動コピー（貼り付けだけで済むように）
+  try{
+    var pw = (document.getElementById('pw-val').textContent || '').trim();
+    if(navigator.clipboard && window.isSecureContext){ navigator.clipboard.writeText(pw); }
+  }catch(e){}
+}
 function togglePw(){
   pwVisible = !pwVisible;
   const val = document.getElementById('pw-val');
