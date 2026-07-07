@@ -246,6 +246,24 @@ html[data-theme="dark"] .manual-open{color:#FFFFFF;}
   .hero-sub{font-size:16px;}
   .hero-sub span{font-size:14px;}
 }
+
+/* ===== 今日・今週の予定ウィジェット ===== */
+.home-agenda-card{display:block;margin:2px 0 20px;padding:14px 16px;background:var(--white);border:1px solid var(--gray200);border-radius:16px;text-decoration:none;color:inherit;box-shadow:0 3px 14px rgba(0,0,0,.06);}
+.hac-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px;}
+.hac-title{display:flex;align-items:center;gap:7px;font-weight:800;font-size:15px;color:var(--navy);}
+.hac-title i{color:var(--orange);font-size:19px;}
+.hac-more{display:flex;align-items:center;gap:1px;font-size:12.5px;font-weight:800;color:var(--orange);white-space:nowrap;}
+.hac-list{display:flex;flex-direction:column;gap:8px;}
+.hac-row{display:grid;grid-template-columns:50px 1fr;gap:11px;align-items:center;padding:9px 11px;background:var(--gray50);border-radius:11px;border-left:4px solid var(--gray300);}
+.hac-row.hac-today{background:rgba(232,97,42,.12);border-left-color:var(--orange);}
+.hac-date{text-align:center;line-height:1.02;}
+.hac-date b{display:block;font-size:21px;font-weight:900;color:var(--navy);}
+.hac-date span{display:block;font-size:11px;font-weight:800;color:var(--gray500);margin-top:2px;}
+.hac-info{min-width:0;}
+.hac-evtitle{font-size:14px;font-weight:800;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.hac-meta{font-size:12px;font-weight:600;color:var(--gray500);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px;}
+.hac-badge{display:inline-block;font-size:10px;font-weight:900;color:#fff;background:var(--orange);border-radius:5px;padding:1px 6px;margin-right:6px;vertical-align:middle;}
+.hac-loading,.hac-empty{font-size:13px;font-weight:600;color:var(--gray500);padding:7px 2px;}
 </style>
 </head>
 <body>
@@ -264,6 +282,17 @@ html[data-theme="dark"] .manual-open{color:#FFFFFF;}
     <i class="ti ti-phone"></i>048-773-9863
   </a>
 </div>
+
+<!-- ===== 今日・今週の予定（カレンダー要約） ===== -->
+<a href="calendar.html" class="home-agenda-card" aria-label="今日・今週の予定をカレンダーで開く">
+  <div class="hac-head">
+    <span class="hac-title"><i class="ti ti-calendar-event"></i>今日・今週の予定</span>
+    <span class="hac-more">すべて見る<i class="ti ti-chevron-right"></i></span>
+  </div>
+  <div class="hac-list" id="home-agenda-list">
+    <div class="hac-loading">予定を確認中…</div>
+  </div>
+</a>
 
 <!-- ===== よく使う ===== -->
 <div class="section">
@@ -639,5 +668,90 @@ if('serviceWorker' in navigator){
     .catch(err => console.warn('[SW] 登録失敗:', err));
 }
 </script>
+
+<script>
+/* ホーム：今日・今週の予定（カレンダーから最大3件） */
+(function(){
+  var listEl = document.getElementById('home-agenda-list');
+  if(!listEl) return;
+
+  var API_KEY = 'AIzaSyAcwXq2eLqpJNLJKy8clba4PpuBQE90FEU';
+  var CALENDARS = [
+    'saitamadokenageoina@gmail.com',
+    '920df97122bc62cb84852428f01928500d430b00a5acef448d6eb679d8cdf1fb@group.calendar.google.com',
+    '54161b483cfaa13f0564824f4faefb29de140db9edaf11354a7e7ab1ea84a9bb@group.calendar.google.com',
+    'e018dfe146750b7c91526703a0bd87946403c54a72f4ccae9d5d3ad7f4baa089@group.calendar.google.com',
+    'b077dc8d3c4a32926a17ca7ab55fb0d7f3a1cbda300012ea6a40861d26e7228d@group.calendar.google.com',
+    'fed78bebafadb3c46d2a023a02549e5cdadf32ad56e5444f40a5ac99c3b68bd8@group.calendar.google.com'
+  ];
+  var DAYS = ['日','月','火','水','木','金','土'];
+
+  var now = new Date();
+  var weekLater = new Date(now); weekLater.setDate(now.getDate() + 7);
+  var timeMin = now.toISOString();
+  var timeMax = weekLater.toISOString();
+  var pad = function(n){ return String(n).padStart(2,'0'); };
+  var todayStr = now.getFullYear() + '-' + pad(now.getMonth()+1) + '-' + pad(now.getDate());
+  var esc = function(s){ return String(s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); };
+
+  var reqs = CALENDARS.map(function(id){
+    var url = 'https://www.googleapis.com/calendar/v3/calendars/' + encodeURIComponent(id)
+      + '/events?key=' + API_KEY
+      + '&timeMin=' + encodeURIComponent(timeMin)
+      + '&timeMax=' + encodeURIComponent(timeMax)
+      + '&singleEvents=true&orderBy=startTime&maxResults=10';
+    return fetch(url).then(function(r){ return r.ok ? r.json() : {items:[]}; })
+      .then(function(d){ return (d.items||[]).map(function(ev){
+        return {
+          title: ev.summary || '(無題)',
+          start: ev.start.dateTime || ev.start.date,
+          end:   ev.end.dateTime   || ev.end.date,
+          allDay: !ev.start.dateTime,
+          location: ev.location || ''
+        };
+      }); })
+      .catch(function(){ return []; });
+  });
+
+  Promise.all(reqs).then(function(results){
+    var events = [].concat.apply([], results)
+      .sort(function(a,b){ return a.start.localeCompare(b.start); })
+      .slice(0, 3);
+
+    if(!events.length){
+      listEl.innerHTML = '<div class="hac-empty">今週の予定はありません。</div>';
+      return;
+    }
+
+    listEl.innerHTML = events.map(function(ev){
+      var dstr = ev.start.slice(0,10);
+      var d = new Date(dstr + 'T00:00:00');
+      var dow = d.getDay();
+      var isToday = (dstr === todayStr);
+
+      var timeStr;
+      if(ev.allDay){ timeStr = '終日'; }
+      else { var s = new Date(ev.start); timeStr = pad(s.getHours()) + ':' + pad(s.getMinutes()); }
+
+      var loc = ev.location
+        ? ev.location.replace(/,?\s*日本.*/, '').replace(/〒\d{3}-\d{4}\s*/, '').split(',')[0].trim().slice(0,16)
+        : '';
+      var meta = [timeStr, loc].filter(Boolean).join(' ・ ');
+      var dowColor = dow === 0 ? '#CC3B3B' : (dow === 6 ? '#3A66C0' : '');
+
+      return '<div class="hac-row' + (isToday ? ' hac-today' : '') + '">'
+        + '<div class="hac-date"><b>' + d.getDate() + '</b>'
+        + '<span' + (dowColor ? ' style="color:' + dowColor + '"' : '') + '>' + DAYS[dow] + '</span></div>'
+        + '<div class="hac-info">'
+        + '<div class="hac-evtitle">' + (isToday ? '<span class="hac-badge">今日</span>' : '') + esc(ev.title) + '</div>'
+        + '<div class="hac-meta">' + esc(meta) + '</div>'
+        + '</div></div>';
+    }).join('');
+  }).catch(function(){
+    listEl.innerHTML = '<div class="hac-empty">予定を取得できませんでした。</div>';
+  });
+})();
+</script>
+
 </body>
 </html>
