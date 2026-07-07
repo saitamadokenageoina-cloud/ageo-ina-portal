@@ -248,17 +248,6 @@ html[data-theme="dark"] .manual-open{color:#FFFFFF;}
 }
 
 
-/* ===== ヒーロー内「今日の予定」チップ ===== */
-.hero-subrow{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin:12px 0 20px;position:relative;z-index:1;}
-.hero-subrow .hero-sub{margin:0;}
-.hero-today{flex:0 1 auto;min-width:148px;max-width:210px;display:block;text-decoration:none;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:13px;padding:9px 13px;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);}
-.ht-label{display:flex;align-items:center;gap:5px;font-size:10.5px;font-weight:800;letter-spacing:.06em;color:#00C8FF;margin-bottom:4px;}
-.ht-label i{font-size:14px;}
-.ht-item{font-size:13px;font-weight:800;color:#fff;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.ht-item .ht-time{color:#FFC08A;margin-right:5px;}
-.ht-more{font-size:11px;font-weight:700;color:rgba(255,255,255,.72);margin-top:2px;}
-.ht-none{font-size:12.5px;font-weight:700;color:rgba(255,255,255,.78);}
-@media(max-width:400px){.hero-today{flex:1 1 100%;min-width:0;max-width:none;}}
 </style>
 </head>
 <body>
@@ -272,13 +261,7 @@ html[data-theme="dark"] .manual-open{color:#FFFFFF;}
   <div class="hero-main">
     <h1 class="hero-title">埼玉土建<br><span>上尾伊奈支部</span></h1>
   </div>
-  <div class="hero-subrow">
-    <p class="hero-sub">組合員のための現場<span>暮らしサポートアプリ</span></p>
-    <a href="calendar.html" class="hero-today" id="hero-today" aria-label="今日の予定をカレンダーで開く">
-      <span class="ht-label"><i class="ti ti-calendar-event"></i>今日の予定</span>
-      <span class="ht-body"><span class="ht-none">確認中…</span></span>
-    </a>
-  </div>
+  <p class="hero-sub">組合員のための現場<span>暮らしサポートアプリ</span></p>
   <a href="tel:048-773-9863" class="hero-tel">
     <i class="ti ti-phone"></i>048-773-9863
   </a>
@@ -416,6 +399,29 @@ html[data-theme="dark"] .manual-open{color:#FFFFFF;}
         <span class="mc-badge new">NEW</span>
         <p class="mc-title">CCUS能力評価サポート診断</p>
         <p class="mc-desc">能力評価の申請条件を確認</p>
+      </div>
+    </a>
+
+    <!-- 作業記録 -->
+    <a class="mc" href="work_log.html">
+      <div class="mc-top" style="background:linear-gradient(135deg,#0E5C4A,#147C62);">
+        <svg viewBox="0 0 200 80" aria-hidden="true">
+          <rect x="66" y="12" width="68" height="58" rx="7" fill="rgba(255,255,255,.16)"/>
+          <rect x="88" y="7" width="24" height="12" rx="4" fill="rgba(255,255,255,.4)"/>
+          <circle cx="82" cy="30" r="4" fill="rgba(120,235,170,.9)"/>
+          <polyline points="79,30 81,33 86,26" stroke="#0E5C4A" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+          <rect x="92" y="28" width="34" height="4" rx="2" fill="rgba(255,255,255,.5)"/>
+          <circle cx="82" cy="44" r="4" fill="rgba(120,235,170,.9)"/>
+          <polyline points="79,44 81,47 86,40" stroke="#0E5C4A" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+          <rect x="92" y="42" width="28" height="4" rx="2" fill="rgba(255,255,255,.38)"/>
+          <rect x="78" y="56" width="44" height="4" rx="2" fill="rgba(255,255,255,.3)"/>
+        </svg>
+        <span class="mc-emoji">📝</span>
+      </div>
+      <div class="mc-body">
+        <span class="mc-badge new">NEW</span>
+        <p class="mc-title">作業記録</p>
+        <p class="mc-desc">粉塵・石綿・振動を毎日かんたん記録</p>
       </div>
     </a>
 
@@ -661,61 +667,6 @@ if('serviceWorker' in navigator){
 
 
 
-<script>
-/* ホーム：今日の予定チップ（カレンダーから当日分） */
-(function(){
-  var body = document.querySelector('#hero-today .ht-body');
-  if(!body) return;
-
-  var API_KEY = 'AIzaSyAcwXq2eLqpJNLJKy8clba4PpuBQE90FEU';
-  var CALENDARS = [
-    'saitamadokenageoina@gmail.com',
-    '920df97122bc62cb84852428f01928500d430b00a5acef448d6eb679d8cdf1fb@group.calendar.google.com',
-    '54161b483cfaa13f0564824f4faefb29de140db9edaf11354a7e7ab1ea84a9bb@group.calendar.google.com',
-    'e018dfe146750b7c91526703a0bd87946403c54a72f4ccae9d5d3ad7f4baa089@group.calendar.google.com',
-    'b077dc8d3c4a32926a17ca7ab55fb0d7f3a1cbda300012ea6a40861d26e7228d@group.calendar.google.com',
-    'fed78bebafadb3c46d2a023a02549e5cdadf32ad56e5444f40a5ac99c3b68bd8@group.calendar.google.com'
-  ];
-  var pad = function(n){ return String(n).padStart(2,'0'); };
-  var esc = function(s){ return String(s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); };
-
-  var now = new Date();
-  var start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0,0,0);
-  var end   = new Date(now.getFullYear(), now.getMonth(), now.getDate()+1, 0,0,0);
-  var timeMin = start.toISOString();
-  var timeMax = end.toISOString();
-
-  var reqs = CALENDARS.map(function(id){
-    var url = 'https://www.googleapis.com/calendar/v3/calendars/' + encodeURIComponent(id)
-      + '/events?key=' + API_KEY
-      + '&timeMin=' + encodeURIComponent(timeMin)
-      + '&timeMax=' + encodeURIComponent(timeMax)
-      + '&singleEvents=true&orderBy=startTime&maxResults=6';
-    return fetch(url).then(function(r){ return r.ok ? r.json() : {items:[]}; })
-      .then(function(d){ return (d.items||[]).map(function(ev){
-        return { title: ev.summary || '(無題)', start: ev.start.dateTime || ev.start.date, allDay: !ev.start.dateTime };
-      }); })
-      .catch(function(){ return []; });
-  });
-
-  Promise.all(reqs).then(function(results){
-    var events = [].concat.apply([], results).sort(function(a,b){ return a.start.localeCompare(b.start); });
-    if(!events.length){
-      body.innerHTML = '<span class="ht-none">予定なし</span>';
-      return;
-    }
-    var ev = events[0];
-    var timeStr;
-    if(ev.allDay){ timeStr = '終日'; }
-    else { var s = new Date(ev.start); timeStr = pad(s.getHours()) + ':' + pad(s.getMinutes()); }
-    var html = '<span class="ht-item"><span class="ht-time">' + timeStr + '</span>' + esc(ev.title) + '</span>';
-    if(events.length > 1){ html += '<span class="ht-more">ほか' + (events.length - 1) + '件</span>'; }
-    body.innerHTML = html;
-  }).catch(function(){
-    body.innerHTML = '<span class="ht-none">取得できませんでした</span>';
-  });
-})();
-</script>
 
 </body>
 </html>

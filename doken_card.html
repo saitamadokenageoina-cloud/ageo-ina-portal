@@ -119,9 +119,13 @@
 .ug-head i{color:var(--orange);font-size:21px;}
 .ug-steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:13px;}
 .ug-steps li{display:flex;gap:12px;align-items:flex-start;}
-.ug-num{flex:0 0 28px;width:28px;height:28px;border-radius:50%;background:var(--orange);color:#fff;font-weight:900;font-size:16px;display:flex;align-items:center;justify-content:center;margin-top:1px;}
-.ug-body{font-size:14.5px;line-height:1.65;color:var(--gray700);}
-.ug-body b{display:block;color:var(--navy);font-size:15.5px;margin-bottom:2px;}
+.ug-fig{flex:0 0 46px;width:46px;height:46px;border-radius:12px;background:rgba(232,97,42,.1);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;margin-top:1px;}
+.ug-fig i{font-size:23px;color:var(--orange);}
+.ug-fig .ug-n{font-size:8.5px;font-weight:900;color:var(--orange);letter-spacing:.02em;}
+.ug-body{flex:1;font-size:15px;line-height:1.62;color:var(--gray700);}
+.ug-body b{display:block;color:var(--navy);font-size:15.5px;margin-bottom:3px;}
+.ug-paste{display:inline-flex;align-items:center;gap:5px;margin:2px 3px;background:#2b2b2b;color:#fff;font-size:12px;font-weight:800;padding:4px 11px;border-radius:8px;box-shadow:0 3px 8px rgba(0,0,0,.2);vertical-align:middle;}
+.ug-paste i{color:#fff;font-size:14px;}
 .ug-note{display:flex;align-items:flex-start;gap:7px;margin:14px 0 0;padding-top:12px;border-top:1px solid var(--gray200);font-size:13px;line-height:1.6;color:var(--gray600);}
 .ug-note i{color:var(--orange);font-size:17px;margin-top:1px;flex:0 0 auto;}
 </style>
@@ -192,13 +196,22 @@
 
   <!-- ===== 使い方ガイド（機械が苦手な方向け）===== -->
   <div class="usage-guide">
-    <p class="ug-head"><i class="ti ti-help-circle"></i>はじめての方へ（かんたん3ステップ）</p>
+    <p class="ug-head"><i class="ti ti-help-circle"></i>使い方（かんたん3ステップ）</p>
     <ol class="ug-steps">
-      <li><span class="ug-num">1</span><div class="ug-body"><b>「コピー」ボタンを押す</b>上にある青いパスワード欄の「コピー」を押すと、パスワード（TD2026）が自動で控えられます。</div></li>
-      <li><span class="ug-num">2</span><div class="ug-body"><b>「デジタルどけんカードを開く」を押す</b>公式サイトが開きます（開いた時にもパスワードは自動でコピーされます）。</div></li>
-      <li><span class="ug-num">3</span><div class="ug-body"><b>パスワード欄を長押し →「ペースト」→「認証」</b>サイトのパスワード入力欄を指で<strong>長押し</strong>すると「ペースト（貼り付け）」が出ます。それを押すとパスワードが入ります。最後に「認証」を押せば完了です。</div></li>
+      <li>
+        <span class="ug-fig"><i class="ti ti-copy"></i><span class="ug-n">STEP1</span></span>
+        <div class="ug-body"><b>「コピー」を押す</b>パスワードが自動でひかえられます。</div>
+      </li>
+      <li>
+        <span class="ug-fig"><i class="ti ti-external-link"></i><span class="ug-n">STEP2</span></span>
+        <div class="ug-body"><b>「デジタルどけんカードを開く」を押す</b>公式サイトが開きます。</div>
+      </li>
+      <li>
+        <span class="ug-fig"><i class="ti ti-hand-finger"></i><span class="ug-n">STEP3</span></span>
+        <div class="ug-body"><b>入力欄を“長押し”して貼り付け</b>指で長押しすると出てくる<span class="ug-paste"><i class="ti ti-clipboard"></i>ペースト</span>を押す → 「認証」で完了！</div>
+      </li>
     </ol>
-    <p class="ug-note"><i class="ti ti-bulb"></i>一度パスワードを入れると、次回から入れ直さずに使えることがあります。うまくいかない時は支部（048-773-9863）へお気軽にお電話ください。</p>
+    <p class="ug-note"><i class="ti ti-phone"></i>うまくいかない時は支部（048-773-9863）へお電話ください。いっしょに操作します。</p>
   </div>
 
   <div class="caution">

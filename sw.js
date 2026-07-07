@@ -2,7 +2,7 @@
 // ★重要★ 変更をデプロイするたびに CACHE_VERSION の末尾番号を必ず1つ上げること。
 //   このファイルのバイトが変わることでブラウザが更新を検知し、
 //   新SWを再インストール → 古いキャッシュを全削除 → ページ自動リロードとなる。
-const CACHE_VERSION = 'v20260707-18';
+const CACHE_VERSION = 'v20260707-19';
 const CACHE_NAME = 'ageo-ina-portal-' + CACHE_VERSION;
 
 // GitHub Pages プロジェクトページのため、配信は /ageo-ina-portal/ 配下
@@ -23,6 +23,7 @@ const CACHE_FILES = [
   BASE + 'rodo36_preview.html',
   BASE + 'rodo36_form_preview.html',
   BASE + 'anzen_check.html',
+  BASE + 'work_log.html',
 ];
 
 // インストール：新キャッシュを作成（1ファイル失敗してもinstall全体は成功させる）
