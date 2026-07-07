@@ -24,27 +24,28 @@
 }
 .fld input:focus,.fld textarea:focus{border-color:var(--orange);}
 .fld textarea{resize:vertical;min-height:52px;line-height:1.5;}
-.fld .hint{font-size:11.5px;color:var(--gray500);margin-top:4px;font-weight:600;}
 
-.haz-label{font-size:13px;font-weight:800;color:var(--gray600);margin:2px 0 8px;}
+.haz-label{font-size:13px;font-weight:800;color:var(--gray600);margin:2px 0 4px;}
+.haz-sub{font-size:11.5px;color:var(--gray500);margin:0 0 9px;font-weight:600;}
 .haz-grid{display:flex;flex-direction:column;gap:9px;}
-.haz-btn{display:flex;align-items:center;gap:11px;width:100%;box-sizing:border-box;padding:12px 14px;background:var(--gray50);border:1.5px solid var(--gray200);border-radius:12px;cursor:pointer;text-align:left;font-family:inherit;transition:all .12s;}
-.haz-btn .hz-ico{font-size:22px;flex-shrink:0;color:var(--gray400);}
-.haz-btn .hz-name{flex:1;font-size:15px;font-weight:800;color:var(--navy);}
-.haz-btn .hz-state{font-size:13px;font-weight:900;color:var(--gray500);background:var(--gray200);border-radius:8px;padding:4px 12px;min-width:44px;text-align:center;}
+.haz-btn{display:flex;align-items:center;gap:11px;width:100%;box-sizing:border-box;padding:11px 13px;background:var(--gray50);border:1.5px solid var(--gray200);border-radius:12px;cursor:pointer;text-align:left;font-family:inherit;transition:all .12s;}
+.haz-btn .hz-ico{font-size:21px;flex-shrink:0;color:var(--gray400);width:24px;text-align:center;}
+.haz-btn .hz-name{flex:1;font-size:14.5px;font-weight:800;color:var(--navy);line-height:1.3;}
+.haz-btn .hz-state{font-size:12.5px;font-weight:900;color:var(--gray500);background:var(--gray200);border-radius:8px;padding:4px 11px;min-width:40px;text-align:center;flex-shrink:0;}
 .haz-btn.on{background:rgba(232,97,42,.1);border-color:var(--orange);}
 .haz-btn.on .hz-ico{color:var(--orange);}
 .haz-btn.on .hz-state{background:var(--orange);color:#fff;}
+.hz-del{flex-shrink:0;width:28px;height:28px;border-radius:8px;background:var(--gray200);color:var(--gray600);display:flex;align-items:center;justify-content:center;font-size:14px;}
+.haz-add{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;box-sizing:border-box;padding:11px;margin-top:10px;background:transparent;border:1.5px dashed var(--gray300);border-radius:12px;color:var(--gray600);font-size:13.5px;font-weight:800;cursor:pointer;font-family:inherit;}
 
-.btn-row{display:flex;gap:10px;margin-top:4px;}
+.btn-row{display:flex;gap:10px;margin-top:16px;}
 .btn-main{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:15px;font-size:16px;font-weight:800;color:#fff;background:var(--orange);border:none;border-radius:12px;cursor:pointer;font-family:inherit;box-shadow:0 4px 14px rgba(232,97,42,.3);}
 .btn-main:active{transform:scale(.98);}
 .btn-sub{display:flex;align-items:center;justify-content:center;gap:6px;padding:15px 16px;font-size:14px;font-weight:800;color:var(--navy);background:var(--gray100);border:1.5px solid var(--gray200);border-radius:12px;cursor:pointer;font-family:inherit;white-space:nowrap;}
 
-.toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%) translateY(20px);background:#147C62;color:#fff;font-size:14px;font-weight:800;padding:12px 22px;border-radius:99px;box-shadow:0 8px 24px rgba(0,0,0,.3);opacity:0;pointer-events:none;transition:all .25s;z-index:120;}
+.toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%) translateY(20px);background:#147C62;color:#fff;font-size:14px;font-weight:800;padding:12px 22px;border-radius:99px;box-shadow:0 8px 24px rgba(0,0,0,.3);opacity:0;pointer-events:none;transition:all .25s;z-index:120;max-width:88%;text-align:center;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
-/* 記録一覧 */
 .rec-head{display:flex;align-items:center;justify-content:space-between;margin:22px 2px 12px;}
 .rec-head .rh-title{display:flex;align-items:center;gap:7px;font-size:16px;font-weight:800;color:var(--navy);}
 .rec-head .rh-title i{color:var(--orange);}
@@ -56,13 +57,12 @@
 .rec-actions{display:flex;gap:6px;flex-shrink:0;}
 .rec-actions button{background:var(--gray100);border:none;border-radius:8px;width:32px;height:32px;font-size:15px;color:var(--gray600);cursor:pointer;display:flex;align-items:center;justify-content:center;}
 .rec-actions button.del{color:var(--red);}
-.rec-jobsite{font-size:13.5px;font-weight:700;color:var(--gray700);margin-bottom:7px;line-height:1.5;}
-.rec-jobsite .rj-sep{color:var(--gray400);margin:0 6px;}
+.rec-jobsite{font-size:13.5px;font-weight:700;color:var(--gray700);margin-bottom:7px;line-height:1.55;}
+.rec-jobsite .rj-sep{color:var(--gray400);margin:0 5px;}
+.rec-jobsite .rj-moto{color:var(--gray500);font-weight:700;}
 .rec-hz{display:flex;flex-wrap:wrap;gap:6px;}
-.hz-tag{font-size:11.5px;font-weight:800;border-radius:7px;padding:3px 9px;}
-.hz-tag.on{background:rgba(232,97,42,.12);color:#C04E1E;}
-.hz-tag.off{background:var(--gray100);color:var(--gray400);}
-.hz-tag .hz-note{color:var(--gray500);font-weight:700;}
+.hz-tag{font-size:11.5px;font-weight:800;border-radius:7px;padding:3px 9px;background:rgba(232,97,42,.12);color:#C04E1E;}
+.hz-tag.none{background:var(--gray100);color:var(--gray400);}
 .rec-note{font-size:12.5px;color:var(--gray600);margin-top:7px;line-height:1.5;background:var(--gray50);border-radius:8px;padding:7px 10px;}
 
 .empty{text-align:center;color:var(--gray500);font-size:13.5px;font-weight:600;padding:26px 10px;line-height:1.6;}
@@ -77,8 +77,7 @@
 .pr-table{width:100%;border-collapse:collapse;font-size:8.5pt;}
 .pr-table th,.pr-table td{border:1px solid #999;padding:4px 5px;text-align:left;vertical-align:top;color:#111;}
 .pr-table th{background:#1B2A3B;color:#fff;font-size:8pt;white-space:nowrap;}
-.pr-table td.c{text-align:center;font-weight:800;}
-.pr-foot{font-size:8pt;color:#555;margin-top:10px;}
+.pr-foot{font-size:8pt;color:#555;margin-top:10px;line-height:1.5;}
 @media print{
   @page{size:A4 portrait;margin:12mm;}
   header.hdr,.content{display:none !important;}
@@ -103,7 +102,7 @@
     <i class="ti ti-clipboard-text"></i>
     <div>
       <h2>毎日の作業をかんたん記録</h2>
-      <p>粉塵・石綿・振動工具の作業歴を残せます。将来の労災（じん肺・振動障害など）認定時に役立つ記録になります。</p>
+      <p>粉塵・石綿・騒音・化学物質・振動・暑さ・重量物などの作業歴を残せます。将来の職業病・労災（じん肺、石綿関連疾患、騒音性難聴、振動障害など）の認定時に役立つ記録になります。</p>
     </div>
   </div>
 
@@ -121,32 +120,29 @@
       <datalist id="job-list"></datalist>
     </div>
     <div class="fld">
+      <label for="f-moto">元請（元請会社名）</label>
+      <input type="text" id="f-moto" list="moto-list" placeholder="例：○○建設株式会社" autocomplete="off">
+      <datalist id="moto-list"></datalist>
+    </div>
+    <div class="fld">
       <label for="f-site">現場名</label>
       <input type="text" id="f-site" list="site-list" placeholder="例：上尾○○ビル新築工事" autocomplete="off">
       <datalist id="site-list"></datalist>
     </div>
 
-    <p class="haz-label">作業内容（あった作業だけタップ）</p>
-    <div class="haz-grid">
-      <button type="button" class="haz-btn" id="hz-dust" onclick="toggleHz('dust')">
-        <i class="ti ti-wind hz-ico"></i><span class="hz-name">粉塵の出る作業</span><span class="hz-state">なし</span>
-      </button>
-      <button type="button" class="haz-btn" id="hz-asbestos" onclick="toggleHz('asbestos')">
-        <i class="ti ti-alert-triangle hz-ico"></i><span class="hz-name">石綿（アスベスト）</span><span class="hz-state">なし</span>
-      </button>
-      <button type="button" class="haz-btn" id="hz-vibration" onclick="toggleHz('vibration')">
-        <i class="ti ti-tool hz-ico"></i><span class="hz-name">振動工具の使用</span><span class="hz-state">なし</span>
-      </button>
-    </div>
+    <p class="haz-label">作業内容・有害作業</p>
+    <p class="haz-sub">その日にあった作業だけタップ（なくてもOK）。項目は自由に追加できます。</p>
+    <div class="haz-grid" id="haz-grid"></div>
+    <button type="button" class="haz-add" onclick="addCustomHz()"><i class="ti ti-plus"></i>項目を追加する</button>
 
-    <div class="fld" style="margin-top:14px;">
+    <div class="fld" style="margin-top:16px;">
       <label for="f-note">メモ（任意）</label>
       <textarea id="f-note" placeholder="必要なら作業の内容を一言（空欄でOK）"></textarea>
     </div>
 
     <div class="btn-row">
       <button class="btn-main" onclick="saveRecord()"><i class="ti ti-device-floppy"></i>この内容で保存</button>
-      <button class="btn-sub" onclick="fillLast()" id="btn-last"><i class="ti ti-copy"></i>前回と同じ</button>
+      <button class="btn-sub" onclick="fillLast()"><i class="ti ti-copy"></i>前回と同じ</button>
     </div>
   </div>
 
@@ -178,139 +174,194 @@
 <script>
 const KEY = 'doken_worklog_v1';
 const KEY_JOB = 'doken_worklog_job';
-const HZ = { dust:'粉塵', asbestos:'石綿', vibration:'振動工具' };
-let hz = { dust:false, asbestos:false, vibration:false };
+const KEY_HZ  = 'doken_worklog_customhz';
+
+/* 建設業の職業病に対応した既定の有害作業項目 */
+const HAZARDS_DEFAULT = [
+  { key:'dust',      name:'粉塵',              icon:'ti-wind' },
+  { key:'asbestos',  name:'石綿（アスベスト）', icon:'ti-alert-triangle' },
+  { key:'noise',     name:'騒音',              icon:'ti-ear' },
+  { key:'chemical',  name:'化学物質・有機溶剤', icon:'ti-flask' },
+  { key:'vibration', name:'振動工具',          icon:'ti-tool' },
+  { key:'hand',      name:'手指の反復作業',     icon:'ti-hand-finger' },
+  { key:'posture',   name:'重量物・無理な姿勢', icon:'ti-weight' },
+  { key:'heat',      name:'高温・暑さ',        icon:'ti-sun' }
+];
+
+let hzOn = {};      // key -> bool（入力中の状態）
 let editId = null;
 
 function load(){ try{ return JSON.parse(localStorage.getItem(KEY) || '[]'); }catch(e){ return []; } }
 function store(a){ try{ localStorage.setItem(KEY, JSON.stringify(a)); }catch(e){} }
+function loadCustom(){ try{ return JSON.parse(localStorage.getItem(KEY_HZ) || '[]'); }catch(e){ return []; } }
+function storeCustom(a){ try{ localStorage.setItem(KEY_HZ, JSON.stringify(a)); }catch(e){} }
+function allHazards(){ return HAZARDS_DEFAULT.concat(loadCustom()); }
+
 function esc(s){ return String(s||'').replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 function pad(n){ return String(n).padStart(2,'0'); }
 function todayStr(){ const d=new Date(); return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
-
 function fmtDate(iso){
-  const p = iso.split('-'); if(p.length<3) return iso;
-  const d = new Date(+p[0], +p[1]-1, +p[2]);
-  const w = ['日','月','火','水','木','金','土'][d.getDay()];
+  const p=iso.split('-'); if(p.length<3) return iso;
+  const d=new Date(+p[0], +p[1]-1, +p[2]);
+  const w=['日','月','火','水','木','金','土'][d.getDay()];
   return (+p[1])+'月'+(+p[2])+'日（'+w+'）';
 }
-
-function toggleHz(k){
-  hz[k] = !hz[k];
-  const btn = document.getElementById('hz-'+k);
-  btn.classList.toggle('on', hz[k]);
-  btn.querySelector('.hz-state').textContent = hz[k] ? 'あり' : 'なし';
-}
-function setHz(v){
-  ['dust','asbestos','vibration'].forEach(k=>{
-    hz[k] = !!(v && v[k]);
-    const btn = document.getElementById('hz-'+k);
-    btn.classList.toggle('on', hz[k]);
-    btn.querySelector('.hz-state').textContent = hz[k] ? 'あり' : 'なし';
-  });
-}
-
 function toast(msg){
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  clearTimeout(t._t); t._t = setTimeout(()=>t.classList.remove('show'), 1900);
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),1900);
+}
+
+/* 有害作業トグルの描画 */
+function renderHaz(){
+  const custom = loadCustom();
+  const html = allHazards().map(h=>{
+    const on = !!hzOn[h.key];
+    const isCustom = custom.some(c=>c.key===h.key);
+    return '<button type="button" class="haz-btn'+(on?' on':'')+'" onclick="toggleHz(\''+h.key+'\')">'
+      + '<i class="ti '+h.icon+' hz-ico"></i>'
+      + '<span class="hz-name">'+esc(h.name)+'</span>'
+      + '<span class="hz-state">'+(on?'あり':'なし')+'</span>'
+      + (isCustom ? '<span class="hz-del" onclick="delCustomHz(\''+h.key+'\',event)"><i class="ti ti-x"></i></span>' : '')
+      + '</button>';
+  }).join('');
+  document.getElementById('haz-grid').innerHTML = html;
+}
+function toggleHz(k){ hzOn[k]=!hzOn[k]; renderHaz(); }
+
+function addCustomHz(){
+  const name = (prompt('追加する作業・有害作業の名前を入力してください\n（例：溶接ヒューム、有機溶剤、騒音の大きい作業 など）')||'').trim();
+  if(!name) return;
+  const custom = loadCustom();
+  if(allHazards().some(h=>h.name===name)){ toast('同じ項目がすでにあります'); return; }
+  const key='c'+Date.now();
+  custom.push({key, name, icon:'ti-circle-dot'});
+  storeCustom(custom);
+  hzOn[key]=true;
+  renderHaz();
+  toast('「'+name+'」を追加しました');
+}
+function delCustomHz(k, ev){
+  if(ev){ ev.stopPropagation(); }
+  const custom=loadCustom();
+  const target=custom.find(c=>c.key===k);
+  if(!target) return;
+  if(!confirm('項目「'+target.name+'」を一覧から削除しますか？\n（保存済みの記録の表示はそのまま残ります）')) return;
+  storeCustom(custom.filter(c=>c.key!==k));
+  delete hzOn[k];
+  renderHaz();
+}
+
+function setHzFromRecord(rec){
+  hzOn={};
+  const names = (rec && rec.hazards) || [];
+  // 記録に含まれるが一覧に無いカスタム項目は、表示できるよう一時的に復活させる
+  const custom = loadCustom();
+  let changed=false;
+  names.forEach(nm=>{
+    if(!allHazards().some(h=>h.name===nm)){
+      custom.push({key:'c'+Date.now()+Math.floor(Math.random()*999), name:nm, icon:'ti-circle-dot'});
+      changed=true;
+    }
+  });
+  if(changed) storeCustom(custom);
+  allHazards().forEach(h=>{ hzOn[h.key] = names.indexOf(h.name)>=0; });
+  renderHaz();
+}
+function collectHazards(){
+  return allHazards().filter(h=>hzOn[h.key]).map(h=>h.name);
 }
 
 function resetForm(){
-  editId = null;
-  document.getElementById('f-date').value = todayStr();
-  document.getElementById('f-site').value = '';
-  document.getElementById('f-note').value = '';
-  setHz(null);
-  document.querySelector('.btn-main').innerHTML = '<i class="ti ti-device-floppy"></i>この内容で保存';
+  editId=null;
+  document.getElementById('f-date').value=todayStr();
+  document.getElementById('f-site').value='';
+  document.getElementById('f-note').value='';
+  hzOn={}; renderHaz();
+  document.querySelector('.btn-main').innerHTML='<i class="ti ti-device-floppy"></i>この内容で保存';
 }
 
 function saveRecord(){
-  const date = document.getElementById('f-date').value || todayStr();
-  const job  = document.getElementById('f-job').value.trim();
-  const site = document.getElementById('f-site').value.trim();
-  const note = document.getElementById('f-note').value.trim();
-
+  const date=document.getElementById('f-date').value || todayStr();
+  const job =document.getElementById('f-job').value.trim();
+  const moto=document.getElementById('f-moto').value.trim();
+  const site=document.getElementById('f-site').value.trim();
+  const note=document.getElementById('f-note').value.trim();
   if(!job && !site){ toast('職種か現場名を入れてください'); return; }
 
-  const rec = { id: editId || ('r'+Date.now()), date, job, site,
-    dust:hz.dust, asbestos:hz.asbestos, vibration:hz.vibration, note };
-
-  let arr = load();
-  if(editId){ arr = arr.map(r => r.id===editId ? rec : r); }
-  else { arr.push(rec); }
+  const rec={ id: editId || ('r'+Date.now()), date, job, moto, site, hazards:collectHazards(), note };
+  let arr=load();
+  if(editId){ arr=arr.map(r=>r.id===editId?rec:r); } else { arr.push(rec); }
   store(arr);
   if(job){ try{ localStorage.setItem(KEY_JOB, job); }catch(e){} }
 
-  toast(editId ? '記録を更新しました' : '記録を保存しました');
-  resetForm();
-  render();
+  toast(editId?'記録を更新しました':'記録を保存しました');
+  resetForm(); render();
 }
 
 function editRec(id){
-  const r = load().find(x=>x.id===id); if(!r) return;
-  editId = id;
-  document.getElementById('f-date').value = r.date;
-  document.getElementById('f-job').value = r.job || '';
-  document.getElementById('f-site').value = r.site || '';
-  document.getElementById('f-note').value = r.note || '';
-  setHz(r);
-  document.querySelector('.btn-main').innerHTML = '<i class="ti ti-check"></i>この内容で更新';
+  const r=load().find(x=>x.id===id); if(!r) return;
+  editId=id;
+  document.getElementById('f-date').value=r.date;
+  document.getElementById('f-job').value=r.job||'';
+  document.getElementById('f-moto').value=r.moto||'';
+  document.getElementById('f-site').value=r.site||'';
+  document.getElementById('f-note').value=r.note||'';
+  setHzFromRecord(r);
+  document.querySelector('.btn-main').innerHTML='<i class="ti ti-check"></i>この内容で更新';
   window.scrollTo({top:0, behavior:'smooth'});
 }
-
 function delRec(id){
   if(!confirm('この記録を削除しますか？')) return;
   store(load().filter(x=>x.id!==id));
   if(editId===id) resetForm();
-  render();
-  toast('削除しました');
+  render(); toast('削除しました');
 }
-
 function fillLast(){
-  const arr = load();
+  const arr=load();
   if(!arr.length){ toast('前回の記録がありません'); return; }
-  const r = arr[arr.length-1];
-  document.getElementById('f-job').value = r.job || '';
-  document.getElementById('f-site').value = r.site || '';
-  document.getElementById('f-note').value = '';
-  setHz(r);
-  document.getElementById('f-date').value = todayStr();
+  const r=arr[arr.length-1];
+  document.getElementById('f-job').value=r.job||'';
+  document.getElementById('f-moto').value=r.moto||'';
+  document.getElementById('f-site').value=r.site||'';
+  document.getElementById('f-note').value='';
+  document.getElementById('f-date').value=todayStr();
+  setHzFromRecord(r);
   toast('前回の内容を入れました');
 }
 
-function hzTags(r){
-  return ['dust','asbestos','vibration'].map(k=>{
-    const on = !!r[k];
-    return '<span class="hz-tag '+(on?'on':'off')+'">'+HZ[k]+' <span class="hz-note">'+(on?'あり':'なし')+'</span></span>';
-  }).join('');
-}
-
 function render(){
-  const arr = load().slice().sort((a,b)=> b.date.localeCompare(a.date) || b.id.localeCompare(a.id));
-  const list = document.getElementById('rec-list');
-  document.getElementById('rec-count').textContent = arr.length + '件';
+  const arr=load().slice().sort((a,b)=> b.date.localeCompare(a.date) || b.id.localeCompare(a.id));
+  document.getElementById('rec-count').textContent=arr.length+'件';
 
-  // datalist（職種・現場の履歴）
-  const jobs = [...new Set(load().map(r=>r.job).filter(Boolean))];
-  const sites = [...new Set(load().map(r=>r.site).filter(Boolean))];
-  document.getElementById('job-list').innerHTML = jobs.map(j=>'<option value="'+esc(j)+'">').join('');
-  document.getElementById('site-list').innerHTML = sites.map(s=>'<option value="'+esc(s)+'">').join('');
+  const raw=load();
+  const uniq=(k)=>[...new Set(raw.map(r=>r[k]).filter(Boolean))];
+  document.getElementById('job-list').innerHTML=uniq('job').map(v=>'<option value="'+esc(v)+'">').join('');
+  document.getElementById('moto-list').innerHTML=uniq('moto').map(v=>'<option value="'+esc(v)+'">').join('');
+  document.getElementById('site-list').innerHTML=uniq('site').map(v=>'<option value="'+esc(v)+'">').join('');
 
+  const list=document.getElementById('rec-list');
   if(!arr.length){
-    list.innerHTML = '<div class="empty">まだ記録がありません。<br>上のフォームから今日の作業を記録しましょう。</div>';
+    list.innerHTML='<div class="empty">まだ記録がありません。<br>上のフォームから今日の作業を記録しましょう。</div>';
   } else {
-    list.innerHTML = arr.map(r=>{
-      const js = [r.job, r.site].filter(Boolean).map(esc).join('<span class="rj-sep">／</span>');
+    list.innerHTML=arr.map(r=>{
+      const parts=[];
+      if(r.job) parts.push(esc(r.job));
+      if(r.moto) parts.push('<span class="rj-moto">元請：'+esc(r.moto)+'</span>');
+      if(r.site) parts.push(esc(r.site));
+      const js=parts.join('<span class="rj-sep">／</span>');
+      const hz=(r.hazards&&r.hazards.length)
+        ? r.hazards.map(n=>'<span class="hz-tag">'+esc(n)+'</span>').join('')
+        : '<span class="hz-tag none">有害作業なし</span>';
       return '<div class="rec">'
         + '<div class="rec-top"><span class="rec-date">'+fmtDate(r.date)+'</span>'
         + '<span class="rec-actions">'
         + '<button onclick="editRec(\''+r.id+'\')" aria-label="編集"><i class="ti ti-pencil"></i></button>'
         + '<button class="del" onclick="delRec(\''+r.id+'\')" aria-label="削除"><i class="ti ti-trash"></i></button>'
         + '</span></div>'
-        + (js ? '<div class="rec-jobsite">'+js+'</div>' : '')
-        + '<div class="rec-hz">'+hzTags(r)+'</div>'
-        + (r.note ? '<div class="rec-note">'+esc(r.note)+'</div>' : '')
+        + (js?'<div class="rec-jobsite">'+js+'</div>':'')
+        + '<div class="rec-hz">'+hz+'</div>'
+        + (r.note?'<div class="rec-note">'+esc(r.note)+'</div>':'')
         + '</div>';
     }).join('');
   }
@@ -318,22 +369,22 @@ function render(){
 }
 
 function buildPrint(arr){
-  const now = new Date();
-  const gen = now.getFullYear()+'年'+(now.getMonth()+1)+'月'+now.getDate()+'日 出力';
-  const mark = b => b ? '○' : '－';
-  let rows = arr.map(r=>(
-    '<tr><td>'+esc(r.date)+'</td><td>'+esc(r.job||'')+'</td><td>'+esc(r.site||'')+'</td>'
-    +'<td class="c">'+mark(r.dust)+'</td><td class="c">'+mark(r.asbestos)+'</td><td class="c">'+mark(r.vibration)+'</td>'
-    +'<td>'+esc(r.note||'')+'</td></tr>'
-  )).join('');
-  if(!arr.length) rows = '<tr><td colspan="7" style="text-align:center;color:#888;">記録なし</td></tr>';
-  document.getElementById('print-area').innerHTML =
-    '<p class="pr-h1">作業記録（粉塵・石綿・振動工具）</p>'
+  const now=new Date();
+  const gen=now.getFullYear()+'年'+(now.getMonth()+1)+'月'+now.getDate()+'日 出力';
+  let rows=arr.map(r=>{
+    const hz=(r.hazards&&r.hazards.length)?r.hazards.join('、'):'－';
+    return '<tr><td>'+esc(r.date)+'</td><td>'+esc(r.job||'')+'</td><td>'+esc(r.moto||'')+'</td>'
+      +'<td>'+esc(r.site||'')+'</td><td>'+esc(hz)+'</td><td>'+esc(r.note||'')+'</td></tr>';
+  }).join('');
+  if(!arr.length) rows='<tr><td colspan="6" style="text-align:center;color:#888;">記録なし</td></tr>';
+  document.getElementById('print-area').innerHTML=
+    '<p class="pr-h1">作業記録（職業病・労災対策）</p>'
     +'<p class="pr-sub">埼玉土建一般労働組合 上尾伊奈支部　｜　'+gen+'　｜　全'+arr.length+'件</p>'
     +'<table class="pr-table"><thead><tr>'
-    +'<th>日付</th><th>職種</th><th>現場名</th><th>粉塵</th><th>石綿</th><th>振動工具</th><th>メモ</th>'
+    +'<th>日付</th><th>職種</th><th>元請</th><th>現場名</th><th>有害作業（あった作業）</th><th>メモ</th>'
     +'</tr></thead><tbody>'+rows+'</tbody></table>'
-    +'<p class="pr-foot">○＝該当作業あり　／　－＝なし。本記録は組合員本人が入力したものです。労災（じん肺・石綿関連疾患・振動障害等）の認定資料の一助としてご活用ください。</p>';
+    +'<p class="pr-foot">本記録は組合員本人が入力したものです。粉塵・石綿・騒音・化学物質・振動・高温・重量物などの作業歴として、'
+    +'職業病・労災（じん肺、石綿関連疾患、騒音性難聴、振動障害、腰痛・頸肩腕障害、熱中症 等）の認定資料の一助にご活用ください。</p>';
 }
 
 function exportPDF(){
@@ -342,8 +393,9 @@ function exportPDF(){
 }
 
 // 初期化
-document.getElementById('f-date').value = todayStr();
-try{ const lj = localStorage.getItem(KEY_JOB); if(lj) document.getElementById('f-job').value = lj; }catch(e){}
+document.getElementById('f-date').value=todayStr();
+try{ const lj=localStorage.getItem(KEY_JOB); if(lj) document.getElementById('f-job').value=lj; }catch(e){}
+renderHaz();
 render();
 </script>
 
