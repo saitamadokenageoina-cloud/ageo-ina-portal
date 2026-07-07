@@ -82,8 +82,8 @@
 .msum-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:9px;}
 .msum-month{font-size:15px;font-weight:900;color:var(--navy);}
 .msum-days{font-size:12.5px;font-weight:800;color:#0E7C5A;background:rgba(20,124,98,.12);border-radius:99px;padding:3px 12px;}
-.msum-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
-.msum-del{background:rgba(214,69,69,.12);border:none;border-radius:8px;width:30px;height:30px;color:var(--red);font-size:15px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
+.msum-del-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;margin-top:11px;padding:10px;font-size:13px;font-weight:800;color:var(--red);background:rgba(214,69,69,.1);border:1.5px solid rgba(214,69,69,.32);border-radius:10px;cursor:pointer;font-family:inherit;}
+.msum-del-btn i{font-size:16px;}
 .msum-hz{display:flex;flex-wrap:wrap;gap:6px;}
 .msum-hz .mh{font-size:11.5px;font-weight:800;color:#C04E1E;background:rgba(232,97,42,.1);border-radius:7px;padding:3px 9px;}
 .msum-hz .mh-none{font-size:11.5px;color:var(--gray400);font-weight:700;}
@@ -498,9 +498,9 @@ function renderYearly(arr){
                             : '<span class="mh-none">有害作業の記録なし</span>';
     return '<div class="msum"><div class="msum-top">'
       +'<span class="msum-month">'+m.y+'年</span>'
-      +'<span class="msum-right"><span class="msum-days">記録 '+m.days+'日</span>'
-      +'<button class="msum-del" onclick="deleteYear(\''+m.y+'\')" aria-label="この年を削除"><i class="ti ti-trash"></i></button></span></div>'
-      +'<div class="msum-hz">'+chips+'</div></div>';
+      +'<span class="msum-days">記録 '+m.days+'日</span></div>'
+      +'<div class="msum-hz">'+chips+'</div>'
+      +'<button class="msum-del-btn" onclick="deleteYear(\''+m.y+'\')"><i class="ti ti-trash"></i>この年をまとめて削除</button></div>';
   }).join('');
 }
 function renderMonthly(arr){
@@ -514,9 +514,9 @@ function renderMonthly(arr){
                             : '<span class="mh-none">有害作業の記録なし</span>';
     return '<div class="msum"><div class="msum-top">'
       +'<span class="msum-month">'+y+'年'+mo+'月</span>'
-      +'<span class="msum-right"><span class="msum-days">記録 '+m.days+'日</span>'
-      +'<button class="msum-del" onclick="deleteMonth(\''+m.ym+'\')" aria-label="この月を削除"><i class="ti ti-trash"></i></button></span></div>'
-      +'<div class="msum-hz">'+chips+'</div></div>';
+      +'<span class="msum-days">記録 '+m.days+'日</span></div>'
+      +'<div class="msum-hz">'+chips+'</div>'
+      +'<button class="msum-del-btn" onclick="deleteMonth(\''+m.ym+'\')"><i class="ti ti-trash"></i>この月をまとめて削除</button></div>';
   }).join('');
 }
 
