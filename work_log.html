@@ -67,6 +67,38 @@
 .rec-note{font-size:12.5px;color:var(--gray600);margin-top:7px;line-height:1.5;background:var(--gray50);border-radius:8px;padding:7px 10px;}
 
 .empty{text-align:center;color:var(--gray500);font-size:13.5px;font-weight:600;padding:26px 10px;line-height:1.6;}
+/* ===== カレンダー月表示 ===== */
+.cal-box{background:var(--white);border:1px solid var(--gray200);border-radius:14px;padding:12px;box-shadow:0 3px 14px rgba(0,0,0,.06);}
+.cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.cal-title{font-size:16px;font-weight:900;color:var(--navy);}
+.cal-arrow{width:40px;height:40px;border-radius:10px;background:var(--gray100);border:none;color:var(--navy);font-size:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.cal-dow{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:4px;}
+.cal-dow span{text-align:center;font-size:12px;font-weight:800;color:var(--gray500);padding:3px 0;}
+.cal-dow .sun{color:#CC3B3B;}.cal-dow .sat{color:#3A66C0;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}
+.cal-cell{position:relative;aspect-ratio:1/1;border:none;background:var(--gray50);border-radius:9px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;font-family:inherit;padding:0;}
+.cal-cell.empty{background:transparent;cursor:default;padding:0;}
+.cal-cell .cal-d{font-size:14px;font-weight:700;color:var(--navy);}
+.cal-cell.sun .cal-d{color:#CC3B3B;}.cal-cell.sat .cal-d{color:#3A66C0;}
+.cal-cell.has{background:rgba(20,124,98,.16);}
+.cal-cell.has .cal-d{color:#0E7C5A;font-weight:900;}
+.cal-cell .cal-dot{width:6px;height:6px;border-radius:50%;background:#147C62;margin-top:3px;}
+.cal-cell.today{outline:2px solid var(--orange);outline-offset:-2px;}
+.cal-cell.sel{background:var(--orange)!important;}
+.cal-cell.sel .cal-d{color:#fff!important;}
+.cal-cell.sel .cal-dot{background:#fff;}
+.cal-hint{display:flex;align-items:flex-start;gap:5px;font-size:11.5px;color:var(--gray500);margin:10px 2px 0;line-height:1.5;}
+.cal-hint i{font-size:14px;margin-top:1px;}
+.day-panel{background:var(--white);border:1px solid var(--gray200);border-radius:14px;padding:14px;margin-top:12px;box-shadow:0 3px 14px rgba(0,0,0,.06);}
+.dp-head{display:flex;align-items:center;gap:6px;font-size:15px;font-weight:900;color:var(--navy);margin-bottom:11px;padding-bottom:9px;border-bottom:2px solid var(--gray100);}
+.dp-head i{color:var(--orange);}
+.dp-empty{color:var(--gray500);font-size:13px;padding:6px 0;font-weight:600;}
+.dp-rec{border-left:4px solid #147C62;background:var(--gray50);border-radius:10px;padding:11px 12px;margin-bottom:10px;}
+.dp-jobsite{font-size:13.5px;font-weight:800;color:var(--navy);margin-bottom:8px;line-height:1.55;}
+.dp-actions{display:flex;gap:8px;margin-top:11px;}
+.dp-edit,.dp-del{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;padding:10px;font-size:13px;font-weight:800;border-radius:9px;cursor:pointer;font-family:inherit;border:1.5px solid;}
+.dp-edit{color:var(--navy);background:var(--gray100);border-color:var(--gray200);}
+.dp-del{color:var(--red);background:rgba(214,69,69,.1);border-color:rgba(214,69,69,.32);}
 
 .safe-note{display:flex;align-items:flex-start;gap:8px;background:rgba(240,147,0,.1);border:1px solid rgba(240,147,0,.28);border-radius:12px;padding:12px 14px;margin:6px 0 4px;font-size:12.5px;line-height:1.6;color:var(--gray700);}
 .safe-note i{color:#B07800;font-size:18px;flex-shrink:0;margin-top:1px;}
@@ -200,12 +232,22 @@
   </div>
   <div id="month-summary"></div>
 
-  <!-- 一覧 -->
+  <!-- カレンダー月表示 -->
   <div class="rec-head">
-    <span class="rh-title"><i class="ti ti-list-details"></i>保存した記録</span>
+    <span class="rh-title"><i class="ti ti-calendar"></i>保存した記録（カレンダー）</span>
     <span class="rh-count" id="rec-count">0件</span>
   </div>
-  <div id="rec-list"></div>
+  <div class="cal-box">
+    <div class="cal-nav">
+      <button class="cal-arrow" onclick="calShift(-1)" aria-label="前の月"><i class="ti ti-chevron-left"></i></button>
+      <span class="cal-title" id="cal-title"></span>
+      <button class="cal-arrow" onclick="calShift(1)" aria-label="次の月"><i class="ti ti-chevron-right"></i></button>
+    </div>
+    <div class="cal-dow"><span class="sun">日</span><span>月</span><span>火</span><span>水</span><span>木</span><span>金</span><span class="sat">土</span></div>
+    <div class="cal-grid" id="cal-grid"></div>
+    <p class="cal-hint"><i class="ti ti-info-circle"></i>色のついた日に記録があります。日をタップすると内容の確認・削除ができます。</p>
+  </div>
+  <div class="day-panel" id="day-panel" style="display:none"></div>
 
   <button class="btn-main" style="width:100%;background:#1B2A3B;box-shadow:none;margin-top:6px;" onclick="exportPDF()">
     <i class="ti ti-file-type-pdf"></i>PDFで出力（控え保存・印刷）
@@ -356,7 +398,10 @@ function saveRecord(){
   if(job){ try{ localStorage.setItem(KEY_JOB, job); }catch(e){} }
 
   toast(editId?'記録を更新しました':'記録を保存しました');
-  resetForm(); render();
+  const _sd=date;
+  resetForm();
+  calY=+_sd.slice(0,4); calM=+_sd.slice(5,7)-1; selDate=_sd;
+  render();
 }
 
 function editRec(id){
@@ -409,6 +454,78 @@ function deleteMonth(ym){
   if(editId) resetForm();
   render(); toast(label+'の記録を削除しました');
 }
+/* ===== カレンダー月表示 ===== */
+let calY, calM, selDate=null;
+function initCal(){
+  const arr=load();
+  if(arr.length){
+    const latest=arr.slice().sort((a,b)=>b.date.localeCompare(a.date))[0].date;
+    calY=+latest.slice(0,4); calM=+latest.slice(5,7)-1;
+  }else{ const d=new Date(); calY=d.getFullYear(); calM=d.getMonth(); }
+}
+function calShift(delta){
+  calM+=delta;
+  if(calM<0){ calM=11; calY--; }
+  if(calM>11){ calM=0; calY++; }
+  selDate=null; renderCalendar();
+}
+function recordsByDate(){
+  const map={};
+  load().forEach(r=>{ (map[r.date]=map[r.date]||[]).push(r); });
+  return map;
+}
+function renderCalendar(){
+  if(calY===undefined) initCal();
+  const map=recordsByDate();
+  const startDow=new Date(calY,calM,1).getDay();
+  const dim=new Date(calY,calM+1,0).getDate();
+  const todayIso=todayStr();
+  let cells='';
+  for(let i=0;i<startDow;i++) cells+='<div class="cal-cell empty"></div>';
+  for(let d=1;d<=dim;d++){
+    const iso=calY+'-'+pad(calM+1)+'-'+pad(d);
+    const has=(map[iso]||[]).length>0;
+    const dow=(startDow+d-1)%7;
+    let cls='cal-cell';
+    if(has) cls+=' has';
+    if(iso===todayIso) cls+=' today';
+    if(iso===selDate) cls+=' sel';
+    if(dow===0) cls+=' sun';
+    if(dow===6) cls+=' sat';
+    cells+='<button class="'+cls+'" onclick="selectDay(\''+iso+'\')"><span class="cal-d">'+d+'</span>'+(has?'<span class="cal-dot"></span>':'')+'</button>';
+  }
+  document.getElementById('cal-grid').innerHTML=cells;
+  document.getElementById('cal-title').textContent=calY+'年'+(calM+1)+'月';
+  renderDayPanel();
+}
+function selectDay(iso){ selDate=(selDate===iso)?null:iso; renderCalendar(); }
+function renderDayPanel(){
+  const panel=document.getElementById('day-panel');
+  if(!selDate){ panel.style.display='none'; panel.innerHTML=''; return; }
+  panel.style.display='block';
+  const recs=recordsByDate()[selDate]||[];
+  let html='<div class="dp-head"><i class="ti ti-calendar-event"></i>'+fmtDate(selDate)+'</div>';
+  if(!recs.length){
+    html+='<div class="dp-empty">この日の記録はありません。</div>';
+  }else{
+    html+=recs.map(r=>{
+      const parts=[];
+      if(r.job) parts.push(esc(r.job));
+      if(r.moto) parts.push('元請：'+esc(r.moto));
+      if(r.site) parts.push(esc(r.site));
+      const hz=(r.hazards&&r.hazards.length)? r.hazards.map(n=>'<span class="hz-tag">'+esc(n)+'</span>').join('') : '<span class="hz-tag none">有害作業なし</span>';
+      return '<div class="dp-rec">'
+        +(parts.length?'<div class="dp-jobsite">'+parts.join(' ／ ')+'</div>':'')
+        +'<div class="rec-hz">'+hz+'</div>'
+        +(r.note?'<div class="rec-note">'+esc(r.note)+'</div>':'')
+        +'<div class="dp-actions">'
+        +'<button class="dp-edit" onclick="editRec(\''+r.id+'\')"><i class="ti ti-pencil"></i>編集</button>'
+        +'<button class="dp-del" onclick="delRec(\''+r.id+'\')"><i class="ti ti-trash"></i>この記録を削除</button>'
+        +'</div></div>';
+    }).join('');
+  }
+  panel.innerHTML=html;
+}
 function render(){
   const arr=load().slice().sort((a,b)=> b.date.localeCompare(a.date) || b.id.localeCompare(a.id));
   document.getElementById('rec-count').textContent=arr.length+'件';
@@ -419,31 +536,7 @@ function render(){
   document.getElementById('moto-list').innerHTML=uniq('moto').map(v=>'<option value="'+esc(v)+'">').join('');
   document.getElementById('site-list').innerHTML=uniq('site').map(v=>'<option value="'+esc(v)+'">').join('');
 
-  const list=document.getElementById('rec-list');
-  if(!arr.length){
-    list.innerHTML='<div class="empty">まだ記録がありません。<br>上のフォームから今日の作業を記録しましょう。</div>';
-  } else {
-    list.innerHTML=arr.map(r=>{
-      const parts=[];
-      if(r.job) parts.push(esc(r.job));
-      if(r.moto) parts.push('<span class="rj-moto">元請：'+esc(r.moto)+'</span>');
-      if(r.site) parts.push(esc(r.site));
-      const js=parts.join('<span class="rj-sep">／</span>');
-      const hz=(r.hazards&&r.hazards.length)
-        ? r.hazards.map(n=>'<span class="hz-tag">'+esc(n)+'</span>').join('')
-        : '<span class="hz-tag none">有害作業なし</span>';
-      return '<div class="rec">'
-        + '<div class="rec-top"><span class="rec-date">'+fmtDate(r.date)+'</span>'
-        + '<span class="rec-actions">'
-        + '<button onclick="editRec(\''+r.id+'\')" aria-label="編集"><i class="ti ti-pencil"></i></button>'
-        + '<button class="del" onclick="delRec(\''+r.id+'\')" aria-label="削除"><i class="ti ti-trash"></i></button>'
-        + '</span></div>'
-        + (js?'<div class="rec-jobsite">'+js+'</div>':'')
-        + '<div class="rec-hz">'+hz+'</div>'
-        + (r.note?'<div class="rec-note">'+esc(r.note)+'</div>':'')
-        + '</div>';
-    }).join('');
-  }
+  renderCalendar();
   buildPrint(arr);
   renderYearly(arr);
   renderMonthly(arr);
@@ -631,6 +724,7 @@ document.getElementById('f-date').value=todayStr();
 try{ const lj=localStorage.getItem(KEY_JOB); if(lj) document.getElementById('f-job').value=lj; }catch(e){}
 document.getElementById('f-name').value=getName();
 renderHaz();
+initCal();
 render();
 </script>
 
