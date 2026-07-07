@@ -70,6 +70,22 @@
 .safe-note{display:flex;align-items:flex-start;gap:8px;background:rgba(240,147,0,.1);border:1px solid rgba(240,147,0,.28);border-radius:12px;padding:12px 14px;margin:6px 0 4px;font-size:12.5px;line-height:1.6;color:var(--gray700);}
 .safe-note i{color:#B07800;font-size:18px;flex-shrink:0;margin-top:1px;}
 
+
+/* ===== 記録者・月別まとめ ===== */
+.name-bar{display:flex;align-items:center;gap:10px;background:var(--white);border:1px solid var(--gray200);border-radius:14px;padding:11px 14px;margin-bottom:14px;box-shadow:0 3px 14px rgba(0,0,0,.06);}
+.name-bar label{display:flex;align-items:center;gap:5px;font-size:13px;font-weight:800;color:var(--gray600);white-space:nowrap;flex-shrink:0;}
+.name-bar label i{color:var(--orange);font-size:17px;}
+.name-bar input{flex:1;min-width:0;padding:9px 11px;font-size:16px;font-weight:700;color:var(--navy);background:var(--gray50);border:1.5px solid var(--gray200);border-radius:10px;outline:none;font-family:inherit;}
+.name-bar input:focus{border-color:var(--orange);}
+.msum{background:var(--white);border:1px solid var(--gray200);border-radius:12px;padding:12px 14px;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,.05);}
+.msum-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:9px;}
+.msum-month{font-size:15px;font-weight:900;color:var(--navy);}
+.msum-days{font-size:12.5px;font-weight:800;color:#0E7C5A;background:rgba(20,124,98,.12);border-radius:99px;padding:3px 12px;}
+.msum-hz{display:flex;flex-wrap:wrap;gap:6px;}
+.msum-hz .mh{font-size:11.5px;font-weight:800;color:#C04E1E;background:rgba(232,97,42,.1);border-radius:7px;padding:3px 9px;}
+.msum-hz .mh-none{font-size:11.5px;color:var(--gray400);font-weight:700;}
+.pr-h2{font-size:11pt;font-weight:800;margin:14px 0 5px;color:#111;}
+
 /* ===== 印刷（PDF出力）===== */
 #print-area{position:absolute;left:-9999px;top:0;width:100%;background:#fff;color:#111;}
 .pr-h1{font-size:16pt;font-weight:800;margin:0 0 2px;color:#111;}
@@ -104,6 +120,10 @@
       <h2>毎日の作業をかんたん記録</h2>
       <p>粉塵・石綿・騒音・化学物質・振動・暑さ・重量物などの作業歴を残せます。将来の職業病・労災（じん肺、石綿関連疾患、騒音性難聴、振動障害など）の認定時に役立つ記録になります。</p>
     </div>
+  </div>
+  <div class="name-bar">
+    <label for="f-name"><i class="ti ti-user"></i>記録者（氏名）</label>
+    <input type="text" id="f-name" placeholder="山田　太郎" autocomplete="off" oninput="saveName()">
   </div>
 
   <!-- 入力フォーム -->
@@ -151,6 +171,12 @@
     <span>記録は<strong>このスマホの中だけ</strong>に保存されます（外部には送信されません）。機種変更や故障に備え、ときどき下の「PDFで出力」で保存・印刷して控えを残してください。</span>
   </div>
 
+  <!-- 月別のまとめ -->
+  <div class="rec-head">
+    <span class="rh-title"><i class="ti ti-chart-bar"></i>月別のまとめ</span>
+  </div>
+  <div id="month-summary"></div>
+
   <!-- 一覧 -->
   <div class="rec-head">
     <span class="rh-title"><i class="ti ti-list-details"></i>保存した記録</span>
@@ -175,6 +201,7 @@
 const KEY = 'doken_worklog_v1';
 const KEY_JOB = 'doken_worklog_job';
 const KEY_HZ  = 'doken_worklog_customhz';
+const KEY_NAME= 'doken_worklog_name';
 
 /* 建設業の職業病に対応した既定の有害作業項目 */
 const HAZARDS_DEFAULT = [
@@ -366,20 +393,75 @@ function render(){
     }).join('');
   }
   buildPrint(arr);
+  renderMonthly(arr);
+}
+
+function saveName(){ try{ localStorage.setItem(KEY_NAME, document.getElementById('f-name').value.trim()); }catch(e){} }
+function getName(){ try{ return (localStorage.getItem(KEY_NAME)||'').trim(); }catch(e){ return ''; } }
+
+/* 月別のまとめ（曝露日数＝その作業をした日数） */
+function monthlySummary(arr){
+  const months={};
+  arr.forEach(r=>{
+    const ym=(r.date||'').slice(0,7); if(ym.length<7) return;
+    if(!months[ym]) months[ym]={days:new Set(), hz:{}};
+    months[ym].days.add(r.date);
+    (r.hazards||[]).forEach(n=>{
+      if(!months[ym].hz[n]) months[ym].hz[n]=new Set();
+      months[ym].hz[n].add(r.date);
+    });
+  });
+  return Object.keys(months).sort().reverse().map(ym=>{
+    const m=months[ym], hz={};
+    Object.keys(m.hz).forEach(n=> hz[n]=m.hz[n].size);
+    return { ym, days:m.days.size, hz };
+  });
+}
+function renderMonthly(arr){
+  const el=document.getElementById('month-summary');
+  const ms=monthlySummary(arr);
+  if(!ms.length){ el.innerHTML='<div class="empty" style="padding:16px 10px;">記録がたまると、ここに月ごとの合計が出ます。</div>'; return; }
+  el.innerHTML=ms.map(m=>{
+    const y=m.ym.slice(0,4), mo=+m.ym.slice(5,7);
+    const keys=Object.keys(m.hz);
+    const chips=keys.length ? keys.map(n=>'<span class="mh">'+esc(n)+' '+m.hz[n]+'日</span>').join('')
+                            : '<span class="mh-none">有害作業の記録なし</span>';
+    return '<div class="msum"><div class="msum-top">'
+      +'<span class="msum-month">'+y+'年'+mo+'月</span>'
+      +'<span class="msum-days">記録 '+m.days+'日</span></div>'
+      +'<div class="msum-hz">'+chips+'</div></div>';
+  }).join('');
 }
 
 function buildPrint(arr){
   const now=new Date();
   const gen=now.getFullYear()+'年'+(now.getMonth()+1)+'月'+now.getDate()+'日 出力';
+  const nm=getName();
+  // 明細
   let rows=arr.map(r=>{
     const hz=(r.hazards&&r.hazards.length)?r.hazards.join('、'):'－';
     return '<tr><td>'+esc(r.date)+'</td><td>'+esc(r.job||'')+'</td><td>'+esc(r.moto||'')+'</td>'
       +'<td>'+esc(r.site||'')+'</td><td>'+esc(hz)+'</td><td>'+esc(r.note||'')+'</td></tr>';
   }).join('');
   if(!arr.length) rows='<tr><td colspan="6" style="text-align:center;color:#888;">記録なし</td></tr>';
+  // 月別まとめ
+  const ms=monthlySummary(arr);
+  let msRows=ms.map(m=>{
+    const y=m.ym.slice(0,4), mo=+m.ym.slice(5,7);
+    const hz=Object.keys(m.hz).map(n=>n+' '+m.hz[n]+'日').join('、')||'－';
+    return '<tr><td>'+y+'年'+mo+'月</td><td style="text-align:center;font-weight:800;">'+m.days+'</td><td>'+esc(hz)+'</td></tr>';
+  }).join('');
+  const msTable = ms.length
+    ? '<p class="pr-h2">月別のまとめ（作業をした日数）</p>'
+      +'<table class="pr-table"><thead><tr><th>月</th><th>記録日数</th><th>有害作業の日数</th></tr></thead><tbody>'+msRows+'</tbody></table>'
+    : '';
   document.getElementById('print-area').innerHTML=
     '<p class="pr-h1">作業記録（職業病・労災対策）</p>'
-    +'<p class="pr-sub">埼玉土建一般労働組合 上尾伊奈支部　｜　'+gen+'　｜　全'+arr.length+'件</p>'
+    +'<p class="pr-sub">埼玉土建一般労働組合 上尾伊奈支部'
+      +(nm?'　｜　氏名：'+esc(nm):'')
+      +'　｜　'+gen+'　｜　全'+arr.length+'件</p>'
+    +msTable
+    +'<p class="pr-h2">作業記録の明細</p>'
     +'<table class="pr-table"><thead><tr>'
     +'<th>日付</th><th>職種</th><th>元請</th><th>現場名</th><th>有害作業（あった作業）</th><th>メモ</th>'
     +'</tr></thead><tbody>'+rows+'</tbody></table>'
@@ -395,6 +477,7 @@ function exportPDF(){
 // 初期化
 document.getElementById('f-date').value=todayStr();
 try{ const lj=localStorage.getItem(KEY_JOB); if(lj) document.getElementById('f-job').value=lj; }catch(e){}
+document.getElementById('f-name').value=getName();
 renderHaz();
 render();
 </script>
