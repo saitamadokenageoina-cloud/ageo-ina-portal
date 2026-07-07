@@ -23,6 +23,7 @@
   color:var(--navy);background:var(--gray50);border:1.5px solid var(--gray200);border-radius:11px;outline:none;
 }
 .fld input:focus,.fld textarea:focus{border-color:var(--orange);}
+.fld input[type=date]{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;}
 .fld textarea{resize:vertical;min-height:52px;line-height:1.5;}
 
 .haz-label{font-size:13px;font-weight:800;color:var(--gray600);margin:2px 0 4px;}
@@ -31,7 +32,7 @@
 .haz-btn{display:flex;align-items:center;gap:11px;width:100%;box-sizing:border-box;padding:11px 13px;background:var(--gray50);border:1.5px solid var(--gray200);border-radius:12px;cursor:pointer;text-align:left;font-family:inherit;transition:all .12s;}
 .haz-btn .hz-ico{font-size:21px;flex-shrink:0;color:var(--gray400);width:24px;text-align:center;}
 .haz-btn .hz-name{flex:1;font-size:14.5px;font-weight:800;color:var(--navy);line-height:1.3;}
-.haz-btn .hz-state{font-size:12.5px;font-weight:900;color:var(--gray500);background:var(--gray200);border-radius:8px;padding:4px 11px;min-width:40px;text-align:center;flex-shrink:0;}
+.haz-btn .hz-state{font-size:12.5px;font-weight:900;color:#fff;background:#67707E;border-radius:8px;padding:4px 11px;min-width:40px;text-align:center;flex-shrink:0;}
 .haz-btn.on{background:rgba(232,97,42,.1);border-color:var(--orange);}
 .haz-btn.on .hz-ico{color:var(--orange);}
 .haz-btn.on .hz-state{background:var(--orange);color:#fff;}
@@ -62,7 +63,7 @@
 .rec-jobsite .rj-moto{color:var(--gray500);font-weight:700;}
 .rec-hz{display:flex;flex-wrap:wrap;gap:6px;}
 .hz-tag{font-size:11.5px;font-weight:800;border-radius:7px;padding:3px 9px;background:rgba(232,97,42,.12);color:#C04E1E;}
-.hz-tag.none{background:var(--gray100);color:var(--gray400);}
+.hz-tag.none{background:#67707E;color:#fff;}
 .rec-note{font-size:12.5px;color:var(--gray600);margin-top:7px;line-height:1.5;background:var(--gray50);border-radius:8px;padding:7px 10px;}
 
 .empty{text-align:center;color:var(--gray500);font-size:13.5px;font-weight:600;padding:26px 10px;line-height:1.6;}
@@ -86,16 +87,24 @@
 .msum-hz .mh-none{font-size:11.5px;color:var(--gray400);font-weight:700;}
 .pr-h2{font-size:11pt;font-weight:800;margin:14px 0 5px;color:#111;}
 
+.backup-box{background:var(--white);border:1px solid var(--gray200);border-radius:14px;padding:14px 16px;margin:14px 0 4px;box-shadow:0 3px 14px rgba(0,0,0,.06);}
+.bk-title{display:flex;align-items:center;gap:7px;font-size:14px;font-weight:800;color:var(--navy);margin:0 0 6px;}
+.bk-title i{color:#0E7C5A;font-size:18px;}
+.bk-desc{font-size:12px;color:var(--gray600);line-height:1.6;margin:0 0 11px;}
+.bk-btns{display:flex;gap:9px;flex-wrap:wrap;}
+.bk-btn{flex:1;min-width:130px;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;font-size:13.5px;font-weight:800;color:var(--navy);background:var(--gray100);border:1.5px solid var(--gray200);border-radius:11px;cursor:pointer;font-family:inherit;}
+.bk-btn i{font-size:16px;color:#0E7C5A;}
+
 /* ===== 印刷（PDF出力）===== */
 #print-area{position:absolute;left:-9999px;top:0;width:100%;background:#fff;color:#111;}
 .pr-h1{font-size:16pt;font-weight:800;margin:0 0 2px;color:#111;}
 .pr-sub{font-size:9pt;color:#555;margin:0 0 10px;}
-.pr-table{width:100%;border-collapse:collapse;font-size:8.5pt;}
-.pr-table th,.pr-table td{border:1px solid #999;padding:4px 5px;text-align:left;vertical-align:top;color:#111;}
+.pr-table{width:100%;table-layout:fixed;border-collapse:collapse;font-size:8.3pt;}
+.pr-table th,.pr-table td{border:1px solid #999;padding:4px 5px;text-align:left;vertical-align:top;color:#111;word-break:break-word;overflow-wrap:anywhere;}
 .pr-table th{background:#1B2A3B;color:#fff;font-size:8pt;white-space:nowrap;}
 .pr-foot{font-size:8pt;color:#555;margin-top:10px;line-height:1.5;}
 @media print{
-  @page{size:A4 portrait;margin:12mm;}
+  @page{size:A4 portrait;margin:10mm;}
   header.hdr,.content{display:none !important;}
   #print-area{position:static;left:auto;}
   body{background:#fff;}
@@ -171,6 +180,12 @@
     <span>記録は<strong>このスマホの中だけ</strong>に保存されます（外部には送信されません）。機種変更や故障に備え、ときどき下の「PDFで出力」で保存・印刷して控えを残してください。</span>
   </div>
 
+  <!-- 年ごとの累計 -->
+  <div class="rec-head">
+    <span class="rh-title"><i class="ti ti-calendar-stats"></i>年ごとの累計</span>
+  </div>
+  <div id="year-summary"></div>
+
   <!-- 月別のまとめ -->
   <div class="rec-head">
     <span class="rh-title"><i class="ti ti-chart-bar"></i>月別のまとめ</span>
@@ -187,6 +202,16 @@
   <button class="btn-main" style="width:100%;background:#1B2A3B;box-shadow:none;margin-top:6px;" onclick="exportPDF()">
     <i class="ti ti-file-type-pdf"></i>PDFで出力（控え保存・印刷）
   </button>
+
+  <div class="backup-box">
+    <p class="bk-title"><i class="ti ti-database-export"></i>データの引き継ぎ（機種変更・バックアップ）</p>
+    <p class="bk-desc">記録はこのスマホの中だけにあります。機種変更の前に「バックアップを保存」し、（iCloud・メールなどに控えて）新しいスマホで「バックアップから復元」してください。</p>
+    <div class="bk-btns">
+      <button class="bk-btn" onclick="exportBackup()"><i class="ti ti-download"></i>バックアップを保存</button>
+      <label class="bk-btn" for="bk-file"><i class="ti ti-upload"></i>バックアップから復元</label>
+      <input type="file" id="bk-file" accept="application/json,.json" style="display:none" onchange="importBackup(this)">
+    </div>
+  </div>
 
   <p class="footer" style="text-align:center;color:var(--gray500);font-size:12px;margin:18px 0 6px;">埼玉土建一般労働組合 上尾伊奈支部 ｜ TEL 048-773-9863</p>
 
@@ -393,6 +418,7 @@ function render(){
     }).join('');
   }
   buildPrint(arr);
+  renderYearly(arr);
   renderMonthly(arr);
 }
 
@@ -416,6 +442,38 @@ function monthlySummary(arr){
     Object.keys(m.hz).forEach(n=> hz[n]=m.hz[n].size);
     return { ym, days:m.days.size, hz };
   });
+}
+/* 年ごとの累計 */
+function yearlySummary(arr){
+  const years={};
+  arr.forEach(r=>{
+    const y=(r.date||'').slice(0,4); if(y.length<4) return;
+    if(!years[y]) years[y]={days:new Set(), hz:{}};
+    years[y].days.add(r.date);
+    (r.hazards||[]).forEach(n=>{
+      if(!years[y].hz[n]) years[y].hz[n]=new Set();
+      years[y].hz[n].add(r.date);
+    });
+  });
+  return Object.keys(years).sort().reverse().map(y=>{
+    const m=years[y], hz={};
+    Object.keys(m.hz).forEach(n=> hz[n]=m.hz[n].size);
+    return { y, days:m.days.size, hz };
+  });
+}
+function renderYearly(arr){
+  const el=document.getElementById('year-summary');
+  const ys=yearlySummary(arr);
+  if(!ys.length){ el.innerHTML='<div class="empty" style="padding:16px 10px;">記録がたまると、ここに年ごとの合計が出ます。</div>'; return; }
+  el.innerHTML=ys.map(m=>{
+    const keys=Object.keys(m.hz);
+    const chips=keys.length ? keys.map(n=>'<span class="mh">'+esc(n)+' '+m.hz[n]+'日</span>').join('')
+                            : '<span class="mh-none">有害作業の記録なし</span>';
+    return '<div class="msum"><div class="msum-top">'
+      +'<span class="msum-month">'+m.y+'年</span>'
+      +'<span class="msum-days">記録 '+m.days+'日</span></div>'
+      +'<div class="msum-hz">'+chips+'</div></div>';
+  }).join('');
 }
 function renderMonthly(arr){
   const el=document.getElementById('month-summary');
@@ -444,6 +502,17 @@ function buildPrint(arr){
       +'<td>'+esc(r.site||'')+'</td><td>'+esc(hz)+'</td><td>'+esc(r.note||'')+'</td></tr>';
   }).join('');
   if(!arr.length) rows='<tr><td colspan="6" style="text-align:center;color:#888;">記録なし</td></tr>';
+  // 年ごとの累計
+  const ys=yearlySummary(arr);
+  let ysRows=ys.map(m=>{
+    const hz=Object.keys(m.hz).map(n=>n+' '+m.hz[n]+'日').join('、')||'－';
+    return '<tr><td>'+m.y+'年</td><td style="text-align:center;font-weight:800;">'+m.days+'</td><td>'+esc(hz)+'</td></tr>';
+  }).join('');
+  const ysTable = ys.length
+    ? '<p class="pr-h2">年ごとの累計（作業をした日数）</p>'
+      +'<table class="pr-table"><colgroup><col style="width:22%"><col style="width:20%"><col style="width:58%"></colgroup>'
+      +'<thead><tr><th>年</th><th>記録日数</th><th>有害作業の日数</th></tr></thead><tbody>'+ysRows+'</tbody></table>'
+    : '';
   // 月別まとめ
   const ms=monthlySummary(arr);
   let msRows=ms.map(m=>{
@@ -453,20 +522,62 @@ function buildPrint(arr){
   }).join('');
   const msTable = ms.length
     ? '<p class="pr-h2">月別のまとめ（作業をした日数）</p>'
-      +'<table class="pr-table"><thead><tr><th>月</th><th>記録日数</th><th>有害作業の日数</th></tr></thead><tbody>'+msRows+'</tbody></table>'
+      +'<table class="pr-table"><colgroup><col style="width:22%"><col style="width:20%"><col style="width:58%"></colgroup>'
+      +'<thead><tr><th>月</th><th>記録日数</th><th>有害作業の日数</th></tr></thead><tbody>'+msRows+'</tbody></table>'
     : '';
   document.getElementById('print-area').innerHTML=
     '<p class="pr-h1">作業記録（職業病・労災対策）</p>'
     +'<p class="pr-sub">埼玉土建一般労働組合 上尾伊奈支部'
       +(nm?'　｜　氏名：'+esc(nm):'')
       +'　｜　'+gen+'　｜　全'+arr.length+'件</p>'
+    +ysTable
     +msTable
     +'<p class="pr-h2">作業記録の明細</p>'
-    +'<table class="pr-table"><thead><tr>'
+    +'<table class="pr-table"><colgroup><col style="width:12%"><col style="width:13%"><col style="width:17%"><col style="width:20%"><col style="width:26%"><col style="width:12%"></colgroup>'
+    +'<thead><tr>'
     +'<th>日付</th><th>職種</th><th>元請</th><th>現場名</th><th>有害作業（あった作業）</th><th>メモ</th>'
     +'</tr></thead><tbody>'+rows+'</tbody></table>'
     +'<p class="pr-foot">本記録は組合員本人が入力したものです。粉塵・石綿・騒音・化学物質・振動・高温・重量物などの作業歴として、'
     +'職業病・労災（じん肺、石綿関連疾患、騒音性難聴、振動障害、腰痛・頸肩腕障害、熱中症 等）の認定資料の一助にご活用ください。</p>';
+}
+
+function exportBackup(){
+  try{
+    const data={ app:'ageo-ina-worklog', version:1, exported:new Date().toISOString(),
+      name:getName(), records:load(), customHazards:loadCustom() };
+    const blob=new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
+    const url=URL.createObjectURL(blob);
+    const d=new Date();
+    const fn='作業記録バックアップ_'+d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate())+'.json';
+    const a=document.createElement('a');
+    a.href=url; a.download=fn; document.body.appendChild(a); a.click();
+    setTimeout(()=>{ document.body.removeChild(a); URL.revokeObjectURL(url); },120);
+    toast('バックアップを保存しました');
+  }catch(e){ alert('バックアップの保存に失敗しました。'); }
+}
+function importBackup(input){
+  const file=input.files && input.files[0];
+  if(!file) return;
+  const reader=new FileReader();
+  reader.onload=function(e){
+    let data;
+    try{ data=JSON.parse(e.target.result); }
+    catch(err){ alert('ファイルを読み込めませんでした。正しいバックアップファイルか確認してください。'); input.value=''; return; }
+    if(!data || !Array.isArray(data.records)){ alert('このファイルは作業記録のバックアップではないようです。'); input.value=''; return; }
+    const cur=load(); const ids=new Set(cur.map(r=>r.id)); let added=0;
+    data.records.forEach(r=>{ if(r && r.id && !ids.has(r.id)){ cur.push(r); ids.add(r.id); added++; } });
+    store(cur);
+    if(Array.isArray(data.customHazards)){
+      const cc=loadCustom(); const names=new Set(cc.map(c=>c.name));
+      data.customHazards.forEach(c=>{ if(c && c.name && !names.has(c.name)){ cc.push(c); names.add(c.name); } });
+      storeCustom(cc);
+    }
+    if(data.name && !getName()){ try{ localStorage.setItem(KEY_NAME, data.name); document.getElementById('f-name').value=data.name; }catch(e){} }
+    input.value='';
+    render();
+    alert('復元しました。\n'+added+'件の記録を追加しました（全'+load().length+'件）。');
+  };
+  reader.readAsText(file,'utf-8');
 }
 
 function exportPDF(){
