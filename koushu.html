@@ -308,8 +308,37 @@ function setCat(v, btn) {
   render();
 }
 
+function getKoushuEndDate(k) {
+  const text = String(k.date || '');
+  const dates = [];
+  let currentMonth = null;
+  const re = /(?:(\d{1,2})月)?(\d{1,2})日/g;
+  let match;
+  while ((match = re.exec(text))) {
+    if (match[1]) currentMonth = Number(match[1]);
+    if (!currentMonth) {
+      const m = String(k.month || '').match(/(\d{1,2})月/);
+      currentMonth = m ? Number(m[1]) : null;
+    }
+    if (!currentMonth) continue;
+    const day = Number(match[2]);
+    const year = currentMonth <= 3 ? 2027 : 2026;
+    dates.push(new Date(year, currentMonth - 1, day, 23, 59, 59, 999));
+  }
+  if (!dates.length) return null;
+  return new Date(Math.max(...dates.map(d => d.getTime())));
+}
+
+function isUpcoming(k) {
+  const end = getKoushuEndDate(k);
+  if (!end) return true;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return end >= today;
+}
+
 function render() {
-  let items = KOUSHU;
+  let items = KOUSHU.filter(isUpcoming);
   if(curPeriod !== 'all') items = items.filter(k=>k.period===curPeriod);
   if(curCat !== 'all')    items = items.filter(k=>k.cat===curCat);
 
