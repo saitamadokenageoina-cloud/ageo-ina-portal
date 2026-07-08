@@ -128,6 +128,31 @@
 .ug-paste i{color:#fff;font-size:14px;}
 .ug-note{display:flex;align-items:flex-start;gap:7px;margin:14px 0 0;padding-top:12px;border-top:1px solid var(--gray200);font-size:13px;line-height:1.6;color:var(--gray600);}
 .ug-note i{color:var(--orange);font-size:17px;margin-top:1px;flex:0 0 auto;}
+/* ===== かんたん3ステップ（特大ボタン）===== */
+.easy-steps{background:var(--white);border:1px solid var(--gray200);border-radius:18px;padding:18px 16px;margin:16px 0 4px;box-shadow:0 3px 14px rgba(0,0,0,.06);}
+.es-head{display:flex;align-items:center;justify-content:center;gap:8px;font-size:18px;font-weight:900;color:var(--navy);margin:0 0 15px;}
+.es-head i{color:var(--orange);font-size:23px;}
+.es-num{display:inline-block;font-size:12px;font-weight:900;color:#fff;background:var(--orange);border-radius:99px;padding:3px 14px;margin:0 0 8px;}
+.es-btn{display:flex;align-items:center;gap:14px;width:100%;box-sizing:border-box;padding:17px 15px;border-radius:16px;border:none;cursor:pointer;font-family:inherit;text-align:left;text-decoration:none;transition:transform .1s;}
+.es-btn:active{transform:scale(.98);}
+.es-copy{background:linear-gradient(135deg,#E8612A,#F0851F);box-shadow:0 6px 18px rgba(232,97,42,.32);}
+.es-open{background:linear-gradient(135deg,#1B5E9B,#2E7CC4);box-shadow:0 6px 18px rgba(30,110,180,.32);}
+.es-copy.done{background:linear-gradient(135deg,#0E7C5A,#12936B);box-shadow:0 6px 18px rgba(14,124,90,.32);}
+.es-ico{flex:0 0 54px;width:54px;height:54px;border-radius:14px;background:rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;}
+.es-ico i{font-size:31px;color:#fff;}
+.es-txt{flex:1;color:#fff;min-width:0;}
+.es-txt b{display:block;font-size:20px;font-weight:900;line-height:1.2;}
+.es-txt small{display:block;font-size:12.5px;color:rgba(255,255,255,.85);margin-top:3px;font-weight:600;}
+.es-arrow{font-size:24px;color:rgba(255,255,255,.85);flex-shrink:0;}
+.es-down{text-align:center;color:var(--gray300);font-size:26px;line-height:1;margin:8px 0;}
+.es-step3{background:var(--gray50);border:1.5px solid var(--gray200);border-radius:16px;padding:16px 14px;text-align:center;}
+.es3-title{font-size:17px;font-weight:900;color:var(--navy);margin:0 0 12px;}
+.es3-title u{text-decoration-color:var(--orange);text-decoration-thickness:2px;text-underline-offset:3px;}
+.es3-fig{width:100%;max-width:250px;height:auto;margin:0 auto 12px;display:block;}
+.es3-desc{font-size:14.5px;line-height:1.7;color:var(--gray700);margin:0;}
+.es-paste{display:inline-flex;align-items:center;gap:4px;background:#2b2b2b;color:#fff;font-size:13px;font-weight:800;padding:3px 12px;border-radius:8px;margin:0 3px;vertical-align:middle;}
+.es-help{display:flex;align-items:center;justify-content:center;gap:7px;margin:16px 0 0;padding-top:14px;border-top:1px solid var(--gray200);font-size:13.5px;font-weight:700;color:var(--gray600);text-align:center;line-height:1.5;}
+.es-help i{color:var(--orange);font-size:18px;flex-shrink:0;}
 </style>
 </head>
 <body>
@@ -194,24 +219,52 @@
     </a>
   </div>
 
-  <!-- ===== 使い方ガイド（機械が苦手な方向け）===== -->
-  <div class="usage-guide">
-    <p class="ug-head"><i class="ti ti-help-circle"></i>使い方（かんたん3ステップ）</p>
-    <ol class="ug-steps">
-      <li>
-        <span class="ug-fig"><i class="ti ti-copy"></i><span class="ug-n">STEP1</span></span>
-        <div class="ug-body"><b>「コピー」を押す</b>パスワードが自動でひかえられます。</div>
-      </li>
-      <li>
-        <span class="ug-fig"><i class="ti ti-external-link"></i><span class="ug-n">STEP2</span></span>
-        <div class="ug-body"><b>「デジタルどけんカードを開く」を押す</b>公式サイトが開きます。</div>
-      </li>
-      <li>
-        <span class="ug-fig"><i class="ti ti-hand-finger"></i><span class="ug-n">STEP3</span></span>
-        <div class="ug-body"><b>入力欄を“長押し”して貼り付け</b>指で長押しすると出てくる<span class="ug-paste"><i class="ti ti-clipboard"></i>ペースト</span>を押す → 「認証」で完了！</div>
-      </li>
-    </ol>
-    <p class="ug-note"><i class="ti ti-phone"></i>うまくいかない時は支部（048-773-9863）へお電話ください。いっしょに操作します。</p>
+  <!-- ===== かんたん3ステップ（特大ボタン＋イラスト）===== -->
+  <div class="easy-steps">
+    <p class="es-head"><i class="ti ti-hand-click"></i>この順番でタップするだけ</p>
+
+    <!-- STEP 1 -->
+    <span class="es-num">STEP 1</span>
+    <button class="es-btn es-copy" id="es-copy" onclick="copyBig()">
+      <span class="es-ico"><i class="ti ti-key"></i></span>
+      <span class="es-txt"><b>パスワードをコピー</b><small>ここを押すだけで自動でひかえます</small></span>
+      <i class="ti ti-hand-finger es-arrow"></i>
+    </button>
+
+    <div class="es-down"><i class="ti ti-chevron-down"></i></div>
+
+    <!-- STEP 2 -->
+    <span class="es-num">STEP 2</span>
+    <a href="https://doken-card.jp/dc/card" target="_blank" rel="noopener" class="es-btn es-open" onclick="copyForSite()">
+      <span class="es-ico"><i class="ti ti-id-badge-2"></i></span>
+      <span class="es-txt"><b>カードを開く</b><small>公式サイトのカード画面がひらきます</small></span>
+      <i class="ti ti-external-link es-arrow"></i>
+    </a>
+
+    <div class="es-down"><i class="ti ti-chevron-down"></i></div>
+
+    <!-- STEP 3 -->
+    <span class="es-num">STEP 3</span>
+    <div class="es-step3">
+      <p class="es3-title">入力欄を <u>長押し</u> して貼り付け</p>
+      <svg class="es3-fig" viewBox="0 0 260 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect x="74" y="6" width="112" height="36" rx="9" fill="#2b2b2b"/>
+        <polygon points="120,42 140,42 130,52" fill="#2b2b2b"/>
+        <text x="130" y="30" text-anchor="middle" fill="#ffffff" font-size="16" font-weight="700" font-family="'M PLUS 1p',sans-serif">ペースト</text>
+        <rect x="22" y="64" width="216" height="44" rx="11" fill="#ffffff" stroke="#E8612A" stroke-width="2.5"/>
+        <circle cx="48" cy="86" r="4.5" fill="#9AA5B4"/>
+        <circle cx="64" cy="86" r="4.5" fill="#9AA5B4"/>
+        <circle cx="80" cy="86" r="4.5" fill="#9AA5B4"/>
+        <circle cx="96" cy="86" r="4.5" fill="#9AA5B4"/>
+        <circle cx="150" cy="86" r="15" fill="none" stroke="#E8612A" stroke-width="2.5" opacity="0.55"/>
+        <circle cx="150" cy="86" r="24" fill="none" stroke="#E8612A" stroke-width="1.5" opacity="0.3"/>
+        <rect x="139" y="96" width="24" height="48" rx="12" fill="#F3CBA3" stroke="#D69A6B" stroke-width="1.6"/>
+        <ellipse cx="151" cy="106" rx="7.5" ry="5.5" fill="#FBE7D3"/>
+      </svg>
+      <p class="es3-desc">入力欄を指で<b>長押し</b>すると出てくる<span class="es-paste"><i class="ti ti-clipboard"></i>ペースト</span>を押す。<br>最後に<b>「認証」</b>を押せば完了です！</p>
+    </div>
+
+    <p class="es-help"><i class="ti ti-phone"></i>分からない時は支部（048-773-9863）へ。<br>いっしょに操作します。</p>
   </div>
 
   <div class="caution">
@@ -372,9 +425,29 @@ async function copyPw(){
   }
 }
 
+async function copyBig(){
+  const password=(document.getElementById('pw-val').textContent||'').trim();
+  const btn=document.getElementById('es-copy');
+  const ic=btn.querySelector('.es-ico i');
+  const b=btn.querySelector('.es-txt b');
+  const sm=btn.querySelector('.es-txt small');
+  try{
+    if(navigator.clipboard && window.isSecureContext){ await navigator.clipboard.writeText(password); }
+    else{ const input=document.createElement('input'); input.value=password; input.setAttribute('readonly',''); input.style.position='fixed'; input.style.opacity='0'; document.body.appendChild(input); input.select(); document.execCommand('copy'); input.remove(); }
+    btn.classList.add('done'); if(ic) ic.className='ti ti-check'; if(b) b.textContent='コピーしました'; if(sm) sm.textContent='つぎに STEP2 を押してください';
+    setTimeout(()=>{ btn.classList.remove('done'); if(ic) ic.className='ti ti-key'; if(b) b.textContent='パスワードをコピー'; if(sm) sm.textContent='ここを押すだけで自動でひかえます'; },2400);
+  }catch(e){ if(b) b.textContent='コピーに失敗しました'; setTimeout(()=>{ if(b) b.textContent='パスワードをコピー'; },2400); }
+}
 function openCat(cat){ window.open(`https://doken-card.jp/dc/result?category=${cat}`, '_blank'); }
 function e(url, ev){ ev.stopPropagation(); window.open(url, '_blank'); }
 </script>
 <script src="assets/js/navigation.js"></script>
+<script>
+if('serviceWorker' in navigator){
+  let _r=false;
+  navigator.serviceWorker.addEventListener('controllerchange', ()=>{ if(!_r){ _r=true; location.reload(); } });
+  navigator.serviceWorker.register('/ageo-ina-portal/sw.js', {scope:'/ageo-ina-portal/'}).then(reg=>reg.update()).catch(()=>{});
+}
+</script>
 </body>
 </html>
