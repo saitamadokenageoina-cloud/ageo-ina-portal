@@ -99,6 +99,17 @@
 .dp-edit,.dp-del{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;padding:10px;font-size:13px;font-weight:800;border-radius:9px;cursor:pointer;font-family:inherit;border:1.5px solid;}
 .dp-edit{color:var(--navy);background:var(--gray100);border-color:var(--gray200);}
 .dp-del{color:var(--red);background:rgba(214,69,69,.1);border-color:rgba(214,69,69,.32);}
+.dp-meta{font-size:12px;color:var(--gray600);font-weight:700;margin-bottom:8px;}
+.settings-card{background:var(--white);border:1px solid var(--gray200);border-radius:14px;padding:14px 16px;margin-bottom:14px;box-shadow:0 3px 14px rgba(0,0,0,.06);}
+.sc-title{display:flex;align-items:center;gap:7px;font-size:15px;font-weight:800;color:var(--navy);margin:0 0 4px;}
+.sc-title i{color:var(--orange);font-size:19px;}
+.sc-cap{font-size:11.5px;color:var(--gray500);font-weight:600;margin:0 0 12px;line-height:1.5;}
+.sc-grid{display:flex;flex-direction:column;gap:11px;}
+.sc-grid .fld{margin-bottom:0;}
+.sc-grid select{width:100%;box-sizing:border-box;padding:11px 13px;font-size:16px;font-family:inherit;font-weight:700;color:var(--navy);background:var(--gray50);border:1.5px solid var(--gray200);border-radius:11px;outline:none;}
+.sc-grid select:focus{border-color:var(--orange);}
+.sc-note{display:flex;align-items:flex-start;gap:6px;font-size:11.5px;color:var(--gray600);line-height:1.6;margin:12px 0 0;background:var(--gray50);border-radius:9px;padding:9px 11px;}
+.sc-note i{color:#0E7C5A;font-size:15px;flex-shrink:0;margin-top:1px;}
 
 .safe-note{display:flex;align-items:flex-start;gap:8px;background:rgba(240,147,0,.1);border:1px solid rgba(240,147,0,.28);border-radius:12px;padding:12px 14px;margin:6px 0 4px;font-size:12.5px;line-height:1.6;color:var(--gray700);}
 .safe-note i{color:#B07800;font-size:18px;flex-shrink:0;margin-top:1px;}
@@ -170,9 +181,41 @@
       <p>粉塵・石綿・騒音・化学物質・振動・暑さ・重量物などの作業歴を残せます。将来の職業病・労災（じん肺、石綿関連疾患、騒音性難聴、振動障害など）の認定時に役立つ記録になります。</p>
     </div>
   </div>
-  <div class="name-bar">
-    <label for="f-name"><i class="ti ti-user"></i>記録者（氏名）</label>
-    <input type="text" id="f-name" placeholder="山田　太郎" autocomplete="off" oninput="saveName()">
+  <div class="settings-card">
+    <p class="sc-title"><i class="ti ti-id-badge-2"></i>あなたの情報</p>
+    <p class="sc-cap">最初に1回だけ入力（会社や立場が変わった時だけ直せばOK）。記録・PDFに自動で反映されます。</p>
+    <div class="sc-grid">
+      <div class="fld">
+        <label for="f-name">氏名</label>
+        <input type="text" id="f-name" placeholder="山田　太郎" autocomplete="off" oninput="saveSettings()">
+      </div>
+      <div class="fld">
+        <label for="f-company">所属会社（一人親方は屋号）</label>
+        <input type="text" id="f-company" placeholder="例：○○工務店" autocomplete="off" oninput="saveSettings()">
+      </div>
+      <div class="fld">
+        <label for="f-status">立場</label>
+        <select id="f-status" onchange="saveSettings()">
+          <option value="労働者">労働者（会社に雇われている）</option>
+          <option value="一人親方">一人親方</option>
+          <option value="事業主">事業主</option>
+        </select>
+      </div>
+      <div class="fld" id="fld-special">
+        <label for="f-special">労災の特別加入（任意）</label>
+        <select id="f-special" onchange="saveSettings()">
+          <option value="">未選択</option>
+          <option value="加入あり">加入あり</option>
+          <option value="加入なし">加入なし</option>
+          <option value="不明">不明</option>
+        </select>
+      </div>
+      <div class="fld">
+        <label for="f-rosai">労災番号（任意・分かれば）</label>
+        <input type="text" id="f-rosai" placeholder="分かれば入力（任意）" autocomplete="off" oninput="saveSettings()">
+      </div>
+    </div>
+    <p class="sc-note"><i class="ti ti-info-circle"></i>労災（特に石綿）の申請では「どの会社で・どの立場で・どの現場で有害作業をしたか」が大切です。ここを入れておくと将来の申請がスムーズになります。</p>
   </div>
 
   <!-- 入力フォーム -->
@@ -391,7 +434,11 @@ function saveRecord(){
   const note=document.getElementById('f-note').value.trim();
   if(!job && !site){ toast('職種か現場名を入れてください'); return; }
 
-  const rec={ id: editId || ('r'+Date.now()), date, job, moto, site, hazards:collectHazards(), note };
+  const orig = editId ? load().find(r=>r.id===editId) : null;
+  const _st = loadSettings();
+  const rec={ id: editId || ('r'+Date.now()), date, job, moto, site, hazards:collectHazards(), note,
+    company: (orig && orig.company!==undefined) ? orig.company : _st.company,
+    status:  (orig && orig.status!==undefined)  ? orig.status  : _st.status };
   let arr=load();
   if(editId){ arr=arr.map(r=>r.id===editId?rec:r); } else { arr.push(rec); }
   store(arr);
@@ -508,7 +555,10 @@ function renderDayPanel(){
   if(!recs.length){
     html+='<div class="dp-empty">この日の記録はありません。</div>';
   }else{
+    const _s=loadSettings();
     html+=recs.map(r=>{
+      const company=(r.company!==undefined&&r.company!=='')?r.company:_s.company;
+      const status=(r.status!==undefined&&r.status!=='')?r.status:_s.status;
       const parts=[];
       if(r.job) parts.push(esc(r.job));
       if(r.moto) parts.push('元請：'+esc(r.moto));
@@ -516,6 +566,7 @@ function renderDayPanel(){
       const hz=(r.hazards&&r.hazards.length)? r.hazards.map(n=>'<span class="hz-tag">'+esc(n)+'</span>').join('') : '<span class="hz-tag none">有害作業なし</span>';
       return '<div class="dp-rec">'
         +(parts.length?'<div class="dp-jobsite">'+parts.join(' ／ ')+'</div>':'')
+        +((company||status)?'<div class="dp-meta">'+[company?'所属：'+esc(company):'',status?'立場：'+esc(status):''].filter(Boolean).join('　')+'</div>':'')
         +'<div class="rec-hz">'+hz+'</div>'
         +(r.note?'<div class="rec-note">'+esc(r.note)+'</div>':'')
         +'<div class="dp-actions">'
@@ -544,6 +595,35 @@ function render(){
 
 function saveName(){ try{ localStorage.setItem(KEY_NAME, document.getElementById('f-name').value.trim()); }catch(e){} }
 function getName(){ try{ return (localStorage.getItem(KEY_NAME)||'').trim(); }catch(e){ return ''; } }
+const KEY_COMPANY='doken_worklog_company';
+const KEY_STATUS ='doken_worklog_status';
+const KEY_SPECIAL='doken_worklog_special';
+const KEY_ROSAI  ='doken_worklog_rosai';
+function _gv(k){ try{ return (localStorage.getItem(k)||'').trim(); }catch(e){ return ''; } }
+function _sv(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+function loadSettings(){ return { name:getName(), company:_gv(KEY_COMPANY), status:_gv(KEY_STATUS)||'労働者', special:_gv(KEY_SPECIAL), rosai:_gv(KEY_ROSAI) }; }
+function updateSpecialVis(){
+  const el=document.getElementById('fld-special'); if(!el) return;
+  const st=document.getElementById('f-status').value;
+  el.style.display=(st==='一人親方'||st==='事業主')?'':'none';
+}
+function saveSettings(){
+  _sv(KEY_NAME, document.getElementById('f-name').value.trim());
+  _sv(KEY_COMPANY, document.getElementById('f-company').value.trim());
+  _sv(KEY_STATUS, document.getElementById('f-status').value);
+  _sv(KEY_SPECIAL, document.getElementById('f-special').value);
+  _sv(KEY_ROSAI, document.getElementById('f-rosai').value.trim());
+  updateSpecialVis();
+}
+function applySettingsToForm(){
+  const s=loadSettings();
+  document.getElementById('f-name').value=s.name;
+  document.getElementById('f-company').value=s.company;
+  document.getElementById('f-status').value=s.status;
+  document.getElementById('f-special').value=s.special;
+  document.getElementById('f-rosai').value=s.rosai;
+  updateSpecialVis();
+}
 
 /* 月別のまとめ（曝露日数＝その作業をした日数） */
 function monthlySummary(arr){
@@ -616,7 +696,8 @@ function renderMonthly(arr){
 function buildPrint(arr){
   const now=new Date();
   const gen=now.getFullYear()+'年'+(now.getMonth()+1)+'月'+now.getDate()+'日 出力';
-  const nm=getName();
+  const _s=loadSettings();
+  const nm=_s.name;
   // 明細
   let rows=arr.map(r=>{
     const hz=(r.hazards&&r.hazards.length)?r.hazards.join('、'):'－';
@@ -652,6 +733,7 @@ function buildPrint(arr){
     +'<p class="pr-sub">埼玉土建一般労働組合 上尾伊奈支部'
       +(nm?'　｜　氏名：'+esc(nm):'')
       +'　｜　'+gen+'　｜　全'+arr.length+'件</p>'
+    +((_s.company||_s.status||_s.rosai||_s.special)?'<p class="pr-sub">'+[_s.company?'所属：'+esc(_s.company):'',_s.status?'立場：'+esc(_s.status):'',_s.rosai?'労災番号：'+esc(_s.rosai):'',_s.special?'特別加入：'+esc(_s.special):''].filter(Boolean).join('　｜　')+'</p>':'')
     +ysTable
     +msTable
     +'<p class="pr-h2">作業記録の明細</p>'
@@ -664,8 +746,8 @@ function buildPrint(arr){
 }
 
 async function exportBackup(){
-  const data={ app:'ageo-ina-worklog', version:1, exported:new Date().toISOString(),
-    name:getName(), records:load(), customHazards:loadCustom() };
+  const data={ app:'ageo-ina-worklog', version:2, exported:new Date().toISOString(),
+    name:getName(), settings:loadSettings(), records:load(), customHazards:loadCustom() };
   const json=JSON.stringify(data,null,2);
   const d=new Date();
   const fn='作業記録バックアップ_'+d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate())+'.json';
@@ -706,7 +788,15 @@ function importBackup(input){
       data.customHazards.forEach(c=>{ if(c && c.name && !names.has(c.name)){ cc.push(c); names.add(c.name); } });
       storeCustom(cc);
     }
-    if(data.name && !getName()){ try{ localStorage.setItem(KEY_NAME, data.name); document.getElementById('f-name').value=data.name; }catch(e){} }
+    if(data.name && !getName()){ _sv(KEY_NAME, data.name); }
+    if(data.settings){
+      const s2=loadSettings();
+      if(data.settings.company && !s2.company) _sv(KEY_COMPANY,data.settings.company);
+      if(data.settings.status  && s2.status==='労働者') _sv(KEY_STATUS,data.settings.status);
+      if(data.settings.special && !s2.special) _sv(KEY_SPECIAL,data.settings.special);
+      if(data.settings.rosai   && !s2.rosai)   _sv(KEY_ROSAI,data.settings.rosai);
+    }
+    applySettingsToForm();
     input.value='';
     render();
     alert('復元しました。\n'+added+'件の記録を追加しました（全'+load().length+'件）。');
@@ -722,7 +812,7 @@ function exportPDF(){
 // 初期化
 document.getElementById('f-date').value=todayStr();
 try{ const lj=localStorage.getItem(KEY_JOB); if(lj) document.getElementById('f-job').value=lj; }catch(e){}
-document.getElementById('f-name').value=getName();
+applySettingsToForm();
 renderHaz();
 initCal();
 render();
