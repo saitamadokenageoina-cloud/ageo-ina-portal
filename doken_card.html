@@ -153,6 +153,11 @@
 .es-paste{display:inline-flex;align-items:center;gap:4px;background:#2b2b2b;color:#fff;font-size:13px;font-weight:800;padding:3px 12px;border-radius:8px;margin:0 3px;vertical-align:middle;}
 .es-help{display:flex;align-items:center;justify-content:center;gap:7px;margin:16px 0 0;padding-top:14px;border-top:1px solid var(--gray200);font-size:13.5px;font-weight:700;color:var(--gray600);text-align:center;line-height:1.5;}
 .es-help i{color:var(--orange);font-size:18px;flex-shrink:0;}
+/* ===== 大見出し（2部構成）===== */
+.big-sec{display:flex;align-items:center;gap:10px;margin:26px 2px 14px;}
+.big-sec .bs-no{flex:0 0 auto;width:30px;height:30px;border-radius:9px;background:var(--orange);color:#fff;font-size:16px;font-weight:900;display:flex;align-items:center;justify-content:center;}
+.big-sec .bs-tx{font-size:18px;font-weight:900;color:var(--navy);line-height:1.2;}
+.big-sec .bs-sub{display:block;font-size:11.5px;color:var(--gray500);font-weight:600;margin-top:1px;}
 </style>
 </head>
 <body>
@@ -168,6 +173,8 @@
 </header>
 
 <div class="content">
+
+  <div class="big-sec"><span class="bs-no">1</span><span class="bs-tx">お店で見せる<span class="bs-sub">お店で提示して特典を受けるとき</span></span></div>
 
   <!-- デジタルカード -->
   <div class="digital-card">
@@ -200,23 +207,12 @@
         <button class="pw-toggle" onclick="togglePw()" id="pw-btn">
           <i class="ti ti-eye" id="pw-icon"></i>表示
         </button>
-        <button class="pw-toggle pw-copy" onclick="copyPw()" id="pw-copy-btn">
-          <i class="ti ti-copy"></i>コピー
-        </button>
       </div>
     </div>
-    <p class="pw-hint"><i class="ti ti-info-circle"></i>タップでパスワードを表示。組合員と家族のみ利用可。</p>
+    <p class="pw-hint"><i class="ti ti-info-circle"></i>下の「STEP1」を押すと、このパスワードが自動でコピーされます。</p>
 
     <p class="dc-member" style="margin-top:14px;">上尾伊奈支部 組合員</p>
     <p class="dc-org">埼玉土建一般労働組合</p>
-    <a href="https://doken-card.jp/dc/card" target="_blank" rel="noopener" class="dc-link" onclick="copyForSite()">
-      <i class="ti ti-id"></i>
-      <div style="flex:1;">
-        <p class="dc-link-title">デジタルどけんカードを開く</p>
-        <p class="dc-link-sub">公式サイトのカード表示ページへ移動します</p>
-      </div>
-      <i class="ti ti-external-link" style="font-size:18px;color:rgba(255,255,255,.72);"></i>
-    </a>
   </div>
 
   <!-- ===== かんたん3ステップ（特大ボタン＋イラスト）===== -->
@@ -271,6 +267,8 @@
     <p><i class="ti ti-shield-check" style="font-size:14px;vertical-align:-2px;margin-right:4px;color:var(--green);"></i>どけんカードは<strong>組合員と家族のみ</strong>が利用できます。</p>
     <p><i class="ti ti-alert-triangle" style="font-size:14px;vertical-align:-2px;margin-right:4px;color:var(--yellow);"></i>パスワード・サイト情報を<strong>組合外・SNSに流出させることは禁止</strong>されています。</p>
   </div>
+
+  <div class="big-sec"><span class="bs-no">2</span><span class="bs-tx">特典が使えるお店を探す<span class="bs-sub">どけんカードで割引などが受けられる登録店</span></span></div>
 
   <!-- エリアから探す -->
   <p class="sec-label">エリアから探す</p>
