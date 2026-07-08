@@ -2,7 +2,7 @@
 // ★重要★ 変更をデプロイするたびに CACHE_VERSION の末尾番号を必ず1つ上げること。
 //   このファイルのバイトが変わることでブラウザが更新を検知し、
 //   新SWを再インストール → 古いキャッシュを全削除 → ページ自動リロードとなる。
-const CACHE_VERSION = 'v20260707-26';
+const CACHE_VERSION = 'v20260707-27';
 const CACHE_NAME = 'ageo-ina-portal-' + CACHE_VERSION;
 
 // GitHub Pages プロジェクトページのため、配信は /ageo-ina-portal/ 配下
@@ -59,7 +59,9 @@ self.addEventListener('fetch', event => {
   if (url.origin !== self.location.origin) return;
 
   event.respondWith(
-    fetch(event.request)
+    fetch(event.request.mode === 'navigate'
+            ? new Request(event.request, {cache: 'no-store'})  // HTMLページは常に最新を取得
+            : event.request)
       .then(response => {
         const clone = response.clone();
         caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
