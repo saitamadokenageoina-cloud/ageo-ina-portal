@@ -170,9 +170,14 @@ html[data-theme="dark"] .table-row{border-color:rgba(255,255,255,.12)!important;
       </div>
       <div class="tool-card" onclick="openTool('benefit')">
         <div class="tool-card-icon" style="color:#6B21A8;"><i class="ti ti-heart-handshake"></i></div>
-        <p class="tool-card-title">退職金・給付金</p>
-        <p class="tool-card-desc">建退共目安・国保給付を試算</p>
+        <p class="tool-card-title">給付金</p>
+        <p class="tool-card-desc">医療費払戻・傷病手当・出産葬祭</p>
       </div>
+      <a class="tool-card" href="https://www2.kentaikyo.taisyokukin.go.jp/taishokukin/index.php" target="_blank" rel="noopener" style="display:block;text-decoration:none;">
+        <div class="tool-card-icon" style="color:#B45309;"><i class="ti ti-pig-money"></i></div>
+        <p class="tool-card-title">退職金シミュレーション<i class="ti ti-external-link" style="font-size:13px;margin-left:4px;vertical-align:-1px;"></i></p>
+        <p class="tool-card-desc">建退共の公式サイトで試算</p>
+      </a>
     </div>
   </div>
 
@@ -296,38 +301,20 @@ html[data-theme="dark"] .table-row{border-color:rgba(255,255,255,.12)!important;
 
   <!-- 退職金・給付金シミュ -->
   <div id="tool-benefit" class="tool-detail">
-    <p style="font-size:17px;font-weight:800;color:var(--navy);margin:0 0 14px;">退職金・給付金シミュレーター</p>
+    <p style="font-size:17px;font-weight:800;color:var(--navy);margin:0 0 14px;">給付金シミュレーター</p>
     <div class="tab-row">
-      <button class="t-btn active" onclick="benefitTab('retire')" id="bft-retire">退職金</button>
-      <button class="t-btn" onclick="benefitTab('medical')" id="bft-medical">医療費払戻</button>
+      <button class="t-btn active" onclick="benefitTab('medical')" id="bft-medical">医療費払戻</button>
       <button class="t-btn" onclick="benefitTab('sick')" id="bft-sick">傷病手当</button>
       <button class="t-btn" onclick="benefitTab('birth')" id="bft-birth">出産・葬祭</button>
     </div>
 
-    <div class="card" id="bfp-retire">
-      <p class="sec-label">建退共 退職金の目安</p>
-      <div class="grid2">
-        <div class="input-group">
-          <label>年間就労日数</label>
-          <input type="number" id="bf-workdays" value="220" min="1" max="365" oninput="calcRetire()">
-        </div>
-        <div class="input-group">
-          <label>加入年数</label>
-          <input type="number" id="bf-years" value="10" min="0" max="50" step="0.5" oninput="calcRetire()">
-        </div>
-      </div>
-      <div class="input-group">
-        <label>掛金日額（目安）</label>
-        <input type="number" id="bf-kakekin" value="320" min="1" oninput="calcRetire()">
-      </div>
-      <div id="bf-retire-result"></div>
-      <div class="alert alert-info" style="margin-top:12px;">
-        <i class="ti ti-info-circle"></i>
-        <span>建退共の実際の退職金は掛金納付月数・制度上の計算により決まります。この試算は「掛金総額ベース」の概算です。</span>
-      </div>
-    </div>
+    <a href="https://www2.kentaikyo.taisyokukin.go.jp/taishokukin/index.php" target="_blank" rel="noopener" class="alert alert-info" style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+      <i class="ti ti-pig-money"></i>
+      <span><b>退職金（建退共）の試算</b>は建退共の公式サイトで行えます。タップして移動<i class="ti ti-external-link" style="font-size:13px;margin-left:3px;vertical-align:-1px;"></i></span>
+    </a>
 
-    <div class="card hidden" id="bfp-medical">
+
+    <div class="card" id="bfp-medical">
       <p class="sec-label">一部負担払戻金の目安（2026国保ガイド）</p>
       <div class="grid2">
         <div class="input-group">
@@ -450,7 +437,7 @@ function openTool(name){
   document.querySelectorAll('.tool-detail').forEach(d=>d.classList.remove('active'));
   document.getElementById('tool-'+name).classList.add('active');
   document.getElementById('back-label').textContent='計算ツール';
-  const titles={romu:'労務費シミュ',kokuho:'国保料シミュ',ccus:'CCUSレベル確認',benefit:'退職金・給付金'};
+  const titles={romu:'労務費シミュ',kokuho:'国保料シミュ',ccus:'CCUSレベル確認',benefit:'給付金'};
   document.getElementById('page-title').textContent=titles[name]||'計算ツール';
   if(name==='romu'){calcRoumu();}
   if(name==='ccus')initCcus();
@@ -512,34 +499,19 @@ const BF_SICK = {
 function money(n){return Math.max(0,Math.round(n)).toLocaleString('ja-JP')+'円';}
 
 function initBenefit(){
-  benefitTab('retire');
-  calcRetire();
+  benefitTab('medical');
   calcMedicalRefund();
   calcSickPay();
   calcEventPay();
 }
 
 function benefitTab(tab){
-  ['retire','medical','sick','birth'].forEach(t=>{
+  ['medical','sick','birth'].forEach(t=>{
     document.getElementById('bfp-'+t).classList.toggle('hidden',t!==tab);
     document.getElementById('bft-'+t).classList.toggle('active',t===tab);
   });
 }
 
-function calcRetire(){
-  const days=parseFloat(document.getElementById('bf-workdays').value)||0;
-  const years=parseFloat(document.getElementById('bf-years').value)||0;
-  const daily=parseFloat(document.getElementById('bf-kakekin').value)||320;
-  const totalDays=Math.round(days*years);
-  const total=totalDays*daily;
-  const monthly=years>0?total/(years*12):0;
-  document.getElementById('bf-retire-result').innerHTML=`
-    <div style="background:var(--gray50);border-radius:var(--r12);padding:14px 16px;margin-top:4px;">
-      <div class="result-row"><span class="result-label">掛金納付日数の目安</span><span class="result-val">${totalDays.toLocaleString()}日</span></div>
-      <div class="result-row"><span class="result-label">掛金総額ベース</span><span class="result-val">${money(total)}</span></div>
-      <div class="result-row total"><span class="result-label">月あたり積立目安</span><span class="result-val">${money(monthly)}</span></div>
-    </div>`;
-}
 
 function calcMedicalRefund(){
   const person=document.getElementById('bf-med-person').value;

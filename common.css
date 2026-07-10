@@ -30,7 +30,15 @@ body{
 }
 button{font-family:inherit;cursor:pointer;}
 input,select,textarea{font-family:inherit;}
-a{text-decoration:none;}
+a{text-decoration:none;color:inherit;}
+/* 電話番号リンク：ブラウザ既定の青紫（訪問済み紫）を防ぐ。
+   ただしボタン等クラス付きの要素は各自のCSS（背景色に合う色）を優先する */
+a[href^="tel:"]:not([class]){color:var(--orange);font-weight:800;}
+a[href^="tel:"]:not([class]):visited{color:var(--orange);}
+/* iOS Safari が本文中の電話番号を自動でリンク化した時の青紫を防ぐ */
+a[x-apple-data-detectors],
+a[href^="tel:"][x-apple-data-detectors]{color:inherit!important;-webkit-text-fill-color:currentColor!important;text-decoration:none!important;font-weight:inherit!important;}
+footer a,footer a:visited{color:inherit!important;-webkit-text-fill-color:currentColor!important;}
 img{max-width:100%;display:block;}
 
 /* APP SHELL */
