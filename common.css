@@ -31,14 +31,30 @@ body{
 button{font-family:inherit;cursor:pointer;}
 input,select,textarea{font-family:inherit;}
 a{text-decoration:none;color:inherit;}
-/* 電話番号リンク：ブラウザ既定の青紫（訪問済み紫）を防ぐ。
-   ただしボタン等クラス付きの要素は各自のCSS（背景色に合う色）を優先する */
-a[href^="tel:"]:not([class]){color:var(--orange);font-weight:800;}
-a[href^="tel:"]:not([class]):visited{color:var(--orange);}
-/* iOS Safari が本文中の電話番号を自動でリンク化した時の青紫を防ぐ */
+/* iOS Safari が本文中の電話番号・住所を自動リンク化した時の青紫を防ぐ。
+   iOSは <a> の内部に span を生成するため、子孫まで色を強制する */
 a[x-apple-data-detectors],
-a[href^="tel:"][x-apple-data-detectors]{color:inherit!important;-webkit-text-fill-color:currentColor!important;text-decoration:none!important;font-weight:inherit!important;}
-footer a,footer a:visited{color:inherit!important;-webkit-text-fill-color:currentColor!important;}
+a[x-apple-data-detectors] *,
+a[x-apple-data-detectors="true"],
+a[x-apple-data-detectors="true"] *{
+  color:inherit!important;
+  -webkit-text-fill-color:inherit!important;
+  text-decoration:none!important;
+  font-weight:inherit!important;
+  font-size:inherit!important;
+}
+/* フッター内のリンク（自動リンク含む）は必ずフッターの文字色を継承 */
+footer a,footer a *,footer a:visited{
+  color:inherit!important;
+  -webkit-text-fill-color:inherit!important;
+  text-decoration:none!important;
+}
+/* 本文中の電話リンク：ライト／ダーク双方で読めるオレンジに統一 */
+.tel-inline,.tel-inline:visited,.tel-inline *{
+  color:var(--orange)!important;
+  -webkit-text-fill-color:var(--orange)!important;
+  font-weight:800;
+}
 img{max-width:100%;display:block;}
 
 /* APP SHELL */
