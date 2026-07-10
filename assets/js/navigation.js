@@ -70,3 +70,70 @@
     injectThemeToggle();
   }
 })();
+
+/* =====================================================================
+   自動更新（Service Worker）
+   - 全ページ共通。pushして sw.js の CACHE_VERSION が変われば
+     新SWをインストール → 即時有効化 → 開いているページを自動リロード。
+   - 初回インストール時はリロードしない（hadController で判定）。
+   - 短時間の連続リロードを防止（8秒ガード）。
+   ===================================================================== */
+(function () {
+  if (!('serviceWorker' in navigator)) return;
+
+  var SW_URL = '/ageo-ina-portal/sw.js';
+  var SCOPE  = '/ageo-ina-portal/';
+  var KEY    = 'doken_sw_reloaded_at';
+
+  // このページ読み込み時点で既にSWに制御されていたか（初回導入時の無駄なリロード防止）
+  var hadController = !!navigator.serviceWorker.controller;
+
+  function reloadOnce() {
+    if (!hadController) return;              // 初回インストールでは再読込しない
+    var now = Date.now();
+    var last = parseInt(sessionStorage.getItem(KEY) || '0', 10);
+    if (now - last < 8000) return;           // 連続リロード防止
+    try { sessionStorage.setItem(KEY, String(now)); } catch (e) {}
+    setTimeout(function () { location.reload(); }, 300);
+  }
+
+  // 新SWが制御を握った / SWから更新通知が来た → 自動リロード
+  navigator.serviceWorker.addEventListener('controllerchange', reloadOnce);
+  navigator.serviceWorker.addEventListener('message', function (e) {
+    if (e.data && e.data.type === 'SW_UPDATED') reloadOnce();
+  });
+
+  function activateWaiting(reg) {
+    if (reg.waiting) reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+  }
+
+  function register() {
+    navigator.serviceWorker.register(SW_URL, { scope: SCOPE })
+      .then(function (reg) {
+        reg.update();          // 起動時に必ず更新チェック
+        activateWaiting(reg);  // 待機中の新SWがあれば即適用
+
+        reg.addEventListener('updatefound', function () {
+          var nw = reg.installing;
+          if (!nw) return;
+          nw.addEventListener('statechange', function () {
+            if (nw.state === 'installed' && navigator.serviceWorker.controller) {
+              nw.postMessage({ type: 'SKIP_WAITING' });
+            }
+          });
+        });
+      })
+      .catch(function () { /* 失敗しても通常表示は継続 */ });
+  }
+
+  if (document.readyState === 'complete') register();
+  else window.addEventListener('load', register);
+
+  // ホーム画面アプリを再表示したときも更新チェック
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState !== 'visible') return;
+    navigator.serviceWorker.getRegistration(SCOPE).then(function (reg) {
+      if (reg) { reg.update(); activateWaiting(reg); }
+    }).catch(function () {});
+  });
+})();

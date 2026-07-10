@@ -710,25 +710,7 @@ function showManual(key, btn){
 showManual('first');
 </script>
 <script src="assets/js/navigation.js"></script>
-<script>
-// Service Worker登録（キャッシュ自動更新）
-if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('/ageo-ina-portal/sw.js', {scope:'/ageo-ina-portal/'})
-    .then(reg => {
-      // 新バージョンがあれば即座に更新
-      reg.addEventListener('updatefound', () => {
-        const newSW = reg.installing;
-        newSW.addEventListener('statechange', () => {
-          if(newSW.state === 'installed' && navigator.serviceWorker.controller){
-            // 更新完了 → 自動リロード
-            navigator.serviceWorker.addEventListener('controllerchange', () => location.reload());
-          }
-        });
-      });
-    })
-    .catch(err => console.warn('[SW] 登録失敗:', err));
-}
-</script>
+
 
 
 

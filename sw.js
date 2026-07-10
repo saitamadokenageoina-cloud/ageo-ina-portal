@@ -2,7 +2,7 @@
 // ★重要★ 変更をデプロイするたびに CACHE_VERSION の末尾番号を必ず1つ上げること。
 //   このファイルのバイトが変わることでブラウザが更新を検知し、
 //   新SWを再インストール → 古いキャッシュを全削除 → ページ自動リロードとなる。
-const CACHE_VERSION = 'v20260707-36';
+const CACHE_VERSION = 'v20260707-37';
 const CACHE_NAME = 'ageo-ina-portal-' + CACHE_VERSION;
 
 // GitHub Pages プロジェクトページのため、配信は /ageo-ina-portal/ 配下
@@ -29,6 +29,13 @@ const CACHE_FILES = [
 ];
 
 // インストール：新キャッシュを作成（1ファイル失敗してもinstall全体は成功させる）
+// ページ側から「すぐ切り替えて」と言われたら待機せず即有効化
+self.addEventListener('message', event => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
+
 self.addEventListener('install', event => {
   console.log('[SW] Install:', CACHE_NAME);
   event.waitUntil(
@@ -50,6 +57,11 @@ self.addEventListener('activate', event => {
         })
       ))
       .then(() => self.clients.claim())
+      .then(() => self.clients.matchAll({type: 'window'}))
+      .then(clients => {
+        // 開いている全ページに「更新した」と通知 → ページ側で自動リロード
+        clients.forEach(c => c.postMessage({type: 'SW_UPDATED', version: CACHE_VERSION}));
+      })
   );
 });
 

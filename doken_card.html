@@ -440,12 +440,5 @@ function openCat(cat){ window.open(`https://doken-card.jp/dc/result?category=${c
 function e(url, ev){ ev.stopPropagation(); window.open(url, '_blank'); }
 </script>
 <script src="assets/js/navigation.js"></script>
-<script>
-if('serviceWorker' in navigator){
-  let _r=false;
-  navigator.serviceWorker.addEventListener('controllerchange', ()=>{ if(!_r){ _r=true; location.reload(); } });
-  navigator.serviceWorker.register('/ageo-ina-portal/sw.js', {scope:'/ageo-ina-portal/'}).then(reg=>reg.update()).catch(()=>{});
-}
-</script>
 </body>
 </html>
