@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<title>労働者供給事業｜埼玉土建 上尾伊奈支部</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.47.0/iconfont/tabler-icons.min.css">
+<link rel="stylesheet" href="common.css">
+<style>
+/* ===== ヒーロー ===== */
+.ls-hero{background:linear-gradient(135deg,#12457F,#1D63AF);border-radius:var(--r16);padding:20px;margin-bottom:16px;text-align:center;}
+.ls-hero .ls-tag{display:inline-block;font-size:11.5px;font-weight:900;color:#FFD98A;letter-spacing:.04em;margin-bottom:6px;}
+.ls-hero h2{font-size:23px;font-weight:900;color:#fff;margin:0 0 5px;line-height:1.25;letter-spacing:.01em;}
+.ls-hero .ls-sub{font-size:13px;color:rgba(255,255,255,.82);margin:0;font-weight:600;line-height:1.55;}
+
+/* ===== メリット ===== */
+.merit-box{background:var(--white);border:1px solid var(--gray200);border-radius:16px;padding:16px;margin-bottom:14px;box-shadow:0 3px 14px rgba(0,0,0,.06);}
+.sec-t{display:flex;align-items:center;gap:7px;font-size:16px;font-weight:900;color:var(--navy);margin:0 0 13px;}
+.sec-t i{color:var(--orange);font-size:20px;}
+.merit-lead{display:flex;align-items:center;justify-content:center;gap:7px;background:linear-gradient(135deg,#12457F,#1D63AF);color:#fff;font-size:14.5px;font-weight:900;border-radius:11px;padding:12px;margin-bottom:10px;}
+.merit-lead i{color:#FFD98A;font-size:19px;}
+.merit-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+.merit-item{display:flex;align-items:center;gap:7px;background:var(--gray50);border:1.5px solid var(--gray200);border-radius:11px;padding:11px 10px;font-size:13px;font-weight:800;color:var(--navy);line-height:1.35;}
+.merit-item i{color:#1D63AF;font-size:18px;flex-shrink:0;}
+@media(max-width:360px){.merit-grid{grid-template-columns:1fr;}}
+
+/* ===== とは（しくみ） ===== */
+.what-box{background:#FBF8EF;border:1px solid #E8DFC4;border-radius:16px;padding:16px;margin-bottom:14px;}
+.what-box p{font-size:13.5px;line-height:1.75;color:var(--gray700);margin:0 0 10px;}
+.what-box p:last-child{margin-bottom:0;}
+.what-box strong{color:#12457F;}
+.flow-fig{display:flex;align-items:center;justify-content:center;gap:6px;margin:14px 0 10px;}
+.ff-node{flex:1;text-align:center;background:#fff;border:1.5px solid #C9D6E6;border-radius:11px;padding:10px 4px;}
+.ff-node i{font-size:20px;color:#1D63AF;}
+.ff-node p{font-size:11px;font-weight:800;color:var(--navy);margin:3px 0 0;line-height:1.3;}
+.ff-arrow{flex:0 0 auto;color:var(--orange);font-size:17px;}
+.pay-note{display:flex;align-items:center;gap:7px;background:rgba(232,97,42,.1);border:1px solid rgba(232,97,42,.3);border-radius:10px;padding:10px 12px;font-size:12.5px;font-weight:800;color:#C04E1E;line-height:1.5;}
+.pay-note i{font-size:17px;flex-shrink:0;}
+.job-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
+.job-tag{font-size:12px;font-weight:800;color:#12457F;background:#E6EEF8;border-radius:7px;padding:4px 10px;}
+
+/* ===== 募集中の事業所 ===== */
+.recruit{background:var(--white);border:1px solid var(--gray200);border-left:5px solid #E8612A;border-radius:14px;padding:15px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.06);}
+.rc-badge{display:inline-block;font-size:10.5px;font-weight:900;color:#fff;background:#E8612A;border-radius:99px;padding:3px 11px;margin-bottom:7px;}
+.rc-name{font-size:17px;font-weight:900;color:var(--navy);margin:0 0 12px;line-height:1.3;}
+.rc-row{display:flex;gap:10px;padding:9px 0;border-top:1px solid var(--gray100);}
+.rc-row:first-of-type{border-top:none;padding-top:0;}
+.rc-k{flex:0 0 62px;font-size:12px;font-weight:900;color:#fff;background:#12457F;border-radius:6px;padding:3px 0;text-align:center;height:fit-content;}
+.rc-v{flex:1;font-size:13.5px;line-height:1.65;color:var(--gray700);font-weight:600;min-width:0;}
+.rc-v b{color:var(--navy);font-weight:900;}
+.rc-v .yen{color:#C04E1E;font-weight:900;font-size:15px;}
+.rc-v ul{margin:4px 0 0;padding-left:17px;}
+.rc-v li{margin-bottom:3px;}
+.rc-job{background:var(--gray50);border:1.5px solid var(--gray200);border-radius:10px;padding:10px 12px;margin-bottom:9px;}
+.rc-job-t{font-size:13.5px;font-weight:900;color:#12457F;margin:0 0 5px;}
+.rc-note{font-size:11.5px;color:var(--gray500);font-weight:600;margin-top:9px;line-height:1.55;}
+
+/* ===== 流れ ===== */
+.flow-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0;}
+.flow-list li{display:flex;gap:12px;position:relative;padding-bottom:16px;}
+.flow-list li:last-child{padding-bottom:0;}
+.flow-list li::before{content:'';position:absolute;left:17px;top:38px;bottom:2px;width:2px;background:var(--gray200);}
+.flow-list li:last-child::before{display:none;}
+.fl-n{flex:0 0 36px;width:36px;height:36px;border-radius:50%;background:#12457F;color:#fff;font-size:16px;font-weight:900;display:flex;align-items:center;justify-content:center;z-index:1;}
+.flow-list li:last-child .fl-n{background:#E8612A;}
+.fl-b{flex:1;padding-top:5px;}
+.fl-b b{display:block;font-size:15px;font-weight:900;color:var(--navy);margin-bottom:2px;}
+.fl-b small{display:block;font-size:12.5px;color:var(--gray600);line-height:1.6;font-weight:600;}
+
+/* ===== 問い合わせ ===== */
+.cta{background:linear-gradient(135deg,#12457F,#1D63AF);border-radius:16px;padding:18px;text-align:center;margin-bottom:14px;}
+.cta p{color:#fff;font-size:14.5px;font-weight:900;margin:0 0 4px;}
+.cta small{display:block;color:rgba(255,255,255,.75);font-size:12px;margin-bottom:13px;font-weight:600;line-height:1.5;}
+.cta-tel{display:flex;align-items:center;justify-content:center;gap:8px;background:#fff;color:#12457F;font-size:20px;font-weight:900;border-radius:12px;padding:14px;text-decoration:none;box-shadow:0 5px 16px rgba(0,0,0,.2);}
+.cta-tel i{font-size:22px;color:#E8612A;}
+
+.caution2{display:flex;align-items:flex-start;gap:8px;background:rgba(240,147,0,.1);border:1px solid rgba(240,147,0,.28);border-radius:12px;padding:12px 14px;font-size:12.5px;line-height:1.65;color:var(--gray700);margin-bottom:14px;}
+.caution2 i{color:#B07800;font-size:18px;flex-shrink:0;margin-top:1px;}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <button class="hdr-back" onclick="goBack()"><i class="ti ti-arrow-left"></i>戻る</button>
+  <div style="text-align:right;">
+    <p class="hdr-org" style="margin:0;">仕事対策</p>
+    <p class="hdr-title" style="margin:0;font-size:14px;">労働者供給事業</p>
+  </div>
+</header>
+
+<div class="content">
+
+  <div class="ls-hero">
+    <span class="ls-tag">\\ メリットいろいろ //</span>
+    <h2>労働者供給事業で<br>仕事をしませんか</h2>
+    <p class="ls-sub">埼玉土建が厚生労働省の認可を受けて行う、<br>組合員のための仕事紹介のしくみです。</p>
+  </div>
+
+  <!-- メリット -->
+  <div class="merit-box">
+    <p class="sec-t"><i class="ti ti-thumb-up"></i>ここが安心</p>
+    <div class="merit-lead"><i class="ti ti-shield-check"></i>労働者としての権利が守られる</div>
+    <div class="merit-grid">
+      <div class="merit-item"><i class="ti ti-building"></i>事業所の直接雇用</div>
+      <div class="merit-item"><i class="ti ti-clock-dollar"></i>残業代・休日出勤手当も支給</div>
+      <div class="merit-item"><i class="ti ti-coin"></i>安定した賃金</div>
+      <div class="merit-item"><i class="ti ti-calendar-check"></i>休日もしっかり確保</div>
+      <div class="merit-item"><i class="ti ti-car"></i>交通費も支給</div>
+      <div class="merit-item"><i class="ti ti-heart-handshake"></i>福利厚生費も会社負担の場合あり</div>
+    </div>
+  </div>
+
+  <!-- しくみ -->
+  <div class="what-box">
+    <p class="sec-t"><i class="ti ti-info-circle"></i>労働者供給事業とは</p>
+    <p>建設業では、現場作業に従事する労働者の派遣は一切禁止されていますが、<strong>埼玉土建は厚生労働省から認可を受け</strong>、「賃金」や「処遇」の改善を目的に労働者供給事業を行っています。</p>
+
+    <div class="flow-fig">
+      <div class="ff-node"><i class="ti ti-users-group"></i><p>労働組合</p></div>
+      <i class="ti ti-arrow-right ff-arrow"></i>
+      <div class="ff-node"><i class="ti ti-building-community"></i><p>会社<br>(供給先)</p></div>
+      <i class="ti ti-arrow-right ff-arrow"></i>
+      <div class="ff-node"><i class="ti ti-user"></i><p>労働者<br>(あなた)</p></div>
+    </div>
+
+    <div class="pay-note"><i class="ti ti-cash"></i>賃金は会社から直接支払われます（ピンハネ・手数料は一切なし）</div>
+
+    <p style="margin-top:12px;">埼玉土建が相手先企業と<strong>「労働協約」</strong>（就業時間・休憩時間・休日・給料・残業代・各種補償）を結びますので、安心して現場で働くことができます。</p>
+
+    <p style="margin-bottom:4px;"><strong>対象職種</strong></p>
+    <div class="job-tags">
+      <span class="job-tag">大工</span><span class="job-tag">内装工</span><span class="job-tag">電工</span>
+      <span class="job-tag">設備工</span><span class="job-tag">外装工</span><span class="job-tag">躯体職種</span>
+      <span class="job-tag">外構職種</span><span class="job-tag">その他の建設関連職種</span>
+    </div>
+  </div>
+
+  <!-- 募集中 -->
+  <p class="sec-t" style="margin:22px 2px 12px;"><i class="ti ti-briefcase"></i>現在募集している事業所</p>
+
+  <div class="recruit">
+    <span class="rc-badge">募集中</span>
+    <p class="rc-name">株式会社 東栄住宅</p>
+
+    <div class="rc-row">
+      <span class="rc-k">仕事内容</span>
+      <div class="rc-v">
+        <div class="rc-job">
+          <p class="rc-job-t">大工職</p>
+          土台、上棟、外部作業、外国人実習生の指導
+        </div>
+        <div class="rc-job" style="margin-bottom:0;">
+          <p class="rc-job-t">タイル職</p>
+          玄関土間タイル作業、外国人実習生の指導
+        </div>
+        <p class="rc-note">※ 外国人技能実習生とともに協力して業務ができる方</p>
+      </div>
+    </div>
+
+    <div class="rc-row">
+      <span class="rc-k">エリア</span>
+      <div class="rc-v">埼玉（大宮、川越ほか）、東京、神奈川（横浜ほか）、千葉（船橋、柏、松戸）の現場</div>
+    </div>
+
+    <div class="rc-row">
+      <span class="rc-k">賃金・手当</span>
+      <div class="rc-v">
+        <b>【大工職】</b>
+        <ul>
+          <li>基本給：月額 <span class="yen">541,700円</span></li>
+          <li>手当：月額 5,000円（建方作業手当・実績により変動）</li>
+          <li>手当：月額 5,000円〜（実習生指導手当・人数によって変動）</li>
+          <li>手当：月額 15,000円（実習生の送迎がある場合）</li>
+        </ul>
+        <b style="display:block;margin-top:8px;">【タイル職】</b>
+        <ul>
+          <li>基本給：月額 <span class="yen">455,000円</span></li>
+          <li>手当：月額 15,000円（実習生の送迎がある場合）</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="rc-row">
+      <span class="rc-k">働き方</span>
+      <div class="rc-v">
+        週休2日（土・日・休）<br>
+        土日出勤もあるが、その際は法律に則り割増賃金
+      </div>
+    </div>
+
+    <div class="rc-row">
+      <span class="rc-k">その他</span>
+      <div class="rc-v">
+        <ul>
+          <li>社用車を貸与</li>
+          <li>給油カード、ETCカードを貸与</li>
+          <li>自宅に駐車できない場合は、会社負担で近隣に駐車場を用意する</li>
+          <li>外国人実習生の相談やクレームなどは、東栄住宅の社員が行う</li>
+          <li>外国人実習生は、4人または8人に1グループ</li>
+          <li>年齢は長期を見据えて65歳までに入職するのが理想</li>
+          <li>木建、足場、丸鋸、玉掛の特別教育が必要だが、東栄住宅でも取得できるので、応募は可能</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="caution2">
+    <i class="ti ti-alert-circle"></i>
+    <span>募集内容は変更される場合があります。最新の条件や詳細は、支部までお問い合わせください。応募には<strong>組合への登録申込書の提出</strong>が必要です。</span>
+  </div>
+
+  <!-- 流れ -->
+  <div class="merit-box">
+    <p class="sec-t"><i class="ti ti-route"></i>仕事スタートまでの流れ</p>
+    <ol class="flow-list">
+      <li><span class="fl-n">1</span><div class="fl-b"><b>「登録申込書」を組合に提出</b><small>まずは支部へご連絡ください。用紙をお渡しします。</small></div></li>
+      <li><span class="fl-n">2</span><div class="fl-b"><b>仕事依頼のメールを待つ</b><small>登録された方に、お仕事の情報が届きます。</small></div></li>
+      <li><span class="fl-n">3</span><div class="fl-b"><b>希望する条件の仕事があれば、電話で組合に連絡</b><small>気になる仕事があればお電話ください。</small></div></li>
+      <li><span class="fl-n">4</span><div class="fl-b"><b>詳細を確認</b><small>賃金・働き方などをしっかり確認します。</small></div></li>
+      <li><span class="fl-n">5</span><div class="fl-b"><b>出勤スタート！</b><small>労働協約にもとづき、安心して働けます。</small></div></li>
+    </ol>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta">
+    <p>まずは登録を！</p>
+    <small>「話だけ聞きたい」でも大丈夫です。<br>お気軽にお電話ください。</small>
+    <a href="tel:0487739863" class="cta-tel"><i class="ti ti-phone"></i>048-773-9863</a>
+  </div>
+
+  <p class="footer" style="text-align:center;color:var(--gray500);font-size:12px;margin:18px 0 6px;">埼玉土建一般労働組合 上尾伊奈支部<br><span style="font-size:10px;color:var(--gray400);">アプリ版数 v30</span></p>
+
+</div>
+
+<script src="assets/js/navigation.js"></script>
+<script>
+if('serviceWorker' in navigator){
+  let _r=false;
+  navigator.serviceWorker.addEventListener('controllerchange', ()=>{ if(!_r){ _r=true; location.reload(); } });
+  navigator.serviceWorker.register('/ageo-ina-portal/sw.js', {scope:'/ageo-ina-portal/'}).then(reg=>reg.update()).catch(()=>{});
+}
+</script>
+</body>
+</html>
