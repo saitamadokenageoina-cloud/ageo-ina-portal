@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>YouTubeチャンネル｜埼玉土建 上尾伊奈支部</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.47.0/iconfont/tabler-icons.min.css">
 <link rel="stylesheet" href="common.css">
@@ -144,7 +144,7 @@ function renderVideos(items) {
     const thumb = vid ? `https://img.youtube.com/vi/${vid}/mqdefault.jpg` : null;
     const url = item.link;
     return `
-      <div class="video-card" onclick="window.open('${url}','_blank')">
+      <div class="video-card" onclick="window.open('${url}','_blank','noopener')">
         <div class="video-thumb">
           ${thumb
             ? `<img src="${thumb}" alt="${item.title}" loading="lazy" onerror="this.parentNode.innerHTML='<div class=\\"video-thumb-fallback\\"><i class=\\"ti ti-brand-youtube\\" style=\\"font-size:48px;color:rgba(255,255,255,.3)\\"></i></div>'">`

@@ -84,7 +84,8 @@ if(window.pdfjsLib){
 }
 
 const raw = sessionStorage.getItem('rodo36FormData');
-const data = raw ? JSON.parse(raw) : null;
+let data = null;
+try { data = raw ? JSON.parse(raw) : null; } catch (e) { data = null; }
 const params = new URLSearchParams(location.search);
 const templates = {
   general:'assets/pdfs/forms/rodo36-general.pdf',
