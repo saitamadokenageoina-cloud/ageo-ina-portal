@@ -18,6 +18,16 @@
     position:static !important; left:auto !important; top:auto !important;
     width:auto !important; display:block !important;
   }
+  /* 印刷時：白黒でも読めるよう、背景は白・文字は黒・区切りは枠線で表現 */
+  #print-area, #print-area *{
+    color:#111 !important; -webkit-text-fill-color:#111 !important;
+    background-color:transparent !important; background-image:none !important;
+  }
+  #print-area .pr-body > div,
+  #print-area .pr-body .result-box{
+    background-color:#fff !important; border:1px solid #999 !important;
+  }
+  #print-area .pr-body th{ background:#eee !important; }
   /* カード・表の分断を避ける */
   #print-area .pr-sec{ break-after:avoid; page-break-after:avoid; }
   #print-area .pr-body .card,
@@ -28,19 +38,30 @@
 }
 
 /* ===== 印刷DOM 共通体裁（画面外・印刷共通） ===== */
+/* 画面から複製したHTMLがダークテーマの濃紺背景(インライン style="background:var(--gray50)"等)を
+   引き継ぐため、印刷/プレビュー内では背景を白系に、文字を黒に強制して可読性を担保する。 */
 #print-area, #print-area *{
   color:#111 !important; -webkit-text-fill-color:#111 !important;
-  box-shadow:none !important; -webkit-print-color-adjust:exact; print-color-adjust:exact;
+  background-color:transparent !important; background-image:none !important;
+  box-shadow:none !important; text-shadow:none !important;
+  filter:none !important; opacity:1 !important;
+  -webkit-print-color-adjust:exact; print-color-adjust:exact;
+}
+/* 結果ブロック（元は濃紺/淡色カード）は白地＋薄い枠に統一 */
+#print-area .pr-body > div,
+#print-area .pr-body .result-box{
+  background-color:#fff !important; border:1px solid #ccc !important;
+  border-radius:6px !important; padding:8px 10px !important; margin:4px 0 !important;
 }
 #print-area{ font-family:'Hiragino Kaku Gothic ProN','Yu Gothic','Noto Sans JP',sans-serif; }
 #print-area .pr-h1{ font-size:15pt; font-weight:800; margin:0 0 2px; }
 #print-area .pr-sub{ font-size:8.5pt; color:#555 !important; -webkit-text-fill-color:#555 !important; margin:0 0 8px; border-bottom:1.5px solid #333; padding-bottom:6px; }
-#print-area .pr-sec{ font-size:11pt; font-weight:800; margin:11px 0 4px; padding-left:8px; border-left:4px solid #E8612A; }
+#print-area .pr-sec{ font-size:11pt; font-weight:800; margin:11px 0 4px; padding-left:8px; border-left:4px solid #E8612A !important; }
 #print-area .pr-body{ font-size:9.5pt; line-height:1.55; }
-#print-area .pr-body .result-row{ display:flex; justify-content:space-between; gap:10px; padding:3px 0; border-bottom:1px dotted #bbb; }
-#print-area .pr-body .result-row.total{ border-top:2px solid #333; border-bottom:none; font-weight:800; margin-top:2px; padding-top:5px; }
+#print-area .pr-body .result-row{ display:flex; justify-content:space-between; gap:10px; padding:3px 0; border-bottom:1px dotted #bbb !important; }
+#print-area .pr-body .result-row.total{ border-top:2px solid #333 !important; border-bottom:none !important; font-weight:800; margin-top:2px; padding-top:5px; }
 #print-area .pr-body table{ width:100%; border-collapse:collapse; font-size:8.5pt; table-layout:fixed; margin:4px 0; }
-#print-area .pr-body th, #print-area .pr-body td{ border:1px solid #999; padding:3px 5px; text-align:left; word-break:break-word; overflow-wrap:anywhere; vertical-align:top; }
+#print-area .pr-body th, #print-area .pr-body td{ border:1px solid #999 !important; padding:3px 5px; text-align:left; word-break:break-word; overflow-wrap:anywhere; vertical-align:top; }
 #print-area .pr-body th{ background:#f0f0f0 !important; }
 #print-area .pr-foot{ font-size:7.5pt; color:#666 !important; -webkit-text-fill-color:#666 !important; margin-top:12px; border-top:1px solid #ccc; padding-top:6px; line-height:1.5; }
 #print-area .pr-block{ margin:0 0 8px; }
@@ -74,6 +95,14 @@ body.preview-lock{ overflow:hidden !important; }
 }
 #preview-overlay .pv-sheet, #preview-overlay .pv-sheet *{
   color:#111 !important; -webkit-text-fill-color:#111 !important;
+  background-color:transparent !important; background-image:none !important;
+  box-shadow:none !important; text-shadow:none !important;
+  filter:none !important; opacity:1 !important;
+}
+#preview-overlay .pv-sheet .pr-body > div,
+#preview-overlay .pv-sheet .pr-body .result-box{
+  background-color:#fff !important; border:1px solid #ccc !important;
+  border-radius:6px !important; padding:8px 10px !important; margin:4px 0 !important;
 }
 #preview-overlay .pv-sheet .pr-h1{ font-size:15pt; font-weight:800; margin:0 0 2px; }
 #preview-overlay .pv-sheet .pr-sub{ font-size:8.5pt; color:#555 !important; -webkit-text-fill-color:#555 !important; margin:0 0 8px; border-bottom:1.5px solid #333; padding-bottom:6px; }

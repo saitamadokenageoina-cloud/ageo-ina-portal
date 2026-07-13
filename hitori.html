@@ -109,7 +109,7 @@
 .if-row{display:flex;justify-content:space-between;font-size:13.5px;padding:5px 0;color:var(--gray700);font-weight:600;}
 .if-row.minus{color:#C04E1E;}
 .if-row.total{border-top:2px solid var(--navy);margin-top:6px;padding-top:9px;font-weight:900;font-size:15px;color:var(--navy);}
-.income-note{display:flex;align-items:flex-start;gap:8px;background:rgba(240,147,0,.1);border:1px solid rgba(240,147,0,.28);border-radius:10px;padding:11px 13px;font-size:12px;line-height:1.6;color:var(--gray700);margin-top:12px;font-weight:600;}
+.income-note{display:flex;align-items:flex-start;gap:8px;background:var(--gray50);border:1px solid var(--gray200);border-radius:10px;padding:11px 13px;font-size:12px;line-height:1.6;color:var(--gray700);margin-top:12px;font-weight:600;}
 .income-note i{color:#B07800;font-size:16px;flex-shrink:0;margin-top:1px;}
 
 /* ===== 比較表（スマホは縦カード） ===== */
@@ -146,9 +146,10 @@
 .warn-box{background:#FFF4EC;border:1.5px solid #F0A876;border-left:5px solid #E8612A;border-radius:14px;padding:16px;margin-bottom:12px;}
 .warn-head{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:900;color:#C04E1E;margin-bottom:10px;}
 .warn-head i{font-size:20px;}
-.warn-box p{font-size:13px;line-height:1.7;color:var(--gray700);margin:0 0 9px;font-weight:600;}
+/* 固定の淡背景カードなので、文字色も固定の濃色にする（テーマ変数を使わない） */
+.warn-box p{font-size:13px;line-height:1.7;color:#3A2A1E !important;-webkit-text-fill-color:#3A2A1E;margin:0 0 9px;font-weight:600;}
 .warn-box p:last-child{margin-bottom:0;}
-.warn-box .warn-consult{background:#fff;border-radius:10px;padding:11px 13px;font-size:12.5px;color:var(--navy);font-weight:700;line-height:1.6;}
+.warn-box .warn-consult{background:#fff;border-radius:10px;padding:11px 13px;font-size:12.5px;color:#1B2A3B !important;-webkit-text-fill-color:#1B2A3B;font-weight:700;line-height:1.6;}
 
 /* ===== 詳細解説アコーディオン ===== */
 #detail-area{display:none;}
@@ -295,7 +296,7 @@
     <p class="info-note">出典：国土交通省 不動産・建設経済局 建設振興課「一人親方に関する基礎知識」。関連：<a class="src-link" href="https://www.mlit.go.jp/totikensangyo/const/content/001448684.pdf" target="_blank" rel="noopener noreferrer">働き方の自己診断チェックリスト</a>／<a class="src-link" href="https://roumuhi.mlit.go.jp/" target="_blank" rel="noopener noreferrer">労務費に関する基準</a></p>
   </div>
 
-  <p class="footer" style="text-align:center;color:var(--gray500);font-size:12px;margin:20px 0 6px;">埼玉土建一般労働組合 上尾伊奈支部<br><span style="font-size:10px;color:var(--gray400);">アプリ版数 v44</span></p>
+  <p class="footer" style="text-align:center;color:var(--gray500);font-size:12px;margin:20px 0 6px;">埼玉土建一般労働組合 上尾伊奈支部<br><span style="font-size:10px;color:var(--gray400);">アプリ版数 v45</span></p>
 
 </div>
 </div>
