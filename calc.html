@@ -318,6 +318,7 @@ html[data-theme="dark"] .table-row{border-color:rgba(255,255,255,.12)!important;
       <div class="card" id="kkp-compare"><div id="kk-compare-content"></div></div>
       <div class="card hidden" id="kkp-ageo"><div id="kk-ageo-detail"></div></div>
       <div class="card hidden" id="kkp-doken"><div id="kk-doken-detail"></div></div>
+      <button class="print-btn" onclick="printKokuho()" style="display:flex;align-items:center;justify-content:center;gap:6px;width:100%;margin-top:12px;padding:12px;font-size:14px;font-weight:800;color:#fff;background:#1B2A3B;border:none;border-radius:11px;cursor:pointer;font-family:inherit;"><i class="ti ti-printer"></i>この結果を印刷・PDF保存（A4）</button>
       <div class="alert alert-warn"><i class="ti ti-alert-triangle"></i><span>概算試算です。正確には各窓口・<a href="https://www.sai-doken-kokuho.jp/05hoken/04simulation.html" target="_blank" style="color:#7A5500;text-decoration:underline;" rel="noopener noreferrer">公式シミュレーター</a>でご確認ください。</span></div>
     </div>
   </div>
@@ -1010,10 +1011,80 @@ function printSections(title, sections, note){
           + '<div class="pr-body">'+s.html+'</div>';
   });
   if(!body){ alert('印刷できる結果がありません。先に計算・判定を行ってください。'); return; }
-  let pa=document.getElementById('print-area');
-  if(!pa){ pa=document.createElement('div'); pa.id='print-area'; document.body.appendChild(pa); }
-  pa.innerHTML=_prHeader(title)+body+_prFooter(note||'');
-  window.print();
+  const html = _prHeader(title)+body+_prFooter(note||'');
+  openPrintDoc(title, html);
+}
+
+/* 独立した印刷用ドキュメントを生成して印刷（iOS/PWAでも確実に動く）。
+   ・common.cssのダーク影響を受けないよう自前の最小CSSを同梱
+   ・画像/フォント読み込み完了を待ってからprint() */
+function openPrintDoc(title, innerHtml){
+  const css = `
+    *{-webkit-print-color-adjust:exact;print-color-adjust:exact;box-sizing:border-box;}
+    html,body{margin:0;padding:0;background:#fff;color:#111;
+      font-family:'Noto Sans JP','Hiragino Kaku Gothic ProN','Yu Gothic',sans-serif;}
+    .sheet{width:190mm;margin:0 auto;padding:10mm;color:#111;}
+    .pr-h1{font-size:16pt;font-weight:800;margin:0 0 2px;}
+    .pr-sub{font-size:8.5pt;color:#555;margin:0 0 8px;border-bottom:1.5px solid #333;padding-bottom:6px;}
+    .pr-sec{font-size:11pt;font-weight:800;margin:11px 0 4px;padding-left:8px;border-left:4px solid #E8612A;}
+    .pr-body{font-size:9.5pt;line-height:1.55;}
+    .pr-body *{color:#111 !important;background:transparent !important;box-shadow:none !important;border-color:#999 !important;}
+    .pr-body table{width:100%;border-collapse:collapse;font-size:8.5pt;table-layout:fixed;}
+    .pr-body th,.pr-body td{border:1px solid #999;padding:3px 5px;text-align:left;word-break:break-word;overflow-wrap:anywhere;}
+    .pr-foot{font-size:7.5pt;color:#666 !important;margin-top:12px;border-top:1px solid #ccc;padding-top:6px;line-height:1.5;}
+    @page{size:A4 portrait;margin:0;}
+    @media print{.no-print{display:none;}}
+    .no-print{position:fixed;top:10px;right:10px;left:10px;display:flex;gap:8px;justify-content:center;}
+    .no-print button{flex:1;max-width:220px;padding:14px;font-size:15px;font-weight:800;border:none;border-radius:10px;cursor:pointer;font-family:inherit;}
+    .np-print{background:#1B2A3B;color:#fff;} .np-close{background:#e5e7eb;color:#111;}
+    .sheet{margin-top:70px;}
+    @media print{.sheet{margin-top:0;}}
+  `;
+  const doc = '<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8">'
+    + '<meta name="viewport" content="width=device-width,initial-scale=1">'
+    + '<title>'+title+'</title><style>'+css+'</style></head><body>'
+    + '<div class="no-print"><button class="np-print" onclick="window.print()">🖨 印刷 / PDF保存</button>'
+    + '<button class="np-close" onclick="window.close()">閉じる</button></div>'
+    + '<div class="sheet">'+innerHtml+'</div>'
+    + '<script>window.addEventListener("load",function(){setTimeout(function(){window.focus();window.print();},400);});<\/script>'
+    + '</body></html>';
+
+  // 新しいウィンドウ（タブ）で開く。ブロックされたらiframeにフォールバック
+  const w = window.open('', '_blank');
+  if(w && w.document){
+    w.document.open(); w.document.write(doc); w.document.close();
+    return;
+  }
+  // フォールバック：非表示iframe
+  let f=document.getElementById('print-frame');
+  if(f) f.remove();
+  f=document.createElement('iframe');
+  f.id='print-frame';
+  f.style.cssText='position:fixed;right:0;bottom:0;width:0;height:0;border:0;';
+  document.body.appendChild(f);
+  const fd=f.contentWindow.document;
+  fd.open(); fd.write(doc); fd.close();
+  setTimeout(function(){ try{ f.contentWindow.focus(); f.contentWindow.print(); }catch(e){} }, 500);
+}
+
+function printKokuho(){
+  const res=document.getElementById('kk-result');
+  if(!res || res.classList.contains('hidden')){ alert('先に「比較する」を押してください。'); return; }
+  const cmp=document.getElementById('kk-compare-content');
+  const ageo=document.getElementById('kk-ageo-detail');
+  const doken=document.getElementById('kk-doken-detail');
+  const cityName=document.getElementById('kk-city').selectedOptions[0].textContent;
+  const kubunName=document.getElementById('kk-dkubun').selectedOptions[0].textContent;
+  const secs=[];
+  secs.push({label:'条件', html:'<div class="result-row"><span>市町村</span><span>'+cityName+'</span></div>'
+    +'<div class="result-row"><span>土建国保 区分</span><span>'+kubunName+'</span></div>'});
+  if(cmp && cmp.innerHTML.trim()) secs.push({label:'比較結果（市町村国保 と 土建国保）', html:cmp.innerHTML});
+  if(ageo && ageo.innerHTML.trim() && !document.getElementById('kkp-ageo').classList.contains('hidden'))
+    secs.push({label:'市町村国保 内訳', html:ageo.innerHTML});
+  if(doken && doken.innerHTML.trim() && !document.getElementById('kkp-doken').classList.contains('hidden'))
+    secs.push({label:'土建国保 内訳', html:doken.innerHTML});
+  printSections('国民健康保険料 比較シミュレーション（令和8年度）', secs,
+    '本試算は概算です。市町村国保は前年所得・世帯構成等で変動します。正確な金額は各市町村・支部へご確認ください。');
 }
 
 function printRomu(){
