@@ -126,12 +126,29 @@ html[data-theme="dark"] .table-row{border-color:rgba(255,255,255,.12)!important;
 #print-area .pr-foot{font-size:7.5pt;color:#666 !important;-webkit-text-fill-color:#666 !important;margin-top:10px;border-top:1px solid #ccc;padding-top:5px;line-height:1.5;}
 @media print{
   @page{size:A4 portrait;margin:10mm;}
-  body{background:#fff !important;}
+  html,body{background:#fff !important;}
   body > *:not(#print-area){display:none !important;}
-  #print-area{position:static;left:auto;display:block !important;}
-  /* 1枚に収める：はみ出す場合は縮小の目安として全体をやや小さく */
-  #print-area{max-height:277mm;overflow:hidden;}
+  #print-area{position:static !important;left:auto !important;display:block !important;}
+  #preview-overlay{display:none !important;}
 }
+/* 画面プレビュー（A4イメージ） */
+#preview-overlay{display:none;position:fixed;inset:0;z-index:9999;background:rgba(10,18,30,.72);}
+#preview-overlay .pv-bar{position:sticky;top:0;display:flex;gap:8px;justify-content:center;padding:12px;background:#0D1B2E;}
+#preview-overlay .pv-bar button{flex:1;max-width:220px;padding:13px;font-size:15px;font-weight:800;border:none;border-radius:10px;cursor:pointer;font-family:inherit;}
+#preview-overlay .pv-print{background:#E8612A;color:#fff;}
+#preview-overlay .pv-close{background:#e5e7eb;color:#111;}
+#preview-overlay .pv-scroll{height:calc(100% - 62px);overflow:auto;padding:16px;-webkit-overflow-scrolling:touch;}
+#preview-overlay .pv-sheet{width:210mm;max-width:100%;min-height:297mm;margin:0 auto;background:#fff;color:#111;padding:12mm;box-shadow:0 8px 30px rgba(0,0,0,.4);border-radius:2px;transform-origin:top center;}
+#preview-overlay .pv-sheet *{color:#111 !important;-webkit-text-fill-color:#111 !important;}
+#preview-overlay .pv-sheet .pr-h1{font-size:15pt;font-weight:800;margin:0 0 2px;}
+#preview-overlay .pv-sheet .pr-sub{font-size:8.5pt;color:#555 !important;-webkit-text-fill-color:#555 !important;margin:0 0 8px;border-bottom:1.5px solid #333;padding-bottom:6px;}
+#preview-overlay .pv-sheet .pr-sec{font-size:10.5pt;font-weight:800;margin:10px 0 4px;padding-left:8px;border-left:4px solid #E8612A;}
+#preview-overlay .pv-sheet .pr-body{font-size:9.5pt;line-height:1.55;}
+#preview-overlay .pv-sheet .pr-body .result-row{display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px dotted #bbb;}
+#preview-overlay .pv-sheet .pr-body .result-row.total{border-top:2px solid #333;border-bottom:none;font-weight:800;margin-top:2px;padding-top:5px;}
+#preview-overlay .pv-sheet .pr-body table{width:100%;border-collapse:collapse;font-size:8.5pt;table-layout:fixed;}
+#preview-overlay .pv-sheet .pr-body th,#preview-overlay .pv-sheet .pr-body td{border:1px solid #999;padding:3px 5px;text-align:left;word-break:break-word;overflow-wrap:anywhere;}
+#preview-overlay .pv-sheet .pr-foot{font-size:7.5pt;color:#666 !important;-webkit-text-fill-color:#666 !important;margin-top:10px;border-top:1px solid #ccc;padding-top:5px;line-height:1.5;}
 
 </style>
 </head>
@@ -245,7 +262,7 @@ html[data-theme="dark"] .table-row{border-color:rgba(255,255,255,.12)!important;
       <div class="card">
         <p class="sec-label">計算結果</p>
         <div id="romu-result-inner"></div>
-        <button class="print-btn" onclick="printRomu()" style="display:flex;align-items:center;justify-content:center;gap:6px;width:100%;margin-top:12px;padding:12px;font-size:14px;font-weight:800;color:#fff;background:#1B2A3B;border:none;border-radius:11px;cursor:pointer;font-family:inherit;"><i class="ti ti-printer"></i>この結果を印刷・PDF保存（A4）</button>
+        <div style="display:flex;gap:8px;margin-top:12px;"><button class="print-btn" onclick="previewRomu()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;font-size:14px;font-weight:800;color:#1B2A3B;background:#fff;border:2px solid #1B2A3B;border-radius:11px;cursor:pointer;font-family:inherit;"><i class="ti ti-eye"></i>プレビュー</button><button class="print-btn" onclick="printRomu()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;font-size:14px;font-weight:800;color:#fff;background:#1B2A3B;border:2px solid #1B2A3B;border-radius:11px;cursor:pointer;font-family:inherit;"><i class="ti ti-printer"></i>印刷・PDF</button></div>
       </div>
       <div style="background:var(--blue-lt);border-radius:var(--r12);padding:12px 16px;font-size:13px;color:var(--blue);margin-top:4px;">
         <i class="ti ti-info-circle" style="font-size:14px;vertical-align:-2px;margin-right:4px;"></i>
@@ -318,7 +335,7 @@ html[data-theme="dark"] .table-row{border-color:rgba(255,255,255,.12)!important;
       <div class="card" id="kkp-compare"><div id="kk-compare-content"></div></div>
       <div class="card hidden" id="kkp-ageo"><div id="kk-ageo-detail"></div></div>
       <div class="card hidden" id="kkp-doken"><div id="kk-doken-detail"></div></div>
-      <button class="print-btn" onclick="printKokuho()" style="display:flex;align-items:center;justify-content:center;gap:6px;width:100%;margin-top:12px;padding:12px;font-size:14px;font-weight:800;color:#fff;background:#1B2A3B;border:none;border-radius:11px;cursor:pointer;font-family:inherit;"><i class="ti ti-printer"></i>この結果を印刷・PDF保存（A4）</button>
+      <div style="display:flex;gap:8px;margin-top:12px;"><button class="print-btn" onclick="previewKokuho()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;font-size:14px;font-weight:800;color:#1B2A3B;background:#fff;border:2px solid #1B2A3B;border-radius:11px;cursor:pointer;font-family:inherit;"><i class="ti ti-eye"></i>プレビュー</button><button class="print-btn" onclick="printKokuho()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;font-size:14px;font-weight:800;color:#fff;background:#1B2A3B;border:2px solid #1B2A3B;border-radius:11px;cursor:pointer;font-family:inherit;"><i class="ti ti-printer"></i>印刷・PDF</button></div>
       <div class="alert alert-warn"><i class="ti ti-alert-triangle"></i><span>概算試算です。正確には各窓口・<a href="https://www.sai-doken-kokuho.jp/05hoken/04simulation.html" target="_blank" style="color:#7A5500;text-decoration:underline;" rel="noopener noreferrer">公式シミュレーター</a>でご確認ください。</span></div>
     </div>
   </div>
@@ -420,7 +437,7 @@ html[data-theme="dark"] .table-row{border-color:rgba(255,255,255,.12)!important;
       </div>
     </div>
 
-    <button class="print-btn" onclick="printBenefit()" style="display:flex;align-items:center;justify-content:center;gap:6px;width:100%;margin-top:12px;padding:12px;font-size:14px;font-weight:800;color:#fff;background:#1B2A3B;border:none;border-radius:11px;cursor:pointer;font-family:inherit;"><i class="ti ti-printer"></i>この結果を印刷・PDF保存（A4）</button>
+    <div style="display:flex;gap:8px;margin-top:12px;"><button class="print-btn" onclick="previewBenefit()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;font-size:14px;font-weight:800;color:#1B2A3B;background:#fff;border:2px solid #1B2A3B;border-radius:11px;cursor:pointer;font-family:inherit;"><i class="ti ti-eye"></i>プレビュー</button><button class="print-btn" onclick="printBenefit()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;font-size:14px;font-weight:800;color:#fff;background:#1B2A3B;border:2px solid #1B2A3B;border-radius:11px;cursor:pointer;font-family:inherit;"><i class="ti ti-printer"></i>印刷・PDF</button></div>
   </div>
 
   <!-- CCUS -->
@@ -442,7 +459,7 @@ html[data-theme="dark"] .table-row{border-color:rgba(255,255,255,.12)!important;
       <div id="ccus-next-wrap" class="hidden"><p class="sec-label">次のレベルへの条件</p><div class="card" id="ccus-next"></div></div>
       <p class="sec-label">全レベル早見表</p>
       <div class="card" id="ccus-table"></div>
-      <button class="print-btn" onclick="printCcus()" style="display:flex;align-items:center;justify-content:center;gap:6px;width:100%;margin-top:12px;padding:12px;font-size:14px;font-weight:800;color:#fff;background:#1B2A3B;border:none;border-radius:11px;cursor:pointer;font-family:inherit;"><i class="ti ti-printer"></i>この結果を印刷・PDF保存（A4）</button>
+      <div style="display:flex;gap:8px;margin-top:12px;"><button class="print-btn" onclick="previewCcus()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;font-size:14px;font-weight:800;color:#1B2A3B;background:#fff;border:2px solid #1B2A3B;border-radius:11px;cursor:pointer;font-family:inherit;"><i class="ti ti-eye"></i>プレビュー</button><button class="print-btn" onclick="printCcus()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;font-size:14px;font-weight:800;color:#fff;background:#1B2A3B;border:2px solid #1B2A3B;border-radius:11px;cursor:pointer;font-family:inherit;"><i class="ti ti-printer"></i>印刷・PDF</button></div>
       <div class="alert alert-info"><i class="ti ti-info-circle"></i><span>詳細基準は職種により異なります。申請は支部または各能力評価実施団体へ。就業日数は1年＝215日換算。</span></div>
     </div>
   </div>
@@ -910,20 +927,20 @@ function kkCalc(){
       <p style="font-size:12px;font-weight:700;color:var(--orange);margin:0 0 10px;letter-spacing:.06em;">🏆 上尾市・伊奈町の国保にはない土建国保だけのメリット</p>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
         <div style="background:rgba(255,255,255,.07);border-radius:8px;padding:10px;border-top:3px solid #E8612A;">
-          <p style="font-size:13px;font-weight:800;color:#fff;margin:0 0 4px;">💊 医療費が実質ゼロ</p>
-          <p style="font-size:11px;color:rgba(255,255,255,.92);font-weight:700;margin:0;line-height:1.5;">一部負担払戻金制度により、入院・通院の自己負担を全額払い戻し。市区町村国保には存在しない独自制度。</p>
+          <p style="font-size:13px;font-weight:800;color:#fff;margin:0 0 4px;">💊 医療費の負担を軽減</p>
+          <p style="font-size:11px;color:rgba(255,255,255,.92);font-weight:700;margin:0;line-height:1.5;">一部負担払戻金制度により、窓口で払った医療費のうち月17,500円を超えた分を自動で払い戻し（組合員は入院・通院、家族は入院が対象）。市区町村国保にはない独自制度。</p>
         </div>
         <div style="background:rgba(255,255,255,.07);border-radius:8px;padding:10px;border-top:3px solid #5DCAA5;">
           <p style="font-size:13px;font-weight:800;color:#fff;margin:0 0 4px;">🏥 休んでも収入が続く</p>
-          <p style="font-size:11px;color:rgba(255,255,255,.92);font-weight:700;margin:0;line-height:1.5;">傷病手当金：病気やケガで4日以上連続して休業した場合、1日目から区分・療養状況に応じた日額を支給。市区町村国保にはない制度。</p>
+          <p style="font-size:11px;color:rgba(255,255,255,.92);font-weight:700;margin:0;line-height:1.5;">傷病手当金：病気やケガで4日以上連続して休業したとき、1日目から区分・療養状況に応じた日額を支給（病気・ケガ各180日分を限度）。市区町村国保にはない制度。</p>
         </div>
         <div style="background:rgba(255,255,255,.07);border-radius:8px;padding:10px;border-top:3px solid #B5D4F4;">
           <p style="font-size:13px;font-weight:800;color:#fff;margin:0 0 4px;">👶 出産 50万円給付</p>
-          <p style="font-size:11px;color:rgba(255,255,255,.92);font-weight:700;margin:0;line-height:1.5;">出産育児一時金50万円。直接支払制度で窓口負担も軽減。手続きは支部で完結するので安心。</p>
+          <p style="font-size:11px;color:rgba(255,255,255,.92);font-weight:700;margin:0;line-height:1.5;">出産育児一時金は1児につき50万円（産科医療補償制度の対象外は48万8千円）。直接支払制度で窓口負担も軽減。</p>
         </div>
         <div style="background:rgba(255,255,255,.07);border-radius:8px;padding:10px;border-top:3px solid #FAC775;">
           <p style="font-size:13px;font-weight:800;color:#fff;margin:0 0 4px;">🌸 葬祭費 7万円</p>
-          <p style="font-size:11px;color:rgba(255,255,255,.92);font-weight:700;margin:0;line-height:1.5;">市区町村国保より手厚い7万円。組合員・家族が対象。</p>
+          <p style="font-size:11px;color:rgba(255,255,255,.92);font-weight:700;margin:0;line-height:1.5;">組合員・家族が亡くなり葬儀をあげたとき、葬儀をあげた人に7万円を支給。</p>
         </div>
       </div>
       <p style="font-size:11px;color:rgba(255,255,255,.9);font-weight:700;margin:10px 0 0;">※ 保険料の安さだけでなく、これらの給付が受けられることが土建国保の大きな強みです。詳細は支部へご相談ください。</p>
@@ -1002,74 +1019,61 @@ function _prHeader(title){
 function _prFooter(note){
   return '<p class="pr-foot">'+note+'<br>本結果はアプリによる試算・簡易判定です。正式な金額・判定は関係機関・支部（TEL 048-773-9863）へご確認ください。</p>';
 }
-function printSections(title, sections, note){
-  // sections: [{label, html}]
+function _prBuild(title, sections, note){
   let body='';
   sections.forEach(s=>{
     if(!s || !s.html) return;
     body += (s.label?'<p class="pr-sec">'+s.label+'</p>':'')
           + '<div class="pr-body">'+s.html+'</div>';
   });
-  if(!body){ alert('印刷できる結果がありません。先に計算・判定を行ってください。'); return; }
-  const html = _prHeader(title)+body+_prFooter(note||'');
-  openPrintDoc(title, html);
+  if(!body) return null;
+  return _prHeader(title)+body+_prFooter(note||'');
 }
 
-/* 独立した印刷用ドキュメントを生成して印刷（iOS/PWAでも確実に動く）。
-   ・common.cssのダーク影響を受けないよう自前の最小CSSを同梱
-   ・画像/フォント読み込み完了を待ってからprint() */
-function openPrintDoc(title, innerHtml){
-  const css = `
-    *{-webkit-print-color-adjust:exact;print-color-adjust:exact;box-sizing:border-box;}
-    html,body{margin:0;padding:0;background:#fff;color:#111;
-      font-family:'Noto Sans JP','Hiragino Kaku Gothic ProN','Yu Gothic',sans-serif;}
-    .sheet{width:190mm;margin:0 auto;padding:10mm;color:#111;}
-    .pr-h1{font-size:16pt;font-weight:800;margin:0 0 2px;}
-    .pr-sub{font-size:8.5pt;color:#555;margin:0 0 8px;border-bottom:1.5px solid #333;padding-bottom:6px;}
-    .pr-sec{font-size:11pt;font-weight:800;margin:11px 0 4px;padding-left:8px;border-left:4px solid #E8612A;}
-    .pr-body{font-size:9.5pt;line-height:1.55;}
-    .pr-body *{color:#111 !important;background:transparent !important;box-shadow:none !important;border-color:#999 !important;}
-    .pr-body table{width:100%;border-collapse:collapse;font-size:8.5pt;table-layout:fixed;}
-    .pr-body th,.pr-body td{border:1px solid #999;padding:3px 5px;text-align:left;word-break:break-word;overflow-wrap:anywhere;}
-    .pr-foot{font-size:7.5pt;color:#666 !important;margin-top:12px;border-top:1px solid #ccc;padding-top:6px;line-height:1.5;}
-    @page{size:A4 portrait;margin:0;}
-    @media print{.no-print{display:none;}}
-    .no-print{position:fixed;top:10px;right:10px;left:10px;display:flex;gap:8px;justify-content:center;}
-    .no-print button{flex:1;max-width:220px;padding:14px;font-size:15px;font-weight:800;border:none;border-radius:10px;cursor:pointer;font-family:inherit;}
-    .np-print{background:#1B2A3B;color:#fff;} .np-close{background:#e5e7eb;color:#111;}
-    .sheet{margin-top:70px;}
-    @media print{.sheet{margin-top:0;}}
-  `;
-  const doc = '<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8">'
-    + '<meta name="viewport" content="width=device-width,initial-scale=1">'
-    + '<title>'+title+'</title><style>'+css+'</style></head><body>'
-    + '<div class="no-print"><button class="np-print" onclick="window.print()">🖨 印刷 / PDF保存</button>'
-    + '<button class="np-close" onclick="window.close()">閉じる</button></div>'
-    + '<div class="sheet">'+innerHtml+'</div>'
-    + '<script>window.addEventListener("load",function(){setTimeout(function(){window.focus();window.print();},400);});<\/script>'
-    + '</body></html>';
+/* 同一ページ内に印刷DOMを描画して window.print()。iOS/PWAでも確実に動く。 */
+function printSections(title, sections, note){
+  const html=_prBuild(title, sections, note);
+  if(!html){ alert('印刷できる結果がありません。先に計算・判定を行ってください。'); return; }
+  let pa=document.getElementById('print-area');
+  if(!pa){ pa=document.createElement('div'); pa.id='print-area'; document.body.appendChild(pa); }
+  pa.innerHTML=html;
+  // 印刷後にプレビュー用クラスが残らないよう掃除
+  const done=()=>{ document.body.classList.remove('previewing'); window.removeEventListener('afterprint',done); };
+  window.addEventListener('afterprint',done);
+  setTimeout(()=>{ window.print(); }, 60);
+}
 
-  // 新しいウィンドウ（タブ）で開く。ブロックされたらiframeにフォールバック
-  const w = window.open('', '_blank');
-  if(w && w.document){
-    w.document.open(); w.document.write(doc); w.document.close();
-    return;
+/* 画面上でA4イメージを確認できるプレビュー（印刷前の確認用） */
+function previewSections(title, sections, note){
+  const html=_prBuild(title, sections, note);
+  if(!html){ alert('プレビューできる結果がありません。先に計算・判定を行ってください。'); return; }
+  let ov=document.getElementById('preview-overlay');
+  if(!ov){
+    ov=document.createElement('div'); ov.id='preview-overlay';
+    ov.innerHTML='<div class="pv-bar">'
+      +'<button class="pv-print" onclick="_previewPrint()">🖨 印刷 / PDF保存</button>'
+      +'<button class="pv-close" onclick="closePreview()">閉じる</button></div>'
+      +'<div class="pv-scroll"><div class="pv-sheet" id="preview-sheet"></div></div>';
+    document.body.appendChild(ov);
   }
-  // フォールバック：非表示iframe
-  let f=document.getElementById('print-frame');
-  if(f) f.remove();
-  f=document.createElement('iframe');
-  f.id='print-frame';
-  f.style.cssText='position:fixed;right:0;bottom:0;width:0;height:0;border:0;';
-  document.body.appendChild(f);
-  const fd=f.contentWindow.document;
-  fd.open(); fd.write(doc); fd.close();
-  setTimeout(function(){ try{ f.contentWindow.focus(); f.contentWindow.print(); }catch(e){} }, 500);
+  document.getElementById('preview-sheet').innerHTML=html;
+  // 印刷用#print-areaにも同じ内容を入れておく（そのまま印刷できるよう）
+  let pa=document.getElementById('print-area');
+  if(!pa){ pa=document.createElement('div'); pa.id='print-area'; document.body.appendChild(pa); }
+  pa.innerHTML=html;
+  ov.style.display='block';
+  document.body.style.overflow='hidden';
 }
+function closePreview(){
+  const ov=document.getElementById('preview-overlay');
+  if(ov) ov.style.display='none';
+  document.body.style.overflow='';
+}
+function _previewPrint(){ setTimeout(()=>window.print(), 60); }
 
-function printKokuho(){
+function _kokuhoData(){
   const res=document.getElementById('kk-result');
-  if(!res || res.classList.contains('hidden')){ alert('先に「比較する」を押してください。'); return; }
+  if(!res || res.classList.contains('hidden')){ alert('先に「比較する」を押してください。'); return null; }
   const cmp=document.getElementById('kk-compare-content');
   const ageo=document.getElementById('kk-ageo-detail');
   const doken=document.getElementById('kk-doken-detail');
@@ -1083,18 +1087,23 @@ function printKokuho(){
     secs.push({label:'市町村国保 内訳', html:ageo.innerHTML});
   if(doken && doken.innerHTML.trim() && !document.getElementById('kkp-doken').classList.contains('hidden'))
     secs.push({label:'土建国保 内訳', html:doken.innerHTML});
-  printSections('国民健康保険料 比較シミュレーション（令和8年度）', secs,
-    '本試算は概算です。市町村国保は前年所得・世帯構成等で変動します。正確な金額は各市町村・支部へご確認ください。');
+  return {title:'国民健康保険料 比較シミュレーション（令和8年度）', secs,
+    note:'本試算は概算です。市町村国保は前年所得・世帯構成等で変動します。正確な金額は各市町村・支部へご確認ください。'};
 }
+function printKokuho(){ const d=_kokuhoData(); if(d) printSections(d.title,d.secs,d.note); }
+function previewKokuho(){ const d=_kokuhoData(); if(d) previewSections(d.title,d.secs,d.note); }
 
-function printRomu(){
+function _romuData(){
   const inner=document.getElementById('romu-result-inner');
-  if(!inner || !inner.innerHTML.trim()){ alert('先に「計算する」を押してください。'); return; }
-  printSections('労務費（法定福利費）試算結果',
-    [{label:'計算結果（本人負担／会社負担）', html: inner.innerHTML}],
-    '料率：厚生年金18.3%（労使折半）・介護保険1.62%（40〜64歳、労使折半）・雇用保険は令和8年度厚労省告示による。');
+  if(!inner || !inner.innerHTML.trim()){ alert('先に金額を入力してください。'); return null; }
+  return {title:'労務費（法定福利費）試算結果',
+    secs:[{label:'計算結果（本人負担／会社負担）', html: inner.innerHTML}],
+    note:'料率：厚生年金18.3%（労使折半）・介護保険1.62%（40〜64歳、労使折半）・雇用保険は令和8年度厚労省告示による。'};
 }
-function printBenefit(){
+function printRomu(){ const d=_romuData(); if(d) printSections(d.title,d.secs,d.note); }
+function previewRomu(){ const d=_romuData(); if(d) previewSections(d.title,d.secs,d.note); }
+
+function _benefitData(){
   const secs=[];
   const m=document.getElementById('bf-medical-result');
   const s2=document.getElementById('bf-sick-result');
@@ -1102,10 +1111,14 @@ function printBenefit(){
   if(m && m.innerHTML.trim()) secs.push({label:'医療費払戻（試算）', html:m.innerHTML});
   if(s2 && s2.innerHTML.trim()) secs.push({label:'傷病手当（試算）', html:s2.innerHTML});
   if(b && b.innerHTML.trim()) secs.push({label:'出産・葬祭（試算）', html:b.innerHTML});
-  printSections('給付金 試算結果', secs,
-    '給付金は組合の共済規程にもとづく試算です。申請には期限・必要書類があります。');
+  if(!secs.length){ alert('先にいずれかのタブで金額を入力してください。'); return null; }
+  return {title:'給付金 試算結果', secs,
+    note:'給付金は埼玉土建国保の規程にもとづく試算です。申請には期限・必要書類があります。正確な内容は支部へご確認ください。'};
 }
-function printCcus(){
+function printBenefit(){ const d=_benefitData(); if(d) printSections(d.title,d.secs,d.note); }
+function previewBenefit(){ const d=_benefitData(); if(d) previewSections(d.title,d.secs,d.note); }
+
+function _ccusData(){
   const badge=document.getElementById('ccus-badge');
   const progs=document.getElementById('ccus-progs');
   const table=document.getElementById('ccus-table');
@@ -1116,9 +1129,12 @@ function printCcus(){
   if(next && next.innerHTML.trim() && !document.getElementById('ccus-next-wrap').classList.contains('hidden'))
     secs.push({label:'次のレベルへの条件', html:next.innerHTML});
   if(table && table.innerHTML.trim()) secs.push({label:'レベル別基準表', html:table.innerHTML});
-  printSections('CCUS能力評価レベル 確認結果', secs,
-    'CCUSレベルの正式判定は能力評価実施団体の審査によります。');
+  if(!secs.length){ alert('先に職種・経験年数などを選んでください。'); return null; }
+  return {title:'CCUS能力評価レベル 確認結果', secs,
+    note:'CCUSレベルの正式判定は能力評価実施団体の審査によります。'};
 }
+function printCcus(){ const d=_ccusData(); if(d) printSections(d.title,d.secs,d.note); }
+function previewCcus(){ const d=_ccusData(); if(d) previewSections(d.title,d.secs,d.note); }
 </script>
 </body>
 </html>
