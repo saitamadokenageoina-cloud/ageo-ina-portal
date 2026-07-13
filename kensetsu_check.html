@@ -6,6 +6,7 @@
 <title>建設業許可チェッカー｜埼玉土建 上尾伊奈支部</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.47.0/iconfont/tabler-icons.min.css">
 <link rel="stylesheet" href="common.css">
+<link rel="stylesheet" href="assets/css/print.css">
 <style>
 .check-hero{background:linear-gradient(135deg,#0C447C,#1A5FA8);border-radius:var(--r16);padding:20px;margin-bottom:16px;display:flex;align-items:center;gap:14px;}
 .check-hero i{font-size:44px;color:#B5D4F4;flex-shrink:0;}
@@ -57,43 +58,7 @@
 .prog-bar{height:8px;background:var(--gray100);border-radius:99px;overflow:hidden;}
 .prog-fill{height:100%;border-radius:99px;transition:width .5s;}
 
-/* ===== 印刷（A4・1枚）===== */
-#print-area{position:absolute;left:-9999px;top:0;width:100%;background:#fff;}
-#print-area,#print-area *{color:#111 !important;-webkit-text-fill-color:#111 !important;box-shadow:none !important;}
-#print-area .pr-h1{font-size:15pt;font-weight:800;margin:0 0 2px;}
-#print-area .pr-sub{font-size:8.5pt;color:#555 !important;-webkit-text-fill-color:#555 !important;margin:0 0 8px;border-bottom:1.5px solid #333;padding-bottom:6px;}
-#print-area .pr-sec{font-size:10.5pt;font-weight:800;margin:10px 0 4px;padding-left:8px;border-left:4px solid #E8612A;}
-#print-area .pr-body{font-size:9.5pt;line-height:1.55;}
-#print-area .pr-body .result-row{display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px dotted #bbb;}
-#print-area .pr-body .result-row.total{border-top:2px solid #333;border-bottom:none;font-weight:800;margin-top:2px;padding-top:5px;}
-#print-area .pr-body table{width:100%;border-collapse:collapse;font-size:8.5pt;table-layout:fixed;}
-#print-area .pr-body th,#print-area .pr-body td{border:1px solid #999;padding:3px 5px;text-align:left;word-break:break-word;overflow-wrap:anywhere;}
-#print-area .pr-foot{font-size:7.5pt;color:#666 !important;-webkit-text-fill-color:#666 !important;margin-top:10px;border-top:1px solid #ccc;padding-top:5px;line-height:1.5;}
-@media print{
-  @page{size:A4 portrait;margin:10mm;}
-  html,body{background:#fff !important;}
-  body > *:not(#print-area){display:none !important;}
-  #print-area{position:static !important;left:auto !important;display:block !important;}
-  #preview-overlay{display:none !important;}
-}
-/* 画面プレビュー（A4イメージ） */
-#preview-overlay{display:none;position:fixed;inset:0;z-index:9999;background:rgba(10,18,30,.72);}
-#preview-overlay .pv-bar{position:sticky;top:0;display:flex;gap:8px;justify-content:center;padding:12px;background:#0D1B2E;}
-#preview-overlay .pv-bar button{flex:1;max-width:220px;padding:13px;font-size:15px;font-weight:800;border:none;border-radius:10px;cursor:pointer;font-family:inherit;}
-#preview-overlay .pv-print{background:#E8612A;color:#fff;}
-#preview-overlay .pv-close{background:#e5e7eb;color:#111;}
-#preview-overlay .pv-scroll{height:calc(100% - 62px);overflow:auto;padding:16px;-webkit-overflow-scrolling:touch;}
-#preview-overlay .pv-sheet{width:210mm;max-width:100%;min-height:297mm;margin:0 auto;background:#fff;color:#111;padding:12mm;box-shadow:0 8px 30px rgba(0,0,0,.4);border-radius:2px;transform-origin:top center;}
-#preview-overlay .pv-sheet *{color:#111 !important;-webkit-text-fill-color:#111 !important;}
-#preview-overlay .pv-sheet .pr-h1{font-size:15pt;font-weight:800;margin:0 0 2px;}
-#preview-overlay .pv-sheet .pr-sub{font-size:8.5pt;color:#555 !important;-webkit-text-fill-color:#555 !important;margin:0 0 8px;border-bottom:1.5px solid #333;padding-bottom:6px;}
-#preview-overlay .pv-sheet .pr-sec{font-size:10.5pt;font-weight:800;margin:10px 0 4px;padding-left:8px;border-left:4px solid #E8612A;}
-#preview-overlay .pv-sheet .pr-body{font-size:9.5pt;line-height:1.55;}
-#preview-overlay .pv-sheet .pr-body .result-row{display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px dotted #bbb;}
-#preview-overlay .pv-sheet .pr-body .result-row.total{border-top:2px solid #333;border-bottom:none;font-weight:800;margin-top:2px;padding-top:5px;}
-#preview-overlay .pv-sheet .pr-body table{width:100%;border-collapse:collapse;font-size:8.5pt;table-layout:fixed;}
-#preview-overlay .pv-sheet .pr-body th,#preview-overlay .pv-sheet .pr-body td{border:1px solid #999;padding:3px 5px;text-align:left;word-break:break-word;overflow-wrap:anywhere;}
-#preview-overlay .pv-sheet .pr-foot{font-size:7.5pt;color:#666 !important;-webkit-text-fill-color:#666 !important;margin-top:10px;border-top:1px solid #ccc;padding-top:5px;line-height:1.5;}
+/* 印刷・プレビューCSSは assets/css/print.css に集約 */
 
 </style>
 </head>
@@ -353,69 +318,12 @@ function calcExpiry(){
   document.getElementById('expiry-result').style.display = 'block';
 }
 </script>
-<script src="assets/js/navigation.js">
-/* ===== 印刷（A4・1枚）共通 ===== */
-function _prHeader(title){
-  const d=new Date();
-  const gen=d.getFullYear()+'年'+(d.getMonth()+1)+'月'+d.getDate()+'日 出力';
-  return '<p class="pr-h1">'+title+'</p>'
-    +'<p class="pr-sub">埼玉土建一般労働組合 上尾伊奈支部（組合員アプリ）　｜　'+gen+'</p>';
-}
-function _prFooter(note){
-  return '<p class="pr-foot">'+note+'<br>本結果はアプリによる試算・簡易判定です。正式な金額・判定は関係機関・支部（TEL 048-773-9863）へご確認ください。</p>';
-}
-function _prBuild(title, sections, note){
-  let body='';
-  sections.forEach(s=>{
-    if(!s || !s.html) return;
-    body += (s.label?'<p class="pr-sec">'+s.label+'</p>':'')
-          + '<div class="pr-body">'+s.html+'</div>';
-  });
-  if(!body) return null;
-  return _prHeader(title)+body+_prFooter(note||'');
-}
-
-/* 同一ページ内に印刷DOMを描画して window.print()。iOS/PWAでも確実に動く。 */
-function printSections(title, sections, note){
-  const html=_prBuild(title, sections, note);
-  if(!html){ alert('印刷できる結果がありません。先に計算・判定を行ってください。'); return; }
-  let pa=document.getElementById('print-area');
-  if(!pa){ pa=document.createElement('div'); pa.id='print-area'; document.body.appendChild(pa); }
-  pa.innerHTML=html;
-  // 印刷後にプレビュー用クラスが残らないよう掃除
-  const done=()=>{ document.body.classList.remove('previewing'); window.removeEventListener('afterprint',done); };
-  window.addEventListener('afterprint',done);
-  setTimeout(()=>{ window.print(); }, 60);
-}
-
-/* 画面上でA4イメージを確認できるプレビュー（印刷前の確認用） */
-function previewSections(title, sections, note){
-  const html=_prBuild(title, sections, note);
-  if(!html){ alert('プレビューできる結果がありません。先に計算・判定を行ってください。'); return; }
-  let ov=document.getElementById('preview-overlay');
-  if(!ov){
-    ov=document.createElement('div'); ov.id='preview-overlay';
-    ov.innerHTML='<div class="pv-bar">'
-      +'<button class="pv-print" onclick="_previewPrint()">🖨 印刷 / PDF保存</button>'
-      +'<button class="pv-close" onclick="closePreview()">閉じる</button></div>'
-      +'<div class="pv-scroll"><div class="pv-sheet" id="preview-sheet"></div></div>';
-    document.body.appendChild(ov);
-  }
-  document.getElementById('preview-sheet').innerHTML=html;
-  // 印刷用#print-areaにも同じ内容を入れておく（そのまま印刷できるよう）
-  let pa=document.getElementById('print-area');
-  if(!pa){ pa=document.createElement('div'); pa.id='print-area'; document.body.appendChild(pa); }
-  pa.innerHTML=html;
-  ov.style.display='block';
-  document.body.style.overflow='hidden';
-}
-function closePreview(){
-  const ov=document.getElementById('preview-overlay');
-  if(ov) ov.style.display='none';
-  document.body.style.overflow='';
-}
-function _previewPrint(){ setTimeout(()=>window.print(), 60); }
-
+<script src="assets/js/navigation.js"></script>
+<script src="assets/js/print-util.js"></script>
+<script>
+/* 印刷・プレビューは assets/js/print-util.js (DokenPrint) に集約 */
+function printSections(title, sections, note){ DokenPrint.print({title:title, sections:sections, note:note}); }
+function previewSections(title, sections, note){ DokenPrint.preview({title:title, sections:sections, note:note}); }
 
 function _kensetsuData(){
   const r=document.getElementById('result');

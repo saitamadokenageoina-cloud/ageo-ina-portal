@@ -1,0 +1,92 @@
+/* =====================================================================
+   共通 印刷 / プレビュー スタイル（print-util.js とセットで使用）
+   ===================================================================== */
+
+/* 画面表示中は印刷DOMを画面外へ退避 */
+#print-area{
+  position:absolute; left:-99999px; top:0; width:210mm; background:#fff;
+}
+
+/* ===== 印刷 ===== */
+@media print{
+  @page{ size:A4 portrait; margin:12mm; }
+  html, body{ background:#fff !important; }
+  /* 印刷対象以外を全て隠す（#print-area は body 直下にある前提） */
+  body > *:not(#print-area){ display:none !important; }
+  #preview-overlay{ display:none !important; }
+  #print-area{
+    position:static !important; left:auto !important; top:auto !important;
+    width:auto !important; display:block !important;
+  }
+  /* カード・表の分断を避ける */
+  #print-area .pr-sec{ break-after:avoid; page-break-after:avoid; }
+  #print-area .pr-body .card,
+  #print-area .pr-body .pr-block{ break-inside:avoid; page-break-inside:avoid; }
+  #print-area table{ break-inside:auto; }
+  #print-area tr{ break-inside:avoid; page-break-inside:avoid; }
+  #print-area thead{ display:table-header-group; }
+}
+
+/* ===== 印刷DOM 共通体裁（画面外・印刷共通） ===== */
+#print-area, #print-area *{
+  color:#111 !important; -webkit-text-fill-color:#111 !important;
+  box-shadow:none !important; -webkit-print-color-adjust:exact; print-color-adjust:exact;
+}
+#print-area{ font-family:'Hiragino Kaku Gothic ProN','Yu Gothic','Noto Sans JP',sans-serif; }
+#print-area .pr-h1{ font-size:15pt; font-weight:800; margin:0 0 2px; }
+#print-area .pr-sub{ font-size:8.5pt; color:#555 !important; -webkit-text-fill-color:#555 !important; margin:0 0 8px; border-bottom:1.5px solid #333; padding-bottom:6px; }
+#print-area .pr-sec{ font-size:11pt; font-weight:800; margin:11px 0 4px; padding-left:8px; border-left:4px solid #E8612A; }
+#print-area .pr-body{ font-size:9.5pt; line-height:1.55; }
+#print-area .pr-body .result-row{ display:flex; justify-content:space-between; gap:10px; padding:3px 0; border-bottom:1px dotted #bbb; }
+#print-area .pr-body .result-row.total{ border-top:2px solid #333; border-bottom:none; font-weight:800; margin-top:2px; padding-top:5px; }
+#print-area .pr-body table{ width:100%; border-collapse:collapse; font-size:8.5pt; table-layout:fixed; margin:4px 0; }
+#print-area .pr-body th, #print-area .pr-body td{ border:1px solid #999; padding:3px 5px; text-align:left; word-break:break-word; overflow-wrap:anywhere; vertical-align:top; }
+#print-area .pr-body th{ background:#f0f0f0 !important; }
+#print-area .pr-foot{ font-size:7.5pt; color:#666 !important; -webkit-text-fill-color:#666 !important; margin-top:12px; border-top:1px solid #ccc; padding-top:6px; line-height:1.5; }
+#print-area .pr-block{ margin:0 0 8px; }
+#print-area .pr-two{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+
+/* ===== プレビュー オーバーレイ ===== */
+body.preview-lock{ overflow:hidden !important; }
+#preview-overlay{
+  display:none; position:fixed; inset:0; z-index:10000; background:rgba(10,18,30,.74);
+}
+#preview-overlay .pv-bar{
+  position:sticky; top:0; display:flex; gap:8px; align-items:center;
+  padding:10px 12px; background:#0D1B2E;
+}
+#preview-overlay .pv-ttl{ color:#fff; font-size:13px; font-weight:800; margin-right:auto; }
+#preview-overlay .pv-bar button{
+  display:flex; align-items:center; justify-content:center; gap:6px;
+  min-height:44px; padding:0 16px; font-size:14px; font-weight:800;
+  border:none; border-radius:10px; cursor:pointer; font-family:inherit;
+}
+#preview-overlay .pv-print{ background:#E8612A; color:#fff; }
+#preview-overlay .pv-close{ background:#e5e7eb; color:#111; }
+#preview-overlay .pv-scroll{
+  height:calc(100% - 64px); overflow:auto; padding:16px 12px 40px;
+  -webkit-overflow-scrolling:touch;
+}
+#preview-overlay .pv-sheet{
+  width:210mm; max-width:100%; min-height:290mm; margin:0 auto;
+  background:#fff; color:#111; padding:12mm;
+  box-shadow:0 10px 34px rgba(0,0,0,.45); border-radius:2px;
+}
+#preview-overlay .pv-sheet, #preview-overlay .pv-sheet *{
+  color:#111 !important; -webkit-text-fill-color:#111 !important;
+}
+#preview-overlay .pv-sheet .pr-h1{ font-size:15pt; font-weight:800; margin:0 0 2px; }
+#preview-overlay .pv-sheet .pr-sub{ font-size:8.5pt; color:#555 !important; -webkit-text-fill-color:#555 !important; margin:0 0 8px; border-bottom:1.5px solid #333; padding-bottom:6px; }
+#preview-overlay .pv-sheet .pr-sec{ font-size:11pt; font-weight:800; margin:11px 0 4px; padding-left:8px; border-left:4px solid #E8612A; }
+#preview-overlay .pv-sheet .pr-body{ font-size:9.5pt; line-height:1.55; }
+#preview-overlay .pv-sheet .pr-body .result-row{ display:flex; justify-content:space-between; gap:10px; padding:3px 0; border-bottom:1px dotted #bbb; }
+#preview-overlay .pv-sheet .pr-body .result-row.total{ border-top:2px solid #333; border-bottom:none; font-weight:800; margin-top:2px; padding-top:5px; }
+#preview-overlay .pv-sheet .pr-body table{ width:100%; border-collapse:collapse; font-size:8.5pt; table-layout:fixed; margin:4px 0; }
+#preview-overlay .pv-sheet .pr-body th, #preview-overlay .pv-sheet .pr-body td{ border:1px solid #999; padding:3px 5px; text-align:left; word-break:break-word; overflow-wrap:anywhere; vertical-align:top; }
+#preview-overlay .pv-sheet .pr-body th{ background:#f0f0f0; }
+#preview-overlay .pv-sheet .pr-foot{ font-size:7.5pt; color:#666 !important; -webkit-text-fill-color:#666 !important; margin-top:12px; border-top:1px solid #ccc; padding-top:6px; line-height:1.5; }
+#preview-overlay .pv-sheet .pr-two{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+@media(max-width:480px){
+  #preview-overlay .pv-ttl{ display:none; }
+  #preview-overlay .pv-sheet{ padding:8mm; }
+}

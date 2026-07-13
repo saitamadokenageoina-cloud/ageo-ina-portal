@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>一人親方の基礎知識・診断｜埼玉土建 上尾伊奈支部</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.47.0/iconfont/tabler-icons.min.css">
+<link rel="stylesheet" href="common.css">
+<link rel="stylesheet" href="assets/css/print.css">
+<style>
+/* ===== ヒーロー ===== */
+.oy-hero{background:linear-gradient(135deg,#C9501C,#E8862A);border-radius:var(--r16);padding:20px;margin-bottom:16px;}
+.oy-hero .oy-tag{display:inline-block;font-size:11.5px;font-weight:900;color:#FFE6C7;letter-spacing:.04em;margin-bottom:6px;}
+.oy-hero h2{font-size:22px;font-weight:900;color:#fff;margin:0 0 6px;line-height:1.3;}
+.oy-hero p{font-size:13px;color:rgba(255,255,255,.9);margin:0;font-weight:600;line-height:1.6;}
+
+/* ===== セクション見出し ===== */
+.sec-t{display:flex;align-items:center;gap:8px;font-size:17px;font-weight:900;color:var(--navy);margin:24px 2px 12px;}
+.sec-t i{color:var(--orange);font-size:22px;}
+.sec-lead{font-size:13.5px;color:var(--gray600);line-height:1.7;margin:0 2px 14px;font-weight:600;}
+
+/* ===== 診断 ===== */
+.quiz-card{background:var(--white);border:1px solid var(--gray200);border-radius:16px;padding:16px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.06);}
+.q-head{display:flex;align-items:center;gap:9px;margin-bottom:12px;}
+.q-no{flex:0 0 auto;width:30px;height:30px;border-radius:9px;background:var(--orange);color:#fff;font-size:15px;font-weight:900;display:flex;align-items:center;justify-content:center;}
+.q-title{font-size:15px;font-weight:900;color:var(--navy);}
+.q-opts{display:flex;flex-direction:column;gap:9px;}
+.q-opt{display:flex;align-items:flex-start;gap:11px;min-height:44px;padding:12px 14px;background:var(--gray50);border:2px solid var(--gray200);border-radius:12px;cursor:pointer;text-align:left;font-family:inherit;width:100%;transition:border-color .12s,background .12s;}
+.q-opt:hover{border-color:var(--gray400);}
+.q-opt:focus-visible{outline:3px solid rgba(232,97,42,.5);outline-offset:2px;}
+.q-opt .q-mark{flex:0 0 auto;width:26px;height:26px;border-radius:50%;border:2px solid var(--gray400);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:var(--gray500);background:transparent;}
+.q-opt .q-txt{flex:1;font-size:15px;font-weight:700;color:var(--navy);line-height:1.45;padding-top:1px;}
+.q-opt .q-ab{font-size:11px;font-weight:900;color:var(--gray500);}
+.q-opt[aria-pressed="true"]{background:rgba(232,97,42,.1);border-color:var(--orange);}
+.q-opt[aria-pressed="true"] .q-mark{background:var(--orange);border-color:var(--orange);color:#fff;}
+.q-opt[aria-pressed="true"] .q-txt{color:var(--navy);}
+.q-opt[aria-pressed="true"] .q-ab{color:var(--orange);}
+
+/* 進捗 */
+.progress-wrap{position:sticky;top:8px;z-index:5;background:var(--white);border:1px solid var(--gray200);border-radius:14px;padding:12px 14px;margin-bottom:14px;box-shadow:0 3px 14px rgba(0,0,0,.08);}
+.progress-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.progress-label{font-size:13px;font-weight:800;color:var(--navy);}
+.progress-count{font-size:13px;font-weight:900;color:var(--orange);}
+.progress-bar{height:8px;background:var(--gray200);border-radius:99px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,#E8862A,#C9501C);width:0;transition:width .25s;border-radius:99px;}
+
+.result-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:52px;margin-top:6px;font-size:16px;font-weight:900;color:#fff;background:var(--orange);border:none;border-radius:13px;cursor:pointer;font-family:inherit;}
+.result-btn:disabled{background:var(--gray300);color:var(--gray500);cursor:not-allowed;}
+.result-btn:focus-visible{outline:3px solid rgba(232,97,42,.5);outline-offset:2px;}
+
+/* 未回答ハイライト */
+.quiz-card.unanswered{border-color:#E8612A;box-shadow:0 0 0 3px rgba(232,97,42,.15);}
+.unanswered-note{font-size:12px;font-weight:800;color:#C04E1E;margin:6px 2px 0;display:none;}
+
+/* ===== 診断結果 ===== */
+#result-area{display:none;}
+.result-hero{border-radius:16px;padding:20px;margin-bottom:14px;text-align:center;color:#fff;}
+.result-hero.type-a{background:linear-gradient(135deg,#C9501C,#E8862A);}
+.result-hero.type-mid{background:linear-gradient(135deg,#5A7A9A,#7A9AB8);}
+.result-hero.type-b{background:linear-gradient(135deg,#2E6FB8,#4A9BE8);}
+.result-hero .rh-badge{display:inline-block;font-size:11.5px;font-weight:900;background:rgba(255,255,255,.22);border-radius:99px;padding:4px 14px;margin-bottom:8px;}
+.result-hero h3{font-size:21px;font-weight:900;margin:0 0 8px;line-height:1.3;}
+.result-hero p{font-size:13.5px;line-height:1.7;margin:0;color:rgba(255,255,255,.95);font-weight:600;}
+.result-count{display:flex;gap:10px;margin-bottom:14px;}
+.rc-box{flex:1;background:var(--white);border:1px solid var(--gray200);border-radius:12px;padding:14px;text-align:center;}
+.rc-box .rc-n{font-size:28px;font-weight:900;line-height:1;}
+.rc-box .rc-l{font-size:12px;font-weight:700;color:var(--gray600);margin-top:5px;}
+.rc-box.a .rc-n{color:#E8612A;}
+.rc-box.b .rc-n{color:#2E6FB8;}
+
+.answer-list{background:var(--white);border:1px solid var(--gray200);border-radius:14px;padding:8px 14px;margin-bottom:14px;}
+.al-row{display:flex;gap:10px;padding:11px 0;border-bottom:1px solid var(--gray100);}
+.al-row:last-child{border-bottom:none;}
+.al-q{flex:0 0 92px;font-size:12.5px;font-weight:800;color:var(--gray600);}
+.al-a{flex:1;font-size:13px;font-weight:700;color:var(--navy);line-height:1.5;}
+.al-badge{display:inline-block;font-size:10.5px;font-weight:900;color:#fff;border-radius:5px;padding:1px 7px;margin-right:6px;}
+.al-badge.a{background:#E8612A;}
+.al-badge.b{background:#2E6FB8;}
+
+.result-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:10px;}
+.ra-btn{display:flex;align-items:center;justify-content:center;gap:6px;min-height:48px;font-size:14px;font-weight:800;border-radius:12px;cursor:pointer;font-family:inherit;border:2px solid var(--orange);}
+.ra-btn.primary{background:var(--orange);color:#fff;}
+.ra-btn.ghost{background:var(--white);color:var(--orange);}
+.ra-btn.dark{background:#1B2A3B;color:#fff;border-color:#1B2A3B;}
+.ra-btn.line{background:var(--white);color:#1B2A3B;border-color:#1B2A3B;}
+.ra-btn:focus-visible{outline:3px solid rgba(232,97,42,.5);outline-offset:2px;}
+.ra-btn.full{grid-column:1/-1;}
+
+.disclaimer{display:flex;align-items:flex-start;gap:8px;background:var(--gray50);border:1px solid var(--gray200);border-radius:12px;padding:12px 14px;font-size:12px;line-height:1.65;color:var(--gray600);margin-bottom:14px;font-weight:600;}
+.disclaimer i{color:var(--gray500);font-size:16px;flex-shrink:0;margin-top:1px;}
+
+/* ===== メリット/デメリット ===== */
+.md-card{background:var(--white);border:1px solid var(--gray200);border-radius:14px;overflow:hidden;margin-bottom:12px;}
+.md-head{display:flex;align-items:center;gap:8px;padding:12px 15px;font-size:15px;font-weight:900;color:#fff;}
+.md-head.merit{background:linear-gradient(135deg,#1A8A5A,#22A86E);}
+.md-head.demerit{background:linear-gradient(135deg,#C9501C,#E8612A);}
+.md-item{display:flex;gap:11px;padding:12px 15px;border-top:1px solid var(--gray100);}
+.md-item:first-of-type{border-top:none;}
+.md-ico{flex:0 0 auto;width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;}
+.md-head.merit + .md-item .md-ico,.md-card.merit .md-ico{background:rgba(34,168,110,.12);color:#1A8A5A;}
+.md-card.demerit .md-ico{background:rgba(232,97,42,.12);color:#C9501C;}
+.md-body b{display:block;font-size:14px;font-weight:900;color:var(--navy);margin-bottom:2px;}
+.md-body span{font-size:12.5px;color:var(--gray600);line-height:1.6;font-weight:600;}
+
+/* ===== 収入 ===== */
+.income-box{background:var(--white);border:1px solid var(--gray200);border-radius:14px;padding:16px;margin-bottom:12px;}
+.income-box p{font-size:13.5px;line-height:1.75;color:var(--gray700);margin:0 0 12px;}
+.income-flow{background:var(--gray50);border:1.5px solid var(--gray200);border-radius:12px;padding:14px 16px;}
+.if-row{display:flex;justify-content:space-between;font-size:13.5px;padding:5px 0;color:var(--gray700);font-weight:600;}
+.if-row.minus{color:#C04E1E;}
+.if-row.total{border-top:2px solid var(--navy);margin-top:6px;padding-top:9px;font-weight:900;font-size:15px;color:var(--navy);}
+.income-note{display:flex;align-items:flex-start;gap:8px;background:rgba(240,147,0,.1);border:1px solid rgba(240,147,0,.28);border-radius:10px;padding:11px 13px;font-size:12px;line-height:1.6;color:var(--gray700);margin-top:12px;font-weight:600;}
+.income-note i{color:#B07800;font-size:16px;flex-shrink:0;margin-top:1px;}
+
+/* ===== 比較表（スマホは縦カード） ===== */
+.cmp-wrap{margin-bottom:12px;}
+.cmp-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:12px;border:1px solid var(--gray200);}
+.cmp-table{width:100%;border-collapse:collapse;font-size:13px;min-width:520px;}
+.cmp-table th,.cmp-table td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--gray100);vertical-align:top;line-height:1.5;}
+.cmp-table thead th{position:sticky;top:0;font-size:13px;font-weight:900;color:#fff;}
+.cmp-table thead th:nth-child(1){background:#5A6B7A;}
+.cmp-table thead th:nth-child(2){background:#C9501C;}
+.cmp-table thead th:nth-child(3){background:#2E6FB8;}
+.cmp-table tbody th{font-weight:800;color:var(--navy);background:var(--gray50);white-space:nowrap;}
+.cmp-table td{font-weight:600;color:var(--gray700);}
+.cmp-table .col-oy{background:rgba(232,97,42,.05);}
+.cmp-table .col-emp{background:rgba(46,111,184,.05);}
+.scroll-hint{display:flex;align-items:center;justify-content:center;gap:6px;font-size:11.5px;color:var(--gray500);font-weight:700;margin-top:7px;}
+/* スマホ縦カード */
+.cmp-cards{display:none;}
+@media(max-width:640px){
+  .cmp-scroll{display:none;}
+  .scroll-hint{display:none;}
+  .cmp-cards{display:block;}
+  .cc-item{background:var(--white);border:1px solid var(--gray200);border-radius:12px;overflow:hidden;margin-bottom:9px;}
+  .cc-q{background:var(--gray50);padding:9px 13px;font-size:13.5px;font-weight:900;color:var(--navy);border-bottom:1px solid var(--gray100);}
+  .cc-row{display:flex;padding:9px 13px;gap:10px;font-size:12.5px;line-height:1.55;}
+  .cc-row + .cc-row{border-top:1px dashed var(--gray100);}
+  .cc-side{flex:0 0 78px;font-weight:900;font-size:11px;padding-top:2px;}
+  .cc-row.oy .cc-side{color:#C9501C;}
+  .cc-row.emp .cc-side{color:#2E6FB8;}
+  .cc-val{flex:1;color:var(--gray700);font-weight:600;}
+}
+
+/* ===== 注意喚起 ===== */
+.warn-box{background:#FFF4EC;border:1.5px solid #F0A876;border-left:5px solid #E8612A;border-radius:14px;padding:16px;margin-bottom:12px;}
+.warn-head{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:900;color:#C04E1E;margin-bottom:10px;}
+.warn-head i{font-size:20px;}
+.warn-box p{font-size:13px;line-height:1.7;color:var(--gray700);margin:0 0 9px;font-weight:600;}
+.warn-box p:last-child{margin-bottom:0;}
+.warn-box .warn-consult{background:#fff;border-radius:10px;padding:11px 13px;font-size:12.5px;color:var(--navy);font-weight:700;line-height:1.6;}
+
+/* ===== 詳細解説アコーディオン ===== */
+#detail-area{display:none;}
+.acc{background:var(--white);border:1px solid var(--gray200);border-radius:12px;margin-bottom:9px;overflow:hidden;}
+.acc-btn{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;min-height:48px;padding:13px 15px;background:none;border:none;cursor:pointer;font-family:inherit;text-align:left;}
+.acc-btn:focus-visible{outline:3px solid rgba(232,97,42,.5);outline-offset:-3px;}
+.acc-btn .acc-t{font-size:14.5px;font-weight:800;color:var(--navy);}
+.acc-btn .acc-i{color:var(--orange);font-size:20px;transition:transform .2s;}
+.acc-btn[aria-expanded="true"] .acc-i{transform:rotate(180deg);}
+.acc-panel{display:none;padding:0 15px 15px;}
+.acc-panel.open{display:block;}
+
+.info-note{font-size:11.5px;color:var(--gray500);line-height:1.6;font-weight:600;margin:10px 2px 0;}
+.src-link{color:var(--orange);font-weight:700;text-decoration:underline;}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="hdr">
+  <button class="hdr-back" onclick="goBack()"><i class="ti ti-arrow-left"></i>戻る</button>
+  <div style="text-align:right;">
+    <p class="hdr-org" style="margin:0;">建設業の働き方</p>
+    <p class="hdr-title" style="margin:0;font-size:14px;">一人親方の基礎知識</p>
+  </div>
+</header>
+
+<div class="content">
+
+  <div class="oy-hero">
+    <span class="oy-tag">\\ メリットとデメリットを正しく知ろう //</span>
+    <h2>一人親方に関する基礎知識</h2>
+    <p>現場で経験を積んだあと、自分の名前と責任のもと仕事を受ける自律的なスタイル。それが「一人親方」です。まずは自分に合っているかチェックしてみましょう。</p>
+  </div>
+
+  <!-- ===== 診断 ===== -->
+  <p class="sec-t"><i class="ti ti-clipboard-check"></i>あなたは一人親方タイプ？会社員タイプ？</p>
+  <p class="sec-lead">5つの質問で、あなたに合った働き方のヒントが見えてきます。自分に近いほうを選んでみましょう。</p>
+
+  <div class="progress-wrap">
+    <div class="progress-top">
+      <span class="progress-label">回答の進捗</span>
+      <span class="progress-count"><span id="answered">0</span> / 5問回答済み</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+  </div>
+
+  <div id="quiz-area"></div>
+
+  <button class="result-btn" id="result-btn" onclick="showResult()" disabled>
+    <i class="ti ti-check"></i>診断結果を見る
+  </button>
+  <p class="unanswered-note" id="unanswered-note"><i class="ti ti-alert-circle"></i>未回答の質問があります（オレンジ枠）。</p>
+
+  <!-- ===== 結果 ===== -->
+  <div id="result-area">
+    <p class="sec-t" style="margin-top:22px;"><i class="ti ti-award"></i>診断結果</p>
+    <div class="result-hero" id="result-hero">
+      <span class="rh-badge" id="rh-badge">診断タイプ</span>
+      <h3 id="rh-title"></h3>
+      <p id="rh-desc"></p>
+    </div>
+    <div class="result-count">
+      <div class="rc-box a"><div class="rc-n" id="rc-a">0</div><div class="rc-l">Aの回答（一人親方寄り）</div></div>
+      <div class="rc-box b"><div class="rc-n" id="rc-b">0</div><div class="rc-l">Bの回答（会社員寄り）</div></div>
+    </div>
+    <div class="answer-list" id="answer-list"></div>
+    <div class="disclaimer">
+      <i class="ti ti-info-circle"></i>
+      <span>この診断は、一般的な傾向を確認するための参考情報です。雇用契約、請負契約、税務、社会保険、労働者性などを法的に判定するものではありません。</span>
+    </div>
+    <div class="result-actions">
+      <button class="ra-btn ghost" onclick="restartQuiz()"><i class="ti ti-refresh"></i>もう一度診断</button>
+      <button class="ra-btn primary" onclick="toggleDetail()"><i class="ti ti-book-2"></i>詳細解説を見る</button>
+      <button class="ra-btn line" onclick="previewResult()"><i class="ti ti-eye"></i>プレビュー</button>
+      <button class="ra-btn dark" onclick="printResult()"><i class="ti ti-printer"></i>印刷・PDF</button>
+    </div>
+  </div>
+
+  <!-- ===== 詳細解説 ===== -->
+  <div id="detail-area">
+    <!-- メリット -->
+    <p class="sec-t"><i class="ti ti-thumb-up"></i>一人親方のメリット</p>
+    <div class="md-card merit">
+      <div class="md-head merit"><i class="ti ti-circle-check"></i>メリット一覧（例）</div>
+      <div class="md-item"><div class="md-ico"><i class="ti ti-run"></i></div><div class="md-body"><b>自由に働ける</b><span>裁量と責任のもと、働く時間や現場を自分で選べる。</span></div></div>
+      <div class="md-item"><div class="md-ico"><i class="ti ti-trending-up"></i></div><div class="md-body"><b>実力次第で収入が上がる可能性がある</b><span>技量・仕事量・単価次第で収入が伸びる可能性がある。</span></div></div>
+      <div class="md-item"><div class="md-ico"><i class="ti ti-receipt"></i></div><div class="md-body"><b>経費計上ができる場合がある</b><span>事業に必要な支出は、事業主として経費にできる場合がある。</span></div></div>
+      <div class="md-item"><div class="md-ico"><i class="ti ti-stairs-up"></i></div><div class="md-body"><b>自分のペースで成長できる</b><span>会社の教育方針だけに限られず、自分が挑戦したい技術を磨ける。</span></div></div>
+    </div>
+
+    <!-- デメリット -->
+    <p class="sec-t"><i class="ti ti-alert-triangle"></i>一人親方のデメリット</p>
+    <div class="md-card demerit">
+      <div class="md-head demerit"><i class="ti ti-alert-circle"></i>デメリット一覧（例）</div>
+      <div class="md-item"><div class="md-ico"><i class="ti ti-chart-line"></i></div><div class="md-body"><b>収入が不安定</b><span>現場数・単価・病気・ケガ・天候・景気などによって収入が減る場合がある。</span></div></div>
+      <div class="md-item"><div class="md-ico"><i class="ti ti-shield-half"></i></div><div class="md-body"><b>各種保険を自分で手続きする必要がある</b><span>労災保険の特別加入、健康保険、年金などを自分で確認・加入・負担する。</span></div></div>
+      <div class="md-item"><div class="md-ico"><i class="ti ti-file-invoice"></i></div><div class="md-body"><b>確定申告や事務作業が必要</b><span>領収書・帳簿・請求書・税金申告などを自分で管理する必要がある。</span></div></div>
+      <div class="md-item"><div class="md-ico"><i class="ti ti-writing"></i></div><div class="md-body"><b>契約やトラブル対応も自己責任</b><span>書面のない契約、報酬未払い、追加工事、事故などへの対応が必要になる。</span></div></div>
+      <div class="md-item"><div class="md-ico"><i class="ti ti-calendar-stats"></i></div><div class="md-body"><b>慎重な将来設計が必要</b><span>国民年金のみの場合、会社員と比べて将来の年金額が少なくなる可能性がある。</span></div></div>
+    </div>
+
+    <!-- 収入 -->
+    <p class="sec-t"><i class="ti ti-coin"></i>一人親方の収入</p>
+    <div class="income-box">
+      <p>一人親方の収入は、仕事内容・地域・技術・経験・人脈・元請との関係・単価・稼働日数・経費などによって大きく変わります。<b>「総収入」と「実際の手取り」は異なります。</b></p>
+      <div class="income-flow">
+        <div class="if-row"><span>総収入</span><span></span></div>
+        <div class="if-row minus"><span>－ 材料費</span><span></span></div>
+        <div class="if-row minus"><span>－ 車両費</span><span></span></div>
+        <div class="if-row minus"><span>－ 燃料費</span><span></span></div>
+        <div class="if-row minus"><span>－ 工具代</span><span></span></div>
+        <div class="if-row minus"><span>－ 保険料</span><span></span></div>
+        <div class="if-row minus"><span>－ 税金</span><span></span></div>
+        <div class="if-row minus"><span>－ その他経費</span><span></span></div>
+        <div class="if-row total"><span>＝ 実際の手取り</span><span></span></div>
+      </div>
+      <div class="income-note">
+        <i class="ti ti-info-circle"></i>
+        <span>参考：全建総連東京都連合会の調査では、東京都在住の一人親方の2023年の1日あたり賃金は約21,800円、年収換算 約597万円とされ、建設技能者の平均年収（国税庁「令和5年 民間給与実態統計調査」による約443万円）を上回るとされています。ただしこれは「総収入」であり、ここから経費を支払う必要があります。<br>※調査時点・対象地域が限られた数値です。現在の全国平均ではありません。制度・統計は変わるため最新情報をご確認ください。</span>
+      </div>
+    </div>
+
+    <!-- 働き方の比較 -->
+    <p class="sec-t"><i class="ti ti-scale"></i>一人親方と会社員の比較</p>
+    <p class="sec-lead">契約のしかたや保険の加入、働き方の自由度など、制度面での違いを比較します。</p>
+    <div class="cmp-wrap" id="cmp-work"></div>
+
+    <!-- 偽装一人親方 -->
+    <p class="sec-t"><i class="ti ti-alert-hexagon"></i>気をつけたい「偽装一人親方」</p>
+    <div class="warn-box">
+      <div class="warn-head"><i class="ti ti-alert-triangle"></i>働き方の実態を確認しましょう</div>
+      <p>契約上は一人親方でも、実際には勤務時間・作業場所・仕事の方法・業務の進め方などを会社から細かく指示され、働き方の実態が労働者である場合、「偽装一人親方」と判断される可能性があります。</p>
+      <p>契約書の名称だけでなく、実際の指揮命令・報酬の決まり方・仕事を断る自由・勤務時間の拘束・道具や材料の負担など、働き方の実態を確認することが重要です。</p>
+      <div class="warn-consult"><i class="ti ti-messages" style="color:#E8612A;"></i> 判断が難しい場合は、労働基準監督署・行政機関・労働組合・専門家などへ相談してください。支部でもご相談を受け付けています（TEL <a href="tel:048-773-9863" class="tel-inline">048-773-9863</a>）。</div>
+    </div>
+
+    <!-- 保険・年金・休業補償 -->
+    <p class="sec-t"><i class="ti ti-shield-check"></i>保険・年金・休業補償</p>
+    <p class="sec-lead">加入する保険や年金は、働き方によって大きく異なります。</p>
+    <div class="cmp-wrap" id="cmp-ins"></div>
+    <div class="cmp-wrap" id="cmp-birth"></div>
+    <p class="info-note">※ 制度内容・支給額・保険料・加入条件は変更される可能性があり、制度ごとに例外や加入条件があります。最新情報は行政機関や加入団体（埼玉土建国保など）にご確認ください。建設国保では、組合によって出産手当金・育児一時金が受け取れる場合もあります。</p>
+
+    <p class="info-note">出典：国土交通省 不動産・建設経済局 建設振興課「一人親方に関する基礎知識」。関連：<a class="src-link" href="https://www.mlit.go.jp/totikensangyo/const/content/001448684.pdf" target="_blank" rel="noopener noreferrer">働き方の自己診断チェックリスト</a>／<a class="src-link" href="https://roumuhi.mlit.go.jp/" target="_blank" rel="noopener noreferrer">労務費に関する基準</a></p>
+  </div>
+
+  <p class="footer" style="text-align:center;color:var(--gray500);font-size:12px;margin:20px 0 6px;">埼玉土建一般労働組合 上尾伊奈支部<br><span style="font-size:10px;color:var(--gray400);">アプリ版数 v44</span></p>
+
+</div>
+</div>
+
+<script src="assets/js/navigation.js"></script>
+<script src="assets/js/print-util.js"></script>
+<script>
+/* ===== データ一元管理 ===== */
+var QUESTIONS = [
+  { id:1, cat:'収入',        a:'働いた分だけ報酬をもらえる',        b:'一定の金額を毎月もらえる' },
+  { id:2, cat:'仕事の選び方', a:'やりたい仕事を自分で選びたい',      b:'決められた仕事をきちんとこなしたい' },
+  { id:3, cat:'働き続ける期間', a:'体が動く間はずっと働きたい',       b:'一定の年齢で区切りをつけたい' },
+  { id:4, cat:'事務手続き',   a:'確定申告などは自分でやれる',        b:'経理や事務は正直負担である' },
+  { id:5, cat:'休みと収入',   a:'休むと収入が減るのは仕方がない',    b:'安定的な収入が欲しい' }
+];
+
+var RESULT_TYPES = {
+  a:{ badge:'一人親方タイプ', cls:'type-a',
+      title:'一人親方タイプかもしれません',
+      desc:'自由に働ける反面、自己管理や責任を伴います。保険・補償・税金・契約についても確認しましょう。' },
+  mid:{ badge:'どちらも合いそう', cls:'type-mid',
+      title:'どちらの働き方にも合いそうです',
+      desc:'一人親方と会社員の両方の特徴を比較し、今後の生活や収入の安定性を考えて判断しましょう。' },
+  b:{ badge:'会社員タイプ', cls:'type-b',
+      title:'会社員タイプかもしれません',
+      desc:'雇用される働き方のほうが、安定性や事務負担の面で力を発揮できる可能性があります。' }
+};
+
+/* 比較表データ（印刷・プレビューと共用） */
+var CMP_WORK = {
+  title:'制度・特徴の比較',
+  rows:[
+    ['契約形態','請負契約（自営業）','雇用契約（労働者）'],
+    ['指揮命令','原則なし（独立性）','会社の管理下で勤務'],
+    ['報酬','作業単位・工事単位で支払','月給・日給・時給など'],
+    ['社会保険','自分で加入（国民年金等）','会社を通じて加入（厚生年金等）'],
+    ['労災保険','任意の特別加入制度あり','労災適用'],
+    ['労災以外の所得補償','なし（加入制度により傷病手当金）','雇用保険（加入制度により傷病手当金）'],
+    ['有給休暇','なし','あり'],
+    ['収入の安定性','業務量や景気、季節で上下','安定して受け取れる'],
+    ['所得税','自分で確定申告','会社が年末調整']
+  ]
+};
+var CMP_INS = {
+  title:'加入できる保険の比較',
+  rows:[
+    ['労災保険','特別加入（任意）','元請等の労災保険に加入'],
+    ['雇用保険','原則として加入できない','加入が必要'],
+    ['医療保険','国民健康保険（建設国保等）','健康保険（協会けんぽ・組合健保）等'],
+    ['年金保険','国民年金','厚生年金']
+  ]
+};
+var CMP_BIRTH = {
+  title:'産前・産後・育児休業中の所得補償',
+  rows:[
+    ['産前・産後休業','制度なし・休業による補償なし※','法定で取得可能。出産手当金あり（賃金の2/3）'],
+    ['育児休業','制度なし・休業による補償なし※','法定で取得可能。育児休業給付あり（開始時賃金の67%、6か月経過後50%）'],
+    ['出産育児一時金','出産育児一時金 50万円','出産育児一時金 50万円']
+  ]
+};
+
+/* ===== 状態 ===== */
+var answers = {};          // {qid: 'a'|'b'}
+var quizCompleted = false;
+
+/* ===== 描画：質問 ===== */
+function renderQuiz(){
+  var area = document.getElementById('quiz-area');
+  area.innerHTML = QUESTIONS.map(function(q){
+    return '<div class="quiz-card" id="qcard-'+q.id+'" data-qid="'+q.id+'">'
+      + '<div class="q-head"><span class="q-no">'+q.id+'</span><span class="q-title">'+q.cat+'</span></div>'
+      + '<div class="q-opts" role="group" aria-label="質問'+q.id+' '+q.cat+'">'
+      + optBtn(q.id,'a',q.a)
+      + optBtn(q.id,'b',q.b)
+      + '</div></div>';
+  }).join('');
+}
+function optBtn(qid, ab, text){
+  return '<button type="button" class="q-opt" data-qid="'+qid+'" data-ab="'+ab+'"'
+    + ' aria-pressed="false" onclick="selectAnswer('+qid+',\''+ab+'\')">'
+    + '<span class="q-mark">'+ab.toUpperCase()+'</span>'
+    + '<span class="q-txt"><span class="q-ab">'+ab.toUpperCase()+'タイプ</span><br>'+text+'</span>'
+    + '</button>';
+}
+
+function selectAnswer(qid, ab){
+  answers[qid] = ab;
+  var card = document.getElementById('qcard-'+qid);
+  card.classList.remove('unanswered');
+  card.querySelectorAll('.q-opt').forEach(function(btn){
+    btn.setAttribute('aria-pressed', btn.dataset.ab === ab ? 'true' : 'false');
+  });
+  updateProgress();
+}
+
+function updateProgress(){
+  var n = Object.keys(answers).length;
+  document.getElementById('answered').textContent = n;
+  document.getElementById('progress-fill').style.width = (n/QUESTIONS.length*100)+'%';
+  var btn = document.getElementById('result-btn');
+  btn.disabled = (n < QUESTIONS.length);
+  if (n >= QUESTIONS.length) document.getElementById('unanswered-note').style.display='none';
+}
+
+/* ===== 診断結果 ===== */
+function countA(){ return QUESTIONS.filter(function(q){ return answers[q.id]==='a'; }).length; }
+
+function judge(aCount){
+  if (aCount >= 4) return RESULT_TYPES.a;
+  if (aCount >= 2) return RESULT_TYPES.mid;
+  return RESULT_TYPES.b;
+}
+
+function showResult(){
+  var n = Object.keys(answers).length;
+  if (n < QUESTIONS.length){
+    // 未回答をハイライト
+    QUESTIONS.forEach(function(q){
+      if (!answers[q.id]) document.getElementById('qcard-'+q.id).classList.add('unanswered');
+    });
+    document.getElementById('unanswered-note').style.display='block';
+    var firstUn = QUESTIONS.find(function(q){ return !answers[q.id]; });
+    if (firstUn) document.getElementById('qcard-'+firstUn.id).scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+  var a = countA(), b = QUESTIONS.length - a;
+  var t = judge(a);
+
+  var hero = document.getElementById('result-hero');
+  hero.className = 'result-hero ' + t.cls;
+  document.getElementById('rh-badge').textContent = t.badge;
+  document.getElementById('rh-title').textContent = t.title;
+  document.getElementById('rh-desc').textContent = t.desc;
+  document.getElementById('rc-a').textContent = a;
+  document.getElementById('rc-b').textContent = b;
+
+  document.getElementById('answer-list').innerHTML = QUESTIONS.map(function(q){
+    var ab = answers[q.id];
+    var txt = ab==='a' ? q.a : q.b;
+    return '<div class="al-row"><div class="al-q">Q'+q.id+' '+q.cat+'</div>'
+      + '<div class="al-a"><span class="al-badge '+ab+'">'+ab.toUpperCase()+'</span>'+txt+'</div></div>';
+  }).join('');
+
+  quizCompleted = true;
+  document.getElementById('result-area').style.display='block';
+  document.getElementById('result-area').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function restartQuiz(){
+  if (!confirm('診断をやり直します。現在の回答は消えます。よろしいですか？')) return;
+  answers = {};
+  quizCompleted = false;
+  document.getElementById('result-area').style.display='none';
+  document.getElementById('detail-area').style.display='none';
+  renderQuiz();
+  updateProgress();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function toggleDetail(){
+  var d = document.getElementById('detail-area');
+  var show = d.style.display==='none' || !d.style.display;
+  d.style.display = show ? 'block' : 'none';
+  if (show) d.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+/* ===== 比較表の描画（PC=表／スマホ=縦カード、印刷共用データから生成） ===== */
+function renderCmp(elId, data, oyLabel, empLabel){
+  var el = document.getElementById(elId);
+  var thead = '<thead><tr><th>項目</th><th>'+oyLabel+'</th><th>'+empLabel+'</th></tr></thead>';
+  var tbody = '<tbody>' + data.rows.map(function(r){
+    return '<tr><th>'+r[0]+'</th><td class="col-oy">'+r[1]+'</td><td class="col-emp">'+r[2]+'</td></tr>';
+  }).join('') + '</tbody>';
+  var cards = data.rows.map(function(r){
+    return '<div class="cc-item"><div class="cc-q">'+r[0]+'</div>'
+      + '<div class="cc-row oy"><div class="cc-side">'+oyLabel+'</div><div class="cc-val">'+r[1]+'</div></div>'
+      + '<div class="cc-row emp"><div class="cc-side">'+empLabel+'</div><div class="cc-val">'+r[2]+'</div></div>'
+      + '</div>';
+  }).join('');
+  el.innerHTML =
+    '<p style="font-size:13px;font-weight:800;color:var(--navy);margin:0 2px 8px;">'+data.title+'</p>'
+    + '<div class="cmp-scroll"><table class="cmp-table">'+thead+tbody+'</table></div>'
+    + '<div class="scroll-hint"><i class="ti ti-arrows-horizontal"></i>横にスクロールできます</div>'
+    + '<div class="cmp-cards">'+cards+'</div>';
+}
+
+/* ===== 印刷・プレビュー（共通ユーティリティを使用） ===== */
+function buildResultSections(){
+  if (!quizCompleted){
+    alert('診断結果がまだ作成されていません。5問に回答して「診断結果を見る」を押してください。');
+    return null;
+  }
+  var a = countA(), b = QUESTIONS.length - a, t = judge(a);
+  var secs = [];
+
+  // 判定
+  secs.push({ label:'診断結果', html:
+    '<div class="result-row total"><span>判定</span><span>'+t.title+'</span></div>'
+    + '<div class="result-row"><span>Aの回答（一人親方寄り）</span><span>'+a+' 問</span></div>'
+    + '<div class="result-row"><span>Bの回答（会社員寄り）</span><span>'+b+' 問</span></div>'
+    + '<p style="margin:6px 0 0;">'+t.desc+'</p>'
+  });
+
+  // 回答一覧
+  var rows = QUESTIONS.map(function(q){
+    var ab=answers[q.id], txt=ab==='a'?q.a:q.b;
+    return '<tr><td style="width:26%;">Q'+q.id+' '+q.cat+'</td><td style="width:10%;">'+ab.toUpperCase()+'</td><td>'+txt+'</td></tr>';
+  }).join('');
+  secs.push({ label:'回答した内容', html:'<table><tr><th>質問</th><th>選択</th><th>回答内容</th></tr>'+rows+'</table>' });
+
+  // 比較表（詳細解説）
+  secs.push({ label:'一人親方と会社員の比較', html: cmpTableHtml(CMP_WORK,'一人親方（請負）','会社員（雇用）') });
+  secs.push({ label:'保険・年金の比較', html: cmpTableHtml(CMP_INS,'一人親方（請負）','会社員（雇用）') });
+  secs.push({ label:'産前・産後・育児休業の補償', html: cmpTableHtml(CMP_BIRTH,'一人親方（請負）','会社員（雇用）') });
+
+  return {
+    title:'一人親方タイプ診断 結果',
+    sections:secs,
+    note:'この診断は一般的な傾向を確認するための参考情報で、労働者性等を法的に判定するものではありません。制度・統計は変更される可能性があります（出典：国土交通省「一人親方に関する基礎知識」）。'
+  };
+}
+function cmpTableHtml(data, oy, emp){
+  var rows = data.rows.map(function(r){
+    return '<tr><th style="width:24%;">'+r[0]+'</th><td>'+r[1]+'</td><td>'+r[2]+'</td></tr>';
+  }).join('');
+  return '<table><tr><th>項目</th><th>'+oy+'</th><th>'+emp+'</th></tr>'+rows+'</table>';
+}
+
+function printResult(){
+  var data = buildResultSections();
+  if (data) DokenPrint.print(data);
+}
+function previewResult(){
+  var data = buildResultSections();
+  if (data) DokenPrint.preview(data);
+}
+
+/* ===== 初期化 ===== */
+(function init(){
+  try{
+    renderQuiz();
+    updateProgress();
+    renderCmp('cmp-work', CMP_WORK, '一人親方（請負）', '会社員（雇用）');
+    renderCmp('cmp-ins',  CMP_INS,  '一人親方（請負）', '会社員（雇用）');
+    renderCmp('cmp-birth',CMP_BIRTH,'一人親方（請負）', '会社員（雇用）');
+  }catch(e){
+    console.error('[一人親方] 初期化エラー:', e);
+  }
+})();
+</script>
+</body>
+</html>
