@@ -52,7 +52,7 @@
   padding: 4px 12px;
   font-size: 11px; font-weight: 600; color: #00C8FF;
   letter-spacing: .1em; text-transform: uppercase;
-  margin-bottom: 12px; position: relative; z-index: 1;
+  margin-bottom: 10px; position: relative; z-index: 1;
 }
 .hero-tag::before {
   content: ''; width: 6px; height: 6px;
@@ -60,22 +60,50 @@
   animation: blink 1.8s infinite;
 }
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
-.hero-title {
-  font-size: 27px; font-weight: 700; color: #fff;
-  margin: 0 0 6px; line-height: 1.2; position: relative; z-index: 1;
-  letter-spacing: -.02em;
-}
-.hero-title span { color: #00C8FF; }
 .hero-main {
   position: relative; z-index: 1;
+  display: flex; align-items: baseline; flex-wrap: wrap;
+  column-gap: 10px; row-gap: 2px;
 }
+.hero-title {
+  font-size: 24px; font-weight: 700; color: #fff;
+  margin: 0; line-height: 1.25;
+  letter-spacing: -.02em; white-space: nowrap;
+}
+.hero-title span { color: #00C8FF; white-space: nowrap; }
 .hero-sub {
-  font-size: 18px; color: rgba(255,255,255,.9);
-  margin: 12px 0 20px; position: relative; z-index: 1;
-  line-height: 1.45; font-weight: 700; letter-spacing: 0;
-  text-shadow: 0 2px 14px rgba(0,200,255,.16);
+  font-size: 13.5px; color: rgba(255,255,255,.78);
+  margin: 6px 0 14px; position: relative; z-index: 1;
+  line-height: 1.5; font-weight: 600; letter-spacing: 0;
 }
-.hero-sub span{display:block;color:rgba(255,255,255,.72);font-size:15px;font-weight:600;}
+.hero-sub span{color:rgba(255,255,255,.78);}
+.hero-sub .dot{margin:0 6px;color:rgba(0,200,255,.5);}
+
+/* ===== 天気自動アラート（現場向け） ===== */
+.wx-alert{
+  display:none; align-items:center; gap:10px;
+  border-radius:var(--r12); padding:10px 13px;
+  margin:0 0 14px; position:relative; z-index:1;
+  border:1px solid rgba(255,255,255,.16);
+  animation:wxIn .3s ease;
+}
+@keyframes wxIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.wx-alert.show{display:flex;}
+.wx-alert .wx-icon{font-size:22px;flex-shrink:0;line-height:1;}
+.wx-alert .wx-body{flex:1;min-width:0;}
+.wx-alert .wx-label{font-size:11px;font-weight:800;letter-spacing:.04em;margin:0 0 1px;}
+.wx-alert .wx-msg{font-size:12.5px;font-weight:600;line-height:1.4;color:rgba(255,255,255,.92);}
+.wx-alert .wx-arrow{flex-shrink:0;color:rgba(255,255,255,.6);font-size:16px;}
+.wx-alert.lv-caution{background:rgba(26,95,168,.22);border-color:rgba(46,130,212,.4);}
+.wx-alert.lv-caution .wx-label{color:#7DC4FF;}
+.wx-alert.lv-warn{background:rgba(176,120,0,.22);border-color:rgba(232,168,0,.4);}
+.wx-alert.lv-warn .wx-label{color:#FFCE5C;}
+.wx-alert.lv-severe{background:rgba(192,78,30,.26);border-color:rgba(232,97,42,.5);}
+.wx-alert.lv-severe .wx-label{color:#FF9D6E;}
+.wx-alert.lv-danger{background:rgba(139,0,0,.3);border-color:rgba(192,57,43,.55);}
+.wx-alert.lv-danger .wx-label{color:#FF6B6B;}
+.wx-alert.lv-wind{background:rgba(46,90,120,.25);border-color:rgba(100,170,200,.4);}
+.wx-alert.lv-wind .wx-label{color:#8FE0E8;}
 .hero-tel {
   display: inline-flex; align-items: center; gap: 8px;
   background: linear-gradient(135deg, #E8612A, #C04E1E);
@@ -246,8 +274,8 @@ html[data-theme="dark"] .manual-tab{color:#F8FAFC;background:rgba(8,22,49,.92);b
 html[data-theme="dark"] .manual-open{color:#FFFFFF;}
 @media (max-width:380px){
   .manual-tabs{gap:8px;}
-  .hero-sub{font-size:16px;}
-  .hero-sub span{font-size:14px;}
+  .hero-title{font-size:21px;}
+  .hero-sub{font-size:12.5px;}
 }
 
 
@@ -260,11 +288,21 @@ html[data-theme="dark"] .manual-open{color:#FFFFFF;}
 <div class="hero">
   <div class="hero-scan-line"></div>
   <div class="hero-glow"></div>
-  <div class="hero-tag"><i class="ti ti-wifi"></i>DOKEN SMART PORTAL</div>
+  <div class="hero-tag"><i class="ti ti-helmet"></i>DOKEN SMART PORTAL</div>
   <div class="hero-main">
-    <h1 class="hero-title">埼玉土建<br><span>上尾伊奈支部</span></h1>
+    <h1 class="hero-title">埼玉土建<span>上尾伊奈支部</span></h1>
   </div>
-  <p class="hero-sub">組合員のための現場<span>暮らしサポートアプリ</span></p>
+  <p class="hero-sub">建設業ではたらく組合員のための<span class="dot">・</span>現場サポートアプリ</p>
+
+  <a class="wx-alert" id="wx-alert" href="atsusa.html">
+    <span class="wx-icon" id="wx-icon">🌡️</span>
+    <span class="wx-body">
+      <span class="wx-label" id="wx-label"></span>
+      <span class="wx-msg" id="wx-msg"></span>
+    </span>
+    <i class="ti ti-chevron-right wx-arrow"></i>
+  </a>
+
   <a href="tel:048-773-9863" class="hero-tel">
     <i class="ti ti-phone"></i>048-773-9863
   </a>
@@ -746,6 +784,74 @@ function showManual(key, btn){
 showManual('first');
 </script>
 <script src="assets/js/navigation.js"></script>
+
+<script>
+/* =====================================================================
+   ホーム画面：現場向け天気自動アラート
+   GPS→Open-Meteoで気温・湿度・風速・天気コードを取得し、
+   熱中症(WBGT)・大雨雷・強風のいずれかに該当すればタイトル下に表示する。
+   該当しない場合は何も表示しない（吉見SMC FCの練習アラートと同じ「該当時のみ表示」方式）。
+   WBGTの区分・係数は atsusa.html の熱中症AIアラートと統一。
+   ===================================================================== */
+(function(){
+  const RAIN_CODES = new Set([61,63,65,80,81,82,95]); // 雨・にわか雨・雷雨
+  const THUNDER_CODES = new Set([95]);
+
+  function calcWBGT(temp, hum){
+    const tw = temp * Math.atan(0.151977 * Math.pow(hum + 8.313659, 0.5))
+      + Math.atan(temp + hum) - Math.atan(hum - 1.676331)
+      + 0.00391838 * Math.pow(hum, 1.5) * Math.atan(0.023101 * hum) - 4.686035;
+    return tw * 0.7 + temp * 0.2 + 1.5; // 屋外(日射あり)想定
+  }
+
+  function showAlert(level, icon, label, msg){
+    const el = document.getElementById('wx-alert');
+    if(!el) return;
+    el.className = 'wx-alert show lv-' + level;
+    document.getElementById('wx-icon').textContent = icon;
+    document.getElementById('wx-label').textContent = label;
+    document.getElementById('wx-msg').textContent = msg;
+  }
+
+  function decideAlert(temp, hum, wind, code){
+    const wbgt = calcWBGT(temp, hum);
+    // ① 熱中症を最優先（現場作業への影響が最も大きいため）
+    if (wbgt >= 31) return showAlert('danger','🔴','熱中症 危険','すべての作業者が危険域。屋外作業の中止を強く推奨します。');
+    if (wbgt >= 28) return showAlert('severe','🌡️','熱中症 厳重警戒','屋外の激しい作業は中止を検討。こまめな休憩と水分補給を。');
+    // ② 大雨・雷（足場・高所・電気工事等への影響）
+    if (THUNDER_CODES.has(code)) return showAlert('danger','⛈️','雷雨 注意','屋外・高所作業は中止を。落雷のおそれがあります。');
+    if (RAIN_CODES.has(code)) return showAlert('caution','🌧️','雨天 注意','足元・資材の濡れに注意。屋外作業は無理のない範囲で。');
+    // ③ 強風（高所作業・足場・クレーン作業への影響、10m/s≒時速36km目安）
+    if (wind >= 10) return showAlert('wind','💨','強風 注意','高所・足場・クレーン作業は特に注意してください。');
+    // ④ 熱中症「警戒」レベル（作業自体は可能だが水分補給を促す）
+    if (wbgt >= 25) return showAlert('warn','☀️','熱中症 警戒','作業の合間に積極的に休憩を。直射日光を避けてください。');
+    // 該当なし → 何も表示しない
+  }
+
+  function initWeatherAlert(){
+    if (!('geolocation' in navigator)) return;
+    navigator.geolocation.getCurrentPosition(function(pos){
+      const lat = pos.coords.latitude, lon = pos.coords.longitude;
+      fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&timezone=Asia%2FTokyo`)
+        .then(r => r.json())
+        .then(data => {
+          const c = data.current || {};
+          const temp = parseFloat(c.temperature_2m);
+          const hum  = parseFloat(c.relative_humidity_2m);
+          const wind = parseFloat(c.wind_speed_10m); // km/h
+          const code = c.weather_code;
+          if (isNaN(temp) || isNaN(hum)) return;
+          decideAlert(temp, hum, isNaN(wind) ? 0 : wind / 3.6, code); // km/h→m/s
+        })
+        .catch(function(e){ console.error('[天気アラート]', e); });
+    }, function(){ /* 位置情報が拒否・失敗した場合は何も表示しない */ },
+    { enableHighAccuracy:false, timeout:8000, maximumAge:20*60*1000 });
+  }
+
+  if (document.readyState === 'complete') initWeatherAlert();
+  else window.addEventListener('load', initWeatherAlert);
+})();
+</script>
 
 
 
