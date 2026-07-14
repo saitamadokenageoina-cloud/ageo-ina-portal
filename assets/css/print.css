@@ -19,10 +19,11 @@
     width:auto !important; display:block !important;
   }
   /* 印刷時：白黒でも読めるよう、背景は白・文字は黒・区切りは枠線で表現 */
-  #print-area, #print-area *{
+  #print-area *{
     color:#111 !important; -webkit-text-fill-color:#111 !important;
     background-color:transparent !important; background-image:none !important;
   }
+  #print-area{ background-color:#fff !important; }
   #print-area .pr-body > div,
   #print-area .pr-body .result-box{
     background-color:#fff !important; border:1px solid #999 !important;
@@ -40,11 +41,15 @@
 /* ===== 印刷DOM 共通体裁（画面外・印刷共通） ===== */
 /* 画面から複製したHTMLがダークテーマの濃紺背景(インライン style="background:var(--gray50)"等)を
    引き継ぐため、印刷/プレビュー内では背景を白系に、文字を黒に強制して可読性を担保する。 */
-#print-area, #print-area *{
+#print-area *{
   color:#111 !important; -webkit-text-fill-color:#111 !important;
   background-color:transparent !important; background-image:none !important;
   box-shadow:none !important; text-shadow:none !important;
   filter:none !important; opacity:1 !important;
+  -webkit-print-color-adjust:exact; print-color-adjust:exact;
+}
+#print-area{
+  background-color:#fff !important;
   -webkit-print-color-adjust:exact; print-color-adjust:exact;
 }
 /* 擬似要素（::before/::after）にも念のため同様の無効化を適用 */
@@ -99,12 +104,13 @@ body.preview-lock{ overflow:hidden !important; }
   background:#ffffff !important; color:#111; padding:22px 20px;
   box-shadow:0 10px 34px rgba(0,0,0,.45); border-radius:4px;
 }
-#preview-overlay .pv-sheet, #preview-overlay .pv-sheet *{
+#preview-overlay .pv-sheet *{
   color:#111 !important; -webkit-text-fill-color:#111 !important;
   background-color:transparent !important; background-image:none !important;
   box-shadow:none !important; text-shadow:none !important;
   filter:none !important; opacity:1 !important;
 }
+#preview-overlay .pv-sheet{ background-color:#ffffff !important; color:#111 !important; }
 #preview-overlay .pv-sheet *::before, #preview-overlay .pv-sheet *::after{
   color:#111 !important; -webkit-text-fill-color:#111 !important;
   background-color:transparent !important; background-image:none !important;
