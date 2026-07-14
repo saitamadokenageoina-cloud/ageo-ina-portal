@@ -6,18 +6,36 @@ DOKEN Guild cloud backend template for Google Apps Script.
 3. Set Script Properties:
    SPREADSHEET_ID = your spreadsheet id
    ADMIN_PIN = a private deletion PIN
+   ALERT_PIN = a private PIN for the weather-alert settings page (e.g. 9863)
 4. Deploy as Web app:
    Execute as: Me
    Who has access: Anyone
 5. Copy the Web app URL into assets/js/guild-config.js as apiUrl.
+
+このスクリプトは DOKEN ギルド（掲示板）と 天気自動アラート設定 の両方の
+共有データ保存を兼ねる。シートを分けて同じスプレッドシート内で管理する。
 */
 
 const PROPS = PropertiesService.getScriptProperties();
 const SHEET_NAME = 'guild_posts';
+const ALERT_SHEET_NAME = 'alert_config';
 
 function doPost(e) {
   const body = JSON.parse((e && e.postData && e.postData.contents) || '{}');
   const action = body.action || 'list';
+
+  if (action === 'getAlertConfig') {
+    return json_({ config: readAlertConfig_() });
+  }
+
+  if (action === 'saveAlertConfig') {
+    if (String(body.pin || '') !== String(PROPS.getProperty('ALERT_PIN') || '')) {
+      return json_({ ok: false, error: 'invalid pin' }, 403);
+    }
+    writeAlertConfig_(body.config || {});
+    return json_({ ok: true });
+  }
+
   const sheet = getSheet_();
 
   if (action === 'list') {
@@ -79,6 +97,30 @@ function getSheet_() {
     sheet.appendRow(['json']);
   }
   return sheet;
+}
+
+function getAlertSheet_() {
+  const ss = SpreadsheetApp.openById(PROPS.getProperty('SPREADSHEET_ID'));
+  let sheet = ss.getSheetByName(ALERT_SHEET_NAME);
+  if (!sheet) {
+    sheet = ss.insertSheet(ALERT_SHEET_NAME);
+    sheet.appendRow(['json']);
+  }
+  return sheet;
+}
+
+function readAlertConfig_() {
+  const sheet = getAlertSheet_();
+  const values = sheet.getDataRange().getValues();
+  if (values.length < 2 || !values[1][0]) return null;
+  try { return JSON.parse(values[1][0]); } catch (e) { return null; }
+}
+
+function writeAlertConfig_(config) {
+  const sheet = getAlertSheet_();
+  sheet.clear();
+  sheet.appendRow(['json']);
+  sheet.appendRow([JSON.stringify(config)]);
 }
 
 function readPosts_(sheet) {

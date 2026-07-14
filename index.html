@@ -717,7 +717,7 @@ html[data-theme="dark"] .manual-open{color:#FFFFFF;}
 </section>
 
 <div style="height:28px;"></div>
-<footer>埼玉土建一般労働組合 上尾伊奈支部｜〒362-0003 上尾市菅谷295｜TEL <a href="tel:048-773-9863">048-773-9863</a></footer>
+<footer>埼玉土建一般労働組合 上尾伊奈支部｜〒362-0003 上尾市菅谷295｜TEL <a href="tel:048-773-9863">048-773-9863</a><br><a href="alert_settings.html" style="color:inherit;opacity:.55;font-size:11px;">天気アラート設定（管理者用）</a></footer>
 </div>
 
 <script>
@@ -784,6 +784,7 @@ function showManual(key, btn){
 showManual('first');
 </script>
 <script src="assets/js/navigation.js"></script>
+<script src="assets/js/guild-config.js"></script>
 
 <script>
 /* =====================================================================
@@ -792,10 +793,19 @@ showManual('first');
    熱中症(WBGT)・大雨雷・強風のいずれかに該当すればタイトル下に表示する。
    該当しない場合は何も表示しない（吉見SMC FCの練習アラートと同じ「該当時のみ表示」方式）。
    WBGTの区分・係数は atsusa.html の熱中症AIアラートと統一。
+   表示条件（表示開始日・時刻・各しきい値）は alert_settings.html（管理者用）で設定可能。
+   初期設定：当日の予報をもとに、0時から表示。
    ===================================================================== */
 (function(){
   const RAIN_CODES = new Set([61,63,65,80,81,82,95]); // 雨・にわか雨・雷雨
   const THUNDER_CODES = new Set([95]);
+  const LS_KEY = 'doken_wx_alert_settings';
+  const DEFAULT_SETTINGS = {
+    dayMode: 'today', startHour: 0,
+    heatOn: true, heatWarn: 25, heatSevere: 28, heatDanger: 31,
+    rainOn: true,
+    windOn: true, windSpeed: 10
+  };
 
   function calcWBGT(temp, hum){
     const tw = temp * Math.atan(0.151977 * Math.pow(hum + 8.313659, 0.5))
@@ -813,39 +823,84 @@ showManual('first');
     document.getElementById('wx-msg').textContent = msg;
   }
 
-  function decideAlert(temp, hum, wind, code){
+  function decideAlert(cfg, temp, hum, wind, code){
     const wbgt = calcWBGT(temp, hum);
     // ① 熱中症を最優先（現場作業への影響が最も大きいため）
-    if (wbgt >= 31) return showAlert('danger','🔴','熱中症 危険','すべての作業者が危険域。屋外作業の中止を強く推奨します。');
-    if (wbgt >= 28) return showAlert('severe','🌡️','熱中症 厳重警戒','屋外の激しい作業は中止を検討。こまめな休憩と水分補給を。');
+    if (cfg.heatOn && wbgt >= cfg.heatDanger) return showAlert('danger','🔴','熱中症 危険','すべての作業者が危険域。屋外作業の中止を強く推奨します。');
+    if (cfg.heatOn && wbgt >= cfg.heatSevere) return showAlert('severe','🌡️','熱中症 厳重警戒','屋外の激しい作業は中止を検討。こまめな休憩と水分補給を。');
     // ② 大雨・雷（足場・高所・電気工事等への影響）
-    if (THUNDER_CODES.has(code)) return showAlert('danger','⛈️','雷雨 注意','屋外・高所作業は中止を。落雷のおそれがあります。');
-    if (RAIN_CODES.has(code)) return showAlert('caution','🌧️','雨天 注意','足元・資材の濡れに注意。屋外作業は無理のない範囲で。');
-    // ③ 強風（高所作業・足場・クレーン作業への影響、10m/s≒時速36km目安）
-    if (wind >= 10) return showAlert('wind','💨','強風 注意','高所・足場・クレーン作業は特に注意してください。');
+    if (cfg.rainOn && THUNDER_CODES.has(code)) return showAlert('danger','⛈️','雷雨 注意','屋外・高所作業は中止を。落雷のおそれがあります。');
+    if (cfg.rainOn && RAIN_CODES.has(code)) return showAlert('caution','🌧️','雨天 注意','足元・資材の濡れに注意。屋外作業は無理のない範囲で。');
+    // ③ 強風（高所作業・足場・クレーン作業への影響）
+    if (cfg.windOn && wind >= cfg.windSpeed) return showAlert('wind','💨','強風 注意','高所・足場・クレーン作業は特に注意してください。');
     // ④ 熱中症「警戒」レベル（作業自体は可能だが水分補給を促す）
-    if (wbgt >= 25) return showAlert('warn','☀️','熱中症 警戒','作業の合間に積極的に休憩を。直射日光を避けてください。');
+    if (cfg.heatOn && wbgt >= cfg.heatWarn) return showAlert('warn','☀️','熱中症 警戒','作業の合間に積極的に休憩を。直射日光を避けてください。');
     // 該当なし → 何も表示しない
+  }
+
+  function apiUrl(){
+    return (window.DOKEN_GUILD_CONFIG && window.DOKEN_GUILD_CONFIG.apiUrl) || '';
+  }
+
+  async function loadConfig(){
+    const url = apiUrl();
+    if (url){
+      try{
+        const res = await fetch(url, {method:'POST', body: JSON.stringify({action:'getAlertConfig'})});
+        const data = await res.json();
+        if (data && data.config) return Object.assign({}, DEFAULT_SETTINGS, data.config);
+      }catch(e){ /* 共有設定が取れない場合は端末内の設定へフォールバック */ }
+    }
+    try{
+      const local = JSON.parse(localStorage.getItem(LS_KEY) || 'null');
+      if (local) return Object.assign({}, DEFAULT_SETTINGS, local);
+    }catch(e){}
+    return DEFAULT_SETTINGS;
   }
 
   function initWeatherAlert(){
     if (!('geolocation' in navigator)) return;
-    navigator.geolocation.getCurrentPosition(function(pos){
-      const lat = pos.coords.latitude, lon = pos.coords.longitude;
-      fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&timezone=Asia%2FTokyo`)
-        .then(r => r.json())
-        .then(data => {
-          const c = data.current || {};
-          const temp = parseFloat(c.temperature_2m);
-          const hum  = parseFloat(c.relative_humidity_2m);
-          const wind = parseFloat(c.wind_speed_10m); // km/h
-          const code = c.weather_code;
-          if (isNaN(temp) || isNaN(hum)) return;
-          decideAlert(temp, hum, isNaN(wind) ? 0 : wind / 3.6, code); // km/h→m/s
-        })
-        .catch(function(e){ console.error('[天気アラート]', e); });
-    }, function(){ /* 位置情報が拒否・失敗した場合は何も表示しない */ },
-    { enableHighAccuracy:false, timeout:8000, maximumAge:20*60*1000 });
+    loadConfig().then(function(cfg){
+      // 表示開始時刻チェック：現在時刻がこの時刻より前なら判定を行わない
+      const nowHour = new Date().getHours();
+      if (nowHour < cfg.startHour) return;
+
+      navigator.geolocation.getCurrentPosition(function(pos){
+        const lat = pos.coords.latitude, lon = pos.coords.longitude;
+
+        if (cfg.dayMode === 'prevday'){
+          // 前日から：翌日の予報（最高気温・天気・最大風速）で判定
+          fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=relative_humidity_2m&daily=weather_code,temperature_2m_max,wind_speed_10m_max&timezone=Asia%2FTokyo`)
+            .then(r => r.json())
+            .then(data => {
+              const cur = data.current || {};
+              const daily = data.daily || {};
+              const hum = parseFloat(cur.relative_humidity_2m);
+              const temp = daily.temperature_2m_max ? parseFloat(daily.temperature_2m_max[1]) : NaN;
+              const wind = daily.wind_speed_10m_max ? parseFloat(daily.wind_speed_10m_max[1]) : NaN;
+              const code = daily.weather_code ? daily.weather_code[1] : null;
+              if (isNaN(temp) || isNaN(hum)) return;
+              decideAlert(cfg, temp, hum, isNaN(wind) ? 0 : wind / 3.6, code);
+            })
+            .catch(function(e){ console.error('[天気アラート]', e); });
+        } else {
+          // 当日：現在の気象で判定
+          fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&timezone=Asia%2FTokyo`)
+            .then(r => r.json())
+            .then(data => {
+              const c = data.current || {};
+              const temp = parseFloat(c.temperature_2m);
+              const hum  = parseFloat(c.relative_humidity_2m);
+              const wind = parseFloat(c.wind_speed_10m); // km/h
+              const code = c.weather_code;
+              if (isNaN(temp) || isNaN(hum)) return;
+              decideAlert(cfg, temp, hum, isNaN(wind) ? 0 : wind / 3.6, code); // km/h→m/s
+            })
+            .catch(function(e){ console.error('[天気アラート]', e); });
+        }
+      }, function(){ /* 位置情報が拒否・失敗した場合は何も表示しない */ },
+      { enableHighAccuracy:false, timeout:8000, maximumAge:20*60*1000 });
+    });
   }
 
   if (document.readyState === 'complete') initWeatherAlert();

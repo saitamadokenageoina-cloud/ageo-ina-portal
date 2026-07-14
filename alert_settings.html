@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>天気アラート設定（管理者用）｜埼玉土建 上尾伊奈支部</title>
+<link rel="stylesheet" href="assets/css/tabler-icons.min.css">
+<link rel="stylesheet" href="common.css">
+<style>
+.gate{min-height:70vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:24px;text-align:center;}
+.gate i{font-size:44px;color:var(--orange);}
+.gate h2{font-size:18px;color:var(--navy);margin:0;}
+.gate p{font-size:13px;color:var(--gray600);margin:0;max-width:280px;line-height:1.6;}
+.gate input{width:100%;max-width:220px;padding:14px;font-size:20px;text-align:center;letter-spacing:.3em;border:2px solid var(--gray200);border-radius:12px;background:var(--white);color:var(--navy);font-weight:800;}
+.gate input:focus{outline:none;border-color:var(--orange);}
+.gate button{width:100%;max-width:220px;min-height:48px;background:var(--orange);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;}
+.gate .err{color:#C04E1E;font-size:12.5px;font-weight:700;display:none;}
+
+#settings-area{display:none;}
+.set-sec{background:var(--white);border:1px solid var(--gray200);border-radius:14px;padding:16px;margin-bottom:12px;}
+.set-sec-t{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:800;color:var(--navy);margin:0 0 12px;}
+.set-sec-t i{color:var(--orange);font-size:19px;}
+.set-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--gray100);}
+.set-row:first-of-type{border-top:none;padding-top:0;}
+.set-label{font-size:13.5px;font-weight:700;color:var(--navy);flex-shrink:0;}
+.set-sub{font-size:11.5px;color:var(--gray500);font-weight:600;margin-top:2px;}
+.set-ctl select,.set-ctl input[type=number]{min-height:40px;padding:6px 10px;font-size:14px;font-weight:700;border:1.5px solid var(--gray200);border-radius:9px;background:var(--white);color:var(--navy);font-family:inherit;}
+.set-ctl input[type=number]{width:72px;text-align:center;}
+.switch{position:relative;display:inline-block;width:46px;height:26px;flex-shrink:0;}
+.switch input{opacity:0;width:0;height:0;}
+.switch .slider{position:absolute;inset:0;background:var(--gray300);border-radius:99px;transition:.15s;cursor:pointer;}
+.switch .slider::before{content:'';position:absolute;width:20px;height:20px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.15s;box-shadow:0 1px 3px rgba(0,0,0,.3);}
+.switch input:checked + .slider{background:var(--orange);}
+.switch input:checked + .slider::before{transform:translateX(20px);}
+.thr-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 0;border-top:1px dashed var(--gray100);}
+.thr-row:first-of-type{border-top:none;}
+.thr-badge{flex:0 0 auto;font-size:11px;font-weight:900;color:#fff;border-radius:7px;padding:3px 10px;}
+.thr-badge.warn{background:#B07800;}
+.thr-badge.severe{background:#C04E1E;}
+.thr-badge.danger{background:#8B0000;}
+.thr-name{flex:1;font-size:12.5px;font-weight:700;color:var(--gray700);}
+.thr-input{display:flex;align-items:center;gap:5px;}
+.thr-input span{font-size:12px;color:var(--gray500);font-weight:700;}
+.save-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:52px;background:var(--orange);color:#fff;border:none;border-radius:13px;font-size:16px;font-weight:900;cursor:pointer;font-family:inherit;margin-top:6px;}
+.save-msg{text-align:center;font-size:12.5px;font-weight:800;margin-top:10px;display:none;}
+.save-msg.ok{color:#1A7A4A;display:block;}
+.save-msg.ng{color:#C04E1E;display:block;}
+.default-note{display:flex;align-items:flex-start;gap:8px;background:var(--gray50);border:1px solid var(--gray200);border-radius:12px;padding:12px 14px;font-size:12px;line-height:1.65;color:var(--gray600);margin-bottom:14px;font-weight:600;}
+.default-note i{color:var(--gray500);font-size:16px;flex-shrink:0;margin-top:1px;}
+.sync-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:800;padding:4px 10px;border-radius:99px;margin-bottom:12px;}
+.sync-badge.shared{background:rgba(26,122,74,.12);color:#1A7A4A;}
+.sync-badge.local{background:rgba(232,97,42,.12);color:#C04E1E;}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="hdr">
+  <button class="hdr-back" onclick="goBack()"><i class="ti ti-arrow-left"></i>戻る</button>
+  <div style="text-align:right;">
+    <p class="hdr-org" style="margin:0;">管理者設定</p>
+    <p class="hdr-title" style="margin:0;font-size:14px;">天気アラート設定</p>
+  </div>
+</header>
+
+<div class="content">
+
+  <!-- パスワードゲート -->
+  <div class="gate" id="gate">
+    <i class="ti ti-shield-lock"></i>
+    <h2>管理者パスワードを入力</h2>
+    <p>ホーム画面の天気自動アラートの表示条件を設定します。支部の管理者のみご利用ください。</p>
+    <input type="password" id="pw" inputmode="numeric" maxlength="8" placeholder="••••">
+    <button onclick="checkPw()">確認する</button>
+    <p class="err" id="pw-err">パスワードが違います。</p>
+  </div>
+
+  <!-- 設定画面本体 -->
+  <div id="settings-area">
+    <span class="sync-badge" id="sync-badge"></span>
+
+    <div class="default-note">
+      <i class="ti ti-info-circle"></i>
+      <span>初期設定は「当日の天気予報をもとに、0時から表示」です。特別な事情がなければ変更の必要はありません。</span>
+    </div>
+
+    <div class="set-sec">
+      <p class="set-sec-t"><i class="ti ti-clock"></i>表示タイミング</p>
+      <div class="set-row">
+        <div><p class="set-label">表示する予報の対象日</p><p class="set-sub">前日から翌日の予報で早めに知らせることもできます</p></div>
+        <div class="set-ctl">
+          <select id="s-dayMode">
+            <option value="today">当日のみ（初期設定）</option>
+            <option value="prevday">前日から（翌日の予報）</option>
+          </select>
+        </div>
+      </div>
+      <div class="set-row">
+        <div><p class="set-label">表示を開始する時刻</p><p class="set-sub">この時刻以降にアプリを開くとアラート判定が始まります</p></div>
+        <div class="set-ctl">
+          <select id="s-startHour">
+            <option value="0">0時（初期設定・深夜0時から）</option>
+            <option value="5">5時</option>
+            <option value="6">6時</option>
+            <option value="7">7時</option>
+            <option value="12">12時（昼から）</option>
+            <option value="15">15時</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="set-sec">
+      <p class="set-sec-t"><i class="ti ti-temperature-sun"></i>熱中症アラート（WBGT）</p>
+      <div class="set-row">
+        <div class="set-label">熱中症アラートを表示する</div>
+        <label class="switch"><input type="checkbox" id="s-heatOn" checked><span class="slider"></span></label>
+      </div>
+      <div class="thr-row">
+        <span class="thr-badge warn">警戒</span>
+        <span class="thr-name">こまめな休憩・水分補給を促す</span>
+        <span class="thr-input"><input type="number" id="s-heatWarn" value="25" min="20" max="35" step="0.5"><span>℃以上</span></span>
+      </div>
+      <div class="thr-row">
+        <span class="thr-badge severe">厳重警戒</span>
+        <span class="thr-name">激しい作業の中止を検討</span>
+        <span class="thr-input"><input type="number" id="s-heatSevere" value="28" min="20" max="35" step="0.5"><span>℃以上</span></span>
+      </div>
+      <div class="thr-row">
+        <span class="thr-badge danger">危険</span>
+        <span class="thr-name">屋外作業の中止を強く推奨</span>
+        <span class="thr-input"><input type="number" id="s-heatDanger" value="31" min="20" max="35" step="0.5"><span>℃以上</span></span>
+      </div>
+    </div>
+
+    <div class="set-sec">
+      <p class="set-sec-t"><i class="ti ti-cloud-rain"></i>雨・雷アラート</p>
+      <div class="set-row">
+        <div><p class="set-label">雨・雷アラートを表示する</p><p class="set-sub">雷雨・強い雨の予報時に注意を表示します</p></div>
+        <label class="switch"><input type="checkbox" id="s-rainOn" checked><span class="slider"></span></label>
+      </div>
+    </div>
+
+    <div class="set-sec">
+      <p class="set-sec-t"><i class="ti ti-wind"></i>強風アラート</p>
+      <div class="set-row">
+        <div><p class="set-label">強風アラートを表示する</p><p class="set-sub">高所・足場・クレーン作業への注意喚起です</p></div>
+        <label class="switch"><input type="checkbox" id="s-windOn" checked><span class="slider"></span></label>
+      </div>
+      <div class="thr-row">
+        <span class="thr-badge severe">注意</span>
+        <span class="thr-name">風速がこの値以上で表示</span>
+        <span class="thr-input"><input type="number" id="s-windSpeed" value="10" min="5" max="25" step="1"><span>m/s以上</span></span>
+      </div>
+    </div>
+
+    <button class="save-btn" onclick="saveSettings()"><i class="ti ti-device-floppy"></i>設定を保存する</button>
+    <p class="save-msg" id="save-msg"></p>
+  </div>
+
+</div>
+</div>
+
+<script src="assets/js/navigation.js"></script>
+<script src="assets/js/guild-config.js"></script>
+<script>
+const ADMIN_PW = '9863';
+const LS_KEY = 'doken_wx_alert_settings';
+
+const DEFAULT_SETTINGS = {
+  dayMode: 'today',
+  startHour: 0,
+  heatOn: true, heatWarn: 25, heatSevere: 28, heatDanger: 31,
+  rainOn: true,
+  windOn: true, windSpeed: 10
+};
+
+function checkPw(){
+  const v = document.getElementById('pw').value.trim();
+  if (v === ADMIN_PW){
+    try{ sessionStorage.setItem('doken_wx_admin_ok','1'); }catch(e){}
+    document.getElementById('gate').style.display = 'none';
+    document.getElementById('settings-area').style.display = 'block';
+    loadSettings();
+  } else {
+    document.getElementById('pw-err').style.display = 'block';
+  }
+}
+document.getElementById('pw').addEventListener('keydown', function(e){
+  if (e.key === 'Enter') checkPw();
+});
+
+function applyToForm(cfg){
+  document.getElementById('s-dayMode').value = cfg.dayMode;
+  document.getElementById('s-startHour').value = String(cfg.startHour);
+  document.getElementById('s-heatOn').checked = !!cfg.heatOn;
+  document.getElementById('s-heatWarn').value = cfg.heatWarn;
+  document.getElementById('s-heatSevere').value = cfg.heatSevere;
+  document.getElementById('s-heatDanger').value = cfg.heatDanger;
+  document.getElementById('s-rainOn').checked = !!cfg.rainOn;
+  document.getElementById('s-windOn').checked = !!cfg.windOn;
+  document.getElementById('s-windSpeed').value = cfg.windSpeed;
+}
+
+function readForm(){
+  return {
+    dayMode: document.getElementById('s-dayMode').value,
+    startHour: parseInt(document.getElementById('s-startHour').value, 10),
+    heatOn: document.getElementById('s-heatOn').checked,
+    heatWarn: parseFloat(document.getElementById('s-heatWarn').value) || 25,
+    heatSevere: parseFloat(document.getElementById('s-heatSevere').value) || 28,
+    heatDanger: parseFloat(document.getElementById('s-heatDanger').value) || 31,
+    rainOn: document.getElementById('s-rainOn').checked,
+    windOn: document.getElementById('s-windOn').checked,
+    windSpeed: parseFloat(document.getElementById('s-windSpeed').value) || 10
+  };
+}
+
+function apiUrl(){
+  return (window.DOKEN_GUILD_CONFIG && window.DOKEN_GUILD_CONFIG.apiUrl) || '';
+}
+
+async function loadSettings(){
+  let cfg = null;
+  const badge = document.getElementById('sync-badge');
+  const url = apiUrl();
+  if (url){
+    try{
+      const res = await fetch(url, {method:'POST', body: JSON.stringify({action:'getAlertConfig'})});
+      const data = await res.json();
+      if (data && data.config){ cfg = data.config; }
+    }catch(e){ console.error('[アラート設定] 共有設定の取得に失敗:', e); }
+  }
+  if (cfg){
+    badge.textContent = '全員に共有される設定です';
+    badge.className = 'sync-badge shared';
+  } else {
+    try{ cfg = JSON.parse(localStorage.getItem(LS_KEY) || 'null'); }catch(e){ cfg = null; }
+    badge.textContent = url ? 'この端末だけの設定です（共有設定が未取得）' : 'この端末だけの設定です（共有設定は未設定）';
+    badge.className = 'sync-badge local';
+  }
+  applyToForm(Object.assign({}, DEFAULT_SETTINGS, cfg || {}));
+}
+
+async function saveSettings(){
+  const cfg = readForm();
+  try{ localStorage.setItem(LS_KEY, JSON.stringify(cfg)); }catch(e){}
+
+  const msg = document.getElementById('save-msg');
+  const url = apiUrl();
+  if (!url){
+    msg.textContent = 'この端末に保存しました（共有設定は未接続のため、この端末のみ反映されます）。';
+    msg.className = 'save-msg ok';
+    return;
+  }
+  try{
+    const res = await fetch(url, {method:'POST', body: JSON.stringify({action:'saveAlertConfig', pin:ADMIN_PW, config:cfg})});
+    const data = await res.json();
+    if (data && data.ok){
+      msg.textContent = '保存しました。全員のアプリに反映されます。';
+      msg.className = 'save-msg ok';
+    } else {
+      msg.textContent = 'この端末には保存しましたが、共有設定への反映に失敗しました。';
+      msg.className = 'save-msg ng';
+    }
+  }catch(e){
+    console.error('[アラート設定] 共有設定の保存に失敗:', e);
+    msg.textContent = 'この端末には保存しましたが、共有設定への反映に失敗しました（通信エラー）。';
+    msg.className = 'save-msg ng';
+  }
+}
+
+(function init(){
+  try{
+    if (sessionStorage.getItem('doken_wx_admin_ok') === '1'){
+      document.getElementById('gate').style.display = 'none';
+      document.getElementById('settings-area').style.display = 'block';
+      loadSettings();
+    }
+  }catch(e){}
+})();
+</script>
+</body>
+</html>

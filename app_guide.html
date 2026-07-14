@@ -74,7 +74,7 @@
     <button class="guide-tab" onclick="switchGuide('features',this)"><i class="ti ti-apps"></i>機能一覧</button>
     <button class="guide-tab" onclick="switchGuide('print',this)"><i class="ti ti-printer"></i>印刷</button>
     <button class="guide-tab" onclick="switchGuide('install',this)"><i class="ti ti-device-mobile"></i>追加</button>
-    <button class="guide-tab" onclick="switchGuide('guild',this)"><i class="ti ti-cloud"></i>ギルド設定</button>
+    <button class="guide-tab" onclick="switchGuide('guild',this)"><i class="ti ti-cloud"></i>管理者設定</button>
     <button class="guide-tab" onclick="switchGuide('trouble',this)"><i class="ti ti-help"></i>困った時</button>
   </nav>
 
@@ -97,12 +97,37 @@
         <table class="feature-table">
           <thead><tr><th>区分</th><th>できること</th></tr></thead>
           <tbody>
-            <tr><td>現場で使う</td><td>熱中症AIアラート、安全チェック、36協定、DOKENギルドを開きます。</td></tr>
-            <tr><td>組合員サービス</td><td>どけんカード、加入メリット診断、CCUS能力評価サポート、建設業許可チェッカーを使います。</td></tr>
-            <tr><td>手続き・情報</td><td>必要書類、加入メリット、計算ツール、講習日程、資料本棚、YouTube、支部カレンダーを確認します。</td></tr>
+            <tr><td>よく使う</td><td>支部カレンダー、どけんカード登録店を開きます。</td></tr>
+            <tr><td>仕事確保</td><td>DOKENギルド、求人求職、労働者供給事業、ホームドクターなびを開きます。</td></tr>
+            <tr><td>現場・管理関係</td><td>標準見積書作成、熱中症AIアラート、現場安全チェックリスト、作業記録、36協定・残業カウンター、CCUS能力評価サポート診断を開きます。</td></tr>
+            <tr><td>手続き・シミュレーション</td><td>手続き・必要書類ガイド、加入のメリット、計算ツール、建設業許可チェッカー、一人親方の基礎知識・診断を開きます。</td></tr>
+            <tr><td>講習・資料</td><td>技能講習日程案内、資料本棚、YouTubeチャンネルを開きます。</td></tr>
           </tbody>
         </table>
         <div class="tip green">迷ったときは、目的に近いカードをタップしてください。各ページの左上「戻る」から前の画面へ戻れます。</div>
+      </div>
+    </article>
+
+    <article class="acc">
+      <div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-bell-ringing"></i></div><p class="acc-title">ホームの天気自動アラート</p><i class="ti ti-chevron-right acc-arrow"></i></div>
+      <div class="acc-body">
+        <ol class="steps">
+          <li>ホーム画面のタイトル下に、現在地の熱中症・雨雷・強風の危険度が条件を満たすときだけ自動で表示されます。</li>
+          <li>位置情報の許可が必要です。拒否した場合は何も表示されませんが、他の機能は通常通り使えます。</li>
+          <li>バナーをタップすると、詳しい熱中症AIアラートのページへ移動します。</li>
+        </ol>
+        <div class="tip">表示条件（しきい値・表示開始時刻など）は支部の管理者が「天気アラート設定」から変更できます（ホーム画面フッターの「天気アラート設定（管理者用）」）。初期設定は当日の予報をもとに0時から表示です。</div>
+      </div>
+    </article>
+
+    <article class="acc">
+      <div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-refresh-dot"></i></div><p class="acc-title">アプリは自動で最新版に更新されます</p><i class="ti ti-chevron-right acc-arrow"></i></div>
+      <div class="acc-body">
+        <ol class="steps">
+          <li>このアプリはPWA（プログレッシブウェブアプリ）で、開くたびに新しい内容がないか自動で確認します。</li>
+          <li>更新があれば自動で読み込み直され、最新の内容が表示されます。手動での再インストールは不要です。</li>
+          <li>各ページ下部の「アプリ版数 vXX」で、今表示している版数を確認できます。</li>
+        </ol>
       </div>
     </article>
   </section>
@@ -135,7 +160,7 @@
       <div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-file-search"></i></div><p class="acc-title">手続き・必要書類ガイド</p><i class="ti ti-chevron-right acc-arrow"></i></div>
       <div class="acc-body">
         <ol class="steps">
-          <li>「手続き・情報」から「手続き・必要書類ガイド」を開きます。</li>
+          <li>「手続き・シミュレーション」から「手続き・必要書類ガイド」を開きます。</li>
           <li>国保、共済、加入、労働保険など目的に近い項目を選びます。</li>
           <li>必要書類と問い合わせ先を確認します。</li>
         </ol>
@@ -152,6 +177,70 @@
         </ol>
       </div>
     </article>
+
+    <article class="acc">
+      <div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-message-circle"></i></div><p class="acc-title">DOKENギルド（掲示板）</p><i class="ti ti-chevron-right acc-arrow"></i></div>
+      <div class="acc-body">
+        <ol class="steps">
+          <li>「仕事確保」から「DOKENギルド」を開きます。</li>
+          <li>「人材募集・お手伝い」「資材・道具」「相談・情報共有」のカテゴリから投稿できます。</li>
+          <li>他の組合員の投稿にコメントで返信できます。</li>
+        </ol>
+        <div class="tip">クラウド保存・メール通知を有効にする設定は「ギルド設定」タブで確認できます。</div>
+      </div>
+    </article>
+
+    <article class="acc">
+      <div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-briefcase"></i></div><p class="acc-title">労働者供給事業・求人求職・ホームドクターなび</p><i class="ti ti-chevron-right acc-arrow"></i></div>
+      <div class="acc-body">
+        <ol class="steps">
+          <li>「仕事確保」から、それぞれの仕事紹介の仕組みを確認できます。</li>
+          <li>労働者供給事業では、募集中の事業所と仕事内容・賃金を確認できます。</li>
+          <li>求人求職・ホームドクターなびは外部サイトへ移動します。</li>
+        </ol>
+      </div>
+    </article>
+
+    <article class="acc">
+      <div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-calculator"></i></div><p class="acc-title">計算ツール（労務費・国保料・給付金・CCUS）</p><i class="ti ti-chevron-right acc-arrow"></i></div>
+      <div class="acc-body">
+        <ol class="steps">
+          <li>「手続き・シミュレーション」から「計算ツール」を開きます。</li>
+          <li>労務費（法定福利費）、国保料の比較、給付金、CCUSレベルの4つのシミュレーターがあります。</li>
+          <li>結果は「プレビュー」で確認してから「印刷・PDF」で保存できます。</li>
+        </ol>
+      </div>
+    </article>
+
+    <article class="acc">
+      <div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-clipboard-check"></i></div><p class="acc-title">作業記録・36協定カウンター</p><i class="ti ti-chevron-right acc-arrow"></i></div>
+      <div class="acc-body">
+        <ol class="steps">
+          <li>「作業記録」は粉塵・振動など職業病につながる作業歴を記録します。カレンダー表示・年月ごとの集計・バックアップ機能があります。</li>
+          <li>「36協定・残業カウンター」は残業時間を自動集計し、正式様式のプレビュー・印刷ができます。</li>
+        </ol>
+      </div>
+    </article>
+
+    <article class="acc">
+      <div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-certificate"></i></div><p class="acc-title">建設業許可チェッカー・一人親方の基礎知識</p><i class="ti ti-chevron-right acc-arrow"></i></div>
+      <div class="acc-body">
+        <ol class="steps">
+          <li>「建設業許可チェッカー」は許可の要否を簡易診断し、印刷・プレビューができます。</li>
+          <li>「一人親方の基礎知識」は5問の適性診断、メリット・デメリット、会社員との比較、保険・年金の違いを確認できます。</li>
+        </ol>
+      </div>
+    </article>
+
+    <article class="acc">
+      <div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-id"></i></div><p class="acc-title">どけんカード登録店・支部カレンダー</p><i class="ti ti-chevron-right acc-arrow"></i></div>
+      <div class="acc-body">
+        <ol class="steps">
+          <li>「どけんカード登録店」でパスワード表示・コピーと、優待店の検索ができます。</li>
+          <li>「支部カレンダー」で行事・講習・支部予定を確認できます。</li>
+        </ol>
+      </div>
+    </article>
   </section>
 
   <section class="guide-content" id="tab-print">
@@ -159,12 +248,12 @@
       <div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-printer"></i></div><p class="acc-title">印刷・PDF保存の基本</p><i class="ti ti-chevron-right acc-arrow"></i></div>
       <div class="acc-body">
         <ol class="steps">
-          <li>36協定や安全チェックで必要事項を入力します。</li>
-          <li>「プレビューを表示」をタップして内容を確認します。</li>
-          <li>「印刷・PDF保存」をタップします。</li>
+          <li>36協定、安全チェック、計算ツール、建設業許可チェッカー、一人親方診断などで必要事項を入力・診断します。</li>
+          <li>「プレビュー」ボタンでA4の仕上がりイメージを画面で確認します。</li>
+          <li>「印刷・PDF」ボタンをタップします。</li>
           <li>印刷画面でプリンターを選ぶか、「PDFに保存」を選びます。</li>
         </ol>
-        <div class="tip">iPhoneはSafari、AndroidはChromeでの利用がおすすめです。</div>
+        <div class="tip">iPhoneはSafari、AndroidはChromeでの利用がおすすめです。プレビューと印刷内容は常に同じものが表示されます。</div>
       </div>
     </article>
 
@@ -258,6 +347,22 @@ ADMIN_PIN = 投稿削除に使う管理者PIN</div>
         <div class="tip warn">管理者PINは支部内の管理者だけで共有してください。公開ページや資料には載せないでください。</div>
       </div>
     </article>
+
+    <article class="acc">
+      <div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-bell-cog"></i></div><p class="acc-title">天気アラート設定を全員に共有する（任意）</p><i class="ti ti-chevron-right acc-arrow"></i></div>
+      <div class="acc-body">
+        <ol class="steps">
+          <li>ホーム画面の天気自動アラートは、初期状態では設定を変更してもその端末だけに保存されます。</li>
+          <li>DOKENギルドと同じ Google Apps Script のスクリプトプロパティに <strong>ALERT_PIN</strong>（天気アラート設定用のパスワード）を追加すると、設定が全員のアプリに共有されるようになります。</li>
+        </ol>
+        <div class="codebox">ALERT_PIN = 9863（アプリ内で入力するパスワードと同じ値にしてください）</div>
+        <ol class="steps" start="3">
+          <li>Apps Scriptの中身を最新版（<strong>docs/guild-apps-script-template.js</strong>）に更新し、再デプロイします。</li>
+          <li>「天気アラート設定」ページ（ホーム画面フッターの「天気アラート設定（管理者用）」）でパスワード「9863」を入力し、設定を保存します。</li>
+        </ol>
+        <div class="tip green">共有が有効になると、設定画面に「全員に共有される設定です」と表示されます。共有が未設定の間は「この端末だけの設定です」と表示され、動作には影響ありません。</div>
+      </div>
+    </article>
   </section>
 
   <section class="guide-content" id="tab-trouble">
@@ -279,6 +384,17 @@ ADMIN_PIN = 投稿削除に使う管理者PIN</div>
           <li>端末の設定でSafariまたはChromeの位置情報を許可します。</li>
           <li>ブラウザでこのサイトの位置情報許可をオンにします。</li>
           <li>ページを開き直して再取得します。</li>
+        </ol>
+      </div>
+    </article>
+
+    <article class="acc">
+      <div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-bell-x"></i></div><p class="acc-title">ホームの天気アラートが表示されない</p><i class="ti ti-chevron-right acc-arrow"></i></div>
+      <div class="acc-body">
+        <ol class="steps">
+          <li>位置情報の許可を確認します（上記「位置情報が取得できない」も参照）。</li>
+          <li>これは正常な場合が多いです。熱中症・雨雷・強風のいずれの条件も満たさないときは、何も表示されない仕組みです。</li>
+          <li>表示開始時刻を過ぎているか、「天気アラート設定」ページの設定を確認します。</li>
         </ol>
       </div>
     </article>
