@@ -9,7 +9,7 @@
 <style>
 .az-hero{background:linear-gradient(135deg,#7B2F00,#C04E1E);border-radius:var(--r16);padding:20px;margin-bottom:16px;display:flex;align-items:center;gap:14px;}
 .az-hero i{font-size:44px;color:#FAC775;flex-shrink:0;}
-.az-hero h2{font-size:18px;font-weight:800;color:#fff;margin:0 0 4px;}
+.az-hero h2{font-size:18px;font-weight:700;color:#fff;margin:0 0 4px;}
 .az-hero p{font-size:13px;color:rgba(255,255,255,.65);margin:0;}
 /* 現場情報 */
 .site-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
@@ -17,8 +17,8 @@
 .check-section{background:var(--white);border-radius:var(--r16);box-shadow:var(--shadow-sm);margin-bottom:12px;overflow:hidden;}
 .check-section-head{padding:14px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;}
 .check-section-head i.cat-icon{font-size:22px;flex-shrink:0;}
-.check-section-title{font-size:15px;font-weight:700;color:var(--navy);flex:1;}
-.check-section-badge{font-size:12px;font-weight:700;padding:3px 10px;border-radius:99px;}
+.check-section-title{font-size:15px;font-weight:600;color:var(--navy);flex:1;}
+.check-section-badge{font-size:12px;font-weight:600;padding:3px 10px;border-radius:99px;}
 .check-section-body{padding:0 16px 14px;}
 /* チェック項目 */
 .check-item{display:flex;align-items:flex-start;gap:12px;padding:11px 0;border-bottom:1px solid var(--gray100);}
@@ -26,20 +26,20 @@
 .check-item input[type=checkbox]{width:22px;height:22px;flex-shrink:0;margin-top:1px;cursor:pointer;accent-color:var(--orange);}
 .check-item-label{font-size:14px;color:var(--navy);line-height:1.55;flex:1;cursor:pointer;}
 .check-item.checked .check-item-label{color:var(--gray400);text-decoration:line-through;}
-.check-required{display:inline-block;white-space:nowrap;font-size:10px;font-weight:700;background:var(--red-lt);color:var(--red);padding:2px 7px;border-radius:99px;margin-left:6px;vertical-align:1px;}
+.check-required{display:inline-block;white-space:nowrap;font-size:10px;font-weight:600;background:var(--red-lt);color:var(--red);padding:2px 7px;border-radius:99px;margin-left:6px;vertical-align:1px;}
 /* 集計バー */
 .progress-header{background:#1B2A3B;border-radius:var(--r16);padding:16px 20px;margin-bottom:14px;position:sticky;top:64px;z-index:10;box-shadow:var(--shadow-md);}
 .progress-title{color:rgba(255,255,255,.7);font-size:13px;margin:0 0 6px;display:flex;justify-content:space-between;}
 .progress-bar-wrap{background:rgba(255,255,255,.15);border-radius:99px;height:12px;overflow:hidden;}
 .progress-bar-fill{height:100%;border-radius:99px;transition:width .4s;background:var(--orange);}
-.progress-fraction{color:#fff;font-size:20px;font-weight:800;margin:6px 0 0;}
+.progress-fraction{color:#fff;font-size:20px;font-weight:700;margin:6px 0 0;}
 /* ボタン */
 .action-row{display:flex;gap:8px;margin-top:4px;}
 .print-panel{display:grid;gap:10px;margin-top:10px;}
 .print-panel .print-preview,.print-panel .print-submit{
   width:100%;border:none;border-radius:8px;padding:17px 16px;color:#fff;
   display:flex;align-items:center;justify-content:center;gap:10px;
-  font-size:16px;font-weight:800;box-shadow:0 4px 12px rgba(0,0,0,.16);
+  font-size:16px;font-weight:700;box-shadow:0 4px 12px rgba(0,0,0,.16);
 }
 .print-panel .print-preview{background:#147c62;}
 .print-panel .print-submit{background:#1d5b7d;}
@@ -317,11 +317,11 @@ function openSummary(autoPrint){
     h1{font-size:15pt;line-height:1.2;border-bottom:2px solid #1B2A3B;padding-bottom:4px;margin:0 0 5px;}
     .info{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:3px 6px;margin:5px 0 6px;background:#f5f6f8;padding:5px 6px;border:1px solid #d7dbe2;}
     .info-item{font-size:8.2pt;}
-    .info-item span{font-weight:bold;}
-    .summary{background:#1B2A3B;color:#fff;padding:5px 8px;margin:5px 0 7px;font-size:10pt;font-weight:bold;display:flex;justify-content:space-between;}
+    .info-item span{font-weight:600;}
+    .summary{background:#1B2A3B;color:#fff;padding:5px 8px;margin:5px 0 7px;font-size:10pt;font-weight:600;display:flex;justify-content:space-between;}
     .section-grid{display:grid;grid-template-columns:1fr 1fr;gap:4mm;}
     .section{break-inside:avoid;page-break-inside:avoid;margin:0 0 3mm;}
-    .section-title{font-size:9pt;font-weight:bold;border-left:3px solid #E8612A;padding-left:5px;margin-bottom:3px;color:#1B2A3B;}
+    .section-title{font-size:9pt;font-weight:600;border-left:3px solid #E8612A;padding-left:5px;margin-bottom:3px;color:#1B2A3B;}
     .item{display:flex;align-items:flex-start;gap:4px;padding:1.6px 0;border-bottom:1px solid #eee;font-size:7.4pt;}
     .item .chk{width:12px;flex:0 0 12px;font-size:8pt;text-align:center;}
     .ok{color:#1A7A4A;}
@@ -330,7 +330,7 @@ function openSummary(autoPrint){
     .footer{font-size:7.2pt;color:#444;margin-top:5px;border-top:1px solid #ddd;padding-top:4px;}
     .printbar{background:#1B2A3B;color:#fff;padding:10px 14px;margin:0 auto 12px;display:flex;align-items:center;justify-content:space-between;gap:10px;max-width:210mm;border-radius:8px;}
     .print-actions{display:flex;align-items:center;gap:8px;}
-    .printbar button{background:#E8612A;color:#fff;border:none;border-radius:6px;padding:8px 16px;font-size:14px;font-weight:700;cursor:pointer;}
+    .printbar button{background:#E8612A;color:#fff;border:none;border-radius:6px;padding:8px 16px;font-size:14px;font-weight:600;cursor:pointer;}
     .printbar .back-print{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);}
     @media print{
       body{background:#fff;}
@@ -339,7 +339,7 @@ function openSummary(autoPrint){
     }
   </style></head><body>
   <div class="no-print printbar">
-    <span style="font-weight:700;">現場安全チェックリスト A4プレビュー</span>
+    <span style="font-weight:600;">現場安全チェックリスト A4プレビュー</span>
     <div class="print-actions">
       <button class="back-print" onclick="if(window.opener){window.opener.focus();} window.close();">戻る</button>
       <button onclick="window.print()">印刷・PDF保存</button>

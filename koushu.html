@@ -9,22 +9,22 @@
 <style>
 .k-hero{background:linear-gradient(135deg,#4A3500,#8B6500);border-radius:var(--r16);padding:20px;margin-bottom:16px;display:flex;align-items:center;gap:14px;}
 .k-hero i{font-size:40px;color:#FAC775;flex-shrink:0;}
-.k-hero h2{font-size:18px;font-weight:800;color:#fff;margin:0 0 3px;}
-.k-hero p{font-size:12px;color:rgba(255,255,255,.94);margin:0;font-weight:700;}
+.k-hero h2{font-size:18px;font-weight:700;color:#fff;margin:0 0 3px;}
+.k-hero p{font-size:12px;color:rgba(255,255,255,.94);margin:0;font-weight:600;}
 
 .subsidy{background:linear-gradient(135deg,#1B2A3B,#0D3A6B);border-radius:var(--r16);padding:14px 16px;margin-bottom:14px;}
-.subsidy-ttl{font-size:11px;font-weight:700;color:var(--orange);margin:0 0 8px;letter-spacing:.08em;}
+.subsidy-ttl{font-size:11px;font-weight:600;color:var(--orange);margin:0 0 8px;letter-spacing:.08em;}
 .subsidy-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;}
 .s-item{background:rgba(255,255,255,.14);border-radius:8px;padding:8px 6px;text-align:center;}
-.s-lbl{font-size:10px;color:#E8EEF7;margin:0 0 2px;font-weight:800;}
-.s-val{font-size:13px;font-weight:800;color:#fff;margin:0;}
+.s-lbl{font-size:10px;color:#E8EEF7;margin:0 0 2px;font-weight:700;}
+.s-val{font-size:13px;font-weight:700;color:#fff;margin:0;}
 .s-val span{color:var(--orange);}
-.s-sub{font-size:9px;color:#C9D7E6;margin:1px 0 0;font-weight:700;}
+.s-sub{font-size:9px;color:#C9D7E6;margin:1px 0 0;font-weight:600;}
 
 /* 期フィルター */
 .period-tabs{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px;}
 .period-tabs::-webkit-scrollbar{display:none;}
-.ptab{padding:8px 16px;border-radius:99px;border:2px solid var(--gray200);background:var(--white);color:var(--gray600);font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all .15s;}
+.ptab{padding:8px 16px;border-radius:99px;border:2px solid var(--gray200);background:var(--white);color:var(--gray600);font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all .15s;}
 .ptab.on{background:#1B2A3B;color:#fff;border-color:var(--navy);}
 
 /* カテゴリフィルター */
@@ -35,7 +35,7 @@
 
 /* 月グループ */
 .month-group{margin-bottom:16px;}
-.month-label{font-size:13px;font-weight:700;color:var(--gray600);margin:0 0 8px;display:flex;align-items:center;gap:6px;}
+.month-label{font-size:13px;font-weight:600;color:var(--gray600);margin:0 0 8px;display:flex;align-items:center;gap:6px;}
 .month-label::after{content:'';flex:1;height:1px;background:var(--gray200);}
 
 /* 講習カード */
@@ -46,21 +46,21 @@
 .kcard.yobo{border-left-color:#7B2FBE;}
 .kcard.other{border-left-color:#888;}
 .kcard-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:8px;}
-.kcard-name{font-size:15px;font-weight:700;color:var(--navy);margin:0;line-height:1.4;flex:1;}
-.kcat-badge{font-size:11px;font-weight:700;padding:3px 9px;border-radius:99px;white-space:nowrap;flex-shrink:0;}
+.kcard-name{font-size:15px;font-weight:600;color:var(--navy);margin:0;line-height:1.4;flex:1;}
+.kcat-badge{font-size:11px;font-weight:600;padding:3px 9px;border-radius:99px;white-space:nowrap;flex-shrink:0;}
 .kcat-badge.gino{background:#FEE8D6;color:#7A3010;}
 .kcat-badge.tokubetsu{background:#E8F0FB;color:#0C447C;}
 .kcat-badge.sakugyou{background:#E8F5EE;color:#1A4A2A;}
 .kcat-badge.yobo{background:#EDE8FE;color:#4A1A9B;}
-.kcard-date{font-size:15px;font-weight:700;color:var(--navy);margin:0 0 4px;}
-.kcard-place{font-size:12px;color:var(--gray600);margin:0 0 6px;font-weight:700;}
-.kcard-note{font-size:12px;color:var(--gray600);background:#EEF2F7;border-radius:6px;padding:6px 8px;margin:0;font-weight:700;}
+.kcard-date{font-size:15px;font-weight:600;color:var(--navy);margin:0 0 4px;}
+.kcard-place{font-size:12px;color:var(--gray600);margin:0 0 6px;font-weight:600;}
+.kcard-note{font-size:12px;color:var(--gray600);background:#EEF2F7;border-radius:6px;padding:6px 8px;margin:0;font-weight:600;}
 
 .info-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;}
-.info-chip{font-size:12px;background:var(--gray50);border-radius:6px;padding:4px 10px;color:var(--gray600);font-weight:700;}
+.info-chip{font-size:12px;background:var(--gray50);border-radius:6px;padding:4px 10px;color:var(--gray600);font-weight:600;}
 .info-chip i{font-size:13px;vertical-align:-2px;margin-right:3px;}
 
-.empty{text-align:center;padding:40px 20px;color:var(--gray600);font-weight:700;}
+.empty{text-align:center;padding:40px 20px;color:var(--gray600);font-weight:600;}
 .empty i{font-size:44px;display:block;margin-bottom:10px;opacity:.4;}
 
 .legend{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
@@ -370,7 +370,7 @@ function render() {
         </div>
         <p class="kcard-date">📅 ${k.date}</p>
         <p class="kcard-place">${placeIcon} ${k.place}</p>
-        ${k.fee ? `<p style="font-size:13px;font-weight:700;color:#E8612A;background:#FFF0E9;border-radius:6px;padding:5px 10px;margin:4px 0 0;display:inline-block;">💴 ${k.fee}</p>` : ''}
+        ${k.fee ? `<p style="font-size:13px;font-weight:600;color:#E8612A;background:#FFF0E9;border-radius:6px;padding:5px 10px;margin:4px 0 0;display:inline-block;">💴 ${k.fee}</p>` : ''}
         ${noteHtml}
       </div>`;
     });

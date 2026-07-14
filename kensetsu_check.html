@@ -10,14 +10,14 @@
 <style>
 .check-hero{background:linear-gradient(135deg,#0C447C,#1A5FA8);border-radius:var(--r16);padding:20px;margin-bottom:16px;display:flex;align-items:center;gap:14px;}
 .check-hero i{font-size:44px;color:#B5D4F4;flex-shrink:0;}
-.check-hero h2{font-size:18px;font-weight:800;color:#fff;margin:0 0 4px;}
+.check-hero h2{font-size:18px;font-weight:700;color:#fff;margin:0 0 4px;}
 .check-hero p{font-size:13px;color:rgba(255,255,255,.65);margin:0;}
 /* ステップ */
 .step-wrap{position:relative;}
 .step{background:var(--white);border-radius:var(--r16);box-shadow:var(--shadow-sm);padding:20px;margin-bottom:12px;display:none;}
 .step.active{display:block;}
-.step-num{font-size:11px;font-weight:700;color:var(--orange);letter-spacing:.1em;margin:0 0 6px;}
-.step-q{font-size:17px;font-weight:800;color:var(--navy);margin:0 0 6px;line-height:1.45;}
+.step-num{font-size:11px;font-weight:600;color:var(--orange);letter-spacing:.1em;margin:0 0 6px;}
+.step-q{font-size:17px;font-weight:700;color:var(--navy);margin:0 0 6px;line-height:1.45;}
 .step-hint{font-size:13px;color:var(--gray500);margin:0 0 16px;line-height:1.6;}
 .choice-btn{width:100%;padding:14px 18px;border-radius:var(--r12);border:2px solid var(--gray200);background:var(--white);color:var(--navy);font-size:15px;font-weight:600;text-align:left;margin-bottom:8px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:10px;}
 .choice-btn:hover{border-color:var(--orange);color:var(--orange);}
@@ -26,7 +26,7 @@
 .choice-btn.no{background:var(--gray50);color:var(--gray700);border-color:var(--gray200);}
 /* 金額入力 */
 .amount-input-wrap{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
-.amount-input-wrap input{flex:1;font-size:18px;font-weight:700;text-align:right;}
+.amount-input-wrap input{flex:1;font-size:18px;font-weight:600;text-align:right;}
 .amount-input-wrap span{font-size:16px;font-weight:600;color:var(--gray600);white-space:nowrap;}
 /* 結果 */
 .result-card{border-radius:var(--r16);padding:20px;margin-bottom:12px;}
@@ -34,7 +34,7 @@
 .result-card.warn{background:#FFF8E6;border:2px solid var(--yellow);}
 .result-card.ok{background:var(--green-lt);border:2px solid var(--green);}
 .result-icon{font-size:44px;margin-bottom:10px;}
-.result-title{font-size:20px;font-weight:800;margin:0 0 8px;}
+.result-title{font-size:20px;font-weight:700;margin:0 0 8px;}
 .result-card.danger .result-title{color:#C0392B;}
 .result-card.warn .result-title{color:#7A5500;}
 .result-card.ok .result-title{color:var(--green);}
@@ -42,14 +42,14 @@
 .info-box-blue{background:var(--blue-lt);border-radius:var(--r12);padding:14px 16px;font-size:14px;color:var(--blue);margin-bottom:12px;line-height:1.7;}
 .permit-types{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;}
 .permit-type{background:var(--white);border-radius:var(--r8);padding:10px 12px;border:1.5px solid var(--gray200);}
-.permit-type-title{font-size:13px;font-weight:700;color:var(--navy);margin:0 0 3px;}
+.permit-type-title{font-size:13px;font-weight:600;color:var(--navy);margin:0 0 3px;}
 .permit-type-desc{font-size:11px;color:var(--gray500);margin:0;line-height:1.5;}
 /* 更新期限 */
 .expiry-box{background:var(--white);border-radius:var(--r16);box-shadow:var(--shadow-sm);padding:18px;margin-bottom:12px;}
-.expiry-title{font-size:15px;font-weight:700;color:var(--navy);margin:0 0 12px;}
+.expiry-title{font-size:15px;font-weight:600;color:var(--navy);margin:0 0 12px;}
 .expiry-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--gray100);font-size:14px;}
 .expiry-row:last-child{border:none;}
-.expiry-days{font-size:20px;font-weight:800;}
+.expiry-days{font-size:20px;font-weight:700;}
 .expiry-days.ok{color:var(--green);}
 .expiry-days.warn{color:var(--yellow);}
 .expiry-days.danger{color:var(--red);}
@@ -136,7 +136,7 @@
     </div>
     <!-- 結果 -->
     <div class="step" id="result"></div>
-    <div style="display:flex;gap:8px;margin-top:12px;"><button class="print-btn" onclick="previewKensetsu()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;font-size:14px;font-weight:800;color:#1B2A3B;background:#fff;border:2px solid #1B2A3B;border-radius:11px;cursor:pointer;font-family:inherit;"><i class="ti ti-eye"></i>プレビュー</button><button class="print-btn" onclick="printKensetsu()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;font-size:14px;font-weight:800;color:#fff;background:#1B2A3B;border:2px solid #1B2A3B;border-radius:11px;cursor:pointer;font-family:inherit;"><i class="ti ti-printer"></i>印刷・PDF</button></div>
+    <div style="display:flex;gap:8px;margin-top:12px;"><button class="print-btn" onclick="previewKensetsu()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;font-size:14px;font-weight:700;color:#1B2A3B;background:#fff;border:2px solid #1B2A3B;border-radius:11px;cursor:pointer;font-family:inherit;"><i class="ti ti-eye"></i>プレビュー</button><button class="print-btn" onclick="printKensetsu()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;font-size:14px;font-weight:700;color:#fff;background:#1B2A3B;border:2px solid #1B2A3B;border-radius:11px;cursor:pointer;font-family:inherit;"><i class="ti ti-printer"></i>印刷・PDF</button></div>
   </div>
 
   <!-- 更新期限管理 -->
@@ -242,7 +242,7 @@ function showResult(type, amt, sub){
     case 'shita_need':
       html = `<div class="result-card danger"><div class="result-icon">⚠️</div><p class="result-title">建設業許可が必要です</p><p class="result-body">1件の請負金額が<strong>500万円以上（税込）</strong>の場合、建設業の許可が必要です。<br>無許可で工事を請け負うと、<strong>3年以下の懲役または300万円以下の罰金</strong>の対象になります。</p></div>
       <div class="info-box-blue">
-        <p style="font-weight:700;margin:0 0 8px;">必要な許可の種類</p>
+        <p style="font-weight:600;margin:0 0 8px;">必要な許可の種類</p>
         <div class="permit-types">
           <div class="permit-type"><p class="permit-type-title">知事許可</p><p class="permit-type-desc">1つの都道府県のみに営業所がある場合</p></div>
           <div class="permit-type"><p class="permit-type-title">大臣許可</p><p class="permit-type-desc">2つ以上の都道府県に営業所がある場合</p></div>

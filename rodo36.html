@@ -9,38 +9,38 @@
 <style>
 .r-hero{background:linear-gradient(135deg,#1A3A6B,#1A5FA8);border-radius:var(--r16);padding:20px;margin-bottom:16px;display:flex;align-items:center;gap:14px;}
 .r-hero i{font-size:44px;color:#B5D4F4;flex-shrink:0;}
-.r-hero h2{font-size:18px;font-weight:800;color:#fff;margin:0 0 4px;}
-.r-hero p{font-size:13px;color:rgba(255,255,255,.94);margin:0;font-weight:700;}
+.r-hero h2{font-size:18px;font-weight:700;color:#fff;margin:0 0 4px;}
+.r-hero p{font-size:13px;color:rgba(255,255,255,.94);margin:0;font-weight:600;}
 /* 月入力グリッド */
 .month-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
 .month-cell{background:var(--white);border-radius:var(--r12);padding:10px 8px;border:1.5px solid var(--gray100);box-shadow:var(--shadow-sm);}
-.month-cell label{font-size:11px;font-weight:900;color:var(--navy);display:block;margin-bottom:4px;text-align:center;}
-.month-cell input{width:100%;padding:8px 6px;border-radius:8px;border:1.5px solid var(--gray200);font-size:16px;font-weight:900;text-align:center;outline:none;font-family:inherit;color:var(--navy);background:#F8FAFC;}
+.month-cell label{font-size:11px;font-weight:800;color:var(--navy);display:block;margin-bottom:4px;text-align:center;}
+.month-cell input{width:100%;padding:8px 6px;border-radius:8px;border:1.5px solid var(--gray200);font-size:16px;font-weight:800;text-align:center;outline:none;font-family:inherit;color:var(--navy);background:#F8FAFC;}
 .month-cell input:focus{border-color:var(--orange);}
 .month-cell.over input{background:#FEF0ED;border-color:var(--red);color:var(--red);}
 .month-cell.warn input{background:#FFF8E6;border-color:var(--yellow);}
 /* ゲージ */
 .gauge-card{background:var(--white);border-radius:var(--r16);box-shadow:var(--shadow-sm);padding:18px;margin-bottom:10px;}
-.gauge-title{font-size:14px;font-weight:700;color:var(--navy);margin:0 0 12px;display:flex;align-items:center;justify-content:space-between;}
+.gauge-title{font-size:14px;font-weight:600;color:var(--navy);margin:0 0 12px;display:flex;align-items:center;justify-content:space-between;}
 .gauge-label-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;}
-.gauge-current{font-size:28px;font-weight:800;}
-.gauge-limit{font-size:14px;color:var(--gray600);font-weight:700;}
+.gauge-current{font-size:28px;font-weight:700;}
+.gauge-limit{font-size:14px;color:var(--gray600);font-weight:600;}
 .gauge-bar{height:18px;background:var(--gray100);border-radius:99px;overflow:hidden;margin-bottom:6px;}
 .gauge-fill{height:100%;border-radius:99px;transition:width .5s cubic-bezier(.4,0,.2,1);}
-.gauge-desc{font-size:12px;color:var(--gray600);font-weight:700;}
+.gauge-desc{font-size:12px;color:var(--gray600);font-weight:600;}
 /* 月別バーグラフ */
 .bar-chart{display:flex;align-items:flex-end;gap:4px;height:80px;margin-top:8px;}
 .bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;}
 .bar-item{width:100%;border-radius:4px 4px 0 0;transition:height .4s;}
-.bar-lbl{font-size:9px;color:var(--gray600);font-weight:800;}
-.bar-val{font-size:10px;font-weight:700;color:var(--gray600);}
+.bar-lbl{font-size:9px;color:var(--gray600);font-weight:700;}
+.bar-val{font-size:10px;font-weight:600;color:var(--gray600);}
 /* 法的情報 */
 .law-table{width:100%;border-collapse:collapse;font-size:13px;}
-.law-table th{background:#1B2A3B;color:#fff;padding:8px 10px;font-weight:700;text-align:left;}
+.law-table th{background:#1B2A3B;color:#fff;padding:8px 10px;font-weight:600;text-align:left;}
 .law-table td{padding:8px 10px;border-bottom:1px solid var(--gray100);}
 .law-table tr:last-child td{border:none;}
-.law-table .limit{font-weight:700;color:var(--orange);}
-.status-badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;}
+.law-table .limit{font-weight:600;color:var(--orange);}
+.status-badge{display:inline-block;font-size:11px;font-weight:600;padding:3px 10px;border-radius:99px;}
 .sb-ok{background:var(--green-lt);color:var(--green);}
 .sb-warn{background:#FFF8E6;color:#7A5500;}
 .sb-over{background:var(--red-lt);color:var(--red);}
@@ -48,16 +48,16 @@
 .print-panel .print-preview,.print-panel .print-submit{
   width:100%;border:none;border-radius:8px;padding:17px 16px;color:#fff;
   display:flex;align-items:center;justify-content:center;gap:10px;
-  font-size:16px;font-weight:800;box-shadow:0 4px 12px rgba(0,0,0,.16);
+  font-size:16px;font-weight:700;box-shadow:0 4px 12px rgba(0,0,0,.16);
 }
 .print-panel .print-preview{background:#147c62;}
 .print-panel .print-submit{background:#1d5b7d;}
 .print-panel .print-note{text-align:center;font-size:12px;color:var(--gray600);margin:0;}
-.rodo-note{font-size:13px;color:var(--gray600);margin:0 0 10px;font-weight:700;line-height:1.65;}
-.rodo-warning{font-size:12px;color:var(--gray600);margin:10px 0 0;font-weight:700;}
-.form-sec-title{font-size:11px;font-weight:900;color:var(--navy);margin:10px 0 8px;letter-spacing:.06em;}
+.rodo-note{font-size:13px;color:var(--gray600);margin:0 0 10px;font-weight:600;line-height:1.65;}
+.rodo-warning{font-size:12px;color:var(--gray600);margin:10px 0 0;font-weight:600;}
+.form-sec-title{font-size:11px;font-weight:800;color:var(--navy);margin:10px 0 8px;letter-spacing:.06em;}
 .holiday-box{background:var(--gray50);border-radius:var(--r8);padding:10px 12px;margin:8px 0;}
-.holiday-box label{display:flex;align-items:center;gap:8px;cursor:pointer;font-size:14px;font-weight:800;color:var(--navy);}
+.holiday-box label{display:flex;align-items:center;gap:8px;cursor:pointer;font-size:14px;font-weight:700;color:var(--navy);}
 html[data-theme="dark"] .r-hero p{color:#F8FAFC;}
 html[data-theme="dark"] .month-cell{
   background:#10213A!important;
@@ -277,7 +277,7 @@ html[data-theme="dark"] .status-badge.sb-over{background:#3B1515;color:#FFC3C3;}
 
     <!-- 特別条項 -->
     <div id="tokubetsu-section" style="display:none;margin-top:8px;background:#FFF8E6;border-radius:var(--r12);padding:14px;border-left:4px solid var(--orange);">
-      <p style="font-size:12px;font-weight:700;color:var(--orange);margin:0 0 10px;">⚠️ 特別条項（臨時的に限度時間を超えて労働させる場合のみ）</p>
+      <p style="font-size:12px;font-weight:600;color:var(--orange);margin:0 0 10px;">⚠️ 特別条項（臨時的に限度時間を超えて労働させる場合のみ）</p>
       <div class="input-group">
         <label>臨時的に限度時間を超えて労働させる必要のある具体的事由</label>
         <textarea id="f-toku-jiyu" rows="2" placeholder="例：大規模な設計変更・工法変更に伴う追加工事、自然災害による緊急補修工事、官公庁の検査・引渡し対応&#10;※恒常的な長時間労働を招く事由は不可"></textarea>
@@ -450,13 +450,13 @@ function update(){
       const ac = avg > 80 ? '#C0392B' : avg > 60 ? '#F0B429' : '#1A7A4A';
       avgHtml += `<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--gray100);font-size:13px;">
         <span>直近${last.length}ヶ月平均</span>
-        <span style="font-weight:700;color:${ac};">${avg.toFixed(1)}h ${avg>80?'⚠️超過':avg>60?'⚠️注意':'✅'}</span>
+        <span style="font-weight:600;color:${ac};">${avg.toFixed(1)}h ${avg>80?'⚠️超過':avg>60?'⚠️注意':'✅'}</span>
       </div>`;
     }
     const overCount = overMonths.length;
     avgHtml += `<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-size:13px;">
       <span>45h超え月数</span>
-      <span style="font-weight:700;color:${overCount>6?'#C0392B':overCount>4?'#F0B429':'#1A7A4A'};">${overCount}回 ${overCount>6?'⚠️年6回超':'（上限6回）'}</span>
+      <span style="font-weight:600;color:${overCount>6?'#C0392B':overCount>4?'#F0B429':'#1A7A4A'};">${overCount}回 ${overCount>6?'⚠️年6回超':'（上限6回）'}</span>
     </div>`;
     document.getElementById('avg-result').innerHTML = avgHtml;
   } else {
@@ -609,14 +609,14 @@ function previewKyotei(autoPrint=false) {
   * { box-sizing:border-box; }
   body { font-family:'Hiragino Sans','Meiryo',sans-serif; font-size:10px; color:#111; margin:0; background:#eef1f5; }
   .sheet { width:210mm; min-height:297mm; margin:0 auto; padding:10mm; background:#fff; box-shadow:0 8px 28px rgba(0,0,0,.12); }
-  h1 { font-size:14px; font-weight:800; text-align:center; margin:0 0 3px; line-height:1.25; }
+  h1 { font-size:14px; font-weight:700; text-align:center; margin:0 0 3px; line-height:1.25; }
   h1 small { font-size:10px; }
   .subtitle { text-align:center; font-size:9px; color:#555; margin:0 0 7px; }
   .meta { display:grid; grid-template-columns:1fr 1fr; gap:3px 6px; margin-bottom:7px; border:1px solid #bbb; padding:5px 7px; }
   .meta-item { font-size:9.5px; }
-  .meta-item span { font-weight:700; }
+  .meta-item span { font-weight:600; }
   table { width:100%; border-collapse:collapse; margin-bottom:7px; font-size:9.5px; line-height:1.35; page-break-inside:avoid; }
-  th { background:#1B2A3B; color:white; padding:4px 5px; font-weight:700; text-align:left; }
+  th { background:#1B2A3B; color:white; padding:4px 5px; font-weight:600; text-align:left; }
   td { border:1px solid #aaa; padding:4px 5px; vertical-align:top; }
   tr td:first-child { background:#f5f5f5; font-weight:600; width:20%; }
   .sign-table td { border:1px solid #aaa; padding:6px 7px; vertical-align:middle; }
@@ -628,7 +628,7 @@ function previewKyotei(autoPrint=false) {
   .law-note { background:#f9f9f9; border:1px solid #ddd; padding:5px 7px; font-size:8.5px; color:#555; line-height:1.45; margin-bottom:6px; }
   .printbar { background:#1B2A3B;color:#fff;padding:10px 14px;margin:0 auto 12px;display:flex;align-items:center;justify-content:space-between;gap:10px;max-width:210mm;border-radius:8px; }
   .print-actions { display:flex;align-items:center;gap:8px; }
-  .printbar button { background:#E8612A;color:#fff;border:none;border-radius:6px;padding:8px 16px;font-size:14px;font-weight:700;cursor:pointer; }
+  .printbar button { background:#E8612A;color:#fff;border:none;border-radius:6px;padding:8px 16px;font-size:14px;font-weight:600;cursor:pointer; }
   .printbar .back-print { background:rgba(255,255,255,.12); }
   @media print {
     body { background:#fff; }
@@ -639,7 +639,7 @@ function previewKyotei(autoPrint=false) {
 </head>
 <body>
 <div class="no-print printbar">
-  <span style="font-weight:700;">36協定届 A4プレビュー</span>
+  <span style="font-weight:600;">36協定届 A4プレビュー</span>
   <div class="print-actions">
     <button class="back-print" onclick="if(window.opener){window.opener.focus();} window.close();">戻る</button>
     <button onclick="window.print()">印刷・PDF保存</button>
@@ -666,7 +666,7 @@ function previewKyotei(autoPrint=false) {
   <tr>
     <th colspan="6">◆ 時間外労働（一般条項　限度時間：月45時間・年360時間）</th>
   </tr>
-  <tr style="background:#f0f0f0;font-weight:700;text-align:center;">
+  <tr style="background:#f0f0f0;font-weight:600;text-align:center;">
     <td colspan="3">時間外労働をさせる必要のある具体的事由</td>
     <td>業務の種類</td>
     <td>1ヶ月<br>（上限）</td>

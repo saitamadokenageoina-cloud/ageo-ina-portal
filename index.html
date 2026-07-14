@@ -50,7 +50,7 @@
   border: 1px solid rgba(0,180,255,.25);
   border-radius: 99px;
   padding: 4px 12px;
-  font-size: 11px; font-weight: 700; color: #00C8FF;
+  font-size: 11px; font-weight: 600; color: #00C8FF;
   letter-spacing: .1em; text-transform: uppercase;
   margin-bottom: 12px; position: relative; z-index: 1;
 }
@@ -61,7 +61,7 @@
 }
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
 .hero-title {
-  font-size: 27px; font-weight: 800; color: #fff;
+  font-size: 27px; font-weight: 700; color: #fff;
   margin: 0 0 6px; line-height: 1.2; position: relative; z-index: 1;
   letter-spacing: -.02em;
 }
@@ -72,15 +72,15 @@
 .hero-sub {
   font-size: 18px; color: rgba(255,255,255,.9);
   margin: 12px 0 20px; position: relative; z-index: 1;
-  line-height: 1.45; font-weight: 800; letter-spacing: 0;
+  line-height: 1.45; font-weight: 700; letter-spacing: 0;
   text-shadow: 0 2px 14px rgba(0,200,255,.16);
 }
-.hero-sub span{display:block;color:rgba(255,255,255,.72);font-size:15px;font-weight:700;}
+.hero-sub span{display:block;color:rgba(255,255,255,.72);font-size:15px;font-weight:600;}
 .hero-tel {
   display: inline-flex; align-items: center; gap: 8px;
   background: linear-gradient(135deg, #E8612A, #C04E1E);
   color: #fff; padding: 11px 20px;
-  border-radius: var(--r12); font-size: 16px; font-weight: 700;
+  border-radius: var(--r12); font-size: 16px; font-weight: 600;
   box-shadow: 0 0 20px rgba(232,97,42,.35), 0 4px 12px rgba(0,0,0,.3);
   position: relative; z-index: 1;
 }
@@ -102,7 +102,7 @@
   background: linear-gradient(90deg, var(--gray200), transparent);
 }
 .sec-head-label {
-  font-size: 11px; font-weight: 700;
+  font-size: 11px; font-weight: 600;
   color: var(--gray600); letter-spacing: .12em; text-transform: uppercase;
   white-space: nowrap;
 }
@@ -141,7 +141,7 @@
 .mc-emoji { font-size: 32px; position: relative; z-index: 1; }
 .mc-body { padding: 11px 12px 13px; }
 .mc-badge {
-  font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 99px;
+  font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 99px;
   display: inline-block; margin-bottom: 5px;
 }
 .mc-badge.new { background: #E8F5EE; color: #1A7A4A; }
@@ -150,7 +150,7 @@
 .mc-badge.health{ background: #E3F3F0; color: #0F766E; }
 .mc-badge.biz  { background: #FBEEDD; color: #B45309; }
 .mc-badge.money{ background: #FCE9EE; color: #BE123C; }
-.mc-title { font-size: 13px; font-weight: 700; color: var(--navy); margin: 0 0 3px; line-height: 1.35; }
+.mc-title { font-size: 13px; font-weight: 600; color: var(--navy); margin: 0 0 3px; line-height: 1.35; }
 .mc-desc  { font-size: 11px; color: var(--gray600); margin: 0; line-height: 1.5; font-weight: 600; }
 
 /* ===== リストカード（1列） ===== */
@@ -171,7 +171,7 @@
 .lc-thumb svg { position: absolute; inset: 0; width: 100%; height: 100%; }
 .lc-thumb-icon { font-size: 26px; position: relative; z-index: 1; }
 .lc-body { flex: 1; padding: 12px 12px 12px 4px; }
-.lc-title { font-size: 15px; font-weight: 700; color: var(--navy); margin: 0 0 2px; }
+.lc-title { font-size: 15px; font-weight: 600; color: var(--navy); margin: 0 0 2px; }
 .lc-desc  { font-size: 12px; color: var(--gray600); margin: 0; font-weight: 600; }
 .lc-arrow { font-size: 18px; color: var(--gray200); padding-right: 12px; flex-shrink: 0; }
 
@@ -203,7 +203,7 @@
 .manual-label{
   display:flex;align-items:center;justify-content:center;gap:8px;
   background:linear-gradient(90deg,#16651F,#1F8429);border-radius:7px;padding:8px 10px;
-  color:#fff;font-size:11px;font-weight:900;letter-spacing:.08em;margin:12px 0;
+  color:#fff;font-size:11px;font-weight:800;letter-spacing:.08em;margin:12px 0;
   box-shadow: inset 0 1px 0 rgba(255,255,255,.16);
 }
 .manual-label-button{width:100%;border:none;cursor:pointer;font-family:inherit;}
@@ -213,25 +213,25 @@
 .manual-tab{
   border:1px solid rgba(255,255,255,.14);background:rgba(12,30,64,.82);border-radius:var(--r12);
   padding:10px 8px;text-align:left;display:flex;align-items:center;gap:8px;
-  color:rgba(255,255,255,.8);font-size:12px;font-weight:900;
+  color:rgba(255,255,255,.8);font-size:12px;font-weight:800;
   box-shadow:0 10px 22px rgba(0,0,0,.22), inset 0 2px 0 rgba(232,97,42,.7);
 }
 .manual-glyph{font-size:18px;color:var(--orange);line-height:1;}
 .manual-tab.active{background:linear-gradient(145deg,#143267,#102454);color:#fff;border-color:rgba(99,176,255,.34);box-shadow:0 12px 26px rgba(0,0,0,.3), inset 0 2px 0 #E8612A;}
 .manual-tab.active .manual-glyph{color:#48C8FF;}
 .manual-panel{background:rgba(8,22,49,.68);border:1px solid rgba(255,255,255,.13);border-radius:var(--r12);padding:14px;}
-.manual-panel-title{font-size:15px;font-weight:900;color:#fff;margin:0 0 4px;}
+.manual-panel-title{font-size:15px;font-weight:800;color:#fff;margin:0 0 4px;}
 .manual-panel-lead{font-size:12px;color:rgba(255,255,255,.7);margin:0 0 10px;line-height:1.55;}
 .manual-steps{display:grid;gap:7px;margin-bottom:12px;}
 .manual-step{display:grid;grid-template-columns:24px 1fr;gap:8px;align-items:start;font-size:12px;color:rgba(255,255,255,.82);line-height:1.5;}
 .manual-step b{width:24px;height:24px;border-radius:8px;background:#F79B2E;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;}
 .manual-open{
   display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:11px;
-  border-radius:var(--r12);background:var(--orange);color:#fff;font-size:14px;font-weight:800;
+  border-radius:var(--r12);background:var(--orange);color:#fff;font-size:14px;font-weight:700;
 }
 .manual-faq{display:grid;gap:8px;margin-top:12px;}
 .manual-faq details{border:1px solid rgba(232,97,42,.45);border-radius:10px;background:rgba(13,38,83,.76);overflow:hidden;}
-.manual-faq summary{list-style:none;padding:11px 12px;font-size:12px;font-weight:900;color:#fff;display:flex;justify-content:space-between;align-items:center;gap:8px;}
+.manual-faq summary{list-style:none;padding:11px 12px;font-size:12px;font-weight:800;color:#fff;display:flex;justify-content:space-between;align-items:center;gap:8px;}
 .manual-faq summary::-webkit-details-marker{display:none;}
 .manual-faq summary::after{content:'▼';color:#48C8FF;font-size:12px;}
 .manual-faq details[open] summary::after{content:'▲';}

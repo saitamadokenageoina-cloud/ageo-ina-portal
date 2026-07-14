@@ -65,12 +65,12 @@
   border-radius:6px !important; padding:8px 10px !important; margin:4px 0 !important;
 }
 #print-area{ font-family:'Hiragino Kaku Gothic ProN','Yu Gothic','Noto Sans JP',sans-serif; }
-#print-area .pr-h1{ font-size:15pt; font-weight:800; margin:0 0 2px; }
+#print-area .pr-h1{ font-size:15pt; font-weight:700; margin:0 0 2px; }
 #print-area .pr-sub{ font-size:8.5pt; color:#333 !important; -webkit-text-fill-color:#333 !important; margin:0 0 8px; border-bottom:1.5px solid #333; padding-bottom:6px; }
-#print-area .pr-sec{ font-size:11pt; font-weight:800; margin:11px 0 4px; padding-left:8px; border-left:4px solid #E8612A !important; }
+#print-area .pr-sec{ font-size:11pt; font-weight:700; margin:11px 0 4px; padding-left:8px; border-left:4px solid #E8612A !important; }
 #print-area .pr-body{ font-size:9.5pt; line-height:1.55; }
 #print-area .pr-body .result-row{ display:flex; justify-content:space-between; gap:10px; padding:3px 0; border-bottom:1px dotted #bbb !important; }
-#print-area .pr-body .result-row.total{ border-top:2px solid #333 !important; border-bottom:none !important; font-weight:800; margin-top:2px; padding-top:5px; }
+#print-area .pr-body .result-row.total{ border-top:2px solid #333 !important; border-bottom:none !important; font-weight:700; margin-top:2px; padding-top:5px; }
 #print-area .pr-body table{ width:100%; border-collapse:collapse; font-size:8.5pt; table-layout:fixed; margin:4px 0; }
 #print-area .pr-body th, #print-area .pr-body td{ border:1px solid #999 !important; padding:3px 5px; text-align:left; word-break:break-word; overflow-wrap:anywhere; vertical-align:top; }
 #print-area .pr-body th{ background:#f0f0f0 !important; }
@@ -87,10 +87,10 @@ body.preview-lock{ overflow:hidden !important; }
   position:sticky; top:0; display:flex; gap:8px; align-items:center;
   padding:10px 12px; background:#0D1B2E;
 }
-#preview-overlay .pv-ttl{ color:#fff; font-size:13px; font-weight:800; margin-right:auto; }
+#preview-overlay .pv-ttl{ color:#fff; font-size:13px; font-weight:700; margin-right:auto; }
 #preview-overlay .pv-bar button{
   display:flex; align-items:center; justify-content:center; gap:6px;
-  min-height:44px; padding:0 16px; font-size:14px; font-weight:800;
+  min-height:44px; padding:0 16px; font-size:14px; font-weight:700;
   border:none; border-radius:10px; cursor:pointer; font-family:inherit;
 }
 #preview-overlay .pv-print{ background:#E8612A; color:#fff; }
@@ -121,12 +121,12 @@ body.preview-lock{ overflow:hidden !important; }
   background-color:#fff !important; border:1px solid #ccc !important;
   border-radius:6px !important; padding:8px 10px !important; margin:4px 0 !important;
 }
-#preview-overlay .pv-sheet .pr-h1{ font-size:15pt; font-weight:800; margin:0 0 2px; }
+#preview-overlay .pv-sheet .pr-h1{ font-size:15pt; font-weight:700; margin:0 0 2px; }
 #preview-overlay .pv-sheet .pr-sub{ font-size:8.5pt; color:#333 !important; -webkit-text-fill-color:#333 !important; margin:0 0 8px; border-bottom:1.5px solid #333; padding-bottom:6px; }
-#preview-overlay .pv-sheet .pr-sec{ font-size:11pt; font-weight:800; margin:11px 0 4px; padding-left:8px; border-left:4px solid #E8612A; }
+#preview-overlay .pv-sheet .pr-sec{ font-size:11pt; font-weight:700; margin:11px 0 4px; padding-left:8px; border-left:4px solid #E8612A; }
 #preview-overlay .pv-sheet .pr-body{ font-size:9.5pt; line-height:1.55; }
 #preview-overlay .pv-sheet .pr-body .result-row{ display:flex; justify-content:space-between; gap:10px; padding:3px 0; border-bottom:1px dotted #bbb; }
-#preview-overlay .pv-sheet .pr-body .result-row.total{ border-top:2px solid #333; border-bottom:none; font-weight:800; margin-top:2px; padding-top:5px; }
+#preview-overlay .pv-sheet .pr-body .result-row.total{ border-top:2px solid #333; border-bottom:none; font-weight:700; margin-top:2px; padding-top:5px; }
 #preview-overlay .pv-sheet .pr-body table{ width:100%; border-collapse:collapse; font-size:8.5pt; table-layout:fixed; margin:4px 0; }
 #preview-overlay .pv-sheet .pr-body th, #preview-overlay .pv-sheet .pr-body td{ border:1px solid #999; padding:3px 5px; text-align:left; word-break:break-word; overflow-wrap:anywhere; vertical-align:top; }
 #preview-overlay .pv-sheet .pr-body th{ background:#f0f0f0; }

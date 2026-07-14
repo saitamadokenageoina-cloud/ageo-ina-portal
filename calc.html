@@ -12,8 +12,8 @@
 .tool-card{background:var(--white);border-radius:var(--r16);box-shadow:var(--shadow-sm);padding:18px 14px;cursor:pointer;transition:box-shadow .2s,transform .15s;border:2px solid transparent;}
 .tool-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px);border-color:var(--orange);}
 .tool-card-icon{font-size:28px;margin-bottom:8px;}
-.tool-card-title{font-size:14px;font-weight:700;margin:0 0 3px;color:var(--navy);}
-.tool-card-desc{font-size:12px;color:var(--gray600);margin:0;font-weight:700;}
+.tool-card-title{font-size:14px;font-weight:600;margin:0 0 3px;color:var(--navy);}
+.tool-card-desc{font-size:12px;color:var(--gray600);margin:0;font-weight:600;}
 .tool-detail{display:none;}
 .tool-detail.active{display:block;}
 .tool-back{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:600;color:var(--orange);background:none;border:none;padding:0;margin-bottom:16px;cursor:pointer;}
@@ -24,48 +24,48 @@
 .compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
 .compare-box{background:var(--gray50);border-radius:var(--r12);padding:14px;border:2px solid var(--gray100);}
 .compare-box.winner{border-color:var(--orange);background:var(--orange-lt);}
-.compare-box-label{font-size:12px;font-weight:900;color:var(--gray600);margin:0 0 4px;}
-.compare-box-amount{font-size:26px;font-weight:800;color:var(--navy);margin:0;line-height:1.1;}
+.compare-box-label{font-size:12px;font-weight:800;color:var(--gray600);margin:0 0 4px;}
+.compare-box-amount{font-size:26px;font-weight:700;color:var(--navy);margin:0;line-height:1.1;}
 .compare-box-unit{font-size:13px;font-weight:600;}
-.compare-box-year{font-size:12px;color:var(--gray600);margin:3px 0 0;font-weight:700;}
+.compare-box-year{font-size:12px;color:var(--gray600);margin:3px 0 0;font-weight:600;}
 .winner-banner{border-radius:var(--r12);padding:12px 16px;font-size:14px;font-weight:600;margin-top:4px;}
 .winner-banner.doken{background:var(--green-lt);color:var(--green);}
 .winner-banner.city{background:var(--blue-lt);color:var(--blue);}
 .result-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--gray100);font-size:15px;}
 .result-row:last-child{border:none;}
-.result-row.total{font-weight:700;font-size:16px;}
-.result-label{flex:1;color:var(--gray600);font-weight:700;}
-.result-val{text-align:right;font-weight:800;color:var(--navy);}
-.result-sub{font-size:12px;color:var(--gray600);font-weight:700;}
+.result-row.total{font-weight:600;font-size:16px;}
+.result-label{flex:1;color:var(--gray600);font-weight:600;}
+.result-val{text-align:right;font-weight:700;color:var(--navy);}
+.result-sub{font-size:12px;color:var(--gray600);font-weight:600;}
 .member-row{display:flex;align-items:center;gap:10px;background:var(--gray50);border-radius:var(--r12);padding:12px 14px;margin-bottom:8px;border:1.5px solid var(--gray100);}
 .add-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--r12);border:2px dashed var(--gray200);background:none;color:var(--gray600);font-size:14px;font-weight:600;margin-bottom:12px;cursor:pointer;transition:all .15s;}
 .add-btn:hover{border-color:var(--orange);color:var(--orange);}
 .rm-btn{background:var(--red-lt);border:none;border-radius:var(--r8);color:var(--red);width:32px;height:32px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px;cursor:pointer;}
 .lv-badge{display:flex;align-items:center;gap:16px;background:#1B2A3B;border-radius:var(--r16);padding:16px 20px;margin-bottom:14px;}
-.ccus-card-icon{width:52px;height:68px;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:10px;font-weight:700;gap:4px;flex-shrink:0;border:3px solid rgba(255,255,255,.3);}
+.ccus-card-icon{width:52px;height:68px;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:10px;font-weight:600;gap:4px;flex-shrink:0;border:3px solid rgba(255,255,255,.3);}
 .ccus-card-icon i{font-size:22px;}
-.lv-info h3{font-size:18px;font-weight:800;color:#fff;margin:0 0 3px;}
-.lv-info p{font-size:13px;color:rgba(255,255,255,.94);margin:0;font-weight:700;}
+.lv-info h3{font-size:18px;font-weight:700;color:#fff;margin:0 0 3px;}
+.lv-info p{font-size:13px;color:rgba(255,255,255,.94);margin:0;font-weight:600;}
 .prog-wrap{margin-bottom:10px;}
-.prog-label{display:flex;justify-content:space-between;font-size:13px;color:var(--gray600);margin-bottom:5px;font-weight:800;}
+.prog-label{display:flex;justify-content:space-between;font-size:13px;color:var(--gray600);margin-bottom:5px;font-weight:700;}
 .prog-bar{height:10px;background:var(--gray100);border-radius:99px;overflow:hidden;}
 .prog-fill{height:100%;border-radius:99px;transition:width .6s;}
 .req{display:flex;align-items:flex-start;gap:8px;font-size:14px;margin-bottom:8px;}
 .req i{font-size:18px;flex-shrink:0;margin-top:1px;}
 .req.ok i{color:var(--green);}
 .req.ng i{color:var(--red);}
-.cur-tag{display:inline-block;font-size:11px;font-weight:700;background:var(--orange);color:#fff;padding:2px 8px;border-radius:99px;margin-left:6px;}
+.cur-tag{display:inline-block;font-size:11px;font-weight:600;background:var(--orange);color:#fff;padding:2px 8px;border-radius:99px;margin-left:6px;}
 .table-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--gray100);}
-.mini-card{width:34px;height:44px;border-radius:5px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:9px;font-weight:700;border:2px solid rgba(0,0,0,.12);flex-shrink:0;gap:2px;}
+.mini-card{width:34px;height:44px;border-radius:5px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:9px;font-weight:600;border:2px solid rgba(0,0,0,.12);flex-shrink:0;gap:2px;}
 .mini-card i{font-size:14px;}
 .comp-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--gray100);font-size:14px;}
 .comp-row:last-child{border:none;}
-.comp-row-total{font-weight:700;font-size:15px;}
+.comp-row-total{font-weight:600;font-size:15px;}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 .hidden{display:none!important;}
-.calc-note{font-size:12px;color:var(--gray600);margin:10px 0 0;font-weight:700;line-height:1.65;}
-.calc-small{font-size:11px;color:var(--gray600);display:block;font-weight:700;}
-.calc-muted{color:var(--gray600)!important;font-weight:700!important;}
+.calc-note{font-size:12px;color:var(--gray600);margin:10px 0 0;font-weight:600;line-height:1.65;}
+.calc-small{font-size:11px;color:var(--gray600);display:block;font-weight:600;}
+.calc-muted{color:var(--gray600)!important;font-weight:600!important;}
 html[data-theme="dark"] .tool-card,
 html[data-theme="dark"] .compare-box,
 html[data-theme="dark"] .member-row,
@@ -150,7 +150,7 @@ html[data-theme="dark"] .table-row{border-color:rgba(255,255,255,.12)!important;
       <text x="52" y="14" font-size="14" fill="rgba(255,255,255,.35)">¥</text>
     </svg>
     <div>
-      <p style="font-size:18px;font-weight:800;color:#fff;margin:0 0 3px;">計算ツール</p>
+      <p style="font-size:18px;font-weight:700;color:#fff;margin:0 0 3px;">計算ツール</p>
       <p style="font-size:13px;color:rgba(255,255,255,.92);margin:0;">労務費・国保料・CCUSレベルをかんたん計算</p>
     </div>
   </div>
@@ -187,7 +187,7 @@ html[data-theme="dark"] .table-row{border-color:rgba(255,255,255,.12)!important;
 
   <!-- 労務費シミュ -->
   <div id="tool-romu" class="tool-detail">
-    <p style="font-size:17px;font-weight:800;color:var(--navy);margin:0 0 14px;">労務費シミュレーター（令和8年度）</p>
+    <p style="font-size:17px;font-weight:700;color:var(--navy);margin:0 0 14px;">労務費シミュレーター（令和8年度）</p>
     <div class="card">
       <p class="sec-label">基本情報を入力</p>
       <div class="grid2">
@@ -227,7 +227,7 @@ html[data-theme="dark"] .table-row{border-color:rgba(255,255,255,.12)!important;
       <div class="card">
         <p class="sec-label">計算結果</p>
         <div id="romu-result-inner"></div>
-        <div style="display:flex;gap:8px;margin-top:12px;"><button class="print-btn" onclick="previewRomu()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;font-size:14px;font-weight:800;color:#1B2A3B;background:#fff;border:2px solid #1B2A3B;border-radius:11px;cursor:pointer;font-family:inherit;"><i class="ti ti-eye"></i>プレビュー</button><button class="print-btn" onclick="printRomu()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;font-size:14px;font-weight:800;color:#fff;background:#1B2A3B;border:2px solid #1B2A3B;border-radius:11px;cursor:pointer;font-family:inherit;"><i class="ti ti-printer"></i>印刷・PDF</button></div>
+        <div style="display:flex;gap:8px;margin-top:12px;"><button class="print-btn" onclick="previewRomu()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;font-size:14px;font-weight:700;color:#1B2A3B;background:#fff;border:2px solid #1B2A3B;border-radius:11px;cursor:pointer;font-family:inherit;"><i class="ti ti-eye"></i>プレビュー</button><button class="print-btn" onclick="printRomu()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;font-size:14px;font-weight:700;color:#fff;background:#1B2A3B;border:2px solid #1B2A3B;border-radius:11px;cursor:pointer;font-family:inherit;"><i class="ti ti-printer"></i>印刷・PDF</button></div>
       </div>
       <div style="background:var(--blue-lt);border-radius:var(--r12);padding:12px 16px;font-size:13px;color:var(--blue);margin-top:4px;">
         <i class="ti ti-info-circle" style="font-size:14px;vertical-align:-2px;margin-right:4px;"></i>
@@ -238,7 +238,7 @@ html[data-theme="dark"] .table-row{border-color:rgba(255,255,255,.12)!important;
 
   <!-- 国保シミュ -->
   <div id="tool-kokuho" class="tool-detail">
-    <p style="font-size:17px;font-weight:800;color:var(--navy);margin:0 0 14px;">国保料シミュレーター（令和8年度）</p>
+    <p style="font-size:17px;font-weight:700;color:var(--navy);margin:0 0 14px;">国保料シミュレーター（令和8年度）</p>
     <div class="card">
       <div class="grid2">
         <div class="input-group"><label>市町村</label><select id="kk-city"><option value="ageo">上尾市</option><option value="ina">伊奈町</option></select></div>
@@ -259,34 +259,34 @@ html[data-theme="dark"] .table-row{border-color:rgba(255,255,255,.12)!important;
 <!-- 区分ガイド -->
 <div id="kubun-guide" style="display:none;grid-column:1/-1;">
   <div style="background:#1B2A3B;border-radius:12px;padding:14px 16px;font-size:13px;color:rgba(255,255,255,.85);">
-    <p style="font-weight:700;color:var(--orange);margin:0 0 10px;font-size:12px;letter-spacing:.06em;">📋 土建国保 区分の目安</p>
+    <p style="font-weight:600;color:var(--orange);margin:0 0 10px;font-size:12px;letter-spacing:.06em;">📋 土建国保 区分の目安</p>
     <div style="display:flex;flex-direction:column;gap:6px;">
       <div style="background:rgba(255,255,255,.07);border-radius:8px;padding:8px 12px;border-left:3px solid #FAC775;">
-        <p style="font-weight:700;color:#FAC775;margin:0 0 2px;">特2種（月43,200円）・特1種（月41,300円）</p>
+        <p style="font-weight:600;color:#FAC775;margin:0 0 2px;">特2種（月43,200円）・特1種（月41,300円）</p>
         <p style="margin:0;font-size:12px;color:rgba(255,255,255,.92);">50歳以上の法人代表者。特2種は株式と妻以外にも従業員を使う法人代表、特1種は妻以外には従業員を使わない株式以外の法人代表。</p>
       </div>
       <div style="background:rgba(255,255,255,.07);border-radius:8px;padding:8px 12px;border-left:3px solid #B5D4F4;">
-        <p style="font-weight:700;color:#B5D4F4;margin:0 0 2px;">第1種（月38,700円）</p>
+        <p style="font-weight:600;color:#B5D4F4;margin:0 0 2px;">第1種（月38,700円）</p>
         <p style="margin:0;font-size:12px;color:rgba(255,255,255,.92);">法人事業所の役員・個人事業所の事業主、40歳〜49歳の法人代表者など。</p>
       </div>
       <div style="background:rgba(255,255,255,.07);border-radius:8px;padding:8px 12px;border-left:3px solid #B5D4F4;">
-        <p style="font-weight:700;color:#B5D4F4;margin:0 0 2px;">第2種（月31,400円）</p>
+        <p style="font-weight:600;color:#B5D4F4;margin:0 0 2px;">第2種（月31,400円）</p>
         <p style="margin:0;font-size:12px;color:rgba(255,255,255,.92);">40歳以上の一人親方・手間請者など。</p>
       </div>
       <div style="background:rgba(255,255,255,.07);border-radius:8px;padding:8px 12px;border-left:3px solid #5DCAA5;">
-        <p style="font-weight:700;color:#5DCAA5;margin:0 0 2px;">第3種 男性（月27,700円）・第4種 女性（月23,200円）</p>
+        <p style="font-weight:600;color:#5DCAA5;margin:0 0 2px;">第3種 男性（月27,700円）・第4種 女性（月23,200円）</p>
         <p style="margin:0;font-size:12px;color:rgba(255,255,255,.92);">40歳以上の労働者・家族専従者・委託契約者、及び30歳〜39歳までの組合員。男性は第3種、女性は第4種。</p>
       </div>
       <div style="background:rgba(255,255,255,.07);border-radius:8px;padding:8px 12px;border-left:3px solid #FAA;">
-        <p style="font-weight:700;color:#FAA;margin:0 0 2px;">第5種（月19,000円）</p>
+        <p style="font-weight:600;color:#FAA;margin:0 0 2px;">第5種（月19,000円）</p>
         <p style="margin:0;font-size:12px;color:rgba(255,255,255,.92);">25歳〜29歳までの組合員。</p>
       </div>
       <div style="background:rgba(255,255,255,.07);border-radius:8px;padding:8px 12px;border-left:3px solid rgba(255,255,255,.3);">
-        <p style="font-weight:700;color:rgba(255,255,255,.92);margin:0 0 2px;">第6種（月15,400円）</p>
+        <p style="font-weight:600;color:rgba(255,255,255,.92);margin:0 0 2px;">第6種（月15,400円）</p>
         <p style="margin:0;font-size:12px;color:rgba(255,255,255,.92);">24歳以下の組合員・外国人技能実習生など。</p>
       </div>
     </div>
-    <p style="font-size:11px;color:rgba(255,255,255,.95);font-weight:700;margin:8px 0 0;">※ 区分の詳細・判定は支部（<a href="tel:048-773-9863" class="tel-inline">048-773-9863</a>）にご確認ください。</p>
+    <p style="font-size:11px;color:rgba(255,255,255,.95);font-weight:600;margin:8px 0 0;">※ 区分の詳細・判定は支部（<a href="tel:048-773-9863" class="tel-inline">048-773-9863</a>）にご確認ください。</p>
   </div>
 </div>
       </div>
@@ -300,14 +300,14 @@ html[data-theme="dark"] .table-row{border-color:rgba(255,255,255,.12)!important;
       <div class="card" id="kkp-compare"><div id="kk-compare-content"></div></div>
       <div class="card hidden" id="kkp-ageo"><div id="kk-ageo-detail"></div></div>
       <div class="card hidden" id="kkp-doken"><div id="kk-doken-detail"></div></div>
-      <div style="display:flex;gap:8px;margin-top:12px;"><button class="print-btn" onclick="previewKokuho()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;font-size:14px;font-weight:800;color:#1B2A3B;background:#fff;border:2px solid #1B2A3B;border-radius:11px;cursor:pointer;font-family:inherit;"><i class="ti ti-eye"></i>プレビュー</button><button class="print-btn" onclick="printKokuho()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;font-size:14px;font-weight:800;color:#fff;background:#1B2A3B;border:2px solid #1B2A3B;border-radius:11px;cursor:pointer;font-family:inherit;"><i class="ti ti-printer"></i>印刷・PDF</button></div>
+      <div style="display:flex;gap:8px;margin-top:12px;"><button class="print-btn" onclick="previewKokuho()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;font-size:14px;font-weight:700;color:#1B2A3B;background:#fff;border:2px solid #1B2A3B;border-radius:11px;cursor:pointer;font-family:inherit;"><i class="ti ti-eye"></i>プレビュー</button><button class="print-btn" onclick="printKokuho()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;font-size:14px;font-weight:700;color:#fff;background:#1B2A3B;border:2px solid #1B2A3B;border-radius:11px;cursor:pointer;font-family:inherit;"><i class="ti ti-printer"></i>印刷・PDF</button></div>
       <div class="alert alert-warn"><i class="ti ti-alert-triangle"></i><span>概算試算です。正確には各窓口・<a href="https://www.sai-doken-kokuho.jp/05hoken/04simulation.html" target="_blank" style="color:#7A5500;text-decoration:underline;" rel="noopener noreferrer">公式シミュレーター</a>でご確認ください。</span></div>
     </div>
   </div>
 
   <!-- 退職金・給付金シミュ -->
   <div id="tool-benefit" class="tool-detail">
-    <p style="font-size:17px;font-weight:800;color:var(--navy);margin:0 0 14px;">給付金シミュレーター</p>
+    <p style="font-size:17px;font-weight:700;color:var(--navy);margin:0 0 14px;">給付金シミュレーター</p>
     <div class="tab-row">
       <button class="t-btn active" onclick="benefitTab('medical')" id="bft-medical">医療費払戻</button>
       <button class="t-btn" onclick="benefitTab('sick')" id="bft-sick">傷病手当</button>
@@ -402,12 +402,12 @@ html[data-theme="dark"] .table-row{border-color:rgba(255,255,255,.12)!important;
       </div>
     </div>
 
-    <div style="display:flex;gap:8px;margin-top:12px;"><button class="print-btn" onclick="previewBenefit()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;font-size:14px;font-weight:800;color:#1B2A3B;background:#fff;border:2px solid #1B2A3B;border-radius:11px;cursor:pointer;font-family:inherit;"><i class="ti ti-eye"></i>プレビュー</button><button class="print-btn" onclick="printBenefit()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;font-size:14px;font-weight:800;color:#fff;background:#1B2A3B;border:2px solid #1B2A3B;border-radius:11px;cursor:pointer;font-family:inherit;"><i class="ti ti-printer"></i>印刷・PDF</button></div>
+    <div style="display:flex;gap:8px;margin-top:12px;"><button class="print-btn" onclick="previewBenefit()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;font-size:14px;font-weight:700;color:#1B2A3B;background:#fff;border:2px solid #1B2A3B;border-radius:11px;cursor:pointer;font-family:inherit;"><i class="ti ti-eye"></i>プレビュー</button><button class="print-btn" onclick="printBenefit()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;font-size:14px;font-weight:700;color:#fff;background:#1B2A3B;border:2px solid #1B2A3B;border-radius:11px;cursor:pointer;font-family:inherit;"><i class="ti ti-printer"></i>印刷・PDF</button></div>
   </div>
 
   <!-- CCUS -->
   <div id="tool-ccus" class="tool-detail">
-    <p style="font-size:17px;font-weight:800;color:var(--navy);margin:0 0 14px;">CCUSカードレベル確認（職種別）</p>
+    <p style="font-size:17px;font-weight:700;color:var(--navy);margin:0 0 14px;">CCUSカードレベル確認（職種別）</p>
     <div class="card">
       <div class="input-group" style="margin-bottom:12px;"><label>職種を選択</label><select id="shoku" onchange="onShokuChange()"></select></div>
       <div class="grid2">
@@ -424,7 +424,7 @@ html[data-theme="dark"] .table-row{border-color:rgba(255,255,255,.12)!important;
       <div id="ccus-next-wrap" class="hidden"><p class="sec-label">次のレベルへの条件</p><div class="card" id="ccus-next"></div></div>
       <p class="sec-label">全レベル早見表</p>
       <div class="card" id="ccus-table"></div>
-      <div style="display:flex;gap:8px;margin-top:12px;"><button class="print-btn" onclick="previewCcus()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;font-size:14px;font-weight:800;color:#1B2A3B;background:#fff;border:2px solid #1B2A3B;border-radius:11px;cursor:pointer;font-family:inherit;"><i class="ti ti-eye"></i>プレビュー</button><button class="print-btn" onclick="printCcus()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;font-size:14px;font-weight:800;color:#fff;background:#1B2A3B;border:2px solid #1B2A3B;border-radius:11px;cursor:pointer;font-family:inherit;"><i class="ti ti-printer"></i>印刷・PDF</button></div>
+      <div style="display:flex;gap:8px;margin-top:12px;"><button class="print-btn" onclick="previewCcus()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;font-size:14px;font-weight:700;color:#1B2A3B;background:#fff;border:2px solid #1B2A3B;border-radius:11px;cursor:pointer;font-family:inherit;"><i class="ti ti-eye"></i>プレビュー</button><button class="print-btn" onclick="printCcus()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;font-size:14px;font-weight:700;color:#fff;background:#1B2A3B;border:2px solid #1B2A3B;border-radius:11px;cursor:pointer;font-family:inherit;"><i class="ti ti-printer"></i>印刷・PDF</button></div>
       <div class="alert alert-info"><i class="ti ti-info-circle"></i><span>詳細基準は職種により異なります。申請は支部または各能力評価実施団体へ。就業日数は1年＝215日換算。</span></div>
     </div>
   </div>
@@ -485,7 +485,7 @@ function resultRow(label, honninVal, kaishaVal, noteHtml=''){
 }
 
 function totalRow(honninTotal, kaishaTotal){
-  return `<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;font-size:15px;font-weight:700;">
+  return `<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;font-size:15px;font-weight:600;">
     <span style="color:var(--navy);">合計（月額）</span>
     <div style="text-align:right;">
       <p style="margin:0;color:var(--orange);">本人 ${honninTotal}</p>
@@ -741,7 +741,7 @@ function calcCcus(){
     nextWrap.classList.remove('hidden');
     const reqs=d.nextReqs(lv,days,leader,quals);
     document.getElementById('ccus-next').innerHTML=`
-      <p style="font-size:15px;font-weight:700;margin:0 0 10px;color:var(--navy);">→ レベル${lv+1}（${CARD[lv].label}カード）への条件</p>
+      <p style="font-size:15px;font-weight:600;margin:0 0 10px;color:var(--navy);">→ レベル${lv+1}（${CARD[lv].label}カード）への条件</p>
       ${reqs.map(r=>`<div class="req ${r.ok?'ok':'ng'}"><i class="ti ${r.ok?'ti-circle-check':'ti-circle-x'}" aria-hidden="true"></i><span>${r.txt}</span></div>`).join('')}
       <p class="calc-note" style="font-size:13px;">申請先：${d.org}（埼玉土建各支部でも相談可）</p>`;
   }else{nextWrap.classList.add('hidden');}
@@ -752,7 +752,7 @@ function calcCcus(){
         <i class="ti ti-id" aria-hidden="true"></i><span>${CARD[l.lv-1].label}</span>
       </div>
       <div style="flex:1;">
-        <p style="font-size:14px;font-weight:700;margin:0 0 2px;color:var(--navy);">レベル${l.lv}（${CARD[l.lv-1].label}）${l.lv===lv?'<span class="cur-tag">現在</span>':''}</p>
+        <p style="font-size:14px;font-weight:600;margin:0 0 2px;color:var(--navy);">レベル${l.lv}（${CARD[l.lv-1].label}）${l.lv===lv?'<span class="cur-tag">現在</span>':''}</p>
         <p class="calc-muted" style="font-size:13px;margin:0;">${l.desc}</p>
       </div>
     </div>`).join('');
@@ -889,31 +889,31 @@ function kkCalc(){
       月額では<strong>${cheaper}</strong>が <strong>${Math.abs(diffM).toLocaleString()}円/月</strong>（年間 <strong>${yn(Math.abs(diffM)*12)}</strong>）安い試算です。
     </div>
     <div style="background:linear-gradient(135deg,#1B2A3B,#0D3A6B);border-radius:var(--r12);padding:16px;margin-top:10px;">
-      <p style="font-size:12px;font-weight:700;color:var(--orange);margin:0 0 10px;letter-spacing:.06em;">🏆 上尾市・伊奈町の国保にはない土建国保だけのメリット</p>
+      <p style="font-size:12px;font-weight:600;color:var(--orange);margin:0 0 10px;letter-spacing:.06em;">🏆 上尾市・伊奈町の国保にはない土建国保だけのメリット</p>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
         <div style="background:rgba(255,255,255,.07);border-radius:8px;padding:10px;border-top:3px solid #E8612A;">
-          <p style="font-size:13px;font-weight:800;color:#fff;margin:0 0 4px;">💊 医療費の負担を軽減</p>
-          <p style="font-size:11px;color:rgba(255,255,255,.92);font-weight:700;margin:0;line-height:1.5;">一部負担払戻金制度により、窓口で払った医療費のうち月17,500円を超えた分を自動で払い戻し（組合員は入院・通院、家族は入院が対象）。市区町村国保にはない独自制度。</p>
+          <p style="font-size:13px;font-weight:700;color:#fff;margin:0 0 4px;">💊 医療費の負担を軽減</p>
+          <p style="font-size:11px;color:rgba(255,255,255,.92);font-weight:600;margin:0;line-height:1.5;">一部負担払戻金制度により、窓口で払った医療費のうち月17,500円を超えた分を自動で払い戻し（組合員は入院・通院、家族は入院が対象）。市区町村国保にはない独自制度。</p>
         </div>
         <div style="background:rgba(255,255,255,.07);border-radius:8px;padding:10px;border-top:3px solid #5DCAA5;">
-          <p style="font-size:13px;font-weight:800;color:#fff;margin:0 0 4px;">🏥 休んでも収入が続く</p>
-          <p style="font-size:11px;color:rgba(255,255,255,.92);font-weight:700;margin:0;line-height:1.5;">傷病手当金：病気やケガで4日以上連続して休業したとき、1日目から区分・療養状況に応じた日額を支給（病気・ケガ各180日分を限度）。市区町村国保にはない制度。</p>
+          <p style="font-size:13px;font-weight:700;color:#fff;margin:0 0 4px;">🏥 休んでも収入が続く</p>
+          <p style="font-size:11px;color:rgba(255,255,255,.92);font-weight:600;margin:0;line-height:1.5;">傷病手当金：病気やケガで4日以上連続して休業したとき、1日目から区分・療養状況に応じた日額を支給（病気・ケガ各180日分を限度）。市区町村国保にはない制度。</p>
         </div>
         <div style="background:rgba(255,255,255,.07);border-radius:8px;padding:10px;border-top:3px solid #B5D4F4;">
-          <p style="font-size:13px;font-weight:800;color:#fff;margin:0 0 4px;">👶 出産 50万円給付</p>
-          <p style="font-size:11px;color:rgba(255,255,255,.92);font-weight:700;margin:0;line-height:1.5;">出産育児一時金は1児につき50万円（産科医療補償制度の対象外は48万8千円）。直接支払制度で窓口負担も軽減。</p>
+          <p style="font-size:13px;font-weight:700;color:#fff;margin:0 0 4px;">👶 出産 50万円給付</p>
+          <p style="font-size:11px;color:rgba(255,255,255,.92);font-weight:600;margin:0;line-height:1.5;">出産育児一時金は1児につき50万円（産科医療補償制度の対象外は48万8千円）。直接支払制度で窓口負担も軽減。</p>
         </div>
         <div style="background:rgba(255,255,255,.07);border-radius:8px;padding:10px;border-top:3px solid #FAC775;">
-          <p style="font-size:13px;font-weight:800;color:#fff;margin:0 0 4px;">🌸 葬祭費 7万円</p>
-          <p style="font-size:11px;color:rgba(255,255,255,.92);font-weight:700;margin:0;line-height:1.5;">組合員・家族が亡くなり葬儀をあげたとき、葬儀をあげた人に7万円を支給。</p>
+          <p style="font-size:13px;font-weight:700;color:#fff;margin:0 0 4px;">🌸 葬祭費 7万円</p>
+          <p style="font-size:11px;color:rgba(255,255,255,.92);font-weight:600;margin:0;line-height:1.5;">組合員・家族が亡くなり葬儀をあげたとき、葬儀をあげた人に7万円を支給。</p>
         </div>
       </div>
-      <p style="font-size:11px;color:rgba(255,255,255,.95);font-weight:700;margin:10px 0 0;">※ 保険料の安さだけでなく、これらの給付が受けられることが土建国保の大きな強みです。詳細は支部へご相談ください。</p>
+      <p style="font-size:11px;color:rgba(255,255,255,.95);font-weight:600;margin:10px 0 0;">※ 保険料の安さだけでなく、これらの給付が受けられることが土建国保の大きな強みです。詳細は支部へご相談ください。</p>
     </div>`;
 
   const hasKaigo=mems.some(m=>m.age>=40&&m.age<65);
   document.getElementById('kk-ageo-detail').innerHTML=`
-    <p style="font-size:15px;font-weight:700;color:var(--navy);margin:0 0 10px;">${cityName}国保 内訳</p>
+    <p style="font-size:15px;font-weight:600;color:var(--navy);margin:0 0 10px;">${cityName}国保 内訳</p>
     <div class="result-row"><span class="result-label">医療分</span><span class="result-val">${yn(city.iry)}<br><span class="result-sub">月 ${yn(city.iry/12)}</span></span></div>
     <div class="result-row"><span class="result-label">後期高齢者支援分</span><span class="result-val">${yn(city.shi)}<br><span class="result-sub">月 ${yn(city.shi/12)}</span></span></div>
     ${hasKaigo?`<div class="result-row"><span class="result-label">介護分（40〜64歳）</span><span class="result-val">${yn(city.kai)}<br><span class="result-sub">月 ${yn(city.kai/12)}</span></span></div>`:''}
@@ -924,7 +924,7 @@ function kkCalc(){
   const famRows=doken.famDetails.map(f=>{const rl={tokubetsu:'特別家族',ippan:'一般家族',chuko:'中高生',shogaku:'小学生',mishuugaku:'未就学児'}[f.rel]||f.rel;const tm=f.fh+f.fs+f.fk;return f.exempt?`<div class="result-row" style="opacity:.5;"><span class="result-label">${rl}（${f.age}歳）</span><span class="result-val">免除（4人目以降）</span></div>`:`<div class="result-row"><span class="result-label">${rl}（${f.age}歳）${f.fk>0?' +介護':''}</span><span class="result-val">${yn(tm*12)}<br><span class="result-sub">月 ${tm.toLocaleString()}円</span></span></div>`;}).join('');
 
   document.getElementById('kk-doken-detail').innerHTML=`
-    <p style="font-size:15px;font-weight:700;color:var(--navy);margin:0 0 10px;">埼玉土建国保 内訳（${doken.kubunLabel}）</p>
+    <p style="font-size:15px;font-weight:600;color:var(--navy);margin:0 0 10px;">埼玉土建国保 内訳（${doken.kubunLabel}）</p>
     <div class="result-row"><span class="result-label">組合員保険料</span><span class="result-val">${yn(doken.hokenM*12)}<br><span class="result-sub">月 ${doken.hokenM.toLocaleString()}円</span></span></div>
     <div class="result-row"><span class="result-label">子育て支援金</span><span class="result-val">${yn(doken.shienM*12)}<br><span class="result-sub">月 ${doken.shienM.toLocaleString()}円</span></span></div>
     ${doken.kaigoM>0?`<div class="result-row"><span class="result-label">介護保険料（組合員）</span><span class="result-val">${yn(doken.kaigoM*12)}<br><span class="result-sub">月 ${doken.kaigoM.toLocaleString()}円</span></span></div>`:''}
@@ -932,22 +932,22 @@ function kkCalc(){
     <div class="result-row total"><span class="result-label">月額合計</span><span class="result-val" style="font-size:18px;">${doken.monthTotal.toLocaleString()}円/月</span></div>
     <div class="result-row total"><span class="result-label">年間合計</span><span class="result-val">${yn(doken.yearTotal)}</span></div>
     <div style="background:linear-gradient(135deg,#1B2A3B,#1A3A6B);border-radius:var(--r12);padding:14px 16px;margin-top:10px;">
-      <p style="font-size:13px;font-weight:700;color:var(--orange);margin:0 0 10px;letter-spacing:.06em;">🏆 上尾市・伊奈町の国保にはないメリット</p>
+      <p style="font-size:13px;font-weight:600;color:var(--orange);margin:0 0 10px;letter-spacing:.06em;">🏆 上尾市・伊奈町の国保にはないメリット</p>
       <div style="display:flex;flex-direction:column;gap:8px;">
         <div style="background:rgba(255,255,255,.08);border-radius:var(--r8);padding:10px 12px;border-left:3px solid var(--orange);">
-          <p style="font-size:13px;font-weight:700;color:#fff;margin:0 0 3px;">💊 一部負担払戻金</p>
+          <p style="font-size:13px;font-weight:600;color:#fff;margin:0 0 3px;">💊 一部負担払戻金</p>
           <p style="font-size:12px;color:rgba(255,255,255,.92);margin:0;">窓口で払った医療費（3割負担分）のうち月17,500円を超えた分を自動で払い戻し（組合員は入院・通院、家族は入院が対象）。市区町村国保にはない独自制度。</p>
         </div>
         <div style="background:rgba(255,255,255,.08);border-radius:var(--r8);padding:10px 12px;border-left:3px solid #5DCAA5;">
-          <p style="font-size:13px;font-weight:700;color:#fff;margin:0 0 3px;">🏥 傷病手当金（最大180日分）</p>
+          <p style="font-size:13px;font-weight:600;color:#fff;margin:0 0 3px;">🏥 傷病手当金（最大180日分）</p>
           <p style="font-size:12px;color:rgba(255,255,255,.92);margin:0;">病気やケガで4日以上連続して仕事を休んだ場合、1日目から区分・療養状況に応じた日額を支給（病気・ケガ各180日分を限度）。市区町村国保にはない制度です。</p>
         </div>
         <div style="background:rgba(255,255,255,.08);border-radius:var(--r8);padding:10px 12px;border-left:3px solid #B5D4F4;">
-          <p style="font-size:13px;font-weight:700;color:#fff;margin:0 0 3px;">👶 出産育児一時金 50万円</p>
+          <p style="font-size:13px;font-weight:600;color:#fff;margin:0 0 3px;">👶 出産育児一時金 50万円</p>
           <p style="font-size:12px;color:rgba(255,255,255,.92);margin:0;">1児につき50万円（産科医療補償制度の対象外は48万8千円）。直接支払制度で窓口負担も軽減できます。</p>
         </div>
         <div style="background:rgba(255,255,255,.08);border-radius:var(--r8);padding:10px 12px;border-left:3px solid #FAC775;">
-          <p style="font-size:13px;font-weight:700;color:#fff;margin:0 0 3px;">🌸 葬祭費 7万円</p>
+          <p style="font-size:13px;font-weight:600;color:#fff;margin:0 0 3px;">🌸 葬祭費 7万円</p>
           <p style="font-size:12px;color:rgba(255,255,255,.92);margin:0;">組合員・家族が亡くなり葬儀をあげたとき、葬儀をあげた人に7万円を支給。</p>
         </div>
       </div>
