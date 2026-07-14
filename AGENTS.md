@@ -1,0 +1,238 @@
+# 埼玉土建 上尾伊奈支部 組合員アプリ — 引き継ぎ資料
+最終更新：2026年7月15日／作成：Claude（前担当AI）
+
+---
+
+## 1. プロジェクト概要
+
+- **名称**：上尾伊奈支部 組合員ポータル（PWA）
+- **運営**：埼玉土建一般労働組合 上尾伊奈支部
+- **公開URL**：`https://saitamadokenageoina-cloud.github.io/ageo-ina-portal/`
+- **リポジトリ**：`https://github.com/saitamadokenageoina-cloud/ageo-ina-portal`（GitHub Pages配信、ブランチ`main`直下がそのまま公開される legacy build type）
+- **利用者**：組合員（建設業従事者）。現場で使うためスマホ（主にiPhone Safari／ホーム画面PWA）が主戦場。電波が弱い環境を想定した設計が随所にある。
+- **姉妹サービス**：見積書作成アプリ（別リポジトリ、`https://saitamadokenageoina-cloud.github.io/estimate/` としてホームからリンクのみ、統合はしていない）
+
+## 2. 技術スタック（あえてシンプル）
+
+- **フレームワークなし**。素のHTML + CSS + JavaScript（ES5〜ES6混在、バニラJS）。
+- ビルドツール・バンドラーなし。ファイルをそのまま`git push`すればGitHub Pagesに反映される。
+- PWA対応（`manifest.json` + `sw.js`のService Worker）。
+- 外部ライブラリはCDNではなく**極力自前ホスティング**（後述の教訓参照）。
+- アイコン：Tabler Icons 2.47.0（自前ホスティング済み）。
+- フォント：Google Fonts「M PLUS 1p」（CDN読み込み、これは許容している）。
+
+## 3. デプロイ手順（最重要・必ずこの手順で）
+
+```bash
+# 1. 変更後、sw.js の CACHE_VERSION を必ず1つ上げる
+#    形式: 'v20260707-NN' → NNをインクリメント
+#    例: v20260707-52 → v20260707-53
+
+# 2. commit & push
+git add -A
+git commit -m "変更内容"
+git push origin main
+
+# 3. GitHub Pagesは稀に自動ビルドされないことがあるため、明示的にビルドをトリガー
+curl -sS -X POST -H "Authorization: token <GH_TOKEN>" \
+  -H "Accept: application/vnd.github+json" \
+  https://api.github.com/repos/saitamadokenageoina-cloud/ageo-ina-portal/pages/builds
+
+# 4. ビルド完了をポーリング確認（statusが built かつ commit が最新一致するまで）
+curl -sS -H "Authorization: token <GH_TOKEN>" \
+  -H "Accept: application/vnd.github+json" \
+  https://api.github.com/repos/saitamadokenageoina-cloud/ageo-ina-portal/pages/builds/latest
+```
+
+**GitHubトークンについて**：本セッションで使用していたPersonal Access Tokenはこの会話ログに露出済みのため、**Codexへ引き継ぐ際は新しいトークンを発行し直すことを強く推奨**します（GitHub → Settings → Developer settings → Personal access tokens）。必要スコープは`repo`（Pages管理には`pages`権限も）。
+
+**なぜ手動ビルドトリガーが必要か**：GitHub Pages（legacy build）はpush後に自動ビルドされないことがあり、放置すると古い内容が配信され続ける。必ずビルドAPIを叩いて`status: built` かつ `commit` が最新であることを確認してから「反映完了」と判断すること。
+
+## 4. Service Worker（sw.js）の設計
+
+- **キャッシュ戦略**：Network-First（同一オリジンのGETリクエストのみ）。外部オリジン（Google Calendar API、天気API等）はSWを素通りしそのままネットワークへ。
+- **CACHE_VERSIONを上げないと更新が反映されない**。全ページ共通で`assets/js/navigation.js`がSW登録・自動更新チェック・`controllerchange`での自動リロードを担う。
+- **CACHE_FILES**に事前キャッシュ対象を列挙（HTML主要ページ、common.css、print.css、tabler-icons.min.css、tabler-icons.woff2など）。新規ページを追加したら**ここにも追記が必要**。
+- オフライン時、キャッシュに無いページは動作しない。新規ページ作成時は必ずCACHE_FILESへの追加を忘れないこと。
+
+## 5. 共通基盤ファイル
+
+### common.css
+全ページ共通のCSS変数・ベーススタイル。
+
+```css
+--navy, --orange, --white, --gray50〜900, --green, --red, --blue, --yellow
+--r8, --r12, --r16, --r24 (角丸)
+--shadow-sm/md/lg
+```
+
+**⚠️最重要の罠**：`html[data-theme="dark"]`セレクタで、これらのCSS変数がダークモード用に**再マッピング**される（例：`--gray50`は通常「明るい背景色」だが、ダークモードでは「濃紺の背景色」に変わる。`--navy`は通常「濃紺の文字色」だが、ダークモードでは「明るい文字色」に変わる）。
+
+このため、**固定の背景色を持つ要素**（例：常に薄いオレンジ背景のカードなど）に`color:var(--gray700)`のようなテーマ変数を使うと、ダークモード時に「淡い固定背景＋明るい文字」になり、**文字が見えなくなるバグを繰り返し引き起こした**。固定背景の要素には、テーマ変数を使わず**固定の色コード**を直接指定すること。
+
+電話番号の自動リンク化対策、拡大禁止解除（アクセシビリティ）なども含まれる。
+
+### assets/js/navigation.js（全19ページで読み込み）
+- SW登録・起動時update・待機中SWの即時適用
+- `controllerchange`/`message`イベントでの自動リロード（初回インストール時は除外、8秒の連続リロード防止ガードあり）
+- 画面復帰時（`visibilitychange`）の再チェック
+- 戻るボタンの挙動（`goBack()`）
+- テーマ切替トグル、下部の電話/LINE/地図/ガイドの固定バー（`injectContactRail`）注入
+
+### assets/js/print-util.js + assets/css/print.css（印刷・プレビュー共通基盤）
+`calc.html`・`kensetsu_check.html`・`hitori.html`で使用。グローバル`DokenPrint`オブジェクトを公開。
+
+```js
+DokenPrint.print({title, sections:[{label, html}], note})   // 印刷
+DokenPrint.preview({title, sections, note})                  // プレビュー表示
+```
+
+- `#print-area`をbody直下に生成し、`window.print()`を呼ぶ方式（新規ウィンドウ/iframe方式は**iOS PWAで動作しないため不採用**、後述の教訓参照）。
+- プレビューは`#preview-overlay`のオーバーレイ＋A4イメージの`.pv-sheet`。
+- 複製されたHTMLに残るインラインの色指定（`color`/`background`等）を`stripColorStyles()`でDOMレベルから除去し、印刷/プレビュー内は白地・黒文字に強制する二重の安全策あり。
+
+## 6. ページ一覧（19ページ、現行）
+
+| ファイル | 内容 | 備考 |
+|---|---|---|
+| index.html | ホーム（5セクション：よく使う/仕事確保/現場・管理関係/手続き・シミュレーション/講習・資料） | 各セクションに`id="yoku"`等のアンカーあり（LINEリッチメニュー用URL） |
+| calendar.html | 支部カレンダー | Google Calendar API v3使用、APIキーがクライアント側に埋め込み（読み取り専用、リファラ制限想定） |
+| doken_card.html | どけんカード登録店 | 外部サイト`doken-card.jp`のパスワード表示・コピー機能 |
+| guild.html | DOKENギルド（掲示板） | `assets/js/guild-config.js`（Google Apps Script連携設定）と連動。カテゴリ：人材募集/資材・道具/相談 |
+| kyokyu.html | 労働者供給事業 | 東栄住宅の求人情報を掲載（変更される可能性あり） |
+| calc.html | 計算ツール（労務費/国保料/給付金/CCUS） | 最大の機能。料率は毎年4月更新が必要（下記7章） |
+| atsusa.html | 熱中症AIアラート | GPS→Open-Meteo API→WBGT計算（気象庁JSONへのフォールバックあり） |
+| anzen_check.html | 現場安全チェックリスト | 印刷対応 |
+| work_log.html | 作業記録（労災対策） | localStorage保存、PDF印刷、バックアップ/復元機能 |
+| rodo36.html | 36協定・残業時間カウンター | 印刷対応（A4縦） |
+| rodo36_form_preview.html | 36協定 正式様式プレビュー | pdf.js使用、A4横向き |
+| guide.html | 手続き・必要書類ガイド | |
+| merit.html | 加入のメリット | JSデータ駆動（MERITS配列＋ICON_GLYPHSマップ） |
+| kensetsu_check.html | 建設業許可チェッカー | 印刷対応 |
+| hitori.html | 一人親方の基礎知識・診断 | 国交省PDF準拠。5問診断＋判定＋比較表（PC横並び/スマホ縦カード切替）＋印刷対応 |
+| koushu.html | 技能講習日程案内 | |
+| shiryo.html / book.html | 資料本棚 / デジタルブックリーダー | `assets/js/bookshelf.js`使用 |
+| app_guide.html | 説明書・ヘルプ | |
+
+**`_archive/`フォルダ**：旧版で現行導線からリンクされていないページ10個（ccus_check, kanyu_merit, kokuho_sim, kyosai, merit_check, portal, techno, tetsuzuki_guide, youtube, rodo36_preview）。削除ではなく退避のみ。復元可能。
+
+## 7. 定期更新が必要なデータ（要注意）
+
+| 項目 | 場所 | 更新頻度 |
+|---|---|---|
+| 雇用保険料率 | calc.html `const RM` | 毎年4月（厚労省告示） |
+| 厚生年金・介護保険料率 | calc.html `const RM` | 据置が多いが年1回要確認 |
+| 国保料率・区分別金額 | calc.html 国保シミュ内 | 年度更新 |
+| CCUS判定基準 | calc.html CCUS内 | 制度改定時 |
+| 傷病手当金・出産育児一時金等の給付内容 | calc.html／hitori.html | 埼玉土建国保の規程変更時（公式：https://www.sai-doken-kokuho.jp/ ） |
+| 労働者供給事業の募集内容 | kyokyu.html | 随時（支部からの依頼） |
+
+## 8. 外部API・外部サイト依存一覧
+
+| 用途 | URL | 備考 |
+|---|---|---|
+| 天気・気温湿度 | `api.open-meteo.com/v1/forecast` | キー不要 |
+| 逆ジオコーディング | `nominatim.openstreetmap.org/reverse` | キー不要、利用規約に注意（連続アクセス制限） |
+| 気象庁予報（フォールバック） | `www.jma.go.jp/bosai/forecast/data/forecast/110000.json` | 埼玉県コード110000 |
+| Googleカレンダー | `www.googleapis.com/calendar/v3/calendars/...` | APIキー埋め込み済み（calendar.html） |
+| PDF表示 | cdnjs（pdf.js 3.11.174） | rodo36_form_preview.htmlのみ、CDN依存が残っている箇所 |
+| CCUS公式診断 | `lv-asses-sup.ccus.jp` | 外部リンク |
+| どけんカード公式 | `doken-card.jp` | 外部サイト、アプリ内は誘導のみ |
+| 求人求職 | `www.saitama-doken.or.jp/kyujin/` | 外部リンク |
+| ホームドクターなび | `home-dr-navi.jp/home-dr/index` | 外部リンク（住民からの仕事依頼サイト） |
+| 建退共 | `www2.kentaikyo.taisyokukin.go.jp` | 退職金シミュレーションへの外部リンク |
+| 標準見積書作成 | `saitamadokenageoina-cloud.github.io/estimate/` | 姉妹アプリ（別リポジトリ、未統合） |
+
+## 9. 開発中に判明した「教訓」（重要・再発防止用）
+
+今後の実装で同じ不具合を再発させないために、過去に実際に起きたバグとその原因を記録する。
+
+### 9-1. `<script src="...">`タグに直接コードを書いてはいけない
+`<script src="navigation.js">console.log(...)</script>`のように、**src属性のあるscriptタグの中にインラインコードを書くと、そのコードは一切実行されない**（ブラウザ仕様）。過去にこれが原因で印刷・プレビューのボタンが完全に無反応になるバグが発生した。必ず`<script src="...">`と`<script>コード</script>`は別タグに分離する。
+
+### 9-2. 印刷/プレビューの「色を全部リセットする」CSSは対象範囲に注意
+`#print-area, #print-area *{background:transparent!important}`のように**用紙自体も対象に含めてしまう**と、直前に書いた「用紙を白くする」ルールを同じ詳細度・同じ`!important`で「後勝ち」により打ち消してしまう。結果、用紙が透明になり下の暗い背景が透けて見え、文字も黒に強制されるため実質「暗い背景に黒文字」で読めなくなる。**対象は子孫のみ（`#print-area *`）に限定**し、コンテナ自体の背景指定は別ルールとして独立させること。
+
+### 9-3. 外部CDN依存はオフラインで「四角（グリフ欠落）」の原因になる
+Service WorkerはNetwork-Firstだが**同一オリジンのリクエストしかキャッシュしない**設計のため、外部CDN（Tabler Iconsなど）はキャッシュ対象外だった。電波の弱い現場でCDN取得が失敗すると、アイコンフォントが読み込めずアイコンが軒並み「四角」表示になった。**外部ライブラリは可能な限り自前ホスティングし、SWキャッシュに含めること**。
+
+### 9-4. ダークテーマのCSS変数再マッピングに要注意（9-3節参照の`common.css`の項目も参照）
+固定背景の要素にテーマ変数の文字色を使うと、ダークモードで「淡い背景×明るい文字」の組み合わせになり読めなくなる。固定背景には固定文字色を。
+
+### 9-5. iOS PWAでは`window.open()`や別ウィンドウ/iframeでの印刷が機能しないことがある
+`window.open('','_blank')`はホーム画面PWAでは`null`を返すことがあり、iframeの`contentWindow.print()`も無反応になることがある。**同一ページ内にDOMを描画してから`window.print()`を呼ぶ方式**が最も安定する（`print-util.js`参照）。
+
+### 9-6. 重複関数定義に注意
+同名の関数を2回定義しても後者が有効になるだけで構文エラーにはならないため、コピペ時の重複に気づきにくい。定期的に`grep -c "^function 関数名"`等でチェックすると良い。
+
+### 9-7. 半角%のエスケープミス
+Pythonスクリプトで`width:100%%`のように誤って二重エスケープすると、CSSとして無効になりレイアウトが崩れる。生成スクリプトを書く際は出力結果を必ず`grep`で確認すること。
+
+## 10. LINE公式アカウント連携
+
+リッチメニュー（6分割・大サイズ2500×1686px）用の画像と設定URL一式を過去に作成済み。ホームの5セクションに直接飛べるアンカー：
+
+```
+よく使う：      …/ageo-ina-portal/#yoku
+仕事確保：      …/ageo-ina-portal/#shigoto
+現場・管理関係： …/ageo-ina-portal/#genba
+手続き・試算：   …/ageo-ina-portal/#tetsuzuki
+講習・資料：     …/ageo-ina-portal/#koushu
+```
+アンカー着地時は`navigation.js`が自動スクロールを行う。
+
+## 11. 支部の基本情報（コード内に散在）
+
+- 支部名：埼玉土建一般労働組合 上尾伊奈支部
+- 住所：〒362-0003 上尾市菅谷295
+- 電話：048-773-9863
+- 各ページのフッターに記載（`footer`タグ内、電話番号は`.tel-inline`クラスで自動リンク化済み）
+
+## 12. 現状の既知の未対応・保留事項
+
+- `_archive/`内の旧10ページ：削除するか判断待ち
+- doken_card.htmlのパスワードは外部サイト（doken-card.jp）でクロスオリジンのため自動入力不可（手動コピー＆ペースト方式で運用中）
+- LINEリッチメニューのタブ切替は公式管理画面のみでは実現不可（Liny/Lステップ等の有料ツールか、Messaging API + GAS実装が必要）
+- rodo36_form_preview.htmlのみ、外部CDN（pdf.js）依存が残っている（自前ホスティング未対応）
+
+## 13. 検証コマンド集（引き継ぎ後も活用推奨）
+
+```bash
+# 全HTML内のJS構文チェック（src指定なしのscriptタグを抽出してnode --checkにかける）
+python3 -c "
+import re,glob,subprocess,tempfile,os
+for f in sorted(glob.glob('*.html')):
+    s=open(f,encoding='utf-8').read()
+    for m in re.findall(r'<script(?![^>]*\ssrc=)[^>]*>(.*?)</script>',s,re.S):
+        if not m.strip(): continue
+        t=tempfile.NamedTemporaryFile('w',suffix='.js',delete=False,encoding='utf-8');t.write(m);t.close()
+        r=subprocess.run(['node','--check',t.name],capture_output=True,text=True);os.unlink(t.name)
+        if r.returncode: print('NG:',f,r.stderr)
+"
+
+# 内部リンク切れチェック
+python3 -c "
+import re,glob,os
+htmls=set(glob.glob('*.html'))
+for f in htmls:
+    s=open(f,encoding='utf-8').read()
+    for href in re.findall(r'href=\"([^\"#?]+\.html)',s):
+        if not href.startswith('http') and os.path.basename(href) not in htmls:
+            print(f, '->', href)
+"
+
+# 重複関数定義チェック
+python3 -c "
+import re,glob
+from collections import Counter
+for f in glob.glob('*.html'):
+    s=open(f,encoding='utf-8').read()
+    c=Counter(re.findall(r'function\s+(\w+)\s*\(', s))
+    dups={k:v for k,v in c.items() if v>1}
+    if dups: print(f, dups)
+"
+```
+
+---
+
+以上で、これまでの開発経緯・設計判断・既知の落とし穴を含む引き継ぎ情報を網羅しています。ご不明点があれば元の会話履歴（本ドキュメント作成元のClaudeとのチャット）も参照可能です。
