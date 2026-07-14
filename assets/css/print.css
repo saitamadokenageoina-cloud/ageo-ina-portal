@@ -47,6 +47,12 @@
   filter:none !important; opacity:1 !important;
   -webkit-print-color-adjust:exact; print-color-adjust:exact;
 }
+/* 擬似要素（::before/::after）にも念のため同様の無効化を適用 */
+#print-area *::before, #print-area *::after{
+  color:#111 !important; -webkit-text-fill-color:#111 !important;
+  background-color:transparent !important; background-image:none !important;
+  box-shadow:none !important; text-shadow:none !important;
+}
 /* 結果ブロック（元は濃紺/淡色カード）は白地＋薄い枠に統一 */
 #print-area .pr-body > div,
 #print-area .pr-body .result-box{
@@ -98,6 +104,11 @@ body.preview-lock{ overflow:hidden !important; }
   background-color:transparent !important; background-image:none !important;
   box-shadow:none !important; text-shadow:none !important;
   filter:none !important; opacity:1 !important;
+}
+#preview-overlay .pv-sheet *::before, #preview-overlay .pv-sheet *::after{
+  color:#111 !important; -webkit-text-fill-color:#111 !important;
+  background-color:transparent !important; background-image:none !important;
+  box-shadow:none !important; text-shadow:none !important;
 }
 #preview-overlay .pv-sheet .pr-body > div,
 #preview-overlay .pv-sheet .pr-body .result-box{

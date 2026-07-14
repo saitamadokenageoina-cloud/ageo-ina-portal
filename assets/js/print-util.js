@@ -40,6 +40,38 @@
       .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
 
+  // 色関連のインライン指定だけを除去（レイアウト用の display/flex/padding/margin等は保持）。
+  // 画面から複製したHTMLは var(--navy) 等のテーマ変数を含む inline style を持つことがあり、
+  // CSS側の !important 上書きに万一漏れがあっても文字が見えなくなることがないよう、
+  // DOM レベルで色指定そのものを取り除く二重の安全策。
+  var COLOR_PROPS = ['color','background','background-color','background-image',
+    'background-repeat','background-position','background-size',
+    '-webkit-text-fill-color','text-shadow','box-shadow','border-color'];
+  function stripColorStyles(html){
+    try{
+      var wrap = document.createElement('div');
+      wrap.innerHTML = html;
+      var all = wrap.querySelectorAll('[style]');
+      for (var i = 0; i < all.length; i++){
+        var el = all[i];
+        var decls = el.getAttribute('style').split(';');
+        var kept = [];
+        for (var j = 0; j < decls.length; j++){
+          var d = decls[j].trim();
+          if (!d) continue;
+          var prop = d.split(':')[0].trim().toLowerCase();
+          if (COLOR_PROPS.indexOf(prop) === -1) kept.push(d);
+        }
+        if (kept.length) el.setAttribute('style', kept.join(';'));
+        else el.removeAttribute('style');
+      }
+      return wrap.innerHTML;
+    }catch(e){
+      console.error('[DokenPrint] stripColorStyles失敗:', e);
+      return html; // 失敗時は元のHTMLをそのまま使う（CSS側の!importantが保険になる）
+    }
+  }
+
   // sections の html は「表示用に組み立て済みの安全なHTML」を渡す前提（アプリ内部生成）
   function build(data){
     if (!data || !Array.isArray(data.sections)) return null;
@@ -47,7 +79,7 @@
     data.sections.forEach(function(s){
       if (!s || !s.html) return;
       body += (s.label ? '<p class="pr-sec">' + esc(s.label) + '</p>' : '')
-            + '<div class="pr-body">' + s.html + '</div>';
+            + '<div class="pr-body">' + stripColorStyles(s.html) + '</div>';
     });
     if (!body) return null;
     return header(data.title || '') + body + footer(data.note || '');

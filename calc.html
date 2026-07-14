@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>計算ツール｜埼玉土建 上尾伊奈支部</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.47.0/iconfont/tabler-icons.min.css">
+<link rel="stylesheet" href="assets/css/tabler-icons.min.css">
 <link rel="stylesheet" href="common.css">
 <link rel="stylesheet" href="assets/css/print.css">
 <style>
@@ -965,13 +965,6 @@ function kkTab(tab){
 
 // 初期化
 kkAddMember();
-
-function kkTab(tab){
-  ['compare','ageo','doken'].forEach(t=>{
-    document.getElementById('kkp-'+t).classList.toggle('hidden',t!==tab);
-    document.getElementById('kkt-'+t).classList.toggle('active',t===tab);
-  });
-}
 </script>
 <script src="assets/js/navigation.js"></script>
 <script src="assets/js/print-util.js"></script>
