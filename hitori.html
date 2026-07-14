@@ -132,14 +132,17 @@
   .cmp-scroll{display:none;}
   .scroll-hint{display:none;}
   .cmp-cards{display:block;}
-  .cc-item{background:var(--white);border:1px solid var(--gray200);border-radius:12px;overflow:hidden;margin-bottom:9px;}
-  .cc-q{background:var(--gray50);padding:9px 13px;font-size:13.5px;font-weight:900;color:var(--navy);border-bottom:1px solid var(--gray100);}
-  .cc-row{display:flex;padding:9px 13px;gap:10px;font-size:12.5px;line-height:1.55;}
-  .cc-row + .cc-row{border-top:1px dashed var(--gray100);}
-  .cc-side{flex:0 0 78px;font-weight:900;font-size:11px;padding-top:2px;}
+  .cc-item{background:var(--white);border:1px solid var(--gray200);border-radius:12px;overflow:hidden;margin-bottom:10px;}
+  .cc-q{background:var(--gray50);padding:10px 13px;font-size:14px;font-weight:900;color:var(--navy);border-bottom:1px solid var(--gray100);display:flex;align-items:center;gap:7px;}
+  .cc-q i{color:var(--orange);font-size:17px;}
+  .cc-row{display:flex;align-items:flex-start;padding:10px 13px;gap:10px;font-size:13px;line-height:1.6;}
+  .cc-row + .cc-row{border-top:1px dashed var(--gray200);}
+  .cc-side{flex:0 0 84px;font-weight:900;font-size:12px;padding-top:1px;white-space:nowrap;}
+  .cc-row.oy{background:rgba(232,97,42,.06);}
   .cc-row.oy .cc-side{color:#C9501C;}
+  .cc-row.emp{background:rgba(46,111,184,.06);}
   .cc-row.emp .cc-side{color:#2E6FB8;}
-  .cc-val{flex:1;color:var(--gray700);font-weight:600;}
+  .cc-val{flex:1;color:var(--gray700);font-weight:700;min-width:0;}
 }
 
 /* ===== 注意喚起 ===== */
@@ -296,7 +299,7 @@
     <p class="info-note">出典：国土交通省 不動産・建設経済局 建設振興課「一人親方に関する基礎知識」。関連：<a class="src-link" href="https://www.mlit.go.jp/totikensangyo/const/content/001448684.pdf" target="_blank" rel="noopener noreferrer">働き方の自己診断チェックリスト</a>／<a class="src-link" href="https://roumuhi.mlit.go.jp/" target="_blank" rel="noopener noreferrer">労務費に関する基準</a></p>
   </div>
 
-  <p class="footer" style="text-align:center;color:var(--gray500);font-size:12px;margin:20px 0 6px;">埼玉土建一般労働組合 上尾伊奈支部<br><span style="font-size:10px;color:var(--gray400);">アプリ版数 v45</span></p>
+  <p class="footer" style="text-align:center;color:var(--gray500);font-size:12px;margin:20px 0 6px;">埼玉土建一般労働組合 上尾伊奈支部<br><span style="font-size:10px;color:var(--gray400);">アプリ版数 v46</span></p>
 
 </div>
 </div>
@@ -466,14 +469,17 @@ function toggleDetail(){
 /* ===== 比較表の描画（PC=表／スマホ=縦カード、印刷共用データから生成） ===== */
 function renderCmp(elId, data, oyLabel, empLabel){
   var el = document.getElementById(elId);
+  // 縦カード用の短縮ラベル（「一人親方（請負）」→「一人親方」等、折り返し防止）
+  var oyShort = oyLabel.replace(/（.*?）/g,'');
+  var empShort = empLabel.replace(/（.*?）/g,'');
   var thead = '<thead><tr><th>項目</th><th>'+oyLabel+'</th><th>'+empLabel+'</th></tr></thead>';
   var tbody = '<tbody>' + data.rows.map(function(r){
     return '<tr><th>'+r[0]+'</th><td class="col-oy">'+r[1]+'</td><td class="col-emp">'+r[2]+'</td></tr>';
   }).join('') + '</tbody>';
   var cards = data.rows.map(function(r){
-    return '<div class="cc-item"><div class="cc-q">'+r[0]+'</div>'
-      + '<div class="cc-row oy"><div class="cc-side">'+oyLabel+'</div><div class="cc-val">'+r[1]+'</div></div>'
-      + '<div class="cc-row emp"><div class="cc-side">'+empLabel+'</div><div class="cc-val">'+r[2]+'</div></div>'
+    return '<div class="cc-item"><div class="cc-q"><i class="ti ti-point-filled"></i>'+r[0]+'</div>'
+      + '<div class="cc-row oy"><div class="cc-side">'+oyShort+'</div><div class="cc-val">'+r[1]+'</div></div>'
+      + '<div class="cc-row emp"><div class="cc-side">'+empShort+'</div><div class="cc-val">'+r[2]+'</div></div>'
       + '</div>';
   }).join('');
   el.innerHTML =

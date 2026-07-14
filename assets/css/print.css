@@ -70,7 +70,7 @@
 /* ===== プレビュー オーバーレイ ===== */
 body.preview-lock{ overflow:hidden !important; }
 #preview-overlay{
-  display:none; position:fixed; inset:0; z-index:10000; background:rgba(10,18,30,.74);
+  display:none; position:fixed; inset:0; z-index:10000; background:#0A1424;
 }
 #preview-overlay .pv-bar{
   position:sticky; top:0; display:flex; gap:8px; align-items:center;
@@ -85,13 +85,13 @@ body.preview-lock{ overflow:hidden !important; }
 #preview-overlay .pv-print{ background:#E8612A; color:#fff; }
 #preview-overlay .pv-close{ background:#e5e7eb; color:#111; }
 #preview-overlay .pv-scroll{
-  height:calc(100% - 64px); overflow:auto; padding:16px 12px 40px;
-  -webkit-overflow-scrolling:touch;
+  height:calc(100% - 64px); overflow:auto; padding:16px 10px 60px;
+  -webkit-overflow-scrolling:touch; background:#334155;
 }
 #preview-overlay .pv-sheet{
-  width:210mm; max-width:100%; min-height:290mm; margin:0 auto;
-  background:#fff; color:#111; padding:12mm;
-  box-shadow:0 10px 34px rgba(0,0,0,.45); border-radius:2px;
+  width:100%; max-width:760px; min-height:auto; margin:0 auto;
+  background:#fff; color:#111; padding:20px 18px;
+  box-shadow:0 10px 34px rgba(0,0,0,.45); border-radius:4px;
 }
 #preview-overlay .pv-sheet, #preview-overlay .pv-sheet *{
   color:#111 !important; -webkit-text-fill-color:#111 !important;
