@@ -4,7 +4,7 @@
   const CONFIG = window.DOKEN_CALENDAR_CONFIG || {};
   const CALENDARS = Array.isArray(CONFIG.CALENDARS) ? CONFIG.CALENDARS : [];
   const API_KEY = String(CONFIG.PUBLIC_CALENDAR_KEY || '');
-  const CACHE_KEY = 'doken_calendar_upcoming_v1';
+  const CACHE_KEY = 'doken_calendar_upcoming_v2';
   const CACHE_TTL_MS = 15 * 60 * 1000;
   const RANGE_DAYS = 45;
   const MAX_EVENTS = 18;
@@ -34,6 +34,35 @@
     }
   }
 
+  function parseDescriptionTime(value) {
+    const text = String(value || '').replace(/[０-９]/g, character =>
+      String.fromCharCode(character.charCodeAt(0) - 0xFEE0));
+    const match = text.match(/(?:【\s*時間\s*】\s*)?(\d{1,2})\s*時\s*(?:(\d{1,2})\s*分)?\s*[〜～~\-－]\s*(?:(\d{1,2})\s*時\s*(?:(\d{1,2})\s*分)?)?/);
+    if (!match) return null;
+
+    const startHour = Number(match[1]);
+    const startMinute = Number(match[2] || 0);
+    const hasEnd = match[3] != null;
+    const endHour = hasEnd ? Number(match[3]) : null;
+    const endMinute = hasEnd ? Number(match[4] || 0) : null;
+    if (startHour > 23 || startMinute > 59
+      || (hasEnd && (endHour > 23 || endMinute > 59))) return null;
+
+    const pad = number => String(number).padStart(2, '0');
+    return {
+      startMinutes: startHour * 60 + startMinute,
+      endMinutes: hasEnd ? endHour * 60 + endMinute : null,
+      label: pad(startHour) + ':' + pad(startMinute) + '〜'
+        + (hasEnd ? pad(endHour) + ':' + pad(endMinute) : '')
+    };
+  }
+
+  function dateAtMinutes(dateString, minutes) {
+    const date = new Date(String(dateString) + 'T00:00:00+09:00');
+    date.setTime(date.getTime() + minutes * 60 * 1000);
+    return date.toISOString();
+  }
+
   function eventStartValue(event) {
     return Date.parse(event.start) || 0;
   }
@@ -44,13 +73,31 @@
     const end = rawEvent.end && (rawEvent.end.dateTime || rawEvent.end.date);
     if (!start || !end) return null;
 
+    const descriptionTime = !rawEvent.start.dateTime
+      ? parseDescriptionTime(rawEvent.description)
+      : null;
+    let normalizedStart = String(start);
+    let normalizedEnd = String(end);
+    let allDay = !rawEvent.start.dateTime;
+    let timeText = '';
+    if (descriptionTime) {
+      normalizedStart = dateAtMinutes(rawEvent.start.date, descriptionTime.startMinutes);
+      const endMinutes = descriptionTime.endMinutes == null
+        ? descriptionTime.startMinutes
+        : descriptionTime.endMinutes + (descriptionTime.endMinutes <= descriptionTime.startMinutes ? 24 * 60 : 0);
+      normalizedEnd = dateAtMinutes(rawEvent.start.date, endMinutes);
+      allDay = false;
+      timeText = descriptionTime.label;
+    }
+
     return {
       id: String(rawEvent.id || ''),
       iCalUID: String(rawEvent.iCalUID || ''),
       title: String(rawEvent.summary || '(無題)'),
-      start: String(start),
-      end: String(end),
-      allDay: !rawEvent.start.dateTime,
+      start: normalizedStart,
+      end: normalizedEnd,
+      allDay,
+      timeText,
       location: String(rawEvent.location || ''),
       category: String(calendar.label || '予定'),
       color: normalizeColor(calendar.color),
@@ -93,6 +140,7 @@
   }
 
   function formatTime(event) {
+    if (event.timeText) return event.timeText;
     if (event.allDay) return '終日';
     const start = new Date(event.start);
     const end = new Date(event.end);
@@ -345,6 +393,7 @@
     dedupeAndSort,
     isSafeGoogleEventUrl,
     normalizeEvent,
+    parseDescriptionTime,
     renderUpcoming,
     loadUpcoming
   });
