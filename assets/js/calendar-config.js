@@ -1,7 +1,7 @@
 // 支部カレンダー設定
 // カテゴリーの追加・削除・名称・色は CALENDARS だけを変更してください。
 // APIキーは Google Calendar API と本番サイトのHTTPリファラーだけに制限します。
-const PUBLIC_CALENDAR_KEY = [
+const PUBLIC_CALENDAR_KEY = [AIzaSyDtc62rPLeYi9nL3uULHSZXdB5zt5uHjyw
   "",
   ""
 ].join("");
