@@ -85,9 +85,10 @@ curl -sS -H "Authorization: token <GH_TOKEN>" \
 
 ### assets/js/calendar-config.js + calendar-upcoming.js（支部カレンダー）
 - `calendar-config.js`の`CALENDARS`配列が、カード取得対象・iframe表示対象・カテゴリー名・色の単一設定元。カテゴリー変更はこの配列だけを編集する。
-- APIキーはGoogle Cloudの`portal-calendar`プロジェクトで発行し、Google Calendar API限定かつ`https://saitamadokenageoina-cloud.github.io/ageo-ina-portal/*`のHTTPリファラー限定にする。キー文字列はログや作業報告へ出さない。
+- APIキーはGoogle Cloudの`portal-calendar`プロジェクトで発行し、Google Calendar API限定かつ`https://saitamadokenageoina-cloud.github.io/*`（必要に応じて`/ageo-ina-portal/*`も併記）のHTTPリファラー限定にする。キー文字列はログや作業報告へ出さない。
 - `calendar-upcoming.js`は現在時刻から45日間を`Promise.allSettled()`で並列取得し、キャンセル・重複を除いて開始日時順に最大18件表示する。
-- 取得結果は`localStorage`の`doken_calendar_upcoming_v1`へ15分間キャッシュする。通信失敗時は期限切れの保存データもフォールバック表示する。
+- 終日予定の説明欄に`【時間】19時30分〜`・`19時〜21時`・`19時〜`があれば、開始時刻と任意の終了時刻を抽出してカード表示と並び順へ反映する。終了時刻がなければ補完しない。
+- 取得結果は`localStorage`の`doken_calendar_upcoming_v2`へ15分間キャッシュする。通信失敗時は期限切れの保存データもフォールバック表示する。
 - Google Calendar APIの予定名・場所は必ず`textContent`で描画し、予定詳細URLはHTTPSかつ`calendar.google.com`／`www.google.com`だけを許可する。
 
 ### assets/js/print-util.js + assets/css/print.css（印刷・プレビュー共通基盤）
