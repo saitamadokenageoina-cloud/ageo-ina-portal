@@ -83,6 +83,13 @@ curl -sS -H "Authorization: token <GH_TOKEN>" \
 
 `rodo36_form_preview.html`は印刷専用プレビューのため、例外的に`navigation.js`を読み込まない。
 
+### assets/js/calendar-config.js + calendar-upcoming.js（支部カレンダー）
+- `calendar-config.js`の`CALENDARS`配列が、カード取得対象・iframe表示対象・カテゴリー名・色の単一設定元。カテゴリー変更はこの配列だけを編集する。
+- APIキーはGoogle Cloudの`portal-calendar`プロジェクトで発行し、Google Calendar API限定かつ`https://saitamadokenageoina-cloud.github.io/ageo-ina-portal/*`のHTTPリファラー限定にする。キー文字列はログや作業報告へ出さない。
+- `calendar-upcoming.js`は現在時刻から45日間を`Promise.allSettled()`で並列取得し、キャンセル・重複を除いて開始日時順に最大18件表示する。
+- 取得結果は`localStorage`の`doken_calendar_upcoming_v1`へ15分間キャッシュする。通信失敗時は期限切れの保存データもフォールバック表示する。
+- Google Calendar APIの予定名・場所は必ず`textContent`で描画し、予定詳細URLはHTTPSかつ`calendar.google.com`／`www.google.com`だけを許可する。
+
 ### assets/js/print-util.js + assets/css/print.css（印刷・プレビュー共通基盤）
 `calc.html`・`kensetsu_check.html`・`hitori.html`で使用。グローバル`DokenPrint`オブジェクトを公開。
 
@@ -100,7 +107,7 @@ DokenPrint.preview({title, sections, note})                  // プレビュー�
 | ファイル | 内容 | 備考 |
 |---|---|---|
 | index.html | ホーム（5セクション：よく使う/仕事確保/現場・管理関係/手続き・シミュレーション/講習・資料） | 各セクションに`id="yoku"`等のアンカーあり（LINEリッチメニュー用URL） |
-| calendar.html | 支部カレンダー | Google Calendar API v3使用、APIキーがクライアント側に埋め込み（読み取り専用、リファラ制限想定） |
+| calendar.html | 支部カレンダー | iframeを維持し、その下に今後45日・最大18件の予定カードを表示。設定は`assets/js/calendar-config.js`、取得・15分キャッシュ・安全なDOM描画は`assets/js/calendar-upcoming.js` |
 | doken_card.html | どけんカード登録店 | 外部サイト`doken-card.jp`のパスワード表示・コピー機能 |
 | guild.html | DOKENギルド（掲示板） | `assets/js/guild-config.js`（Google Apps Script連携設定）と連動。カテゴリ：人材募集/資材・道具/相談 |
 | kyokyu.html | 労働者供給事業 | 東栄住宅の求人情報を掲載（変更される可能性あり） |
@@ -139,7 +146,7 @@ DokenPrint.preview({title, sections, note})                  // プレビュー�
 | 天気・気温湿度 | `api.open-meteo.com/v1/forecast` | キー不要 |
 | 逆ジオコーディング | `nominatim.openstreetmap.org/reverse` | キー不要、利用規約に注意（連続アクセス制限） |
 | 気象庁予報（フォールバック） | `www.jma.go.jp/bosai/forecast/data/forecast/110000.json` | 埼玉県コード110000 |
-| Googleカレンダー | `www.googleapis.com/calendar/v3/calendars/...` | APIキー埋め込み済み（calendar.html） |
+| Googleカレンダー | `www.googleapis.com/calendar/v3/calendars/...` | APIキーは`assets/js/calendar-config.js`。Google Calendar API限定・本番URLのHTTPリファラー限定。複数カレンダーは`CALENDARS`配列で管理 |
 | PDF表示 | cdnjsのpdf.js 3.11.174 | 本体・ワーカーはSWインストール時に事前キャッシュ。CMap・標準フォントも必要時取得後に実行時キャッシュ |
 | DOKENギルド・天気設定 | Google Apps Script Webアプリ | URLは`assets/js/guild-config.js`。実働コード更新にはApps Script側の再デプロイが必要 |
 | CCUS公式診断 | `lv-asses-sup.ccus.jp` | 外部リンク |

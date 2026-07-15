@@ -122,6 +122,7 @@ body{
   font-size:15px;
   font-weight:600;
 }
+.today-category-color{display:inline-block;width:10px;height:10px;margin-right:7px;border-radius:50%;vertical-align:1px;box-shadow:0 0 0 3px rgba(255,255,255,.1);}
 .view-tabs{
   display:grid;
   grid-template-columns:repeat(3,1fr);
@@ -164,105 +165,40 @@ body{
   display:block;
   background:#fff;
 }
-.section-label{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  color:#9BE7FF;
-  font-size:20px;
-  font-weight:800;
-  margin:6px 0 12px;
-}
-.agenda-shell{
-  display:block;
-  width:calc(100% + 20px);
-  margin-left:-10px;
-  margin-right:-10px;
-  border-radius:18px;
-  border:1px solid rgba(232,97,42,.48);
-  background:rgba(17,43,85,.74);
-  box-shadow:0 16px 36px rgba(0,0,0,.22);
-  padding:0;
-}
-.agenda-list{
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-  padding:10px;
-}
-.agenda-card{
-  display:grid;
-  grid-template-columns:64px 1fr;
-  gap:12px;
-  align-items:center;
-  min-height:96px;
-  padding:14px;
-  border:1px solid rgba(232,97,42,.42);
-  background:rgba(23,50,97,.9);
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,.035);
-}
-.agenda-date{text-align:center;color:#fff;line-height:1;}
-.agenda-date strong{display:block;font-size:34px;font-weight:800;}
-.agenda-date span{display:block;margin-top:6px;color:#B8C8DC;font-size:14px;font-weight:800;}
-.agenda-body{
-  position:relative;
-  padding-left:18px;
-  border-left:7px solid #8A8F99;
-}
-/* Googleカレンダーの色と完全一致 */
-.agenda-body.branch{border-left-color:#616161;}   /* #616161 グレー  saitamadokenageoina */
-.agenda-body.branch2{border-left-color:#0B8043;}  /* #0b8043 緑      班会議等 */
-.agenda-body.event{border-left-color:#D81B60;}    /* #d81b60 ピンク  行事・大会 */
-.agenda-body.training{border-left-color:#F4511E;} /* #f4511e オレンジ 研修・講習 */
-.agenda-body.consult{border-left-color:#F09300;}  /* #f09300 黄      役員会議 */
-.agenda-body.other{border-left-color:#8E24AA;}    /* #8e24aa 紫      その他 */
-.agenda-body.deadline{border-left-color:#F4511E;} /* 互換用 */
-.agenda-body.holiday{border-left-color:#4285F4;}  /* #4285f4 青      祝日 */
-.agenda-title{
-  margin:0 0 5px;
-  color:#fff;
-  font-size:17px;
-  font-weight:700;
-  line-height:1.35;
-  font-family:var(--font-base);
-  letter-spacing:.01em;
-}
-.agenda-meta{
-  margin:0;
-  color:#AFC1D6;
-  font-size:13px;
-  font-weight:600;
-  line-height:1.6;
-  font-family:var(--font-base);
-}
-.agenda-empty{
-  padding:22px 18px;
-  color:#D8E4F2;
-  font-size:14px;
-  font-weight:700;
-  line-height:1.7;
-  text-align:center;
-}
-@keyframes spin{to{transform:rotate(360deg)}}
-.agenda-fallback{
-  padding:8px;
-}
-.agenda-fallback-note{
-  margin:0 0 10px;
-  color:#D8E4F2;
-  font-size:13px;
-  font-weight:700;
-  line-height:1.6;
-}
-.agenda-fallback-frame{
-  width:100%;
-  height:520px;
-  border:0;
-  display:block;
-  border-radius:14px;
-  background:#fff;
-  filter:invert(.9) hue-rotate(180deg) saturate(.82) contrast(.98);
-}
+.section-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:6px 0 12px;flex-wrap:wrap;}
+.section-label{display:flex;align-items:center;gap:10px;margin:0;color:#9BE7FF;font-size:20px;font-weight:800;}
+.agenda-shell{width:100%;border-radius:18px;border:1px solid rgba(232,97,42,.48);background:rgba(17,43,85,.74);box-shadow:0 16px 36px rgba(0,0,0,.22);overflow:hidden;}
+.agenda-list{display:flex;flex-direction:column;gap:10px;padding:10px;min-width:0;}
+.agenda-card{display:grid;grid-template-columns:58px 6px minmax(0,1fr) 28px;gap:10px;align-items:stretch;min-height:112px;padding:12px 10px;border:1px solid rgba(232,97,42,.42);border-radius:15px;background:rgba(23,50,97,.9);box-shadow:inset 0 0 0 1px rgba(255,255,255,.035);color:inherit;text-decoration:none;overflow:hidden;transition:transform .16s ease,border-color .16s ease,background .16s ease;}
+.agenda-card[href]:active{transform:scale(.985);}
+.agenda-card:focus-visible{outline:3px solid #75D6F6;outline-offset:2px;}
+.agenda-date{align-self:center;text-align:center;color:#fff;line-height:1;}
+.agenda-date strong{display:block;margin:3px 0 5px;font-size:34px;font-weight:800;}
+.agenda-month{display:block;color:#AFC1D6;font-size:12px;font-weight:800;}
+.agenda-weekday{display:block;font-size:13px;font-weight:800;}
+.agenda-weekday.weekday-0{color:#FF9C9C;}
+.agenda-weekday.weekday-6{color:#8FBCFF;}
+.agenda-accent{width:6px;min-height:72px;align-self:stretch;border-radius:999px;background:var(--category-color,#616161);}
+.agenda-body{min-width:0;align-self:center;}
+.agenda-category{display:inline-flex;align-items:center;min-height:24px;margin-bottom:5px;padding:3px 9px;border:1px solid color-mix(in srgb,var(--category-color,#616161) 68%,white);border-radius:999px;background:color-mix(in srgb,var(--category-color,#616161) 24%,transparent);color:#F4F8FF;font-size:11px;font-weight:800;line-height:1.2;}
+.agenda-title{margin:0 0 5px;color:#fff;font-size:17px;font-weight:800;line-height:1.4;font-family:var(--font-base);letter-spacing:.01em;overflow-wrap:anywhere;}
+.agenda-meta{display:flex;align-items:flex-start;gap:5px;margin:2px 0 0;color:#AFC1D6;font-size:13px;font-weight:600;line-height:1.45;font-family:var(--font-base);overflow-wrap:anywhere;}
+.agenda-meta i{flex:0 0 auto;margin-top:2px;font-size:14px;color:#9BE7FF;}
+.agenda-arrow{align-self:center;display:grid;place-items:center;width:28px;height:44px;color:#9BE7FF;font-size:22px;}
+.agenda-message{margin:0;padding:26px 18px;color:#D8E4F2;font-size:14px;font-weight:700;line-height:1.7;text-align:center;}
+.agenda-status{display:flex;align-items:center;justify-content:flex-end;gap:8px;min-height:32px;color:#AFC1D6;font-size:12px;font-weight:700;line-height:1.4;}
+.agenda-status.is-saved span:first-child,.agenda-status.is-warning span:first-child,.agenda-status.is-error span:first-child{padding:4px 8px;border-radius:999px;}
+.agenda-status.is-saved span:first-child{background:#213A5A;color:#C5D9F0;}
+.agenda-status.is-warning span:first-child{background:#4A3511;color:#FFE09A;}
+.agenda-status.is-error span:first-child{background:#4A2020;color:#FFC1C1;}
+.agenda-retry{min-height:44px;padding:8px 12px;border:1px solid rgba(117,214,246,.5);border-radius:12px;background:#153B68;color:#EAF8FF;font:inherit;cursor:pointer;}
+.agenda-skeleton{pointer-events:none;}
+.skeleton-date,.skeleton-line,.skeleton-body{display:block;border-radius:10px;background:linear-gradient(90deg,rgba(255,255,255,.06),rgba(255,255,255,.16),rgba(255,255,255,.06));background-size:220% 100%;animation:skeleton-shimmer 1.25s ease-in-out infinite;}
+.skeleton-date{width:46px;height:62px;align-self:center;}
+.skeleton-line{width:6px;min-height:72px;background:rgba(255,255,255,.12);}
+.skeleton-body{width:82%;height:62px;align-self:center;}
+@keyframes skeleton-shimmer{to{background-position:-220% 0;}}
+@media (prefers-reduced-motion:reduce){.agenda-card,.skeleton-date,.skeleton-line,.skeleton-body{animation:none;transition:none;}}
 html[data-theme="light"] .calendar-page{
   background:#F4F7FB;
 }
@@ -278,9 +214,23 @@ html[data-theme="light"] .agenda-shell{
   background:#FFFFFF;
   border-color:#D8DBE3;
 }
-html[data-theme="light"] .agenda-card{background:#F8FAFC;}
+html[data-theme="light"] .section-label{color:#164B7D;}
+html[data-theme="light"] .agenda-card{background:#F8FAFC;border-color:#CBD5E1;box-shadow:0 4px 14px rgba(15,23,42,.07);}
+html[data-theme="light"] .agenda-date{color:#172638;}
+html[data-theme="light"] .agenda-month{color:#475569;}
+html[data-theme="light"] .agenda-weekday{color:#334155;}
+html[data-theme="light"] .agenda-weekday.weekday-0{color:#B4232B;}
+html[data-theme="light"] .agenda-weekday.weekday-6{color:#2457A6;}
+html[data-theme="light"] .agenda-category{color:#172638;background:color-mix(in srgb,var(--category-color,#616161) 13%,white);}
 html[data-theme="light"] .agenda-title{color:#172638;}
 html[data-theme="light"] .agenda-meta{color:#334155;}
+html[data-theme="light"] .agenda-meta i,html[data-theme="light"] .agenda-arrow{color:#24669E;}
+html[data-theme="light"] .agenda-message,html[data-theme="light"] .agenda-status{color:#334155;}
+html[data-theme="light"] .agenda-status.is-saved span:first-child{background:#E2E8F0;color:#334155;}
+html[data-theme="light"] .agenda-status.is-warning span:first-child{background:#FFF2CC;color:#6B4B00;}
+html[data-theme="light"] .agenda-status.is-error span:first-child{background:#FDE2E2;color:#8F1D1D;}
+html[data-theme="light"] .agenda-retry{background:#FFFFFF;color:#164B7D;border-color:#8FB5D5;}
+html[data-theme="light"] .skeleton-date,html[data-theme="light"] .skeleton-line,html[data-theme="light"] .skeleton-body{background:linear-gradient(90deg,#E2E8F0,#F8FAFC,#E2E8F0);background-size:220% 100%;}
 @media (max-width:520px){
   .calendar-page .content{padding:16px 12px 92px;}
   .calendar-hero{grid-template-columns:70px 1fr;padding:18px 16px;border-radius:22px;}
@@ -292,14 +242,14 @@ html[data-theme="light"] .agenda-meta{color:#334155;}
   .date-block strong{font-size:36px;}
   .view-btn{font-size:14px;min-height:52px;}
   .calendar-frame{height:620px;}
-  .agenda-shell{width:calc(100% + 24px);margin-left:-12px;margin-right:-12px;border-radius:14px;}
+  .section-heading{align-items:flex-start;}
+  .agenda-status{width:100%;justify-content:space-between;}
+  .agenda-shell{border-radius:14px;}
   .agenda-list{padding:8px;gap:9px;}
-  .agenda-card{grid-template-columns:52px 1fr;gap:10px;padding:12px 10px;}
-  .agenda-date strong{font-size:30px;}
-  .agenda-fallback-frame{height:500px;}
-}
-@media (min-width:760px){
-  .agenda-shell{width:calc(100% + 32px);margin-left:-16px;margin-right:-16px;}
+  .agenda-card{grid-template-columns:50px 5px minmax(0,1fr) 24px;gap:8px;padding:12px 8px;}
+  .agenda-date strong{font-size:29px;}
+  .agenda-title{font-size:16px;}
+  .agenda-arrow{width:24px;}
 }
 </style>
 </head>
@@ -330,15 +280,15 @@ html[data-theme="light"] .agenda-meta{color:#334155;}
       <span id="today-week">--</span>
     </div>
     <div class="today-text">
-      <b><i class="ti ti-calendar"></i>今日の日付</b>
-      <p>Googleカレンダーで最新の予定を確認してください</p>
+      <b><i class="ti ti-calendar"></i>今日の予定</b>
+      <p><span class="today-category-color" id="today-category-color" hidden></span><span id="today-summary">予定を確認しています…</span></p>
     </div>
   </section>
 
   <nav class="view-tabs" aria-label="表示切替">
-    <button class="view-btn active" type="button" onclick="switchView('MONTH',this)"><i class="ti ti-calendar-month"></i>月表示</button>
-    <button class="view-btn" type="button" onclick="switchView('WEEK',this)"><i class="ti ti-calendar-week"></i>週表示</button>
-    <button class="view-btn" type="button" onclick="switchView('AGENDA',this)"><i class="ti ti-clipboard-list"></i>リスト</button>
+    <button class="view-btn active" type="button" data-calendar-mode="MONTH"><i class="ti ti-calendar-month"></i>月表示</button>
+    <button class="view-btn" type="button" data-calendar-mode="WEEK"><i class="ti ti-calendar-week"></i>週表示</button>
+    <button class="view-btn" type="button" data-calendar-mode="AGENDA"><i class="ti ti-clipboard-list"></i>リスト</button>
   </nav>
 
   <section class="calendar-shell" id="calendar-shell">
@@ -351,13 +301,15 @@ html[data-theme="light"] .agenda-meta{color:#334155;}
     </iframe>
   </section>
 
-  <div class="section-label"><i class="ti ti-clipboard-list"></i>今後の予定</div>
-  <section class="agenda-shell" id="agenda-shell">
-    <div class="agenda-list" id="agenda-list">
-      <div class="agenda-empty" id="agenda-loading" style="display:flex;align-items:center;justify-content:center;gap:10px;">
-        <i class="ti ti-loader-2" style="font-size:22px;animation:spin 1s linear infinite;"></i>
-        今後1週間の予定を読み込んでいます…
-      </div>
+  <div class="section-heading">
+    <h2 class="section-label" id="upcoming-heading"><i class="ti ti-clipboard-list"></i>今後の予定</h2>
+    <div class="agenda-status is-loading" id="agenda-status" aria-live="polite">今後45日間の予定を読み込んでいます…</div>
+  </div>
+  <section class="agenda-shell" id="agenda-shell" aria-labelledby="upcoming-heading">
+    <div class="agenda-list" id="agenda-list" role="list" aria-live="polite" aria-busy="true">
+      <div class="agenda-card agenda-skeleton" aria-hidden="true"><span class="skeleton-date"></span><span class="skeleton-line"></span><span class="skeleton-body"></span></div>
+      <div class="agenda-card agenda-skeleton" aria-hidden="true"><span class="skeleton-date"></span><span class="skeleton-line"></span><span class="skeleton-body"></span></div>
+      <div class="agenda-card agenda-skeleton" aria-hidden="true"><span class="skeleton-date"></span><span class="skeleton-line"></span><span class="skeleton-body"></span></div>
     </div>
   </section>
 </div>
@@ -365,130 +317,8 @@ html[data-theme="light"] .agenda-meta{color:#334155;}
 <footer>埼玉土建一般労働組合 上尾伊奈支部｜TEL <a href="tel:048-773-9863">048-773-9863</a></footer>
 </div>
 
-<script>
-// ===== Google Calendar API方式（吉見SMCと同一実装） =====
-const API_KEY = 'AIzaSyAcwXq2eLqpJNLJKy8clba4PpuBQE90FEU';
-
-const CALENDAR_QUERY = 'height=600&wkst=1&ctz=Asia%2FTokyo&showPrint=0&showTabs=0&showCalendars=0&showTz=0&src=c2FpdGFtYWRva2VuYWdlb2luYUBnbWFpbC5jb20&src=OTIwZGY5NzEyMmJjNjJjYjg0ODUyNDI4ZjAxOTI4NTAwZDQzMGIwMGE1YWNlZjQ0OGQ2ZWI2NzlkOGNkZjFmYkBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=NTQxNjFiNDgzY2ZhYTEzZjA1NjQ4MjRmNGZhZWZiMjlkZTE0MGRiOWVkYWYxMTM1NGE3ZTdhYjFlYTg0YTliYkBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=ZTAxOGRmZTE0Njc1MGI3YzkxNTI2NzAzYTBiZDg3OTQ2NDAzYzU0YTcyZjRjY2FlOWQ1ZDNhZDdmNGJhYTA4OUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=YjA3N2RjOGQzYzRhMzI5MjZhMTdjYTdhYjU1ZmIwZDdmM2ExY2JkYTMwMDAxMmVhNmE0MDg2MWQyNmU3MjI4ZEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=ZmVkNzhiZWJhZmFkYjNjNDZkMmEwMjNhMDI1NDllNWNkYWRmMzJhZDU2ZTU0NDRmNDBhNWFjOTljM2I2OGJkOEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=amEuamFwYW5lc2Uub2ZmaWNpYWwjaG9saWRheUBncm91cC52LmNhbGVuZGFyLmdvb2dsZS5jb20&color=%23616161&color=%230b8043&color=%23d81b60&color=%23f4511e&color=%23f09300&color=%238e24aa&color=%234285f4';
-const CALENDAR_BASE = 'https://calendar.google.com/calendar/embed?' + CALENDAR_QUERY + '&mode=';
-
-// カレンダーID・色・typeの定義
-const CALENDARS = [
-  { id: 'saitamadokenageoina@gmail.com',                                                                    color: '#616161', type: 'branch'   },
-  { id: '920df97122bc62cb84852428f01928500d430b00a5acef448d6eb679d8cdf1fb@group.calendar.google.com',      color: '#0b8043', type: 'branch2'  },
-  { id: '54161b483cfaa13f0564824f4faefb29de140db9edaf11354a7e7ab1ea84a9bb@group.calendar.google.com',      color: '#d81b60', type: 'event'    },
-  { id: 'e018dfe146750b7c91526703a0bd87946403c54a72f4ccae9d5d3ad7f4baa089@group.calendar.google.com',      color: '#f4511e', type: 'training' },
-  { id: 'b077dc8d3c4a32926a17ca7ab55fb0d7f3a1cbda300012ea6a40861d26e7228d@group.calendar.google.com',      color: '#f09300', type: 'consult'  },
-  { id: 'fed78bebafadb3c46d2a023a02549e5cdadf32ad56e5444f40a5ac99c3b68bd8@group.calendar.google.com',      color: '#8e24aa', type: 'other'    },
-];
-
-function setToday(){
-  const now = new Date();
-  const weeks = ['日曜日','月曜日','火曜日','水曜日','木曜日','金曜日','土曜日'];
-  document.getElementById('today-day').textContent = String(now.getDate());
-  document.getElementById('today-week').textContent = weeks[now.getDay()];
-}
-
-function switchView(mode, btn){
-  document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById('gcal').src = CALENDAR_BASE + mode;
-}
-
-async function loadUpcoming(){
-  const now = new Date();
-  const weekLater = new Date(now);
-  weekLater.setDate(now.getDate() + 7);
-
-  const timeMin = now.toISOString();
-  const timeMax = weekLater.toISOString();
-
-  // 全カレンダーを並列取得
-  const promises = CALENDARS.map(cal => {
-    const url = 'https://www.googleapis.com/calendar/v3/calendars/'
-      + encodeURIComponent(cal.id)
-      + '/events?key=' + API_KEY
-      + '&timeMin=' + encodeURIComponent(timeMin)
-      + '&timeMax=' + encodeURIComponent(timeMax)
-      + '&singleEvents=true'
-      + '&orderBy=startTime'
-      + '&maxResults=20';
-
-    return fetch(url)
-      .then(res => res.ok ? res.json() : { items: [] })
-      .then(data => (data.items || []).map(ev => ({
-        title:   ev.summary || '(無題)',
-        start:   ev.start.dateTime || ev.start.date,
-        end:     ev.end.dateTime   || ev.end.date,
-        allDay:  !ev.start.dateTime,
-        location: ev.location || '',
-        color:   cal.color,
-        type:    cal.type,
-      })))
-      .catch(() => []);
-  });
-
-  Promise.all(promises).then(results => {
-    // ローディング非表示
-    const loading = document.getElementById('agenda-loading');
-    if(loading) loading.style.display = 'none';
-
-    const events = results.flat().sort((a, b) => a.start.localeCompare(b.start));
-    renderUpcoming(events);
-  });
-}
-
-function renderUpcoming(events){
-  const list = document.getElementById('agenda-list');
-  const DAYS = ['日','月','火','水','木','金','土'];
-
-  if(!events.length){
-    list.innerHTML = '<div class="agenda-empty">今後1週間の予定はありません。</div>';
-    return;
-  }
-
-  list.innerHTML = events.slice(0, 20).map(ev => {
-    const d = new Date(ev.start.slice(0, 10) + 'T00:00:00');
-    const dow = d.getDay();
-
-    let timeStr;
-    if(ev.allDay){
-      timeStr = '終日';
-    } else {
-      const s = new Date(ev.start);
-      const e = new Date(ev.end);
-      const hm = t => String(t.getHours()).padStart(2,'0') + ':' + String(t.getMinutes()).padStart(2,'0');
-      timeStr = hm(s) + '〜' + hm(e);
-    }
-
-    // 場所をコンパクトに（住所を省略）
-    const locShort = ev.location
-      ? ev.location.replace(/,?\s*日本.*/, '').replace(/〒\d{3}-\d{4}\s*/, '').split(',')[0].trim().slice(0, 20)
-      : '';
-
-    const dowClass = dow === 0 ? ' style="color:#CC3B3B;" ' : dow === 6 ? ' style="color:#3A66C0;" ' : '';
-
-    return `<article class="agenda-card">
-      <div class="agenda-date">
-        <strong>${d.getDate()}</strong>
-        <span ${dowClass}>${DAYS[dow]}</span>
-      </div>
-      <div class="agenda-body ${ev.type}">
-        <p class="agenda-title">${escHtml(ev.title)}</p>
-        <p class="agenda-meta">${timeStr}${locShort ? '　' + escHtml(locShort) : ''}</p>
-      </div>
-    </article>`;
-  }).join('');
-}
-
-function escHtml(s){
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-setToday();
-document.getElementById('gcal').src = CALENDAR_BASE + 'MONTH';
-loadUpcoming();
-</script>
+<script src="assets/js/calendar-config.js"></script>
+<script src="assets/js/calendar-upcoming.js"></script>
 <script src="assets/js/navigation.js"></script>
 </body>
 </html>
