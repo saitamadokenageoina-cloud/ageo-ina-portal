@@ -200,23 +200,23 @@ html[data-theme="light"] .comment-input{background:#fff;color:#1B2A3B;}
 
     <div class="input-group">
       <label>投稿内容</label>
-      <textarea id="post-body" rows="5" placeholder="例：明日、上尾市内の現場で左官が1人足りません。日給2万円、午前7時〜17時。ご連絡ください。" style="resize:none;font-size:15px;"></textarea>
+      <textarea id="post-body" rows="5" maxlength="1200" placeholder="例：明日、上尾市内の現場で左官が1人足りません。日給2万円、午前7時〜17時。ご連絡ください。" style="resize:none;font-size:15px;"></textarea>
     </div>
 
     <div class="grid2">
       <div class="input-group">
         <label>地域（任意）</label>
-        <input type="text" id="post-area" placeholder="例：上尾市、伊奈町">
+        <input type="text" id="post-area" maxlength="80" placeholder="例：上尾市、伊奈町">
       </div>
       <div class="input-group">
         <label>お名前・職種（任意）</label>
-        <input type="text" id="post-name" placeholder="例：大工 鈴木">
+        <input type="text" id="post-name" maxlength="40" placeholder="例：大工 鈴木">
       </div>
     </div>
 
     <div class="input-group">
       <label>連絡先（任意・組合員のみ閲覧）</label>
-      <input type="text" id="post-tel" placeholder="例：090-XXXX-XXXX">
+      <input type="tel" id="post-tel" maxlength="40" inputmode="tel" placeholder="例：090-XXXX-XXXX">
     </div>
 
     <button class="btn-primary" onclick="submitPost()">
@@ -262,6 +262,38 @@ const CAT = {
   shizai:{label:'資材・道具',badge:'badge-shizai'},
   soudan:{label:'相談',badge:'badge-soudan'},
 };
+const CAT_EMOJI = {jinzai:'👷', shizai:'🔧', soudan:'💬'};
+
+function safeText(value, max){
+  return String(value == null ? '' : value).replace(/[\u0000-\u001F\u007F]/g, ' ').trim().slice(0, max);
+}
+function normalizeComment(comment){
+  if(!comment || typeof comment !== 'object') return null;
+  const text = safeText(comment.text, 300);
+  if(!text) return null;
+  return {emoji:'💬', name:safeText(comment.name, 40) || '匿名', text};
+}
+function normalizePost(post){
+  if(!post || typeof post !== 'object' || !CAT[post.cat]) return null;
+  const id = Number(post.id);
+  const body = safeText(post.body, 1200);
+  if(!Number.isSafeInteger(id) || id <= 0 || !body) return null;
+  const telRaw = safeText(post.tel, 40);
+  const tel = /^[0-9+()\-\sXx]*$/.test(telRaw) ? telRaw : '';
+  return {
+    id,
+    clientId:safeText(post.clientId, 80),
+    cat:post.cat,
+    emoji:CAT_EMOJI[post.cat],
+    name:safeText(post.name, 40) || '匿名',
+    area:safeText(post.area, 80),
+    time:safeText(post.time, 40) || '日時不明',
+    body,
+    tags:Array.isArray(post.tags) ? post.tags.slice(0, 8).map(t=>safeText(t, 30)).filter(Boolean) : [],
+    tel,
+    comments:Array.isArray(post.comments) ? post.comments.map(normalizeComment).filter(Boolean).slice(0, 100) : []
+  };
+}
 
 function hasCloud(){ return Boolean(GUILD_CONFIG.apiUrl); }
 function setStatus(text){ document.getElementById('sync-status').textContent = text; }
@@ -277,8 +309,9 @@ function postKey(post){
 function mergePosts(cloudPosts, localPosts){
   const merged = [];
   const seen = new Set();
-  [...cloudPosts, ...localPosts].forEach(post=>{
-    if(!post || !post.body) return;
+  [...cloudPosts, ...localPosts].forEach(raw=>{
+    const post = normalizePost(raw);
+    if(!post) return;
     const key = postKey(post);
     if(seen.has(key)) return;
     seen.add(key);
@@ -291,7 +324,7 @@ function updateNextId(){
 }
 function loadLocal(){
   const saved = readSavedPosts();
-  posts = saved.length ? saved : (hasCloud() ? [] : SAMPLE_POSTS);
+  posts = mergePosts([], saved.length ? saved : (hasCloud() ? [] : SAMPLE_POSTS));
   updateNextId();
 }
 
@@ -358,10 +391,10 @@ function render(){
   list.innerHTML = filtered.map(p=>`
     <div class="post-card ${p.cat}" id="pc-${p.id}">
       <div class="post-header">
-        <div class="post-avatar">${p.emoji||'👤'}</div>
+        <div class="post-avatar">${esc(p.emoji||'👤')}</div>
         <div style="flex:1;">
           <p class="post-author">${esc(p.name||'匿名')}${p.area?` <span style="font-size:11px;color:var(--gray400);">📍${esc(p.area)}</span>`:''}</p>
-          <p class="post-meta">${p.time}</p>
+          <p class="post-meta">${esc(p.time)}</p>
         </div>
         <span class="post-badge ${CAT[p.cat].badge}">${CAT[p.cat].label}</span>
       </div>
@@ -382,7 +415,7 @@ function render(){
         <div id="cl-${p.id}">
           ${(p.comments||[]).map(c=>`
             <div class="comment-item">
-              <div class="comment-avatar">${c.emoji||'💬'}</div>
+              <div class="comment-avatar">${esc(c.emoji||'💬')}</div>
               <div class="comment-body">
                 <p class="comment-author">${esc(c.name||'匿名')}</p>
                 <p class="comment-text">${esc(c.text)}</p>

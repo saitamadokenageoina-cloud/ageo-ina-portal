@@ -320,7 +320,9 @@
           <li>Apps Scriptの「プロジェクトの設定」からスクリプトプロパティを追加します。</li>
         </ol>
         <div class="codebox">SPREADSHEET_ID = 手順2で控えたスプレッドシートID
-ADMIN_PIN = 投稿削除に使う管理者PIN</div>
+ADMIN_PIN = 投稿削除に使う6文字以上の管理者PIN
+ALERT_PIN = 天気アラート設定に使う6文字以上の管理者PIN
+NOTIFY_EMAIL = ageoina@saitama-doken.or.jp</div>
         <ol class="steps" start="6">
           <li>「デプロイ」→「新しいデプロイ」を選びます。</li>
           <li>種類は「ウェブアプリ」、実行ユーザーは「自分」、アクセスできるユーザーは「全員」にします。</li>
@@ -328,11 +330,12 @@ ADMIN_PIN = 投稿削除に使う管理者PIN</div>
           <li>発行されたウェブアプリURLをコピーします。</li>
           <li><strong>assets/js/guild-config.js</strong> の <strong>apiUrl</strong> にURLを入れて、GitHubへpushします。</li>
         </ol>
+        <div class="tip warn">すでに運用中のApps Scriptを更新する場合は、「デプロイ」→「デプロイを管理」→鉛筆マーク→バージョンを「新バージョン」にしてデプロイします。既存のウェブアプリURLは変わりません。</div>
         <div class="codebox">window.DOKEN_GUILD_CONFIG = {
   apiUrl: 'https://script.google.com/macros/s/発行されたURL/exec',
   notifyEmail: 'ageoina@saitama-doken.or.jp'
 };</div>
-        <div class="tip green">設定後は、全員が同じ投稿を見られます。新しい投稿があると支部メール <strong>ageoina@saitama-doken.or.jp</strong> に通知されます。</div>
+        <div class="tip green">設定後は、全員が同じ投稿を見られます。新しい投稿は、スクリプトプロパティの <strong>NOTIFY_EMAIL</strong> に設定した支部メールへ通知されます。通知先は公開画面から変更できません。</div>
       </div>
     </article>
 
@@ -344,7 +347,7 @@ ADMIN_PIN = 投稿削除に使う管理者PIN</div>
           <li>Apps Scriptに設定した <strong>ADMIN_PIN</strong> を入力します。</li>
           <li>各投稿に表示される「削除」ボタンから不要な投稿を削除します。</li>
         </ol>
-        <div class="tip warn">管理者PINは支部内の管理者だけで共有してください。公開ページや資料には載せないでください。</div>
+        <div class="tip warn">管理者PINは6文字以上にし、支部内の管理者だけで共有してください。公開ページ、GitHub、資料、チャットには載せないでください。</div>
       </div>
     </article>
 
@@ -353,14 +356,15 @@ ADMIN_PIN = 投稿削除に使う管理者PIN</div>
       <div class="acc-body">
         <ol class="steps">
           <li>ホーム画面の天気自動アラートは、初期状態では設定を変更してもその端末だけに保存されます。</li>
-          <li>DOKENギルドと同じ Google Apps Script のスクリプトプロパティに <strong>ALERT_PIN</strong>（天気アラート設定用のパスワード）を追加すると、設定が全員のアプリに共有されるようになります。</li>
+          <li>DOKENギルドと同じ Google Apps Script のスクリプトプロパティに <strong>ALERT_PIN</strong>（天気アラート設定用のPIN）を追加すると、設定が全員のアプリに共有されるようになります。</li>
         </ol>
-        <div class="codebox">ALERT_PIN = 9863（アプリ内で入力するパスワードと同じ値にしてください）</div>
+        <div class="codebox">ALERT_PIN = 6文字以上の新しい管理者PIN
+※実際のPINはGitHubや資料に書かないでください</div>
         <ol class="steps" start="3">
           <li>Apps Scriptの中身を最新版（<strong>docs/guild-apps-script-template.js</strong>）に更新し、再デプロイします。</li>
-          <li>「天気アラート設定」ページ（ホーム画面フッターの「天気アラート設定（管理者用）」）でパスワード「9863」を入力し、設定を保存します。</li>
+          <li>「天気アラート設定」ページ（ホーム画面フッターの「天気アラート設定（管理者用）」）で、スクリプトプロパティに設定したPINを入力して保存します。</li>
         </ol>
-        <div class="tip green">共有が有効になると、設定画面に「全員に共有される設定です」と表示されます。共有が未設定の間は「この端末だけの設定です」と表示され、動作には影響ありません。</div>
+        <div class="tip green">PINは設定画面を閉じるまでだけ使用し、コードや端末には保存されません。共有が未設定の間は「この端末だけの設定です」と表示されます。</div>
       </div>
     </article>
   </section>

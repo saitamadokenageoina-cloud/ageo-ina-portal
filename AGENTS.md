@@ -1,5 +1,5 @@
 # 埼玉土建 上尾伊奈支部 組合員アプリ — 引き継ぎ資料
-最終更新：2026年7月15日／作成：Claude（前担当AI）
+最終更新：2026年7月15日／作成：Claude（前担当AI）／更新：Codex
 
 ---
 
@@ -16,7 +16,7 @@
 
 - **フレームワークなし**。素のHTML + CSS + JavaScript（ES5〜ES6混在、バニラJS）。
 - ビルドツール・バンドラーなし。ファイルをそのまま`git push`すればGitHub Pagesに反映される。
-- PWA対応（`manifest.json` + `sw.js`のService Worker）。
+- PWA対応（`manifest.webmanifest` + `sw.js`のService Worker）。
 - 外部ライブラリはCDNではなく**極力自前ホスティング**（後述の教訓参照）。
 - アイコン：Tabler Icons 2.47.0（自前ホスティング済み）。
 - フォント：Google Fonts「M PLUS 1p」（CDN読み込み、これは許容している）。
@@ -52,7 +52,9 @@ curl -sS -H "Authorization: token <GH_TOKEN>" \
 
 - **キャッシュ戦略**：Network-First（同一オリジンのGETリクエストのみ）。外部オリジン（Google Calendar API、天気API等）はSWを素通りしそのままネットワークへ。
 - **CACHE_VERSIONを上げないと更新が反映されない**。全ページ共通で`assets/js/navigation.js`がSW登録・自動更新チェック・`controllerchange`での自動リロードを担う。
-- **CACHE_FILES**に事前キャッシュ対象を列挙（HTML主要ページ、common.css、print.css、tabler-icons.min.css、tabler-icons.woff2など）。新規ページを追加したら**ここにも追記が必要**。
+- **CACHE_FILES**に事前キャッシュ対象を列挙（全HTML、共通JS/CSS、PWAアイコン、PDF.js本体・ワーカー、36協定正式様式PDFなど）。新規ページや必須共通ファイルを追加したら**ここにも追記が必要**。
+- 容量の大きい資料PDFは事前キャッシュしない。一度オンラインで開いたPDFはNetwork-Firstの実行時キャッシュに保存され、次回以降のオフライン表示に利用される。
+- PDF.jsが必要に応じてCDNから取得するCMap・標準フォントだけは例外的に実行時キャッシュする。Google Calendar・天気API等の外部APIは従来どおりSWを素通りする。
 - オフライン時、キャッシュに無いページは動作しない。新規ページ作成時は必ずCACHE_FILESへの追加を忘れないこと。
 
 ## 5. 共通基盤ファイル
@@ -72,12 +74,14 @@ curl -sS -H "Authorization: token <GH_TOKEN>" \
 
 電話番号の自動リンク化対策、拡大禁止解除（アクセシビリティ）なども含まれる。
 
-### assets/js/navigation.js（全19ページで読み込み）
+### assets/js/navigation.js（20ページ中19ページで読み込み）
 - SW登録・起動時update・待機中SWの即時適用
 - `controllerchange`/`message`イベントでの自動リロード（初回インストール時は除外、8秒の連続リロード防止ガードあり）
 - 画面復帰時（`visibilitychange`）の再チェック
 - 戻るボタンの挙動（`goBack()`）
 - テーマ切替トグル、下部の電話/LINE/地図/ガイドの固定バー（`injectContactRail`）注入
+
+`rodo36_form_preview.html`は印刷専用プレビューのため、例外的に`navigation.js`を読み込まない。
 
 ### assets/js/print-util.js + assets/css/print.css（印刷・プレビュー共通基盤）
 `calc.html`・`kensetsu_check.html`・`hitori.html`で使用。グローバル`DokenPrint`オブジェクトを公開。
@@ -91,7 +95,7 @@ DokenPrint.preview({title, sections, note})                  // プレビュー�
 - プレビューは`#preview-overlay`のオーバーレイ＋A4イメージの`.pv-sheet`。
 - 複製されたHTMLに残るインラインの色指定（`color`/`background`等）を`stripColorStyles()`でDOMレベルから除去し、印刷/プレビュー内は白地・黒文字に強制する二重の安全策あり。
 
-## 6. ページ一覧（19ページ、現行）
+## 6. ページ一覧（20ページ、現行）
 
 | ファイル | 内容 | 備考 |
 |---|---|---|
@@ -102,6 +106,7 @@ DokenPrint.preview({title, sections, note})                  // プレビュー�
 | kyokyu.html | 労働者供給事業 | 東栄住宅の求人情報を掲載（変更される可能性あり） |
 | calc.html | 計算ツール（労務費/国保料/給付金/CCUS） | 最大の機能。料率は毎年4月更新が必要（下記7章） |
 | atsusa.html | 熱中症AIアラート | GPS→Open-Meteo API→WBGT計算（気象庁JSONへのフォールバックあり） |
+| alert_settings.html | 天気アラート管理者設定 | 管理PINはコードに保存せず、入力値をApps Scriptの`ALERT_PIN`で検証。6文字以上を使用 |
 | anzen_check.html | 現場安全チェックリスト | 印刷対応 |
 | work_log.html | 作業記録（労災対策） | localStorage保存、PDF印刷、バックアップ/復元機能 |
 | rodo36.html | 36協定・残業時間カウンター | 印刷対応（A4縦） |
@@ -111,7 +116,7 @@ DokenPrint.preview({title, sections, note})                  // プレビュー�
 | kensetsu_check.html | 建設業許可チェッカー | 印刷対応 |
 | hitori.html | 一人親方の基礎知識・診断 | 国交省PDF準拠。5問診断＋判定＋比較表（PC横並び/スマホ縦カード切替）＋印刷対応 |
 | koushu.html | 技能講習日程案内 | |
-| shiryo.html / book.html | 資料本棚 / デジタルブックリーダー | `assets/js/bookshelf.js`使用 |
+| shiryo.html / book.html | 資料本棚 / デジタルブックリーダー | `assets/js/bookshelf.js`使用。PDF.js本体・ワーカーはSWインストール時に事前キャッシュ |
 | app_guide.html | 説明書・ヘルプ | |
 
 **`_archive/`フォルダ**：旧版で現行導線からリンクされていないページ10個（ccus_check, kanyu_merit, kokuho_sim, kyosai, merit_check, portal, techno, tetsuzuki_guide, youtube, rodo36_preview）。削除ではなく退避のみ。復元可能。
@@ -135,7 +140,8 @@ DokenPrint.preview({title, sections, note})                  // プレビュー�
 | 逆ジオコーディング | `nominatim.openstreetmap.org/reverse` | キー不要、利用規約に注意（連続アクセス制限） |
 | 気象庁予報（フォールバック） | `www.jma.go.jp/bosai/forecast/data/forecast/110000.json` | 埼玉県コード110000 |
 | Googleカレンダー | `www.googleapis.com/calendar/v3/calendars/...` | APIキー埋め込み済み（calendar.html） |
-| PDF表示 | cdnjs（pdf.js 3.11.174） | rodo36_form_preview.htmlのみ、CDN依存が残っている箇所 |
+| PDF表示 | cdnjsのpdf.js 3.11.174 | 本体・ワーカーはSWインストール時に事前キャッシュ。CMap・標準フォントも必要時取得後に実行時キャッシュ |
+| DOKENギルド・天気設定 | Google Apps Script Webアプリ | URLは`assets/js/guild-config.js`。実働コード更新にはApps Script側の再デプロイが必要 |
 | CCUS公式診断 | `lv-asses-sup.ccus.jp` | 外部リンク |
 | どけんカード公式 | `doken-card.jp` | 外部サイト、アプリ内は誘導のみ |
 | 求人求職 | `www.saitama-doken.or.jp/kyujin/` | 外部リンク |
@@ -168,6 +174,12 @@ Service WorkerはNetwork-Firstだが**同一オリジンのリクエストしか
 ### 9-7. 半角%のエスケープミス
 Pythonスクリプトで`width:100%%`のように誤って二重エスケープすると、CSSとして無効になりレイアウトが崩れる。生成スクリプトを書く際は出力結果を必ず`grep`で確認すること。
 
+### 9-8. 公開HTML・JavaScriptに管理PINや秘密情報を書かない
+GitHub Pagesとリポジトリは公開されているため、HTML・JavaScriptに書いた値は画面上で隠しても第三者が確認できる。管理PINはGoogle Apps Scriptのスクリプトプロパティ（`ADMIN_PIN`・`ALERT_PIN`）だけに設定し、6文字以上の推測されにくい値を使う。ブラウザ側は入力されたPINをその画面を閉じるまでメモリ上でのみ保持し、`localStorage`や`sessionStorage`には保存しない。
+
+### 9-9. DOKENギルドの投稿データはサーバーと画面の両方で検証する
+Apps Scriptはカテゴリ、ID、本文長、氏名、地域、電話番号、コメント、天気設定値を許可形式へ正規化する。画面側もクラウド・端末保存データを`normalizePost()`へ通し、HTML表示時は`esc()`でエスケープする。通知先メールはブラウザから受け取らず、スクリプトプロパティ`NOTIFY_EMAIL`のみを使用する。`docs/guild-apps-script-template.js`を変更しただけでは実働APIは更新されないため、Apps Script側の再デプロイまで完了させること。
+
 ## 10. LINE公式アカウント連携
 
 リッチメニュー（6分割・大サイズ2500×1686px）用の画像と設定URL一式を過去に作成済み。ホームの5セクションに直接飛べるアンカー：
@@ -192,8 +204,11 @@ Pythonスクリプトで`width:100%%`のように誤って二重エスケープ�
 
 - `_archive/`内の旧10ページ：削除するか判断待ち
 - doken_card.htmlのパスワードは外部サイト（doken-card.jp）でクロスオリジンのため自動入力不可（手動コピー＆ペースト方式で運用中）
+- doken_card.htmlの共通パスワードは公開HTML内に存在する。組合員限定を厳密に担保するには認証付き配信へ移す必要があり、現在の静的GitHub Pagesだけでは実現できない
+- DOKENギルドは公開URLから閲覧できる。氏名・電話番号等を組合員だけに限定するには認証導入が必要。現状は入力内容を必要最小限にする運用が前提
+- Google Calendar APIキーはクライアント公開型。Google Cloud側でCalendar API限定・公開サイトのHTTPリファラー限定・使用量アラートを必ず設定する
 - LINEリッチメニューのタブ切替は公式管理画面のみでは実現不可（Liny/Lステップ等の有料ツールか、Messaging API + GAS実装が必要）
-- rodo36_form_preview.htmlのみ、外部CDN（pdf.js）依存が残っている（自前ホスティング未対応）
+- PDF.js一式はcdnjs依存だが、本体・ワーカーはSWで事前キャッシュし、CMap・標準フォントは一度取得後に実行時キャッシュする
 
 ## 13. 検証コマンド集（引き継ぎ後も活用推奨）
 

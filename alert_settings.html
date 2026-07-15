@@ -64,14 +64,14 @@
 
 <div class="content">
 
-  <!-- パスワードゲート -->
+  <!-- 管理者PIN入力 -->
   <div class="gate" id="gate">
     <i class="ti ti-shield-lock"></i>
-    <h2>管理者パスワードを入力</h2>
-    <p>ホーム画面の天気自動アラートの表示条件を設定します。支部の管理者のみご利用ください。</p>
-    <input type="password" id="pw" inputmode="numeric" maxlength="8" placeholder="••••">
-    <button onclick="checkPw()">確認する</button>
-    <p class="err" id="pw-err">パスワードが違います。</p>
+    <h2>管理者PINを入力</h2>
+    <p>ホーム画面の天気自動アラートを設定します。PINはこの画面を閉じるまでだけ使用し、端末には保存しません。</p>
+    <input type="password" id="pw" inputmode="text" maxlength="64" autocomplete="current-password" placeholder="管理者PIN">
+    <button onclick="checkPw()">設定画面を開く</button>
+    <p class="err" id="pw-err">管理者PINを入力してください。</p>
   </div>
 
   <!-- 設定画面本体 -->
@@ -163,8 +163,8 @@
 <script src="assets/js/navigation.js"></script>
 <script src="assets/js/guild-config.js"></script>
 <script>
-const ADMIN_PW = '9863';
 const LS_KEY = 'doken_wx_alert_settings';
+let adminPin = '';
 
 const DEFAULT_SETTINGS = {
   dayMode: 'today',
@@ -176,8 +176,10 @@ const DEFAULT_SETTINGS = {
 
 function checkPw(){
   const v = document.getElementById('pw').value.trim();
-  if (v === ADMIN_PW){
-    try{ sessionStorage.setItem('doken_wx_admin_ok','1'); }catch(e){}
+  if (v){
+    adminPin = v;
+    document.getElementById('pw').value = '';
+    document.getElementById('pw-err').style.display = 'none';
     document.getElementById('gate').style.display = 'none';
     document.getElementById('settings-area').style.display = 'block';
     loadSettings();
@@ -243,41 +245,31 @@ async function loadSettings(){
 
 async function saveSettings(){
   const cfg = readForm();
-  try{ localStorage.setItem(LS_KEY, JSON.stringify(cfg)); }catch(e){}
-
   const msg = document.getElementById('save-msg');
   const url = apiUrl();
   if (!url){
+    try{ localStorage.setItem(LS_KEY, JSON.stringify(cfg)); }catch(e){}
     msg.textContent = 'この端末に保存しました（共有設定は未接続のため、この端末のみ反映されます）。';
     msg.className = 'save-msg ok';
     return;
   }
   try{
-    const res = await fetch(url, {method:'POST', body: JSON.stringify({action:'saveAlertConfig', pin:ADMIN_PW, config:cfg})});
+    const res = await fetch(url, {method:'POST', body: JSON.stringify({action:'saveAlertConfig', pin:adminPin, config:cfg})});
     const data = await res.json();
     if (data && data.ok){
+      try{ localStorage.setItem(LS_KEY, JSON.stringify(cfg)); }catch(e){}
       msg.textContent = '保存しました。全員のアプリに反映されます。';
       msg.className = 'save-msg ok';
     } else {
-      msg.textContent = 'この端末には保存しましたが、共有設定への反映に失敗しました。';
+      msg.textContent = '管理者PINが違うため保存できませんでした。設定は変更されていません。';
       msg.className = 'save-msg ng';
     }
   }catch(e){
     console.error('[アラート設定] 共有設定の保存に失敗:', e);
-    msg.textContent = 'この端末には保存しましたが、共有設定への反映に失敗しました（通信エラー）。';
+    msg.textContent = '通信エラーのため保存できませんでした。時間をおいてもう一度お試しください。';
     msg.className = 'save-msg ng';
   }
 }
-
-(function init(){
-  try{
-    if (sessionStorage.getItem('doken_wx_admin_ok') === '1'){
-      document.getElementById('gate').style.display = 'none';
-      document.getElementById('settings-area').style.display = 'block';
-      loadSettings();
-    }
-  }catch(e){}
-})();
 </script>
 </body>
 </html>

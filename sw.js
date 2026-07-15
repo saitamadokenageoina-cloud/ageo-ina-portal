@@ -2,21 +2,35 @@
 // ★重要★ 変更をデプロイするたびに CACHE_VERSION の末尾番号を必ず1つ上げること。
 //   このファイルのバイトが変わることでブラウザが更新を検知し、
 //   新SWを再インストール → 古いキャッシュを全削除 → ページ自動リロードとなる。
-const CACHE_VERSION = 'v20260707-54';
+const CACHE_VERSION = 'v20260707-55';
 const CACHE_NAME = 'ageo-ina-portal-' + CACHE_VERSION;
 
 // GitHub Pages プロジェクトページのため、配信は /ageo-ina-portal/ 配下
 const BASE = '/ageo-ina-portal/';
+const PDFJS_CDN = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/';
 
 // 事前キャッシュするファイル一覧（オフライン用）
 const CACHE_FILES = [
   BASE,
   BASE + 'index.html',
+  BASE + 'manifest.webmanifest',
   BASE + 'common.css',
   BASE + 'assets/css/print.css',
   BASE + 'assets/js/print-util.js',
+  BASE + 'assets/js/navigation.js',
+  BASE + 'assets/js/guild-config.js',
+  BASE + 'assets/js/bookshelf.js',
   BASE + 'assets/css/tabler-icons.min.css',
   BASE + 'assets/fonts/tabler-icons/tabler-icons.woff2',
+  BASE + 'assets/icons/app-icon-192.png',
+  BASE + 'assets/icons/app-icon-512.png',
+  BASE + 'assets/icons/apple-touch-icon.png',
+  BASE + 'assets/icons/favicon-16.png',
+  BASE + 'assets/icons/favicon-32.png',
+  PDFJS_CDN + 'pdf.min.js',
+  PDFJS_CDN + 'pdf.worker.min.js',
+  BASE + 'assets/pdfs/forms/rodo36-general.pdf',
+  BASE + 'assets/pdfs/forms/rodo36-special.pdf',
   BASE + 'guide.html',
   BASE + 'calendar.html',
   BASE + 'calc.html',
@@ -32,6 +46,7 @@ const CACHE_FILES = [
   BASE + 'alert_settings.html',
   BASE + 'merit.html',
   BASE + 'shiryo.html',
+  BASE + 'book.html',
   BASE + 'guild.html',
   BASE + 'kensetsu_check.html',
   BASE + 'app_guide.html',
@@ -78,8 +93,11 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') return;
   const url = new URL(event.request.url);
-  // 外部リクエスト（Googleカレンダー・API・CDN等）はSWを介さずそのまま通す
-  if (url.origin !== self.location.origin) return;
+  // PDF.jsが必要に応じて取得するCMap・標準フォントだけは、
+  // 一度表示した資料をオフラインでも再表示できるよう実行時キャッシュする。
+  const isPdfJsAsset = url.hostname === 'cdnjs.cloudflare.com'
+    && url.pathname.startsWith('/ajax/libs/pdf.js/3.11.174/');
+  if (url.origin !== self.location.origin && !isPdfJsAsset) return;
 
   event.respondWith(
     fetch(event.request.mode === 'navigate'
