@@ -62,6 +62,20 @@ function doPost(e) {
     return json_({ posts: readPosts_(sheet).map(publicPost_) });
   }
 
+  if (action === 'getContact') {
+    if (!validPin_(body.adminPin, 'ADMIN_PIN')) {
+      return json_({ ok: false, error: 'invalid admin pin' });
+    }
+    const postId = positiveInteger_(body.postId);
+    if (!postId) return json_({ ok: false, error: 'invalid post id' });
+    const target = readPosts_(sheet).find(post => String(post.id) === String(postId));
+    if (!target) return json_({ ok: false, error: 'post not found' });
+    return json_({
+      ok: true,
+      contact: target.tel ? { name: target.name, tel: target.tel } : null
+    });
+  }
+
   if (action === 'create') {
     const post = normalizePost_(body.post, false);
     if (!post) return json_({ ok: false, error: 'invalid post' });
@@ -236,7 +250,7 @@ function writePosts_(sheet, posts) {
 
 function publicPost_(post) {
   const copy = Object.assign({}, post);
-  copy.tel = '';
+  delete copy.tel;
   return copy;
 }
 
@@ -245,7 +259,9 @@ function normalizePost_(post, preserveServerFields) {
   const body = safeText_(post.body, 1200);
   if (!body) return null;
   const telRaw = safeText_(post.tel, 40);
-  const tel = /^[0-9+()\-\sXx]*$/.test(telRaw) ? telRaw : '';
+  const tel = isPhone_(telRaw) ? telRaw : '';
+  const name = safeText_(post.name, 40);
+  if (!preserveServerFields && (!name || !tel)) return null;
   const people = numberInRange_(post.people, 1, 99);
   const status = STATUSES.indexOf(post.status) !== -1 ? post.status : 'open';
   const normalized = {
@@ -253,7 +269,7 @@ function normalizePost_(post, preserveServerFields) {
     clientId: safeText_(post.clientId, 80),
     cat: post.cat,
     emoji: CATEGORIES[post.cat].emoji,
-    name: safeText_(post.name, 40) || '匿名',
+    name: name || '匿名',
     area: safeText_(post.area, 80),
     time: safeText_(post.time, 40) || '日時不明',
     body: body,
@@ -271,6 +287,13 @@ function normalizePost_(post, preserveServerFields) {
   };
   if (preserveServerFields && !normalized.id) return null;
   return normalized;
+}
+
+function isPhone_(value) {
+  const text = safeText_(value, 40);
+  if (!/^[0-9+()\-\s]+$/.test(text)) return false;
+  const digits = text.replace(/\D/g, '');
+  return digits.length >= 10 && digits.length <= 12;
 }
 
 function normalizeComment_(comment) {
