@@ -26,6 +26,13 @@
 .badge-shizai{background:#E8F5EE;color:#1A4A2A;}
 .badge-soudan{background:#EDE8FE;color:#4A1A9B;}
 .post-body{font-size:15px;color:var(--gray900);margin:0 0 10px;line-height:1.65;}
+.post-flags{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 9px;}
+.status-chip,.urgent-chip{display:inline-flex;align-items:center;min-height:24px;padding:3px 9px;border-radius:99px;font-size:11px;font-weight:700;}
+.status-open{background:#E8F5EE;color:#1A4A2A;}.status-negotiating{background:#FFF4D6;color:#6B4B00;}.status-closed{background:#E2E8F0;color:#475569;}
+.urgent-chip{background:#FDE2E2;color:#9B1C1C;}
+.post-details{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin:0 0 10px;}
+.post-detail{min-width:0;padding:7px 9px;border-radius:9px;background:var(--gray50);color:var(--gray700);font-size:12px;overflow-wrap:anywhere;}
+.post-detail strong{color:var(--navy);font-weight:700;}
 .post-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
 .post-tag{font-size:12px;background:var(--gray50);color:var(--gray600);padding:3px 10px;border-radius:99px;font-weight:500;}
 .post-actions{display:flex;gap:8px;}
@@ -89,6 +96,16 @@
 .guild-toolbar button{flex:1;border:1.5px solid var(--gray200);background:var(--white);border-radius:var(--r12);padding:9px 10px;font-size:13px;font-weight:600;color:var(--gray600);}
 .guild-toolbar button.active{background:#1B2A3B;color:#fff;border-color:var(--navy);}
 .sync-status{font-size:12px;color:var(--gray600);margin:-6px 0 12px;text-align:right;font-weight:600;}
+.guild-controls{display:grid;grid-template-columns:minmax(0,1fr) 130px;gap:8px;margin-bottom:10px;}
+.guild-search,.guild-sort{width:100%;min-height:44px;border:1.5px solid var(--gray200);border-radius:var(--r12);background:var(--white);color:var(--gray900);font:inherit;font-size:13px;padding:8px 12px;}
+.guild-search:focus,.guild-sort:focus{outline:3px solid rgba(232,97,42,.2);border-color:var(--orange);}
+.archive-btn{width:100%;min-height:44px;margin-bottom:12px;border:1.5px solid var(--gray200);border-radius:var(--r12);background:var(--white);color:var(--gray600);font-size:13px;font-weight:600;}
+.archive-btn.active{background:#1B2A3B;color:#fff;border-color:#1B2A3B;}
+.job-fields{display:none;padding:12px;margin:0 0 14px;border:1px solid var(--gray200);border-radius:var(--r12);background:var(--gray50);}
+.job-fields.open{display:block;}
+.check-row{display:flex;align-items:center;gap:9px;min-height:44px;margin-bottom:12px;font-size:14px;font-weight:600;color:var(--gray700);}
+.check-row input{width:20px;height:20px;accent-color:var(--orange);}
+.form-note{margin:0 0 14px;padding:10px 12px;border-radius:var(--r8);background:#E8F0FB;color:#234B76;font-size:12px;line-height:1.6;}
 html[data-theme="dark"] .tab-row{background:#071426;border:1px solid rgba(255,255,255,.12);}
 html[data-theme="dark"] .t-btn{color:#D8E4F2;background:#13243A;}
 html[data-theme="dark"] .t-btn.active{background:#E8612A;color:#fff;box-shadow:none;}
@@ -100,6 +117,8 @@ html[data-theme="dark"] .sync-status{color:#B8C7DA!important;}
 html[data-theme="dark"] .post-body,
 html[data-theme="dark"] .comment-text{color:#E8EEF7!important;}
 html[data-theme="dark"] .post-tag{background:#071426;color:#D8E4F2!important;border:1px solid rgba(255,255,255,.12);}
+html[data-theme="dark"] .post-detail{background:#071426;color:#D8E4F2;border:1px solid rgba(255,255,255,.1);}
+html[data-theme="dark"] .post-detail strong{color:#fff;}
 html[data-theme="dark"] .comment-body{background:#071426!important;border:1px solid rgba(255,255,255,.12);}
 html[data-theme="dark"] .comment-input{background:#071426;color:#fff;border-color:rgba(255,255,255,.22);}
 html[data-theme="dark"] .post-btn{background:#071426;color:#E8EEF7;border-color:rgba(255,255,255,.18);}
@@ -108,6 +127,10 @@ html[data-theme="dark"] .post-btn.primary{background:#E8612A;color:#fff;border-c
 html[data-theme="dark"] .post-btn.danger{background:#2A1010;color:#FFD1D1;border-color:#D76A6A;}
 html[data-theme="dark"] .modal-sheet{background:#0F1F35;border:1px solid rgba(255,255,255,.12);}
 html[data-theme="dark"] .modal-close{background:#243A56;color:#fff;}
+html[data-theme="dark"] .guild-search,html[data-theme="dark"] .guild-sort,html[data-theme="dark"] .archive-btn{background:#0F1F35;color:#E8EEF7;border-color:rgba(255,255,255,.18);}
+html[data-theme="dark"] .job-fields{background:#071426;border-color:rgba(255,255,255,.15);}
+html[data-theme="dark"] .check-row{color:#E8EEF7;}
+html[data-theme="dark"] .form-note{background:#132D4D;color:#D8E9FF;}
 html[data-theme="dark"] .cat-chip{background:#071426!important;color:#E8EEF7!important;border-color:rgba(255,255,255,.22)!important;}
 .cat-chip.sel{font-weight:800;}
 html[data-theme="dark"] .cat-chip.jinzai.sel{background:#5A240F!important;color:#FFE7D8!important;border-color:#FF8A4C!important;}
@@ -118,6 +141,7 @@ html[data-theme="light"] .post-btn.primary{background:#E8612A;color:#fff;border-
 html[data-theme="light"] .post-btn.danger{background:#FFF5F5;color:#9B1C1C;border-color:#F2B8B5;}
 html[data-theme="light"] .comment-body{background:#F7FAFC;color:#1B2A3B;}
 html[data-theme="light"] .comment-input{background:#fff;color:#1B2A3B;}
+@media(max-width:520px){.guild-controls{grid-template-columns:1fr;}.post-details{grid-template-columns:1fr}.post-actions{flex-wrap:wrap}.post-btn{min-width:calc(50% - 4px)}}
 </style>
 </head>
 <body>
@@ -127,7 +151,7 @@ html[data-theme="light"] .comment-input{background:#fff;color:#1B2A3B;}
     <i class="ti ti-arrow-left"></i>戻る
   </button>
   <div style="text-align:right;">
-    <p class="hdr-org" style="margin:0;">組合員限定</p>
+    <p class="hdr-org" style="margin:0;">支部内情報共有</p>
     <p class="hdr-title" style="margin:0;font-size:14px;">DOKENギルド</p>
   </div>
 </header>
@@ -161,13 +185,22 @@ html[data-theme="light"] .comment-input{background:#fff;color:#1B2A3B;}
 
   <div class="guild-notice">
     <i class="ti ti-lock"></i>
-    <p>投稿はクラウド設定後、全員の画面に共有されます。新規投稿は支部メールへ通知します。</p>
+    <p>新規投稿は支部へ通知されます。連絡先は公開せず、問い合わせは支部が取り次ぎます。</p>
   </div>
   <div class="guild-toolbar">
     <button id="sync-mode" onclick="syncPosts()"><i class="ti ti-refresh"></i> 最新に更新</button>
     <button id="admin-toggle" onclick="toggleAdmin()"><i class="ti ti-shield-lock"></i> 管理者</button>
   </div>
   <p class="sync-status" id="sync-status">ローカル表示中</p>
+
+  <div class="guild-controls">
+    <input class="guild-search" id="guild-search" type="search" maxlength="80" placeholder="地域・職種・投稿内容を検索" aria-label="投稿を検索" oninput="updateSearch(this.value)">
+    <select class="guild-sort" id="guild-sort" aria-label="投稿の並べ替え" onchange="updateSort(this.value)">
+      <option value="newest">新しい順</option>
+      <option value="urgent">急募を優先</option>
+    </select>
+  </div>
+  <button class="archive-btn" id="archive-toggle" type="button" onclick="toggleArchive()"><i class="ti ti-archive"></i> 過去・解決済みの投稿を表示</button>
 
   <!-- フィルタータブ -->
   <div class="tab-row">
@@ -203,6 +236,21 @@ html[data-theme="light"] .comment-input{background:#fff;color:#1B2A3B;}
       <textarea id="post-body" rows="5" maxlength="1200" placeholder="例：明日、上尾市内の現場で左官が1人足りません。日給2万円、午前7時〜17時。ご連絡ください。" style="resize:none;font-size:15px;"></textarea>
     </div>
 
+    <label class="check-row"><input type="checkbox" id="post-urgent">急募として目立たせる</label>
+
+    <div class="job-fields" id="job-fields">
+      <p style="font-size:12px;font-weight:700;color:var(--gray600);margin:0 0 10px;">人材募集の詳細（任意）</p>
+      <div class="grid2">
+        <div class="input-group"><label>作業日</label><input type="date" id="post-work-date"></div>
+        <div class="input-group"><label>作業時間</label><input type="text" id="post-work-time" maxlength="40" placeholder="例：7時〜17時"></div>
+      </div>
+      <div class="grid2">
+        <div class="input-group"><label>職種</label><input type="text" id="post-trade" maxlength="40" placeholder="例：大工、左官"></div>
+        <div class="input-group"><label>必要人数</label><input type="number" id="post-people" min="1" max="99" inputmode="numeric" placeholder="例：2"></div>
+      </div>
+      <div class="input-group"><label>条件</label><input type="text" id="post-conditions" maxlength="120" placeholder="例：経験者、単価応相談"></div>
+    </div>
+
     <div class="grid2">
       <div class="input-group">
         <label>地域（任意）</label>
@@ -214,10 +262,7 @@ html[data-theme="light"] .comment-input{background:#fff;color:#1B2A3B;}
       </div>
     </div>
 
-    <div class="input-group">
-      <label>連絡先（任意・組合員のみ閲覧）</label>
-      <input type="tel" id="post-tel" maxlength="40" inputmode="tel" placeholder="例：090-XXXX-XXXX">
-    </div>
+    <p class="form-note"><i class="ti ti-shield-check"></i> 個人の電話番号は画面に公開しません。問い合わせは上尾伊奈支部が取り次ぎます。</p>
 
     <button class="btn-primary" onclick="submitPost()">
       <i class="ti ti-send"></i>投稿する
@@ -256,6 +301,9 @@ let posts = [];
 let nextId = 1;
 let currentTab = 'all';
 let selectedCat = '';
+let searchTerm = '';
+let sortMode = 'newest';
+let showArchived = false;
 
 const CAT = {
   jinzai:{label:'人材募集',badge:'badge-jinzai'},
@@ -263,6 +311,12 @@ const CAT = {
   soudan:{label:'相談',badge:'badge-soudan'},
 };
 const CAT_EMOJI = {jinzai:'👷', shizai:'🔧', soudan:'💬'};
+const STATUS = {
+  open:{label:'募集中',className:'status-open'},
+  negotiating:{label:'交渉中',className:'status-negotiating'},
+  closed:{label:'解決済み',className:'status-closed'}
+};
+const ARCHIVE_DAYS = 30;
 
 function safeText(value, max){
   return String(value == null ? '' : value).replace(/[\u0000-\u001F\u007F]/g, ' ').trim().slice(0, max);
@@ -280,6 +334,8 @@ function normalizePost(post){
   if(!Number.isSafeInteger(id) || id <= 0 || !body) return null;
   const telRaw = safeText(post.tel, 40);
   const tel = /^[0-9+()\-\sXx]*$/.test(telRaw) ? telRaw : '';
+  const status = STATUS[post.status] ? post.status : 'open';
+  const people = Number(post.people);
   return {
     id,
     clientId:safeText(post.clientId, 80),
@@ -291,7 +347,15 @@ function normalizePost(post){
     body,
     tags:Array.isArray(post.tags) ? post.tags.slice(0, 8).map(t=>safeText(t, 30)).filter(Boolean) : [],
     tel,
-    comments:Array.isArray(post.comments) ? post.comments.map(normalizeComment).filter(Boolean).slice(0, 100) : []
+    comments:Array.isArray(post.comments) ? post.comments.map(normalizeComment).filter(Boolean).slice(0, 100) : [],
+    status,
+    urgent:post.urgent === true,
+    workDate:safeText(post.workDate, 20),
+    workTime:safeText(post.workTime, 40),
+    trade:safeText(post.trade, 40),
+    people:Number.isInteger(people) && people > 0 && people <= 99 ? people : null,
+    conditions:safeText(post.conditions, 120),
+    createdAt:safeText(post.createdAt, 40)
   };
 }
 
@@ -340,20 +404,9 @@ async function guildApi(action, payload={}){
 }
 
 async function guildWrite(action, payload={}){
-  if(!hasCloud()) throw new Error('クラウドURLが未設定です');
-  const body = JSON.stringify({action, notifyEmail:GUILD_CONFIG.notifyEmail, ...payload});
-  if(navigator.sendBeacon){
-    const sent = navigator.sendBeacon(GUILD_CONFIG.apiUrl, new Blob([body], {type:'text/plain;charset=utf-8'}));
-    if(sent) return {ok:true};
-  }
-  await fetch(GUILD_CONFIG.apiUrl, {
-    method:'POST',
-    mode:'no-cors',
-    keepalive:true,
-    headers:{'Content-Type':'text/plain;charset=utf-8'},
-    body
-  });
-  return {ok:true};
+  const data = await guildApi(action, payload);
+  if(!data || data.ok !== true) throw new Error((data && data.error) || '操作を完了できませんでした');
+  return data;
 }
 
 async function syncPosts(){
@@ -367,7 +420,7 @@ async function syncPosts(){
     setStatus('クラウドから読み込み中...');
     const data = await guildApi('list');
     const cloudPosts = Array.isArray(data.posts) ? data.posts : [];
-    posts = mergePosts(cloudPosts, readSavedPosts());
+    posts = mergePosts(cloudPosts, []);
     save();
     updateNextId();
     setStatus(posts.length ? 'クラウド共有中 / 投稿通知先: ' + (GUILD_CONFIG.notifyEmail || '未設定') : 'クラウド共有中 / まだ投稿はありません');
@@ -381,11 +434,48 @@ async function syncPosts(){
 }
 
 // ===== 描画 =====
+function postTimestamp(post){
+  const created = Date.parse(post.createdAt || '');
+  return Number.isFinite(created) ? created : Number(post.id) || 0;
+}
+function isArchived(post){
+  if(post.status === 'closed') return true;
+  const created = Date.parse(post.createdAt || '');
+  return Number.isFinite(created) && Date.now() - created >= ARCHIVE_DAYS * 24 * 60 * 60 * 1000;
+}
+function formatWorkDate(value){
+  const match = String(value || '').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  return match ? Number(match[2]) + '/' + Number(match[3]) : String(value || '');
+}
+function detailHtml(post){
+  const details = [
+    post.workDate ? ['作業日', formatWorkDate(post.workDate)] : null,
+    post.workTime ? ['時間', post.workTime] : null,
+    post.trade ? ['職種', post.trade] : null,
+    post.people ? ['人数', post.people + '人'] : null,
+    post.conditions ? ['条件', post.conditions] : null
+  ].filter(Boolean);
+  if(!details.length) return '';
+  return `<div class="post-details">${details.map(item=>`<div class="post-detail"><strong>${esc(item[0])}</strong> ${esc(item[1])}</div>`).join('')}</div>`;
+}
+function filteredPosts(){
+  const query = searchTerm.toLowerCase();
+  const filtered = posts.filter(post=>{
+    if((currentTab !== 'all' && post.cat !== currentTab) || isArchived(post) !== showArchived) return false;
+    if(!query) return true;
+    return [post.name,post.area,post.body,post.trade,post.conditions,post.workDate,post.workTime,...(post.tags||[])]
+      .join(' ').toLowerCase().includes(query);
+  });
+  return filtered.sort((a,b)=>{
+    if(sortMode === 'urgent' && a.urgent !== b.urgent) return a.urgent ? -1 : 1;
+    return postTimestamp(b) - postTimestamp(a);
+  });
+}
 function render(){
   const list = document.getElementById('post-list');
-  const filtered = currentTab==='all' ? posts : posts.filter(p=>p.cat===currentTab);
+  const filtered = filteredPosts();
   if(!filtered.length){
-    list.innerHTML=`<div class="empty-state"><i class="ti ti-message-circle-off"></i><p>投稿がありません<br>最初に投稿してみましょう！</p></div>`;
+    list.innerHTML=`<div class="empty-state"><i class="ti ti-message-circle-off"></i><p>${showArchived?'過去・解決済みの投稿はありません':'条件に合う募集中の投稿はありません'}<br>${searchTerm?'検索条件を変えてください':'最初に投稿してみましょう！'}</p></div>`;
     return;
   }
   list.innerHTML = filtered.map(p=>`
@@ -398,14 +488,22 @@ function render(){
         </div>
         <span class="post-badge ${CAT[p.cat].badge}">${CAT[p.cat].label}</span>
       </div>
+      <div class="post-flags">
+        <span class="status-chip ${STATUS[p.status].className}">${STATUS[p.status].label}</span>
+        ${p.urgent?'<span class="urgent-chip">急募</span>':''}
+      </div>
       <p class="post-body">${esc(p.body)}</p>
+      ${detailHtml(p)}
       <div class="post-tags">${(p.tags||[]).map(t=>`<span class="post-tag">${esc(t)}</span>`).join('')}</div>
       <div class="post-actions">
         <button class="post-btn" onclick="toggleComment(${p.id})">
           <i class="ti ti-message-circle"></i>コメント（${(p.comments||[]).length}）
         </button>
-        ${p.tel ? `<button class="post-btn primary" onclick="callPost(${p.id})">
-          <i class="ti ti-phone"></i>連絡する
+        <button class="post-btn primary" onclick="contactBranch(${p.id})">
+          <i class="ti ti-phone"></i>支部へ問い合わせ
+        </button>
+        ${isAdmin ? `<button class="post-btn" onclick="advancePostStatus(${p.id})">
+          <i class="ti ti-progress-check"></i>${p.status==='open'?'交渉中にする':p.status==='negotiating'?'解決済みにする':'再掲載する'}
         </button>` : ''}
         ${isAdmin ? `<button class="post-btn danger" onclick="deletePost(${p.id})">
           <i class="ti ti-trash"></i>削除
@@ -438,6 +536,17 @@ function switchTab(tab, btn){
   btn.classList.add('active');
   render();
 }
+function updateSearch(value){ searchTerm = String(value || '').trim(); render(); }
+function updateSort(value){ sortMode = value === 'urgent' ? 'urgent' : 'newest'; render(); }
+function toggleArchive(){
+  showArchived = !showArchived;
+  const button = document.getElementById('archive-toggle');
+  button.classList.toggle('active', showArchived);
+  button.innerHTML = showArchived
+    ? '<i class="ti ti-list"></i> 募集中の投稿へ戻る'
+    : '<i class="ti ti-archive"></i> 過去・解決済みの投稿を表示';
+  render();
+}
 
 // ===== コメント =====
 function toggleComment(id){
@@ -446,64 +555,55 @@ function toggleComment(id){
   if(el.classList.contains('open')) document.getElementById('ci-'+id)?.focus();
 }
 
-function sendComment(postId){
+async function sendComment(postId){
   const input = document.getElementById('ci-'+postId);
   const text = input.value.trim();
   if(!text) return;
   const p = posts.find(p=>p.id===postId);
   if(!p) return;
-  if(!p.comments) p.comments=[];
-  p.comments.push({emoji:'👤', name:'あなた', text});
-  input.value='';
-  save();
-  saveComment(postId, text);
-  // コメント欄を再オープン
-  setTimeout(()=>{
-    const el=document.getElementById('ca-'+postId);
-    if(el) el.classList.add('open');
-  },50);
-}
-
-async function saveComment(postId, text){
-  const p = posts.find(p=>p.id===postId);
   if(hasCloud()){
     try{
       await guildWrite('comment', {postId, comment:{emoji:'👤', name:'あなた', text}});
       setStatus('コメントを送信しました。反映まで数秒かかる場合があります。');
-      setTimeout(syncPosts, 1400);
+      input.value='';
+      await syncPosts();
     }catch(e){
       console.error(e);
-      save();
-      render();
+      alert('コメントを送信できませんでした。通信環境を確認して、もう一度お試しください。');
     }
   }else{
+    if(!p.comments) p.comments=[];
+    p.comments.push({emoji:'👤', name:'あなた', text});
+    input.value='';
     save();
     render();
   }
 }
 
-// ===== 連絡する =====
-function callPost(id){
+// ===== 支部へ問い合わせ =====
+function contactBranch(id){
   const p = posts.find(p=>p.id===id);
   if(!p) return;
-  if(p.tel && (p.tel.startsWith('0') || p.tel.startsWith('+'))) {
-    if(confirm(`${p.name||'投稿者'}に電話しますか？\n${p.tel}`)){
-      location.href = 'tel:' + p.tel.replace(/-/g,'');
-    }
-  } else {
-    alert(`📞 連絡先：${p.tel||'支部経由でお問い合わせください（048-773-9863）'}`);
+  if(confirm(`「${p.body.slice(0,40)}${p.body.length>40?'…':''}」について上尾伊奈支部へ電話しますか？\n048-773-9863`)){
+    location.href = 'tel:0487739863';
   }
 }
 
 // ===== 投稿 =====
 function openModal(){ document.getElementById('modal').classList.add('open'); }
-function closeModal(){ document.getElementById('modal').classList.remove('open'); selectedCat=''; document.querySelectorAll('.cat-chip').forEach(c=>c.classList.remove('sel')); }
+function closeModal(){
+  document.getElementById('modal').classList.remove('open');
+  selectedCat='';
+  document.querySelectorAll('.cat-chip').forEach(c=>c.classList.remove('sel'));
+  document.getElementById('job-fields').classList.remove('open');
+}
 function bgClose(e){ if(e.target===document.getElementById('modal')) closeModal(); }
 
 function selCat(cat, btn){
   selectedCat = cat;
   document.querySelectorAll('.cat-chip').forEach(c=>c.classList.remove('sel'));
   btn.classList.add('sel');
+  document.getElementById('job-fields').classList.toggle('open', cat === 'jinzai');
 }
 
 async function submitPost(){
@@ -512,40 +612,47 @@ async function submitPost(){
   if(!body){ alert('投稿内容を入力してください'); return; }
   const area = document.getElementById('post-area').value.trim();
   const name = document.getElementById('post-name').value.trim() || '匿名';
-  const tel  = document.getElementById('post-tel').value.trim();
   const tags = [area, CAT[selectedCat].label].filter(Boolean);
+  const peopleValue = Number(document.getElementById('post-people').value);
 
   const EMOJIS = {jinzai:'👷',shizai:'🔧',soudan:'💬'};
   const newPost = {
     id: nextId++, clientId:'local-' + Date.now() + '-' + Math.random().toString(36).slice(2), cat: selectedCat,
     emoji: EMOJIS[selectedCat], name, area, time:'たった今',
-    body, tags, tel, comments:[]
+    body, tags, tel:'', comments:[], status:'open',
+    urgent:document.getElementById('post-urgent').checked,
+    workDate:selectedCat==='jinzai' ? document.getElementById('post-work-date').value : '',
+    workTime:selectedCat==='jinzai' ? document.getElementById('post-work-time').value.trim() : '',
+    trade:selectedCat==='jinzai' ? document.getElementById('post-trade').value.trim() : '',
+    people:selectedCat==='jinzai' && Number.isInteger(peopleValue) && peopleValue>0 ? peopleValue : null,
+    conditions:selectedCat==='jinzai' ? document.getElementById('post-conditions').value.trim() : '',
+    createdAt:new Date().toISOString()
   };
-  posts.unshift(newPost);
-  save();
   if(hasCloud()){
     try{
       setStatus('クラウドへ投稿中...');
       await guildWrite('create', {post:newPost});
-      setStatus('投稿しました。支部へメール通知します。反映まで数秒かかる場合があります。');
-      setTimeout(syncPosts, 1600);
+      setStatus('投稿しました。支部へメール通知しました。');
+      await syncPosts();
     }catch(e){
       console.error(e);
-      alert('クラウド投稿に失敗しました。この端末内に一時保存します。');
-      save();
+      alert('投稿を送信できませんでした。入力内容は残しています。通信環境を確認して、もう一度お試しください。');
+      return;
     }
   }else{
+    posts.unshift(newPost);
     save();
   }
   closeModal();
   currentTab='all';
   document.querySelectorAll('.t-btn')[0].click();
   // フォームリセット
-  ['post-body','post-area','post-name','post-tel'].forEach(id=>{ document.getElementById(id).value=''; });
+  ['post-body','post-area','post-name','post-work-date','post-work-time','post-trade','post-people','post-conditions'].forEach(id=>{ document.getElementById(id).value=''; });
+  document.getElementById('post-urgent').checked=false;
   render();
 }
 
-function toggleAdmin(){
+async function toggleAdmin(){
   if(isAdmin){
     isAdmin = false;
     document.getElementById('admin-toggle').classList.remove('active');
@@ -554,10 +661,32 @@ function toggleAdmin(){
   }
   const pin = prompt('管理者PINを入力してください');
   if(!pin) return;
-  adminPinValue = pin;
-  isAdmin = true;
-  document.getElementById('admin-toggle').classList.add('active');
-  render();
+  try{
+    await guildWrite('verifyAdmin', {adminPin:pin});
+    adminPinValue = pin;
+    isAdmin = true;
+    document.getElementById('admin-toggle').classList.add('active');
+    setStatus('管理者モードです');
+    render();
+  }catch(e){
+    alert('管理者PINが違います。');
+  }
+}
+
+async function advancePostStatus(id){
+  if(!isAdmin) return;
+  const post = posts.find(item=>item.id===id);
+  if(!post) return;
+  const nextStatus = post.status === 'open' ? 'negotiating' : post.status === 'negotiating' ? 'closed' : 'open';
+  const label = STATUS[nextStatus].label;
+  if(!confirm(`この投稿を「${label}」に変更しますか？`)) return;
+  try{
+    await guildWrite('updateStatus', {postId:id, status:nextStatus, adminPin:adminPinValue});
+    setStatus(`「${label}」へ変更しました。`);
+    await syncPosts();
+  }catch(e){
+    alert('状態を変更できませんでした。通信環境を確認してください。');
+  }
 }
 
 async function deletePost(id){
@@ -565,17 +694,15 @@ async function deletePost(id){
   if(!confirm('この投稿を削除しますか？')) return;
   const old = posts;
   posts = posts.filter(p=>p.id!==id);
-  save();
   if(hasCloud()){
     try{
       await guildWrite('delete', {postId:id, adminPin:adminPinValue});
-      setStatus('削除を送信しました。反映まで数秒かかる場合があります。');
-      setTimeout(syncPosts, 1400);
+      setStatus('投稿を削除しました。');
+      await syncPosts();
     }catch(e){
       console.error(e);
       alert('クラウド削除に失敗しました。');
       posts = old;
-      save();
       render();
     }
   }else{
@@ -583,6 +710,13 @@ async function deletePost(id){
     render();
   }
 }
+
+window.DokenGuild = Object.freeze({
+  normalizePost,
+  isArchived,
+  mergePosts,
+  postTimestamp
+});
 
 syncPosts();
 </script>
