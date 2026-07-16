@@ -110,7 +110,7 @@ DokenPrint.preview({title, sections, note})                  // プレビュー�
 | index.html | ホーム（5セクション：よく使う/仕事確保/現場・管理関係/手続き・シミュレーション/講習・資料） | 各セクションに`id="yoku"`等のアンカーあり（LINEリッチメニュー用URL） |
 | calendar.html | 支部カレンダー | iframeを維持し、その下に今後45日・最大18件の予定カードを表示。設定は`assets/js/calendar-config.js`、取得・15分キャッシュ・安全なDOM描画は`assets/js/calendar-upcoming.js` |
 | doken_card.html | どけんカード登録店 | 外部サイト`doken-card.jp`のパスワード表示・コピー機能 |
-| guild.html | DOKENギルド（掲示板） | `assets/js/guild-config.js`（Google Apps Script連携設定）と連動。カテゴリ：人材募集/資材・道具/相談 |
+| guild.html | DOKENギルド（掲示板） | Google Apps Script連携。検索・急募順・状態管理・30日整理・支部経由連絡に対応。カテゴリ：人材募集/資材・道具/相談 |
 | kyokyu.html | 労働者供給事業 | 東栄住宅の求人情報を掲載（変更される可能性あり） |
 | calc.html | 計算ツール（労務費/国保料/給付金/CCUS） | 最大の機能。料率は毎年4月更新が必要（下記7章） |
 | atsusa.html | 熱中症AIアラート | GPS→Open-Meteo API→WBGT計算（気象庁JSONへのフォールバックあり） |
@@ -186,7 +186,7 @@ Pythonスクリプトで`width:100%%`のように誤って二重エスケープ�
 GitHub Pagesとリポジトリは公開されているため、HTML・JavaScriptに書いた値は画面上で隠しても第三者が確認できる。管理PINはGoogle Apps Scriptのスクリプトプロパティ（`ADMIN_PIN`・`ALERT_PIN`）だけに設定し、6文字以上の推測されにくい値を使う。ブラウザ側は入力されたPINをその画面を閉じるまでメモリ上でのみ保持し、`localStorage`や`sessionStorage`には保存しない。
 
 ### 9-9. DOKENギルドの投稿データはサーバーと画面の両方で検証する
-Apps Scriptはカテゴリ、ID、本文長、氏名、地域、電話番号、コメント、天気設定値を許可形式へ正規化する。画面側もクラウド・端末保存データを`normalizePost()`へ通し、HTML表示時は`esc()`でエスケープする。通知先メールはブラウザから受け取らず、スクリプトプロパティ`NOTIFY_EMAIL`のみを使用する。`docs/guild-apps-script-template.js`を変更しただけでは実働APIは更新されないため、Apps Script側の再デプロイまで完了させること。
+Apps Scriptはカテゴリ、ID、本文長、氏名、地域、急募、作業日、時間、職種、人数、条件、状態、コメント、天気設定値を許可形式へ正規化する。公開`list`レスポンスでは既存データを削除せず電話番号だけ空にし、画面の連絡先は支部電話へ統一する。画面側もクラウド・端末保存データを`normalizePost()`へ通し、HTML表示時は`esc()`でエスケープする。クラウド取得成功時はクラウド投稿を正とし、古い端末データを再結合しない。書き込みは`ok:true`のJSON応答を確認してから成功表示する。通知先メールはブラウザから受け取らず、スクリプトプロパティ`NOTIFY_EMAIL`のみを使用する。`docs/guild-apps-script-template.js`を変更しただけでは実働APIは更新されないため、Apps Script側の再デプロイまで完了させること。
 
 ## 10. LINE公式アカウント連携
 
@@ -213,7 +213,7 @@ Apps Scriptはカテゴリ、ID、本文長、氏名、地域、電話番号、�
 - `_archive/`内の旧10ページ：削除するか判断待ち
 - doken_card.htmlのパスワードは外部サイト（doken-card.jp）でクロスオリジンのため自動入力不可（手動コピー＆ペースト方式で運用中）
 - doken_card.htmlの共通パスワードは公開HTML内に存在する。組合員限定を厳密に担保するには認証付き配信へ移す必要があり、現在の静的GitHub Pagesだけでは実現できない
-- DOKENギルドは公開URLから閲覧できる。氏名・電話番号等を組合員だけに限定するには認証導入が必要。現状は入力内容を必要最小限にする運用が前提
+- DOKENギルドは公開URLから閲覧できる。氏名等を組合員だけに限定するには認証導入が必要。電話番号は公開APIと画面へ返さず、支部経由で取り次ぐ
 - Google Calendar APIキーはクライアント公開型。Google Cloud側でCalendar API限定・公開サイトのHTTPリファラー限定・使用量アラートを必ず設定する
 - LINEリッチメニューのタブ切替は公式管理画面のみでは実現不可（Liny/Lステップ等の有料ツールか、Messaging API + GAS実装が必要）
 - PDF.js一式はcdnjs依存だが、本体・ワーカーはSWで事前キャッシュし、CMap・標準フォントは一度取得後に実行時キャッシュする
