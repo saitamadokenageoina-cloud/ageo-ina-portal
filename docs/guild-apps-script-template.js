@@ -25,6 +25,7 @@ const CATEGORIES = {
   shizai: { emoji: '🔧' },
   soudan: { emoji: '💬' }
 };
+const STATUSES = ['open', 'negotiating', 'closed'];
 
 function doPost(e) {
   let body;
@@ -49,23 +50,37 @@ function doPost(e) {
     return json_({ ok: true });
   }
 
+  if (action === 'verifyAdmin') {
+    return validPin_(body.adminPin, 'ADMIN_PIN')
+      ? json_({ ok: true })
+      : json_({ ok: false, error: 'invalid admin pin' });
+  }
+
   const sheet = getSheet_();
 
   if (action === 'list') {
-    return json_({ posts: readPosts_(sheet) });
+    return json_({ posts: readPosts_(sheet).map(publicPost_) });
   }
 
   if (action === 'create') {
     const post = normalizePost_(body.post, false);
     if (!post) return json_({ ok: false, error: 'invalid post' });
     post.id = Date.now() * 1000 + Math.floor(Math.random() * 1000);
+    post.status = 'open';
     post.createdAt = new Date().toISOString();
     post.time = Utilities.formatDate(new Date(), 'Asia/Tokyo', 'M/d H:mm');
-    withLock_(function () { appendPost_(sheet, post); });
+    let created = false;
+    const savedPost = withLock_(function () {
+      const existing = readPosts_(sheet).find(item => post.clientId && item.clientId === post.clientId);
+      if (existing) return existing;
+      appendPost_(sheet, post);
+      created = true;
+      return post;
+    });
 
     // 通知先は公開ブラウザから受け取らず、サーバー側の設定だけを使う。
     const notifyEmail = safeText_(PROPS.getProperty('NOTIFY_EMAIL'), 254);
-    if (isEmail_(notifyEmail)) {
+    if (created && isEmail_(notifyEmail)) {
       try {
         MailApp.sendEmail({
           to: notifyEmail,
@@ -76,31 +91,56 @@ function doPost(e) {
             `カテゴリ: ${post.cat}`,
             `投稿者: ${post.name}`,
             `地域: ${post.area}`,
+            `急募: ${post.urgent ? 'はい' : 'いいえ'}`,
+            `作業日: ${post.workDate || '未入力'}`,
+            `時間: ${post.workTime || '未入力'}`,
+            `職種: ${post.trade || '未入力'}`,
+            `必要人数: ${post.people ? post.people + '人' : '未入力'}`,
+            `条件: ${post.conditions || '未入力'}`,
             '',
             post.body,
             '',
-            `連絡先: ${post.tel || '未入力'}`
+            '投稿者への連絡は支部で取り次いでください。'
           ].join('\n')
         });
       } catch (error) {
         console.error('Mail notification failed', error);
       }
     }
-    return json_({ ok: true });
+    return json_({ ok: true, post: publicPost_(savedPost) });
   }
 
   if (action === 'comment') {
     const postId = positiveInteger_(body.postId);
     const comment = normalizeComment_(body.comment);
     if (!postId || !comment) return json_({ ok: false, error: 'invalid comment' });
-    withLock_(function () {
+    const updated = withLock_(function () {
       const posts = readPosts_(sheet);
       const target = posts.find(p => String(p.id) === String(postId));
-      if (!target) return;
+      if (!target) return false;
       target.comments = (target.comments || []).concat([comment]).slice(-100);
       writePosts_(sheet, posts);
+      return true;
     });
-    return json_({ ok: true });
+    return json_({ ok: updated, error: updated ? '' : 'post not found' });
+  }
+
+  if (action === 'updateStatus') {
+    if (!validPin_(body.adminPin, 'ADMIN_PIN')) {
+      return json_({ ok: false, error: 'invalid admin pin' });
+    }
+    const postId = positiveInteger_(body.postId);
+    const status = safeText_(body.status, 20);
+    if (!postId || STATUSES.indexOf(status) === -1) return json_({ ok: false, error: 'invalid status' });
+    const updated = withLock_(function () {
+      const posts = readPosts_(sheet);
+      const target = posts.find(p => String(p.id) === String(postId));
+      if (!target) return false;
+      target.status = status;
+      writePosts_(sheet, posts);
+      return true;
+    });
+    return json_({ ok: updated, error: updated ? '' : 'post not found' });
   }
 
   if (action === 'delete') {
@@ -194,12 +234,20 @@ function writePosts_(sheet, posts) {
   posts.map(post => normalizePost_(post, true)).filter(Boolean).forEach(post => appendPost_(sheet, post));
 }
 
+function publicPost_(post) {
+  const copy = Object.assign({}, post);
+  copy.tel = '';
+  return copy;
+}
+
 function normalizePost_(post, preserveServerFields) {
   if (!post || typeof post !== 'object' || !CATEGORIES[post.cat]) return null;
   const body = safeText_(post.body, 1200);
   if (!body) return null;
   const telRaw = safeText_(post.tel, 40);
   const tel = /^[0-9+()\-\sXx]*$/.test(telRaw) ? telRaw : '';
+  const people = numberInRange_(post.people, 1, 99);
+  const status = STATUSES.indexOf(post.status) !== -1 ? post.status : 'open';
   const normalized = {
     id: preserveServerFields ? positiveInteger_(post.id) : 1,
     clientId: safeText_(post.clientId, 80),
@@ -212,6 +260,13 @@ function normalizePost_(post, preserveServerFields) {
     tags: Array.isArray(post.tags) ? post.tags.slice(0, 8).map(tag => safeText_(tag, 30)).filter(Boolean) : [],
     tel: tel,
     comments: Array.isArray(post.comments) ? post.comments.map(normalizeComment_).filter(Boolean).slice(-100) : [],
+    status: status,
+    urgent: post.urgent === true,
+    workDate: safeText_(post.workDate, 20),
+    workTime: safeText_(post.workTime, 40),
+    trade: safeText_(post.trade, 40),
+    people: people === null ? null : Math.round(people),
+    conditions: safeText_(post.conditions, 120),
     createdAt: preserveServerFields ? safeText_(post.createdAt, 40) : ''
   };
   if (preserveServerFields && !normalized.id) return null;
