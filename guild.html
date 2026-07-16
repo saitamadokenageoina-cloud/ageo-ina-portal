@@ -71,10 +71,13 @@
 /* ===== モーダル ===== */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:300;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;}
 .modal-overlay.open{opacity:1;pointer-events:all;}
-.modal-sheet{background:var(--white);border-radius:var(--r24) var(--r24) 0 0;padding:24px 20px 40px;width:100%;max-width:640px;transform:translateY(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);}
+.modal-sheet{background:var(--white);border-radius:var(--r24) var(--r24) 0 0;padding:0 20px 40px;width:100%;max-width:640px;max-height:calc(100vh - 16px);max-height:calc(100dvh - 16px);overflow-y:auto;overscroll-behavior:contain;transform:translateY(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);}
 .modal-overlay.open .modal-sheet{transform:translateY(0);}
-.modal-title{font-size:18px;font-weight:700;color:var(--navy);margin:0 0 16px;}
-.modal-close{position:absolute;top:20px;right:20px;background:var(--gray100);border:none;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;}
+.modal-nav{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:12px;margin:0 -20px 16px;padding:14px 20px;background:var(--white);border-bottom:1px solid var(--gray100);}
+.modal-back{min-width:88px;min-height:44px;padding:8px 12px;border:1.5px solid var(--gray200);border-radius:var(--r12);background:var(--gray50);color:var(--navy);font:inherit;font-size:14px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:6px;}
+.modal-title{font-size:18px;font-weight:700;color:var(--navy);margin:0;}
+#post-tel{width:100%;min-height:60px;padding:16px 14px;border:2px solid var(--gray100);border-radius:var(--r12);background:var(--white);color:var(--gray900);font:inherit;font-size:17px;outline:none;}
+#post-tel:focus{border-color:var(--orange);}
 
 /* カテゴリ選択チップ */
 .cat-chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
@@ -126,7 +129,9 @@ html[data-theme="dark"] .post-btn:hover{background:#13243A;color:#FFB15C;border-
 html[data-theme="dark"] .post-btn.primary{background:#E8612A;color:#fff;border-color:#E8612A;}
 html[data-theme="dark"] .post-btn.danger{background:#2A1010;color:#FFD1D1;border-color:#D76A6A;}
 html[data-theme="dark"] .modal-sheet{background:#0F1F35;border:1px solid rgba(255,255,255,.12);}
-html[data-theme="dark"] .modal-close{background:#243A56;color:#fff;}
+html[data-theme="dark"] .modal-nav{background:#0F1F35;border-color:rgba(255,255,255,.12);}
+html[data-theme="dark"] .modal-back{background:#243A56;color:#fff;border-color:rgba(255,255,255,.18);}
+html[data-theme="dark"] #post-tel{background:#071426;color:#fff;border-color:rgba(255,255,255,.22);}
 html[data-theme="dark"] .guild-search,html[data-theme="dark"] .guild-sort,html[data-theme="dark"] .archive-btn{background:#0F1F35;color:#E8EEF7;border-color:rgba(255,255,255,.18);}
 html[data-theme="dark"] .job-fields{background:#071426;border-color:rgba(255,255,255,.15);}
 html[data-theme="dark"] .check-row{color:#E8EEF7;}
@@ -221,8 +226,10 @@ html[data-theme="light"] .comment-input{background:#fff;color:#1B2A3B;}
 <!-- 投稿モーダル -->
 <div class="modal-overlay" id="modal" onclick="bgClose(event)">
   <div class="modal-sheet" style="position:relative;">
-    <button class="modal-close" onclick="closeModal()"><i class="ti ti-x" style="font-size:16px;"></i></button>
-    <p class="modal-title">新しく投稿する</p>
+    <div class="modal-nav">
+      <button class="modal-back" type="button" onclick="closeModal()"><i class="ti ti-arrow-left"></i>戻る</button>
+      <p class="modal-title">新しく投稿する</p>
+    </div>
 
     <p style="font-size:12px;font-weight:600;color:var(--gray500);margin:0 0 8px;letter-spacing:.06em;">カテゴリを選択</p>
     <div class="cat-chips">
