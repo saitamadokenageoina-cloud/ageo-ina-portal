@@ -257,12 +257,17 @@ html[data-theme="light"] .comment-input{background:#fff;color:#1B2A3B;}
         <input type="text" id="post-area" maxlength="80" placeholder="例：上尾市、伊奈町">
       </div>
       <div class="input-group">
-        <label>お名前・職種（任意）</label>
-        <input type="text" id="post-name" maxlength="40" placeholder="例：大工 鈴木">
+        <label>投稿者名・職種（必須）</label>
+        <input type="text" id="post-name" maxlength="40" autocomplete="name" placeholder="例：大工 鈴木" required>
       </div>
     </div>
 
-    <p class="form-note"><i class="ti ti-shield-check"></i> 個人の電話番号は画面に公開しません。問い合わせは上尾伊奈支部が取り次ぎます。</p>
+    <div class="input-group">
+      <label>連絡先電話番号（必須・非公開）</label>
+      <input type="tel" id="post-tel" maxlength="24" inputmode="tel" autocomplete="tel" placeholder="例：090-1234-5678" required>
+    </div>
+
+    <p class="form-note"><i class="ti ti-shield-check"></i> 電話番号は一般画面・公開データ・通知メールには表示されません。支部管理者だけが確認し、問い合わせを取り次ぎます。</p>
 
     <button class="btn-primary" onclick="submitPost()">
       <i class="ti ti-send"></i>投稿する
@@ -505,6 +510,9 @@ function render(){
         ${isAdmin ? `<button class="post-btn" onclick="advancePostStatus(${p.id})">
           <i class="ti ti-progress-check"></i>${p.status==='open'?'交渉中にする':p.status==='negotiating'?'解決済みにする':'再掲載する'}
         </button>` : ''}
+        ${isAdmin ? `<button class="post-btn" onclick="showPostContact(${p.id})">
+          <i class="ti ti-address-book"></i>投稿者の連絡先
+        </button>` : ''}
         ${isAdmin ? `<button class="post-btn danger" onclick="deletePost(${p.id})">
           <i class="ti ti-trash"></i>削除
         </button>` : ''}
@@ -611,7 +619,14 @@ async function submitPost(){
   const body = document.getElementById('post-body').value.trim();
   if(!body){ alert('投稿内容を入力してください'); return; }
   const area = document.getElementById('post-area').value.trim();
-  const name = document.getElementById('post-name').value.trim() || '匿名';
+  const name = document.getElementById('post-name').value.trim();
+  const tel = document.getElementById('post-tel').value.trim();
+  const telDigits = tel.replace(/\D/g, '');
+  if(!name){ alert('投稿者名・職種を入力してください'); return; }
+  if(!/^[0-9+()\-\s]+$/.test(tel) || telDigits.length < 10 || telDigits.length > 12){
+    alert('連絡先電話番号を正しく入力してください');
+    return;
+  }
   const tags = [area, CAT[selectedCat].label].filter(Boolean);
   const peopleValue = Number(document.getElementById('post-people').value);
 
@@ -619,7 +634,7 @@ async function submitPost(){
   const newPost = {
     id: nextId++, clientId:'local-' + Date.now() + '-' + Math.random().toString(36).slice(2), cat: selectedCat,
     emoji: EMOJIS[selectedCat], name, area, time:'たった今',
-    body, tags, tel:'', comments:[], status:'open',
+    body, tags, tel, comments:[], status:'open',
     urgent:document.getElementById('post-urgent').checked,
     workDate:selectedCat==='jinzai' ? document.getElementById('post-work-date').value : '',
     workTime:selectedCat==='jinzai' ? document.getElementById('post-work-time').value.trim() : '',
@@ -647,7 +662,7 @@ async function submitPost(){
   currentTab='all';
   document.querySelectorAll('.t-btn')[0].click();
   // フォームリセット
-  ['post-body','post-area','post-name','post-work-date','post-work-time','post-trade','post-people','post-conditions'].forEach(id=>{ document.getElementById(id).value=''; });
+  ['post-body','post-area','post-name','post-tel','post-work-date','post-work-time','post-trade','post-people','post-conditions'].forEach(id=>{ document.getElementById(id).value=''; });
   document.getElementById('post-urgent').checked=false;
   render();
 }
@@ -686,6 +701,26 @@ async function advancePostStatus(id){
     await syncPosts();
   }catch(e){
     alert('状態を変更できませんでした。通信環境を確認してください。');
+  }
+}
+
+async function showPostContact(id){
+  if(!isAdmin) return;
+  try{
+    const data = await guildWrite('getContact', {postId:id, adminPin:adminPinValue});
+    const contact = data.contact;
+    if(!contact || !contact.tel){
+      alert('この投稿は連絡先未登録です。既存投稿の場合は、支部で投稿者を確認してください。');
+      return;
+    }
+    const name = safeText(contact.name, 40) || '投稿者';
+    const tel = safeText(contact.tel, 24);
+    const dial = tel.replace(/[^0-9+]/g, '');
+    if(confirm(`投稿者: ${name}\n電話番号: ${tel}\n\nこの番号へ電話しますか？`)){
+      location.href = 'tel:' + dial;
+    }
+  }catch(e){
+    alert('連絡先を確認できませんでした。管理者PINまたは通信環境を確認してください。');
   }
 }
 
