@@ -123,7 +123,7 @@ DokenPrint.preview({title, sections, note})                  // プレビュー�
 | merit.html | 加入のメリット | JSデータ駆動（MERITS配列＋ICON_GLYPHSマップ） |
 | kensetsu_check.html | 建設業許可チェッカー | 印刷対応 |
 | hitori.html | 一人親方の基礎知識・診断 | 国交省PDF準拠。5問診断＋判定＋比較表（PC横並び/スマホ縦カード切替）＋印刷対応 |
-| koushu.html | 技能講習日程案内 | |
+| koushu.html | 技能講習日程案内 | 申込前ガイド（必要書類・受講資格・確認フロー）を画像で拡大表示。対応する日程カードから直接参照可能。資料には2025年度版を含むため、2026年度日程と支部案内を優先する注意表示あり |
 | shiryo.html / book.html | 資料本棚 / デジタルブックリーダー | `assets/js/bookshelf.js`使用。PDF.js本体・ワーカーはSWインストール時に事前キャッシュ |
 | app_guide.html | 説明書・ヘルプ | |
 
