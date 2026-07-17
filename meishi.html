@@ -69,7 +69,10 @@
               <label class="field wide"><span>ホームページ</span><input id="website" maxlength="120" inputmode="url" placeholder="https://example.jp"></label>
               <label class="field wide"><span>LINE・SNS</span><input id="social" maxlength="120" placeholder="LINE公式URL、Instagramなど"></label>
               <label class="field wide"><span>QRコードのリンク先</span><input id="qr-url" maxlength="180" inputmode="url" placeholder="HP・LINE・施工事例・見積依頼などのhttps://URL"></label>
+              <label class="field wide"><span>ロゴ・写真（任意）</span><input id="photo" type="file" accept="image/png,image/jpeg,image/webp"></label>
             </div>
+            <label class="back-toggle"><input id="use-back" type="checkbox"><span><i class="ti ti-copy"></i><b>裏面を作る（任意）</b><small>選ばない場合、裏面は白無地になります</small></span></label>
+            <div id="back-fields" hidden>
             <p class="form-section-title back-info"><i class="ti ti-file-description"></i>裏面に表示</p>
             <div class="form-grid two">
               <label class="field wide"><span>キャッチコピー</span><input id="tagline" maxlength="44" placeholder="候補から選ぶか自由に入力"></label>
@@ -85,7 +88,7 @@
               <label class="field"><span>インボイス登録番号</span><input id="invoice-number" maxlength="20" placeholder="T＋13桁"></label>
               <label class="field"><span>営業時間・緊急対応</span><input id="business-hours" maxlength="35" placeholder="例：8:00〜18:00／緊急相談可"></label>
               <label class="field"><span>イラスト</span><select id="illustration"><option value="auto">業種から自動</option><option value="line">シンプル線画</option><option value="badge">シンボルマーク</option><option value="none">表示しない</option></select></label>
-              <label class="field"><span>ロゴ・施工写真</span><input id="photo" type="file" accept="image/png,image/jpeg,image/webp"></label>
+            </div>
             </div>
             <label class="member-check"><input id="member-label" type="checkbox"><span>「埼玉土建 上尾伊奈支部 組合員」と表示する</span></label>
             <p class="image-note">写真は端末内で縮小して使用します。顔・住所・車両番号など、公開したくない情報が写っていないか確認してください。</p>
@@ -113,7 +116,7 @@
         </div>
         <div class="side-tabs no-print" role="tablist" aria-label="名刺の面">
           <button class="side-tab active" type="button" data-side="front" role="tab" aria-selected="true">表面</button>
-          <button class="side-tab" type="button" data-side="back" role="tab" aria-selected="false">裏面</button>
+          <button class="side-tab" type="button" data-side="back" role="tab" aria-selected="false">裏面（任意）</button>
         </div>
         <div class="canvas-shell" id="canvas-shell">
           <canvas id="card-preview" width="1075" height="650" aria-label="名刺のプレビュー"></canvas>
