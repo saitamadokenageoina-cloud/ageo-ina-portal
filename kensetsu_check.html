@@ -57,6 +57,28 @@
 .prog-wrap{margin-top:6px;}
 .prog-bar{height:8px;background:var(--gray100);border-radius:99px;overflow:hidden;}
 .prog-fill{height:100%;border-radius:99px;transition:width .5s;}
+.docs-box{background:var(--white);border-radius:var(--r16);box-shadow:var(--shadow-sm);padding:18px;margin-bottom:12px;}
+.docs-title{display:flex;align-items:center;gap:7px;font-size:17px;font-weight:700;color:var(--navy);margin:0 0 4px;}
+.docs-lead{font-size:12px;line-height:1.65;color:var(--gray500);font-weight:600;margin:0 0 12px;}
+.docs-selector-label{font-size:11px;font-weight:800;color:var(--orange);letter-spacing:.07em;margin:12px 0 6px;}
+.docs-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;}
+.docs-tabs.entity{grid-template-columns:1fr 1fr;}
+.docs-tab{min-height:46px;border:2px solid var(--gray200);border-radius:10px;background:var(--white);color:var(--navy);font-size:12px;font-weight:700;padding:7px;}
+.docs-tab.on{background:#0C447C;border-color:#0C447C;color:#fff;}
+.docs-option{display:flex;align-items:flex-start;gap:9px;margin:12px 0 0;padding:10px;border-radius:10px;background:#FFF5DB;color:#5C4300;font-size:12px;line-height:1.55;font-weight:600;}
+.docs-option input{width:20px;height:20px;margin:0;accent-color:#1A7A4A;flex-shrink:0;}
+.docs-progress{margin:14px 0 10px;}.docs-progress-row{display:flex;justify-content:space-between;gap:8px;color:var(--navy);font-size:12px;font-weight:700;margin-bottom:5px;}
+.docs-progress-track{height:9px;background:var(--gray100);border-radius:99px;overflow:hidden;}.docs-progress-fill{height:100%;width:0;background:#1A7A4A;transition:width .2s;}
+.docs-tools{display:flex;gap:7px;margin-bottom:10px;}.docs-tool{min-height:42px;flex:1;border:1px solid var(--gray300);border-radius:9px;background:var(--white);color:var(--navy);font-size:11px;font-weight:700;}
+.docs-group{border:1px solid var(--gray200);border-radius:11px;margin-bottom:9px;overflow:hidden;}.docs-group h3{font-size:13px;color:#0C447C;margin:0;padding:9px 11px;background:#EAF4FF;}
+.permit-doc{display:grid;grid-template-columns:25px minmax(0,1fr);gap:8px;align-items:start;padding:10px 11px;border-top:1px solid var(--gray100);font-size:12px;line-height:1.6;color:var(--gray700);font-weight:600;}
+.permit-doc:first-of-type{border-top:none}.permit-doc input{width:21px;height:21px;margin:1px 0;accent-color:#1A7A4A;}.permit-doc input:checked+span{text-decoration:line-through;opacity:.62;}
+.permit-doc.required span::after{content:' 必須';display:inline-block;margin-left:5px;padding:1px 5px;border-radius:99px;background:#FCE9EE;color:#9F1239;font-size:9px;font-weight:800;text-decoration:none;}
+.docs-source{font-size:10px;color:var(--gray400);line-height:1.55;margin:9px 0 0;}
+.docs-empty{padding:18px;text-align:center;color:var(--gray500);font-size:12px;font-weight:600;}
+html[data-theme="dark"] .docs-box,html[data-theme="dark"] .docs-tab,html[data-theme="dark"] .docs-tool{background:#10213A;border-color:rgba(255,255,255,.18);color:#fff;}
+html[data-theme="dark"] .docs-title,html[data-theme="dark"] .docs-progress-row{color:#fff;}html[data-theme="dark"] .docs-lead,html[data-theme="dark"] .permit-doc{color:#E8EEF7;}
+html[data-theme="dark"] .docs-group{border-color:rgba(255,255,255,.16)}html[data-theme="dark"] .docs-group h3{background:#12365A;color:#CDEBFF;}html[data-theme="dark"] .docs-option{background:#302600;color:#FFE9A8;}
 
 /* 印刷・プレビューCSSは assets/css/print.css に集約 */
 
@@ -165,6 +187,30 @@
       <div id="e-alert" style="margin-top:10px;"></div>
     </div>
   </div>
+
+  <section class="docs-box" aria-labelledby="permit-docs-title">
+    <h2 class="docs-title" id="permit-docs-title"><i class="ti ti-checklist"></i>必要書類チェックリスト</h2>
+    <p class="docs-lead">手続きと事業形態を選ぶと、添付資料にもとづく準備書類を表示します。チェック状況はこの端末に保存されます。</p>
+    <p class="docs-selector-label">1. 手続きを選択</p>
+    <div class="docs-tabs" id="procedure-tabs">
+      <button type="button" class="docs-tab on" data-procedure="new">新規申請</button>
+      <button type="button" class="docs-tab" data-procedure="renew">更新</button>
+      <button type="button" class="docs-tab" data-procedure="annual">年度終了報告</button>
+    </div>
+    <p class="docs-selector-label">2. 事業形態を選択</p>
+    <div class="docs-tabs entity" id="entity-tabs">
+      <button type="button" class="docs-tab on" data-entity="individual">個人</button>
+      <button type="button" class="docs-tab" data-entity="corporation">法人</button>
+    </div>
+    <label class="docs-option" id="annual-missing-option" hidden><input type="checkbox" id="annual-missing"><span>未提出の事業年度終了報告書がある</span></label>
+    <div class="docs-progress">
+      <div class="docs-progress-row"><span id="docs-progress-text">0 / 0 準備済み</span><span id="docs-progress-percent">0%</span></div>
+      <div class="docs-progress-track"><div class="docs-progress-fill" id="docs-progress-fill"></div></div>
+    </div>
+    <div class="docs-tools"><button type="button" class="docs-tool" id="toggle-incomplete">未準備だけ表示</button><button type="button" class="docs-tool" id="reset-docs">チェックをリセット</button></div>
+    <div id="permit-docs-list" aria-live="polite"></div>
+    <p class="docs-source">資料の更新日：新規（個人）2026年7月15日、新規（法人）2025年6月10日、更新改定版2026年6月29日、年度終了報告（個人）2025年5月19日／（法人）2026年2月13日。制度変更や個別事情で追加書類が必要になる場合があります。</p>
+  </section>
 
   <div class="alert alert-info">
     <i class="ti ti-info-circle"></i>
@@ -317,6 +363,72 @@ function calcExpiry(){
   document.getElementById('e-alert').innerHTML = alert;
   document.getElementById('expiry-result').style.display = 'block';
 }
+
+const PERMIT_DOCUMENTS = Object.freeze({
+  new:{
+    individual:[
+      {group:'事業所の確認',items:['自宅を事業所にする場合：家（事業所）の火災保険証の写し','賃貸の場合：賃貸借契約書の写し','事業所の写真（外観・事務所）']},
+      {group:'経営業務の管理責任者（5年以上）の証明',items:['確定申告書控え5年分（税務署印のあるもの・原本提示。直近分は内訳書も）','請求書5年以上（原本提示）','請求書の入金を確認できる通帳5年以上（原本提示）']},
+      {group:'常勤・専任技術者の確認',items:['住民票','健康保険証の写し','有資格者：合格証明書等の原本／実務経験者：過去10年分以上の通帳・請求書']},
+      {group:'その他の申請資料',items:['建設業に関する現在までの職歴（別紙）','埼玉県税の納税情報確認に関する同意書','会社の横判（あれば）・個人印','取引銀行の500万円以上の残高証明書（取得後30日以内。取得時期は要相談）','成年被後見人・被保佐人に該当しない旨の登記事項証明書（法務局本局）','誓約書（ひな形あり）1枚','破産者で復権を得ないものに該当しない旨等の身分証明書（本籍地の市区町村）']}
+    ],
+    corporation:[
+      {group:'事業所の確認',items:['事業所の写真（外観・事務所）','事業所の間取り図（プレハブ等は追加書類を確認）']},
+      {group:'経営業務の管理責任者（5年以上）の証明',items:['履歴事項全部証明書','請求書原本と通帳原本（5年分）','証明者が個人の場合：確定申告書控え5年分（税務署印のあるもの・原本提示。直近分は内訳書も）']},
+      {group:'常勤・専任技術者の確認',items:['健康保険証の写し','有資格者：合格証明書等の原本／実務経験者：過去10年分以上の通帳・請求書']},
+      {group:'法人・役員関係',items:['役員全員の建設業に関する現在までの職歴（別紙）','過去3年分の決算書','埼玉県税の納税情報確認に関する同意書','会社の定款','取引銀行の500万円以上の残高証明書（必要性を要確認）','会社の横判・代表者印','役員全員の成年被後見人・被保佐人に該当しない旨の登記事項証明書','役員全員の身分証明書（本籍地の市区町村）','厚生年金保険料の領収書の写し（直近1か月分）','誓約書（ひな形あり）1枚','雇用保険の保険料申告書・領収書の写し']}
+    ]
+  },
+  renew:{
+    individual:[
+      {group:'更新の基本書類',items:['建設業許可申請書の控え','個人のゴム印（あれば）・個人印（前回使用したもの）','成年被後見人・被保佐人に該当しない旨の登記事項証明書（法務局本局）','身分証明書（本籍地の市区町村）','健康保険証の写し','直近の確定申告書の控え']}
+    ],
+    corporation:[
+      {group:'更新の基本書類',items:['建設業許可申請書の控え','会社のゴム印・代表者印（前回使用したもの）','役員の成年被後見人・被保佐人に該当しない旨の登記事項証明書（法務局本局）','役員の身分証明書（本籍地の市区町村）','厚生年金保険料の領収書の写し（直近分）','取引金融機関・株主（直近決算書の別表2の写し）・使用人数の情報','履歴事項全部証明書','経営業務責任者・専任技術者の健康保険証の写し（土建国保で事業所名の印字がない場合は標準報酬決定通知書の写し）']}
+    ]
+  },
+  annual:{
+    individual:[
+      {group:'事業年度終了報告（個人）',items:['確定申告書の控え（未提出年度分。内訳書がある場合は内訳書も）','前回提出した事業年度終了報告書の控え','工事経歴書（1年間の主な工事5件程度の工期・金額を別紙へ記入）','許可で使用している印鑑（ゴム印があればゴム印も）','個人事業税の納税証明書（未提出年度分）']}
+    ],
+    corporation:[
+      {group:'事業年度終了報告（法人）',items:['決算書（未提出年度分）','前回提出した事業年度終了報告書の控え','工事経歴書（別紙へ記入）','会社の横版・代表者印','事業税の納税証明書（未提出年度分）']}
+    ]
+  }
+});
+const MISSING_ANNUAL = Object.freeze({
+  individual:{group:'未提出の事業年度終了報告に必要',items:['未提出年度の決算書・確定申告書の控え（内訳書がある場合は内訳書も）','事業税の納税証明書','工事経歴書（別紙）','前回提出した事業年度終了報告書の控え']},
+  corporation:{group:'未提出の事業年度終了報告に必要',items:['未提出年度の決算書の控え','事業税の納税証明書','工事経歴書（別紙）','前回提出した事業年度終了報告書の控え']}
+});
+let docsProcedure='new',docsEntity='individual',onlyIncomplete=false;
+
+function currentPermitGroups(){
+  const groups=PERMIT_DOCUMENTS[docsProcedure][docsEntity].map(group=>({group:group.group,items:[...group.items]}));
+  if(docsProcedure==='renew'&&document.getElementById('annual-missing').checked)groups.push(MISSING_ANNUAL[docsEntity]);
+  return groups;
+}
+function permitStorageKey(groupIndex,itemIndex){return `permit_docs_${docsProcedure}_${docsEntity}_${groupIndex}_${itemIndex}`;}
+function renderPermitDocuments(){
+  document.getElementById('annual-missing-option').hidden=docsProcedure!=='renew';
+  const list=document.getElementById('permit-docs-list');list.replaceChildren();const groups=currentPermitGroups();let total=0,done=0,visible=0;
+  groups.forEach((group,groupIndex)=>{
+    const section=document.createElement('section');section.className='docs-group';const title=document.createElement('h3');title.textContent=group.group;section.appendChild(title);let groupVisible=0;
+    group.items.forEach((text,itemIndex)=>{
+      total++;const checked=localStorage.getItem(permitStorageKey(groupIndex,itemIndex))==='1';if(checked)done++;if(onlyIncomplete&&checked)return;
+      visible++;groupVisible++;const label=document.createElement('label');label.className='permit-doc required';const input=document.createElement('input');input.type='checkbox';input.checked=checked;input.dataset.group=groupIndex;input.dataset.item=itemIndex;const span=document.createElement('span');span.textContent=text;label.append(input,span);section.appendChild(label);
+    });
+    if(groupVisible)list.appendChild(section);
+  });
+  if(!visible){const empty=document.createElement('p');empty.className='docs-empty';empty.textContent='すべて準備済みです。お疲れさまでした。';list.appendChild(empty);}
+  const percent=total?Math.round(done/total*100):0;document.getElementById('docs-progress-text').textContent=`${done} / ${total} 準備済み`;document.getElementById('docs-progress-percent').textContent=`${percent}%`;document.getElementById('docs-progress-fill').style.width=`${percent}%`;
+}
+document.querySelectorAll('[data-procedure]').forEach(button=>button.addEventListener('click',()=>{docsProcedure=button.dataset.procedure;document.querySelectorAll('[data-procedure]').forEach(b=>b.classList.toggle('on',b===button));onlyIncomplete=false;document.getElementById('toggle-incomplete').textContent='未準備だけ表示';renderPermitDocuments();}));
+document.querySelectorAll('[data-entity]').forEach(button=>button.addEventListener('click',()=>{docsEntity=button.dataset.entity;document.querySelectorAll('[data-entity]').forEach(b=>b.classList.toggle('on',b===button));renderPermitDocuments();}));
+document.getElementById('annual-missing').addEventListener('change',renderPermitDocuments);
+document.getElementById('permit-docs-list').addEventListener('change',event=>{const input=event.target.closest('input[data-group]');if(!input)return;localStorage.setItem(permitStorageKey(input.dataset.group,input.dataset.item),input.checked?'1':'0');renderPermitDocuments();});
+document.getElementById('toggle-incomplete').addEventListener('click',event=>{onlyIncomplete=!onlyIncomplete;event.currentTarget.textContent=onlyIncomplete?'すべて表示':'未準備だけ表示';renderPermitDocuments();});
+document.getElementById('reset-docs').addEventListener('click',()=>{if(!confirm('現在表示している手続きのチェックをすべて外しますか？'))return;const prefix=`permit_docs_${docsProcedure}_${docsEntity}_`;Object.keys(localStorage).filter(key=>key.startsWith(prefix)).forEach(key=>localStorage.removeItem(key));renderPermitDocuments();});
+renderPermitDocuments();
 </script>
 <script src="assets/js/navigation.js"></script>
 <script src="assets/js/print-util.js"></script>
@@ -331,6 +443,8 @@ function _kensetsuData(){
   if(r && r.innerHTML.trim() && r.classList.contains('active')) secs.push({label:'判定結果', html:r.innerHTML});
   const ex=document.getElementById('expiry-result');
   if(ex && ex.innerHTML.trim() && ex.style.display!=='none') secs.push({label:'許可の有効期限', html:ex.innerHTML});
+  const docs=document.getElementById('permit-docs-list');
+  if(docs && docs.innerHTML.trim()) secs.push({label:'必要書類チェックリスト', html:docs.innerHTML});
   if(!secs.length){ alert('先に診断を行ってください。'); return null; }
   return {title:'建設業許可 簡易判定結果', secs,
     note:'本判定は建設業法にもとづく一般的な目安です（軽微な工事＝500万円未満等）。個別の判断は行政書士・許可行政庁にご相談ください。'};
