@@ -4,7 +4,7 @@
   const FINISHED = { width: 1075, height: 650 };
   const BLEED = { width: 1146, height: 720, inset: 35 };
   const STORAGE_KEY = 'doken_meishi_draft_v1';
-  const fields = ['company', 'person-name', 'role', 'trade', 'tagline', 'services', 'qualifications', 'phone', 'email', 'address', 'website', 'social', 'service-area', 'qr-url', 'illustration', 'back-focus', 'accent-color', 'member-label'];
+  const fields = ['company', 'person-name', 'role', 'trade', 'tagline', 'services', 'qualifications', 'phone', 'email', 'address', 'website', 'social', 'service-area', 'qr-url', 'illustration', 'back-focus', 'event-title', 'exchange-offer', 'exchange-goal', 'accent-color', 'member-label'];
   const form = document.getElementById('card-form');
   const preview = document.getElementById('card-preview');
   const context = preview.getContext('2d');
@@ -46,13 +46,24 @@
     return selected ? selected.value : 'trust';
   }
 
+  function selectedPurpose() {
+    const selected = form.querySelector('input[name="card-purpose"]:checked');
+    return selected ? selected.value : 'business';
+  }
+
+  function tradeLabel() {
+    const select=document.getElementById('trade');
+    return select.selectedOptions[0] ? select.selectedOptions[0].textContent : '建設業';
+  }
+
   function cardData() {
     return {
       company: value('company'), name: value('person-name') || 'お名前', role: value('role'),
       trade: value('trade'), tagline: value('tagline'), services: value('services'),
       qualifications: value('qualifications'), phone: value('phone'), email: value('email'),
       address: value('address'), website: value('website'), social: value('social'), area: value('service-area'),
-      qrUrl: value('qr-url'), illustration: value('illustration') || 'auto', backFocus: value('back-focus') || 'services', member: value('member-label'),
+      qrUrl: value('qr-url'), illustration: value('illustration') || 'auto', backFocus: value('back-focus') || 'services',
+      purpose: selectedPurpose(), eventTitle: value('event-title'), exchangeOffer: value('exchange-offer'), exchangeGoal: value('exchange-goal'), member: value('member-label'),
       style: selectedStyle(), accent: value('accent-color') || '#e8612a'
     };
   }
@@ -248,32 +259,58 @@
     const variant = layoutVariant % 3;
     const left = variant === 2 ? width*.36 : width*.075;
     const contentWidth = variant === 0 ? width*.54 : variant === 2 ? width*.57 : width*.82;
-    const onDark = false;
     ctx.textBaseline = 'alphabetic';
+    const companyY=data.purpose==='exchange'?height*.17:height*.13;
+    if(data.purpose==='exchange'){
+      ctx.fillStyle=data.accent;
+      ctx.font=`800 ${Math.max(25,Math.round(height*.034))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;
+      ctx.fillText(clippedText(ctx,data.eventTitle||'建設職人 名刺交換会',contentWidth),left,height*.09);
+    }
     ctx.fillStyle = variant === 1 ? '#fff' : palette.dark;
     ctx.font = `700 ${Math.max(25,Math.round(height*.04))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;
-    if (data.company) ctx.fillText(clippedText(ctx, data.company, contentWidth), left, height*.18);
+    if (data.company) ctx.fillText(clippedText(ctx, data.company, contentWidth), left, companyY);
     ctx.fillStyle = palette.dark;
     const nameSize = fitText(ctx, data.name, contentWidth, height*.115, height*.07, 800);
     ctx.font = `800 ${nameSize}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;
-    ctx.fillText(data.name, left, height*.39);
+    ctx.fillText(data.name, left, height*.31);
     if (data.role) {
-      ctx.fillStyle = onDark ? 'rgba(255,255,255,.82)' : palette.mid;
+      ctx.fillStyle = palette.mid;
       ctx.font = `700 ${Math.max(25,Math.round(height*.035))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;
-      ctx.fillText(clippedText(ctx, data.role, contentWidth), left, height*.47);
+      ctx.fillText(clippedText(ctx, data.role, contentWidth), left, height*.385);
     }
-    if (data.tagline) {
-      ctx.fillStyle = onDark ? '#fff' : palette.dark;
-      ctx.font = `700 ${Math.max(25,Math.round(height*.031))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;
-      drawLines(ctx, wrapLines(ctx, data.tagline, contentWidth, 2), left, height*.6, height*.048);
+    const profession=[tradeLabel(),data.area].filter(Boolean).join('｜');
+    ctx.font=`800 ${Math.max(25,Math.round(height*.029))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;
+    const badgeText=clippedText(ctx,profession,contentWidth-32);
+    const badgeWidth=Math.min(contentWidth,ctx.measureText(badgeText).width+32);
+    ctx.fillStyle=colorWithAlpha(data.accent,.13);roundedRect(ctx,left,height*.42,badgeWidth,height*.067,12);ctx.fill();
+    ctx.fillStyle=data.accent;ctx.fillText(badgeText,left+16,height*.467);
+    if(data.purpose==='exchange'){
+      const offer=data.exchangeOffer||data.services||data.tagline;
+      const goal=data.exchangeGoal;
+      ctx.font=`700 ${Math.max(25,Math.round(height*.03))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;
+      if(offer){ctx.fillStyle=palette.dark;ctx.fillText(clippedText(ctx,`できる仕事：${offer}`,contentWidth),left,height*.57);}
+      if(goal){ctx.fillStyle=palette.mid;ctx.fillText(clippedText(ctx,`つながりたい：${goal}`,contentWidth),left,height*.65);}
+    }else{
+      if (data.tagline) {
+        ctx.fillStyle = palette.dark;
+        ctx.font = `700 ${Math.max(25,Math.round(height*.031))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;
+        ctx.fillText(clippedText(ctx,data.tagline,contentWidth),left,height*.57);
+      }
+      if(data.services){ctx.fillStyle=palette.mid;ctx.font=`600 ${Math.max(25,Math.round(height*.027))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;ctx.fillText(clippedText(ctx,`対応：${data.services}`,contentWidth),left,height*.66);}
     }
-    const details = [data.phone && `TEL  ${data.phone}`, data.email, data.address].filter(Boolean);
-    ctx.fillStyle = onDark ? 'rgba(255,255,255,.82)' : '#34465a';
+    const details = [
+      data.phone && `TEL  ${data.phone}`,
+      data.email && `MAIL  ${data.email}`,
+      data.address,
+      (data.website && `WEB  ${data.website}`) || (data.social && `SNS  ${data.social}`)
+    ].filter(Boolean);
+    ctx.fillStyle = '#34465a';
     ctx.font = `500 ${Math.max(25,Math.round(height*.026))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;
-    details.slice(0,3).forEach((detail,index) => ctx.fillText(clippedText(ctx, detail, contentWidth), left, height*(.75 + index*.052)));
+    const detailLimit=data.purpose==='exchange'?3:4;
+    details.slice(0,detailLimit).forEach((detail,index) => ctx.fillText(clippedText(ctx, detail, contentWidth), left, height*(.74 + index*.052)));
     if (data.member) {
       ctx.fillStyle = data.accent; ctx.font = `700 ${Math.max(25,Math.round(height*.022))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;
-      ctx.fillText('埼玉土建 上尾伊奈支部 組合員', left, height*.95);
+      ctx.fillText('埼玉土建 上尾伊奈支部 組合員', left, height*.945);
     }
     const artX = variant === 0 ? width*.83 : variant === 1 ? width*.86 : width*.15;
     const artY = variant === 1 ? height*.69 : height*.38;
@@ -294,12 +331,19 @@
     const left = width*.08; const max = target ? width*.61 : width*.78;
     ctx.fillStyle = '#fff'; ctx.font = `800 ${Math.max(25,Math.round(height*.072))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;
     ctx.fillText(clippedText(ctx,data.company || data.name,max),left,height*.19);
-    const blocks = [
+    if(data.purpose==='exchange'&&data.eventTitle){ctx.fillStyle=data.accent;ctx.font=`700 ${Math.max(25,Math.round(height*.027))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;ctx.fillText(clippedText(ctx,data.eventTitle,max),left,height*.27);}
+    const standardBlocks = [
       { key: 'services', label: '主な業務', text: data.services },
       { key: 'qualifications', label: '資格・許可', text: data.qualifications },
       { key: 'area', label: '対応エリア', text: data.area },
       { key: 'message', label: '私たちの強み', text: data.tagline }
-    ].filter(block => block.text);
+    ];
+    const exchangeBlocks = [
+      { key:'offer',label:'できる仕事・協力できること',text:data.exchangeOffer||data.services },
+      { key:'goal',label:'つながりたい相手・探している仕事',text:data.exchangeGoal },
+      { key:'qualifications',label:'資格・許可',text:data.qualifications }
+    ];
+    const blocks=(data.purpose==='exchange'?exchangeBlocks:standardBlocks).filter(block => block.text);
     blocks.sort((a,b) => (a.key === data.backFocus ? -1 : b.key === data.backFocus ? 1 : 0));
     blocks.slice(0,2).forEach((block,index) => {
       const labelY = height*(.34 + index*.25);
@@ -377,9 +421,21 @@
     document.getElementById('accent-color').value = suggestion.color;
     if (!value('services')) document.getElementById('services').value = suggestion.services;
     if (!value('tagline')) document.getElementById('tagline').value = suggestion.lines[0];
+    if(selectedPurpose()==='exchange'){
+      if(!value('event-title'))document.getElementById('event-title').value='建設職人 名刺交換会';
+      if(!value('exchange-offer'))document.getElementById('exchange-offer').value=`${suggestion.services}に対応できます`;
+      if(!value('exchange-goal'))document.getElementById('exchange-goal').value='元請会社・協力会社・仕事仲間とつながりたい';
+    }
     renderTaglineSuggestions(suggestion.lines);
     layoutVariant = (layoutVariant + 1) % 3;
     document.getElementById('suggestion-message').textContent = `提案しました：${suggestion.reason} キャッチコピーは5案から選べます。`;
+    queueRender();
+  }
+
+  function syncPurposeUI() {
+    const exchange=selectedPurpose()==='exchange';
+    document.getElementById('exchange-fields').hidden=!exchange;
+    document.querySelector('#suggest-button span').textContent=exchange?'交換会向けデザインと文章を自動提案':'3項目からデザインと文章を自動提案';
     queueRender();
   }
 
@@ -532,8 +588,13 @@
     add(Boolean(data.name && data.name!=='お名前'),12,'氏名が入力されています','氏名を入力してください');
     add(Boolean(data.company),8,'会社・屋号が入力されています','会社・屋号を入れると信頼感が上がります');
     add(Boolean(data.phone || data.email),12,'問い合わせ先があります','電話番号またはメールを入力してください');
-    add(Boolean(data.tagline),10,'強みが一言で伝わります','キャッチコピー候補から1つ選んでください');
-    add(Boolean(data.services),10,'施工内容が分かります','主な業務・施工内容を入力してください');
+    if(data.purpose==='exchange'){
+      add(Boolean(data.exchangeOffer || data.services),10,'できる仕事が一目で伝わります','できる仕事・協力できることを入力してください');
+      add(Boolean(data.exchangeGoal),10,'つながりたい相手が分かります','つながりたい相手・探している仕事を入力してください');
+    }else{
+      add(Boolean(data.tagline),10,'強みが一言で伝わります','キャッチコピー候補から1つ選んでください');
+      add(Boolean(data.services),10,'施工内容が分かります','主な業務・施工内容を入力してください');
+    }
     add(Boolean(data.qualifications || data.area),5,'資格または対応エリアがあります','資格または対応エリアを入れると安心感が増します');
     const rawQr=data.qrUrl || data.website || data.social;
     add(Boolean(qrTarget(data)),15,'QRコードは約20mm・余白付きです',rawQr?'QRコードのURLはhttps://から入力してください':'QRコードのリンク先を入れると営業力が上がります');
@@ -547,7 +608,7 @@
 
   function buildAiPrompt() {
     const data=cardData();
-    return `あなたは世界最高峰のブランドデザイナー兼、建設業専門マーケティングコンサルタントです。次の情報から、初対面で信頼を獲得し受注につながる横型名刺を提案してください。\n\n【印刷条件】仕上がり91×55mm、塗り足し込み97×61mm、300dpi、角丸なし、重要情報は仕上がり線から3mm以上内側、色は3色以内、最小文字6pt、QRコードは約20mmで十分な余白を確保。表面・裏面を提案。\n【会社名】${data.company || '未入力'}\n【氏名】${data.name || '未入力'}\n【肩書】${data.role || '未入力'}\n【業種】${document.getElementById('trade').selectedOptions[0].textContent}\n【キャッチコピー】${data.tagline || 'AIで5案提案'}\n【施工内容】${data.services || 'AIで整理'}\n【資格】${data.qualifications || '未入力'}\n【対応エリア】${data.area || '未入力'}\n【希望スタイル】${data.style}\n【希望色】${data.accent}\n【イラスト】${data.illustration}\n\n表裏の構成、ブランドカラー、キャッチコピー5案、背景・アイコン・イラスト案、営業効果、印刷時の注意を日本語で提示してください。個人情報は回答内で必要以上に繰り返さないでください。`;
+    return `あなたは世界最高峰のブランドデザイナー兼、建設業専門マーケティングコンサルタントです。次の情報から、初対面で信頼を獲得し受注につながる横型名刺を提案してください。\n\n【印刷条件】仕上がり91×55mm、塗り足し込み97×61mm、300dpi、角丸なし、重要情報は仕上がり線から3mm以上内側、色は3色以内、最小文字6pt、QRコードは約20mmで十分な余白を確保。表面・裏面を提案。\n【用途】${data.purpose==='exchange'?'名刺交換会用':'通常の営業名刺'}\n【交換会名】${data.eventTitle || '未入力'}\n【会社名】${data.company || '未入力'}\n【氏名】${data.name || '未入力'}\n【肩書】${data.role || '未入力'}\n【業種】${tradeLabel()}\n【キャッチコピー】${data.tagline || 'AIで5案提案'}\n【施工内容】${data.services || 'AIで整理'}\n【できる仕事】${data.exchangeOffer || '未入力'}\n【つながりたい相手】${data.exchangeGoal || '未入力'}\n【資格】${data.qualifications || '未入力'}\n【対応エリア】${data.area || '未入力'}\n【希望スタイル】${data.style}\n【希望色】${data.accent}\n【イラスト】${data.illustration}\n\n表裏の構成、ブランドカラー、キャッチコピー5案、背景・アイコン・イラスト案、営業効果、印刷時の注意を日本語で提示してください。個人情報は回答内で必要以上に繰り返さないでください。`;
   }
 
   async function copyAiPrompt() {
@@ -566,7 +627,7 @@
   function saveDraft() {
     const values={};
     fields.forEach(id => { values[id]=value(id); });
-    values.style=selectedStyle(); values.layoutVariant=layoutVariant; values.photo=photoData && photoData.length < 900000 ? photoData : '';
+    values.style=selectedStyle(); values.purpose=selectedPurpose(); values.layoutVariant=layoutVariant; values.photo=photoData && photoData.length < 900000 ? photoData : '';
     try {
       localStorage.setItem(STORAGE_KEY,JSON.stringify(values));
       document.getElementById('save-message').textContent=photoData && !values.photo ? '文字情報をこの端末に保存しました。画像は容量が大きいため保存していません。' : '下書きをこの端末に保存しました。';
@@ -584,6 +645,7 @@
       if (element.type === 'checkbox') element.checked=Boolean(draft[id]); else element.value=String(draft[id]);
     });
     if (draft.style) { const radio=form.querySelector(`input[name="style"][value="${draft.style}"]`); if (radio) radio.checked=true; }
+    if (draft.purpose) { const radio=form.querySelector(`input[name="card-purpose"][value="${draft.purpose}"]`); if (radio) radio.checked=true; }
     layoutVariant=Number.isInteger(draft.layoutVariant) ? draft.layoutVariant%3 : 0;
     if (typeof draft.photo === 'string' && draft.photo.startsWith('data:image/')) { photoData=draft.photo; photoImage=new Image(); photoImage.onload=queueRender; photoImage.src=photoData; }
     document.getElementById('save-message').textContent='この端末に保存した下書きを復元しました。';
@@ -591,6 +653,7 @@
 
   form.addEventListener('input',queueRender);
   form.addEventListener('change',queueRender);
+  form.querySelectorAll('input[name="card-purpose"]').forEach(radio=>radio.addEventListener('change',syncPurposeUI));
   document.getElementById('photo').addEventListener('change',event=>resizePhoto(event.target.files[0]));
   document.getElementById('suggest-button').addEventListener('click',suggestDesign);
   document.getElementById('download-front').addEventListener('click',()=>download('front'));
@@ -608,6 +671,5 @@
   }));
 
   restoreDraft();
-  renderPreview();
-  updateQuality();
+  syncPurposeUI();
 })();
