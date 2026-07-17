@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#10243d">
+<title>名刺作成｜埼玉土建 上尾伊奈支部</title>
+<link rel="stylesheet" href="assets/css/tabler-icons.min.css">
+<link rel="stylesheet" href="common.css">
+<link rel="stylesheet" href="assets/css/meishi.css">
+</head>
+<body>
+<div class="app">
+  <header class="hdr no-print">
+    <button class="hdr-back" type="button" onclick="goBack()"><i class="ti ti-arrow-left"></i>戻る</button>
+    <div class="hdr-right">
+      <p class="hdr-org">埼玉土建 上尾伊奈支部</p>
+      <p class="hdr-title">名刺作成</p>
+    </div>
+  </header>
+
+  <main class="content meishi-main">
+    <section class="meishi-hero no-print">
+      <div class="hero-mark"><i class="ti ti-id"></i></div>
+      <div>
+        <p class="eyebrow">BUSINESS CARD MAKER</p>
+        <h1>職人の魅力が伝わる名刺を作成</h1>
+        <p>入力内容と職種から、配色・背景・レイアウトを端末内で自動提案します。</p>
+      </div>
+    </section>
+
+    <div class="privacy-note no-print" role="note">
+      <i class="ti ti-shield-lock"></i>
+      <span><strong>入力情報や画像は外部へ送信しません。</strong>作成・保存・出力はこの端末内だけで行います。</span>
+    </div>
+
+    <section class="maker-grid no-print">
+      <form id="card-form" class="editor-panel" autocomplete="on">
+        <div class="panel-heading">
+          <span class="step-number">1</span>
+          <div><h2>名刺の情報</h2><p>空欄の項目は名刺に表示されません</p></div>
+        </div>
+
+        <div class="form-grid two">
+          <label class="field"><span>会社・屋号</span><input id="company" name="organization" maxlength="40" placeholder="例：上尾建設" autocomplete="organization"></label>
+          <label class="field"><span>お名前 <em>必須</em></span><input id="person-name" name="name" maxlength="24" required placeholder="例：土建 太郎" autocomplete="name"></label>
+          <label class="field"><span>役職・肩書</span><input id="role" maxlength="30" placeholder="例：代表／一級技能士"></label>
+          <label class="field"><span>職種</span><select id="trade"><option value="general">総合建設・その他</option><option value="carpenter">大工・木工</option><option value="scaffold">鳶・足場</option><option value="plaster">左官・タイル</option><option value="electrical">電気工事</option><option value="plumbing">設備・配管</option><option value="painting">塗装・防水</option><option value="civil">土木・重機</option></select></label>
+          <label class="field wide"><span>ひとこと・強み</span><input id="tagline" maxlength="44" placeholder="例：住まいの困りごとに、誠実・迅速に対応します"></label>
+          <label class="field wide"><span>主な業務</span><input id="services" maxlength="70" placeholder="例：新築・リフォーム・内装工事・修繕"></label>
+          <label class="field wide"><span>資格・許可</span><input id="qualifications" maxlength="70" placeholder="例：一級建築大工技能士／建設業許可 埼玉県知事（般）"></label>
+          <label class="field"><span>電話番号</span><input id="phone" name="tel" maxlength="24" inputmode="tel" placeholder="090-1234-5678" autocomplete="tel"></label>
+          <label class="field"><span>メール</span><input id="email" name="email" maxlength="60" inputmode="email" placeholder="info@example.jp" autocomplete="email"></label>
+          <label class="field wide"><span>住所</span><input id="address" name="street-address" maxlength="70" placeholder="埼玉県上尾市〇〇" autocomplete="street-address"></label>
+          <label class="field wide"><span>ホームページ・SNS</span><input id="website" maxlength="90" inputmode="url" placeholder="https://example.jp"></label>
+        </div>
+
+        <fieldset class="choice-field">
+          <legend>名刺の雰囲気</legend>
+          <div class="choice-row" id="style-options">
+            <label><input type="radio" name="style" value="trust" checked><span>信頼・誠実</span></label>
+            <label><input type="radio" name="style" value="craft"><span>職人・力強い</span></label>
+            <label><input type="radio" name="style" value="premium"><span>上質・高級</span></label>
+            <label><input type="radio" name="style" value="friendly"><span>親しみ・明るい</span></label>
+          </div>
+        </fieldset>
+
+        <div class="form-grid two compact-grid">
+          <label class="field"><span>差し色</span><input id="accent-color" class="color-input" type="color" value="#e8612a"></label>
+          <label class="field"><span>ロゴ・写真（任意）</span><input id="photo" type="file" accept="image/png,image/jpeg,image/webp"></label>
+        </div>
+        <label class="member-check"><input id="member-label" type="checkbox"><span>「埼玉土建 上尾伊奈支部 組合員」と表示する</span></label>
+        <p class="image-note">写真は端末内で縮小して使用します。顔・住所・車両番号など、公開したくない情報が写っていないか確認してください。</p>
+
+        <button id="suggest-button" class="primary-action" type="button"><i class="ti ti-wand"></i><span>職種に合うデザインを自動提案</span></button>
+        <p id="suggestion-message" class="suggestion-message" aria-live="polite"></p>
+      </form>
+
+      <section class="preview-panel">
+        <div class="panel-heading no-print">
+          <span class="step-number">2</span>
+          <div><h2>仕上がり確認</h2><p>実際の比率 91mm × 55mm</p></div>
+        </div>
+        <div class="side-tabs no-print" role="tablist" aria-label="名刺の面">
+          <button class="side-tab active" type="button" data-side="front" role="tab" aria-selected="true">表面</button>
+          <button class="side-tab" type="button" data-side="back" role="tab" aria-selected="false">裏面</button>
+        </div>
+        <div class="canvas-shell" id="canvas-shell">
+          <canvas id="card-preview" width="1075" height="650" aria-label="名刺のプレビュー"></canvas>
+        </div>
+        <p class="preview-help no-print"><i class="ti ti-zoom-check"></i>画面では縮小表示されます。PNGは300dpi相当の高解像度です。</p>
+
+        <div class="output-box no-print">
+          <div class="panel-heading small">
+            <span class="step-number">3</span>
+            <div><h2>保存・印刷</h2><p>表面と裏面を別々に出力できます</p></div>
+          </div>
+          <div class="output-grid">
+            <button id="download-front" type="button"><i class="ti ti-download"></i>表面PNG</button>
+            <button id="download-back" type="button"><i class="ti ti-download"></i>裏面PNG</button>
+            <button id="print-button" class="accent" type="button"><i class="ti ti-printer"></i>印刷・PDF保存</button>
+            <button id="save-draft" type="button"><i class="ti ti-device-floppy"></i>下書き保存</button>
+          </div>
+          <p id="save-message" class="save-message" aria-live="polite"></p>
+        </div>
+      </section>
+    </section>
+
+    <section class="print-guide no-print">
+      <h2><i class="ti ti-ruler-measure"></i>印刷会社へ渡すとき</h2>
+      <ul>
+        <li>PNGは上下左右3mmの塗り足しを含む <strong>97mm × 61mm</strong>、300dpi相当で出力します。</li>
+        <li>中央の仕上がり範囲が <strong>91mm × 55mm</strong>です。文字は端から3mm以上内側に配置しています。</li>
+        <li>家庭用プリンターは「実際のサイズ／100%」を選んでください。色味は画面と多少異なる場合があります。</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="page-footer no-print">
+    <p>埼玉土建一般労働組合 上尾伊奈支部</p>
+    <p>TEL 048-773-9863</p>
+  </footer>
+</div>
+
+<div id="print-area" aria-hidden="true">
+  <section class="print-sheet"><h1>名刺 表面</h1><p>外枠：塗り足し97×61mm／内側：仕上がり91×55mm</p><img id="print-front" alt="名刺表面"></section>
+  <section class="print-sheet"><h1>名刺 裏面</h1><p>外枠：塗り足し97×61mm／内側：仕上がり91×55mm</p><img id="print-back" alt="名刺裏面"></section>
+</div>
+
+<script src="assets/js/navigation.js"></script>
+<script src="assets/js/meishi.js"></script>
+</body>
+</html>
