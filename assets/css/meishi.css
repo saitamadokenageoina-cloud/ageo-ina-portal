@@ -32,6 +32,7 @@
 .advanced-fields[open] summary::after,.ai-prompt-box[open] summary::after{content:'−';}
 .advanced-body{padding:0 13px 14px;border-top:1px solid var(--gray100);}
 .advanced-body .form-grid{padding-top:13px;}
+.form-section-title{display:flex;align-items:center;gap:7px;margin:13px 0 0;color:var(--navy);font-size:13px;font-weight:900;}.form-section-title i{color:var(--orange);font-size:18px;}.form-section-title.back-info{padding-top:13px;border-top:1px solid var(--gray200);}
 .suggestion-box{margin:10px 0 0;padding:12px;border-radius:13px;background:#fff8ed;border:1px solid #f3d5a8;color:#543a1c;}
 .suggestion-box>p{margin:0 0 8px;display:flex;align-items:center;gap:6px;font-size:12px;font-weight:900;}
 .suggestion-chips{display:grid;gap:6px;}
@@ -84,6 +85,7 @@
 @media(min-width:620px){.form-grid.two{grid-template-columns:1fr 1fr;}.field.wide{grid-column:1/-1;}}
 @media(min-width:900px){.meishi-main{max-width:1120px;margin:0 auto;}.maker-grid{grid-template-columns:minmax(0,1.02fr) minmax(380px,.98fr);align-items:start;}.preview-panel{position:sticky;top:14px;}.choice-row{grid-template-columns:repeat(4,minmax(0,1fr));}}
 @media(max-width:390px){.editor-panel,.preview-panel{padding:13px;}.meishi-hero{padding:16px 14px;}.meishi-hero h1{font-size:18px;}.hero-mark{width:46px;height:46px;flex-basis:46px}.choice-row{grid-template-columns:1fr 1fr;}.output-grid{grid-template-columns:1fr;}.output-grid button.accent{grid-column:auto;}}
+html[data-theme="dark"] .result-principle{border-color:#315679;background:linear-gradient(135deg,#17314f,#202d3c);color:#fff;}html[data-theme="dark"] .result-principle small{color:#d8e6f5;}html[data-theme="dark"] .panel-heading p,html[data-theme="dark"] .advanced-fields summary,html[data-theme="dark"] .form-section-title,html[data-theme="dark"] .preview-help,html[data-theme="dark"] .quality-head span,html[data-theme="dark"] .quality-panel>p{color:#d8e2ee;}html[data-theme="dark"] .field input::placeholder{color:#9fb0c4;opacity:1;}
 @media print{
   @page{size:A4 portrait;margin:12mm;}
   body{background:#fff!important;}

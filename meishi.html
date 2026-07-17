@@ -57,15 +57,25 @@
           <div id="tagline-suggestions" class="suggestion-chips"></div>
         </div>
 
-        <details class="advanced-fields">
-          <summary><i class="ti ti-adjustments"></i>連絡先・資格・裏面などを追加する</summary>
+        <details class="advanced-fields" open>
+          <summary><i class="ti ti-address-book"></i>表面の連絡先を入力する</summary>
           <div class="advanced-body">
+            <p class="form-section-title"><i class="ti ti-id"></i>表面に表示</p>
             <div class="form-grid two">
               <label class="field"><span>役職・肩書</span><input id="role" maxlength="30" placeholder="例：代表／一級技能士"></label>
               <label class="field"><span>電話番号</span><input id="phone" name="tel" maxlength="24" inputmode="tel" placeholder="090-1234-5678" autocomplete="tel"></label>
+              <label class="field"><span>メール</span><input id="email" name="email" maxlength="60" inputmode="email" placeholder="info@example.jp" autocomplete="email"></label>
+              <label class="field wide"><span>住所</span><input id="address" name="street-address" maxlength="70" placeholder="埼玉県上尾市〇〇" autocomplete="street-address"></label>
+              <label class="field wide"><span>ホームページ</span><input id="website" maxlength="120" inputmode="url" placeholder="https://example.jp"></label>
+              <label class="field wide"><span>LINE・SNS</span><input id="social" maxlength="120" placeholder="LINE公式URL、Instagramなど"></label>
+              <label class="field wide"><span>QRコードのリンク先</span><input id="qr-url" maxlength="180" inputmode="url" placeholder="HP・LINE・施工事例・見積依頼などのhttps://URL"></label>
+            </div>
+            <p class="form-section-title back-info"><i class="ti ti-file-description"></i>裏面に表示</p>
+            <div class="form-grid two">
               <label class="field wide"><span>キャッチコピー</span><input id="tagline" maxlength="44" placeholder="候補から選ぶか自由に入力"></label>
               <label class="field wide"><span>主な業務・施工内容</span><input id="services" maxlength="70" placeholder="例：新築・リフォーム・内装工事・修繕"></label>
               <label class="field wide"><span>得意な仕事・選ばれる理由</span><input id="strengths" maxlength="70" placeholder="例：小さな修繕も迅速対応／自社施工／見積無料"></label>
+              <label class="field"><span>対応エリア</span><input id="service-area" maxlength="45" placeholder="例：上尾市・伊奈町・県央地域"></label>
               <label class="field wide"><span>資格</span><input id="qualifications" maxlength="70" placeholder="例：一級建築大工技能士／第二種電気工事士"></label>
               <label class="field wide"><span>建設業許可番号</span><input id="permit-number" maxlength="60" placeholder="例：埼玉県知事許可（般-00）第00000号"></label>
               <label class="field"><span>創業・経験</span><input id="experience" maxlength="35" placeholder="例：創業25年／経験30年"></label>
@@ -74,12 +84,6 @@
               <label class="field"><span>保険・保証</span><input id="insurance" maxlength="45" placeholder="例：請負業者賠償責任保険加入"></label>
               <label class="field"><span>インボイス登録番号</span><input id="invoice-number" maxlength="20" placeholder="T＋13桁"></label>
               <label class="field"><span>営業時間・緊急対応</span><input id="business-hours" maxlength="35" placeholder="例：8:00〜18:00／緊急相談可"></label>
-              <label class="field"><span>メール</span><input id="email" name="email" maxlength="60" inputmode="email" placeholder="info@example.jp" autocomplete="email"></label>
-              <label class="field"><span>対応エリア</span><input id="service-area" maxlength="45" placeholder="例：上尾市・伊奈町・県央地域"></label>
-              <label class="field wide"><span>住所</span><input id="address" name="street-address" maxlength="70" placeholder="埼玉県上尾市〇〇" autocomplete="street-address"></label>
-              <label class="field wide"><span>ホームページ</span><input id="website" maxlength="120" inputmode="url" placeholder="https://example.jp"></label>
-              <label class="field wide"><span>LINE・SNS</span><input id="social" maxlength="120" placeholder="LINE公式URL、Instagramなど"></label>
-              <label class="field wide"><span>QRコードのリンク先</span><input id="qr-url" maxlength="180" inputmode="url" placeholder="HP・LINE・施工事例・見積依頼などのhttps://URL"></label>
               <label class="field"><span>イラスト</span><select id="illustration"><option value="auto">業種から自動</option><option value="line">シンプル線画</option><option value="badge">シンボルマーク</option><option value="none">表示しない</option></select></label>
               <label class="field"><span>ロゴ・施工写真</span><input id="photo" type="file" accept="image/png,image/jpeg,image/webp"></label>
             </div>

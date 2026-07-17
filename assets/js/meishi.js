@@ -304,54 +304,47 @@
   function drawFront(ctx, data, width, height) {
     const palette = paletteFor(data);
     fillBackground(ctx, data, palette, width, height);
-    const variant = layoutVariant % 3;
-    const left = variant === 2 ? width*.36 : width*.075;
-    const contentWidth = variant === 0 ? width*.54 : variant === 2 ? width*.57 : width*.82;
+    const left=width*.075;
+    const contentWidth=width*.53;
     ctx.textBaseline = 'alphabetic';
-    const companyY=height*.13;
-    ctx.fillStyle = variant === 1 ? '#fff' : palette.dark;
+    ctx.fillStyle='rgba(255,255,255,.94)';roundedRect(ctx,width*.035,height*.045,width*.62,height*.91,22);ctx.fill();
+    ctx.fillStyle = palette.mid;
     ctx.font = `700 ${Math.max(25,Math.round(height*.04))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;
-    if (data.company) ctx.fillText(clippedText(ctx, data.company, contentWidth), left, companyY);
+    if (data.company) ctx.fillText(clippedText(ctx, data.company, contentWidth), left, height*.14);
     ctx.fillStyle = palette.dark;
     const nameSize = fitText(ctx, data.name, contentWidth, height*.115, height*.07, 800);
     ctx.font = `800 ${nameSize}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;
-    ctx.fillText(data.name, left, height*.31);
+    ctx.fillText(data.name, left, height*.285);
     if (data.role) {
       ctx.fillStyle = palette.mid;
       ctx.font = `700 ${Math.max(25,Math.round(height*.035))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;
-      ctx.fillText(clippedText(ctx, data.role, contentWidth), left, height*.385);
+      ctx.fillText(clippedText(ctx, data.role, contentWidth), left, height*.37);
     }
-    const profession=[tradeLabel(),data.area].filter(Boolean).join('｜');
-    ctx.font=`800 ${Math.max(25,Math.round(height*.029))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;
-    const badgeText=clippedText(ctx,profession,contentWidth-32);
-    const badgeWidth=Math.min(contentWidth,ctx.measureText(badgeText).width+32);
-    ctx.fillStyle=colorWithAlpha(data.accent,.13);roundedRect(ctx,left,height*.42,badgeWidth,height*.067,12);ctx.fill();
-    ctx.fillStyle=data.accent;ctx.fillText(badgeText,left+16,height*.467);
-    if (data.tagline) {
-      ctx.fillStyle = palette.dark;
-      ctx.font = `700 ${Math.max(25,Math.round(height*.031))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;
-      ctx.fillText(clippedText(ctx,data.tagline,contentWidth),left,height*.57);
-    }
-    const serviceLine=data.strengths||data.services;
-    if(serviceLine){ctx.fillStyle=palette.mid;ctx.font=`600 ${Math.max(25,Math.round(height*.027))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;ctx.fillText(clippedText(ctx,serviceLine,contentWidth),left,height*.66);}
+    ctx.fillStyle=data.accent;ctx.fillRect(left,height*.415,contentWidth,height*.008);
     const details = [
       data.phone && `TEL  ${data.phone}`,
       data.email && `MAIL  ${data.email}`,
       data.address,
-      (data.website && `WEB  ${data.website}`) || (data.social && `SNS  ${data.social}`)
+      [data.website&&`WEB  ${data.website}`,data.social&&`SNS  ${data.social}`].filter(Boolean).join('  ')
     ].filter(Boolean);
-    ctx.fillStyle = '#34465a';
-    ctx.font = `500 ${Math.max(25,Math.round(height*.026))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;
-    details.slice(0,4).forEach((detail,index) => ctx.fillText(clippedText(ctx, detail, contentWidth), left, height*(.74 + index*.052)));
+    ctx.fillStyle = '#20344a';
+    ctx.font = `600 ${Math.max(25,Math.round(height*.027))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;
+    details.slice(0,4).forEach((detail,index) => ctx.fillText(clippedText(ctx, detail, contentWidth), left, height*(.52 + index*.09)));
     if (data.member) {
       ctx.fillStyle = data.accent; ctx.font = `700 ${Math.max(25,Math.round(height*.022))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;
-      ctx.fillText('埼玉土建 上尾伊奈支部 組合員', left, height*.945);
+      ctx.fillText('埼玉土建 上尾伊奈支部 組合員', left, height*.925);
     }
-    const artX = variant === 0 ? width*.83 : variant === 1 ? width*.86 : width*.15;
-    const artY = variant === 1 ? height*.69 : height*.38;
-    const artSize = height*.42;
-    if (photoImage) drawPhoto(ctx, photoImage, artX, artY, artSize*.82, data.accent);
-    else if (data.illustration !== 'none') drawTradeIllustration(ctx, data.trade, artX, artY, artSize, variant === 0 ? '#fff' : variant === 2 ? '#fff' : data.accent, data.illustration !== 'line');
+    const target=qrTarget(data);
+    const rightCenter=width*.825;
+    const artSize=target?height*.25:height*.42;
+    const artY=target?height*.22:height*.42;
+    if (photoImage) drawPhoto(ctx, photoImage, rightCenter, artY, artSize*.82, data.accent);
+    else if (data.illustration !== 'none') drawTradeIllustration(ctx, data.trade, rightCenter, artY, artSize, '#fff', data.illustration !== 'line');
+    if(target){
+      const qrSize=Math.round(width*20/91);const qrX=width-qrSize-width*.055;const qrY=height*.49;
+      drawQr(ctx,target,qrX,qrY,qrSize);
+      ctx.fillStyle='#fff';ctx.font=`700 ${Math.max(25,Math.round(height*.021))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;ctx.textAlign='center';ctx.fillText('WEB・LINE・施工事例',qrX+qrSize/2,qrY+qrSize+height*.045);ctx.textAlign='left';
+    }
   }
 
   function drawBack(ctx, data, width, height) {
@@ -362,10 +355,10 @@
     ctx.fillStyle = data.accent; ctx.fillRect(0,0,width,16);
     ctx.fillStyle = colorWithAlpha(data.accent,.14); ctx.beginPath(); ctx.arc(width*.9,height*.14,width*.25,0,Math.PI*2); ctx.fill();
     if (data.illustration !== 'none') drawTradeIllustration(ctx,data.trade,width*.86,height*.2,height*.24,'rgba(255,255,255,.72)',data.illustration !== 'line');
-    const target = qrTarget(data);
-    const left = width*.08; const max = target ? width*.61 : width*.78;
+    const left = width*.08; const max = width*.82;
     ctx.fillStyle = '#fff'; ctx.font = `800 ${Math.max(25,Math.round(height*.072))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;
-    ctx.fillText(clippedText(ctx,data.company || data.name,max),left,height*.19);
+    ctx.fillText(clippedText(ctx,data.company || data.name,width*.64),left,height*.16);
+    if(data.tagline){ctx.fillStyle=data.accent;ctx.font=`800 ${Math.max(25,Math.round(height*.034))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;ctx.fillText(clippedText(ctx,data.tagline,max),left,height*.26);}
     const standardBlocks = [
       { key: 'services', label: '主な業務', text: data.services },
       { key: 'qualifications', label: '資格・許可', text: [data.qualifications,data.permit].filter(Boolean).join('／') },
@@ -375,24 +368,13 @@
     ];
     const blocks=standardBlocks.filter(block => block.text);
     blocks.sort((a,b) => (a.key === data.backFocus ? -1 : b.key === data.backFocus ? 1 : 0));
-    blocks.slice(0,2).forEach((block,index) => {
-      const labelY = height*(.34 + index*.25);
+    blocks.slice(0,3).forEach((block,index) => {
+      const labelY = height*(.38 + index*.19);
       ctx.fillStyle = data.accent; ctx.font = `800 ${Math.max(25,Math.round(height*.031))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`; ctx.fillText(block.label,left,labelY);
-      ctx.fillStyle = '#fff'; ctx.font = `600 ${Math.max(25,Math.round(height*.03))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`; drawLines(ctx,wrapLines(ctx,block.text,max,2),left,labelY+height*.07,height*.048);
+      ctx.fillStyle = '#fff'; ctx.font = `600 ${Math.max(25,Math.round(height*.029))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`; ctx.fillText(clippedText(ctx,block.text,max),left,labelY+height*.062);
     });
-    if (target) {
-      const qrSize = Math.round(width * 20 / 91);
-      const qrX = width - qrSize - width*.055;
-      const qrY = height*.43;
-      drawQr(ctx,target,qrX,qrY,qrSize);
-      ctx.fillStyle = 'rgba(255,255,255,.85)'; ctx.font = `700 ${Math.max(25,Math.round(height*.02))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`; ctx.textAlign='center'; ctx.fillText('詳しくはこちら',qrX+qrSize/2,qrY+qrSize+height*.045); ctx.textAlign='left';
-    }
-    const bottom = [data.phone && `TEL ${data.phone}`,data.email,data.hours || data.invoice].filter(Boolean);
-    ctx.fillStyle = 'rgba(255,255,255,.82)'; ctx.font = `500 ${Math.max(25,Math.round(height*.027))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;
-    bottom.forEach((line,index)=>ctx.fillText(clippedText(ctx,line,target ? max : width*.82),left,height*(.84+index*.052)));
-    if (!blocks.length && data.tagline) {
-      ctx.fillStyle='#fff'; ctx.font=`700 ${Math.round(height*.045)}px "BIZ UDPGothic","Noto Sans JP",sans-serif`; drawLines(ctx,wrapLines(ctx,data.tagline,width*.75,3),left,height*.42,height*.065);
-    }
+    const bottom = [data.hours,data.invoice].filter(Boolean).join('　｜　');
+    if(bottom){ctx.fillStyle='rgba(255,255,255,.92)';ctx.font=`600 ${Math.max(25,Math.round(height*.025))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;ctx.fillText(clippedText(ctx,bottom,max),left,height*.95);}
   }
 
   function renderToCanvas(canvas, side, includeBleed) {
