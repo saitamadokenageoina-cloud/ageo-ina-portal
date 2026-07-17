@@ -220,8 +220,7 @@ html[data-theme="dark"] .rousai-tab{background:#10213A;color:#E8EEF7;border-colo
     <div class="rousai-pane" id="rs-pane-6">
       <div class="card">
         <p class="sec-label">事務所・置き場の労災</p>
-        <div class="input-group"><label>元請金額（ご指定の入力基準・円）</label><input type="number" id="rs6-amount" min="0" step="10000" value="10000000" inputmode="numeric" oninput="calcRousai()"></div>
-        <div class="rousai-warning"><i class="ti ti-alert-triangle"></i> 公的な年度更新では末尾6の一般保険料は「労働者の賃金総額×3/1000」です。この画面はご指定どおり元請金額も入力できますが、申告前に支部へ計算基礎を確認してください。</div>
+        <div class="input-group"><label>労働者の年間賃金総額（円）</label><input type="number" id="rs6-amount" min="0" step="10000" value="10000000" inputmode="numeric" oninput="calcRousai()"></div>
         <label style="display:flex;align-items:center;gap:9px;font-size:14px;font-weight:700;"><input type="checkbox" id="rs6-special" checked onchange="toggleSpecial('6');calcRousai()" style="width:22px;height:22px;accent-color:var(--orange);">事業主特別加入を含める</label>
         <div id="rs6-special-fields"></div>
       </div>
@@ -549,7 +548,7 @@ function calcRousai(){
     const amount=Math.max(0,Number(document.getElementById('rs5-amount').value)||0),type=ROUSAI_TYPES.find(x=>x[0]===document.getElementById('rs5-type').value)||ROUSAI_TYPES[4];
     const wage=Math.floor(amount*type[2]/100/1000)*1000;general=Math.floor(wage*type[3]/1000);lines.push(['元請工事高',rsYen(amount)],['労務費率',type[2]+'%'],['算定賃金総額（1,000円未満切捨て）',rsYen(wage)],['一般保険料（'+type[3]+'/1000）',rsYen(general)]);if(document.getElementById('rs5-special').checked)special=specialPremium('5',type[3]);note='工事区分 '+type[0].replace(/[ab]/,'')+'：'+type[1];
   }else if(rousaiMode==='6'){
-    const amount=Math.max(0,Number(document.getElementById('rs6-amount').value)||0);general=Math.floor(amount*3/1000);lines.push(['入力した計算基礎額',rsYen(amount)],['一般保険料（3/1000）',rsYen(general)]);if(document.getElementById('rs6-special').checked)special=specialPremium('6',3);note='末尾6の正式申告は原則、労働者の賃金総額が計算基礎です。';
+    const amount=Math.max(0,Number(document.getElementById('rs6-amount').value)||0);general=Math.floor(amount*3/1000);lines.push(['労働者の年間賃金総額',rsYen(amount)],['一般保険料（3/1000）',rsYen(general)]);if(document.getElementById('rs6-special').checked)special=specialPremium('6',3);note='末尾6は労働者の年間賃金総額を計算基礎とします。';
   }else{special=specialPremium('8',17);note='第2種特別加入・建設業の一人親方（特2）';}
   if(special){lines.push(['特別加入の算定基礎額（1人）',rsYen(special.basis)],['特別加入保険料（1人）',rsYen(special.one)],['特別加入者',special.count+'人 × '+special.months+'か月']);}
   const total=general+(special?special.total:0),box=document.getElementById('rs-result');box.textContent='';const totalBox=document.createElement('div');totalBox.className='rousai-total';const sm=document.createElement('small');sm.textContent='概算保険料 合計';const strong=document.createElement('strong');strong.textContent=rsYen(total);totalBox.append(sm,strong);const breakdown=document.createElement('div');breakdown.className='card rousai-breakdown';lines.forEach(x=>{const row=document.createElement('div');row.className='rousai-line';const a=document.createElement('span');a.textContent=x[0];const b=document.createElement('span');b.textContent=x[1];row.append(a,b);breakdown.append(row)});const p=document.createElement('p');p.className='rousai-note';p.textContent=note+'。事務費・加入金・一般拠出金等は含みません。';breakdown.append(p);box.append(totalBox,breakdown);
@@ -1106,7 +1105,7 @@ function _rousaiData(){
   const result=document.getElementById('rs-result');
   if(!result || !result.innerHTML.trim()){ alert('先に労災保険料を計算してください。'); return null; }
   const names={5:'基幹番号末尾5（現場労災）',6:'基幹番号末尾6（事務所労災）',8:'基幹番号末尾8（一人親方・特2）'};
-  return {title:'労災保険料 概算結果（令和8年度）',secs:[{label:names[rousaiMode],html:result.innerHTML}],note:'概算です。メリット制、事務費、加入金、一般拠出金等は含みません。末尾6の正式な一般保険料は原則として賃金総額を基礎にします。申告・加入前に支部へご確認ください。'};
+  return {title:'労災保険料 概算結果（令和8年度）',secs:[{label:names[rousaiMode],html:result.innerHTML}],note:'概算です。メリット制、事務費、加入金、一般拠出金等は含みません。末尾6は労働者の年間賃金総額を基礎にします。申告・加入前に支部へご確認ください。'};
 }
 function printRousai(){const d=_rousaiData();if(d)printSections(d.title,d.secs,d.note)}
 function previewRousai(){const d=_rousaiData();if(d)previewSections(d.title,d.secs,d.note)}
