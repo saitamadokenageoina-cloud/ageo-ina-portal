@@ -4,7 +4,7 @@
   const FINISHED = { width: 1075, height: 650 };
   const BLEED = { width: 1146, height: 720, inset: 35 };
   const STORAGE_KEY = 'doken_meishi_draft_v1';
-  const fields = ['company', 'person-name', 'role', 'trade', 'tagline', 'services', 'strengths', 'qualifications', 'permit-number', 'experience', 'achievements', 'ccus', 'insurance', 'invoice-number', 'business-hours', 'phone', 'email', 'address', 'website', 'social', 'service-area', 'qr-url', 'illustration', 'back-focus', 'style-preset', 'accent-color', 'member-label'];
+  const fields = ['company', 'person-name', 'role', 'trade', 'tagline', 'services', 'strengths', 'qualifications', 'permit-number', 'experience', 'achievements', 'ccus', 'insurance', 'invoice-number', 'business-hours', 'phone', 'email', 'address', 'website', 'social', 'service-area', 'qr-url', 'illustration', 'back-focus', 'style-preset', 'accent-color', 'member-label', 'use-back'];
   const form = document.getElementById('card-form');
   const preview = document.getElementById('card-preview');
   const context = preview.getContext('2d');
@@ -84,7 +84,7 @@
       qualifications: value('qualifications'), phone: value('phone'), email: value('email'),
       address: value('address'), website: value('website'), social: value('social'), area: value('service-area'),
       qrUrl: value('qr-url'), illustration: value('illustration') || 'auto', backFocus: value('back-focus') || 'services',
-      strengths:value('strengths'), permit:value('permit-number'), experience:value('experience'), achievements:value('achievements'), ccus:value('ccus'), insurance:value('insurance'), invoice:value('invoice-number'), hours:value('business-hours'), member: value('member-label'),
+      strengths:value('strengths'), permit:value('permit-number'), experience:value('experience'), achievements:value('achievements'), ccus:value('ccus'), insurance:value('insurance'), invoice:value('invoice-number'), hours:value('business-hours'), member: value('member-label'), useBack:Boolean(value('use-back')),
       style: selectedStyle(), accent: value('accent-color') || '#e8612a'
     };
   }
@@ -301,22 +301,37 @@
     return base;
   }
 
+  function designFamily(style){
+    if(['apple','muji','monochrome','minimal','nordic'].includes(style))return'minimal';
+    if(['hotel','black_gold','navy','industrial','future','luxury_home'].includes(style))return'dark';
+    if(['craft','wood','concrete','safety','local','eco'].includes(style))return'band';
+    if(['blueprint','architect','technical','general_contractor'].includes(style))return'blueprint';
+    if(style==='photo')return'photo';
+    return'card';
+  }
+
   function drawFront(ctx, data, width, height) {
     const palette = paletteFor(data);
-    fillBackground(ctx, data, palette, width, height);
-    const left=width*.075;
-    const contentWidth=width*.53;
+    const family=designFamily(data.style);
+    if(family==='card')fillBackground(ctx,data,palette,width,height);
+    else if(family==='minimal'){ctx.fillStyle='#fff';ctx.fillRect(0,0,width,height);ctx.fillStyle=data.accent;ctx.fillRect(0,0,width,10);ctx.fillStyle=colorWithAlpha(data.accent,.06);ctx.beginPath();ctx.arc(width*.92,height*.08,width*.22,0,Math.PI*2);ctx.fill();}
+    else if(family==='band'){ctx.fillStyle='#fff';ctx.fillRect(0,0,width,height);const g=ctx.createLinearGradient(0,0,width*.3,height);g.addColorStop(0,palette.dark);g.addColorStop(1,palette.mid);ctx.fillStyle=g;ctx.fillRect(0,0,width*.3,height);ctx.fillStyle=data.accent;ctx.fillRect(width*.3,0,12,height);drawStyleTexture(ctx,data,width,height);}
+    else{const g=ctx.createLinearGradient(0,0,width,height);g.addColorStop(0,palette.dark);g.addColorStop(1,palette.mid);ctx.fillStyle=g;ctx.fillRect(0,0,width,height);ctx.fillStyle=data.accent;ctx.fillRect(0,height-12,width,12);drawStyleTexture(ctx,data,width,height);}
+    const isBand=family==='band';const isDark=family==='dark'||family==='blueprint';
+    const left=width*(isBand?.37:.075);
+    const contentWidth=width*(isBand?.55:.53);
     ctx.textBaseline = 'alphabetic';
-    ctx.fillStyle='rgba(255,255,255,.94)';roundedRect(ctx,width*.035,height*.045,width*.62,height*.91,22);ctx.fill();
-    ctx.fillStyle = palette.mid;
+    if(family==='card'||family==='photo'){ctx.fillStyle='rgba(255,255,255,.94)';roundedRect(ctx,width*.035,height*.045,width*.62,height*.91,22);ctx.fill();}
+    const companyX=isBand?width*.05:left;const companyWidth=isBand?width*.2:contentWidth;
+    ctx.fillStyle = isBand||isDark?'#fff':palette.mid;
     ctx.font = `700 ${Math.max(25,Math.round(height*.04))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;
-    if (data.company) ctx.fillText(clippedText(ctx, data.company, contentWidth), left, height*.14);
-    ctx.fillStyle = palette.dark;
+    if (data.company) ctx.fillText(clippedText(ctx, data.company, companyWidth), companyX, height*.14);
+    ctx.fillStyle = isDark?'#fff':palette.dark;
     const nameSize = fitText(ctx, data.name, contentWidth, height*.115, height*.07, 800);
     ctx.font = `800 ${nameSize}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;
     ctx.fillText(data.name, left, height*.285);
     if (data.role) {
-      ctx.fillStyle = palette.mid;
+      ctx.fillStyle = isDark?'rgba(255,255,255,.82)':palette.mid;
       ctx.font = `700 ${Math.max(25,Math.round(height*.035))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;
       ctx.fillText(clippedText(ctx, data.role, contentWidth), left, height*.37);
     }
@@ -327,7 +342,7 @@
       data.address,
       [data.website&&`WEB  ${data.website}`,data.social&&`SNS  ${data.social}`].filter(Boolean).join('  ')
     ].filter(Boolean);
-    ctx.fillStyle = '#20344a';
+    ctx.fillStyle = isDark?'rgba(255,255,255,.92)':'#20344a';
     ctx.font = `600 ${Math.max(25,Math.round(height*.027))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;
     details.slice(0,4).forEach((detail,index) => ctx.fillText(clippedText(ctx, detail, contentWidth), left, height*(.52 + index*.09)));
     if (data.member) {
@@ -335,19 +350,21 @@
       ctx.fillText('埼玉土建 上尾伊奈支部 組合員', left, height*.925);
     }
     const target=qrTarget(data);
-    const rightCenter=width*.825;
+    const rightCenter=width*(isBand?.16:.825);
     const artSize=target?height*.25:height*.42;
     const artY=target?height*.22:height*.42;
     if (photoImage) drawPhoto(ctx, photoImage, rightCenter, artY, artSize*.82, data.accent);
-    else if (data.illustration !== 'none') drawTradeIllustration(ctx, data.trade, rightCenter, artY, artSize, '#fff', data.illustration !== 'line');
+    else if (data.illustration !== 'none') drawTradeIllustration(ctx, data.trade, rightCenter, artY, artSize, isBand||isDark?'#fff':data.accent, data.illustration !== 'line');
     if(target){
-      const qrSize=Math.round(width*20/91);const qrX=width-qrSize-width*.055;const qrY=height*.49;
+      const qrSize=Math.round(width*20/91);const qrX=isBand?width*.05:width-qrSize-width*.055;const qrY=height*.49;
       drawQr(ctx,target,qrX,qrY,qrSize);
-      ctx.fillStyle='#fff';ctx.font=`700 ${Math.max(25,Math.round(height*.021))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;ctx.textAlign='center';ctx.fillText('WEB・LINE・施工事例',qrX+qrSize/2,qrY+qrSize+height*.045);ctx.textAlign='left';
+      ctx.fillStyle=isBand||isDark?'#fff':palette.dark;ctx.font=`700 ${Math.max(25,Math.round(height*.021))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;ctx.textAlign='center';ctx.fillText('WEB・LINE・施工事例',qrX+qrSize/2,qrY+qrSize+height*.045);ctx.textAlign='left';
     }
   }
 
   function drawBack(ctx, data, width, height) {
+    const hasContent=[data.tagline,data.services,data.strengths,data.qualifications,data.permit,data.area,data.experience,data.achievements,data.ccus,data.insurance,data.invoice,data.hours].some(Boolean);
+    if(!data.useBack||!hasContent){ctx.fillStyle='#fff';ctx.fillRect(0,0,width,height);return;}
     const palette = paletteFor(data);
     const gradient = ctx.createLinearGradient(0,0,width,height);
     gradient.addColorStop(0,palette.dark); gradient.addColorStop(1,palette.mid);
@@ -431,9 +448,11 @@
     const styleSelect=document.getElementById('style-preset');
     if ([...styleSelect.options].some(option=>option.value===suggestion.style)) styleSelect.value=suggestion.style;
     document.getElementById('accent-color').value = suggestion.color;
-    if (!value('services')) document.getElementById('services').value = suggestion.services;
-    if (!value('tagline')) document.getElementById('tagline').value = suggestion.lines[0];
-    renderTaglineSuggestions(suggestion.lines);
+    if(value('use-back')){
+      if (!value('services')) document.getElementById('services').value = suggestion.services;
+      if (!value('tagline')) document.getElementById('tagline').value = suggestion.lines[0];
+      renderTaglineSuggestions(suggestion.lines);
+    }
     layoutVariant = (layoutVariant + 1) % 3;
     document.getElementById('suggestion-message').textContent = `提案しました：${suggestion.reason} キャッチコピーは5案から選べます。`;
     queueRender();
@@ -588,9 +607,13 @@
     add(Boolean(data.name && data.name!=='お名前'),12,'氏名が入力されています','氏名を入力してください');
     add(Boolean(data.company),8,'会社・屋号が入力されています','会社・屋号を入れると信頼感が上がります');
     add(Boolean(data.phone || data.email),12,'問い合わせ先があります','電話番号またはメールを入力してください');
-    add(Boolean(data.tagline),10,'強みが一言で伝わります','キャッチコピー候補から1つ選んでください');
-    add(Boolean(data.services),10,'施工内容が分かります','主な業務・施工内容を入力してください');
-    add(Boolean(data.qualifications || data.area),5,'資格または対応エリアがあります','資格または対応エリアを入れると安心感が増します');
+    if(data.useBack){
+      add(Boolean(data.tagline),10,'裏面で強みが一言で伝わります','裏面のキャッチコピーを入力してください');
+      add(Boolean(data.services),10,'裏面で施工内容が分かります','裏面の主な業務・施工内容を入力してください');
+      add(Boolean(data.qualifications || data.area),5,'資格または対応エリアがあります','資格または対応エリアを入れると安心感が増します');
+    }else{
+      score+=25;items.push({ok:true,text:'裏面は白無地で出力します'});
+    }
     const rawQr=data.qrUrl || data.website || data.social;
     add(Boolean(qrTarget(data)),15,'QRコードは約20mm・余白付きです',rawQr?'QRコードのURLはhttps://から入力してください':'QRコードのリンク先を入れると営業力が上がります');
     score=Math.min(100,score);
@@ -645,8 +668,14 @@
     document.getElementById('save-message').textContent='この端末に保存した下書きを復元しました。';
   }
 
+  function syncBackUI(){
+    document.getElementById('back-fields').hidden=!value('use-back');
+    queueRender();
+  }
+
   form.addEventListener('input',queueRender);
   form.addEventListener('change',queueRender);
+  document.getElementById('use-back').addEventListener('change',syncBackUI);
   document.getElementById('photo').addEventListener('change',event=>resizePhoto(event.target.files[0]));
   document.getElementById('suggest-button').addEventListener('click',suggestDesign);
   document.getElementById('download-front').addEventListener('click',()=>download('front'));
@@ -664,6 +693,5 @@
   }));
 
   restoreDraft();
-  renderPreview();
-  updateQuality();
+  syncBackUI();
 })();
