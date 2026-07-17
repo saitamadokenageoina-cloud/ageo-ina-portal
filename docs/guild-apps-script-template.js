@@ -26,6 +26,11 @@ const CATEGORIES = {
   soudan: { emoji: '💬' }
 };
 const STATUSES = ['open', 'negotiating', 'closed'];
+const PURPOSES = ['seek_help', 'offer_help', 'request_work', 'offer_work', 'give_material', 'seek_material', 'share'];
+const PURPOSE_CATEGORY = { seek_help:'jinzai', offer_help:'jinzai', request_work:'jinzai', offer_work:'jinzai', give_material:'shizai', seek_material:'shizai', share:'soudan' };
+const PURPOSE_LABELS = { seek_help:'応援に来てほしい', offer_help:'応援に行ける', request_work:'仕事を依頼したい', offer_work:'仕事を請けられる', give_material:'資材・道具を譲りたい', seek_material:'資材・道具を探している', share:'相談・情報共有' };
+const WORKFLOWS = ['unhandled', 'contacting', 'referred', 'matched', 'failed', 'completed'];
+const EXPIRY_OPTIONS = ['24h', '3d', '7d', '14d', 'workdate'];
 
 function doPost(e) {
   let body;
@@ -103,6 +108,7 @@ function doPost(e) {
             'DOKENギルドに新しい投稿がありました。',
             '',
             `カテゴリ: ${post.cat}`,
+            `投稿目的: ${PURPOSE_LABELS[post.purpose] || post.purpose}`,
             `投稿者: ${post.name}`,
             `地域: ${post.area}`,
             `急募: ${post.urgent ? 'はい' : 'いいえ'}`,
@@ -111,6 +117,8 @@ function doPost(e) {
             `職種: ${post.trade || '未入力'}`,
             `必要人数: ${post.people ? post.people + '人' : '未入力'}`,
             `条件: ${post.conditions || '未入力'}`,
+            `掲載期限: ${post.expiresAt || '未設定'}`,
+            `写真: ${post.imageData ? 'あり' : 'なし'}`,
             '',
             post.body,
             '',
@@ -151,6 +159,25 @@ function doPost(e) {
       const target = posts.find(p => String(p.id) === String(postId));
       if (!target) return false;
       target.status = status;
+      writePosts_(sheet, posts);
+      return true;
+    });
+    return json_({ ok: updated, error: updated ? '' : 'post not found' });
+  }
+
+  if (action === 'updateWorkflow') {
+    if (!validPin_(body.adminPin, 'ADMIN_PIN')) {
+      return json_({ ok: false, error: 'invalid admin pin' });
+    }
+    const postId = positiveInteger_(body.postId);
+    const workflow = safeText_(body.workflow, 20);
+    if (!postId || WORKFLOWS.indexOf(workflow) === -1) return json_({ ok: false, error: 'invalid workflow' });
+    const updated = withLock_(function () {
+      const posts = readPosts_(sheet);
+      const target = posts.find(post => String(post.id) === String(postId));
+      if (!target) return false;
+      target.workflow = workflow;
+      target.status = ['matched', 'failed', 'completed'].indexOf(workflow) !== -1 ? 'closed' : (target.status === 'closed' ? 'open' : target.status);
       writePosts_(sheet, posts);
       return true;
     });
@@ -256,7 +283,7 @@ function publicPost_(post) {
 
 function normalizePost_(post, preserveServerFields) {
   if (!post || typeof post !== 'object' || !CATEGORIES[post.cat]) return null;
-  const body = safeText_(post.body, 1200);
+  const body = redactContact_(safeText_(post.body, 1200));
   if (!body) return null;
   const telRaw = safeText_(post.tel, 40);
   const tel = isPhone_(telRaw) ? telRaw : '';
@@ -264,6 +291,11 @@ function normalizePost_(post, preserveServerFields) {
   if (!preserveServerFields && (!name || !tel)) return null;
   const people = numberInRange_(post.people, 1, 99);
   const status = STATUSES.indexOf(post.status) !== -1 ? post.status : 'open';
+  const fallbackPurpose = post.cat === 'jinzai' ? 'seek_help' : post.cat === 'shizai' ? 'give_material' : 'share';
+  const purpose = PURPOSES.indexOf(post.purpose) !== -1 && PURPOSE_CATEGORY[post.purpose] === post.cat ? post.purpose : fallbackPurpose;
+  const workflow = WORKFLOWS.indexOf(post.workflow) !== -1 ? post.workflow : 'unhandled';
+  const expiryOption = EXPIRY_OPTIONS.indexOf(post.expiryOption) !== -1 ? post.expiryOption : (preserveServerFields ? 'legacy' : '7d');
+  const imageData = safeImageData_(post.imageData);
   const normalized = {
     id: preserveServerFields ? positiveInteger_(post.id) : 1,
     clientId: safeText_(post.clientId, 80),
@@ -282,7 +314,12 @@ function normalizePost_(post, preserveServerFields) {
     workTime: safeText_(post.workTime, 40),
     trade: safeText_(post.trade, 40),
     people: people === null ? null : Math.round(people),
-    conditions: safeText_(post.conditions, 120),
+    conditions: redactContact_(safeText_(post.conditions, 120)),
+    purpose: purpose,
+    workflow: workflow,
+    expiryOption: expiryOption,
+    expiresAt: preserveServerFields ? safeIsoDate_(post.expiresAt) : calculateExpiry_(expiryOption, post.workDate),
+    imageData: imageData,
     createdAt: preserveServerFields ? safeText_(post.createdAt, 40) : ''
   };
   if (preserveServerFields && !normalized.id) return null;
@@ -296,15 +333,44 @@ function isPhone_(value) {
   return digits.length >= 10 && digits.length <= 12;
 }
 
+function safeImageData_(value) {
+  const text = String(value || '');
+  if (!text || text.length > 40000) return '';
+  return /^data:image\/jpeg;base64,[A-Za-z0-9+/=]+$/.test(text) ? text : '';
+}
+
+function safeIsoDate_(value) {
+  const text = safeText_(value, 40);
+  return text && !isNaN(new Date(text).getTime()) ? new Date(text).toISOString() : '';
+}
+
+function calculateExpiry_(option, workDate) {
+  const now = new Date();
+  const days = { '24h': 1, '3d': 3, '7d': 7, '14d': 14 };
+  if (days[option]) return new Date(now.getTime() + days[option] * 86400000).toISOString();
+  const dateText = safeText_(workDate, 20);
+  if (option === 'workdate' && /^\d{4}-\d{2}-\d{2}$/.test(dateText)) {
+    const end = new Date(dateText + 'T23:59:59+09:00');
+    if (!isNaN(end.getTime()) && end.getTime() >= now.getTime()) return end.toISOString();
+  }
+  return new Date(now.getTime() + 7 * 86400000).toISOString();
+}
+
 function normalizeComment_(comment) {
   if (!comment || typeof comment !== 'object') return null;
-  const text = safeText_(comment.text, 300);
+  const text = redactContact_(safeText_(comment.text, 300));
   if (!text) return null;
   return {
     emoji: '💬',
     name: safeText_(comment.name, 40) || '匿名',
     text: text
   };
+}
+
+function redactContact_(value) {
+  return String(value || '')
+    .replace(/(?:\+81|0)\d[\d\s()\-]{7,}\d/g, '[連絡先は支部へ]')
+    .replace(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi, '[連絡先は支部へ]');
 }
 
 function safeText_(value, maxLength) {
