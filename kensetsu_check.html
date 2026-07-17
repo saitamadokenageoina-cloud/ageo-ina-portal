@@ -62,8 +62,10 @@
 .docs-lead{font-size:14px;line-height:1.7;color:var(--gray600);font-weight:600;margin:0 0 14px;}
 .docs-selector-label{font-size:13px;font-weight:800;color:var(--orange);letter-spacing:.05em;margin:14px 0 7px;}
 .docs-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;}
+.docs-tabs#procedure-tabs{grid-template-columns:minmax(0,1fr) minmax(0,.75fr) minmax(0,1.55fr);}
 .docs-tabs.entity{grid-template-columns:1fr 1fr;}
 .docs-tab{min-height:52px;border:2px solid var(--gray300);border-radius:11px;background:var(--white);color:var(--navy);font-size:14px;font-weight:800;padding:8px;transition:background .15s,color .15s,border-color .15s,transform .15s;cursor:pointer;}
+#procedure-tabs .docs-tab{font-size:13px;white-space:nowrap;}
 .docs-tab:hover,.docs-tab:focus-visible{border-color:var(--orange);background:#FFF2E9;color:#A83B0C;transform:translateY(-1px);outline:3px solid rgba(232,97,42,.18);outline-offset:1px;}
 .docs-tab.on{background:var(--orange);border-color:var(--orange);color:#fff;box-shadow:0 5px 14px rgba(232,97,42,.28);}
 .docs-option{display:flex;align-items:flex-start;gap:9px;margin:12px 0 0;padding:10px;border-radius:10px;background:#FFF5DB;color:#5C4300;font-size:12px;line-height:1.55;font-weight:600;}
@@ -375,15 +377,15 @@ const PERMIT_DOCUMENTS = Object.freeze({
   new:{
     individual:[
       {group:'事業所の確認',items:['自宅を事業所にする場合：家（事業所）の火災保険証の写し','賃貸の場合：賃貸借契約書の写し','事業所の写真（外観・事務所）']},
-      {group:'経営業務の管理責任者（5年以上）の証明',items:['確定申告書控え5年分（税務署印のあるもの・原本提示。直近分は内訳書も）','請求書5年以上（原本提示）','請求書の入金を確認できる通帳5年以上（原本提示）']},
-      {group:'常勤・専任技術者の確認',items:['住民票','健康保険証の写し','有資格者：合格証明書等の原本／実務経験者：過去10年分以上の通帳・請求書']},
+      {group:'経営業務の管理責任者（5年以上）の証明',items:['確定申告書控え5年分（原本提示。ただし、e-Taxのメール詳細（受信通知）または税務署受付印の写しがあれば写しでも可。直近分は内訳書も）','請求書5年以上（写しでも可）','請求書の入金を確認できる通帳5年以上（写しでも可）']},
+      {group:'常勤・専任技術者の確認',items:['住民票','健康保険証の写し','有資格者：合格証明書等の原本／実務経験者：過去10年分以上の通帳・請求書（写しでも可）']},
       {group:'その他の申請資料',items:['建設業に関する現在までの職歴（別紙）','埼玉県税の納税情報確認に関する同意書','会社の横判（あれば）・個人印','取引銀行の500万円以上の残高証明書（取得後30日以内。取得時期は要相談）','成年被後見人・被保佐人に該当しない旨の登記事項証明書（法務局本局）','誓約書（ひな形あり）1枚','破産者で復権を得ないものに該当しない旨等の身分証明書（本籍地の市区町村）']}
     ],
     corporation:[
       {group:'事業所の確認',items:['事業所の写真（外観・事務所）','事業所の間取り図（プレハブ等は追加書類を確認）']},
-      {group:'経営業務の管理責任者（5年以上）の証明',items:['履歴事項全部証明書','請求書原本と通帳原本（5年分）','証明者が個人の場合：確定申告書控え5年分（税務署印のあるもの・原本提示。直近分は内訳書も）']},
-      {group:'常勤・専任技術者の確認',items:['健康保険証の写し','有資格者：合格証明書等の原本／実務経験者：過去10年分以上の通帳・請求書']},
-      {group:'法人・役員関係',items:['役員全員の建設業に関する現在までの職歴（別紙）','過去3年分の決算書','埼玉県税の納税情報確認に関する同意書','会社の定款','取引銀行の500万円以上の残高証明書（必要性を要確認）','会社の横判・代表者印','役員全員の成年被後見人・被保佐人に該当しない旨の登記事項証明書','役員全員の身分証明書（本籍地の市区町村）','厚生年金保険料の領収書の写し（直近1か月分）','誓約書（ひな形あり）1枚','雇用保険の保険料申告書・領収書の写し']}
+      {group:'経営業務の管理責任者（5年以上）の証明',items:['履歴事項全部証明書','請求書・通帳5年分（いずれも写しでも可）','証明者が個人の場合：確定申告書控え5年分（写しでも可。直近分は内訳書も）']},
+      {group:'常勤・専任技術者の確認',items:['資格確認証の写し','有資格者：合格証明書等の原本／実務経験者：過去10年分以上の通帳・請求書']},
+      {group:'法人・役員関係',items:['役員全員の建設業に関する現在までの職歴（別紙）','過去3年分の決算書','埼玉県税の納税情報確認に関する同意書','会社の定款および議事録の写し','取引銀行の500万円以上の残高証明書（必要性を要確認）','会社の横判・代表者印','役員全員の成年被後見人・被保佐人に該当しない旨の登記事項証明書','役員全員の身分証明書（本籍地の市区町村）','厚生年金保険料の領収書の写し（直近1か月分）','誓約書（ひな形あり）1枚','雇用保険の保険料申告書・領収書の写し']}
     ]
   },
   renew:{
