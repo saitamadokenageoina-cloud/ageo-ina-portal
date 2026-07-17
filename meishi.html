@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#10243d">
-<title>名刺作成｜埼玉土建 上尾伊奈支部</title>
+<title>建設業向けAI名刺作成｜埼玉土建 上尾伊奈支部</title>
 <link rel="stylesheet" href="assets/css/tabler-icons.min.css">
 <link rel="stylesheet" href="common.css">
 <link rel="stylesheet" href="assets/css/meishi.css">
@@ -15,7 +15,7 @@
     <button class="hdr-back" type="button" onclick="goBack()"><i class="ti ti-arrow-left"></i>戻る</button>
     <div class="hdr-right">
       <p class="hdr-org">埼玉土建 上尾伊奈支部</p>
-      <p class="hdr-title">名刺作成</p>
+      <p class="hdr-title">AI名刺作成</p>
     </div>
   </header>
 
@@ -24,8 +24,8 @@
       <div class="hero-mark"><i class="ti ti-id"></i></div>
       <div>
         <p class="eyebrow">BUSINESS CARD MAKER</p>
-        <h1>職人の魅力が伝わる名刺を作成</h1>
-        <p>入力内容と職種から、配色・背景・レイアウトを端末内で自動提案します。</p>
+        <h1>仕事につながる建設業専用名刺</h1>
+        <p>会社名・氏名・業種から、配色・文章・背景・レイアウトを端末内で自動提案します。</p>
       </div>
     </section>
 
@@ -41,39 +41,66 @@
           <div><h2>名刺の情報</h2><p>空欄の項目は名刺に表示されません</p></div>
         </div>
 
-        <div class="form-grid two">
+        <div class="form-grid two basic-fields">
           <label class="field"><span>会社・屋号</span><input id="company" name="organization" maxlength="40" placeholder="例：上尾建設" autocomplete="organization"></label>
           <label class="field"><span>お名前 <em>必須</em></span><input id="person-name" name="name" maxlength="24" required placeholder="例：土建 太郎" autocomplete="name"></label>
-          <label class="field"><span>役職・肩書</span><input id="role" maxlength="30" placeholder="例：代表／一級技能士"></label>
-          <label class="field"><span>職種</span><select id="trade"><option value="general">総合建設・その他</option><option value="carpenter">大工・木工</option><option value="scaffold">鳶・足場</option><option value="plaster">左官・タイル</option><option value="electrical">電気工事</option><option value="plumbing">設備・配管</option><option value="painting">塗装・防水</option><option value="civil">土木・重機</option></select></label>
-          <label class="field wide"><span>ひとこと・強み</span><input id="tagline" maxlength="44" placeholder="例：住まいの困りごとに、誠実・迅速に対応します"></label>
-          <label class="field wide"><span>主な業務</span><input id="services" maxlength="70" placeholder="例：新築・リフォーム・内装工事・修繕"></label>
-          <label class="field wide"><span>資格・許可</span><input id="qualifications" maxlength="70" placeholder="例：一級建築大工技能士／建設業許可 埼玉県知事（般）"></label>
-          <label class="field"><span>電話番号</span><input id="phone" name="tel" maxlength="24" inputmode="tel" placeholder="090-1234-5678" autocomplete="tel"></label>
-          <label class="field"><span>メール</span><input id="email" name="email" maxlength="60" inputmode="email" placeholder="info@example.jp" autocomplete="email"></label>
-          <label class="field wide"><span>住所</span><input id="address" name="street-address" maxlength="70" placeholder="埼玉県上尾市〇〇" autocomplete="street-address"></label>
-          <label class="field wide"><span>ホームページ・SNS</span><input id="website" maxlength="90" inputmode="url" placeholder="https://example.jp"></label>
+          <label class="field wide"><span>業種 <em>必須</em></span><select id="trade"><option value="general">総合建設・その他</option><option value="carpenter">大工・木工</option><option value="scaffold">鳶・足場</option><option value="plaster">左官・タイル</option><option value="electrical">電気工事</option><option value="plumbing">設備・配管</option><option value="painting">塗装・防水</option><option value="civil">土木・重機</option></select></label>
         </div>
 
+        <button id="suggest-button" class="primary-action" type="button"><i class="ti ti-wand"></i><span>3項目からデザインと文章を自動提案</span></button>
+        <p id="suggestion-message" class="suggestion-message" aria-live="polite"></p>
+
+        <div id="tagline-suggestion-box" class="suggestion-box" hidden>
+          <p><i class="ti ti-bulb"></i>キャッチコピー候補</p>
+          <div id="tagline-suggestions" class="suggestion-chips"></div>
+        </div>
+
+        <details class="advanced-fields">
+          <summary><i class="ti ti-adjustments"></i>連絡先・資格・裏面などを追加する</summary>
+          <div class="advanced-body">
+            <div class="form-grid two">
+              <label class="field"><span>役職・肩書</span><input id="role" maxlength="30" placeholder="例：代表／一級技能士"></label>
+              <label class="field"><span>電話番号</span><input id="phone" name="tel" maxlength="24" inputmode="tel" placeholder="090-1234-5678" autocomplete="tel"></label>
+              <label class="field wide"><span>キャッチコピー</span><input id="tagline" maxlength="44" placeholder="候補から選ぶか自由に入力"></label>
+              <label class="field wide"><span>主な業務・施工内容</span><input id="services" maxlength="70" placeholder="例：新築・リフォーム・内装工事・修繕"></label>
+              <label class="field wide"><span>資格・許可</span><input id="qualifications" maxlength="70" placeholder="例：一級建築大工技能士／建設業許可 埼玉県知事（般）"></label>
+              <label class="field"><span>メール</span><input id="email" name="email" maxlength="60" inputmode="email" placeholder="info@example.jp" autocomplete="email"></label>
+              <label class="field"><span>対応エリア</span><input id="service-area" maxlength="45" placeholder="例：上尾市・伊奈町・県央地域"></label>
+              <label class="field wide"><span>住所</span><input id="address" name="street-address" maxlength="70" placeholder="埼玉県上尾市〇〇" autocomplete="street-address"></label>
+              <label class="field wide"><span>ホームページ</span><input id="website" maxlength="120" inputmode="url" placeholder="https://example.jp"></label>
+              <label class="field wide"><span>LINE・SNS</span><input id="social" maxlength="120" placeholder="LINE公式URL、Instagramなど"></label>
+              <label class="field wide"><span>QRコードのリンク先</span><input id="qr-url" maxlength="180" inputmode="url" placeholder="https://から始まるURL"></label>
+              <label class="field"><span>イラスト</span><select id="illustration"><option value="auto">業種から自動</option><option value="line">シンプル線画</option><option value="badge">シンボルマーク</option><option value="none">表示しない</option></select></label>
+              <label class="field"><span>ロゴ・施工写真</span><input id="photo" type="file" accept="image/png,image/jpeg,image/webp"></label>
+            </div>
+            <label class="member-check"><input id="member-label" type="checkbox"><span>「埼玉土建 上尾伊奈支部 組合員」と表示する</span></label>
+            <p class="image-note">写真は端末内で縮小して使用します。顔・住所・車両番号など、公開したくない情報が写っていないか確認してください。</p>
+          </div>
+        </details>
+
         <fieldset class="choice-field">
-          <legend>名刺の雰囲気</legend>
+          <legend>デザインスタイル（自動提案後も変更できます）</legend>
           <div class="choice-row" id="style-options">
             <label><input type="radio" name="style" value="trust" checked><span>信頼・誠実</span></label>
             <label><input type="radio" name="style" value="craft"><span>職人・力強い</span></label>
             <label><input type="radio" name="style" value="premium"><span>上質・高級</span></label>
             <label><input type="radio" name="style" value="friendly"><span>親しみ・明るい</span></label>
+            <label><input type="radio" name="style" value="modern"><span>モダン</span></label>
+            <label><input type="radio" name="style" value="japanese"><span>和風</span></label>
+            <label><input type="radio" name="style" value="housing"><span>住宅向け</span></label>
           </div>
         </fieldset>
 
         <div class="form-grid two compact-grid">
           <label class="field"><span>差し色</span><input id="accent-color" class="color-input" type="color" value="#e8612a"></label>
-          <label class="field"><span>ロゴ・写真（任意）</span><input id="photo" type="file" accept="image/png,image/jpeg,image/webp"></label>
+          <label class="field"><span>裏面の中心</span><select id="back-focus"><option value="services">施工内容</option><option value="qualifications">資格・許可</option><option value="area">対応エリア</option><option value="message">会社の強み</option></select></label>
         </div>
-        <label class="member-check"><input id="member-label" type="checkbox"><span>「埼玉土建 上尾伊奈支部 組合員」と表示する</span></label>
-        <p class="image-note">写真は端末内で縮小して使用します。顔・住所・車両番号など、公開したくない情報が写っていないか確認してください。</p>
 
-        <button id="suggest-button" class="primary-action" type="button"><i class="ti ti-wand"></i><span>職種に合うデザインを自動提案</span></button>
-        <p id="suggestion-message" class="suggestion-message" aria-live="polite"></p>
+        <details class="ai-prompt-box">
+          <summary><i class="ti ti-sparkles"></i>AIでロゴ・イラスト案も相談する</summary>
+          <p>入力内容を反映した建設業専用プロンプトをコピーできます。コピーした時点では外部へ送信されません。</p>
+          <button id="copy-ai-prompt" type="button"><i class="ti ti-copy"></i>AI相談用プロンプトをコピー</button>
+        </details>
       </form>
 
       <section class="preview-panel">
@@ -88,7 +115,7 @@
         <div class="canvas-shell" id="canvas-shell">
           <canvas id="card-preview" width="1075" height="650" aria-label="名刺のプレビュー"></canvas>
         </div>
-        <p class="preview-help no-print"><i class="ti ti-zoom-check"></i>画面では縮小表示されます。PNGは300dpi相当の高解像度です。</p>
+        <p class="preview-help no-print"><i class="ti ti-zoom-check"></i>画面では縮小表示されます。PNGは300dpi情報付きの高解像度です。</p>
 
         <div class="output-box no-print">
           <div class="panel-heading small">
@@ -98,10 +125,20 @@
           <div class="output-grid">
             <button id="download-front" type="button"><i class="ti ti-download"></i>表面PNG</button>
             <button id="download-back" type="button"><i class="ti ti-download"></i>裏面PNG</button>
-            <button id="print-button" class="accent" type="button"><i class="ti ti-printer"></i>印刷・PDF保存</button>
+            <button id="download-icon" type="button"><i class="ti ti-photo"></i>イラスト透過PNG</button>
+            <button id="download-svg" type="button"><i class="ti ti-vector"></i>イラストSVG</button>
+            <button id="pdf-button" class="accent" type="button"><i class="ti ti-file-type-pdf"></i>入稿用PDF</button>
+            <button id="print-button" type="button"><i class="ti ti-printer"></i>家庭で印刷</button>
             <button id="save-draft" type="button"><i class="ti ti-device-floppy"></i>下書き保存</button>
           </div>
           <p id="save-message" class="save-message" aria-live="polite"></p>
+        </div>
+
+        <div class="quality-panel no-print" aria-live="polite">
+          <div class="quality-head"><div><strong>印刷・営業チェック</strong><span id="quality-label">確認中</span></div><b id="quality-score">--</b></div>
+          <div class="quality-meter"><span id="quality-meter"></span></div>
+          <ul id="quality-list"></ul>
+          <p>95点未満の場合は、表示された項目を直すと改善できます。</p>
         </div>
       </section>
     </section>
@@ -109,9 +146,10 @@
     <section class="print-guide no-print">
       <h2><i class="ti ti-ruler-measure"></i>印刷会社へ渡すとき</h2>
       <ul>
-        <li>PNGは上下左右3mmの塗り足しを含む <strong>97mm × 61mm</strong>、300dpi相当で出力します。</li>
+        <li>PNGは上下左右3mmの塗り足しを含む <strong>97mm × 61mm</strong>、300dpi情報付きで出力します。</li>
         <li>中央の仕上がり範囲が <strong>91mm × 55mm</strong>です。文字は端から3mm以上内側に配置しています。</li>
-        <li>家庭用プリンターは「実際のサイズ／100%」を選んでください。色味は画面と多少異なる場合があります。</li>
+        <li>QRコードは約20mmで配置します。入稿前に保存画像を実際のスマートフォンで読み取ってください。</li>
+        <li>出力色はRGBです。印刷時にCMYKへ変換されるため、色味が多少変わる場合があります。ラクスルのデータチェックで必ず最終確認してください。</li>
       </ul>
     </section>
   </main>
@@ -128,6 +166,7 @@
 </div>
 
 <script src="assets/js/navigation.js"></script>
+<script src="assets/js/qrcode-generator.js"></script>
 <script src="assets/js/meishi.js"></script>
 </body>
 </html>
