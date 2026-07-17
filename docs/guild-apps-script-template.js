@@ -30,7 +30,7 @@ const PURPOSES = ['seek_help', 'offer_help', 'request_work', 'offer_work', 'give
 const PURPOSE_CATEGORY = { seek_help:'jinzai', offer_help:'jinzai', request_work:'jinzai', offer_work:'jinzai', give_material:'shizai', seek_material:'shizai', share:'soudan' };
 const PURPOSE_LABELS = { seek_help:'応援に来てほしい', offer_help:'応援に行ける', request_work:'仕事を依頼したい', offer_work:'仕事を請けられる', give_material:'資材・道具を譲りたい', seek_material:'資材・道具を探している', share:'相談・情報共有' };
 const WORKFLOWS = ['unhandled', 'contacting', 'referred', 'matched', 'failed', 'completed'];
-const EXPIRY_OPTIONS = ['24h', '3d', '7d', '14d', 'workdate'];
+const EXPIRY_OPTIONS = ['24h', '48h', '3d', '7d', '14d', 'workdate'];
 
 function doPost(e) {
   let body;
@@ -184,6 +184,34 @@ function doPost(e) {
     return json_({ ok: updated, error: updated ? '' : 'post not found' });
   }
 
+  if (action === 'reviewExpiry') {
+    if (!validPin_(body.adminPin, 'ADMIN_PIN')) {
+      return json_({ ok: false, error: 'invalid admin pin' });
+    }
+    const postId = positiveInteger_(body.postId);
+    const decision = safeText_(body.decision, 20);
+    if (!postId || ['continue', 'resolved'].indexOf(decision) === -1) {
+      return json_({ ok: false, error: 'invalid review' });
+    }
+    const updated = withLock_(function () {
+      const posts = readPosts_(sheet);
+      const target = posts.find(post => String(post.id) === String(postId));
+      if (!target) return false;
+      target.lastReviewedAt = new Date().toISOString();
+      if (decision === 'continue') {
+        target.status = 'open';
+        target.expiryOption = '7d';
+        target.expiresAt = new Date(Date.now() + 7 * 86400000).toISOString();
+      } else {
+        target.status = 'closed';
+        target.workflow = 'completed';
+      }
+      writePosts_(sheet, posts);
+      return true;
+    });
+    return json_({ ok: updated, error: updated ? '' : 'post not found' });
+  }
+
   if (action === 'delete') {
     if (!validPin_(body.adminPin, 'ADMIN_PIN')) {
       return json_({ ok: false, error: 'invalid admin pin' });
@@ -320,7 +348,8 @@ function normalizePost_(post, preserveServerFields) {
     expiryOption: expiryOption,
     expiresAt: preserveServerFields ? safeIsoDate_(post.expiresAt) : calculateExpiry_(expiryOption, post.workDate),
     imageData: imageData,
-    createdAt: preserveServerFields ? safeText_(post.createdAt, 40) : ''
+    createdAt: preserveServerFields ? safeText_(post.createdAt, 40) : '',
+    lastReviewedAt: preserveServerFields ? safeIsoDate_(post.lastReviewedAt) : ''
   };
   if (preserveServerFields && !normalized.id) return null;
   return normalized;
@@ -346,7 +375,7 @@ function safeIsoDate_(value) {
 
 function calculateExpiry_(option, workDate) {
   const now = new Date();
-  const days = { '24h': 1, '3d': 3, '7d': 7, '14d': 14 };
+  const days = { '24h': 1, '48h': 2, '3d': 3, '7d': 7, '14d': 14 };
   if (days[option]) return new Date(now.getTime() + days[option] * 86400000).toISOString();
   const dateText = safeText_(workDate, 20);
   if (option === 'workdate' && /^\d{4}-\d{2}-\d{2}$/.test(dateText)) {
