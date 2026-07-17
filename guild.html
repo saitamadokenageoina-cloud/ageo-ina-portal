@@ -148,7 +148,11 @@
 .board-panel.hidden{display:none;}
 .calendar-hero{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px;margin-bottom:12px;border-radius:16px;background:linear-gradient(135deg,#123E68,#1A7A6A);color:#fff;box-shadow:0 10px 28px rgba(18,62,104,.2);}
 .calendar-hero p{margin:3px 0 0;font-size:12px;color:rgba(255,255,255,.75);}
-.calendar-link{flex-shrink:0;min-height:44px;padding:10px 12px;border-radius:11px;background:#fff;color:#123E68;font-size:12px;font-weight:800;display:flex;align-items:center;gap:5px;}
+.guild-calendar{padding:13px;border:1px solid var(--gray100);border-radius:17px;background:var(--white);box-shadow:var(--shadow-sm);}
+.calendar-nav{display:grid;grid-template-columns:44px 1fr 44px;gap:8px;align-items:center;margin-bottom:10px;}.calendar-nav button{width:44px;height:44px;border:1px solid var(--gray200);border-radius:11px;background:var(--gray50);color:var(--navy);font-size:18px;}.calendar-month{text-align:center;font-size:17px;font-weight:800;color:var(--navy);}
+.calendar-weekdays,.calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));}.calendar-weekdays span{padding:5px 0;text-align:center;font-size:10px;font-weight:800;color:var(--gray500);}.calendar-weekdays span:first-child{color:#C43D3D}.calendar-weekdays span:last-child{color:#2563A8}
+.calendar-day{position:relative;min-width:0;min-height:58px;padding:6px 3px;border:1px solid var(--gray100);background:var(--white);color:var(--gray700);font:inherit;text-align:center;}.calendar-day:nth-child(7n+1){color:#C43D3D}.calendar-day:nth-child(7n){color:#2563A8}.calendar-day.empty{background:var(--gray50);}.calendar-day.today{font-weight:900;box-shadow:inset 0 0 0 2px #4C83B6}.calendar-day.selected{z-index:1;background:#EAF4FF;box-shadow:inset 0 0 0 2px #E8612A;color:#163F64}.calendar-day.has-jobs{font-weight:800;cursor:pointer;}.calendar-day-count{display:flex;justify-content:center;gap:3px;margin-top:6px}.calendar-dot{width:7px;height:7px;border-radius:50%;background:#E8612A}.calendar-dot.offer{background:#1A7A4A}.calendar-more{font-size:8px;color:var(--gray500);line-height:8px;}
+.calendar-selection{margin-top:12px}.calendar-selection-title{margin:0 0 8px;font-size:13px;font-weight:800;color:var(--navy)}.calendar-job{margin-top:7px;padding:12px;border:1px solid var(--gray100);border-left:4px solid #E8612A;border-radius:12px;background:var(--gray50)}.calendar-job.offer{border-left-color:#1A7A4A}.calendar-job strong{display:block;font-size:13px;color:var(--navy);line-height:1.5;overflow-wrap:anywhere}.calendar-job span{display:block;margin-top:4px;font-size:11px;color:var(--gray600);line-height:1.45}.calendar-job button{width:100%;min-height:44px;margin-top:9px;border:0;border-radius:10px;background:#163F64;color:#fff;font:inherit;font-size:12px;font-weight:800}.calendar-empty{padding:20px 8px;text-align:center;color:var(--gray500);font-size:12px;line-height:1.6}
 .agenda-day{margin-bottom:12px;}
 .agenda-date{margin:0 0 7px;font-size:13px;font-weight:800;color:var(--navy);}
 .agenda-item{display:flex;gap:10px;align-items:flex-start;margin-bottom:7px;padding:12px;border:1px solid var(--gray100);border-radius:13px;background:var(--white);box-shadow:var(--shadow-sm);}
@@ -196,6 +200,7 @@ html[data-theme="dark"] .form-note{background:#132D4D;color:#D8E9FF;}
 html[data-theme="dark"] .view-switch,html[data-theme="dark"] .summary-card,html[data-theme="dark"] .form-section{background:#071426;border-color:rgba(255,255,255,.12);}
 html[data-theme="dark"] .availability-panel{background:#0B1B2E;border-color:rgba(255,255,255,.15);box-shadow:none;}html[data-theme="dark"] .availability-heading{color:#fff;}html[data-theme="dark"] .availability-heading span{color:#B8C7DA;}html[data-theme="dark"] .availability-btn{background:#132D4D;color:#D8E9FF;border-color:#4C83B6;}html[data-theme="dark"] .availability-btn.today{background:#103822;color:#C9FAD9;border-color:#37A96B;}
 html[data-theme="dark"] .view-btn.active,html[data-theme="dark"] .purpose-btn,html[data-theme="dark"] .guild-field,html[data-theme="dark"] .photo-picker,html[data-theme="dark"] .agenda-item{background:#0F1F35;color:#E8EEF7;border-color:rgba(255,255,255,.18);}
+html[data-theme="dark"] .guild-calendar,html[data-theme="dark"] .calendar-day{background:#0F1F35;border-color:rgba(255,255,255,.12);color:#E8EEF7}html[data-theme="dark"] .calendar-day.empty{background:#071426}html[data-theme="dark"] .calendar-day.selected{background:#16324F;color:#fff}html[data-theme="dark"] .calendar-month,html[data-theme="dark"] .calendar-selection-title,html[data-theme="dark"] .calendar-job strong{color:#fff}html[data-theme="dark"] .calendar-nav button,html[data-theme="dark"] .calendar-job{background:#071426;color:#fff;border-color:rgba(255,255,255,.15)}html[data-theme="dark"] .calendar-job span{color:#B8C7DA}
 html[data-theme="dark"] .summary-value,html[data-theme="dark"] .photo-picker strong,html[data-theme="dark"] .agenda-date,html[data-theme="dark"] .agenda-item strong{color:#fff;}
 html[data-theme="dark"] .purpose-btn.sel{background:#4D2415;color:#FFE7D8;border-color:#FF8A4C;}
 html[data-theme="dark"] .template-action{background:#132D4D;color:#D8E9FF;border-color:#4C83B6;}
@@ -210,7 +215,7 @@ html[data-theme="light"] .post-btn.primary{background:#E8612A;color:#fff;border-
 html[data-theme="light"] .post-btn.danger{background:#FFF5F5;color:#9B1C1C;border-color:#F2B8B5;}
 html[data-theme="light"] .comment-body{background:#F7FAFC;color:#1B2A3B;}
 html[data-theme="light"] .comment-input{background:#fff;color:#1B2A3B;}
-@media(max-width:520px){.guild-controls{grid-template-columns:1fr;}.post-details{grid-template-columns:1fr}.post-actions{flex-wrap:wrap}.post-btn{min-width:calc(50% - 4px)}.premium-summary{gap:6px}.summary-card{padding:10px 7px}.summary-value{font-size:19px}.admin-stats{grid-template-columns:1fr 1fr}.purpose-grid{grid-template-columns:1fr}.calendar-hero{align-items:flex-start;flex-direction:column}.calendar-link{width:100%;justify-content:center}.availability-actions{grid-template-columns:1fr}.availability-btn{min-height:50px}}
+@media(max-width:520px){.guild-controls{grid-template-columns:1fr;}.post-details{grid-template-columns:1fr}.post-actions{flex-wrap:wrap}.post-btn{min-width:calc(50% - 4px)}.premium-summary{gap:6px}.summary-card{padding:10px 7px}.summary-value{font-size:19px}.admin-stats{grid-template-columns:1fr 1fr}.purpose-grid{grid-template-columns:1fr}.calendar-hero{align-items:flex-start;flex-direction:column}.availability-actions{grid-template-columns:1fr}.availability-btn{min-height:50px}.job-fields .grid2{grid-template-columns:minmax(0,1fr)!important}.job-fields .input-group{min-width:0}.job-fields input{width:100%;min-width:0;box-sizing:border-box}.guild-calendar{padding:9px}.calendar-day{min-height:54px;padding:5px 1px}}
 </style>
 </head>
 <body>
@@ -307,10 +312,14 @@ html[data-theme="light"] .comment-input{background:#fff;color:#1B2A3B;}
 
   <div class="calendar-panel" id="calendar-panel">
     <div class="calendar-hero">
-      <div><strong><i class="ti ti-calendar-event"></i> 仕事と支部の予定</strong><p>作業日が入った募集を日付順に確認できます</p></div>
-      <a class="calendar-link" href="calendar.html"><i class="ti ti-external-link"></i>支部カレンダー</a>
+      <div><strong><i class="ti ti-calendar-event"></i> DOKENギルド仕事カレンダー</strong><p>仕事依頼・応援募集・応援可能の投稿を自動表示します</p></div>
     </div>
-    <div id="guild-agenda"></div>
+    <div class="guild-calendar">
+      <div class="calendar-nav"><button type="button" onclick="moveGuildMonth(-1)" aria-label="前の月"><i class="ti ti-chevron-left"></i></button><div class="calendar-month" id="guild-calendar-month"></div><button type="button" onclick="moveGuildMonth(1)" aria-label="次の月"><i class="ti ti-chevron-right"></i></button></div>
+      <div class="calendar-weekdays" aria-hidden="true"><span>日</span><span>月</span><span>火</span><span>水</span><span>木</span><span>金</span><span>土</span></div>
+      <div class="calendar-grid" id="guild-calendar-grid"></div>
+      <div class="calendar-selection" id="guild-calendar-selection" aria-live="polite"></div>
+    </div>
   </div>
 </div>
 
@@ -447,6 +456,8 @@ let currentView = 'board';
 let searchTerm = '';
 let sortMode = 'newest';
 let showArchived = false;
+let guildCalendarMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+let selectedGuildDate = '';
 
 const CAT = {
   jinzai:{label:'人材募集',badge:'badge-jinzai'},
@@ -667,14 +678,38 @@ function renderSummary(){
   document.getElementById('summary-urgent').textContent = active.filter(post=>post.urgent).length;
   document.getElementById('summary-upcoming').textContent = active.filter(post=>post.workDate).length;
 }
+function guildCalendarPosts(){ return posts.filter(post=>post.cat==='jinzai' && post.workDate && !isArchived(post)).sort((a,b)=>a.workDate.localeCompare(b.workDate)); }
 function renderAgenda(){
-  const target = document.getElementById('guild-agenda');
-  const dated = posts.filter(post=>post.workDate && !isArchived(post)).sort((a,b)=>a.workDate.localeCompare(b.workDate));
-  if(!dated.length){ target.innerHTML='<div class="empty-state"><i class="ti ti-calendar-off"></i><p>作業日が登録された募集はありません</p></div>'; return; }
-  const groups = {};
-  dated.forEach(post=>{ if(!groups[post.workDate]) groups[post.workDate]=[]; groups[post.workDate].push(post); });
-  target.innerHTML = Object.entries(groups).map(([date,items])=>`<section class="agenda-day"><h3 class="agenda-date">${esc(formatAgendaDate(date))}</h3>${items.map(post=>`<div class="agenda-item"><span class="agenda-dot"></span><div><strong>${esc(PURPOSE[post.purpose].icon+' '+post.body.slice(0,55))}${post.body.length>55?'…':''}</strong><span>${esc([post.area,post.trade,post.workTime].filter(Boolean).join(' ／ '))}</span></div></div>`).join('')}</section>`).join('');
+  const title=document.getElementById('guild-calendar-month');
+  const grid=document.getElementById('guild-calendar-grid');
+  const selection=document.getElementById('guild-calendar-selection');
+  if(!title || !grid || !selection) return;
+  const year=guildCalendarMonth.getFullYear(),month=guildCalendarMonth.getMonth();
+  title.textContent=year+'年 '+(month+1)+'月';
+  const firstDay=new Date(year,month,1).getDay(),daysInMonth=new Date(year,month+1,0).getDate();
+  const dated=guildCalendarPosts(), groups={};
+  dated.forEach(post=>{(groups[post.workDate]||(groups[post.workDate]=[])).push(post);});
+  const today=localDateValue(0),monthPrefix=year+'-'+String(month+1).padStart(2,'0'),monthDates=Object.keys(groups).filter(date=>date.startsWith(monthPrefix)).sort();
+  if(!selectedGuildDate || !selectedGuildDate.startsWith(monthPrefix)) selectedGuildDate=groups[today]&&today.startsWith(monthPrefix)?today:(monthDates[0]||'');
+  const cells=[];
+  for(let index=0;index<42;index++){
+    const day=index-firstDay+1;
+    if(day<1 || day>daysInMonth){cells.push('<div class="calendar-day empty" aria-hidden="true"></div>');continue;}
+    const date=[year,String(month+1).padStart(2,'0'),String(day).padStart(2,'0')].join('-');
+    const items=groups[date]||[],dots=items.slice(0,3).map(post=>`<span class="calendar-dot ${['offer_help','offer_work'].includes(post.purpose)?'offer':''}"></span>`).join('');
+    cells.push(`<button type="button" class="calendar-day ${items.length?'has-jobs':''} ${date===today?'today':''} ${date===selectedGuildDate?'selected':''}" onclick="selectGuildDate('${date}')" aria-label="${month+1}月${day}日${items.length?' '+items.length+'件の投稿':''}"><span>${day}</span>${items.length?`<span class="calendar-day-count">${dots}${items.length>3?`<span class="calendar-more">+${items.length-3}</span>`:''}</span>`:''}</button>`);
+  }
+  grid.innerHTML=cells.join('');
+  renderGuildDateSelection(groups[selectedGuildDate]||[]);
 }
+function renderGuildDateSelection(items){
+  const selection=document.getElementById('guild-calendar-selection');
+  if(!selectedGuildDate){selection.innerHTML='<div class="calendar-empty"><i class="ti ti-calendar-off"></i><br>この月に作業日のある投稿はありません。</div>';return;}
+  selection.innerHTML=`<p class="calendar-selection-title">${esc(formatAgendaDate(selectedGuildDate))}の投稿（${items.length}件）</p>${items.length?items.map(post=>`<article class="calendar-job ${['offer_help','offer_work'].includes(post.purpose)?'offer':''}"><strong>${esc(PURPOSE[post.purpose].icon+' '+post.body.slice(0,80))}${post.body.length>80?'…':''}</strong><span>${esc([PURPOSE[post.purpose].label,post.area,post.trade,post.workTime].filter(Boolean).join(' ／ '))}</span><button type="button" onclick="openCalendarPost(${post.id})">掲示板で詳しく見る</button></article>`).join(''):'<div class="calendar-empty">この日の投稿はありません。</div>'}`;
+}
+function selectGuildDate(date){selectedGuildDate=date;renderAgenda();}
+function moveGuildMonth(amount){guildCalendarMonth=new Date(guildCalendarMonth.getFullYear(),guildCalendarMonth.getMonth()+amount,1);selectedGuildDate='';renderAgenda();}
+function openCalendarPost(id){switchView('board');requestAnimationFrame(()=>document.getElementById('pc-'+id)?.scrollIntoView({behavior:'smooth',block:'center'}));}
 function formatAgendaDate(value){
   const date = new Date(value+'T00:00:00');
   return Number.isNaN(date.getTime()) ? value : new Intl.DateTimeFormat('ja-JP',{month:'long',day:'numeric',weekday:'short'}).format(date);
