@@ -66,6 +66,11 @@
 .calc-note{font-size:12px;color:var(--gray600);margin:10px 0 0;font-weight:600;line-height:1.65;}
 .calc-small{font-size:11px;color:var(--gray600);display:block;font-weight:600;}
 .calc-muted{color:var(--gray600)!important;font-weight:600!important;}
+.rousai-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
+.rousai-tab{min-height:58px;border:2px solid var(--gray200);border-radius:12px;background:var(--white);color:var(--navy);font:inherit;font-size:14px;font-weight:800;cursor:pointer;transition:.15s;}
+.rousai-tab:hover,.rousai-tab:focus-visible{border-color:var(--orange);color:#A83B0C;background:#FFF2E9;outline:3px solid rgba(232,97,42,.16);}
+.rousai-tab.active{background:var(--orange);border-color:var(--orange);color:#fff;box-shadow:0 6px 16px rgba(232,97,42,.26);}
+.rousai-pane{display:none}.rousai-pane.active{display:block}.rousai-result{margin-top:12px}.rousai-total{padding:16px;border-radius:13px;background:linear-gradient(135deg,#0C447C,#1A5FA8);color:#fff}.rousai-total small{display:block;color:#D8E9F8;font-weight:700}.rousai-total strong{display:block;font-size:28px;line-height:1.35}.rousai-breakdown{margin-top:10px}.rousai-line{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--gray100);font-size:13px}.rousai-line span:last-child{font-weight:800;text-align:right}.rousai-note{font-size:12px;line-height:1.65;color:var(--gray600);font-weight:600;margin:10px 0 0}.rousai-warning{padding:12px;border-radius:10px;background:#FFF1D6;color:#68410A;font-size:12px;line-height:1.65;font-weight:700;margin:10px 0}.special-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.special-grid .wide{grid-column:1/-1}
 html[data-theme="dark"] .tool-card,
 html[data-theme="dark"] .compare-box,
 html[data-theme="dark"] .member-row,
@@ -112,6 +117,8 @@ html[data-theme="dark"] .add-btn{color:#E8EEF7!important;border-color:rgba(255,2
 html[data-theme="dark"] .comp-row,
 html[data-theme="dark"] .result-row,
 html[data-theme="dark"] .table-row{border-color:rgba(255,255,255,.12)!important;}
+html[data-theme="dark"] .rousai-tab{background:#10213A;color:#E8EEF7;border-color:rgba(255,255,255,.2)}html[data-theme="dark"] .rousai-tab:hover,html[data-theme="dark"] .rousai-tab:focus-visible{background:#352417;color:#FFD2BC;border-color:#FF8A52}html[data-theme="dark"] .rousai-tab.active{background:#F06A2D;color:#fff;border-color:#F06A2D}html[data-theme="dark"] .rousai-line{border-color:rgba(255,255,255,.12);color:#E8EEF7}html[data-theme="dark"] .rousai-note{color:#D8E4F2}html[data-theme="dark"] .rousai-warning{background:#3A2A08;color:#FFF0C6}
+@media(max-width:390px){.rousai-tab{font-size:12px;padding:7px 4px}.special-grid{grid-template-columns:1fr}}
 
 /* 印刷・プレビューCSSは assets/css/print.css に集約 */
 
@@ -151,7 +158,7 @@ html[data-theme="dark"] .table-row{border-color:rgba(255,255,255,.12)!important;
     </svg>
     <div>
       <p style="font-size:18px;font-weight:700;color:#fff;margin:0 0 3px;">計算ツール</p>
-      <p style="font-size:13px;color:rgba(255,255,255,.92);margin:0;">労務費・国保料・CCUSレベルをかんたん計算</p>
+      <p style="font-size:13px;color:rgba(255,255,255,.92);margin:0;">労災保険料・労務費・国保料・CCUSをかんたん計算</p>
     </div>
   </div>
   <!-- ホーム -->
@@ -161,6 +168,11 @@ html[data-theme="dark"] .table-row{border-color:rgba(255,255,255,.12)!important;
         <div class="tool-card-icon" style="color:var(--blue);"><i class="ti ti-receipt-2"></i></div>
         <p class="tool-card-title">労務費シミュ</p>
         <p class="tool-card-desc">雇用保険・厚生年金・介護保険</p>
+      </div>
+      <div class="tool-card" onclick="openTool('rousai')">
+        <div class="tool-card-icon" style="color:#C0392B;"><i class="ti ti-shield-check"></i></div>
+        <p class="tool-card-title">労災保険料</p>
+        <p class="tool-card-desc">末尾5・6・8／特別加入の月割り</p>
       </div>
       <div class="tool-card" onclick="openTool('kokuho')">
         <div class="tool-card-icon" style="color:var(--orange);"><i class="ti ti-building-community"></i></div>
@@ -183,6 +195,48 @@ html[data-theme="dark"] .table-row{border-color:rgba(255,255,255,.12)!important;
         <p class="tool-card-desc">建退共の公式サイトで試算</p>
       </a>
     </div>
+  </div>
+
+  <!-- 労災保険料シミュ -->
+  <div id="tool-rousai" class="tool-detail">
+    <p style="font-size:19px;font-weight:800;color:var(--navy);margin:0 0 4px;">労災保険料シミュレーター</p>
+    <p class="calc-note" style="margin:0 0 14px;">令和8年度（令和7年度と同率）・概算</p>
+    <div class="rousai-tabs" role="tablist" aria-label="基幹番号末尾">
+      <button type="button" class="rousai-tab active" id="rs-tab-5" onclick="selectRousai('5')" aria-selected="true">末尾5<br><small>現場労災</small></button>
+      <button type="button" class="rousai-tab" id="rs-tab-6" onclick="selectRousai('6')" aria-selected="false">末尾6<br><small>事務所労災</small></button>
+      <button type="button" class="rousai-tab" id="rs-tab-8" onclick="selectRousai('8')" aria-selected="false">末尾8<br><small>一人親方</small></button>
+    </div>
+
+    <div class="rousai-pane active" id="rs-pane-5">
+      <div class="card">
+        <p class="sec-label">元請工事の情報</p>
+        <div class="input-group"><label>元請工事高（税抜・円）</label><input type="number" id="rs5-amount" min="0" step="10000" value="10000000" inputmode="numeric" oninput="calcRousai()"></div>
+        <div class="input-group"><label>工事の種類</label><select id="rs5-type" onchange="calcRousai()"></select></div>
+        <label style="display:flex;align-items:center;gap:9px;font-size:14px;font-weight:700;margin-top:12px;"><input type="checkbox" id="rs5-special" checked onchange="toggleSpecial('5');calcRousai()" style="width:22px;height:22px;accent-color:var(--orange);">事業主特別加入を含める</label>
+        <div id="rs5-special-fields"></div>
+      </div>
+    </div>
+
+    <div class="rousai-pane" id="rs-pane-6">
+      <div class="card">
+        <p class="sec-label">事務所・置き場の労災</p>
+        <div class="input-group"><label>元請金額（ご指定の入力基準・円）</label><input type="number" id="rs6-amount" min="0" step="10000" value="10000000" inputmode="numeric" oninput="calcRousai()"></div>
+        <div class="rousai-warning"><i class="ti ti-alert-triangle"></i> 公的な年度更新では末尾6の一般保険料は「労働者の賃金総額×3/1000」です。この画面はご指定どおり元請金額も入力できますが、申告前に支部へ計算基礎を確認してください。</div>
+        <label style="display:flex;align-items:center;gap:9px;font-size:14px;font-weight:700;"><input type="checkbox" id="rs6-special" checked onchange="toggleSpecial('6');calcRousai()" style="width:22px;height:22px;accent-color:var(--orange);">事業主特別加入を含める</label>
+        <div id="rs6-special-fields"></div>
+      </div>
+    </div>
+
+    <div class="rousai-pane" id="rs-pane-8">
+      <div class="card">
+        <p class="sec-label">一人親方労災（特2・17/1000）</p>
+        <div id="rs8-special-fields"></div>
+        <p class="rousai-note">一人親方は労働者の賃金や元請金額ではなく、選択した給付基礎日額と加入月から保険料を算出します。</p>
+      </div>
+    </div>
+    <div class="rousai-result" id="rs-result" aria-live="polite"></div>
+    <div style="display:flex;gap:8px;margin-top:12px;"><button class="print-btn" onclick="previewRousai()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;font-size:14px;font-weight:700;color:#1B2A3B;background:#fff;border:2px solid #1B2A3B;border-radius:11px;cursor:pointer;font-family:inherit;"><i class="ti ti-eye"></i>プレビュー</button><button class="print-btn" onclick="printRousai()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;font-size:14px;font-weight:700;color:#fff;background:#1B2A3B;border:2px solid #1B2A3B;border-radius:11px;cursor:pointer;font-family:inherit;"><i class="ti ti-printer"></i>印刷・PDF</button></div>
+    <div class="alert alert-info" style="margin-top:12px;"><i class="ti ti-info-circle"></i><span>概算結果です。メリット制、工事区分、消費税の扱い、加入・脱退日、事務組合費等は含みません。申告・加入前に支部（<a href="tel:048-773-9863" class="tel-inline">048-773-9863</a>）へ確認してください。</span></div>
   </div>
 
   <!-- 労務費シミュ -->
@@ -446,9 +500,10 @@ function openTool(name){
   document.querySelectorAll('.tool-detail').forEach(d=>d.classList.remove('active'));
   document.getElementById('tool-'+name).classList.add('active');
   document.getElementById('back-label').textContent='計算ツール';
-  const titles={romu:'労務費シミュ',kokuho:'国保料シミュ',ccus:'CCUSレベル確認',benefit:'給付金'};
+  const titles={romu:'労務費シミュ',rousai:'労災保険料',kokuho:'国保料シミュ',ccus:'CCUSレベル確認',benefit:'給付金'};
   document.getElementById('page-title').textContent=titles[name]||'計算ツール';
   if(name==='romu'){calcRoumu();}
+  if(name==='rousai'){initRousai();calcRousai();}
   if(name==='ccus')initCcus();
   if(name==='benefit'){initBenefit();}
 }
@@ -459,6 +514,47 @@ function closeTool(){
   document.getElementById('back-label').textContent='戻る';
   document.getElementById('page-title').textContent='計算ツール';
 }
+
+const ROUSAI_TYPES=[
+  ['31','水力発電施設・ずい道等新設',19,34],['32','道路新設',19,11],['33','舗装工事',17,9],['34','鉄道・軌道新設',19,9],
+  ['35','建築（既設建築物設備を除く）',23,9.5],['38','既設建築物設備',23,12],
+  ['36a','機械装置の組立・据付（組立・取付）',38,6],['36b','機械装置の組立・据付（その他）',21,6],['37','その他の建設',23,15]
+];
+const ROUSAI_DAILY=[25000,24000,22000,20000,18000,16000,14000,12000,10000,9000,8000,7000,6000,5000,4000,3500];
+let rousaiMode='5',rousaiReady=false;
+function initRousai(){
+  if(rousaiReady)return;rousaiReady=true;
+  const sel=document.getElementById('rs5-type');
+  ROUSAI_TYPES.forEach((x,i)=>{const o=document.createElement('option');o.value=x[0];o.textContent=x[0].replace(/[ab]/,'')+' '+x[1]+'（労務費率'+x[2]+'%・保険率'+x[3]+'/1000）';if(x[0]==='35')o.selected=true;sel.append(o)});
+  ['5','6','8'].forEach(makeSpecialFields);toggleSpecial('5');toggleSpecial('6');
+}
+function makeSpecialFields(kind){
+  const box=document.getElementById('rs'+kind+'-special-fields');if(!box)return;
+  const wrap=document.createElement('div');wrap.className='special-grid';wrap.style.marginTop='12px';
+  const daily=document.createElement('div');daily.className='input-group';const dl=document.createElement('label');dl.textContent='給付基礎日額';const ds=document.createElement('select');ds.id='rs'+kind+'-daily';ROUSAI_DAILY.forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent=v.toLocaleString('ja-JP')+'円';if(v===6000)o.selected=true;ds.append(o)});ds.onchange=calcRousai;daily.append(dl,ds);
+  const month=document.createElement('div');month.className='input-group';const ml=document.createElement('label');ml.textContent='加入月';const ms=document.createElement('select');ms.id='rs'+kind+'-month';[[4,'4月（12か月）'],[5,'5月（11か月）'],[6,'6月（10か月）'],[7,'7月（9か月）'],[8,'8月（8か月）'],[9,'9月（7か月）'],[10,'10月（6か月）'],[11,'11月（5か月）'],[12,'12月（4か月）'],[1,'1月（3か月）'],[2,'2月（2か月）'],[3,'3月（1か月）']].forEach(x=>{const o=document.createElement('option');o.value=x[0];o.textContent=x[1];ms.append(o)});ms.onchange=calcRousai;month.append(ml,ms);
+  const count=document.createElement('div');count.className='input-group wide';const cl=document.createElement('label');cl.textContent=kind==='8'?'一人親方の人数（同じ日額・加入月）':'特別加入者数（同じ日額・加入月）';const ci=document.createElement('input');ci.type='number';ci.id='rs'+kind+'-count';ci.min='1';ci.max='20';ci.value='1';ci.oninput=calcRousai;count.append(cl,ci);wrap.append(daily,month,count);box.append(wrap);
+}
+function toggleSpecial(kind){const box=document.getElementById('rs'+kind+'-special-fields'),on=document.getElementById('rs'+kind+'-special');if(box&&on)box.style.display=on.checked?'':'none'}
+function selectRousai(kind){
+  rousaiMode=kind;['5','6','8'].forEach(k=>{const on=k===kind;document.getElementById('rs-tab-'+k).classList.toggle('active',on);document.getElementById('rs-tab-'+k).setAttribute('aria-selected',String(on));document.getElementById('rs-pane-'+k).classList.toggle('active',on)});calcRousai();
+}
+function specialPremium(kind,rate){
+  const daily=Number(document.getElementById('rs'+kind+'-daily').value),month=Number(document.getElementById('rs'+kind+'-month').value),count=Math.max(1,Number(document.getElementById('rs'+kind+'-count').value)||1),months=month>=4?16-month:4-month;
+  const monthlyBase=Math.ceil(daily*365/12),basis=Math.floor(monthlyBase*months/1000)*1000,one=Math.floor(basis*rate/1000);return{daily,months,basis,one,count,total:one*count,rate};
+}
+function calcRousai(){
+  if(!rousaiReady)return;let general=0,special=null,lines=[],note='';
+  if(rousaiMode==='5'){
+    const amount=Math.max(0,Number(document.getElementById('rs5-amount').value)||0),type=ROUSAI_TYPES.find(x=>x[0]===document.getElementById('rs5-type').value)||ROUSAI_TYPES[4];
+    const wage=Math.floor(amount*type[2]/100/1000)*1000;general=Math.floor(wage*type[3]/1000);lines.push(['元請工事高',rsYen(amount)],['労務費率',type[2]+'%'],['算定賃金総額（1,000円未満切捨て）',rsYen(wage)],['一般保険料（'+type[3]+'/1000）',rsYen(general)]);if(document.getElementById('rs5-special').checked)special=specialPremium('5',type[3]);note='工事区分 '+type[0].replace(/[ab]/,'')+'：'+type[1];
+  }else if(rousaiMode==='6'){
+    const amount=Math.max(0,Number(document.getElementById('rs6-amount').value)||0);general=Math.floor(amount*3/1000);lines.push(['入力した計算基礎額',rsYen(amount)],['一般保険料（3/1000）',rsYen(general)]);if(document.getElementById('rs6-special').checked)special=specialPremium('6',3);note='末尾6の正式申告は原則、労働者の賃金総額が計算基礎です。';
+  }else{special=specialPremium('8',17);note='第2種特別加入・建設業の一人親方（特2）';}
+  if(special){lines.push(['特別加入の算定基礎額（1人）',rsYen(special.basis)],['特別加入保険料（1人）',rsYen(special.one)],['特別加入者',special.count+'人 × '+special.months+'か月']);}
+  const total=general+(special?special.total:0),box=document.getElementById('rs-result');box.textContent='';const totalBox=document.createElement('div');totalBox.className='rousai-total';const sm=document.createElement('small');sm.textContent='概算保険料 合計';const strong=document.createElement('strong');strong.textContent=rsYen(total);totalBox.append(sm,strong);const breakdown=document.createElement('div');breakdown.className='card rousai-breakdown';lines.forEach(x=>{const row=document.createElement('div');row.className='rousai-line';const a=document.createElement('span');a.textContent=x[0];const b=document.createElement('span');b.textContent=x[1];row.append(a,b);breakdown.append(row)});const p=document.createElement('p');p.className='rousai-note';p.textContent=note+'。事務費・加入金・一般拠出金等は含みません。';breakdown.append(p);box.append(totalBox,breakdown);
+}
+function rsYen(v){return Math.floor(v).toLocaleString('ja-JP')+'円'}
 // ========== 労務費シミュレーター ==========
 // 令和8年度 料率
 const RM = {
@@ -1005,6 +1101,15 @@ function _romuData(){
 }
 function printRomu(){ const d=_romuData(); if(d) printSections(d.title,d.secs,d.note); }
 function previewRomu(){ const d=_romuData(); if(d) previewSections(d.title,d.secs,d.note); }
+
+function _rousaiData(){
+  const result=document.getElementById('rs-result');
+  if(!result || !result.innerHTML.trim()){ alert('先に労災保険料を計算してください。'); return null; }
+  const names={5:'基幹番号末尾5（現場労災）',6:'基幹番号末尾6（事務所労災）',8:'基幹番号末尾8（一人親方・特2）'};
+  return {title:'労災保険料 概算結果（令和8年度）',secs:[{label:names[rousaiMode],html:result.innerHTML}],note:'概算です。メリット制、事務費、加入金、一般拠出金等は含みません。末尾6の正式な一般保険料は原則として賃金総額を基礎にします。申告・加入前に支部へご確認ください。'};
+}
+function printRousai(){const d=_rousaiData();if(d)printSections(d.title,d.secs,d.note)}
+function previewRousai(){const d=_rousaiData();if(d)previewSections(d.title,d.secs,d.note)}
 
 function _benefitData(){
   const secs=[];
