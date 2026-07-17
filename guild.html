@@ -116,6 +116,12 @@
 .summary-card{min-width:0;padding:12px 10px;border:1px solid var(--gray100);border-radius:14px;background:linear-gradient(145deg,var(--white),var(--gray50));box-shadow:0 5px 18px rgba(18,38,63,.06);}
 .summary-value{display:block;font-size:22px;line-height:1.1;font-weight:800;color:var(--navy);}
 .summary-label{display:block;margin-top:5px;font-size:10px;font-weight:700;color:var(--gray500);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.availability-panel{margin:0 0 14px;padding:14px;border:1px solid #CFE1F1;border-radius:16px;background:linear-gradient(145deg,#F7FBFF,#EAF5FF);box-shadow:0 7px 22px rgba(20,71,112,.08);}
+.availability-heading{display:flex;align-items:flex-start;gap:9px;margin-bottom:10px;color:#163F64;}
+.availability-heading i{margin-top:1px;font-size:20px;color:#1A7A4A;}.availability-heading strong{display:block;font-size:14px;}.availability-heading span{display:block;margin-top:2px;font-size:11px;color:#506B83;line-height:1.45;}
+.availability-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.availability-btn{min-height:52px;padding:9px 10px;border:1.5px solid #2C759F;border-radius:13px;background:#fff;color:#174B70;font:inherit;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:7px;box-shadow:0 4px 12px rgba(20,71,112,.08);}
+.availability-btn.today{border-color:#1A7A4A;background:#EAF8F0;color:#145A37;}
 .purpose-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
 .purpose-btn{min-height:52px;padding:9px 10px;border:1.5px solid var(--gray200);border-radius:13px;background:var(--white);color:var(--gray700);font:inherit;font-size:12px;font-weight:700;text-align:left;line-height:1.35;}
 .purpose-btn.sel{border-color:var(--orange);background:#FFF1E9;color:#963C16;box-shadow:0 0 0 3px rgba(232,97,42,.12);}
@@ -154,6 +160,10 @@
 .admin-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;}
 .admin-stat{min-width:0;padding:9px 5px;border-radius:11px;background:rgba(255,255,255,.09);text-align:center;}.admin-stat strong{display:block;font-size:18px;}.admin-stat span{display:block;margin-top:2px;font-size:9px;color:#C9D7E8;}
 .admin-trades{margin-top:9px;padding:9px 11px;border-radius:10px;background:rgba(255,255,255,.07);font-size:11px;color:#D8E4F2;line-height:1.6;}
+.admin-review{margin-top:10px;padding:11px;border:1px solid rgba(255,196,96,.35);border-radius:12px;background:rgba(255,177,60,.1);}
+.admin-review-title{display:flex;align-items:center;gap:6px;margin:0 0 4px;font-size:12px;font-weight:800;color:#FFE3AE;}.admin-review-note{margin:0 0 9px;font-size:10px;line-height:1.5;color:#D8E4F2;}
+.review-item{padding:10px;margin-top:7px;border-radius:10px;background:rgba(5,18,34,.52);}.review-item strong{display:block;font-size:12px;line-height:1.45;color:#fff;overflow-wrap:anywhere;}.review-item span{display:block;margin-top:3px;font-size:10px;color:#C9D7E8;}
+.review-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px;}.review-btn{min-height:44px;border:1px solid rgba(255,255,255,.25);border-radius:9px;background:#153D65;color:#fff;font:inherit;font-size:11px;font-weight:800;}.review-btn.resolve{background:#334155;}
 .admin-select{width:100%;min-height:44px;margin-top:8px;padding:8px 10px;border:1px solid rgba(255,255,255,.2);border-radius:10px;background:#0B1B2E;color:#fff;font:inherit;font-size:12px;}
 .copy-toast{position:fixed;left:50%;bottom:116px;z-index:500;transform:translate(-50%,20px);padding:11px 16px;border-radius:99px;background:#10243C;color:#fff;font-size:13px;font-weight:700;opacity:0;pointer-events:none;transition:.2s;box-shadow:0 8px 24px rgba(0,0,0,.28);}.copy-toast.show{opacity:1;transform:translate(-50%,0);}
 html[data-theme="dark"] .tab-row{background:#071426;border:1px solid rgba(255,255,255,.12);}
@@ -184,6 +194,7 @@ html[data-theme="dark"] .job-fields{background:#071426;border-color:rgba(255,255
 html[data-theme="dark"] .check-row{color:#E8EEF7;}
 html[data-theme="dark"] .form-note{background:#132D4D;color:#D8E9FF;}
 html[data-theme="dark"] .view-switch,html[data-theme="dark"] .summary-card,html[data-theme="dark"] .form-section{background:#071426;border-color:rgba(255,255,255,.12);}
+html[data-theme="dark"] .availability-panel{background:#0B1B2E;border-color:rgba(255,255,255,.15);box-shadow:none;}html[data-theme="dark"] .availability-heading{color:#fff;}html[data-theme="dark"] .availability-heading span{color:#B8C7DA;}html[data-theme="dark"] .availability-btn{background:#132D4D;color:#D8E9FF;border-color:#4C83B6;}html[data-theme="dark"] .availability-btn.today{background:#103822;color:#C9FAD9;border-color:#37A96B;}
 html[data-theme="dark"] .view-btn.active,html[data-theme="dark"] .purpose-btn,html[data-theme="dark"] .guild-field,html[data-theme="dark"] .photo-picker,html[data-theme="dark"] .agenda-item{background:#0F1F35;color:#E8EEF7;border-color:rgba(255,255,255,.18);}
 html[data-theme="dark"] .summary-value,html[data-theme="dark"] .photo-picker strong,html[data-theme="dark"] .agenda-date,html[data-theme="dark"] .agenda-item strong{color:#fff;}
 html[data-theme="dark"] .purpose-btn.sel{background:#4D2415;color:#FFE7D8;border-color:#FF8A4C;}
@@ -199,7 +210,7 @@ html[data-theme="light"] .post-btn.primary{background:#E8612A;color:#fff;border-
 html[data-theme="light"] .post-btn.danger{background:#FFF5F5;color:#9B1C1C;border-color:#F2B8B5;}
 html[data-theme="light"] .comment-body{background:#F7FAFC;color:#1B2A3B;}
 html[data-theme="light"] .comment-input{background:#fff;color:#1B2A3B;}
-@media(max-width:520px){.guild-controls{grid-template-columns:1fr;}.post-details{grid-template-columns:1fr}.post-actions{flex-wrap:wrap}.post-btn{min-width:calc(50% - 4px)}.premium-summary{gap:6px}.summary-card{padding:10px 7px}.summary-value{font-size:19px}.admin-stats{grid-template-columns:1fr 1fr}.purpose-grid{grid-template-columns:1fr}.calendar-hero{align-items:flex-start;flex-direction:column}.calendar-link{width:100%;justify-content:center}}
+@media(max-width:520px){.guild-controls{grid-template-columns:1fr;}.post-details{grid-template-columns:1fr}.post-actions{flex-wrap:wrap}.post-btn{min-width:calc(50% - 4px)}.premium-summary{gap:6px}.summary-card{padding:10px 7px}.summary-value{font-size:19px}.admin-stats{grid-template-columns:1fr 1fr}.purpose-grid{grid-template-columns:1fr}.calendar-hero{align-items:flex-start;flex-direction:column}.calendar-link{width:100%;justify-content:center}.availability-actions{grid-template-columns:1fr}.availability-btn{min-height:50px}}
 </style>
 </head>
 <body>
@@ -261,6 +272,14 @@ html[data-theme="light"] .comment-input{background:#fff;color:#1B2A3B;}
     <div class="summary-card"><span class="summary-value" id="summary-urgent">0</span><span class="summary-label">急募</span></div>
     <div class="summary-card"><span class="summary-value" id="summary-upcoming">0</span><span class="summary-label">予定あり</span></div>
   </div>
+
+  <section class="availability-panel" aria-labelledby="availability-title">
+    <div class="availability-heading"><i class="ti ti-bolt"></i><div><strong id="availability-title">急な応援に行けますか？</strong><span>日にちを選ぶと投稿フォームへ自動入力します。職種・地域・連絡先を足すだけです。</span></div></div>
+    <div class="availability-actions">
+      <button class="availability-btn today" type="button" onclick="openQuickAvailability(0)"><i class="ti ti-sun"></i>今日 空いています</button>
+      <button class="availability-btn" type="button" onclick="openQuickAvailability(1)"><i class="ti ti-calendar-plus"></i>明日 空いています</button>
+    </div>
+  </section>
 
   <div class="admin-dashboard" id="admin-dashboard" aria-live="polite"></div>
 
@@ -360,7 +379,7 @@ html[data-theme="light"] .comment-input{background:#fff;color:#1B2A3B;}
     <div class="form-section">
       <p class="form-section-title">掲載期限</p>
       <select class="guild-field" id="post-expiry" aria-label="掲載期限">
-        <option value="24h">24時間</option><option value="3d">3日</option><option value="7d" selected>7日</option><option value="14d">14日</option><option value="workdate">作業日まで</option>
+        <option value="24h">24時間</option><option value="48h">48時間</option><option value="3d">3日</option><option value="7d" selected>7日</option><option value="14d">14日</option><option value="workdate">作業日まで</option>
       </select>
     </div>
 
@@ -449,7 +468,7 @@ const PURPOSE = {
 const WORKFLOW = {
   unhandled:'未対応', contacting:'投稿者へ確認中', referred:'紹介済み', matched:'成立', failed:'不成立', completed:'完了'
 };
-const EXPIRY = { '24h':'24時間', '3d':'3日', '7d':'7日', '14d':'14日', workdate:'作業日まで' };
+const EXPIRY = { '24h':'24時間', '48h':'48時間', '3d':'3日', '7d':'7日', '14d':'14日', workdate:'作業日まで' };
 const ARCHIVE_DAYS = 30;
 
 function safeText(value, max){
@@ -497,7 +516,8 @@ function normalizePost(post){
     purpose, workflow, expiryOption,
     expiresAt:safeText(post.expiresAt, 40),
     imageData,
-    createdAt:safeText(post.createdAt, 40)
+    createdAt:safeText(post.createdAt, 40),
+    lastReviewedAt:safeText(post.lastReviewedAt, 40)
   };
 }
 
@@ -582,10 +602,18 @@ function postTimestamp(post){
 }
 function isArchived(post){
   if(post.status === 'closed' || ['matched','failed','completed'].includes(post.workflow)) return true;
-  const expires = Date.parse(post.expiresAt || '');
-  if(Number.isFinite(expires) && Date.now() > expires) return true;
+  if(needsExpiryReview(post)) return true;
   const created = Date.parse(post.createdAt || '');
   return Number.isFinite(created) && Date.now() - created >= ARCHIVE_DAYS * 24 * 60 * 60 * 1000;
+}
+function needsExpiryReview(post){
+  if(post.status === 'closed' || ['matched','failed','completed'].includes(post.workflow)) return false;
+  const expires = Date.parse(post.expiresAt || '');
+  if(Number.isFinite(expires) && Date.now() > expires) return true;
+  const workEnd = /^\d{4}-\d{2}-\d{2}$/.test(post.workDate || '') ? Date.parse(post.workDate + 'T23:59:59+09:00') : NaN;
+  if(!Number.isFinite(workEnd) || Date.now() <= workEnd) return false;
+  const reviewed = Date.parse(post.lastReviewedAt || '');
+  return !Number.isFinite(reviewed) || reviewed < workEnd;
 }
 function formatWorkDate(value){
   const match = String(value || '').match(/^(\d{4})-(\d{2})-(\d{2})$/);
@@ -659,8 +687,10 @@ function renderAdminDashboard(){
   const count = key=>monthPosts.filter(post=>post.workflow===key).length;
   const trades={};monthPosts.forEach(post=>{if(post.trade)trades[post.trade]=(trades[post.trade]||0)+1;});
   const topTrades=Object.entries(trades).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([name,total])=>`${name} ${total}件`).join(' ／ ');
+  const reviewPosts=posts.filter(needsExpiryReview).sort((a,b)=>postTimestamp(a)-postTimestamp(b));
+  const reviewHtml=reviewPosts.length ? `<div class="admin-review"><p class="admin-review-title"><i class="ti ti-clock-exclamation"></i>確認が必要な募集 ${reviewPosts.length}件</p><p class="admin-review-note">期限または作業日を過ぎています。「7日継続」か「解決済み」を選んでください。</p>${reviewPosts.slice(0,8).map(post=>`<div class="review-item"><strong>${esc(post.body.slice(0,70))}${post.body.length>70?'…':''}</strong><span>${esc([post.workDate?formatWorkDate(post.workDate):'',post.area,post.trade].filter(Boolean).join(' ／ ')||'日程・地域未入力')}</span><div class="review-actions"><button class="review-btn" type="button" onclick="reviewExpiredPost(${post.id},'continue')"><i class="ti ti-refresh"></i> 7日継続</button><button class="review-btn resolve" type="button" onclick="reviewExpiredPost(${post.id},'resolved')"><i class="ti ti-circle-check"></i> 解決済み</button></div></div>`).join('')}${reviewPosts.length>8?`<p class="admin-review-note" style="margin-top:8px;">ほか${reviewPosts.length-8}件は過去の投稿画面から確認できます。</p>`:''}</div>` : '';
   box.classList.add('show');
-  box.innerHTML=`<div class="admin-title"><span><i class="ti ti-chart-bar"></i> 今月の運用状況</span><small>${now.getMonth()+1}月</small></div><div class="admin-stats"><div class="admin-stat"><strong>${monthPosts.length}</strong><span>投稿</span></div><div class="admin-stat"><strong>${count('unhandled')}</strong><span>未対応</span></div><div class="admin-stat"><strong>${count('referred')}</strong><span>紹介済み</span></div><div class="admin-stat"><strong>${count('matched')}</strong><span>成立</span></div></div><div class="admin-trades"><i class="ti ti-hammer"></i> 職種別：${esc(topTrades||'今月の登録なし')}</div>`;
+  box.innerHTML=`<div class="admin-title"><span><i class="ti ti-chart-bar"></i> 今月の運用状況</span><small>${now.getMonth()+1}月</small></div><div class="admin-stats"><div class="admin-stat"><strong>${monthPosts.length}</strong><span>投稿</span></div><div class="admin-stat"><strong>${count('unhandled')}</strong><span>未対応</span></div><div class="admin-stat"><strong>${count('referred')}</strong><span>紹介済み</span></div><div class="admin-stat"><strong>${count('matched')}</strong><span>成立</span></div></div><div class="admin-trades"><i class="ti ti-hammer"></i> 職種別：${esc(topTrades||'今月の登録なし')}</div>${reviewHtml}`;
 }
 function render(){
   const list = document.getElementById('post-list');
@@ -811,6 +841,21 @@ function contactBranch(id){
 
 // ===== 投稿 =====
 function openModal(){ const modal=document.getElementById('modal'); modal.classList.add('open'); modal.querySelector('.modal-sheet').scrollTop=0; }
+function localDateValue(dayOffset){
+  const date=new Date(); date.setDate(date.getDate()+dayOffset);
+  return [date.getFullYear(),String(date.getMonth()+1).padStart(2,'0'),String(date.getDate()).padStart(2,'0')].join('-');
+}
+function openQuickAvailability(dayOffset){
+  const offset=dayOffset===1?1:0;
+  openModal();
+  const purposeButton=document.querySelector('.purpose-btn[data-purpose="offer_help"]');
+  if(purposeButton) selectPurpose(purposeButton);
+  document.getElementById('post-work-date').value=localDateValue(offset);
+  document.getElementById('post-expiry').value=offset===0?'24h':'48h';
+  document.getElementById('post-urgent').checked=offset===0;
+  document.getElementById('post-body').value=(offset===0?'本日':'明日')+'、応援に行けます。職種・地域・時間などの条件をご確認ください。詳しくは支部を通じてお問い合わせください。';
+  document.getElementById('post-trade').focus();
+}
 function closeModal(){
   document.getElementById('modal').classList.remove('open');
   selectedCat='';
@@ -894,7 +939,7 @@ function preparePhoto(file){
 }
 
 function calculateExpiry(option,workDate){
-  const now=Date.now(); const days={"24h":1,"3d":3,"7d":7,"14d":14};
+  const now=Date.now(); const days={"24h":1,"48h":2,"3d":3,"7d":7,"14d":14};
   if(days[option]) return new Date(now+days[option]*86400000).toISOString();
   if(option==='workdate' && /^\d{4}-\d{2}-\d{2}$/.test(workDate)) return new Date(workDate+'T23:59:59+09:00').toISOString();
   return new Date(now+7*86400000).toISOString();
@@ -1005,6 +1050,17 @@ async function updateWorkflow(id,workflow){
     setStatus(`取り次ぎ状況を「${WORKFLOW[workflow]}」へ変更しました。`);
     await syncPosts();
   }catch(e){ alert('取り次ぎ状況を変更できませんでした。'); await syncPosts(); }
+}
+
+async function reviewExpiredPost(id,decision){
+  if(!isAdmin || !['continue','resolved'].includes(decision)) return;
+  const message=decision==='continue'?'この募集を7日間継続しますか？':'この募集を解決済みにしますか？';
+  if(!confirm(message)) return;
+  try{
+    await guildWrite('reviewExpiry',{postId:id,decision,adminPin:adminPinValue});
+    setStatus(decision==='continue'?'掲載期限を7日延長しました。':'募集を解決済みにしました。');
+    await syncPosts();
+  }catch(e){ alert('確認結果を保存できませんでした。通信環境を確認してください。'); await syncPosts(); }
 }
 
 function lineNoticeText(post){
