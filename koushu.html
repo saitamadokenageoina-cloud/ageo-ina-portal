@@ -66,6 +66,27 @@
 .legend{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
 .legend-item{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--gray600);}
 .legend-dot{width:12px;height:12px;border-radius:2px;flex-shrink:0;}
+.guide-section{margin:16px 0 18px;scroll-margin-top:12px;}
+.guide-heading{display:flex;align-items:center;gap:8px;margin:0 0 5px;color:var(--navy);font-size:17px;font-weight:700;}
+.guide-lead{margin:0 0 10px;color:var(--gray600);font-size:12px;line-height:1.7;font-weight:600;}
+.guide-notice{display:flex;gap:9px;align-items:flex-start;background:#FFF5DB;border:1px solid #D99A00;border-radius:10px;padding:10px 12px;margin-bottom:10px;color:#5C4300;font-size:12px;line-height:1.6;font-weight:600;}
+.guide-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;}
+.guide-card{min-width:0;background:var(--white);border:1px solid var(--gray200);border-radius:12px;padding:12px;box-shadow:var(--shadow-sm);}
+.guide-card-wide{grid-column:1/-1;}
+.guide-card h3{margin:0 0 4px;color:var(--navy);font-size:14px;line-height:1.45;}
+.guide-card p{margin:0 0 9px;color:var(--gray600);font-size:11px;line-height:1.55;font-weight:600;}
+.guide-open,.kcard-guide{width:100%;min-height:44px;border:1px solid #326FA8;border-radius:9px;background:#EAF4FF;color:#104E83;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;padding:8px 10px;}
+.kcard-guides{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px;}
+.kcard-guide{width:auto;flex:1 1 145px;background:transparent;}
+.guide-modal[hidden]{display:none;}
+.guide-modal{position:fixed;inset:0;z-index:10000;background:rgba(2,11,24,.92);display:flex;flex-direction:column;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);}
+.guide-modal-head{min-height:58px;display:flex;align-items:center;gap:10px;padding:8px 12px;background:#10213A;color:#fff;border-bottom:1px solid rgba(255,255,255,.16);}
+.guide-modal-close{min-width:48px;min-height:44px;border:1px solid rgba(255,255,255,.35);border-radius:10px;background:transparent;color:#fff;font-size:14px;font-weight:700;cursor:pointer;}
+.guide-modal-title{min-width:0;margin:0;font-size:14px;line-height:1.4;overflow-wrap:anywhere;}
+.guide-modal-body{flex:1;overflow:auto;padding:12px;display:flex;justify-content:center;align-items:flex-start;overscroll-behavior:contain;}
+.guide-modal-img{display:block;width:auto;max-width:100%;height:auto;background:#fff;border-radius:4px;}
+body.guide-modal-open{overflow:hidden;}
+@media(max-width:520px){.guide-grid{grid-template-columns:1fr}.guide-card-wide{grid-column:auto}.guide-modal-body{padding:8px}.guide-modal-img{min-width:100%;}}
 html[data-theme="dark"] .kcard{background:#10213A;color:#EAF0F7;border-color:rgba(255,255,255,.12);}
 html[data-theme="dark"] .kcard-name,
 html[data-theme="dark"] .kcard-date,
@@ -80,6 +101,11 @@ html[data-theme="dark"] .ptab,
 html[data-theme="dark"] .ctab{background:#071426;color:#E8EEF7;border-color:rgba(255,255,255,.18);}
 html[data-theme="dark"] .ptab.on{background:#E8612A;color:#fff;border-color:#E8612A;}
 html[data-theme="dark"] .ctab.on{background:#3B2416;color:#FFCFB0;border-color:#E8612A;}
+html[data-theme="dark"] .guide-heading,html[data-theme="dark"] .guide-card h3{color:#fff;}
+html[data-theme="dark"] .guide-lead,html[data-theme="dark"] .guide-card p{color:#D8E4F2;}
+html[data-theme="dark"] .guide-card{background:#10213A;border-color:rgba(255,255,255,.18);}
+html[data-theme="dark"] .guide-notice{background:#302600;border-color:#9D7900;color:#FFE9A8;}
+html[data-theme="dark"] .guide-open,html[data-theme="dark"] .kcard-guide{background:#12365A;border-color:#5AAAE8;color:#E5F4FF;}
 </style>
 </head>
 <body>
@@ -136,6 +162,13 @@ html[data-theme="dark"] .ctab.on{background:#3B2416;color:#FFCFB0;border-color:#
     <span>受講票と写真（縦30mm×横24mm・無背景・脱帽）が必要。事業主の説明印が必要な講習あり。キャンセルは1週間前までに支部へ連絡を。</span>
   </div>
 
+  <section class="guide-section" id="application-guides" aria-labelledby="application-guides-title">
+    <h2 class="guide-heading" id="application-guides-title"><i class="ti ti-files"></i>申込前ガイド・必要書類</h2>
+    <p class="guide-lead">受講資格、必要書類、実務経験の確認資料を講習別に見られます。画像をタップすると拡大します。</p>
+    <div class="guide-notice"><i class="ti ti-alert-triangle"></i><span>提供資料には2025年度版が含まれます。日程・料金・締切・助成額は変更される場合があるため、このページの2026年度日程と支部の案内を優先してください。</span></div>
+    <div class="guide-grid" id="guide-grid"></div>
+  </section>
+
   <!-- 凡例 -->
   <div class="legend">
     <div class="legend-item"><div class="legend-dot" style="background:#E8612A;"></div>技能講習</div>
@@ -172,6 +205,13 @@ html[data-theme="dark"] .ctab.on{background:#3B2416;color:#FFCFB0;border-color:#
       <i class="ti ti-phone"></i>支部に電話して申込む（048-773-9863）
     </a>
   </div>
+</div>
+<div class="guide-modal" id="guide-modal" role="dialog" aria-modal="true" aria-labelledby="guide-modal-title" hidden>
+  <div class="guide-modal-head">
+    <button type="button" class="guide-modal-close" id="guide-modal-close" aria-label="資料を閉じる"><i class="ti ti-arrow-left"></i> 戻る</button>
+    <h2 class="guide-modal-title" id="guide-modal-title"></h2>
+  </div>
+  <div class="guide-modal-body" id="guide-modal-body"><img class="guide-modal-img" id="guide-modal-img" alt=""></div>
 </div>
 <footer>埼玉土建一般労働組合 上尾伊奈支部｜TEL <a href="tel:048-773-9863">048-773-9863</a></footer>
 </div>
@@ -293,7 +333,89 @@ const KOUSHU = [
 ];
 
 const CAT_LABEL = {gino:'技能講習',tokubetsu:'特別教育',sakugyou:'作業主任者',yobo:'安全衛生教育',other:'その他'};
+const GUIDE_DOCS = Object.freeze({
+  overview:{title:'技能講習 申請確認一覧表',description:'受講資格、必要書類、資格取得祝金の全体確認（2025年度版）',src:'assets/images/koushu/application-overview-2025.png'},
+  scaffoldFlow:{title:'足場の組立て等作業主任者｜実務経験確認フロー',description:'作業開始時期や特別教育から受講資格を確認',src:'assets/images/koushu/scaffold-experience-flow.png'},
+  smallCrane:{title:'小型移動式クレーン運転技能講習',description:'受講資格、必要書類、講習内容、注意事項',src:'assets/images/koushu/small-mobile-crane.png'},
+  scaffold:{title:'足場の組立て等作業主任者技能講習',description:'受講資格、実務経験、必要書類、注意事項',src:'assets/images/koushu/scaffold-supervisor.png'},
+  foreman:{title:'職長・安全衛生責任者 能力向上教育',description:'受講資格、必要書類、講習内容、注意事項',src:'assets/images/koushu/foreman-ability.png'},
+  aerial:{title:'高所作業車運転技能講習',description:'受講コース別の必要書類、講習内容、注意事項',src:'assets/images/koushu/aerial-work-platform.png'},
+  asbestos:{title:'一般建築物石綿含有建材調査者講習',description:'受講区分、実務経験、必要書類、注意事項',src:'assets/images/koushu/asbestos-surveyor.png'},
+  asbestosEligibility:{title:'石綿含有建材調査者｜受講区分判定フロー',description:'経歴や修了資格から受講区分を確認',src:'assets/images/koushu/asbestos-eligibility-flow.png'},
+  asbestosDocuments:{title:'石綿含有建材調査者｜必要書類確認フロー',description:'受講区分ごとの証明書類を確認',src:'assets/images/koushu/asbestos-documents-flow.png'}
+});
+const GUIDE_GROUPS = Object.freeze([
+  {title:'まず全体を確認',keys:['overview'],wide:true},
+  {title:'足場の組立て等',keys:['scaffold','scaffoldFlow']},
+  {title:'小型移動式クレーン',keys:['smallCrane']},
+  {title:'職長・安全衛生責任者',keys:['foreman']},
+  {title:'高所作業車',keys:['aerial']},
+  {title:'石綿含有建材調査者',keys:['asbestos','asbestosEligibility','asbestosDocuments'],wide:true}
+]);
 let curPeriod = 'all', curCat = 'all';
+
+function createGuideButton(key, compact) {
+  const doc = GUIDE_DOCS[key];
+  if (!doc) return null;
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = compact ? 'kcard-guide' : 'guide-open';
+  button.dataset.guideKey = key;
+  const icon = document.createElement('i');
+  icon.className = 'ti ti-zoom-in';
+  const label = document.createElement('span');
+  label.textContent = compact ? doc.title.replace(/^[^｜]+｜/, '') : doc.title;
+  button.append(icon, label);
+  return button;
+}
+
+function renderGuideIndex() {
+  const grid = document.getElementById('guide-grid');
+  GUIDE_GROUPS.forEach(group => {
+    const card = document.createElement('article');
+    card.className = 'guide-card' + (group.wide ? ' guide-card-wide' : '');
+    const heading = document.createElement('h3');
+    heading.textContent = group.title;
+    card.appendChild(heading);
+    group.keys.forEach(key => {
+      const doc = GUIDE_DOCS[key];
+      const description = document.createElement('p');
+      description.textContent = doc.description;
+      card.append(description, createGuideButton(key, false));
+    });
+    grid.appendChild(card);
+  });
+}
+
+function guideKeysForCourse(k) {
+  if (k.name.includes('小型移動式クレーン')) return ['smallCrane'];
+  if (k.name.includes('足場の組立て')) return ['scaffold','scaffoldFlow'];
+  if (k.name.includes('職長・安全衛生責任者能力向上')) return ['foreman'];
+  if (k.name.includes('高所作業車') && k.name.includes('10m以上')) return ['aerial'];
+  if (k.name.includes('一般建築物石綿含有建材調査者')) return ['asbestos','asbestosEligibility','asbestosDocuments'];
+  return [];
+}
+
+function openGuide(key) {
+  const doc = GUIDE_DOCS[key];
+  if (!doc) return;
+  const modal = document.getElementById('guide-modal');
+  document.getElementById('guide-modal-title').textContent = doc.title;
+  const image = document.getElementById('guide-modal-img');
+  image.src = doc.src;
+  image.alt = doc.title;
+  modal.hidden = false;
+  document.body.classList.add('guide-modal-open');
+  document.getElementById('guide-modal-body').scrollTop = 0;
+  document.getElementById('guide-modal-close').focus();
+}
+
+function closeGuide() {
+  const modal = document.getElementById('guide-modal');
+  modal.hidden = true;
+  document.getElementById('guide-modal-img').removeAttribute('src');
+  document.body.classList.remove('guide-modal-open');
+}
 
 function setPeriod(v, btn) {
   curPeriod = v;
@@ -372,14 +494,32 @@ function render() {
         <p class="kcard-place">${placeIcon} ${k.place}</p>
         ${k.fee ? `<p style="font-size:13px;font-weight:600;color:#E8612A;background:#FFF0E9;border-radius:6px;padding:5px 10px;margin:4px 0 0;display:inline-block;">💴 ${k.fee}</p>` : ''}
         ${noteHtml}
+        <div class="kcard-guides" data-course-name="${k.name}"></div>
       </div>`;
     });
     html += '</div>';
   });
 
   document.getElementById('koushu-list').innerHTML = html;
+  document.querySelectorAll('.kcard-guides').forEach((container, index) => {
+    const course = items[index];
+    guideKeysForCourse(course).forEach(key => container.appendChild(createGuideButton(key, true)));
+    if (!container.childElementCount) container.remove();
+  });
 }
 
+renderGuideIndex();
+document.addEventListener('click', event => {
+  const button = event.target.closest('[data-guide-key]');
+  if (button) openGuide(button.dataset.guideKey);
+});
+document.getElementById('guide-modal-close').addEventListener('click', closeGuide);
+document.getElementById('guide-modal').addEventListener('click', event => {
+  if (event.target.id === 'guide-modal') closeGuide();
+});
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && !document.getElementById('guide-modal').hidden) closeGuide();
+});
 render();
 </script>
 <script src="assets/js/navigation.js"></script>
