@@ -4,7 +4,7 @@
   const FINISHED = { width: 1075, height: 650 };
   const BLEED = { width: 1146, height: 720, inset: 35 };
   const STORAGE_KEY = 'doken_meishi_draft_v1';
-  const fields = ['company', 'person-name', 'role', 'trade', 'tagline', 'services', 'qualifications', 'phone', 'email', 'address', 'website', 'social', 'service-area', 'qr-url', 'illustration', 'back-focus', 'event-title', 'exchange-offer', 'exchange-goal', 'accent-color', 'member-label'];
+  const fields = ['company', 'person-name', 'role', 'trade', 'tagline', 'services', 'strengths', 'qualifications', 'permit-number', 'experience', 'achievements', 'ccus', 'insurance', 'invoice-number', 'business-hours', 'phone', 'email', 'address', 'website', 'social', 'service-area', 'qr-url', 'illustration', 'back-focus', 'style-preset', 'accent-color', 'member-label'];
   const form = document.getElementById('card-form');
   const preview = document.getElementById('card-preview');
   const context = preview.getContext('2d');
@@ -21,7 +21,29 @@
     friendly: { dark: '#173d35', mid: '#23805f', light: '#eff9f4', accent: '#f08a32' },
     modern: { dark: '#111827', mid: '#334155', light: '#f8fafc', accent: '#0ea5e9' },
     japanese: { dark: '#2d2926', mid: '#5d5147', light: '#f5f0e6', accent: '#a33b32' },
-    housing: { dark: '#123f3a', mid: '#2d7a68', light: '#f3faf7', accent: '#e47b38' }
+    housing: { dark: '#123f3a', mid: '#2d7a68', light: '#f3faf7', accent: '#e47b38' },
+    hotel: { dark: '#172235', mid: '#46566d', light: '#f8f5ed', accent: '#b8892d' },
+    apple: { dark: '#111827', mid: '#4b5563', light: '#ffffff', accent: '#0a84ff' },
+    muji: { dark: '#3f3933', mid: '#776c61', light: '#f5f1e8', accent: '#8b3d32' },
+    architect: { dark: '#15222d', mid: '#425668', light: '#f5f7f8', accent: '#de5b35' },
+    general_contractor: { dark: '#082f49', mid: '#075985', light: '#eef8fc', accent: '#f59e0b' },
+    black_gold: { dark: '#090b0f', mid: '#252a32', light: '#f7f4ec', accent: '#c69a42' },
+    navy: { dark: '#071b38', mid: '#123f70', light: '#f0f5fa', accent: '#e8612a' },
+    monochrome: { dark: '#151515', mid: '#555555', light: '#f7f7f7', accent: '#222222' },
+    stylish: { dark: '#17202a', mid: '#34495e', light: '#f8fafc', accent: '#00a7a5' },
+    wood: { dark: '#3a281d', mid: '#76543b', light: '#f7f0e5', accent: '#c47b35' },
+    concrete: { dark: '#343a40', mid: '#6c757d', light: '#eceff1', accent: '#e76f3c' },
+    blueprint: { dark: '#073b66', mid: '#0d6aa7', light: '#edf7ff', accent: '#f5b642' },
+    minimal: { dark: '#252525', mid: '#666666', light: '#ffffff', accent: '#d95d39' },
+    industrial: { dark: '#1e252b', mid: '#4f5b62', light: '#eef0ed', accent: '#f0832d' },
+    nordic: { dark: '#29434e', mid: '#607d7f', light: '#f5f2ea', accent: '#d97956' },
+    future: { dark: '#08152e', mid: '#163d78', light: '#eef5ff', accent: '#00b8d9' },
+    luxury_home: { dark: '#22211f', mid: '#5b5148', light: '#fbf8f2', accent: '#b58a52' },
+    eco: { dark: '#173c2b', mid: '#35795a', light: '#f0f8f2', accent: '#e59a2f' },
+    safety: { dark: '#172c43', mid: '#345d7d', light: '#f1f6fa', accent: '#f2a900' },
+    local: { dark: '#173d35', mid: '#39755f', light: '#f5faf7', accent: '#ee7d35' },
+    photo: { dark: '#111827', mid: '#374151', light: '#f8fafc', accent: '#e8612a' },
+    technical: { dark: '#0b2748', mid: '#245681', light: '#eff6fb', accent: '#00a3a3' }
   };
 
   const tradeSuggestions = {
@@ -32,6 +54,11 @@
     plumbing: { style: 'trust', color: '#1586a8', reason: '清潔感と安心感が伝わる青系の構成です。', services: '給排水・空調・設備・修繕工事', lines: ['水まわりの安心を、確かな技で。','暮らしを支える、設備のプロ。','見えない配管まで、丁寧に。','水と空気の困りごとに迅速対応。','毎日の快適を、設備から。'] },
     painting: { style: 'friendly', color: '#e85278', reason: '仕上がりの美しさが伝わる明るい差し色の構成です。', services: '外壁塗装・屋根塗装・防水・補修', lines: ['住まいを守り、彩りをつくる。','丁寧な塗装で、長持ちする家へ。','下地から誠実に、美しい仕上がり。','色と技で、建物に新しい価値を。','塗るだけでなく、守る仕事。'] },
     civil: { style: 'craft', color: '#e07a24', reason: '土木・重機の堅牢さが伝わる力強い構成です。', services: '土木・造成・外構・重機工事', lines: ['地域の足元を、確かな技で。','強い基盤を、誠実な施工で。','安全第一、確実な土木工事。','地域の未来を、地面から支える。','機動力と技術で、現場に応える。'] },
+    interior: { style: 'stylish', color: '#2f7d73', reason: '空間づくりのセンスと清潔感が伝わる構成です。', services: '内装・クロス・床・原状回復工事', lines: ['空間を整え、心地よさをつくる。','きれい・丁寧・確かな内装。','暮らしに合う空間をご提案。','仕上がりで選ばれる内装工事。','小さな張替えから誠実に。'] },
+    demolition: { style: 'industrial', color: '#e8612a', reason: '安全管理と機動力が伝わる重厚な構成です。', services: '建物解体・内装解体・撤去・処分', lines: ['壊すだけでなく、次をつくる。','安全・迅速・近隣へ丁寧に。','解体から整地まで一貫対応。','現場をきれいに、確実に。','安心できる解体工事を。'] },
+    rebar: { style: 'technical', color: '#16858c', reason: '構造を支える精度と技術力が伝わる構成です。', services: '鉄筋・型枠・躯体工事', lines: ['建物の強さを、確かな技で。','見えない構造に、誇れる仕事。','精度と安全で、現場を支える。','躯体の品質を、足元から。','確かな施工で、未来を組む。'] },
+    roofing: { style: 'safety', color: '#d77a25', reason: '住まいを守る安心感と専門性が伝わる構成です。', services: '屋根・板金・雨樋・雨漏り修繕', lines: ['屋根から、住まいを守る。','雨漏りの不安に迅速対応。','見えない傷みも丁寧に確認。','安心が長持ちする屋根工事。','地域の屋根を、確かな技で。'] },
+    design: { style: 'architect', color: '#de5b35', reason: '設計力と管理能力を端正に見せる構成です。', services: '設計・施工管理・確認申請・改修提案', lines: ['図面から現場まで、確かな品質を。','考える力で、建築を整える。','設計と施工を、ひとつにつなぐ。','使いやすさを、かたちに。','現場を読み、最適解を描く。'] },
     general: { style: 'trust', color: '#e8612a', reason: '幅広いお客様に安心感を与える、誠実で見やすい構成です。', services: '建築・改修・修繕・住まいの相談', lines: ['確かな技で、地域の安心を。','相談しやすい、頼れる建設のプロ。','小さな修繕から、誠実に。','技術と信頼で、想いをかたちに。','地域に根ざし、末永いお付き合いを。'] }
   };
 
@@ -42,13 +69,7 @@
   }
 
   function selectedStyle() {
-    const selected = form.querySelector('input[name="style"]:checked');
-    return selected ? selected.value : 'trust';
-  }
-
-  function selectedPurpose() {
-    const selected = form.querySelector('input[name="card-purpose"]:checked');
-    return selected ? selected.value : 'business';
+    return value('style-preset') || 'trust';
   }
 
   function tradeLabel() {
@@ -63,7 +84,7 @@
       qualifications: value('qualifications'), phone: value('phone'), email: value('email'),
       address: value('address'), website: value('website'), social: value('social'), area: value('service-area'),
       qrUrl: value('qr-url'), illustration: value('illustration') || 'auto', backFocus: value('back-focus') || 'services',
-      purpose: selectedPurpose(), eventTitle: value('event-title'), exchangeOffer: value('exchange-offer'), exchangeGoal: value('exchange-goal'), member: value('member-label'),
+      strengths:value('strengths'), permit:value('permit-number'), experience:value('experience'), achievements:value('achievements'), ccus:value('ccus'), insurance:value('insurance'), invoice:value('invoice-number'), hours:value('business-hours'), member: value('member-label'),
       style: selectedStyle(), accent: value('accent-color') || '#e8612a'
     };
   }
@@ -245,6 +266,33 @@
       ctx.fillStyle = data.accent; ctx.fillRect(width*.3, 0, 12, height);
       ctx.fillStyle = colorWithAlpha(data.accent,.1); ctx.beginPath(); ctx.moveTo(width*.66,0); ctx.lineTo(width,0); ctx.lineTo(width,height*.48); ctx.closePath(); ctx.fill();
     }
+    drawStyleTexture(ctx,data,width,height);
+  }
+
+  function drawStyleTexture(ctx,data,width,height) {
+    ctx.save();
+    ctx.lineWidth=1.5;
+    if (data.style==='blueprint' || data.style==='architect') {
+      ctx.strokeStyle=data.style==='blueprint'?'rgba(26,110,170,.12)':'rgba(40,60,75,.08)';
+      const step=Math.max(28,Math.round(width/26));
+      for(let x=0;x<width;x+=step){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,height);ctx.stroke();}
+      for(let y=0;y<height;y+=step){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(width,y);ctx.stroke();}
+    } else if (data.style==='wood') {
+      ctx.strokeStyle='rgba(100,62,30,.10)';
+      for(let y=24;y<height;y+=32){ctx.beginPath();ctx.moveTo(0,y);ctx.bezierCurveTo(width*.3,y-9,width*.65,y+10,width,y-3);ctx.stroke();}
+    } else if (data.style==='concrete' || data.style==='industrial') {
+      ctx.fillStyle='rgba(30,38,44,.075)';
+      for(let i=0;i<54;i+=1){const x=(i*83)%width;const y=(i*47)%height;ctx.fillRect(x,y,2+(i%3),2+(i%2));}
+    } else if (data.style==='future' || data.style==='technical') {
+      ctx.strokeStyle=colorWithAlpha(data.accent,.16);
+      for(let i=0;i<6;i+=1){const y=height*(.15+i*.13);ctx.beginPath();ctx.moveTo(width*.55,y);ctx.lineTo(width*(.68+i*.025),y);ctx.lineTo(width*(.72+i*.025),y-height*.06);ctx.lineTo(width*.96,y-height*.06);ctx.stroke();}
+    } else if (data.style==='black_gold' || data.style==='hotel' || data.style==='luxury_home') {
+      ctx.strokeStyle=colorWithAlpha(data.accent,.26);ctx.lineWidth=3;ctx.strokeRect(width*.035,height*.055,width*.93,height*.89);
+    } else if (data.style==='japanese') {
+      ctx.strokeStyle='rgba(90,55,42,.10)';
+      for(let i=-height;i<width;i+=46){ctx.beginPath();ctx.moveTo(i,0);ctx.lineTo(i+height,height);ctx.stroke();}
+    }
+    ctx.restore();
   }
 
   function paletteFor(data) {
@@ -260,12 +308,7 @@
     const left = variant === 2 ? width*.36 : width*.075;
     const contentWidth = variant === 0 ? width*.54 : variant === 2 ? width*.57 : width*.82;
     ctx.textBaseline = 'alphabetic';
-    const companyY=data.purpose==='exchange'?height*.17:height*.13;
-    if(data.purpose==='exchange'){
-      ctx.fillStyle=data.accent;
-      ctx.font=`800 ${Math.max(25,Math.round(height*.034))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;
-      ctx.fillText(clippedText(ctx,data.eventTitle||'建設職人 名刺交換会',contentWidth),left,height*.09);
-    }
+    const companyY=height*.13;
     ctx.fillStyle = variant === 1 ? '#fff' : palette.dark;
     ctx.font = `700 ${Math.max(25,Math.round(height*.04))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;
     if (data.company) ctx.fillText(clippedText(ctx, data.company, contentWidth), left, companyY);
@@ -284,20 +327,13 @@
     const badgeWidth=Math.min(contentWidth,ctx.measureText(badgeText).width+32);
     ctx.fillStyle=colorWithAlpha(data.accent,.13);roundedRect(ctx,left,height*.42,badgeWidth,height*.067,12);ctx.fill();
     ctx.fillStyle=data.accent;ctx.fillText(badgeText,left+16,height*.467);
-    if(data.purpose==='exchange'){
-      const offer=data.exchangeOffer||data.services||data.tagline;
-      const goal=data.exchangeGoal;
-      ctx.font=`700 ${Math.max(25,Math.round(height*.03))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;
-      if(offer){ctx.fillStyle=palette.dark;ctx.fillText(clippedText(ctx,`できる仕事：${offer}`,contentWidth),left,height*.57);}
-      if(goal){ctx.fillStyle=palette.mid;ctx.fillText(clippedText(ctx,`つながりたい：${goal}`,contentWidth),left,height*.65);}
-    }else{
-      if (data.tagline) {
-        ctx.fillStyle = palette.dark;
-        ctx.font = `700 ${Math.max(25,Math.round(height*.031))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;
-        ctx.fillText(clippedText(ctx,data.tagline,contentWidth),left,height*.57);
-      }
-      if(data.services){ctx.fillStyle=palette.mid;ctx.font=`600 ${Math.max(25,Math.round(height*.027))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;ctx.fillText(clippedText(ctx,`対応：${data.services}`,contentWidth),left,height*.66);}
+    if (data.tagline) {
+      ctx.fillStyle = palette.dark;
+      ctx.font = `700 ${Math.max(25,Math.round(height*.031))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;
+      ctx.fillText(clippedText(ctx,data.tagline,contentWidth),left,height*.57);
     }
+    const serviceLine=data.strengths||data.services;
+    if(serviceLine){ctx.fillStyle=palette.mid;ctx.font=`600 ${Math.max(25,Math.round(height*.027))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;ctx.fillText(clippedText(ctx,serviceLine,contentWidth),left,height*.66);}
     const details = [
       data.phone && `TEL  ${data.phone}`,
       data.email && `MAIL  ${data.email}`,
@@ -306,8 +342,7 @@
     ].filter(Boolean);
     ctx.fillStyle = '#34465a';
     ctx.font = `500 ${Math.max(25,Math.round(height*.026))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;
-    const detailLimit=data.purpose==='exchange'?3:4;
-    details.slice(0,detailLimit).forEach((detail,index) => ctx.fillText(clippedText(ctx, detail, contentWidth), left, height*(.74 + index*.052)));
+    details.slice(0,4).forEach((detail,index) => ctx.fillText(clippedText(ctx, detail, contentWidth), left, height*(.74 + index*.052)));
     if (data.member) {
       ctx.fillStyle = data.accent; ctx.font = `700 ${Math.max(25,Math.round(height*.022))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;
       ctx.fillText('埼玉土建 上尾伊奈支部 組合員', left, height*.945);
@@ -331,19 +366,14 @@
     const left = width*.08; const max = target ? width*.61 : width*.78;
     ctx.fillStyle = '#fff'; ctx.font = `800 ${Math.max(25,Math.round(height*.072))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;
     ctx.fillText(clippedText(ctx,data.company || data.name,max),left,height*.19);
-    if(data.purpose==='exchange'&&data.eventTitle){ctx.fillStyle=data.accent;ctx.font=`700 ${Math.max(25,Math.round(height*.027))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;ctx.fillText(clippedText(ctx,data.eventTitle,max),left,height*.27);}
     const standardBlocks = [
       { key: 'services', label: '主な業務', text: data.services },
-      { key: 'qualifications', label: '資格・許可', text: data.qualifications },
+      { key: 'qualifications', label: '資格・許可', text: [data.qualifications,data.permit].filter(Boolean).join('／') },
       { key: 'area', label: '対応エリア', text: data.area },
-      { key: 'message', label: '私たちの強み', text: data.tagline }
+      { key: 'message', label: '選ばれる理由', text: data.strengths||data.tagline },
+      { key: 'trust', label: '信頼情報', text: [data.experience,data.achievements,data.ccus,data.insurance].filter(Boolean).join('／') }
     ];
-    const exchangeBlocks = [
-      { key:'offer',label:'できる仕事・協力できること',text:data.exchangeOffer||data.services },
-      { key:'goal',label:'つながりたい相手・探している仕事',text:data.exchangeGoal },
-      { key:'qualifications',label:'資格・許可',text:data.qualifications }
-    ];
-    const blocks=(data.purpose==='exchange'?exchangeBlocks:standardBlocks).filter(block => block.text);
+    const blocks=standardBlocks.filter(block => block.text);
     blocks.sort((a,b) => (a.key === data.backFocus ? -1 : b.key === data.backFocus ? 1 : 0));
     blocks.slice(0,2).forEach((block,index) => {
       const labelY = height*(.34 + index*.25);
@@ -357,9 +387,9 @@
       drawQr(ctx,target,qrX,qrY,qrSize);
       ctx.fillStyle = 'rgba(255,255,255,.85)'; ctx.font = `700 ${Math.max(25,Math.round(height*.02))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`; ctx.textAlign='center'; ctx.fillText('詳しくはこちら',qrX+qrSize/2,qrY+qrSize+height*.045); ctx.textAlign='left';
     }
-    const bottom = [data.phone && `TEL ${data.phone}`,data.website || data.social || data.email].filter(Boolean);
+    const bottom = [data.phone && `TEL ${data.phone}`,data.email,data.hours || data.invoice].filter(Boolean);
     ctx.fillStyle = 'rgba(255,255,255,.82)'; ctx.font = `500 ${Math.max(25,Math.round(height*.027))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;
-    bottom.forEach((line,index)=>ctx.fillText(clippedText(ctx,line,target ? max : width*.82),left,height*(.86+index*.052)));
+    bottom.forEach((line,index)=>ctx.fillText(clippedText(ctx,line,target ? max : width*.82),left,height*(.84+index*.052)));
     if (!blocks.length && data.tagline) {
       ctx.fillStyle='#fff'; ctx.font=`700 ${Math.round(height*.045)}px "BIZ UDPGothic","Noto Sans JP",sans-serif`; drawLines(ctx,wrapLines(ctx,data.tagline,width*.75,3),left,height*.42,height*.065);
     }
@@ -416,26 +446,14 @@
   function suggestDesign() {
     const trade = value('trade') || 'general';
     const suggestion = tradeSuggestions[trade] || tradeSuggestions.general;
-    const radio = form.querySelector(`input[name="style"][value="${suggestion.style}"]`);
-    if (radio) radio.checked = true;
+    const styleSelect=document.getElementById('style-preset');
+    if ([...styleSelect.options].some(option=>option.value===suggestion.style)) styleSelect.value=suggestion.style;
     document.getElementById('accent-color').value = suggestion.color;
     if (!value('services')) document.getElementById('services').value = suggestion.services;
     if (!value('tagline')) document.getElementById('tagline').value = suggestion.lines[0];
-    if(selectedPurpose()==='exchange'){
-      if(!value('event-title'))document.getElementById('event-title').value='建設職人 名刺交換会';
-      if(!value('exchange-offer'))document.getElementById('exchange-offer').value=`${suggestion.services}に対応できます`;
-      if(!value('exchange-goal'))document.getElementById('exchange-goal').value='元請会社・協力会社・仕事仲間とつながりたい';
-    }
     renderTaglineSuggestions(suggestion.lines);
     layoutVariant = (layoutVariant + 1) % 3;
     document.getElementById('suggestion-message').textContent = `提案しました：${suggestion.reason} キャッチコピーは5案から選べます。`;
-    queueRender();
-  }
-
-  function syncPurposeUI() {
-    const exchange=selectedPurpose()==='exchange';
-    document.getElementById('exchange-fields').hidden=!exchange;
-    document.querySelector('#suggest-button span').textContent=exchange?'交換会向けデザインと文章を自動提案':'3項目からデザインと文章を自動提案';
     queueRender();
   }
 
@@ -588,13 +606,8 @@
     add(Boolean(data.name && data.name!=='お名前'),12,'氏名が入力されています','氏名を入力してください');
     add(Boolean(data.company),8,'会社・屋号が入力されています','会社・屋号を入れると信頼感が上がります');
     add(Boolean(data.phone || data.email),12,'問い合わせ先があります','電話番号またはメールを入力してください');
-    if(data.purpose==='exchange'){
-      add(Boolean(data.exchangeOffer || data.services),10,'できる仕事が一目で伝わります','できる仕事・協力できることを入力してください');
-      add(Boolean(data.exchangeGoal),10,'つながりたい相手が分かります','つながりたい相手・探している仕事を入力してください');
-    }else{
-      add(Boolean(data.tagline),10,'強みが一言で伝わります','キャッチコピー候補から1つ選んでください');
-      add(Boolean(data.services),10,'施工内容が分かります','主な業務・施工内容を入力してください');
-    }
+    add(Boolean(data.tagline),10,'強みが一言で伝わります','キャッチコピー候補から1つ選んでください');
+    add(Boolean(data.services),10,'施工内容が分かります','主な業務・施工内容を入力してください');
     add(Boolean(data.qualifications || data.area),5,'資格または対応エリアがあります','資格または対応エリアを入れると安心感が増します');
     const rawQr=data.qrUrl || data.website || data.social;
     add(Boolean(qrTarget(data)),15,'QRコードは約20mm・余白付きです',rawQr?'QRコードのURLはhttps://から入力してください':'QRコードのリンク先を入れると営業力が上がります');
@@ -608,7 +621,7 @@
 
   function buildAiPrompt() {
     const data=cardData();
-    return `あなたは世界最高峰のブランドデザイナー兼、建設業専門マーケティングコンサルタントです。次の情報から、初対面で信頼を獲得し受注につながる横型名刺を提案してください。\n\n【印刷条件】仕上がり91×55mm、塗り足し込み97×61mm、300dpi、角丸なし、重要情報は仕上がり線から3mm以上内側、色は3色以内、最小文字6pt、QRコードは約20mmで十分な余白を確保。表面・裏面を提案。\n【用途】${data.purpose==='exchange'?'名刺交換会用':'通常の営業名刺'}\n【交換会名】${data.eventTitle || '未入力'}\n【会社名】${data.company || '未入力'}\n【氏名】${data.name || '未入力'}\n【肩書】${data.role || '未入力'}\n【業種】${tradeLabel()}\n【キャッチコピー】${data.tagline || 'AIで5案提案'}\n【施工内容】${data.services || 'AIで整理'}\n【できる仕事】${data.exchangeOffer || '未入力'}\n【つながりたい相手】${data.exchangeGoal || '未入力'}\n【資格】${data.qualifications || '未入力'}\n【対応エリア】${data.area || '未入力'}\n【希望スタイル】${data.style}\n【希望色】${data.accent}\n【イラスト】${data.illustration}\n\n表裏の構成、ブランドカラー、キャッチコピー5案、背景・アイコン・イラスト案、営業効果、印刷時の注意を日本語で提示してください。個人情報は回答内で必要以上に繰り返さないでください。`;
+    return `あなたは世界最高峰のブランドデザイナー、建設業専門マーケティング責任者、印刷デザイナーです。次の情報から、3秒で業種、10秒で信頼、30秒で依頼方法まで伝わる「建設業で最も成果が出る名刺」を設計してください。\n\n【印刷条件】仕上がり91×55mm、塗り足し込み97×61mm、300dpi、角丸なし、重要情報は仕上がり線から3mm以上内側、色は3色以内、最小文字6pt、QRコードは約20mmで十分な余白を確保。表面・裏面を提案。\n【会社名】${data.company || '未入力'}\n【氏名】${data.name || '未入力'}\n【肩書】${data.role || '未入力'}\n【業種】${tradeLabel()}\n【キャッチコピー】${data.tagline || 'AIで5案提案'}\n【施工内容】${data.services || 'AIで整理'}\n【選ばれる理由】${data.strengths || 'AIで整理'}\n【資格】${data.qualifications || '未入力'}\n【建設業許可】${data.permit || '未入力'}\n【創業・経験】${data.experience || '未入力'}\n【施工実績】${data.achievements || '未入力'}\n【CCUS・所属】${data.ccus || '未入力'}\n【保険・保証】${data.insurance || '未入力'}\n【インボイス】${data.invoice || '未入力'}\n【営業時間】${data.hours || '未入力'}\n【対応エリア】${data.area || '未入力'}\n【希望スタイル】${data.style}\n【希望色】${data.accent}\n【イラスト】${data.illustration}\n\n表裏の構成、視線誘導、ブランドカラー、キャッチコピー5案、背景・アイコン・イラスト案、営業効果、印刷時の注意を日本語で提示してください。個人情報は回答内で必要以上に繰り返さないでください。`;
   }
 
   async function copyAiPrompt() {
@@ -627,7 +640,7 @@
   function saveDraft() {
     const values={};
     fields.forEach(id => { values[id]=value(id); });
-    values.style=selectedStyle(); values.purpose=selectedPurpose(); values.layoutVariant=layoutVariant; values.photo=photoData && photoData.length < 900000 ? photoData : '';
+    values.style=selectedStyle(); values.layoutVariant=layoutVariant; values.photo=photoData && photoData.length < 900000 ? photoData : '';
     try {
       localStorage.setItem(STORAGE_KEY,JSON.stringify(values));
       document.getElementById('save-message').textContent=photoData && !values.photo ? '文字情報をこの端末に保存しました。画像は容量が大きいため保存していません。' : '下書きをこの端末に保存しました。';
@@ -644,8 +657,7 @@
       const element=document.getElementById(id); if (!element || draft[id] === undefined) return;
       if (element.type === 'checkbox') element.checked=Boolean(draft[id]); else element.value=String(draft[id]);
     });
-    if (draft.style) { const radio=form.querySelector(`input[name="style"][value="${draft.style}"]`); if (radio) radio.checked=true; }
-    if (draft.purpose) { const radio=form.querySelector(`input[name="card-purpose"][value="${draft.purpose}"]`); if (radio) radio.checked=true; }
+    if (draft.style) { const select=document.getElementById('style-preset'); if ([...select.options].some(option=>option.value===draft.style)) select.value=draft.style; }
     layoutVariant=Number.isInteger(draft.layoutVariant) ? draft.layoutVariant%3 : 0;
     if (typeof draft.photo === 'string' && draft.photo.startsWith('data:image/')) { photoData=draft.photo; photoImage=new Image(); photoImage.onload=queueRender; photoImage.src=photoData; }
     document.getElementById('save-message').textContent='この端末に保存した下書きを復元しました。';
@@ -653,7 +665,6 @@
 
   form.addEventListener('input',queueRender);
   form.addEventListener('change',queueRender);
-  form.querySelectorAll('input[name="card-purpose"]').forEach(radio=>radio.addEventListener('change',syncPurposeUI));
   document.getElementById('photo').addEventListener('change',event=>resizePhoto(event.target.files[0]));
   document.getElementById('suggest-button').addEventListener('click',suggestDesign);
   document.getElementById('download-front').addEventListener('click',()=>download('front'));
@@ -671,5 +682,6 @@
   }));
 
   restoreDraft();
-  syncPurposeUI();
+  renderPreview();
+  updateQuality();
 })();
