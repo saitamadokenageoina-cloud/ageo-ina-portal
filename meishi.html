@@ -41,6 +41,14 @@
           <div><h2>名刺の情報</h2><p>空欄の項目は名刺に表示されません</p></div>
         </div>
 
+        <fieldset class="purpose-field">
+          <legend>名刺の用途</legend>
+          <div class="purpose-options">
+            <label><input type="radio" name="card-purpose" value="business" checked><span><i class="ti ti-briefcase"></i><b>通常の営業名刺</b><small>お客様・元請・協力会社向け</small></span></label>
+            <label><input type="radio" name="card-purpose" value="exchange"><span><i class="ti ti-users-group"></i><b>名刺交換会用</b><small>仕事・仲間とのつながりを重視</small></span></label>
+          </div>
+        </fieldset>
+
         <div class="form-grid two basic-fields">
           <label class="field"><span>会社・屋号</span><input id="company" name="organization" maxlength="40" placeholder="例：上尾建設" autocomplete="organization"></label>
           <label class="field"><span>お名前 <em>必須</em></span><input id="person-name" name="name" maxlength="24" required placeholder="例：土建 太郎" autocomplete="name"></label>
@@ -49,6 +57,15 @@
 
         <button id="suggest-button" class="primary-action" type="button"><i class="ti ti-wand"></i><span>3項目からデザインと文章を自動提案</span></button>
         <p id="suggestion-message" class="suggestion-message" aria-live="polite"></p>
+
+        <section id="exchange-fields" class="exchange-fields" hidden>
+          <div class="exchange-head"><i class="ti ti-arrows-exchange"></i><div><strong>名刺交換会用の情報</strong><small>「できること」と「つながりたい相手」が一目で伝わります</small></div></div>
+          <div class="form-grid two">
+            <label class="field wide"><span>交換会・交流会名</span><input id="event-title" maxlength="44" placeholder="例：建設職人 名刺交換会"></label>
+            <label class="field wide"><span>できる仕事・協力できること</span><input id="exchange-offer" maxlength="58" placeholder="例：木造住宅の応援・リフォーム工事に対応できます"></label>
+            <label class="field wide"><span>つながりたい相手・探している仕事</span><input id="exchange-goal" maxlength="58" placeholder="例：元請会社・設備業者・応援先とつながりたい"></label>
+          </div>
+        </section>
 
         <div id="tagline-suggestion-box" class="suggestion-box" hidden>
           <p><i class="ti ti-bulb"></i>キャッチコピー候補</p>
