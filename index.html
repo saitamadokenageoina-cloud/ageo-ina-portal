@@ -180,6 +180,9 @@
 .mc-badge.money{ background: #FCE9EE; color: #BE123C; }
 .mc-title { font-size: 13px; font-weight: 600; color: var(--navy); margin: 0 0 3px; line-height: 1.35; }
 .mc-desc  { font-size: 11px; color: var(--gray600); margin: 0; line-height: 1.5; font-weight: 600; }
+.mc-guild{grid-column:1/-1;display:grid;grid-template-columns:150px minmax(0,1fr);border-color:#2EA868;background:linear-gradient(135deg,#F1FFF7,#FFFFFF);box-shadow:0 14px 32px rgba(26,122,74,.2);position:relative;}
+.mc-guild::after{content:'おすすめ';position:absolute;top:10px;right:10px;padding:5px 9px;border-radius:99px;background:#E8612A;color:#fff;font-size:10px;font-weight:800;box-shadow:0 5px 12px rgba(232,97,42,.3);}
+.mc-guild .mc-top{height:auto;min-height:132px}.mc-guild .mc-body{display:flex;flex-direction:column;justify-content:center;padding:18px 16px}.mc-guild .mc-title{font-size:21px;font-weight:800;color:#123E2A}.mc-guild .mc-desc{font-size:13px;line-height:1.6}.mc-guild .mc-badge{align-self:flex-start;background:#DDF6E8;color:#145A37;font-weight:800}
 
 /* ===== リストカード（1列） ===== */
 .lc {
@@ -277,6 +280,7 @@ html[data-theme="dark"] .manual-open{color:#FFFFFF;}
   .hero-title{font-size:21px;}
   .hero-sub{font-size:12.5px;}
 }
+@media (max-width:520px){.mc-guild{grid-template-columns:112px minmax(0,1fr)}.mc-guild .mc-top{min-height:138px}.mc-guild .mc-body{padding:16px 12px}.mc-guild .mc-title{font-size:19px}.mc-guild .mc-desc{font-size:12px;padding-right:2px}}
 
 
 </style>
@@ -368,9 +372,9 @@ html[data-theme="dark"] .manual-open{color:#FFFFFF;}
         <span class="mc-emoji">👥</span>
       </div>
       <div class="mc-body">
-        <span class="mc-badge biz">マッチング</span>
+        <span class="mc-badge biz">仕事・応援マッチング</span>
         <p class="mc-title">DOKENギルド</p>
-        <p class="mc-desc">人材・資材マッチング掲示板</p>
+        <p class="mc-desc">仕事を頼む・探す、今日空いている職人をつなぐ支部専用掲示板</p>
       </div>
     </a>
 

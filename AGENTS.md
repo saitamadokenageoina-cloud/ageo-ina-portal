@@ -110,7 +110,7 @@ DokenPrint.preview({title, sections, note})                  // プレビュー�
 | index.html | ホーム（5セクション：よく使う/仕事確保/現場・管理関係/手続き・シミュレーション/講習・資料） | 各セクションに`id="yoku"`等のアンカーあり（LINEリッチメニュー用URL） |
 | calendar.html | 支部カレンダー | iframeを維持し、その下に今後45日・最大18件の予定カードを表示。設定は`assets/js/calendar-config.js`、取得・15分キャッシュ・安全なDOM描画は`assets/js/calendar-upcoming.js` |
 | doken_card.html | どけんカード登録店 | 外部サイト`doken-card.jp`のパスワード表示・コピー機能 |
-| guild.html | DOKENギルド（掲示板） | Google Apps Script連携。投稿目的・文章テンプレート・掲載期限・取り次ぎ状況・LINE文コピー・作業カレンダー・近似マッチ・月次集計・圧縮写真・支部経由連絡に対応。「今日／明日 空いています」の簡易投稿と、期限到達後の管理者確認（7日継続／解決済み）も備える |
+| guild.html | DOKENギルド（掲示板） | Google Apps Script連携。投稿目的・文章テンプレート・掲載期限・取り次ぎ状況・LINE文コピー・DOKENギルド専用月間カレンダー・近似マッチ・月次集計・圧縮写真・支部経由連絡に対応。作業日のある人材投稿は専用カレンダーへ自動表示する。「今日／明日 空いています」の簡易投稿と、期限到達後の管理者確認（7日継続／解決済み）も備える |
 | kyokyu.html | 労働者供給事業 | 東栄住宅の求人情報を掲載（変更される可能性あり） |
 | calc.html | 計算ツール（労務費/国保料/給付金/CCUS） | 最大の機能。料率は毎年4月更新が必要（下記7章） |
 | atsusa.html | 熱中症AIアラート | GPS→Open-Meteo API→WBGT計算（気象庁JSONへのフォールバックあり） |
