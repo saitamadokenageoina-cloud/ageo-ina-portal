@@ -71,12 +71,15 @@
 .guide-lead{margin:0 0 11px;color:var(--gray600);font-size:12px;line-height:1.7;font-weight:600;}
 .flow-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
 .flow-tab{min-height:48px;border:2px solid var(--gray200);border-radius:10px;background:var(--white);color:var(--navy);font-size:12px;font-weight:700;padding:8px;}
-.flow-tab.on{background:#0C447C;border-color:#0C447C;color:#fff;}
+.flow-tab:hover,.flow-tab:focus-visible{border-color:var(--orange);background:#FFF4EE;outline:none;}
+.flow-tab.on{background:var(--orange);border-color:var(--orange);color:#fff;box-shadow:0 4px 12px rgba(240,90,35,.28);}
 .flow-panel{margin-top:12px;border-top:1px solid var(--gray200);padding-top:12px;}
 .flow-progress{font-size:11px;font-weight:700;color:var(--orange);margin:0 0 5px;}
 .flow-question{font-size:15px;font-weight:700;color:var(--navy);line-height:1.55;margin:0 0 10px;}
 .flow-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
 .flow-choice{min-height:48px;border:2px solid #326FA8;border-radius:10px;background:#EAF4FF;color:#104E83;font-size:14px;font-weight:700;}
+.flow-choice:hover,.flow-choice:focus-visible{border-color:var(--orange);background:#FFF4EE;color:#7A2D0F;outline:none;}
+.flow-choice.selected{background:var(--orange);border-color:var(--orange);color:#fff;box-shadow:0 4px 12px rgba(240,90,35,.28);}
 .flow-result{border-radius:12px;padding:13px;margin-top:10px;font-size:13px;line-height:1.65;font-weight:600;}
 .flow-result.ok{background:#E8F5EE;border:2px solid #1A7A4A;color:#174D31;}
 .flow-result.no{background:#FEF0ED;border:2px solid #C0392B;color:#7C2118;}
@@ -112,7 +115,12 @@ html[data-theme="dark"] .guide-heading,html[data-theme="dark"] .flow-question{co
 html[data-theme="dark"] .guide-lead{color:#D8E4F2;}
 html[data-theme="dark"] .course-guide{background:#09192D;border-color:#3F7399;}html[data-theme="dark"] .course-guide summary{color:#BDE3FF;}
 html[data-theme="dark"] .course-guide-list,html[data-theme="dark"] .doc-check{color:#E8EEF7;}html[data-theme="dark"] .guide-note{background:#302600;color:#FFE9A8;}
-html[data-theme="dark"] .flow-choice{background:#12365A;color:#E5F4FF;border-color:#5AAAE8;}html[data-theme="dark"] .flow-reset{color:#fff;}
+html[data-theme="dark"] .flow-choice{background:#12365A;color:#fff;border-color:#5AAAE8;}html[data-theme="dark"] .flow-reset{color:#fff;}
+html[data-theme="dark"] .flow-tab.on,html[data-theme="dark"] .flow-choice.selected{background:#F06A2D;border-color:#F06A2D;color:#fff;}
+html[data-theme="dark"] .flow-tab:hover,html[data-theme="dark"] .flow-tab:focus-visible,html[data-theme="dark"] .flow-choice:hover,html[data-theme="dark"] .flow-choice:focus-visible{background:#3D2A23;border-color:#FF9A6B;color:#fff;}
+html[data-theme="dark"] .flow-result.ok{background:#123B2A;border-color:#48B982;color:#E8FFF3;}
+html[data-theme="dark"] .flow-result.no{background:#491B1B;border-color:#F17868;color:#FFF0F0;}
+html[data-theme="dark"] .flow-result h3,html[data-theme="dark"] .flow-result p,html[data-theme="dark"] .flow-result li{color:inherit;}
 </style>
 </head>
 <body>
@@ -173,8 +181,8 @@ html[data-theme="dark"] .flow-choice{background:#12365A;color:#E5F4FF;border-col
     <h2 class="guide-heading" id="application-guides-title"><i class="ti ti-files"></i>申込前ガイド・必要書類</h2>
     <p class="guide-lead">足場・石綿の受講資格を質問に答えて確認できます。必要書類は該当する日程カード内に表示します。</p>
     <div class="flow-tabs" role="tablist" aria-label="受講資格の確認">
-      <button class="flow-tab on" type="button" data-flow="scaffold">足場の受講資格</button>
-      <button class="flow-tab" type="button" data-flow="asbestos">石綿の受講区分</button>
+      <button class="flow-tab on" type="button" data-flow="scaffold" role="tab" aria-selected="true">足場の受講資格</button>
+      <button class="flow-tab" type="button" data-flow="asbestos" role="tab" aria-selected="false">石綿の受講区分</button>
     </div>
     <div class="flow-panel" id="flow-panel" aria-live="polite"></div>
   </section>
@@ -422,7 +430,7 @@ function renderFlow(){
   const progress=document.createElement('p');progress.className='flow-progress';progress.textContent=`質問 ${flowStep}`;
   const question=document.createElement('p');question.className='flow-question';question.textContent=node.text;
   const actions=document.createElement('div');actions.className='flow-actions';
-  [['はい','yes'],['いいえ','no']].forEach(([label,answer])=>{const button=document.createElement('button');button.type='button';button.className='flow-choice';button.textContent=label;button.addEventListener('click',()=>advanceFlow(node[answer]));actions.appendChild(button);});
+  [['はい','yes'],['いいえ','no']].forEach(([label,answer])=>{const button=document.createElement('button');button.type='button';button.className='flow-choice';button.textContent=label;button.setAttribute('aria-pressed','false');button.addEventListener('click',()=>{actions.querySelectorAll('.flow-choice').forEach(choice=>{choice.classList.remove('selected');choice.setAttribute('aria-pressed','false');});button.classList.add('selected');button.setAttribute('aria-pressed','true');window.setTimeout(()=>advanceFlow(node[answer]),120);});actions.appendChild(button);});
   panel.append(progress,question,actions);
 }
 
@@ -529,7 +537,7 @@ function render() {
 }
 
 document.querySelectorAll('.flow-tab').forEach(button=>button.addEventListener('click',()=>{
-  activeFlow=button.dataset.flow;document.querySelectorAll('.flow-tab').forEach(tab=>tab.classList.toggle('on',tab===button));resetFlow();
+  activeFlow=button.dataset.flow;document.querySelectorAll('.flow-tab').forEach(tab=>{const selected=tab===button;tab.classList.toggle('on',selected);tab.setAttribute('aria-selected',String(selected));});resetFlow();
 }));
 document.addEventListener('change',event=>{
   const input=event.target.closest('[data-check-key]');if(!input)return;
