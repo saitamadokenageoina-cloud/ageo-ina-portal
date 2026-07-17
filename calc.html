@@ -66,7 +66,7 @@
 .calc-note{font-size:12px;color:var(--gray600);margin:10px 0 0;font-weight:600;line-height:1.65;}
 .calc-small{font-size:11px;color:var(--gray600);display:block;font-weight:600;}
 .calc-muted{color:var(--gray600)!important;font-weight:600!important;}
-.rousai-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
+.rousai-tabs{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px;}
 .rousai-tab{min-height:58px;border:2px solid var(--gray200);border-radius:12px;background:var(--white);color:var(--navy);font:inherit;font-size:14px;font-weight:800;cursor:pointer;transition:.15s;}
 .rousai-tab:hover,.rousai-tab:focus-visible{border-color:var(--orange);color:#A83B0C;background:#FFF2E9;outline:3px solid rgba(232,97,42,.16);}
 .rousai-tab.active{background:var(--orange);border-color:var(--orange);color:#fff;box-shadow:0 6px 16px rgba(232,97,42,.26);}
@@ -204,7 +204,8 @@ html[data-theme="dark"] .rousai-tab{background:#10213A;color:#E8EEF7;border-colo
     <div class="rousai-tabs" role="tablist" aria-label="基幹番号末尾">
       <button type="button" class="rousai-tab active" id="rs-tab-5" onclick="selectRousai('5')" aria-selected="true">末尾5<br><small>現場労災</small></button>
       <button type="button" class="rousai-tab" id="rs-tab-6" onclick="selectRousai('6')" aria-selected="false">末尾6<br><small>事務所労災</small></button>
-      <button type="button" class="rousai-tab" id="rs-tab-8" onclick="selectRousai('8')" aria-selected="false">末尾8<br><small>一人親方</small></button>
+      <button type="button" class="rousai-tab" id="rs-tab-8" onclick="selectRousai('8')" aria-selected="false">特2<br><small>建設一人親方</small></button>
+      <button type="button" class="rousai-tab" id="rs-tab-t1" onclick="selectRousai('t1')" aria-selected="false">特1<br><small>運送一人親方</small></button>
     </div>
 
     <div class="rousai-pane active" id="rs-pane-5">
@@ -231,6 +232,13 @@ html[data-theme="dark"] .rousai-tab{background:#10213A;color:#E8EEF7;border-colo
         <p class="sec-label">一人親方労災（特2・17/1000）</p>
         <div id="rs8-special-fields"></div>
         <p class="rousai-note">一人親方は労働者の賃金や元請金額ではなく、選択した給付基礎日額と加入月から保険料を算出します。</p>
+      </div>
+    </div>
+    <div class="rousai-pane" id="rs-pane-t1">
+      <div class="card">
+        <p class="sec-label">運送業の一人親方労災（特1・11/1000）</p>
+        <div id="rst1-special-fields"></div>
+        <p class="rousai-note">個人タクシー、個人貨物運送業者、原動機付自転車または自転車を使った貨物運送が対象です。給付基礎日額と加入月から概算します。</p>
       </div>
     </div>
     <div class="rousai-result" id="rs-result" aria-live="polite"></div>
@@ -525,18 +533,18 @@ function initRousai(){
   if(rousaiReady)return;rousaiReady=true;
   const sel=document.getElementById('rs5-type');
   ROUSAI_TYPES.forEach((x,i)=>{const o=document.createElement('option');o.value=x[0];o.textContent=x[0].replace(/[ab]/,'')+' '+x[1]+'（労務費率'+x[2]+'%・保険率'+x[3]+'/1000）';if(x[0]==='35')o.selected=true;sel.append(o)});
-  ['5','6','8'].forEach(makeSpecialFields);toggleSpecial('5');toggleSpecial('6');
+  ['5','6','8','t1'].forEach(makeSpecialFields);toggleSpecial('5');toggleSpecial('6');
 }
 function makeSpecialFields(kind){
   const box=document.getElementById('rs'+kind+'-special-fields');if(!box)return;
   const wrap=document.createElement('div');wrap.className='special-grid';wrap.style.marginTop='12px';
   const daily=document.createElement('div');daily.className='input-group';const dl=document.createElement('label');dl.textContent='給付基礎日額';const ds=document.createElement('select');ds.id='rs'+kind+'-daily';ROUSAI_DAILY.forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent=v.toLocaleString('ja-JP')+'円';if(v===6000)o.selected=true;ds.append(o)});ds.onchange=calcRousai;daily.append(dl,ds);
   const month=document.createElement('div');month.className='input-group';const ml=document.createElement('label');ml.textContent='加入月';const ms=document.createElement('select');ms.id='rs'+kind+'-month';[[4,'4月（12か月）'],[5,'5月（11か月）'],[6,'6月（10か月）'],[7,'7月（9か月）'],[8,'8月（8か月）'],[9,'9月（7か月）'],[10,'10月（6か月）'],[11,'11月（5か月）'],[12,'12月（4か月）'],[1,'1月（3か月）'],[2,'2月（2か月）'],[3,'3月（1か月）']].forEach(x=>{const o=document.createElement('option');o.value=x[0];o.textContent=x[1];ms.append(o)});ms.onchange=calcRousai;month.append(ml,ms);
-  const count=document.createElement('div');count.className='input-group wide';const cl=document.createElement('label');cl.textContent=kind==='8'?'一人親方の人数（同じ日額・加入月）':'特別加入者数（同じ日額・加入月）';const ci=document.createElement('input');ci.type='number';ci.id='rs'+kind+'-count';ci.min='1';ci.max='20';ci.value='1';ci.oninput=calcRousai;count.append(cl,ci);wrap.append(daily,month,count);box.append(wrap);
+  const count=document.createElement('div');count.className='input-group wide';const cl=document.createElement('label');cl.textContent=(kind==='8'||kind==='t1')?'一人親方の人数（同じ日額・加入月）':'特別加入者数（同じ日額・加入月）';const ci=document.createElement('input');ci.type='number';ci.id='rs'+kind+'-count';ci.min='1';ci.max='20';ci.value='1';ci.oninput=calcRousai;count.append(cl,ci);wrap.append(daily,month,count);box.append(wrap);
 }
 function toggleSpecial(kind){const box=document.getElementById('rs'+kind+'-special-fields'),on=document.getElementById('rs'+kind+'-special');if(box&&on)box.style.display=on.checked?'':'none'}
 function selectRousai(kind){
-  rousaiMode=kind;['5','6','8'].forEach(k=>{const on=k===kind;document.getElementById('rs-tab-'+k).classList.toggle('active',on);document.getElementById('rs-tab-'+k).setAttribute('aria-selected',String(on));document.getElementById('rs-pane-'+k).classList.toggle('active',on)});calcRousai();
+  rousaiMode=kind;['5','6','8','t1'].forEach(k=>{const on=k===kind;document.getElementById('rs-tab-'+k).classList.toggle('active',on);document.getElementById('rs-tab-'+k).setAttribute('aria-selected',String(on));document.getElementById('rs-pane-'+k).classList.toggle('active',on)});calcRousai();
 }
 function specialPremium(kind,rate){
   const daily=Number(document.getElementById('rs'+kind+'-daily').value),month=Number(document.getElementById('rs'+kind+'-month').value),count=Math.max(1,Number(document.getElementById('rs'+kind+'-count').value)||1),months=month>=4?16-month:4-month;
@@ -549,7 +557,8 @@ function calcRousai(){
     const wage=Math.floor(amount*type[2]/100/1000)*1000;general=Math.floor(wage*type[3]/1000);lines.push(['元請工事高',rsYen(amount)],['労務費率',type[2]+'%'],['算定賃金総額（1,000円未満切捨て）',rsYen(wage)],['一般保険料（'+type[3]+'/1000）',rsYen(general)]);if(document.getElementById('rs5-special').checked)special=specialPremium('5',type[3]);note='工事区分 '+type[0].replace(/[ab]/,'')+'：'+type[1];
   }else if(rousaiMode==='6'){
     const amount=Math.max(0,Number(document.getElementById('rs6-amount').value)||0);general=Math.floor(amount*3/1000);lines.push(['労働者の年間賃金総額',rsYen(amount)],['一般保険料（3/1000）',rsYen(general)]);if(document.getElementById('rs6-special').checked)special=specialPremium('6',3);note='末尾6は労働者の年間賃金総額を計算基礎とします。';
-  }else{special=specialPremium('8',17);note='第2種特別加入・建設業の一人親方（特2）';}
+  }else if(rousaiMode==='8'){special=specialPremium('8',17);note='第2種特別加入・建設業の一人親方（特2・17/1000）';
+  }else{special=specialPremium('t1',11);note='運送業の一人親方（特1・11/1000）';}
   if(special){lines.push(['特別加入の算定基礎額（1人）',rsYen(special.basis)],['特別加入保険料（1人）',rsYen(special.one)],['特別加入者',special.count+'人 × '+special.months+'か月']);}
   const total=general+(special?special.total:0),box=document.getElementById('rs-result');box.textContent='';const totalBox=document.createElement('div');totalBox.className='rousai-total';const sm=document.createElement('small');sm.textContent='概算保険料 合計';const strong=document.createElement('strong');strong.textContent=rsYen(total);totalBox.append(sm,strong);const breakdown=document.createElement('div');breakdown.className='card rousai-breakdown';lines.forEach(x=>{const row=document.createElement('div');row.className='rousai-line';const a=document.createElement('span');a.textContent=x[0];const b=document.createElement('span');b.textContent=x[1];row.append(a,b);breakdown.append(row)});const p=document.createElement('p');p.className='rousai-note';p.textContent=note+'。事務費・加入金・一般拠出金等は含みません。';breakdown.append(p);box.append(totalBox,breakdown);
 }
@@ -1104,7 +1113,7 @@ function previewRomu(){ const d=_romuData(); if(d) previewSections(d.title,d.sec
 function _rousaiData(){
   const result=document.getElementById('rs-result');
   if(!result || !result.innerHTML.trim()){ alert('先に労災保険料を計算してください。'); return null; }
-  const names={5:'基幹番号末尾5（現場労災）',6:'基幹番号末尾6（事務所労災）',8:'基幹番号末尾8（一人親方・特2）'};
+  const names={5:'基幹番号末尾5（現場労災）',6:'基幹番号末尾6（事務所労災）',8:'建設業の一人親方（特2）',t1:'運送業の一人親方（特1）'};
   return {title:'労災保険料 概算結果（令和8年度）',secs:[{label:names[rousaiMode],html:result.innerHTML}],note:'概算です。メリット制、事務費、加入金、一般拠出金等は含みません。末尾6は労働者の年間賃金総額を基礎にします。申告・加入前に支部へご確認ください。'};
 }
 function printRousai(){const d=_rousaiData();if(d)printSections(d.title,d.secs,d.note)}
