@@ -183,8 +183,6 @@
 .mc-guild{grid-column:1/-1;display:grid;grid-template-columns:150px minmax(0,1fr);border-color:#2EA868;background:linear-gradient(135deg,#F1FFF7,#FFFFFF);box-shadow:0 14px 32px rgba(26,122,74,.2);position:relative;}
 .mc-guild::after{content:'おすすめ';position:absolute;top:10px;right:10px;padding:5px 9px;border-radius:99px;background:#E8612A;color:#fff;font-size:10px;font-weight:800;box-shadow:0 5px 12px rgba(232,97,42,.3);}
 .mc-guild .mc-top{height:auto;min-height:132px}.mc-guild .mc-body{display:flex;flex-direction:column;justify-content:center;padding:18px 16px}.mc-guild .mc-title{font-size:21px;font-weight:800;color:#123E2A}.mc-guild .mc-desc{font-size:13px;line-height:1.6}.mc-guild .mc-badge{align-self:flex-start;background:#DDF6E8;color:#145A37;font-weight:800}
-.mc-health-form{grid-column:1/-1;display:grid;grid-template-columns:120px minmax(0,1fr);border-color:#5FB7A8;background:linear-gradient(135deg,#F0FFFC,#FFFFFF);}
-.mc-health-form .mc-top{height:auto;min-height:116px}.mc-health-form .mc-body{display:flex;flex-direction:column;justify-content:center;padding:16px}.mc-health-form .mc-title{font-size:17px;font-weight:700}.mc-health-form .mc-desc{font-size:12px}.mc-health-form .mc-badge{align-self:flex-start}
 
 /* ===== リストカード（1列） ===== */
 .lc {
@@ -283,7 +281,6 @@ html[data-theme="dark"] .manual-open{color:#FFFFFF;}
   .hero-sub{font-size:12.5px;}
 }
 @media (max-width:520px){.mc-guild{grid-template-columns:112px minmax(0,1fr)}.mc-guild .mc-top{min-height:138px}.mc-guild .mc-body{padding:16px 12px}.mc-guild .mc-title{font-size:19px}.mc-guild .mc-desc{font-size:12px;padding-right:2px}}
-@media (max-width:520px){.mc-health-form{grid-template-columns:96px minmax(0,1fr)}.mc-health-form .mc-top{min-height:118px}.mc-health-form .mc-body{padding:14px 12px}.mc-health-form .mc-title{font-size:16px}}
 
 
 </style>
@@ -354,23 +351,6 @@ html[data-theme="dark"] .manual-open{color:#FFFFFF;}
         <span class="mc-badge tool">優待</span>
         <p class="mc-title">どけんカード登録店</p>
         <p class="mc-desc">県内700店以上の優待店を検索</p>
-      </div>
-    </a>
-
-    <a class="mc mc-health-form" href="https://forms.gle/uKCqkLJAw7gMjwUMA" target="_blank" rel="noopener noreferrer">
-      <div class="mc-top" style="background:linear-gradient(135deg,#087F73,#13A896);">
-        <svg viewBox="0 0 120 116" aria-hidden="true">
-          <rect x="25" y="19" width="70" height="79" rx="12" fill="rgba(255,255,255,.94)"/>
-          <rect x="44" y="12" width="32" height="14" rx="6" fill="rgba(255,255,255,.7)"/>
-          <path d="M60 38v25M47.5 50.5h25" stroke="#0A8F81" stroke-width="9" stroke-linecap="round"/>
-          <path d="M42 79h36M42 88h25" stroke="#8ACFC7" stroke-width="5" stroke-linecap="round"/>
-        </svg>
-        <span class="mc-emoji"><i class="ti ti-heart-rate-monitor"></i></span>
-      </div>
-      <div class="mc-body">
-        <span class="mc-badge health">入力フォーム</span>
-        <p class="mc-title">健康診断</p>
-        <p class="mc-desc">健康診断の入力フォームを開く</p>
       </div>
     </a>
 
@@ -569,6 +549,22 @@ html[data-theme="dark"] .manual-open{color:#FFFFFF;}
     <div class="sec-head-line"></div>
   </div>
   <div class="grid2">
+
+    <a class="mc" href="kyosai_guide.html">
+      <div class="mc-top" style="background:linear-gradient(135deg,#123B66,#1B6B91);">
+        <svg viewBox="0 0 200 80" aria-hidden="true"><rect x="44" y="10" width="84" height="60" rx="10" fill="rgba(255,255,255,.9)"/><path d="M60 28h52M60 41h40M60 54h48" stroke="#1B6B91" stroke-width="5" stroke-linecap="round"/><circle cx="145" cy="52" r="20" fill="#EF642B"/><path d="M136 52l7 7 14-18" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="mc-emoji">🤝</span>
+      </div>
+      <div class="mc-body"><span class="mc-badge money">共済</span><p class="mc-title">総合共済 申請ナビ</p><p class="mc-desc">できごとから必要書類を確認</p></div>
+    </a>
+
+    <a class="mc" href="https://forms.gle/uKCqkLJAw7gMjwUMA" target="_blank" rel="noopener noreferrer">
+      <div class="mc-top" style="background:linear-gradient(135deg,#087F73,#13A896);">
+        <svg viewBox="0 0 200 80" aria-hidden="true"><rect x="60" y="8" width="80" height="64" rx="12" fill="rgba(255,255,255,.94)"/><rect x="84" y="4" width="32" height="13" rx="5" fill="rgba(255,255,255,.72)"/><path d="M100 25v25M87.5 37.5h25" stroke="#0A8F81" stroke-width="8" stroke-linecap="round"/><path d="M82 61h36" stroke="#8ACFC7" stroke-width="4" stroke-linecap="round"/></svg>
+        <span class="mc-emoji"><i class="ti ti-heart-rate-monitor"></i></span>
+      </div>
+      <div class="mc-body"><span class="mc-badge health">入力フォーム</span><p class="mc-title">健康診断</p><p class="mc-desc">健康診断の入力フォームを開く</p></div>
+    </a>
 
     <a class="mc" href="guide.html">
       <div class="mc-top" style="background:linear-gradient(135deg,#1A7A4A,#21A36B);">
