@@ -10,6 +10,7 @@
   const form = document.getElementById('card-form');
   const preview = document.getElementById('card-preview');
   const context = preview.getContext('2d');
+  document.querySelector('.style-select > span').textContent=`デザインコンセプト（${document.getElementById('style-preset').options.length}種類）`;
   let currentSide = 'front';
   let photoData = '';
   let photoImage = null;
@@ -46,7 +47,15 @@
     safety: { dark: '#172c43', mid: '#345d7d', light: '#f1f6fa', accent: '#f2a900' },
     local: { dark: '#173d35', mid: '#39755f', light: '#f5faf7', accent: '#ee7d35' },
     photo: { dark: '#111827', mid: '#374151', light: '#f8fafc', accent: '#e8612a' },
-    technical: { dark: '#0b2748', mid: '#245681', light: '#eff6fb', accent: '#00a3a3' }
+    technical: { dark: '#0b2748', mid: '#245681', light: '#eff6fb', accent: '#00a3a3' },
+    diagonal_luxe: { dark: '#0b2464', mid: '#194ea0', light: '#ffffff', accent: '#e8612a' },
+    wave_blue: { dark: '#073b66', mid: '#1686c5', light: '#f8fcff', accent: '#27a7df' },
+    ink_black: { dark: '#090b0e', mid: '#262b31', light: '#f5f5f3', accent: '#c8a45b' },
+    wa_pattern: { dark: '#102d2a', mid: '#315d42', light: '#f7f2e8', accent: '#b7912e' },
+    stone_mono: { dark: '#25292c', mid: '#62686d', light: '#ececea', accent: '#d86537' },
+    split_duo: { dark: '#10243d', mid: '#285d84', light: '#ffffff', accent: '#e8612a' },
+    orbit: { dark: '#152c43', mid: '#26769c', light: '#f8fbfc', accent: '#16a0a5' },
+    slim_vertical: { dark: '#0c0e11', mid: '#30353b', light: '#f7f7f5', accent: '#d7b56d' }
   };
 
   const tradeSuggestions = {
@@ -388,9 +397,9 @@
   }
 
   function designFamily(style){
-    if(['apple','muji','monochrome','minimal','nordic'].includes(style))return'minimal';
-    if(['hotel','black_gold','navy','industrial','future','luxury_home'].includes(style))return'dark';
-    if(['craft','wood','concrete','safety','local','eco'].includes(style))return'band';
+    if(['apple','muji','monochrome','minimal','nordic','wave_blue','stone_mono','orbit'].includes(style))return'minimal';
+    if(['hotel','black_gold','navy','industrial','future','luxury_home','ink_black','wa_pattern','slim_vertical'].includes(style))return'dark';
+    if(['craft','wood','concrete','safety','local','eco','split_duo'].includes(style))return'band';
     if(['blueprint','architect','technical','general_contractor'].includes(style))return'blueprint';
     if(style==='photo')return'photo';
     return'card';
@@ -411,6 +420,19 @@
   function drawFrontVertical(ctx,data,width,height){
     const palette=paletteFor(data);const mode=data.verticalLayout||'center';const target=qrTarget(data);
     ctx.textBaseline='alphabetic';
+    if(data.style==='slim_vertical'){
+      ctx.fillStyle='#090b0e';ctx.fillRect(0,0,width,height);ctx.fillStyle='#24282d';ctx.fillRect(width*.72,0,width*.28,height);ctx.fillStyle=data.accent;ctx.fillRect(width*.72,0,5,height);
+      ctx.fillStyle='rgba(255,255,255,.07)';for(let y=0;y<height;y+=32){ctx.fillRect(width*.75,y,width*.25,1);}
+      const x=58,max=530;ctx.fillStyle='rgba(255,255,255,.76)';ctx.font='700 27px "BIZ UDPGothic","Noto Sans JP",sans-serif';if(data.company)ctx.fillText(clippedText(ctx,data.company,max),x,105);
+      if(photoImage)drawPhoto(ctx,photoImage,width/2,255,180,data.accent);else if(data.illustration!=='none')drawTradeIllustration(ctx,data.trade,width/2,255,175,'#fff',true);
+      ctx.fillStyle='#fff';ctx.font=`800 ${fitText(ctx,data.name,max,70,43,800)}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;ctx.fillText(data.name,x,445);
+      if(data.role){ctx.fillStyle='rgba(255,255,255,.72)';ctx.font='700 26px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText(clippedText(ctx,data.role,max),x,500);}
+      drawTradeBadge(ctx,data.tradeName,x,530,max,data.accent);ctx.fillStyle=data.accent;ctx.fillRect(x,590,max,5);
+      drawVerticalContactLines(ctx,data,x,665,target?330:max,58,'rgba(255,255,255,.9)');
+      if(target){const q=165,qx=425,qy=745;drawQr(ctx,target,qx,qy,q);ctx.fillStyle='#fff';ctx.font='700 23px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.textAlign='center';ctx.fillText('WEB・LINE',qx+q/2,qy+q+36);ctx.textAlign='left';}
+      if(data.member){ctx.fillStyle=data.accent;ctx.font='700 23px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText('埼玉土建 上尾伊奈支部 組合員',x,1020);}
+      return;
+    }
     if(mode==='stripe'){
       ctx.fillStyle='#f7fafc';ctx.fillRect(0,0,width,height);ctx.fillStyle=palette.dark;ctx.fillRect(0,0,155,height);ctx.fillStyle=data.accent;ctx.fillRect(155,0,10,height);drawStyleTexture(ctx,data,width,height);
       if(photoImage)drawPhoto(ctx,photoImage,78,190,112,data.accent);else if(data.illustration!=='none')drawTradeIllustration(ctx,data.trade,78,190,112,'#fff',true);
@@ -468,16 +490,56 @@
     const bottom=[data.hours,data.invoice].filter(Boolean).join('　｜　');if(bottom){ctx.fillStyle='rgba(255,255,255,.92)';ctx.font='600 23px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText(clippedText(ctx,bottom,max),left,1015);}
   }
 
+  function drawSignatureBackground(ctx,data,palette,width,height){
+    const style=data.style;
+    if(!['diagonal_luxe','wave_blue','ink_black','wa_pattern','stone_mono','split_duo','orbit','slim_vertical'].includes(style))return false;
+    ctx.save();
+    if(style==='diagonal_luxe'){
+      ctx.fillStyle='#fff';ctx.fillRect(0,0,width,height);
+      const gradient=ctx.createLinearGradient(width*.58,0,width,height);gradient.addColorStop(0,palette.dark);gradient.addColorStop(1,palette.mid);ctx.fillStyle=gradient;
+      ctx.beginPath();ctx.moveTo(width*.62,0);ctx.lineTo(width,0);ctx.lineTo(width,height);ctx.lineTo(width*.48,height);ctx.closePath();ctx.fill();
+      ctx.strokeStyle=data.accent;ctx.lineWidth=9;ctx.beginPath();ctx.moveTo(width*.61,0);ctx.lineTo(width*.47,height);ctx.stroke();
+    }else if(style==='wave_blue'){
+      ctx.fillStyle='#fff';ctx.fillRect(0,0,width,height);ctx.lineCap='round';
+      [0,.055,.11,.165].forEach((offset,index)=>{ctx.strokeStyle=index===0?colorWithAlpha(data.accent,.5):colorWithAlpha(palette.mid,.14+index*.05);ctx.lineWidth=18-index*2;ctx.beginPath();ctx.moveTo(width*(.6+offset),-20);ctx.bezierCurveTo(width*(.77+offset),height*.2,width*(.7+offset),height*.72,width*(.92+offset),height+20);ctx.stroke();});
+      ctx.fillStyle=colorWithAlpha(data.accent,.07);ctx.beginPath();ctx.arc(width*.91,height*.2,width*.2,0,Math.PI*2);ctx.fill();
+    }else if(style==='ink_black'){
+      const gradient=ctx.createLinearGradient(0,0,width,height);gradient.addColorStop(0,'#08090b');gradient.addColorStop(.58,'#191c20');gradient.addColorStop(1,'#050607');ctx.fillStyle=gradient;ctx.fillRect(0,0,width,height);
+      ctx.strokeStyle=colorWithAlpha(data.accent,.55);ctx.lineWidth=3;ctx.strokeRect(34,34,width-68,height-68);
+    }else if(style==='wa_pattern'){
+      const gradient=ctx.createLinearGradient(0,0,width,0);gradient.addColorStop(0,palette.dark);gradient.addColorStop(1,'#182113');ctx.fillStyle=gradient;ctx.fillRect(0,0,width,height);
+      ctx.strokeStyle=colorWithAlpha(data.accent,.18);ctx.lineWidth=3;
+      for(let row=0;row<6;row+=1){for(let col=0;col<5;col+=1){const x=width*.68+col*85+(row%2)*42;const y=55+row*95;[34,52,70].forEach(radius=>{ctx.beginPath();ctx.arc(x,y,radius,Math.PI,Math.PI*2);ctx.stroke();});}}
+    }else if(style==='stone_mono'){
+      const gradient=ctx.createLinearGradient(0,0,width,height);gradient.addColorStop(0,'#f7f7f5');gradient.addColorStop(1,'#d7d9d8');ctx.fillStyle=gradient;ctx.fillRect(0,0,width,height);
+      ctx.fillStyle='rgba(31,38,42,.10)';for(let i=0;i<95;i+=1){const x=width*.62+(i*71)%(width*.38);const y=(i*43)%height;ctx.beginPath();ctx.arc(x,y,1+(i%4),0,Math.PI*2);ctx.fill();}
+      ctx.fillStyle=palette.dark;ctx.fillRect(width*.69,0,width*.31,height);ctx.fillStyle=data.accent;ctx.fillRect(width*.68,0,10,height);
+    }else if(style==='split_duo'){
+      ctx.fillStyle='#fff';ctx.fillRect(0,0,width,height);ctx.fillStyle=palette.dark;ctx.fillRect(0,0,width*.3,height);ctx.fillStyle=palette.mid;ctx.fillRect(width*.3,0,12,height);
+      ctx.fillStyle=colorWithAlpha(data.accent,.08);ctx.fillRect(width*.72,0,width*.28,height);ctx.fillStyle=data.accent;ctx.fillRect(width*.72,0,8,height);
+    }else if(style==='orbit'){
+      ctx.fillStyle='#fff';ctx.fillRect(0,0,width,height);ctx.strokeStyle=colorWithAlpha(data.accent,.2);ctx.lineWidth=5;
+      [110,170,230,290].forEach(radius=>{ctx.beginPath();ctx.arc(width*.84,height*.5,radius,0,Math.PI*2);ctx.stroke();});ctx.fillStyle=colorWithAlpha(palette.mid,.08);ctx.beginPath();ctx.arc(width*.84,height*.5,300,0,Math.PI*2);ctx.fill();
+    }else{
+      ctx.fillStyle='#0a0c0f';ctx.fillRect(0,0,width,height);ctx.fillStyle='#262a2f';ctx.fillRect(width*.7,0,width*.3,height);ctx.fillStyle=data.accent;ctx.fillRect(width*.7,0,5,height);
+      ctx.strokeStyle='rgba(255,255,255,.08)';ctx.lineWidth=2;for(let x=width*.73;x<width;x+=24){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x-80,height);ctx.stroke();}
+    }
+    ctx.restore();return true;
+  }
+
   function drawFront(ctx, data, width, height) {
     if(data.illustration==='text'){drawTextOnlyFront(ctx,data,width,height);return;}
     if(data.orientation==='vertical'){drawFrontVertical(ctx,data,width,height);return;}
     const palette = paletteFor(data);
     const family=designFamily(data.style);
-    if(family==='card')fillBackground(ctx,data,palette,width,height);
-    else if(family==='minimal'){ctx.fillStyle='#fff';ctx.fillRect(0,0,width,height);ctx.fillStyle=data.accent;ctx.fillRect(0,0,width,10);ctx.fillStyle=colorWithAlpha(data.accent,.06);ctx.beginPath();ctx.arc(width*.92,height*.08,width*.22,0,Math.PI*2);ctx.fill();}
-    else if(family==='band'){ctx.fillStyle='#fff';ctx.fillRect(0,0,width,height);const g=ctx.createLinearGradient(0,0,width*.3,height);g.addColorStop(0,palette.dark);g.addColorStop(1,palette.mid);ctx.fillStyle=g;ctx.fillRect(0,0,width*.3,height);ctx.fillStyle=data.accent;ctx.fillRect(width*.3,0,12,height);drawStyleTexture(ctx,data,width,height);}
-    else{const g=ctx.createLinearGradient(0,0,width,height);g.addColorStop(0,palette.dark);g.addColorStop(1,palette.mid);ctx.fillStyle=g;ctx.fillRect(0,0,width,height);ctx.fillStyle=data.accent;ctx.fillRect(0,height-12,width,12);drawStyleTexture(ctx,data,width,height);}
-    const isBand=family==='band';const isDark=family==='dark'||family==='blueprint';
+    const signatureBackground=drawSignatureBackground(ctx,data,palette,width,height);
+    if(!signatureBackground){
+      if(family==='card')fillBackground(ctx,data,palette,width,height);
+      else if(family==='minimal'){ctx.fillStyle='#fff';ctx.fillRect(0,0,width,height);ctx.fillStyle=data.accent;ctx.fillRect(0,0,width,10);ctx.fillStyle=colorWithAlpha(data.accent,.06);ctx.beginPath();ctx.arc(width*.92,height*.08,width*.22,0,Math.PI*2);ctx.fill();}
+      else if(family==='band'){ctx.fillStyle='#fff';ctx.fillRect(0,0,width,height);const g=ctx.createLinearGradient(0,0,width*.3,height);g.addColorStop(0,palette.dark);g.addColorStop(1,palette.mid);ctx.fillStyle=g;ctx.fillRect(0,0,width*.3,height);ctx.fillStyle=data.accent;ctx.fillRect(width*.3,0,12,height);drawStyleTexture(ctx,data,width,height);}
+      else{const g=ctx.createLinearGradient(0,0,width,height);g.addColorStop(0,palette.dark);g.addColorStop(1,palette.mid);ctx.fillStyle=g;ctx.fillRect(0,0,width,height);ctx.fillStyle=data.accent;ctx.fillRect(0,height-12,width,12);drawStyleTexture(ctx,data,width,height);}
+    }
+    const isBand=family==='band';const isDark=family==='dark'||family==='blueprint';const rightDark=['diagonal_luxe','stone_mono'].includes(data.style);
     const left=width*(isBand?.37:.075);
     const contentWidth=width*(isBand?.55:.53);
     ctx.textBaseline = 'alphabetic';
@@ -515,11 +577,11 @@
     const artSize=target?height*.25:height*.42;
     const artY=target?height*.22:height*.42;
     if (photoImage) drawPhoto(ctx, photoImage, rightCenter, artY, artSize*.82, data.accent);
-    else if (data.illustration !== 'none') drawTradeIllustration(ctx, data.trade, rightCenter, artY, artSize, isBand||isDark?'#fff':data.accent, data.illustration !== 'line');
+    else if (data.illustration !== 'none') drawTradeIllustration(ctx, data.trade, rightCenter, artY, artSize, isBand||isDark||rightDark?'#fff':data.accent, data.illustration !== 'line');
     if(target){
       const qrSize=Math.round(width*20/91);const qrX=isBand?width*.05:width-qrSize-width*.055;const qrY=height*.49;
       drawQr(ctx,target,qrX,qrY,qrSize);
-      ctx.fillStyle=isBand||isDark?'#fff':palette.dark;ctx.font=`700 ${Math.max(25,Math.round(height*.021))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;ctx.textAlign='center';ctx.fillText('WEB・LINE・施工事例',qrX+qrSize/2,qrY+qrSize+height*.045);ctx.textAlign='left';
+      ctx.fillStyle=isBand||isDark||rightDark?'#fff':palette.dark;ctx.font=`700 ${Math.max(25,Math.round(height*.021))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;ctx.textAlign='center';ctx.fillText('WEB・LINE・施工事例',qrX+qrSize/2,qrY+qrSize+height*.045);ctx.textAlign='left';
     }
   }
 
