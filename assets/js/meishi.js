@@ -15,6 +15,7 @@
   let photoImage = null;
   let layoutVariant = 0;
   let renderQueued = false;
+  let autoSaveTimer = 0;
 
   const palettes = {
     trust: { dark: '#10243d', mid: '#1a5fa8', light: '#eef5fb', accent: '#e8612a' },
@@ -600,6 +601,7 @@
         document.getElementById('tagline').value = line;
         container.querySelectorAll('button').forEach(item => item.classList.toggle('selected', item === button));
         queueRender();
+        queueAutoSave();
       });
       container.appendChild(button);
     });
@@ -620,6 +622,7 @@
     layoutVariant = (layoutVariant + 1) % 3;
     document.getElementById('suggestion-message').textContent = `提案しました：${suggestion.reason} キャッチコピーは5案から選べます。`;
     queueRender();
+    queueAutoSave();
   }
 
   function resizePhoto(file) {
@@ -635,7 +638,7 @@
         const size = 640; const ratio = Math.min(size/image.width,size/image.height,1);
         const canvas = document.createElement('canvas'); canvas.width=Math.round(image.width*ratio); canvas.height=Math.round(image.height*ratio);
         canvas.getContext('2d').drawImage(image,0,0,canvas.width,canvas.height);
-        photoData=canvas.toDataURL('image/jpeg',.84); photoImage=new Image(); photoImage.onload=()=>{syncPhotoControls();queueRender();}; photoImage.src=photoData;
+        photoData=canvas.toDataURL('image/jpeg',.84); photoImage=new Image(); photoImage.onload=()=>{syncPhotoControls();queueRender();queueAutoSave();}; photoImage.src=photoData;
       };
       image.src=String(reader.result);
     };
@@ -654,6 +657,7 @@
     syncPhotoControls();
     document.getElementById('save-message').textContent='画像を削除しました。職種イラストの設定が「入れる」の場合はイラスト表示に戻ります。';
     queueRender();
+    queueAutoSave();
   }
 
   function safeFilename(side) {
@@ -823,31 +827,72 @@
     setTimeout(()=>window.print(),80);
   }
 
-  function saveDraft() {
+  function buildDraft(includeFullPhoto) {
     const values={};
     fields.forEach(id => { values[id]=value(id); });
-    values.style=selectedStyle();values.orientation=selectedOrientation();values.illustrationChoice=selectedIllustration();values.backChoice=selectedBack()?'yes':'no';values.layoutVariant=layoutVariant; values.photo=photoData && photoData.length < 900000 ? photoData : '';
+    values.style=selectedStyle();values.orientation=selectedOrientation();values.illustrationChoice=selectedIllustration();values.backChoice=selectedBack()?'yes':'no';values.layoutVariant=layoutVariant;
+    values.photo=photoData && (includeFullPhoto || photoData.length < 900000) ? photoData : '';
+    values.format='doken-business-card-draft';values.version=2;values.savedAt=new Date().toISOString();
+    return values;
+  }
+
+  function saveDraft(silent) {
+    const values=buildDraft(false);
     try {
       localStorage.setItem(STORAGE_KEY,JSON.stringify(values));
-      document.getElementById('save-message').textContent=photoData && !values.photo ? '文字情報をこの端末に保存しました。画像は容量が大きいため保存していません。' : '下書きをこの端末に保存しました。';
+      if(!silent)document.getElementById('save-message').textContent=photoData && !values.photo ? '文字情報をこの端末に保存しました。画像は容量が大きいため保存していません。' : 'この端末に保存しました。次回は自動で続きから開きます。';
+      return true;
     } catch (error) {
-      document.getElementById('save-message').textContent='端末の保存容量が不足しています。PNGで保存してください。';
+      if(!silent)document.getElementById('save-message').textContent='端末の保存容量が不足しています。「作業データ保存」をお使いください。';
+      return false;
     }
+  }
+
+  function queueAutoSave(){
+    window.clearTimeout(autoSaveTimer);
+    autoSaveTimer=window.setTimeout(()=>saveDraft(true),700);
+  }
+
+  function exportDraft(){
+    const draft=buildDraft(true);
+    const json=JSON.stringify(draft);
+    const name=(value('company')||value('person-name')||'名刺').replace(/[\\/:*?"<>|\s]+/g,'_').slice(0,30);
+    triggerDownload(new Blob([json],{type:'application/json;charset=utf-8'}),`${name}_名刺作業データ.doken-card.json`);
+    saveDraft(true);
+    document.getElementById('save-message').textContent='作業データを保存しました。別の端末では「続きから開く」で選択してください。';
+  }
+
+  function applyDraft(draft,message){
+    if(!draft||typeof draft!=='object')throw new Error('invalid draft');
+    fields.forEach(id=>{
+      const element=document.getElementById(id);if(!element||draft[id]===undefined)return;
+      if(element.type==='checkbox'){element.checked=Boolean(draft[id]);return;}
+      const max=Number(element.maxLength)>0?Number(element.maxLength):500;
+      element.value=String(draft[id]).slice(0,max);
+    });
+    if(draft.style){const select=document.getElementById('style-preset');if([...select.options].some(option=>option.value===draft.style))select.value=draft.style;}
+    [['orientation',draft.orientation],['illustration-choice',draft.illustrationChoice],['back-choice',draft.backChoice]].forEach(([name,choice])=>{if(!choice)return;const radio=form.querySelector(`input[name="${name}"][value="${choice}"]`);if(radio)radio.checked=true;});
+    layoutVariant=Number.isInteger(draft.layoutVariant)?Math.abs(draft.layoutVariant)%3:0;
+    photoData='';photoImage=null;
+    if(typeof draft.photo==='string'&&draft.photo.length<6500000&&/^data:image\/(png|jpeg|webp);base64,/.test(draft.photo)){photoData=draft.photo;photoImage=new Image();photoImage.onload=()=>{syncPhotoControls();queueRender();};photoImage.src=photoData;}
+    syncPhotoControls();syncTradeUI();syncKeyOptions();queueRender();
+    document.getElementById('save-message').textContent=message;
+  }
+
+  function importDraft(file){
+    if(!file)return;
+    if(file.size>6*1024*1024){document.getElementById('save-message').textContent='作業データは6MB以下のファイルを選んでください。';return;}
+    const reader=new FileReader();
+    reader.onload=()=>{try{const draft=JSON.parse(String(reader.result));if(draft.format&&draft.format!=='doken-business-card-draft')throw new Error('wrong format');applyDraft(draft,'作業データを読み込みました。続きから編集できます。');saveDraft(true);}catch(error){document.getElementById('save-message').textContent='名刺の作業データを読み込めませんでした。保存したJSONファイルを選んでください。';}document.getElementById('import-draft').value='';};
+    reader.onerror=()=>{document.getElementById('save-message').textContent='ファイルを読み込めませんでした。';};
+    reader.readAsText(file,'utf-8');
   }
 
   function restoreDraft() {
     let draft;
     try { draft=JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null'); } catch (error) { return; }
     if (!draft || typeof draft !== 'object') return;
-    fields.forEach(id => {
-      const element=document.getElementById(id); if (!element || draft[id] === undefined) return;
-      if (element.type === 'checkbox') element.checked=Boolean(draft[id]); else element.value=String(draft[id]);
-    });
-    if (draft.style) { const select=document.getElementById('style-preset'); if ([...select.options].some(option=>option.value===draft.style)) select.value=draft.style; }
-    [['orientation',draft.orientation],['illustration-choice',draft.illustrationChoice],['back-choice',draft.backChoice]].forEach(([name,choice])=>{if(!choice)return;const radio=form.querySelector(`input[name="${name}"][value="${choice}"]`);if(radio)radio.checked=true;});
-    layoutVariant=Number.isInteger(draft.layoutVariant) ? draft.layoutVariant%3 : 0;
-    if (typeof draft.photo === 'string' && draft.photo.startsWith('data:image/')) { photoData=draft.photo; photoImage=new Image(); photoImage.onload=()=>{syncPhotoControls();queueRender();}; photoImage.src=photoData; }
-    document.getElementById('save-message').textContent='この端末に保存した下書きを復元しました。';
+    try{applyDraft(draft,'この端末に保存した作業内容を復元しました。続きから編集できます。');}catch(error){/* 壊れた保存データは無視する */}
   }
 
   function syncKeyOptions(){
@@ -872,8 +917,8 @@
     queueRender();
   }
 
-  form.addEventListener('input',queueRender);
-  form.addEventListener('change',queueRender);
+  form.addEventListener('input',()=>{queueRender();queueAutoSave();});
+  form.addEventListener('change',()=>{queueRender();queueAutoSave();});
   form.querySelectorAll('input[name="orientation"],input[name="illustration-choice"]').forEach(radio=>radio.addEventListener('change',syncKeyOptions));
   document.getElementById('trade').addEventListener('change',syncTradeUI);
   form.querySelectorAll('input[name="back-choice"]').forEach(radio=>radio.addEventListener('change',()=>{syncKeyOptions();if(selectedBack())selectPreviewSide('back');else selectPreviewSide('front');}));
@@ -888,7 +933,9 @@
   document.getElementById('download-svg').addEventListener('click',downloadIconSvg);
   document.getElementById('pdf-button').addEventListener('click',downloadPdf);
   document.getElementById('print-button').addEventListener('click',preparePrint);
-  document.getElementById('save-draft').addEventListener('click',saveDraft);
+  document.getElementById('save-draft').addEventListener('click',()=>saveDraft(false));
+  document.getElementById('export-draft').addEventListener('click',exportDraft);
+  document.getElementById('import-draft').addEventListener('change',event=>importDraft(event.target.files[0]));
   document.getElementById('copy-ai-prompt').addEventListener('click',copyAiPrompt);
   document.querySelectorAll('.side-tab').forEach(button=>button.addEventListener('click',()=>selectPreviewSide(button.dataset.side)));
 
