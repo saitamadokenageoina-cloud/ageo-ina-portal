@@ -10,10 +10,14 @@
   const form = document.getElementById('card-form');
   const preview = document.getElementById('card-preview');
   const context = preview.getContext('2d');
+  const STYLE_ALIASES=Object.freeze({corporate_panel:'split_duo',orange_slope:'diagonal_luxe',layered_wave:'wave_blue',round_window:'grand_arc',curve_split:'split_duo',orbit:'grand_arc',slim_vertical:'ink_black',black_gold:'hotel',luxury_home:'hotel',premium:'hotel',apple:'minimal',monochrome:'minimal',nordic:'muji',blueprint:'architect',technical:'architect',navy:'general_contractor',industrial:'stone_mono',concrete:'stone_mono',wood:'craft',local:'eco',friendly:'eco',housing:'eco',stylish:'future',modern:'future',japanese:'wa_pattern'});
+  function normalizeStyle(style){return STYLE_ALIASES[style]||style||'trust';}
   const styleSelectElement=document.getElementById('style-preset');
-  const curveStyleGroup=document.createElement('optgroup');curveStyleGroup.label='曲線・企業デザイン';
-  [['grand_arc','大円弧・プレミアム'],['corporate_panel','企業パネル・端正'],['orange_slope','斜めオレンジ・力強い'],['layered_wave','重なりウェーブ・躍動感'],['round_window','丸窓・ミニマル'],['curve_split','左右カーブ・ツートーン']].forEach(([valueName,label])=>{const option=document.createElement('option');option.value=valueName;option.textContent=label;curveStyleGroup.appendChild(option);});
-  styleSelectElement.appendChild(curveStyleGroup);
+  [...styleSelectElement.options].forEach(option=>{if(STYLE_ALIASES[option.value])option.remove();});
+  const arcGroup=document.createElement('optgroup');arcGroup.label='円弧デザイン';const arcOption=document.createElement('option');arcOption.value='grand_arc';arcOption.textContent='大円弧・プレミアム';arcGroup.appendChild(arcOption);styleSelectElement.appendChild(arcGroup);
+  const consolidatedLabels={trust:'AIおすすめ・信頼重視',diagonal_luxe:'斜め分割・モダン',wave_blue:'流線ウェーブ',grand_arc:'大円弧・プレミアム',split_duo:'企業ツートーン',ink_black:'黒紙・白文字',wa_pattern:'和柄・職人',stone_mono:'石材・コンクリート',hotel:'高級・ブラックゴールド',minimal:'白地・ミニマル',muji:'自然素材・ナチュラル',architect:'設計図・技術',general_contractor:'ゼネコン・企業',craft:'職人・木目',eco:'地域密着・環境',safety:'安全第一',future:'未来・スタイリッシュ',photo:'施工写真主役'};
+  [...styleSelectElement.options].forEach(option=>{if(consolidatedLabels[option.value])option.textContent=consolidatedLabels[option.value];});
+  styleSelectElement.querySelectorAll('optgroup').forEach(group=>{if(!group.querySelector('option'))group.remove();});
   document.querySelector('.style-select > span').textContent=`デザインコンセプト（${document.getElementById('style-preset').options.length}種類）`;
   let currentSide = 'front';
   let photoData = '';
@@ -119,7 +123,7 @@
   }
 
   function selectedStyle() {
-    return value('style-preset') || 'trust';
+    return normalizeStyle(value('style-preset'));
   }
 
   function selectedRadio(name,fallback){const selected=form.querySelector(`input[name="${name}"]:checked`);return selected?selected.value:fallback;}
@@ -430,7 +434,7 @@
   function drawFrontVertical(ctx,data,width,height){
     const palette=paletteFor(data);const mode=data.verticalLayout||'center';const target=qrTarget(data);
     ctx.textBaseline='alphabetic';
-    if(data.style==='slim_vertical'){
+    if(data.style==='ink_black'){
       ctx.fillStyle='#090b0e';ctx.fillRect(0,0,width,height);ctx.fillStyle='#24282d';ctx.fillRect(width*.72,0,width*.28,height);ctx.fillStyle=data.accent;ctx.fillRect(width*.72,0,5,height);
       ctx.fillStyle='rgba(255,255,255,.07)';for(let y=0;y<height;y+=32){ctx.fillRect(width*.75,y,width*.25,1);}
       const x=58,max=530;ctx.fillStyle='rgba(255,255,255,.76)';ctx.font='700 27px "BIZ UDPGothic","Noto Sans JP",sans-serif';if(data.company)ctx.fillText(clippedText(ctx,data.company,max),x,105);
@@ -704,7 +708,7 @@
     const trade = value('trade') || 'general';
     const suggestion = tradeSuggestions[trade] || tradeSuggestions.general;
     const styleSelect=document.getElementById('style-preset');
-    if ([...styleSelect.options].some(option=>option.value===suggestion.style)) styleSelect.value=suggestion.style;
+    const suggestedStyle=normalizeStyle(suggestion.style);if ([...styleSelect.options].some(option=>option.value===suggestedStyle)) styleSelect.value=suggestedStyle;
     document.getElementById('accent-color').value = suggestion.color;
     if(selectedBack()){
       if (!value('services')) document.getElementById('services').value = suggestion.services;
@@ -958,11 +962,12 @@
     if(!draft||typeof draft!=='object')throw new Error('invalid draft');
     fields.forEach(id=>{
       const element=document.getElementById(id);if(!element||draft[id]===undefined)return;
+      if(id==='style-preset')return;
       if(element.type==='checkbox'){element.checked=Boolean(draft[id]);return;}
       const max=Number(element.maxLength)>0?Number(element.maxLength):500;
       element.value=String(draft[id]).slice(0,max);
     });
-    if(draft.style){const select=document.getElementById('style-preset');if([...select.options].some(option=>option.value===draft.style))select.value=draft.style;}
+    const restoredStyle=normalizeStyle(draft.style||draft['style-preset']);if(restoredStyle){const select=document.getElementById('style-preset');if([...select.options].some(option=>option.value===restoredStyle))select.value=restoredStyle;}
     [['orientation',draft.orientation],['illustration-choice',draft.illustrationChoice],['back-choice',draft.backChoice]].forEach(([name,choice])=>{if(!choice)return;const radio=form.querySelector(`input[name="${name}"][value="${choice}"]`);if(radio)radio.checked=true;});
     layoutVariant=Number.isInteger(draft.layoutVariant)?Math.abs(draft.layoutVariant)%3:0;
     photoData='';photoImage=null;
