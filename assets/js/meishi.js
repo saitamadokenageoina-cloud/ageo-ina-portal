@@ -291,6 +291,40 @@
     ctx.fillStyle=accent;roundedRect(ctx,x,y,width,44,12);ctx.fill();ctx.fillStyle='#fff';ctx.fillText(label,x+17,y+23);ctx.restore();
   }
 
+  function drawTextOnlyFront(ctx,data,width,height){
+    const vertical=data.orientation==='vertical';const palette=paletteFor(data);const target=qrTarget(data);
+    ctx.fillStyle='#fff';ctx.fillRect(0,0,width,height);ctx.fillStyle=data.accent;ctx.fillRect(0,0,width,vertical?14:12);
+    ctx.strokeStyle='rgba(16,36,61,.14)';ctx.lineWidth=2;ctx.strokeRect(vertical?34:28,vertical?34:28,width-(vertical?68:56),height-(vertical?68:56));ctx.textBaseline='alphabetic';ctx.textAlign='left';
+    if(vertical){
+      const x=60,max=530;ctx.fillStyle=palette.mid;ctx.font='700 28px "BIZ UDPGothic","Noto Sans JP",sans-serif';if(data.company)ctx.fillText(clippedText(ctx,data.company,max),x,105);
+      ctx.fillStyle=palette.dark;ctx.font=`800 ${fitText(ctx,data.name,max,72,44,800)}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;ctx.fillText(data.name,x,225);
+      if(data.role){ctx.fillStyle=palette.mid;ctx.font='700 27px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText(clippedText(ctx,data.role,max),x,282);}
+      drawTradeBadge(ctx,data.tradeName,x,315,max,data.accent);ctx.fillStyle=data.accent;ctx.fillRect(x,385,max,5);
+      drawVerticalContactLines(ctx,data,x,465,target?330:max,64,'#20344a');
+      if(target){const q=165,qx=420,qy=770;drawQr(ctx,target,qx,qy,q);ctx.fillStyle=palette.dark;ctx.font='700 23px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.textAlign='center';ctx.fillText('WEB・LINE',qx+q/2,qy+q+36);ctx.textAlign='left';}
+      if(data.member){ctx.fillStyle=data.accent;ctx.font='700 23px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText('埼玉土建 上尾伊奈支部 組合員',x,1015);}
+      return;
+    }
+    const x=75,max=target?650:925;ctx.fillStyle=palette.mid;ctx.font='700 27px "BIZ UDPGothic","Noto Sans JP",sans-serif';if(data.company)ctx.fillText(clippedText(ctx,data.company,max),x,95);
+    ctx.fillStyle=palette.dark;ctx.font=`800 ${fitText(ctx,data.name,max,78,46,800)}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;ctx.fillText(data.name,x,210);
+    if(data.role){ctx.fillStyle=palette.mid;ctx.font='700 26px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText(clippedText(ctx,data.role,max),x,268);}
+    drawTradeBadge(ctx,data.tradeName,x,300,max,data.accent);ctx.fillStyle=data.accent;ctx.fillRect(x,365,max,5);
+    const details=[data.phone&&`TEL  ${data.phone}`,data.email&&`MAIL  ${data.email}`,data.address,[data.website&&`WEB  ${data.website}`,data.social&&`SNS  ${data.social}`].filter(Boolean).join('  ')].filter(Boolean);
+    ctx.fillStyle='#20344a';ctx.font='600 25px "BIZ UDPGothic","Noto Sans JP",sans-serif';details.slice(0,4).forEach((detail,index)=>ctx.fillText(clippedText(ctx,detail,max),x,425+index*52));
+    if(target){const q=190,qx=820,qy=350;drawQr(ctx,target,qx,qy,q);ctx.fillStyle=palette.dark;ctx.font='700 23px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.textAlign='center';ctx.fillText('WEB・LINE',qx+q/2,qy+q+36);ctx.textAlign='left';}
+    if(data.member){ctx.fillStyle=data.accent;ctx.font='700 23px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText('埼玉土建 上尾伊奈支部 組合員',x,620);}
+  }
+
+  function drawTextOnlyBack(ctx,data,width,height){
+    if(!data.useBack){ctx.fillStyle='#fff';ctx.fillRect(0,0,width,height);return;}
+    const vertical=data.orientation==='vertical';const palette=paletteFor(data);const suggestion=tradeSuggestions[data.trade]||tradeSuggestions.general;const tagline=data.tagline||suggestion.lines[0];const left=vertical?60:75;const max=width-left*2;
+    ctx.fillStyle='#fff';ctx.fillRect(0,0,width,height);ctx.fillStyle=data.accent;ctx.fillRect(0,0,width,vertical?14:12);ctx.fillStyle=palette.dark;ctx.font=`800 ${vertical?44:45}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;ctx.fillText(clippedText(ctx,data.company||data.name,max),left,vertical?105:95);
+    ctx.fillStyle=data.accent;ctx.font=`800 ${vertical?28:27}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;ctx.fillText(clippedText(ctx,tagline,max),left,vertical?165:155);
+    const blocks=[{label:'主な業務',text:data.services||suggestion.services},{label:'選ばれる理由',text:data.strengths||tagline},{label:'資格・許可',text:[data.qualifications,data.permit].filter(Boolean).join('／')||'資格・許可などの信頼情報'},{label:'対応エリア',text:data.area||'対応エリアをご入力ください'}];
+    const start=vertical?275:250;const gap=vertical?160:112;blocks.slice(0,vertical?4:3).forEach((block,index)=>{const y=start+index*gap;ctx.fillStyle=data.accent;ctx.font='800 26px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText(block.label,left,y);ctx.fillStyle='#24384d';ctx.font='600 25px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText(clippedText(ctx,block.text,max),left,y+45);});
+    const bottom=[data.hours,data.invoice].filter(Boolean).join('　｜　');if(bottom){ctx.fillStyle=palette.mid;ctx.font='600 23px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText(clippedText(ctx,bottom,max),left,vertical?1015:610);}
+  }
+
   function drawPhoto(ctx, image, x, y, size, accent) {
     ctx.save();
     ctx.beginPath(); ctx.arc(x, y, size / 2, 0, Math.PI * 2); ctx.clip();
@@ -434,6 +468,7 @@
   }
 
   function drawFront(ctx, data, width, height) {
+    if(data.illustration==='text'){drawTextOnlyFront(ctx,data,width,height);return;}
     if(data.orientation==='vertical'){drawFrontVertical(ctx,data,width,height);return;}
     const palette = paletteFor(data);
     const family=designFamily(data.style);
@@ -488,6 +523,7 @@
   }
 
   function drawBack(ctx, data, width, height) {
+    if(data.illustration==='text'){drawTextOnlyBack(ctx,data,width,height);return;}
     if(data.orientation==='vertical'){drawBackVertical(ctx,data,width,height);return;}
     if(!data.useBack){ctx.fillStyle='#fff';ctx.fillRect(0,0,width,height);return;}
     const palette = paletteFor(data);
@@ -496,7 +532,7 @@
     ctx.fillStyle = gradient; ctx.fillRect(0,0,width,height);
     ctx.fillStyle = data.accent; ctx.fillRect(0,0,width,16);
     ctx.fillStyle = colorWithAlpha(data.accent,.14); ctx.beginPath(); ctx.arc(width*.9,height*.14,width*.25,0,Math.PI*2); ctx.fill();
-    if (data.illustration !== 'none') drawTradeIllustration(ctx,data.trade,width*.86,height*.2,height*.24,'rgba(255,255,255,.72)',data.illustration !== 'line');
+    if (data.illustration === 'auto') drawTradeIllustration(ctx,data.trade,width*.86,height*.2,height*.24,'rgba(255,255,255,.72)',true);
     const left = width*.08; const max = width*.82;
     ctx.fillStyle = '#fff'; ctx.font = `800 ${Math.max(25,Math.round(height*.072))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;
     ctx.fillText(clippedText(ctx,data.company || data.name,width*.64),left,height*.16);
@@ -767,7 +803,8 @@
   function buildAiPrompt() {
     const data=cardData();
     const sizes=CARD_SIZES[data.orientation]||CARD_SIZES.horizontal;
-    return `あなたは世界最高峰のブランドデザイナー、建設業専門マーケティング責任者、印刷デザイナーです。次の情報から、3秒で業種、10秒で信頼、30秒で依頼方法まで伝わる「建設業で最も成果が出る名刺」を設計してください。\n\n【印刷条件】仕上がり${sizes.finishedMm.width}×${sizes.finishedMm.height}mm、塗り足し込み${sizes.bleedMm.width}×${sizes.bleedMm.height}mm、300dpi、角丸なし、重要情報は仕上がり線から3mm以上内側、色は3色以内、最小文字6pt、QRコードは約20mmで十分な余白を確保。${data.useBack?'表面・裏面を提案':'表面のみ提案し、裏面は白無地'}。\n【会社名】${data.company || '未入力'}\n【氏名】${data.name || '未入力'}\n【肩書】${data.role || '未入力'}\n【業種】${tradeLabel()}\n【キャッチコピー】${data.tagline || 'AIで5案提案'}\n【施工内容】${data.services || 'AIで整理'}\n【選ばれる理由】${data.strengths || 'AIで整理'}\n【資格】${data.qualifications || '未入力'}\n【建設業許可】${data.permit || '未入力'}\n【創業・経験】${data.experience || '未入力'}\n【施工実績】${data.achievements || '未入力'}\n【CCUS・所属】${data.ccus || '未入力'}\n【保険・保証】${data.insurance || '未入力'}\n【インボイス】${data.invoice || '未入力'}\n【営業時間】${data.hours || '未入力'}\n【対応エリア】${data.area || '未入力'}\n【希望スタイル】${data.style}\n【希望色】${data.accent}\n【イラスト】${data.illustration==='none'?'使用しない':'職種に合わせて使用'}\n\n文字、写真、イラスト、QRコードが重ならない専用領域を確保してください。視線誘導、ブランドカラー、キャッチコピー5案、背景・アイコン・イラスト案、営業効果、印刷時の注意を日本語で提示してください。個人情報は回答内で必要以上に繰り返さないでください。`;
+    const visualMode=data.illustration==='auto'?'職種イラストを使用':data.illustration==='text'?'文字だけのミニマル構成':'イラストを使用しない';
+    return `あなたは世界最高峰のブランドデザイナー、建設業専門マーケティング責任者、印刷デザイナーです。次の情報から、3秒で業種、10秒で信頼、30秒で依頼方法まで伝わる「建設業で最も成果が出る名刺」を設計してください。\n\n【印刷条件】仕上がり${sizes.finishedMm.width}×${sizes.finishedMm.height}mm、塗り足し込み${sizes.bleedMm.width}×${sizes.bleedMm.height}mm、300dpi、角丸なし、重要情報は仕上がり線から3mm以上内側、色は3色以内、最小文字6pt、QRコードは約20mmで十分な余白を確保。${data.useBack?'表面・裏面を提案':'表面のみ提案し、裏面は白無地'}。\n【会社名】${data.company || '未入力'}\n【氏名】${data.name || '未入力'}\n【肩書】${data.role || '未入力'}\n【業種】${tradeLabel()}\n【キャッチコピー】${data.tagline || 'AIで5案提案'}\n【施工内容】${data.services || 'AIで整理'}\n【選ばれる理由】${data.strengths || 'AIで整理'}\n【資格】${data.qualifications || '未入力'}\n【建設業許可】${data.permit || '未入力'}\n【創業・経験】${data.experience || '未入力'}\n【施工実績】${data.achievements || '未入力'}\n【CCUS・所属】${data.ccus || '未入力'}\n【保険・保証】${data.insurance || '未入力'}\n【インボイス】${data.invoice || '未入力'}\n【営業時間】${data.hours || '未入力'}\n【対応エリア】${data.area || '未入力'}\n【希望スタイル】${data.style}\n【希望色】${data.accent}\n【見せ方】${visualMode}\n\n文字、写真、イラスト、QRコードが重ならない専用領域を確保してください。視線誘導、ブランドカラー、キャッチコピー5案、背景・アイコン・イラスト案、営業効果、印刷時の注意を日本語で提示してください。個人情報は回答内で必要以上に繰り返さないでください。`;
   }
 
   async function copyAiPrompt() {
