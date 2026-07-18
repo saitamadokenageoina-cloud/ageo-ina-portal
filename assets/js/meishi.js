@@ -372,16 +372,16 @@
   }
 
   function drawBackVertical(ctx,data,width,height){
-    const hasContent=[data.tagline,data.services,data.strengths,data.qualifications,data.permit,data.area,data.experience,data.achievements,data.ccus,data.insurance,data.invoice,data.hours].some(Boolean);
-    if(!data.useBack||!hasContent){ctx.fillStyle='#fff';ctx.fillRect(0,0,width,height);return;}
+    if(!data.useBack){ctx.fillStyle='#fff';ctx.fillRect(0,0,width,height);return;}
     const palette=paletteFor(data);const gradient=ctx.createLinearGradient(0,0,0,height);gradient.addColorStop(0,palette.dark);gradient.addColorStop(1,palette.mid);ctx.fillStyle=gradient;ctx.fillRect(0,0,width,height);ctx.fillStyle=data.accent;ctx.fillRect(0,0,width,14);
     const left=58,max=534;ctx.fillStyle='#fff';ctx.font='800 45px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText(clippedText(ctx,data.company||data.name,max),left,105);
-    if(data.tagline){ctx.fillStyle=data.accent;ctx.font='800 28px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText(clippedText(ctx,data.tagline,max),left,165);}
+    const suggestion=tradeSuggestions[data.trade]||tradeSuggestions.general;const tagline=data.tagline||suggestion.lines[0];
+    ctx.fillStyle=data.accent;ctx.font='800 28px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText(clippedText(ctx,tagline,max),left,165);
     const blocks=[
-      {key:'services',label:'主な業務',text:data.services},
-      {key:'qualifications',label:'資格・許可',text:[data.qualifications,data.permit].filter(Boolean).join('／')},
-      {key:'area',label:'対応エリア',text:data.area},
-      {key:'message',label:'選ばれる理由',text:data.strengths||data.tagline},
+      {key:'services',label:'主な業務',text:data.services||suggestion.services},
+      {key:'qualifications',label:'資格・許可',text:[data.qualifications,data.permit].filter(Boolean).join('／')||'資格・許可・保険などの信頼情報'},
+      {key:'area',label:'対応エリア',text:data.area||'対応エリアをご入力ください'},
+      {key:'message',label:'選ばれる理由',text:data.strengths||tagline},
       {key:'trust',label:'信頼情報',text:[data.experience,data.achievements,data.ccus,data.insurance].filter(Boolean).join('／')}
     ].filter(block=>block.text);
     blocks.sort((a,b)=>(a.key===data.backFocus?-1:b.key===data.backFocus?1:0));
@@ -444,8 +444,7 @@
 
   function drawBack(ctx, data, width, height) {
     if(data.orientation==='vertical'){drawBackVertical(ctx,data,width,height);return;}
-    const hasContent=[data.tagline,data.services,data.strengths,data.qualifications,data.permit,data.area,data.experience,data.achievements,data.ccus,data.insurance,data.invoice,data.hours].some(Boolean);
-    if(!data.useBack||!hasContent){ctx.fillStyle='#fff';ctx.fillRect(0,0,width,height);return;}
+    if(!data.useBack){ctx.fillStyle='#fff';ctx.fillRect(0,0,width,height);return;}
     const palette = paletteFor(data);
     const gradient = ctx.createLinearGradient(0,0,width,height);
     gradient.addColorStop(0,palette.dark); gradient.addColorStop(1,palette.mid);
@@ -456,12 +455,13 @@
     const left = width*.08; const max = width*.82;
     ctx.fillStyle = '#fff'; ctx.font = `800 ${Math.max(25,Math.round(height*.072))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;
     ctx.fillText(clippedText(ctx,data.company || data.name,width*.64),left,height*.16);
-    if(data.tagline){ctx.fillStyle=data.accent;ctx.font=`800 ${Math.max(25,Math.round(height*.034))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;ctx.fillText(clippedText(ctx,data.tagline,max),left,height*.26);}
+    const suggestion=tradeSuggestions[data.trade]||tradeSuggestions.general;const tagline=data.tagline||suggestion.lines[0];
+    ctx.fillStyle=data.accent;ctx.font=`800 ${Math.max(25,Math.round(height*.034))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;ctx.fillText(clippedText(ctx,tagline,max),left,height*.26);
     const standardBlocks = [
-      { key: 'services', label: '主な業務', text: data.services },
-      { key: 'qualifications', label: '資格・許可', text: [data.qualifications,data.permit].filter(Boolean).join('／') },
-      { key: 'area', label: '対応エリア', text: data.area },
-      { key: 'message', label: '選ばれる理由', text: data.strengths||data.tagline },
+      { key: 'services', label: '主な業務', text: data.services||suggestion.services },
+      { key: 'qualifications', label: '資格・許可', text: [data.qualifications,data.permit].filter(Boolean).join('／')||'資格・許可・保険などの信頼情報' },
+      { key: 'area', label: '対応エリア', text: data.area||'対応エリアをご入力ください' },
+      { key: 'message', label: '選ばれる理由', text: data.strengths||tagline },
       { key: 'trust', label: '信頼情報', text: [data.experience,data.achievements,data.ccus,data.insurance].filter(Boolean).join('／') }
     ];
     const blocks=standardBlocks.filter(block => block.text);
@@ -546,6 +546,7 @@
     if (file.size > 8 * 1024 * 1024) {
       document.getElementById('suggestion-message').textContent = '画像は8MB以下を選んでください。'; return;
     }
+    document.getElementById('photo-status').textContent='画像を読み込んでいます…';
     const reader = new FileReader();
     reader.onload = () => {
       const image = new Image();
@@ -561,7 +562,9 @@
   }
 
   function syncPhotoControls(){
-    document.getElementById('remove-photo').hidden=!photoData;
+    const ready=Boolean(photoData);document.getElementById('remove-photo').hidden=!ready;
+    document.getElementById('photo-control').classList.toggle('has-photo',ready);
+    document.getElementById('photo-status').textContent=ready?'✓ 画像を読み込みました。名刺プレビューに反映されています。':'画像は未選択です';
   }
 
   function clearPhoto(){
@@ -779,9 +782,18 @@
     queueRender();
   }
 
+  function selectPreviewSide(side){
+    currentSide=side;
+    document.querySelectorAll('.side-tab').forEach(tab=>{const active=tab.dataset.side===side;tab.classList.toggle('active',active);tab.setAttribute('aria-selected',String(active));});
+    queueRender();
+  }
+
   form.addEventListener('input',queueRender);
   form.addEventListener('change',queueRender);
-  form.querySelectorAll('input[name="orientation"],input[name="back-choice"],input[name="illustration-choice"]').forEach(radio=>radio.addEventListener('change',syncKeyOptions));
+  form.querySelectorAll('input[name="orientation"],input[name="illustration-choice"]').forEach(radio=>radio.addEventListener('change',syncKeyOptions));
+  form.querySelectorAll('input[name="back-choice"]').forEach(radio=>radio.addEventListener('change',()=>{syncKeyOptions();if(selectedBack())selectPreviewSide('back');else selectPreviewSide('front');}));
+  document.getElementById('back-fields').addEventListener('input',()=>selectPreviewSide('back'));
+  document.getElementById('back-fields').addEventListener('change',()=>selectPreviewSide('back'));
   document.getElementById('photo').addEventListener('change',event=>resizePhoto(event.target.files[0]));
   document.getElementById('remove-photo').addEventListener('click',clearPhoto);
   document.getElementById('suggest-button').addEventListener('click',suggestDesign);
@@ -793,11 +805,7 @@
   document.getElementById('print-button').addEventListener('click',preparePrint);
   document.getElementById('save-draft').addEventListener('click',saveDraft);
   document.getElementById('copy-ai-prompt').addEventListener('click',copyAiPrompt);
-  document.querySelectorAll('.side-tab').forEach(button => button.addEventListener('click',()=>{
-    currentSide=button.dataset.side;
-    document.querySelectorAll('.side-tab').forEach(tab=>{ const active=tab===button; tab.classList.toggle('active',active); tab.setAttribute('aria-selected',String(active)); });
-    queueRender();
-  }));
+  document.querySelectorAll('.side-tab').forEach(button=>button.addEventListener('click',()=>selectPreviewSide(button.dataset.side)));
 
   restoreDraft();
   syncPhotoControls();
