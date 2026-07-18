@@ -148,7 +148,15 @@
             <button id="download-svg" type="button"><i class="ti ti-vector"></i>イラストSVG</button>
             <button id="pdf-button" class="accent" type="button"><i class="ti ti-file-type-pdf"></i>入稿用PDF</button>
             <button id="print-button" type="button"><i class="ti ti-printer"></i>家庭で印刷</button>
-            <button id="save-draft" type="button"><i class="ti ti-device-floppy"></i>下書き保存</button>
+            <button id="save-draft" type="button"><i class="ti ti-device-floppy"></i>この端末に保存</button>
+          </div>
+          <div class="draft-transfer" aria-labelledby="draft-transfer-title">
+            <div><strong id="draft-transfer-title"><i class="ti ti-refresh"></i>あとで続きから作る</strong><small>入力中はこの端末へ自動保存されます。別のスマホ・パソコンで続ける場合は作業データを保存してください。</small></div>
+            <div class="draft-transfer-actions">
+              <button id="export-draft" type="button"><i class="ti ti-file-download"></i>作業データ保存</button>
+              <label class="draft-import-button" for="import-draft"><i class="ti ti-file-upload"></i>続きから開く</label>
+              <input id="import-draft" class="visually-hidden" type="file" accept="application/json,.json,.doken-card.json">
+            </div>
           </div>
           <p id="save-message" class="save-message" aria-live="polite"></p>
         </div>
