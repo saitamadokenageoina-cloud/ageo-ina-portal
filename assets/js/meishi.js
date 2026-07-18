@@ -620,7 +620,7 @@
       renderTaglineSuggestions(suggestion.lines);
     }
     layoutVariant = (layoutVariant + 1) % 3;
-    document.getElementById('suggestion-message').textContent = `提案しました：${suggestion.reason} キャッチコピーは5案から選べます。`;
+    document.getElementById('suggestion-message').textContent = `キャッチコピーを5案提案しました。気に入った言葉をタップしてください。${suggestion.reason}`;
     queueRender();
     queueAutoSave();
   }
