@@ -1,10 +1,12 @@
 (() => {
   'use strict';
 
-  const FINISHED = { width: 1075, height: 650 };
-  const BLEED = { width: 1146, height: 720, inset: 35 };
+  const CARD_SIZES = {
+    horizontal:{finished:{width:1075,height:650},bleed:{width:1146,height:720,inset:35},finishedMm:{width:91,height:55},bleedMm:{width:97,height:61}},
+    vertical:{finished:{width:650,height:1075},bleed:{width:720,height:1146,inset:35},finishedMm:{width:55,height:91},bleedMm:{width:61,height:97}}
+  };
   const STORAGE_KEY = 'doken_meishi_draft_v1';
-  const fields = ['company', 'person-name', 'role', 'trade', 'tagline', 'services', 'strengths', 'qualifications', 'permit-number', 'experience', 'achievements', 'ccus', 'insurance', 'invoice-number', 'business-hours', 'phone', 'email', 'address', 'website', 'social', 'service-area', 'qr-url', 'illustration', 'back-focus', 'style-preset', 'accent-color', 'member-label', 'use-back'];
+  const fields = ['company', 'person-name', 'role', 'trade', 'tagline', 'services', 'strengths', 'qualifications', 'permit-number', 'experience', 'achievements', 'ccus', 'insurance', 'invoice-number', 'business-hours', 'phone', 'email', 'address', 'website', 'social', 'service-area', 'qr-url', 'back-focus', 'style-preset', 'vertical-layout', 'accent-color', 'member-label'];
   const form = document.getElementById('card-form');
   const preview = document.getElementById('card-preview');
   const context = preview.getContext('2d');
@@ -72,6 +74,12 @@
     return value('style-preset') || 'trust';
   }
 
+  function selectedRadio(name,fallback){const selected=form.querySelector(`input[name="${name}"]:checked`);return selected?selected.value:fallback;}
+  function selectedOrientation(){return selectedRadio('orientation','horizontal');}
+  function selectedIllustration(){return selectedRadio('illustration-choice','auto');}
+  function selectedBack(){return selectedRadio('back-choice','yes')==='yes';}
+  function currentSizes(){return CARD_SIZES[selectedOrientation()]||CARD_SIZES.horizontal;}
+
   function tradeLabel() {
     const select=document.getElementById('trade');
     return select.selectedOptions[0] ? select.selectedOptions[0].textContent : '建設業';
@@ -83,8 +91,8 @@
       trade: value('trade'), tagline: value('tagline'), services: value('services'),
       qualifications: value('qualifications'), phone: value('phone'), email: value('email'),
       address: value('address'), website: value('website'), social: value('social'), area: value('service-area'),
-      qrUrl: value('qr-url'), illustration: value('illustration') || 'auto', backFocus: value('back-focus') || 'services',
-      strengths:value('strengths'), permit:value('permit-number'), experience:value('experience'), achievements:value('achievements'), ccus:value('ccus'), insurance:value('insurance'), invoice:value('invoice-number'), hours:value('business-hours'), member: value('member-label'), useBack:Boolean(value('use-back')),
+      qrUrl: value('qr-url'), illustration:selectedIllustration(), backFocus: value('back-focus') || 'services', orientation:selectedOrientation(), verticalLayout:value('vertical-layout')||'center',
+      strengths:value('strengths'), permit:value('permit-number'), experience:value('experience'), achievements:value('achievements'), ccus:value('ccus'), insurance:value('insurance'), invoice:value('invoice-number'), hours:value('business-hours'), member: value('member-label'), useBack:selectedBack(),
       style: selectedStyle(), accent: value('accent-color') || '#e8612a'
     };
   }
@@ -310,7 +318,79 @@
     return'card';
   }
 
+  function drawVerticalContactLines(ctx,data,x,startY,maxWidth,lineHeight,color){
+    const details=[
+      data.phone&&`TEL  ${data.phone}`,
+      data.email&&`MAIL  ${data.email}`,
+      data.address,
+      data.website&&`WEB  ${data.website}`,
+      data.social&&`SNS  ${data.social}`
+    ].filter(Boolean);
+    ctx.fillStyle=color;ctx.font='600 25px "BIZ UDPGothic","Noto Sans JP",sans-serif';
+    details.slice(0,5).forEach((detail,index)=>ctx.fillText(clippedText(ctx,detail,maxWidth),x,startY+index*lineHeight));
+  }
+
+  function drawFrontVertical(ctx,data,width,height){
+    const palette=paletteFor(data);const mode=data.verticalLayout||'center';const target=qrTarget(data);
+    ctx.textBaseline='alphabetic';
+    if(mode==='stripe'){
+      ctx.fillStyle='#f7fafc';ctx.fillRect(0,0,width,height);ctx.fillStyle=palette.dark;ctx.fillRect(0,0,155,height);ctx.fillStyle=data.accent;ctx.fillRect(155,0,10,height);drawStyleTexture(ctx,data,width,height);
+      if(photoImage)drawPhoto(ctx,photoImage,78,190,112,data.accent);else if(data.illustration!=='none')drawTradeIllustration(ctx,data.trade,78,190,112,'#fff',true);
+      const x=200,max=400;
+      ctx.fillStyle=palette.mid;ctx.font='700 28px "BIZ UDPGothic","Noto Sans JP",sans-serif';if(data.company)ctx.fillText(clippedText(ctx,data.company,max),x,120);
+      ctx.fillStyle=palette.dark;ctx.font=`800 ${fitText(ctx,data.name,max,70,43,800)}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;ctx.fillText(data.name,x,225);
+      if(data.role){ctx.fillStyle=palette.mid;ctx.font='700 27px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText(clippedText(ctx,data.role,max),x,275);}
+      ctx.fillStyle=data.accent;ctx.fillRect(x,315,max,7);
+      drawVerticalContactLines(ctx,data,x,395,max,68,'#20344a');
+      if(target){const q=170,qx=width-q-48,qy=790;drawQr(ctx,target,qx,qy,q);ctx.fillStyle=palette.dark;ctx.font='700 24px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.textAlign='center';ctx.fillText('WEB・LINE',qx+q/2,qy+q+38);ctx.textAlign='left';}
+      if(data.member){ctx.fillStyle=data.accent;ctx.font='700 24px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText('埼玉土建 上尾伊奈支部 組合員',x,1020);}
+      return;
+    }
+
+    if(mode==='photo'){
+      const g=ctx.createLinearGradient(0,0,0,height);g.addColorStop(0,palette.dark);g.addColorStop(.4,palette.mid);g.addColorStop(.401,'#fff');g.addColorStop(1,'#fff');ctx.fillStyle=g;ctx.fillRect(0,0,width,height);drawStyleTexture(ctx,data,width,height);
+      if(photoImage)drawPhoto(ctx,photoImage,width/2,205,235,data.accent);else if(data.illustration!=='none')drawTradeIllustration(ctx,data.trade,width/2,205,220,'#fff',true);
+      ctx.textAlign='center';ctx.fillStyle='#fff';ctx.font='700 27px "BIZ UDPGothic","Noto Sans JP",sans-serif';if(data.company)ctx.fillText(clippedText(ctx,data.company,540),width/2,360);
+      ctx.fillStyle=palette.dark;ctx.font=`800 ${fitText(ctx,data.name,540,68,42,800)}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;ctx.fillText(data.name,width/2,505);
+      if(data.role){ctx.fillStyle=palette.mid;ctx.font='700 27px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText(clippedText(ctx,data.role,500),width/2,555);}
+      ctx.textAlign='left';ctx.fillStyle=data.accent;ctx.fillRect(55,595,540,7);
+      drawVerticalContactLines(ctx,data,60,670,target?330:530,62,'#20344a');
+      if(target){const q=165,qx=430,qy=720;drawQr(ctx,target,qx,qy,q);ctx.fillStyle=palette.dark;ctx.font='700 23px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.textAlign='center';ctx.fillText('WEB・LINE',qx+q/2,qy+q+36);ctx.textAlign='left';}
+      if(data.member){ctx.fillStyle=data.accent;ctx.font='700 23px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText('埼玉土建 上尾伊奈支部 組合員',60,1020);}
+      return;
+    }
+
+    ctx.fillStyle='#fff';ctx.fillRect(0,0,width,height);ctx.fillStyle=palette.dark;ctx.fillRect(0,0,width,270);ctx.fillStyle=data.accent;ctx.fillRect(0,270,width,10);drawStyleTexture(ctx,data,width,height);
+    if(photoImage)drawPhoto(ctx,photoImage,width/2,155,175,data.accent);else if(data.illustration!=='none')drawTradeIllustration(ctx,data.trade,width/2,155,170,'#fff',true);
+    ctx.textAlign='center';ctx.fillStyle=palette.mid;ctx.font='700 28px "BIZ UDPGothic","Noto Sans JP",sans-serif';if(data.company)ctx.fillText(clippedText(ctx,data.company,540),width/2,355);
+    ctx.fillStyle=palette.dark;ctx.font=`800 ${fitText(ctx,data.name,540,72,44,800)}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;ctx.fillText(data.name,width/2,455);
+    if(data.role){ctx.fillStyle=palette.mid;ctx.font='700 27px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText(clippedText(ctx,data.role,500),width/2,510);}
+    ctx.textAlign='left';ctx.fillStyle=data.accent;ctx.fillRect(55,550,540,7);
+    drawVerticalContactLines(ctx,data,60,625,target?330:530,64,'#20344a');
+    if(target){const q=165,qx=430,qy=680;drawQr(ctx,target,qx,qy,q);ctx.fillStyle=palette.dark;ctx.font='700 23px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.textAlign='center';ctx.fillText('WEB・LINE',qx+q/2,qy+q+36);ctx.textAlign='left';}
+    if(data.member){ctx.fillStyle=data.accent;ctx.font='700 23px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText('埼玉土建 上尾伊奈支部 組合員',60,1020);}
+  }
+
+  function drawBackVertical(ctx,data,width,height){
+    const hasContent=[data.tagline,data.services,data.strengths,data.qualifications,data.permit,data.area,data.experience,data.achievements,data.ccus,data.insurance,data.invoice,data.hours].some(Boolean);
+    if(!data.useBack||!hasContent){ctx.fillStyle='#fff';ctx.fillRect(0,0,width,height);return;}
+    const palette=paletteFor(data);const gradient=ctx.createLinearGradient(0,0,0,height);gradient.addColorStop(0,palette.dark);gradient.addColorStop(1,palette.mid);ctx.fillStyle=gradient;ctx.fillRect(0,0,width,height);ctx.fillStyle=data.accent;ctx.fillRect(0,0,width,14);
+    const left=58,max=534;ctx.fillStyle='#fff';ctx.font='800 45px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText(clippedText(ctx,data.company||data.name,max),left,105);
+    if(data.tagline){ctx.fillStyle=data.accent;ctx.font='800 28px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText(clippedText(ctx,data.tagline,max),left,165);}
+    const blocks=[
+      {key:'services',label:'主な業務',text:data.services},
+      {key:'qualifications',label:'資格・許可',text:[data.qualifications,data.permit].filter(Boolean).join('／')},
+      {key:'area',label:'対応エリア',text:data.area},
+      {key:'message',label:'選ばれる理由',text:data.strengths||data.tagline},
+      {key:'trust',label:'信頼情報',text:[data.experience,data.achievements,data.ccus,data.insurance].filter(Boolean).join('／')}
+    ].filter(block=>block.text);
+    blocks.sort((a,b)=>(a.key===data.backFocus?-1:b.key===data.backFocus?1:0));
+    blocks.slice(0,4).forEach((block,index)=>{const y=270+index*165;ctx.fillStyle=data.accent;ctx.font='800 27px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText(block.label,left,y);ctx.fillStyle='#fff';ctx.font='600 25px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText(clippedText(ctx,block.text,max),left,y+48);});
+    const bottom=[data.hours,data.invoice].filter(Boolean).join('　｜　');if(bottom){ctx.fillStyle='rgba(255,255,255,.92)';ctx.font='600 23px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText(clippedText(ctx,bottom,max),left,1015);}
+  }
+
   function drawFront(ctx, data, width, height) {
+    if(data.orientation==='vertical'){drawFrontVertical(ctx,data,width,height);return;}
     const palette = paletteFor(data);
     const family=designFamily(data.style);
     if(family==='card')fillBackground(ctx,data,palette,width,height);
@@ -322,7 +402,7 @@
     const contentWidth=width*(isBand?.55:.53);
     ctx.textBaseline = 'alphabetic';
     if(family==='card'||family==='photo'){ctx.fillStyle='rgba(255,255,255,.94)';roundedRect(ctx,width*.035,height*.045,width*.62,height*.91,22);ctx.fill();}
-    const companyX=isBand?width*.05:left;const companyWidth=isBand?width*.2:contentWidth;
+    const companyX=left;const companyWidth=contentWidth;
     ctx.fillStyle = isBand||isDark?'#fff':palette.mid;
     ctx.font = `700 ${Math.max(25,Math.round(height*.04))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;
     if (data.company) ctx.fillText(clippedText(ctx, data.company, companyWidth), companyX, height*.14);
@@ -363,6 +443,7 @@
   }
 
   function drawBack(ctx, data, width, height) {
+    if(data.orientation==='vertical'){drawBackVertical(ctx,data,width,height);return;}
     const hasContent=[data.tagline,data.services,data.strengths,data.qualifications,data.permit,data.area,data.experience,data.achievements,data.ccus,data.insurance,data.invoice,data.hours].some(Boolean);
     if(!data.useBack||!hasContent){ctx.fillStyle='#fff';ctx.fillRect(0,0,width,height);return;}
     const palette = paletteFor(data);
@@ -396,15 +477,17 @@
 
   function renderToCanvas(canvas, side, includeBleed) {
     const data = cardData();
+    const sizes=CARD_SIZES[data.orientation]||CARD_SIZES.horizontal;
+    const finished=sizes.finished;const bleed=sizes.bleed;
     const ctx = canvas.getContext('2d');
-    const target = includeBleed ? BLEED : FINISHED;
+    const target = includeBleed ? bleed : finished;
     canvas.width = target.width; canvas.height = target.height;
     ctx.clearRect(0,0,target.width,target.height);
     if (includeBleed) {
-      const design=document.createElement('canvas'); design.width=FINISHED.width; design.height=FINISHED.height;
+      const design=document.createElement('canvas'); design.width=finished.width; design.height=finished.height;
       const designContext=design.getContext('2d');
-      if (side === 'front') drawFront(designContext,data,FINISHED.width,FINISHED.height); else drawBack(designContext,data,FINISHED.width,FINISHED.height);
-      const i=BLEED.inset,w=FINISHED.width,h=FINISHED.height;
+      if (side === 'front') drawFront(designContext,data,finished.width,finished.height); else drawBack(designContext,data,finished.width,finished.height);
+      const i=bleed.inset,w=finished.width,h=finished.height;
       ctx.drawImage(design,0,0,w,h,i,i,w,h);
       ctx.drawImage(design,0,0,w,1,i,0,w,i); ctx.drawImage(design,0,h-1,w,1,i,i+h,w,i);
       ctx.drawImage(design,0,0,1,h,0,i,i,h); ctx.drawImage(design,w-1,0,1,h,i+w,i,i,h);
@@ -448,7 +531,7 @@
     const styleSelect=document.getElementById('style-preset');
     if ([...styleSelect.options].some(option=>option.value===suggestion.style)) styleSelect.value=suggestion.style;
     document.getElementById('accent-color').value = suggestion.color;
-    if(value('use-back')){
+    if(selectedBack()){
       if (!value('services')) document.getElementById('services').value = suggestion.services;
       if (!value('tagline')) document.getElementById('tagline').value = suggestion.lines[0];
       renderTaglineSuggestions(suggestion.lines);
@@ -470,16 +553,29 @@
         const size = 640; const ratio = Math.min(size/image.width,size/image.height,1);
         const canvas = document.createElement('canvas'); canvas.width=Math.round(image.width*ratio); canvas.height=Math.round(image.height*ratio);
         canvas.getContext('2d').drawImage(image,0,0,canvas.width,canvas.height);
-        photoData=canvas.toDataURL('image/jpeg',.84); photoImage=new Image(); photoImage.onload=queueRender; photoImage.src=photoData;
+        photoData=canvas.toDataURL('image/jpeg',.84); photoImage=new Image(); photoImage.onload=()=>{syncPhotoControls();queueRender();}; photoImage.src=photoData;
       };
       image.src=String(reader.result);
     };
     reader.readAsDataURL(file);
   }
 
+  function syncPhotoControls(){
+    document.getElementById('remove-photo').hidden=!photoData;
+  }
+
+  function clearPhoto(){
+    photoData='';photoImage=null;
+    document.getElementById('photo').value='';
+    syncPhotoControls();
+    document.getElementById('save-message').textContent='画像を削除しました。職種イラストの設定が「入れる」の場合はイラスト表示に戻ります。';
+    queueRender();
+  }
+
   function safeFilename(side) {
     const base=(value('company') || value('person-name') || '名刺').replace(/[\\/:*?"<>|\s]+/g,'_').slice(0,30);
-    return `${base}_${side === 'front' ? '表面' : '裏面'}_97x61mm.png`;
+    const sizes=currentSizes();const orientation=selectedOrientation()==='vertical'?'縦型':'横型';
+    return `${base}_${orientation}_${side === 'front' ? '表面' : '裏面'}_${sizes.bleedMm.width}x${sizes.bleedMm.height}mm.png`;
   }
 
   const crcTable = (() => {
@@ -568,23 +664,23 @@
 
   function ascii(text) { return new TextEncoder().encode(text); }
 
-  function makePdf(frontBytes,backBytes) {
+  function makePdf(frontBytes,backBytes,sizes) {
     const chunks=[]; const offsets=[]; let length=0;
     const append = data => { const bytes=typeof data==='string'?ascii(data):data; chunks.push(bytes); length+=bytes.length; };
     const object = (number,parts) => {
       offsets[number]=length; append(`${number} 0 obj\n`); parts.forEach(append); append('\nendobj\n');
     };
-    const pageWidth=(97/25.4*72).toFixed(3); const pageHeight=(61/25.4*72).toFixed(3);
+    const pageWidth=(sizes.bleedMm.width/25.4*72).toFixed(3); const pageHeight=(sizes.bleedMm.height/25.4*72).toFixed(3);
     const content1=ascii(`q\n${pageWidth} 0 0 ${pageHeight} 0 0 cm\n/Im1 Do\nQ\n`);
     const content2=ascii(`q\n${pageWidth} 0 0 ${pageHeight} 0 0 cm\n/Im2 Do\nQ\n`);
     append('%PDF-1.4\n%\xE2\xE3\xCF\xD3\n');
     object(1,['<< /Type /Catalog /Pages 2 0 R >>']);
     object(2,['<< /Type /Pages /Count 2 /Kids [3 0 R 6 0 R] >>']);
     object(3,[`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${pageWidth} ${pageHeight}] /Resources << /XObject << /Im1 4 0 R >> >> /Contents 5 0 R >>`]);
-    object(4,[`<< /Type /XObject /Subtype /Image /Width ${BLEED.width} /Height ${BLEED.height} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${frontBytes.length} >>\nstream\n`,frontBytes,'\nendstream']);
+    object(4,[`<< /Type /XObject /Subtype /Image /Width ${sizes.bleed.width} /Height ${sizes.bleed.height} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${frontBytes.length} >>\nstream\n`,frontBytes,'\nendstream']);
     object(5,[`<< /Length ${content1.length} >>\nstream\n`,content1,'endstream']);
     object(6,[`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${pageWidth} ${pageHeight}] /Resources << /XObject << /Im2 7 0 R >> >> /Contents 8 0 R >>`]);
-    object(7,[`<< /Type /XObject /Subtype /Image /Width ${BLEED.width} /Height ${BLEED.height} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${backBytes.length} >>\nstream\n`,backBytes,'\nendstream']);
+    object(7,[`<< /Type /XObject /Subtype /Image /Width ${sizes.bleed.width} /Height ${sizes.bleed.height} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${backBytes.length} >>\nstream\n`,backBytes,'\nendstream']);
     object(8,[`<< /Length ${content2.length} >>\nstream\n`,content2,'endstream']);
     const xref=length; append('xref\n0 9\n0000000000 65535 f \n');
     for(let number=1;number<=8;number+=1) append(`${String(offsets[number]).padStart(10,'0')} 00000 n \n`);
@@ -595,9 +691,10 @@
   function downloadPdf() {
     const front=document.createElement('canvas'); const back=document.createElement('canvas');
     renderToCanvas(front,'front',true); renderToCanvas(back,'back',true);
-    const pdf=makePdf(dataUrlBytes(front.toDataURL('image/jpeg',.96)),dataUrlBytes(back.toDataURL('image/jpeg',.96)));
+    const sizes=currentSizes();const pdf=makePdf(dataUrlBytes(front.toDataURL('image/jpeg',.96)),dataUrlBytes(back.toDataURL('image/jpeg',.96)),sizes);
     const base=(value('company') || value('person-name') || '名刺').replace(/[\\/:*?"<>|\s]+/g,'_').slice(0,30);
-    triggerDownload(pdf,`${base}_表裏_97x61mm_RGB.pdf`);
+    const orientation=selectedOrientation()==='vertical'?'縦型':'横型';
+    triggerDownload(pdf,`${base}_${orientation}_表裏_${sizes.bleedMm.width}x${sizes.bleedMm.height}mm_RGB.pdf`);
     document.getElementById('save-message').textContent='表裏2ページの入稿用PDFを保存しました。ラクスルのデータチェックで仕上がりと色を確認してください。';
   }
 
@@ -626,7 +723,8 @@
 
   function buildAiPrompt() {
     const data=cardData();
-    return `あなたは世界最高峰のブランドデザイナー、建設業専門マーケティング責任者、印刷デザイナーです。次の情報から、3秒で業種、10秒で信頼、30秒で依頼方法まで伝わる「建設業で最も成果が出る名刺」を設計してください。\n\n【印刷条件】仕上がり91×55mm、塗り足し込み97×61mm、300dpi、角丸なし、重要情報は仕上がり線から3mm以上内側、色は3色以内、最小文字6pt、QRコードは約20mmで十分な余白を確保。表面・裏面を提案。\n【会社名】${data.company || '未入力'}\n【氏名】${data.name || '未入力'}\n【肩書】${data.role || '未入力'}\n【業種】${tradeLabel()}\n【キャッチコピー】${data.tagline || 'AIで5案提案'}\n【施工内容】${data.services || 'AIで整理'}\n【選ばれる理由】${data.strengths || 'AIで整理'}\n【資格】${data.qualifications || '未入力'}\n【建設業許可】${data.permit || '未入力'}\n【創業・経験】${data.experience || '未入力'}\n【施工実績】${data.achievements || '未入力'}\n【CCUS・所属】${data.ccus || '未入力'}\n【保険・保証】${data.insurance || '未入力'}\n【インボイス】${data.invoice || '未入力'}\n【営業時間】${data.hours || '未入力'}\n【対応エリア】${data.area || '未入力'}\n【希望スタイル】${data.style}\n【希望色】${data.accent}\n【イラスト】${data.illustration}\n\n表裏の構成、視線誘導、ブランドカラー、キャッチコピー5案、背景・アイコン・イラスト案、営業効果、印刷時の注意を日本語で提示してください。個人情報は回答内で必要以上に繰り返さないでください。`;
+    const sizes=CARD_SIZES[data.orientation]||CARD_SIZES.horizontal;
+    return `あなたは世界最高峰のブランドデザイナー、建設業専門マーケティング責任者、印刷デザイナーです。次の情報から、3秒で業種、10秒で信頼、30秒で依頼方法まで伝わる「建設業で最も成果が出る名刺」を設計してください。\n\n【印刷条件】仕上がり${sizes.finishedMm.width}×${sizes.finishedMm.height}mm、塗り足し込み${sizes.bleedMm.width}×${sizes.bleedMm.height}mm、300dpi、角丸なし、重要情報は仕上がり線から3mm以上内側、色は3色以内、最小文字6pt、QRコードは約20mmで十分な余白を確保。${data.useBack?'表面・裏面を提案':'表面のみ提案し、裏面は白無地'}。\n【会社名】${data.company || '未入力'}\n【氏名】${data.name || '未入力'}\n【肩書】${data.role || '未入力'}\n【業種】${tradeLabel()}\n【キャッチコピー】${data.tagline || 'AIで5案提案'}\n【施工内容】${data.services || 'AIで整理'}\n【選ばれる理由】${data.strengths || 'AIで整理'}\n【資格】${data.qualifications || '未入力'}\n【建設業許可】${data.permit || '未入力'}\n【創業・経験】${data.experience || '未入力'}\n【施工実績】${data.achievements || '未入力'}\n【CCUS・所属】${data.ccus || '未入力'}\n【保険・保証】${data.insurance || '未入力'}\n【インボイス】${data.invoice || '未入力'}\n【営業時間】${data.hours || '未入力'}\n【対応エリア】${data.area || '未入力'}\n【希望スタイル】${data.style}\n【希望色】${data.accent}\n【イラスト】${data.illustration==='none'?'使用しない':'職種に合わせて使用'}\n\n文字、写真、イラスト、QRコードが重ならない専用領域を確保してください。視線誘導、ブランドカラー、キャッチコピー5案、背景・アイコン・イラスト案、営業効果、印刷時の注意を日本語で提示してください。個人情報は回答内で必要以上に繰り返さないでください。`;
   }
 
   async function copyAiPrompt() {
@@ -638,6 +736,9 @@
   function preparePrint() {
     const front=document.createElement('canvas'); const back=document.createElement('canvas');
     renderToCanvas(front,'front',true); renderToCanvas(back,'back',true);
+    const sizes=currentSizes();
+    ['front','back'].forEach(side=>{const image=document.getElementById(`print-${side}`);image.style.width=`${sizes.bleedMm.width}mm`;image.style.height=`${sizes.bleedMm.height}mm`;});
+    document.querySelectorAll('.print-dimensions').forEach(node=>{node.textContent=`外枠：塗り足し${sizes.bleedMm.width}×${sizes.bleedMm.height}mm／内側：仕上がり${sizes.finishedMm.width}×${sizes.finishedMm.height}mm`;});
     document.getElementById('print-front').src=front.toDataURL('image/png'); document.getElementById('print-back').src=back.toDataURL('image/png');
     setTimeout(()=>window.print(),80);
   }
@@ -645,7 +746,7 @@
   function saveDraft() {
     const values={};
     fields.forEach(id => { values[id]=value(id); });
-    values.style=selectedStyle(); values.layoutVariant=layoutVariant; values.photo=photoData && photoData.length < 900000 ? photoData : '';
+    values.style=selectedStyle();values.orientation=selectedOrientation();values.illustrationChoice=selectedIllustration();values.backChoice=selectedBack()?'yes':'no';values.layoutVariant=layoutVariant; values.photo=photoData && photoData.length < 900000 ? photoData : '';
     try {
       localStorage.setItem(STORAGE_KEY,JSON.stringify(values));
       document.getElementById('save-message').textContent=photoData && !values.photo ? '文字情報をこの端末に保存しました。画像は容量が大きいため保存していません。' : '下書きをこの端末に保存しました。';
@@ -663,20 +764,26 @@
       if (element.type === 'checkbox') element.checked=Boolean(draft[id]); else element.value=String(draft[id]);
     });
     if (draft.style) { const select=document.getElementById('style-preset'); if ([...select.options].some(option=>option.value===draft.style)) select.value=draft.style; }
+    [['orientation',draft.orientation],['illustration-choice',draft.illustrationChoice],['back-choice',draft.backChoice]].forEach(([name,choice])=>{if(!choice)return;const radio=form.querySelector(`input[name="${name}"][value="${choice}"]`);if(radio)radio.checked=true;});
     layoutVariant=Number.isInteger(draft.layoutVariant) ? draft.layoutVariant%3 : 0;
-    if (typeof draft.photo === 'string' && draft.photo.startsWith('data:image/')) { photoData=draft.photo; photoImage=new Image(); photoImage.onload=queueRender; photoImage.src=photoData; }
+    if (typeof draft.photo === 'string' && draft.photo.startsWith('data:image/')) { photoData=draft.photo; photoImage=new Image(); photoImage.onload=()=>{syncPhotoControls();queueRender();}; photoImage.src=photoData; }
     document.getElementById('save-message').textContent='この端末に保存した下書きを復元しました。';
   }
 
-  function syncBackUI(){
-    document.getElementById('back-fields').hidden=!value('use-back');
+  function syncKeyOptions(){
+    const sizes=currentSizes();const vertical=selectedOrientation()==='vertical';
+    document.getElementById('vertical-layout-wrap').hidden=!vertical;
+    document.getElementById('back-fields').hidden=!selectedBack();
+    const shell=document.getElementById('canvas-shell');shell.style.aspectRatio=`${sizes.finished.width}/${sizes.finished.height}`;shell.classList.toggle('vertical',vertical);
+    document.getElementById('card-size-label').textContent=`実際の比率 ${sizes.finishedMm.width}mm × ${sizes.finishedMm.height}mm`;
     queueRender();
   }
 
   form.addEventListener('input',queueRender);
   form.addEventListener('change',queueRender);
-  document.getElementById('use-back').addEventListener('change',syncBackUI);
+  form.querySelectorAll('input[name="orientation"],input[name="back-choice"],input[name="illustration-choice"]').forEach(radio=>radio.addEventListener('change',syncKeyOptions));
   document.getElementById('photo').addEventListener('change',event=>resizePhoto(event.target.files[0]));
+  document.getElementById('remove-photo').addEventListener('click',clearPhoto);
   document.getElementById('suggest-button').addEventListener('click',suggestDesign);
   document.getElementById('download-front').addEventListener('click',()=>download('front'));
   document.getElementById('download-back').addEventListener('click',()=>download('back'));
@@ -693,5 +800,6 @@
   }));
 
   restoreDraft();
-  syncBackUI();
+  syncPhotoControls();
+  syncKeyOptions();
 })();
