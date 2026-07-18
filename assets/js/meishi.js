@@ -206,45 +206,32 @@
     lines.forEach((line, index) => ctx.fillText(line, x, y + lineHeight * index));
   }
 
+  const tradeIconPaths = {
+    general:{stroke:['M180 610V390L500 155l320 235v220','M255 610v180h490V610','M405 790V565h190v225','M300 350c35-125 365-125 400 0','M275 350h450'],fill:[]},
+    carpenter:{stroke:['M145 560L500 260l355 300','M255 550v240h490V550','M610 730L805 535','M750 475l105 105','M690 520l120-120'],fill:['M640 710l55 55-72 72-55-55z']},
+    scaffold:{stroke:['M215 180v640M500 180v640M785 180v640','M145 300h710M145 500h710M145 700h710','M215 700L785 300','M500 500l285 200'],fill:['M365 175c18-105 252-105 270 0v42H365z']},
+    plaster:{stroke:['M125 650h565l185-325H310z','M395 330l120-205 120 70-118 205','M215 750h570'],fill:['M270 575h420l-45 75H225z']},
+    electrical:{stroke:['M235 205v140M385 205v140','M205 345h210v100c0 105-65 165-155 165','M260 610v175h155'],fill:['M610 115L385 510h180l-70 375 270-455H580z']},
+    plumbing:{stroke:['M125 305h255v315h275','M230 215v180M545 515v190','M125 255h210M600 570h150'],fill:['M770 165c-150 180-150 310 0 350 150-40 150-170 0-350z']},
+    painting:{stroke:['M180 625h520v-85h135v235','M835 775v95','M705 275h85v265','M195 725c135 70 270-70 405 0'],fill:['M125 220h580v220H125c-30 0-55-25-55-55V275c0-30 25-55 55-55z']},
+    civil:{stroke:['M125 760h750','M250 650a125 125 0 1 0 250 0a125 125 0 1 0-250 0','M560 650a125 125 0 1 0 250 0a125 125 0 1 0-250 0','M585 335l205-180 125 80-165 315'],fill:['M165 540h520L570 325H300z']},
+    interior:{stroke:['M170 180v640h660V180','M500 180v640','M610 315h145v270H610z','M240 315h165v310H240z','M680 315v270','M235 710h180'],fill:['M590 285h185v55H590z']},
+    demolition:{stroke:['M175 790h650','M245 690h430','M300 690V390h300v300','M300 480h300M300 570h300','M500 390l65-155 95 40','M660 275l165 155','M825 430l-80 110'],fill:['M445 335l55-125 55 125z']},
+    rebar:{stroke:['M190 210v580M395 210v580M600 210v580M805 210v580','M145 315h710M145 520h710M145 725h710','M190 725l615-410M190 315l615 410'],fill:['M150 175h80v70h-80zM765 755h80v70h-80z']},
+    roofing:{stroke:['M105 530L500 190l395 340','M210 520v275h580V520','M320 430l180-155 180 155','M690 620c0 105-75 155-150 195-75-40-150-90-150-195v-70h300z'],fill:['M540 595l35 70 75 10-55 52 15 75-70-36-70 36 15-75-55-52 75-10z']},
+    design:{stroke:['M185 160h480v680H185z','M285 290h275M285 410h275M285 530h195','M665 300l155-155 70 70-155 155','M625 410l110-40-70-70z','M655 610a125 125 0 1 0 0 250'],fill:['M790 125l120 120-48 48-120-120z']}
+  };
+
   function drawTradeIllustration(ctx, trade, x, y, size, color, reverse = false) {
-    ctx.save();
-    ctx.translate(x, y);
-    ctx.strokeStyle = color;
-    ctx.fillStyle = color;
-    ctx.lineWidth = Math.max(5, size * .045);
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-    const s = size;
-    if (trade === 'carpenter') {
-      ctx.beginPath(); ctx.moveTo(-s*.42, 0); ctx.lineTo(0, -s*.34); ctx.lineTo(s*.42, 0); ctx.stroke();
-      ctx.strokeRect(-s*.29, 0, s*.58, s*.34);
-      ctx.beginPath(); ctx.moveTo(s*.12, s*.31); ctx.lineTo(s*.38, s*.06); ctx.moveTo(s*.29, s*.02); ctx.lineTo(s*.42, s*.15); ctx.stroke();
-    } else if (trade === 'scaffold') {
-      for (let i = -1; i <= 1; i += 1) { ctx.beginPath(); ctx.moveTo(i*s*.25, -s*.35); ctx.lineTo(i*s*.25, s*.38); ctx.stroke(); }
-      [-.28, 0, .28].forEach(row => { ctx.beginPath(); ctx.moveTo(-s*.42, row*s); ctx.lineTo(s*.42, row*s); ctx.stroke(); });
-      ctx.beginPath(); ctx.moveTo(-s*.4, s*.32); ctx.lineTo(s*.4, -s*.32); ctx.stroke();
-    } else if (trade === 'electrical') {
-      ctx.beginPath(); ctx.moveTo(s*.06,-s*.45); ctx.lineTo(-s*.27,s*.05); ctx.lineTo(-s*.02,s*.05); ctx.lineTo(-s*.13,s*.43); ctx.lineTo(s*.3,-s*.12); ctx.lineTo(s*.05,-s*.12); ctx.closePath(); ctx.fill();
-    } else if (trade === 'plumbing') {
-      ctx.beginPath(); ctx.moveTo(-s*.38,-s*.15); ctx.lineTo(-s*.08,-s*.15); ctx.lineTo(-s*.08,s*.2); ctx.lineTo(s*.23,s*.2); ctx.stroke();
-      ctx.strokeRect(-s*.29,-s*.25,s*.11,s*.2); ctx.strokeRect(s*.13,s*.1,s*.2,s*.2);
-      ctx.beginPath(); ctx.moveTo(s*.35,-s*.36); ctx.bezierCurveTo(s*.16,-s*.12,s*.16,s*.02,s*.35,s*.09); ctx.bezierCurveTo(s*.54,s*.02,s*.54,-s*.12,s*.35,-s*.36); ctx.fill();
-    } else if (trade === 'painting') {
-      roundedRect(ctx,-s*.42,-s*.3,s*.54,s*.25,s*.06); ctx.fill();
-      ctx.beginPath(); ctx.moveTo(s*.12,-s*.18); ctx.lineTo(s*.3,-s*.18); ctx.lineTo(s*.3,s*.06); ctx.lineTo(s*.08,s*.06); ctx.lineTo(s*.08,s*.39); ctx.stroke();
-    } else if (trade === 'civil') {
-      ctx.beginPath(); ctx.arc(-s*.18,s*.22,s*.17,0,Math.PI*2); ctx.arc(s*.2,s*.22,s*.17,0,Math.PI*2); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(-s*.35,s*.06); ctx.lineTo(s*.23,s*.06); ctx.lineTo(s*.06,-s*.18); ctx.lineTo(-s*.19,-s*.18); ctx.closePath(); ctx.fill();
-      ctx.beginPath(); ctx.moveTo(s*.03,-s*.2); ctx.lineTo(s*.26,-s*.4); ctx.lineTo(s*.42,-s*.33); ctx.moveTo(s*.26,-s*.4); ctx.lineTo(s*.42,-s*.12); ctx.stroke();
-    } else if (trade === 'plaster') {
-      ctx.beginPath(); ctx.moveTo(-s*.42,s*.18); ctx.lineTo(s*.26,s*.18); ctx.lineTo(s*.42,-s*.12); ctx.lineTo(-s*.25,-s*.12); ctx.closePath(); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(-s*.08,-s*.13); ctx.lineTo(s*.06,-s*.38); ctx.lineTo(s*.19,-s*.31); ctx.lineTo(s*.05,-s*.08); ctx.stroke();
-    } else {
-      ctx.beginPath(); ctx.moveTo(-s*.42,s*.15); ctx.lineTo(-s*.42,-s*.1); ctx.lineTo(0,-s*.4); ctx.lineTo(s*.42,-s*.1); ctx.lineTo(s*.42,s*.15); ctx.stroke();
-      ctx.strokeRect(-s*.3,s*.15,s*.6,s*.2);
-      ctx.beginPath(); ctx.moveTo(-s*.12,s*.35); ctx.lineTo(-s*.12,s*.02); ctx.lineTo(s*.12,s*.02); ctx.lineTo(s*.12,s*.35); ctx.stroke();
-    }
-    if (reverse) { ctx.globalAlpha = .18; ctx.beginPath(); ctx.arc(0,0,s*.53,0,Math.PI*2); ctx.fill(); }
+    const spec=tradeIconPaths[trade]||tradeIconPaths.general;
+    ctx.save();ctx.translate(x-size/2,y-size/2);ctx.scale(size/1000,size/1000);ctx.lineCap='round';ctx.lineJoin='round';
+    ctx.fillStyle=color;ctx.strokeStyle=color;
+    ctx.globalAlpha=reverse?.16:.08;ctx.beginPath();ctx.arc(500,500,455,0,Math.PI*2);ctx.fill();
+    ctx.globalAlpha=reverse?.38:.22;ctx.lineWidth=16;ctx.beginPath();ctx.arc(500,500,430,0,Math.PI*2);ctx.stroke();
+    ctx.globalAlpha=1;ctx.lineWidth=46;
+    spec.fill.forEach(path=>ctx.fill(new Path2D(path)));
+    spec.stroke.forEach(path=>ctx.stroke(new Path2D(path)));
+    ctx.globalAlpha=.7;ctx.fillStyle=color;ctx.beginPath();ctx.arc(805,185,23,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(860,245,12,0,Math.PI*2);ctx.fill();
     ctx.restore();
   }
 
@@ -639,18 +626,12 @@
   }
 
   function iconSvgMarkup(trade,color) {
-    const common=`fill="none" stroke="${color}" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"`;
-    const shapes={
-      carpenter:`<path ${common} d="M120 430L500 130l380 300M240 430v330h520V430M570 710V500h150v210M560 260l210-110m-55-35l90 100"/>`,
-      scaffold:`<path ${common} d="M180 130v650M500 130v650M820 130v650M120 260h760M120 500h760M120 740h760M180 740L820 130"/>`,
-      electrical:`<path fill="${color}" d="M560 70L245 535h235l-75 395 350-520H520z"/>`,
-      plumbing:`<path ${common} d="M130 300h280v310h280M250 210v180M640 520v180M770 160c-130 150-130 250 0 280 130-30 130-130 0-280z"/>`,
-      painting:`<path ${common} d="M140 160h480v230H140zM620 275h170v190H520v370M450 835h140"/>`,
-      civil:`<path ${common} d="M150 690h700M230 690a120 120 0 10240 0 120 120 0 10-240 0zm360 0a120 120 0 10240 0 120 120 0 10-240 0zM190 500h500L550 280H300zM530 275l210-170 150 90-170 300"/>`,
-      plaster:`<path ${common} d="M120 620h620l150-270H270zM460 350l120-220 130 70-120 210"/>`,
-      general:`<path ${common} d="M120 430L500 130l380 300M220 430v350h560V430M400 780V520h200v260M90 820h820"/>`
-    };
-    return `<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000">${shapes[trade]||shapes.general}</svg>`;
+    const spec=tradeIconPaths[trade]||tradeIconPaths.general;
+    const background=`<circle cx="500" cy="500" r="455" fill="${color}" opacity=".08"/><circle cx="500" cy="500" r="430" fill="none" stroke="${color}" stroke-width="16" opacity=".22"/>`;
+    const fills=spec.fill.map(path=>`<path fill="${color}" d="${path}"/>`).join('');
+    const strokes=spec.stroke.map(path=>`<path fill="none" stroke="${color}" stroke-width="46" stroke-linecap="round" stroke-linejoin="round" d="${path}"/>`).join('');
+    const details=`<circle cx="805" cy="185" r="23" fill="${color}" opacity=".7"/><circle cx="860" cy="245" r="12" fill="${color}" opacity=".7"/>`;
+    return `<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000">${background}${fills}${strokes}${details}</svg>`;
   }
 
   function downloadIconSvg() {
