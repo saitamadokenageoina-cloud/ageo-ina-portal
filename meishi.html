@@ -46,7 +46,15 @@
         <div class="form-grid two basic-fields">
           <label class="field"><span>会社・屋号</span><input id="company" name="organization" maxlength="40" placeholder="例：上尾建設" autocomplete="organization"></label>
           <label class="field"><span>お名前 <em>必須</em></span><input id="person-name" name="name" maxlength="24" required placeholder="例：土建 太郎" autocomplete="name"></label>
-          <label class="field wide"><span>業種 <em>必須</em></span><select id="trade"><option value="general">総合建設・その他</option><option value="carpenter">大工・木工</option><option value="scaffold">鳶・足場</option><option value="plaster">左官・タイル</option><option value="electrical">電気工事</option><option value="plumbing">設備・配管・空調</option><option value="painting">塗装・防水</option><option value="civil">土木・重機・外構</option><option value="interior">内装・クロス</option><option value="demolition">解体工事</option><option value="rebar">鉄筋・型枠</option><option value="roofing">屋根・板金</option><option value="design">設計・施工管理</option></select></label>
+          <label class="field wide"><span>業種・職種 <em>必須</em></span><select id="trade">
+            <optgroup label="総合・設計・管理"><option value="general">建築一式・ゼネコン・総合建設</option><option value="design">設計・施工管理</option><option value="survey">測量・墨出し・建設サービス</option></optgroup>
+            <optgroup label="躯体・基礎・土木"><option value="civil">土木・造成・外構</option><option value="scaffold">鳶・足場・土工</option><option value="rebar">鉄筋・型枠</option><option value="steel">鉄骨・鋼構造物</option><option value="masonry">石・タイル・れんが・ブロック</option><option value="paving">舗装工事</option><option value="dredging">しゅんせつ工事</option><option value="demolition">解体工事</option></optgroup>
+            <optgroup label="建築・仕上げ"><option value="carpenter">大工・木工</option><option value="plaster">左官</option><option value="roofing">屋根工事</option><option value="sheetmetal">板金・雨樋</option><option value="glass">ガラス・サッシ</option><option value="painting">塗装</option><option value="waterproof">防水・シーリング</option><option value="interior">内装・クロス・床</option><option value="fittings">建具・家具</option><option value="sign">看板・サイン</option></optgroup>
+            <optgroup label="設備・専門工事"><option value="electrical">電気工事</option><option value="telecom">電気通信・弱電</option><option value="plumbing">管・給排水・空調</option><option value="waterworks">水道施設</option><option value="fire">消防施設</option><option value="machinery">機械器具設置</option><option value="insulation">熱絶縁・保温</option><option value="cleaning">清掃施設・美装</option><option value="well">さく井・井戸</option></optgroup>
+            <optgroup label="屋外・運転"><option value="landscaping">造園・植栽</option><option value="heavy_operator">建設機械・重機運転</option><option value="driver">建設車両・運送</option></optgroup>
+            <option value="custom">その他（職種名を自由入力）</option>
+          </select></label>
+          <label id="custom-trade-wrap" class="field wide" hidden><span>職種名を入力 <em>必須</em></span><input id="custom-trade" maxlength="32" placeholder="例：地盤改良／エレベーター保守／住宅クリーニング"></label>
         </div>
 
         <section class="key-options" aria-label="名刺の重要設定">
