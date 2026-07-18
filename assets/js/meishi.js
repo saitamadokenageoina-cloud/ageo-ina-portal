@@ -6,7 +6,7 @@
     vertical:{finished:{width:650,height:1075},bleed:{width:720,height:1146,inset:35},finishedMm:{width:55,height:91},bleedMm:{width:61,height:97}}
   };
   const STORAGE_KEY = 'doken_meishi_draft_v1';
-  const fields = ['company', 'person-name', 'role', 'trade', 'tagline', 'services', 'strengths', 'qualifications', 'permit-number', 'experience', 'achievements', 'ccus', 'insurance', 'invoice-number', 'business-hours', 'phone', 'email', 'address', 'website', 'social', 'service-area', 'qr-url', 'back-focus', 'style-preset', 'vertical-layout', 'accent-color', 'member-label'];
+  const fields = ['company', 'person-name', 'role', 'trade', 'custom-trade', 'tagline', 'services', 'strengths', 'qualifications', 'permit-number', 'experience', 'achievements', 'ccus', 'insurance', 'invoice-number', 'business-hours', 'phone', 'email', 'address', 'website', 'social', 'service-area', 'qr-url', 'back-focus', 'style-preset', 'vertical-layout', 'accent-color', 'member-label'];
   const form = document.getElementById('card-form');
   const preview = document.getElementById('card-preview');
   const context = preview.getContext('2d');
@@ -51,18 +51,46 @@
   const tradeSuggestions = {
     carpenter: { style: 'craft', color: '#c97832', reason: '木の温かさと職人らしい力強さが伝わる構成です。', services: '新築・リフォーム・造作・木工事', lines: ['木を知り、暮らしをつくる。','確かな技で、住まいに安心を。','細部まで、誠実な仕事。','地域の住まいを、末永く支える。','大工の技で、想いをかたちに。'] },
     scaffold: { style: 'craft', color: '#e8612a', reason: '鳶・足場の機動力が伝わる、濃色とオレンジの構成です。', services: '足場工事・鳶工事・仮設工事', lines: ['安全を組み、現場を支える。','迅速・安全・確実な足場施工。','現場の一歩目を、確かな技で。','高所の仕事に、安心の土台を。','機動力で、現場を止めない。'] },
-    plaster: { style: 'premium', color: '#a77a48', reason: '左官の質感と丁寧な仕事が伝わる落ち着いた構成です。', services: '左官・タイル・外構・補修工事', lines: ['塗りの技で、空間に表情を。','手仕事の美しさを、暮らしへ。','壁一面に、職人の誠実さを。','伝統の技と、現代の仕上がり。','下地から仕上げまで丁寧に。'] },
+    plaster: { style: 'premium', color: '#a77a48', reason: '左官の質感と丁寧な仕事が伝わる落ち着いた構成です。', services: '左官・塗り壁・モルタル・補修工事', lines: ['塗りの技で、空間に表情を。','手仕事の美しさを、暮らしへ。','壁一面に、職人の誠実さを。','伝統の技と、現代の仕上がり。','下地から仕上げまで丁寧に。'] },
     electrical: { style: 'modern', color: '#f0b429', reason: '安全性と専門性が伝わる紺色と黄色の構成です。', services: '電気設備・配線・照明・改修工事', lines: ['安全な電気で、暮らしを明るく。','見えない配線まで、確かな仕事。','電気の困りごとに、迅速対応。','安心をつなぐ、電気のプロ。','未来の暮らしに、確かな電気を。'] },
     plumbing: { style: 'trust', color: '#1586a8', reason: '清潔感と安心感が伝わる青系の構成です。', services: '給排水・空調・設備・修繕工事', lines: ['水まわりの安心を、確かな技で。','暮らしを支える、設備のプロ。','見えない配管まで、丁寧に。','水と空気の困りごとに迅速対応。','毎日の快適を、設備から。'] },
-    painting: { style: 'friendly', color: '#e85278', reason: '仕上がりの美しさが伝わる明るい差し色の構成です。', services: '外壁塗装・屋根塗装・防水・補修', lines: ['住まいを守り、彩りをつくる。','丁寧な塗装で、長持ちする家へ。','下地から誠実に、美しい仕上がり。','色と技で、建物に新しい価値を。','塗るだけでなく、守る仕事。'] },
-    civil: { style: 'craft', color: '#e07a24', reason: '土木・重機の堅牢さが伝わる力強い構成です。', services: '土木・造成・外構・重機工事', lines: ['地域の足元を、確かな技で。','強い基盤を、誠実な施工で。','安全第一、確実な土木工事。','地域の未来を、地面から支える。','機動力と技術で、現場に応える。'] },
+    painting: { style: 'friendly', color: '#e85278', reason: '仕上がりの美しさが伝わる明るい差し色の構成です。', services: '外壁塗装・屋根塗装・吹付・補修', lines: ['住まいを守り、彩りをつくる。','丁寧な塗装で、長持ちする家へ。','下地から誠実に、美しい仕上がり。','色と技で、建物に新しい価値を。','塗るだけでなく、守る仕事。'] },
+    civil: { style: 'craft', color: '#e07a24', reason: '土木の堅牢さが伝わる力強い構成です。', services: '土木・造成・外構・基礎工事', lines: ['地域の足元を、確かな技で。','強い基盤を、誠実な施工で。','安全第一、確実な土木工事。','地域の未来を、地面から支える。','機動力と技術で、現場に応える。'] },
     interior: { style: 'stylish', color: '#2f7d73', reason: '空間づくりのセンスと清潔感が伝わる構成です。', services: '内装・クロス・床・原状回復工事', lines: ['空間を整え、心地よさをつくる。','きれい・丁寧・確かな内装。','暮らしに合う空間をご提案。','仕上がりで選ばれる内装工事。','小さな張替えから誠実に。'] },
     demolition: { style: 'industrial', color: '#e8612a', reason: '安全管理と機動力が伝わる重厚な構成です。', services: '建物解体・内装解体・撤去・処分', lines: ['壊すだけでなく、次をつくる。','安全・迅速・近隣へ丁寧に。','解体から整地まで一貫対応。','現場をきれいに、確実に。','安心できる解体工事を。'] },
     rebar: { style: 'technical', color: '#16858c', reason: '構造を支える精度と技術力が伝わる構成です。', services: '鉄筋・型枠・躯体工事', lines: ['建物の強さを、確かな技で。','見えない構造に、誇れる仕事。','精度と安全で、現場を支える。','躯体の品質を、足元から。','確かな施工で、未来を組む。'] },
-    roofing: { style: 'safety', color: '#d77a25', reason: '住まいを守る安心感と専門性が伝わる構成です。', services: '屋根・板金・雨樋・雨漏り修繕', lines: ['屋根から、住まいを守る。','雨漏りの不安に迅速対応。','見えない傷みも丁寧に確認。','安心が長持ちする屋根工事。','地域の屋根を、確かな技で。'] },
+    roofing: { style: 'safety', color: '#d77a25', reason: '住まいを守る安心感と専門性が伝わる構成です。', services: '瓦・スレート・屋根葺き・雨漏り修繕', lines: ['屋根から、住まいを守る。','雨漏りの不安に迅速対応。','見えない傷みも丁寧に確認。','安心が長持ちする屋根工事。','地域の屋根を、確かな技で。'] },
     design: { style: 'architect', color: '#de5b35', reason: '設計力と管理能力を端正に見せる構成です。', services: '設計・施工管理・確認申請・改修提案', lines: ['図面から現場まで、確かな品質を。','考える力で、建築を整える。','設計と施工を、ひとつにつなぐ。','使いやすさを、かたちに。','現場を読み、最適解を描く。'] },
     general: { style: 'trust', color: '#e8612a', reason: '幅広いお客様に安心感を与える、誠実で見やすい構成です。', services: '建築・改修・修繕・住まいの相談', lines: ['確かな技で、地域の安心を。','相談しやすい、頼れる建設のプロ。','小さな修繕から、誠実に。','技術と信頼で、想いをかたちに。','地域に根ざし、末永いお付き合いを。'] }
   };
+
+  function professionSuggestion(style,color,services,line,reason='専門性と信頼が伝わる構成です。'){
+    return{style,color,services,reason,lines:[line,'専門の技で、現場に応える。','安全・丁寧・確実な施工。','見えない部分まで、誠実に。','地域と現場を、技術で支える。']};
+  }
+
+  Object.assign(tradeSuggestions,{
+    survey:professionSuggestion('architect','#2872a8','測量・墨出し・現況調査・施工支援','正確な測量で、現場の基準をつくる。'),
+    steel:professionSuggestion('industrial','#3b6f8f','鉄骨・鋼構造物・鍛冶・溶接工事','鉄で組み、建物の強さを支える。'),
+    masonry:professionSuggestion('craft','#a66a43','石・タイル・れんが・ブロック工事','積み上げる技で、美しさと強さを。'),
+    paving:professionSuggestion('industrial','#e2762d','舗装・路盤・駐車場・道路工事','確かな舗装で、安全な道をつくる。'),
+    dredging:professionSuggestion('technical','#1686a0','しゅんせつ・河川・港湾・水路工事','水辺の基盤を、確かな技術で守る。'),
+    sheetmetal:professionSuggestion('technical','#708090','建築板金・雨樋・金属屋根・外装工事','一枚の金属を、建物を守る技へ。'),
+    glass:professionSuggestion('modern','#2997c8','ガラス・サッシ・窓・鏡工事','光と安心を、確かな窓まわりから。'),
+    waterproof:professionSuggestion('trust','#1976a3','防水・シーリング・漏水補修工事','水を止め、建物を長く守る。'),
+    machinery:professionSuggestion('industrial','#59636e','機械器具設置・据付・搬入・メンテナンス','精密な据付で、設備を確実に動かす。'),
+    insulation:professionSuggestion('safety','#d98228','保温・保冷・断熱・熱絶縁工事','熱を制御し、建物の効率を高める。'),
+    telecom:professionSuggestion('future','#1674bd','電気通信・LAN・弱電・防犯設備','通信をつなぎ、現場と暮らしを支える。'),
+    landscaping:professionSuggestion('eco','#3f8a50','造園・植栽・剪定・庭・緑地管理','緑の技で、心地よい景色をつくる。'),
+    well:professionSuggestion('technical','#167f9b','さく井・井戸・地中熱・揚水設備','地下の水を、安全に暮らしへ届ける。'),
+    fittings:professionSuggestion('wood','#9b693f','建具・家具・木製扉・造作工事','開く、閉じる、その先まで美しく。'),
+    waterworks:professionSuggestion('trust','#1689ad','水道施設・配水管・給水設備工事','安心できる水を、確かな設備で。'),
+    fire:professionSuggestion('safety','#d64535','消防設備・警報・消火設備・点検','万一に備える設備を、確実に。'),
+    cleaning:professionSuggestion('friendly','#2c9b83','建築美装・清掃施設・竣工クリーニング','仕上げの清潔さで、建物の価値を高める。'),
+    sign:professionSuggestion('stylish','#e05275','看板・サイン・シート・広告施工','伝えたい想いを、街で目立つ形に。'),
+    heavy_operator:professionSuggestion('industrial','#e2762d','重機運転・掘削・積込・整地作業','重機の技で、現場を正確に動かす。'),
+    driver:professionSuggestion('safety','#3974a8','建設車両・資材運搬・ダンプ・運送','安全運行で、現場の流れを支える。'),
+    custom:professionSuggestion('trust','#e8612a','建設関連工事・専門サービス','専門の仕事を、分かりやすく誠実に伝える。')
+  });
 
   function value(id) {
     const element = document.getElementById(id);
@@ -82,13 +110,14 @@
 
   function tradeLabel() {
     const select=document.getElementById('trade');
+    if(select.value==='custom')return value('custom-trade')||'その他の建設関連職種';
     return select.selectedOptions[0] ? select.selectedOptions[0].textContent : '建設業';
   }
 
   function cardData() {
     return {
       company: value('company'), name: value('person-name') || 'お名前', role: value('role'),
-      trade: value('trade'), tagline: value('tagline'), services: value('services'),
+      trade: value('trade'), tradeName:tradeLabel(), tagline: value('tagline'), services: value('services'),
       qualifications: value('qualifications'), phone: value('phone'), email: value('email'),
       address: value('address'), website: value('website'), social: value('social'), area: value('service-area'),
       qrUrl: value('qr-url'), illustration:selectedIllustration(), backFocus: value('back-focus') || 'services', orientation:selectedOrientation(), verticalLayout:value('vertical-layout')||'center',
@@ -219,7 +248,28 @@
     demolition:{stroke:['M175 790h650','M245 690h430','M300 690V390h300v300','M300 480h300M300 570h300','M500 390l65-155 95 40','M660 275l165 155','M825 430l-80 110'],fill:['M445 335l55-125 55 125z']},
     rebar:{stroke:['M190 210v580M395 210v580M600 210v580M805 210v580','M145 315h710M145 520h710M145 725h710','M190 725l615-410M190 315l615 410'],fill:['M150 175h80v70h-80zM765 755h80v70h-80z']},
     roofing:{stroke:['M105 530L500 190l395 340','M210 520v275h580V520','M320 430l180-155 180 155','M690 620c0 105-75 155-150 195-75-40-150-90-150-195v-70h300z'],fill:['M540 595l35 70 75 10-55 52 15 75-70-36-70 36 15-75-55-52 75-10z']},
-    design:{stroke:['M185 160h480v680H185z','M285 290h275M285 410h275M285 530h195','M665 300l155-155 70 70-155 155','M625 410l110-40-70-70z','M655 610a125 125 0 1 0 0 250'],fill:['M790 125l120 120-48 48-120-120z']}
+    design:{stroke:['M185 160h480v680H185z','M285 290h275M285 410h275M285 530h195','M665 300l155-155 70 70-155 155','M625 410l110-40-70-70z','M655 610a125 125 0 1 0 0 250'],fill:['M790 125l120 120-48 48-120-120z']},
+    survey:{stroke:['M175 790h650','M500 180v610','M310 420h380','M370 420l130-240 130 240','M250 690l250-270 250 270'],fill:['M455 135h90v90h-90z']},
+    steel:{stroke:['M170 790h660','M250 790V225M750 790V225','M250 315h500M250 520h500M250 700h500','M250 700l500-385M250 315l500 385'],fill:['M210 180h580v90H210z']},
+    masonry:{stroke:['M145 745h710','M185 295h630v390H185z','M185 425h630M185 555h630','M340 295v130M650 295v130M500 425v130M340 555v130M650 555v130'],fill:['M205 315h115v90H205z']},
+    paving:{stroke:['M120 725h760','M210 630h580','M295 535h410','M375 440h250','M500 255v110','M410 315h180'],fill:['M455 185h90v110h-90z']},
+    dredging:{stroke:['M115 725c125-90 250 90 375 0s250 90 375 0','M250 610h430l100-165H390z','M470 445l135-220 125 70','M730 295l135 115'],fill:['M315 535h365l-45 75H270z']},
+    sheetmetal:{stroke:['M155 665L500 265l345 400','M245 650h510v160H245','M320 570l180-210 180 210','M690 235l105 105','M740 185l105 105'],fill:['M205 665h590v55H205z']},
+    glass:{stroke:['M185 175h630v650H185z','M500 175v650M185 500h630','M250 255l165-30M585 745l165-30'],fill:['M225 540h235v245H225z']},
+    waterproof:{stroke:['M165 710h670','M250 650V360h500v290','M335 470h330','M500 180c-135 160-135 285 0 325 135-40 135-165 0-325'],fill:['M420 585h160v125H420z']},
+    machinery:{stroke:['M165 700h670','M250 620h500v-300H250z','M335 405h330v130H335z','M335 620v105M665 620v105','M500 205v115','M430 205h140'],fill:['M390 440h220v60H390z']},
+    insulation:{stroke:['M165 735h670','M230 650V270h540v380','M315 345c70 55 140-55 210 0s140-55 210 0','M315 475c70 55 140-55 210 0s140-55 210 0','M315 605c70 55 140-55 210 0s140-55 210 0'],fill:[]},
+    telecom:{stroke:['M205 760h590','M500 760V500','M370 500h260','M280 400c115-120 325-120 440 0','M175 285c175-205 475-205 650 0'],fill:['M445 435h110v110H445z']},
+    landscaping:{stroke:['M500 790V455','M500 610l-165-135M500 560l165-135','M500 500c-205 0-275-155-230-300 155 0 260 85 230 300','M500 430c205 0 275-145 230-285-155 0-260 80-230 285','M230 790h540'],fill:[]},
+    well:{stroke:['M200 730h600','M280 680V350h440v330','M230 350h540','M350 350v-95h300v95','M500 445v245','M430 515h140'],fill:['M500 105c-85 105-85 180 0 205 85-25 85-100 0-205z']},
+    fittings:{stroke:['M220 170h560v660H220z','M310 255h380v575H310z','M610 535h18','M310 390h380','M385 300h230'],fill:['M580 500h85v70h-85z']},
+    waterworks:{stroke:['M140 660h720','M215 660V430h570v230','M360 430V270h280v160','M500 145v125','M410 145h180','M690 505v155'],fill:['M295 505c-75 95-75 165 0 185 75-20 75-90 0-185z']},
+    fire:{stroke:['M500 160c-85 125-240 210-240 410 0 150 105 250 240 250s240-100 240-250c0-115-65-220-155-300 5 115-45 180-95 210 20-125-20-220-90-285','M500 500c-70 80-100 145-100 205 0 65 45 110 100 110s100-45 100-110c0-60-30-125-100-205'],fill:[]},
+    cleaning:{stroke:['M260 780l95-430h290l95 430','M315 560h370','M410 350v-145h180v145','M200 750h600'],fill:['M690 180l28 58 62 9-45 44 11 62-56-29-56 29 11-62-45-44 62-9z']},
+    sign:{stroke:['M175 250h650v400H175z','M285 650v170M715 650v170','M245 820h510','M285 360h430M285 470h290M285 580h360'],fill:['M175 250h650v70H175z']},
+    heavy_operator:{stroke:['M125 760h750','M200 650a115 115 0 1 0 230 0a115 115 0 1 0-230 0','M550 650a115 115 0 1 0 230 0a115 115 0 1 0-230 0','M535 345l200-185 130 75-155 305'],fill:['M155 545h515L555 330H285z']},
+    driver:{stroke:['M145 710h710','M220 650a105 105 0 1 0 210 0a105 105 0 1 0-210 0','M600 650a105 105 0 1 0 210 0a105 105 0 1 0-210 0','M165 560V300h470v260','M635 395h120l105 165H635'],fill:['M205 340h390v170H205z']},
+    custom:{stroke:['M170 610V390L500 155l320 235v220','M255 610v180h490V610','M405 790V565h190v225','M300 350c35-125 365-125 400 0','M275 350h450'],fill:[]}
   };
 
   function drawTradeIllustration(ctx, trade, x, y, size, color, reverse = false) {
@@ -233,6 +283,12 @@
     spec.stroke.forEach(path=>ctx.stroke(new Path2D(path)));
     ctx.globalAlpha=.7;ctx.fillStyle=color;ctx.beginPath();ctx.arc(805,185,23,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(860,245,12,0,Math.PI*2);ctx.fill();
     ctx.restore();
+  }
+
+  function drawTradeBadge(ctx,text,x,y,maxWidth,accent){
+    ctx.save();ctx.textAlign='left';ctx.textBaseline='middle';ctx.font='800 25px "BIZ UDPGothic","Noto Sans JP",sans-serif';
+    const label=clippedText(ctx,text||'建設業',maxWidth-34);const width=Math.min(maxWidth,ctx.measureText(label).width+34);
+    ctx.fillStyle=accent;roundedRect(ctx,x,y,width,44,12);ctx.fill();ctx.fillStyle='#fff';ctx.fillText(label,x+17,y+23);ctx.restore();
   }
 
   function drawPhoto(ctx, image, x, y, size, accent) {
@@ -325,10 +381,11 @@
       if(photoImage)drawPhoto(ctx,photoImage,78,190,112,data.accent);else if(data.illustration!=='none')drawTradeIllustration(ctx,data.trade,78,190,112,'#fff',true);
       const x=200,max=400;
       ctx.fillStyle=palette.mid;ctx.font='700 28px "BIZ UDPGothic","Noto Sans JP",sans-serif';if(data.company)ctx.fillText(clippedText(ctx,data.company,max),x,120);
-      ctx.fillStyle=palette.dark;ctx.font=`800 ${fitText(ctx,data.name,max,70,43,800)}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;ctx.fillText(data.name,x,225);
-      if(data.role){ctx.fillStyle=palette.mid;ctx.font='700 27px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText(clippedText(ctx,data.role,max),x,275);}
-      ctx.fillStyle=data.accent;ctx.fillRect(x,315,max,7);
-      drawVerticalContactLines(ctx,data,x,395,max,68,'#20344a');
+      drawTradeBadge(ctx,data.tradeName,x,145,max,data.accent);
+      ctx.fillStyle=palette.dark;ctx.font=`800 ${fitText(ctx,data.name,max,70,43,800)}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;ctx.fillText(data.name,x,255);
+      if(data.role){ctx.fillStyle=palette.mid;ctx.font='700 27px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText(clippedText(ctx,data.role,max),x,310);}
+      ctx.fillStyle=data.accent;ctx.fillRect(x,350,max,7);
+      drawVerticalContactLines(ctx,data,x,425,max,64,'#20344a');
       if(target){const q=170,qx=width-q-48,qy=790;drawQr(ctx,target,qx,qy,q);ctx.fillStyle=palette.dark;ctx.font='700 24px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.textAlign='center';ctx.fillText('WEB・LINE',qx+q/2,qy+q+38);ctx.textAlign='left';}
       if(data.member){ctx.fillStyle=data.accent;ctx.font='700 24px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText('埼玉土建 上尾伊奈支部 組合員',x,1020);}
       return;
@@ -340,9 +397,9 @@
       ctx.textAlign='center';ctx.fillStyle='#fff';ctx.font='700 27px "BIZ UDPGothic","Noto Sans JP",sans-serif';if(data.company)ctx.fillText(clippedText(ctx,data.company,540),width/2,360);
       ctx.fillStyle=palette.dark;ctx.font=`800 ${fitText(ctx,data.name,540,68,42,800)}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;ctx.fillText(data.name,width/2,505);
       if(data.role){ctx.fillStyle=palette.mid;ctx.font='700 27px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText(clippedText(ctx,data.role,500),width/2,555);}
-      ctx.textAlign='left';ctx.fillStyle=data.accent;ctx.fillRect(55,595,540,7);
-      drawVerticalContactLines(ctx,data,60,670,target?330:530,62,'#20344a');
-      if(target){const q=165,qx=430,qy=720;drawQr(ctx,target,qx,qy,q);ctx.fillStyle=palette.dark;ctx.font='700 23px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.textAlign='center';ctx.fillText('WEB・LINE',qx+q/2,qy+q+36);ctx.textAlign='left';}
+      ctx.textAlign='left';drawTradeBadge(ctx,data.tradeName,55,570,540,data.accent);ctx.fillStyle=data.accent;ctx.fillRect(55,625,540,7);
+      drawVerticalContactLines(ctx,data,60,700,target?330:530,60,'#20344a');
+      if(target){const q=165,qx=430,qy=745;drawQr(ctx,target,qx,qy,q);ctx.fillStyle=palette.dark;ctx.font='700 23px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.textAlign='center';ctx.fillText('WEB・LINE',qx+q/2,qy+q+36);ctx.textAlign='left';}
       if(data.member){ctx.fillStyle=data.accent;ctx.font='700 23px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText('埼玉土建 上尾伊奈支部 組合員',60,1020);}
       return;
     }
@@ -352,9 +409,9 @@
     ctx.textAlign='center';ctx.fillStyle=palette.mid;ctx.font='700 28px "BIZ UDPGothic","Noto Sans JP",sans-serif';if(data.company)ctx.fillText(clippedText(ctx,data.company,540),width/2,355);
     ctx.fillStyle=palette.dark;ctx.font=`800 ${fitText(ctx,data.name,540,72,44,800)}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;ctx.fillText(data.name,width/2,455);
     if(data.role){ctx.fillStyle=palette.mid;ctx.font='700 27px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText(clippedText(ctx,data.role,500),width/2,510);}
-    ctx.textAlign='left';ctx.fillStyle=data.accent;ctx.fillRect(55,550,540,7);
-    drawVerticalContactLines(ctx,data,60,625,target?330:530,64,'#20344a');
-    if(target){const q=165,qx=430,qy=680;drawQr(ctx,target,qx,qy,q);ctx.fillStyle=palette.dark;ctx.font='700 23px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.textAlign='center';ctx.fillText('WEB・LINE',qx+q/2,qy+q+36);ctx.textAlign='left';}
+    ctx.textAlign='left';drawTradeBadge(ctx,data.tradeName,55,530,540,data.accent);ctx.fillStyle=data.accent;ctx.fillRect(55,590,540,7);
+    drawVerticalContactLines(ctx,data,60,665,target?330:530,60,'#20344a');
+    if(target){const q=165,qx=430,qy=710;drawQr(ctx,target,qx,qy,q);ctx.fillStyle=palette.dark;ctx.font='700 23px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.textAlign='center';ctx.fillText('WEB・LINE',qx+q/2,qy+q+36);ctx.textAlign='left';}
     if(data.member){ctx.fillStyle=data.accent;ctx.font='700 23px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText('埼玉土建 上尾伊奈支部 組合員',60,1020);}
   }
 
@@ -402,7 +459,8 @@
       ctx.font = `700 ${Math.max(25,Math.round(height*.035))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;
       ctx.fillText(clippedText(ctx, data.role, contentWidth), left, height*.37);
     }
-    ctx.fillStyle=data.accent;ctx.fillRect(left,height*.415,contentWidth,height*.008);
+    drawTradeBadge(ctx,data.tradeName,left,height*.395,contentWidth,data.accent);
+    ctx.fillStyle=data.accent;ctx.fillRect(left,height*.475,contentWidth,height*.008);
     const details = [
       data.phone && `TEL  ${data.phone}`,
       data.email && `MAIL  ${data.email}`,
@@ -411,7 +469,7 @@
     ].filter(Boolean);
     ctx.fillStyle = isDark?'rgba(255,255,255,.92)':'#20344a';
     ctx.font = `600 ${Math.max(25,Math.round(height*.027))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;
-    details.slice(0,4).forEach((detail,index) => ctx.fillText(clippedText(ctx, detail, contentWidth), left, height*(.52 + index*.09)));
+    details.slice(0,4).forEach((detail,index) => ctx.fillText(clippedText(ctx, detail, contentWidth), left, height*(.56 + index*.085)));
     if (data.member) {
       ctx.fillStyle = data.accent; ctx.font = `700 ${Math.max(25,Math.round(height*.022))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;
       ctx.fillText('埼玉土建 上尾伊奈支部 組合員', left, height*.925);
@@ -687,6 +745,7 @@
     const add=(ok,points,good,bad)=>{ if(ok){score+=points;items.push({ok:true,text:good});}else items.push({ok:false,text:bad}); };
     add(Boolean(data.name && data.name!=='お名前'),12,'氏名が入力されています','氏名を入力してください');
     add(Boolean(data.company),8,'会社・屋号が入力されています','会社・屋号を入れると信頼感が上がります');
+    if(data.trade==='custom')add(Boolean(value('custom-trade')),8,'自由入力した職種名が表示されます','「その他」を選んだ場合は職種名を入力してください');
     add(Boolean(data.phone || data.email),12,'問い合わせ先があります','電話番号またはメールを入力してください');
     if(data.useBack){
       add(Boolean(data.tagline),10,'裏面で強みが一言で伝わります','裏面のキャッチコピーを入力してください');
@@ -763,6 +822,13 @@
     queueRender();
   }
 
+  function syncTradeUI(){
+    const custom=value('trade')==='custom';const wrap=document.getElementById('custom-trade-wrap');const input=document.getElementById('custom-trade');
+    wrap.hidden=!custom;input.required=custom;
+    if(custom)input.setAttribute('aria-required','true');else input.removeAttribute('aria-required');
+    queueRender();
+  }
+
   function selectPreviewSide(side){
     currentSide=side;
     document.querySelectorAll('.side-tab').forEach(tab=>{const active=tab.dataset.side===side;tab.classList.toggle('active',active);tab.setAttribute('aria-selected',String(active));});
@@ -772,6 +838,7 @@
   form.addEventListener('input',queueRender);
   form.addEventListener('change',queueRender);
   form.querySelectorAll('input[name="orientation"],input[name="illustration-choice"]').forEach(radio=>radio.addEventListener('change',syncKeyOptions));
+  document.getElementById('trade').addEventListener('change',syncTradeUI);
   form.querySelectorAll('input[name="back-choice"]').forEach(radio=>radio.addEventListener('change',()=>{syncKeyOptions();if(selectedBack())selectPreviewSide('back');else selectPreviewSide('front');}));
   document.getElementById('back-fields').addEventListener('input',()=>selectPreviewSide('back'));
   document.getElementById('back-fields').addEventListener('change',()=>selectPreviewSide('back'));
@@ -790,5 +857,6 @@
 
   restoreDraft();
   syncPhotoControls();
+  syncTradeUI();
   syncKeyOptions();
 })();
