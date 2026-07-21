@@ -15,6 +15,9 @@
   const styleSelectElement=document.getElementById('style-preset');
   [...styleSelectElement.options].forEach(option=>{if(STYLE_ALIASES[option.value])option.remove();});
   const arcGroup=document.createElement('optgroup');arcGroup.label='円弧デザイン';const arcOption=document.createElement('option');arcOption.value='grand_arc';arcOption.textContent='大円弧・プレミアム';arcGroup.appendChild(arcOption);styleSelectElement.appendChild(arcGroup);
+  const sceneGroup=document.createElement('optgroup');sceneGroup.label='日本・街並みデザイン';
+  [['ichimatsu','市松モザイク・祭典風'],['fireworks','花火・和風'],['townscape','住宅・街並み']].forEach(item=>{const option=document.createElement('option');option.value=item[0];option.textContent=item[1];sceneGroup.appendChild(option);});
+  styleSelectElement.appendChild(sceneGroup);
   const consolidatedLabels={trust:'AIおすすめ・信頼重視',diagonal_luxe:'斜め分割・モダン',wave_blue:'流線ウェーブ',grand_arc:'大円弧・プレミアム',split_duo:'企業ツートーン',ink_black:'黒紙・白文字',wa_pattern:'和柄・職人',stone_mono:'石材・コンクリート',hotel:'高級・ブラックゴールド',minimal:'白地・ミニマル',muji:'自然素材・ナチュラル',architect:'設計図・技術',general_contractor:'ゼネコン・企業',craft:'職人・木目',eco:'地域密着・環境',safety:'安全第一',future:'未来・スタイリッシュ',photo:'施工写真主役'};
   [...styleSelectElement.options].forEach(option=>{if(consolidatedLabels[option.value])option.textContent=consolidatedLabels[option.value];});
   styleSelectElement.querySelectorAll('optgroup').forEach(group=>{if(!group.querySelector('option'))group.remove();});
@@ -69,7 +72,10 @@
     orange_slope: { dark: '#172231', mid: '#34465b', light: '#ffffff', accent: '#f47b20' },
     layered_wave: { dark: '#10243d', mid: '#245b83', light: '#ffffff', accent: '#f08a24' },
     round_window: { dark: '#133d46', mid: '#277987', light: '#ffffff', accent: '#d8a73a' },
-    curve_split: { dark: '#101a2f', mid: '#243a5d', light: '#ffffff', accent: '#f47b20' }
+    curve_split: { dark: '#101a2f', mid: '#243a5d', light: '#ffffff', accent: '#f47b20' },
+    ichimatsu: { dark: '#132a67', mid: '#2454a6', light: '#ffffff', accent: '#27a7df' },
+    fireworks: { dark: '#075a70', mid: '#087c8f', light: '#f4fbfb', accent: '#f1c75b' },
+    townscape: { dark: '#35251f', mid: '#765449', light: '#fffaf5', accent: '#d66a36' }
   };
 
   const tradeSuggestions = {
@@ -378,6 +384,26 @@
     drawStyleTexture(ctx,data,width,height);
   }
 
+  function drawIchimatsuMosaic(ctx,width,height,color,alpha=.9) {
+    ctx.save();
+    const blocks=[[.7,.02,48],[.78,.08,58],[.88,.02,44],[.94,.13,56],[.73,.22,42],[.83,.27,64],[.94,.32,46],[.76,.42,55],[.89,.48,50],[.97,.58,62],[.79,.65,46],[.9,.72,60],[.73,.82,52],[.85,.9,44],[.96,.86,58]];
+    blocks.forEach((block,index)=>{ctx.fillStyle=colorWithAlpha(index%3===0?'#ffffff':color,index%3===0?.22:alpha-(index%4)*.12);ctx.save();ctx.translate(width*block[0],height*block[1]);ctx.rotate((index%2?1:-1)*.09);ctx.fillRect(0,0,block[2],block[2]);ctx.restore();});
+    ctx.restore();
+  }
+
+  function drawFireworkBurst(ctx,x,y,radius,color,alpha=.72) {
+    ctx.save();ctx.strokeStyle=colorWithAlpha(color,alpha);ctx.fillStyle=colorWithAlpha(color,alpha);ctx.lineWidth=Math.max(2,radius*.025);ctx.lineCap='round';
+    for(let i=0;i<24;i+=1){const angle=Math.PI*2*i/24;const inner=radius*(.2+(i%3)*.035);const outer=radius*(.68+(i%4)*.06);ctx.beginPath();ctx.moveTo(x+Math.cos(angle)*inner,y+Math.sin(angle)*inner);ctx.lineTo(x+Math.cos(angle)*outer,y+Math.sin(angle)*outer);ctx.stroke();ctx.beginPath();ctx.arc(x+Math.cos(angle)*radius*.92,y+Math.sin(angle)*radius*.92,Math.max(2,radius*.035),0,Math.PI*2);ctx.fill();}
+    ctx.restore();
+  }
+
+  function drawTownscape(ctx,width,height,color,alpha=.16) {
+    ctx.save();ctx.fillStyle=colorWithAlpha(color,alpha);const base=height*.98;let x=width*.6;
+    const buildings=[{w:.075,h:.29,roof:'flat'},{w:.09,h:.2,roof:'gable'},{w:.07,h:.36,roof:'flat'},{w:.105,h:.25,roof:'gable'},{w:.065,h:.32,roof:'flat'}];
+    buildings.forEach((building,index)=>{const w=width*building.w;const h=height*building.h;if(building.roof==='gable'){ctx.beginPath();ctx.moveTo(x,base);ctx.lineTo(x,base-h*.72);ctx.lineTo(x+w*.5,base-h);ctx.lineTo(x+w,base-h*.72);ctx.lineTo(x+w,base);ctx.closePath();ctx.fill();}else{ctx.fillRect(x,base-h,w,h);ctx.fillRect(x+w*.38,base-h-height*.06,w*.24,height*.06);}ctx.fillStyle=colorWithAlpha('#ffffff',.22);for(let row=0;row<3;row+=1){for(let col=0;col<2;col+=1){ctx.fillRect(x+w*(.18+col*.42),base-h+height*(.055+row*.07),w*.18,height*.035);}}ctx.fillStyle=colorWithAlpha(color,alpha);x+=w+width*.012;});
+    ctx.fillRect(width*.57,base-height*.018,width*.43,height*.018);ctx.restore();
+  }
+
   function drawStyleTexture(ctx,data,width,height) {
     ctx.save();
     ctx.lineWidth=1.5;
@@ -409,6 +435,12 @@
       for(let i=0;i<5;i+=1){const y=height*(.18+i*.14);ctx.beginPath();ctx.moveTo(width*.63,y);ctx.lineTo(width*(.77+i*.03),y);ctx.lineTo(width*(.82+i*.02),y-height*.07);ctx.lineTo(width*.98,y-height*.07);ctx.stroke();}
     } else if (data.style==='black_gold' || data.style==='hotel' || data.style==='luxury_home') {
       ctx.strokeStyle=colorWithAlpha(data.accent,.26);ctx.lineWidth=3;ctx.strokeRect(width*.035,height*.055,width*.93,height*.89);
+    } else if (data.style==='ichimatsu') {
+      drawIchimatsuMosaic(ctx,width,height,data.accent,.35);
+    } else if (data.style==='fireworks') {
+      drawFireworkBurst(ctx,width*.82,height*.17,height*.13,'#ffffff',.35);drawFireworkBurst(ctx,width*.94,height*.38,height*.09,data.accent,.5);
+    } else if (data.style==='townscape') {
+      drawTownscape(ctx,width,height,data.accent,.16);
     } else if (data.style==='japanese') {
       ctx.strokeStyle='rgba(90,55,42,.10)';
       for(let i=-height;i<width;i+=46){ctx.beginPath();ctx.moveTo(i,0);ctx.lineTo(i+height,height);ctx.stroke();}
@@ -423,8 +455,8 @@
   }
 
   function designFamily(style){
-    if(['apple','muji','monochrome','minimal','nordic','wave_blue','stone_mono','orbit','grand_arc','corporate_panel','orange_slope','layered_wave','round_window'].includes(style))return'minimal';
-    if(['hotel','black_gold','navy','industrial','future','luxury_home','ink_black','wa_pattern','slim_vertical'].includes(style))return'dark';
+    if(['apple','muji','monochrome','minimal','nordic','wave_blue','stone_mono','orbit','grand_arc','corporate_panel','orange_slope','layered_wave','round_window','ichimatsu','townscape'].includes(style))return'minimal';
+    if(['hotel','black_gold','navy','industrial','future','luxury_home','ink_black','wa_pattern','slim_vertical','fireworks'].includes(style))return'dark';
     if(['craft','wood','concrete','safety','local','eco','split_duo','curve_split'].includes(style))return'band';
     if(['blueprint','architect','technical','general_contractor'].includes(style))return'blueprint';
     if(style==='photo')return'photo';
@@ -518,7 +550,7 @@
 
   function drawSignatureBackground(ctx,data,palette,width,height){
     const style=data.style;
-    if(!['diagonal_luxe','wave_blue','ink_black','wa_pattern','craft','stone_mono','split_duo','orbit','slim_vertical','grand_arc','corporate_panel','orange_slope','layered_wave','round_window','curve_split'].includes(style))return false;
+    if(!['diagonal_luxe','wave_blue','ink_black','wa_pattern','craft','stone_mono','split_duo','orbit','slim_vertical','grand_arc','corporate_panel','orange_slope','layered_wave','round_window','curve_split','ichimatsu','fireworks','townscape'].includes(style))return false;
     ctx.save();
     if(style==='diagonal_luxe'){
       ctx.fillStyle='#fff';ctx.fillRect(0,0,width,height);
@@ -566,6 +598,16 @@
       ctx.fillStyle='#fff';ctx.fillRect(0,0,width,height);const gradient=ctx.createLinearGradient(width*.58,0,width,height);gradient.addColorStop(0,palette.mid);gradient.addColorStop(1,palette.dark);ctx.fillStyle=gradient;
       ctx.beginPath();ctx.moveTo(width*.75,0);ctx.lineTo(width,0);ctx.lineTo(width,height);ctx.lineTo(width*.46,height);ctx.quadraticCurveTo(width*.71,height*.61,width*.75,0);ctx.closePath();ctx.fill();
       [['rgba(255,255,255,.92)',width*.72,width*.43,5],[colorWithAlpha(data.accent,.9),width*.735,width*.445,6],[colorWithAlpha(palette.mid,.28),width*.69,width*.4,3]].forEach(line=>{ctx.strokeStyle=line[0];ctx.lineWidth=line[3];ctx.beginPath();ctx.moveTo(line[1],0);ctx.quadraticCurveTo(width*.69,height*.61,line[2],height);ctx.stroke();});
+    }else if(style==='ichimatsu'){
+      ctx.fillStyle='#fff';ctx.fillRect(0,0,width,height);const navy=ctx.createLinearGradient(width*.66,0,width,height);navy.addColorStop(0,palette.mid);navy.addColorStop(1,palette.dark);ctx.fillStyle=navy;ctx.beginPath();ctx.moveTo(width*.68,0);ctx.lineTo(width,0);ctx.lineTo(width,height);ctx.lineTo(width*.75,height);ctx.quadraticCurveTo(width*.62,height*.55,width*.68,0);ctx.closePath();ctx.fill();
+      drawIchimatsuMosaic(ctx,width,height,'#ffffff',.58);ctx.strokeStyle=data.accent;ctx.lineWidth=6;ctx.beginPath();ctx.moveTo(width*.665,0);ctx.quadraticCurveTo(width*.61,height*.55,width*.735,height);ctx.stroke();
+    }else if(style==='fireworks'){
+      const night=ctx.createLinearGradient(0,0,width,height);night.addColorStop(0,palette.dark);night.addColorStop(1,'#063c55');ctx.fillStyle=night;ctx.fillRect(0,0,width,height);
+      drawFireworkBurst(ctx,width*.78,height*.2,height*.18,'#ffffff',.72);drawFireworkBurst(ctx,width*.93,height*.46,height*.13,data.accent,.86);drawFireworkBurst(ctx,width*.7,height*.66,height*.09,'#89d7ea',.58);
+      ctx.fillStyle='rgba(255,255,255,.075)';ctx.beginPath();ctx.moveTo(width*.55,height);ctx.lineTo(width*.68,height*.7);ctx.lineTo(width*.78,height);ctx.lineTo(width*.86,height*.68);ctx.lineTo(width,height*.84);ctx.lineTo(width,height);ctx.closePath();ctx.fill();
+    }else if(style==='townscape'){
+      const paper=ctx.createLinearGradient(0,0,width,height);paper.addColorStop(0,'#fffdf9');paper.addColorStop(1,'#f3e9df');ctx.fillStyle=paper;ctx.fillRect(0,0,width,height);drawTownscape(ctx,width,height,palette.dark,.24);
+      ctx.strokeStyle=colorWithAlpha(data.accent,.32);ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(width*.62,height*.98);ctx.lineTo(width*.62,height*.66);ctx.lineTo(width*.7,height*.58);ctx.lineTo(width*.78,height*.66);ctx.lineTo(width*.78,height*.98);ctx.stroke();
     }else if(style==='corporate_panel'){
       ctx.fillStyle='#fff';ctx.fillRect(0,0,width,height);ctx.fillStyle=palette.dark;ctx.fillRect(width*.73,0,width*.27,height);ctx.fillStyle=data.accent;ctx.fillRect(width*.73,0,9,height);
       ctx.strokeStyle=colorWithAlpha(palette.mid,.18);ctx.lineWidth=3;ctx.strokeRect(30,30,width-60,height-60);ctx.fillStyle=colorWithAlpha(data.accent,.09);ctx.beginPath();ctx.arc(width*.87,height*.2,width*.13,0,Math.PI*2);ctx.fill();
@@ -601,7 +643,7 @@
       else if(family==='band'){ctx.fillStyle='#fff';ctx.fillRect(0,0,width,height);const g=ctx.createLinearGradient(0,0,width*.3,height);g.addColorStop(0,palette.dark);g.addColorStop(1,palette.mid);ctx.fillStyle=g;ctx.fillRect(0,0,width*.3,height);ctx.fillStyle=data.accent;ctx.fillRect(width*.3,0,12,height);drawStyleTexture(ctx,data,width,height);}
       else{const g=ctx.createLinearGradient(0,0,width,height);g.addColorStop(0,palette.dark);g.addColorStop(1,palette.mid);ctx.fillStyle=g;ctx.fillRect(0,0,width,height);ctx.fillStyle=data.accent;ctx.fillRect(0,height-12,width,12);drawStyleTexture(ctx,data,width,height);}
     }
-    const isBand=family==='band';const isDark=family==='dark'||family==='blueprint';const rightDark=['diagonal_luxe','stone_mono','grand_arc','corporate_panel','orange_slope','layered_wave','round_window'].includes(data.style);
+    const isBand=family==='band';const isDark=family==='dark'||family==='blueprint';const rightDark=['diagonal_luxe','stone_mono','grand_arc','corporate_panel','orange_slope','layered_wave','round_window','ichimatsu'].includes(data.style);
     const left=width*(isBand?.37:.075);
     const contentWidth=width*(isBand?.55:.53);
     ctx.textBaseline = 'alphabetic';
