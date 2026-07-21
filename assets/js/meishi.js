@@ -404,6 +404,105 @@
     ctx.fillRect(width*.57,base-height*.018,width*.43,height*.018);ctx.restore();
   }
 
+  function drawIchimatsuArc(ctx,width,height,dark,mid,accent) {
+    ctx.save();
+    const cx=width*1.03,cy=height*.5;
+    const rings=[{r:height*.62,size:38},{r:height*.5,size:34},{r:height*.38,size:30}];
+    rings.forEach((ring,ringIndex)=>{
+      const steps=18-ringIndex*2;
+      for(let i=0;i<steps;i+=1){
+        const angle=Math.PI*(.56+i/(steps-1)*.88);
+        const x=cx+Math.cos(angle)*ring.r;
+        const y=cy+Math.sin(angle)*ring.r;
+        const size=ring.size;
+        ctx.save();ctx.translate(x,y);ctx.rotate(angle+Math.PI/4);
+        ctx.fillStyle=[dark,mid,accent,'#ffffff'][(i+ringIndex)%4];
+        ctx.globalAlpha=(i+ringIndex)%4===3?.94:.88;
+        ctx.fillRect(-size/2,-size/2,size,size);ctx.restore();
+      }
+    });
+    ctx.strokeStyle=colorWithAlpha(accent,.78);ctx.lineWidth=5;
+    [height*.68,height*.56,height*.44].forEach(radius=>{ctx.beginPath();ctx.arc(cx,cy,radius,Math.PI*.56,Math.PI*1.44);ctx.stroke();});
+    ctx.restore();
+  }
+
+  function sceneFont(style,weight,size) {
+    const family=style==='fireworks'?'"BIZ UDPMincho","Yu Mincho","Hiragino Mincho ProN",serif':'"BIZ UDPGothic","Noto Sans JP",sans-serif';
+    return `${weight} ${size}px ${family}`;
+  }
+
+  function sceneDetails(ctx,data,x,startY,maxWidth,lineHeight,color,fontSize=25) {
+    const details=[
+      data.phone&&`TEL  ${data.phone}`,
+      data.email&&`MAIL  ${data.email}`,
+      data.address,
+      [data.website&&`WEB  ${data.website}`,data.social&&`SNS  ${data.social}`].filter(Boolean).join('  ')
+    ].filter(Boolean);
+    ctx.fillStyle=color;ctx.font=sceneFont(data.style,600,fontSize);
+    details.slice(0,4).forEach((detail,index)=>ctx.fillText(clippedText(ctx,detail,maxWidth),x,startY+index*lineHeight));
+  }
+
+  function drawSceneFront(ctx,data,width,height) {
+    const palette=paletteFor(data);const target=qrTarget(data);const qrSize=target?Math.round(width*20/91):0;
+    ctx.textBaseline='alphabetic';ctx.textAlign='left';
+    if(data.style==='ichimatsu'){
+      const paper=ctx.createLinearGradient(0,0,width,height);paper.addColorStop(0,'#ffffff');paper.addColorStop(1,'#f4f8fd');ctx.fillStyle=paper;ctx.fillRect(0,0,width,height);
+      drawIchimatsuArc(ctx,width,height,palette.dark,palette.mid,data.accent);
+      ctx.fillStyle=data.accent;ctx.fillRect(0,0,14,height);
+      const left=70,max=610;ctx.fillStyle=palette.mid;ctx.font=sceneFont(data.style,700,31);if(data.company)ctx.fillText(clippedText(ctx,data.company,max),left,95);
+      ctx.fillStyle=palette.dark;ctx.font=sceneFont(data.style,800,fitText(ctx,data.name,max,76,45,800));ctx.fillText(data.name,left,205);
+      if(data.role){ctx.fillStyle='#37506e';ctx.font=sceneFont(data.style,700,27);ctx.fillText(clippedText(ctx,data.role,max),left,255);}
+      drawTradeBadge(ctx,data.tradeName,left,278,max,data.accent);ctx.fillStyle=data.accent;ctx.fillRect(left,355,max,6);
+      sceneDetails(ctx,data,left,410,max,54,'#19324d',24);
+      const artX=width*.86,artY=height*.18,artSize=target?118:172;
+      if(photoImage)drawPhoto(ctx,photoImage,artX,artY,artSize*.82,data.accent);else if(data.illustration!=='none')drawTradeIllustration(ctx,data.trade,artX,artY,artSize,'#ffffff',true);
+      if(target){const qx=width-qrSize-55,qy=height-qrSize-55;drawQr(ctx,target,qx,qy,qrSize);ctx.fillStyle='#ffffff';ctx.font=sceneFont(data.style,700,20);ctx.textAlign='center';ctx.fillText('WEB・LINE',qx+qrSize/2,qy+qrSize+29);ctx.textAlign='left';}
+      if(data.member){ctx.fillStyle=data.accent;ctx.font=sceneFont(data.style,700,20);ctx.fillText('埼玉土建 上尾伊奈支部 組合員',left,height-30);}
+      return;
+    }
+    if(data.style==='fireworks'){
+      const night=ctx.createLinearGradient(0,0,width,height);night.addColorStop(0,'#056178');night.addColorStop(1,'#073f59');ctx.fillStyle=night;ctx.fillRect(0,0,width,height);
+      drawFireworkBurst(ctx,width*.19,height*.17,height*.145,'#ffffff',.88);drawFireworkBurst(ctx,width*.43,height*.11,height*.12,'#d8f4f4',.72);drawFireworkBurst(ctx,width*.34,height*.37,height*.08,data.accent,.76);
+      ctx.fillStyle='rgba(255,255,255,.08)';ctx.beginPath();ctx.moveTo(0,height);ctx.lineTo(0,height*.74);ctx.lineTo(width*.19,height*.56);ctx.lineTo(width*.34,height*.78);ctx.lineTo(width*.46,height*.59);ctx.lineTo(width*.63,height*.79);ctx.lineTo(width*.77,height*.64);ctx.lineTo(width,height*.84);ctx.lineTo(width,height);ctx.closePath();ctx.fill();
+      const right=width*.56,max=width*.39;ctx.fillStyle='#ffffff';ctx.font=sceneFont(data.style,800,fitText(ctx,data.name,max,70,42,800));ctx.fillText(data.name,right,height*.31);
+      if(data.role){ctx.fillStyle='#d9eef3';ctx.font=sceneFont(data.style,700,25);ctx.fillText(clippedText(ctx,data.role,max),right,height*.385);}
+      drawTradeBadge(ctx,data.tradeName,right,height*.405,max,data.accent);
+      if(photoImage)drawPhoto(ctx,photoImage,width*.88,height*.16,112,data.accent);else if(data.illustration!=='none')drawTradeIllustration(ctx,data.trade,width*.88,height*.16,110,'#ffffff',true);
+      const left=62,detailMax=target?560:930;ctx.fillStyle='#ffffff';ctx.font=sceneFont(data.style,700,31);if(data.company)ctx.fillText(clippedText(ctx,data.company,detailMax),left,height*.61);
+      sceneDetails(ctx,data,left,height*.7,detailMax,50,'#eef8fa',23);
+      if(target){const qx=width-qrSize-52,qy=height-qrSize-48;drawQr(ctx,target,qx,qy,qrSize);ctx.fillStyle='#fff';ctx.font=sceneFont(data.style,700,19);ctx.textAlign='center';ctx.fillText('WEB・LINE',qx+qrSize/2,qy+qrSize+27);ctx.textAlign='left';}
+      if(data.member){ctx.fillStyle=data.accent;ctx.font=sceneFont(data.style,700,19);ctx.fillText('埼玉土建 上尾伊奈支部 組合員',right,height-30);}
+      return;
+    }
+    const paper=ctx.createLinearGradient(0,0,width,height);paper.addColorStop(0,'#fffdf8');paper.addColorStop(1,'#f1e7dc');ctx.fillStyle=paper;ctx.fillRect(0,0,width,height);
+    ctx.fillStyle=palette.dark;ctx.fillRect(0,0,width*.34,height);ctx.fillStyle=data.accent;ctx.fillRect(width*.34,0,8,height);drawTownscape(ctx,width*.92,height,'#ffffff',.22);
+    const artX=width*.17,artY=height*.34,artSize=target?145:205;if(photoImage)drawPhoto(ctx,photoImage,artX,artY,artSize*.78,data.accent);else if(data.illustration!=='none')drawTradeIllustration(ctx,data.trade,artX,artY,artSize,'#ffffff',true);
+    if(data.company){ctx.fillStyle='#ffffff';ctx.font=sceneFont(data.style,700,27);ctx.textAlign='center';ctx.fillText(clippedText(ctx,data.company,width*.28),artX,height*.12);ctx.textAlign='left';}
+    const left=width*.39,max=width*.54;ctx.fillStyle=palette.dark;ctx.font=sceneFont(data.style,800,fitText(ctx,data.name,max,70,42,800));ctx.fillText(data.name,left,height*.25);
+    if(data.role){ctx.fillStyle=palette.mid;ctx.font=sceneFont(data.style,700,26);ctx.fillText(clippedText(ctx,data.role,max),left,height*.33);}
+    drawTradeBadge(ctx,data.tradeName,left,height*.355,max,data.accent);ctx.fillStyle=data.accent;ctx.fillRect(left,height*.48,max,6);
+    sceneDetails(ctx,data,left,height*.56,target?width*.31:max,52,'#352f2b',23);
+    if(target){const qx=width-qrSize-48,qy=height-qrSize-46;drawQr(ctx,target,qx,qy,qrSize);ctx.fillStyle=palette.dark;ctx.font=sceneFont(data.style,700,19);ctx.textAlign='center';ctx.fillText('WEB・LINE',qx+qrSize/2,qy+qrSize+27);ctx.textAlign='left';}
+    if(data.member){ctx.fillStyle='#ffffff';ctx.font=sceneFont(data.style,700,18);ctx.textAlign='center';ctx.fillText('埼玉土建 上尾伊奈支部 組合員',artX,height-28);ctx.textAlign='left';}
+  }
+
+  function drawSceneBack(ctx,data,width,height) {
+    const palette=paletteFor(data);const suggestion=tradeSuggestions[data.trade]||tradeSuggestions.general;const tagline=data.tagline||suggestion.lines[0];
+    if(data.style==='ichimatsu'){ctx.fillStyle='#fff';ctx.fillRect(0,0,width,height);drawIchimatsuArc(ctx,width,height,palette.dark,palette.mid,data.accent);ctx.fillStyle='#f3f7fc';ctx.fillRect(0,height*.78,width,height*.22);}
+    else if(data.style==='fireworks'){const g=ctx.createLinearGradient(0,0,width,height);g.addColorStop(0,'#056178');g.addColorStop(1,'#073f59');ctx.fillStyle=g;ctx.fillRect(0,0,width,height);drawFireworkBurst(ctx,width*.86,height*.18,height*.13,'#ffffff',.55);drawFireworkBurst(ctx,width*.72,height*.43,height*.08,data.accent,.68);}
+    else{ctx.fillStyle=palette.dark;ctx.fillRect(0,0,width,height);drawTownscape(ctx,width,height,'#ffffff',.18);ctx.fillStyle=data.accent;ctx.fillRect(0,0,width,11);}
+    const darkText=data.style==='ichimatsu';const ink=darkText?palette.dark:'#ffffff';const muted=darkText?'#344b66':'#eef4f7';const left=70,max=width*.82;
+    ctx.fillStyle=ink;ctx.font=sceneFont(data.style,800,45);ctx.fillText(clippedText(ctx,data.company||data.name,max),left,92);
+    ctx.fillStyle=data.accent;ctx.font=sceneFont(data.style,800,25);ctx.fillText(clippedText(ctx,tagline,max),left,145);
+    const blocks=[
+      {label:'主な業務',text:data.services||suggestion.services},
+      {label:'資格・許可',text:[data.qualifications,data.permit].filter(Boolean).join('／')||'資格・許可・保険などの信頼情報'},
+      {label:'対応エリア・強み',text:[data.area,data.strengths].filter(Boolean).join('／')||'対応エリア・選ばれる理由'}
+    ];
+    blocks.forEach((block,index)=>{const x=index===2?width*.55:left;const y=index===2?height*.58:height*(.37+index*.22);const w=index===2?width*.37:width*.72;ctx.fillStyle=data.accent;ctx.font=sceneFont(data.style,800,23);ctx.fillText(block.label,x,y);ctx.fillStyle=muted;ctx.font=sceneFont(data.style,600,22);ctx.fillText(clippedText(ctx,block.text,w),x,y+43);});
+    const bottom=[data.experience,data.achievements,data.ccus,data.insurance,data.hours].filter(Boolean).join('　｜　');if(bottom){ctx.fillStyle=muted;ctx.font=sceneFont(data.style,600,19);ctx.fillText(clippedText(ctx,bottom,max),left,height-35);}
+  }
+
   function drawStyleTexture(ctx,data,width,height) {
     ctx.save();
     ctx.lineWidth=1.5;
@@ -634,6 +733,7 @@
   function drawFront(ctx, data, width, height) {
     if(data.illustration==='text'){drawTextOnlyFront(ctx,data,width,height);return;}
     if(data.orientation==='vertical'){drawFrontVertical(ctx,data,width,height);return;}
+    if(['ichimatsu','fireworks','townscape'].includes(data.style)){drawSceneFront(ctx,data,width,height);return;}
     const palette = paletteFor(data);
     const family=designFamily(data.style);
     const signatureBackground=drawSignatureBackground(ctx,data,palette,width,height);
@@ -693,6 +793,7 @@
     if(data.illustration==='text'){drawTextOnlyBack(ctx,data,width,height);return;}
     if(data.orientation==='vertical'){drawBackVertical(ctx,data,width,height);return;}
     if(!data.useBack){ctx.fillStyle='#fff';ctx.fillRect(0,0,width,height);return;}
+    if(['ichimatsu','fireworks','townscape'].includes(data.style)){drawSceneBack(ctx,data,width,height);return;}
     const palette = paletteFor(data);
     const gradient = ctx.createLinearGradient(0,0,width,height);
     gradient.addColorStop(0,palette.dark); gradient.addColorStop(1,palette.mid);
