@@ -265,6 +265,47 @@
     lines.forEach((line, index) => ctx.fillText(line, x, y + lineHeight * index));
   }
 
+  function colorLuminance(color) {
+    if (typeof color !== 'string') return .5;
+    const hex = color.trim().match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i);
+    let rgb;
+    if (hex) {
+      const value = hex[1].length === 3 ? hex[1].split('').map(char => char + char).join('') : hex[1];
+      rgb = [0, 2, 4].map(index => parseInt(value.slice(index, index + 2), 16));
+    } else {
+      const match = color.match(/rgba?\(\s*([\d.]+)[,\s]+([\d.]+)[,\s]+([\d.]+)/i);
+      if (!match) return .5;
+      rgb = match.slice(1, 4).map(Number);
+    }
+    const linear = rgb.map(value => {
+      const channel = value / 255;
+      return channel <= .03928 ? channel / 12.92 : Math.pow((channel + .055) / 1.055, 2.4);
+    });
+    return linear[0] * .2126 + linear[1] * .7152 + linear[2] * .0722;
+  }
+
+  function enableLegibleText(ctx) {
+    if (ctx.__dokenLegibleText) return;
+    const originalFillText = ctx.fillText.bind(ctx);
+    const originalStrokeText = ctx.strokeText.bind(ctx);
+    ctx.fillText = function(text, x, y, maxWidth) {
+      const sizeMatch = String(ctx.font || '').match(/([\d.]+)px/);
+      const fontSize = sizeMatch ? Number(sizeMatch[1]) : 24;
+      const outline = colorLuminance(ctx.fillStyle) > .58 ? 'rgba(8,25,48,.82)' : 'rgba(255,255,255,.94)';
+      ctx.save();
+      ctx.lineJoin = 'round';
+      ctx.miterLimit = 2;
+      ctx.strokeStyle = outline;
+      ctx.lineWidth = Math.max(3, Math.min(6, fontSize * .12));
+      if (maxWidth === undefined) originalStrokeText(text, x, y);
+      else originalStrokeText(text, x, y, maxWidth);
+      ctx.restore();
+      if (maxWidth === undefined) originalFillText(text, x, y);
+      else originalFillText(text, x, y, maxWidth);
+    };
+    ctx.__dokenLegibleText = true;
+  }
+
   const tradeIconPaths = {
     general:{stroke:['M180 610V390L500 155l320 235v220','M255 610v180h490V610','M405 790V565h190v225','M300 350c35-125 365-125 400 0','M275 350h450'],fill:[]},
     carpenter:{stroke:['M145 560L500 260l355 300','M255 550v240h490V550','M610 730L805 535','M750 475l105 105','M690 520l120-120'],fill:['M640 710l55 55-72 72-55-55z']},
@@ -491,7 +532,10 @@
     if(data.style==='ichimatsu'){ctx.fillStyle='#fff';ctx.fillRect(0,0,width,height);drawIchimatsuArc(ctx,width,height,palette.dark,palette.mid,data.accent);ctx.fillStyle='#f3f7fc';ctx.fillRect(0,height*.78,width,height*.22);}
     else if(data.style==='fireworks'){const g=ctx.createLinearGradient(0,0,width,height);g.addColorStop(0,'#056178');g.addColorStop(1,'#073f59');ctx.fillStyle=g;ctx.fillRect(0,0,width,height);drawFireworkBurst(ctx,width*.86,height*.18,height*.13,'#ffffff',.55);drawFireworkBurst(ctx,width*.72,height*.43,height*.08,data.accent,.68);}
     else{ctx.fillStyle=palette.dark;ctx.fillRect(0,0,width,height);drawTownscape(ctx,width,height,'#ffffff',.18);ctx.fillStyle=data.accent;ctx.fillRect(0,0,width,11);}
-    const darkText=data.style==='ichimatsu';const ink=darkText?palette.dark:'#ffffff';const muted=darkText?'#344b66':'#eef4f7';const left=70,max=width*.82;
+    const darkText=data.style==='ichimatsu';const ink=darkText?palette.dark:'#ffffff';const muted=darkText?'#344b66':'#eef4f7';const left=70,max=width*.54;
+    if(data.style==='ichimatsu'){
+      ctx.fillStyle='rgba(255,255,255,.96)';roundedRect(ctx,34,28,width*.61,height*.72,24);ctx.fill();
+    }
     ctx.fillStyle=ink;ctx.font=sceneFont(data.style,800,45);ctx.fillText(clippedText(ctx,data.company||data.name,max),left,92);
     ctx.fillStyle=data.accent;ctx.font=sceneFont(data.style,800,25);ctx.fillText(clippedText(ctx,tagline,max),left,145);
     const blocks=[
@@ -499,7 +543,7 @@
       {label:'資格・許可',text:[data.qualifications,data.permit].filter(Boolean).join('／')||'資格・許可・保険などの信頼情報'},
       {label:'対応エリア・強み',text:[data.area,data.strengths].filter(Boolean).join('／')||'対応エリア・選ばれる理由'}
     ];
-    blocks.forEach((block,index)=>{const x=index===2?width*.55:left;const y=index===2?height*.58:height*(.37+index*.22);const w=index===2?width*.37:width*.72;ctx.fillStyle=data.accent;ctx.font=sceneFont(data.style,800,23);ctx.fillText(block.label,x,y);ctx.fillStyle=muted;ctx.font=sceneFont(data.style,600,22);ctx.fillText(clippedText(ctx,block.text,w),x,y+43);});
+    blocks.forEach((block,index)=>{const y=height*(.37+index*.19);ctx.fillStyle=data.accent;ctx.font=sceneFont(data.style,800,23);ctx.fillText(block.label,left,y);ctx.fillStyle=muted;ctx.font=sceneFont(data.style,600,22);ctx.fillText(clippedText(ctx,block.text,max),left,y+43);});
     const bottom=[data.experience,data.achievements,data.ccus,data.insurance,data.hours].filter(Boolean).join('　｜　');if(bottom){ctx.fillStyle=muted;ctx.font=sceneFont(data.style,600,19);ctx.fillText(clippedText(ctx,bottom,max),left,height-35);}
   }
 
@@ -831,10 +875,12 @@
     const ctx = canvas.getContext('2d');
     const target = includeBleed ? bleed : finished;
     canvas.width = target.width; canvas.height = target.height;
+    enableLegibleText(ctx);
     ctx.clearRect(0,0,target.width,target.height);
     if (includeBleed) {
       const design=document.createElement('canvas'); design.width=finished.width; design.height=finished.height;
       const designContext=design.getContext('2d');
+      enableLegibleText(designContext);
       if (side === 'front') drawFront(designContext,data,finished.width,finished.height); else drawBack(designContext,data,finished.width,finished.height);
       const i=bleed.inset,w=finished.width,h=finished.height;
       ctx.drawImage(design,0,0,w,h,i,i,w,h);
