@@ -56,6 +56,21 @@
     paint();
     document.body.appendChild(btn);
   }
+
+  function updateAppVersion(){
+    var targets = document.querySelectorAll('[data-app-version]');
+    if (!targets.length) return;
+    fetch('/ageo-ina-portal/sw.js', { cache: 'no-store' })
+      .then(function(response){ return response.text(); })
+      .then(function(source){
+        var match = source.match(/CACHE_VERSION\s*=\s*['"][^'"]*-(\d+)['"]/);
+        if (!match) return;
+        targets.forEach(function(target){
+          target.textContent = 'アプリ版数 v' + match[1];
+        });
+      })
+      .catch(function(){ /* 取得できない場合は初期表示のまま継続 */ });
+  }
   window.defaultBack = defaultBack;
   if (typeof window.goBack !== 'function') {
     window.goBack = defaultBack;
@@ -64,10 +79,12 @@
     document.addEventListener('DOMContentLoaded', function(){
       injectContactRail();
       injectThemeToggle();
+      updateAppVersion();
     });
   } else {
     injectContactRail();
     injectThemeToggle();
+    updateAppVersion();
   }
 })();
 
