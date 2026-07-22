@@ -174,7 +174,7 @@
 
     <div class="guide-category" id="manual-site"><i class="ti ti-helmet"></i><div><h2>3．現場・管理関係</h2><p>見積、安全、記録、残業、技能を管理します</p></div></div>
     <article class="acc"><div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-file-invoice"></i></div><p class="acc-title">標準見積書作成</p><i class="ti ti-chevron-right acc-arrow"></i></div><div class="acc-body"><p class="feature-summary">法定福利費を含む見積書・請求書を作成します。</p><ol class="steps"><li>会社情報、工事内容、金額を入力します。</li><li>計算結果と書類の内容を確認します。</li><li>印刷またはPDFで保存します。</li></ol></div></article>
-    <article class="acc"><div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-temperature-sun"></i></div><p class="acc-title">熱中症AIアラート</p><i class="ti ti-chevron-right acc-arrow"></i></div><div class="acc-body"><p class="feature-summary">現在地の気温・湿度などから、熱中症の危険度を確認します。</p><ol class="steps"><li>位置情報の確認が出たら「許可」をタップします。</li><li>表示された危険度と対策を確認します。</li></ol><a class="quick-link" href="atsusa.html">熱中症AIアラートを開く</a></div></article>
+    <article class="acc"><div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-temperature-sun"></i></div><p class="acc-title">熱中症AIアラート</p><i class="ti ti-chevron-right acc-arrow"></i></div><div class="acc-body"><p class="feature-summary">現在地の気温・湿度・日射・風から推定WBGTと今後8時間を表示し、建設現場の作業判断を助けます。</p><ol class="steps"><li>位置情報の確認が出たら「許可」をタップします。許可しない場合は「上尾・伊奈で表示」を使えます。</li><li>現在の危険度と、今後8時間で最も危険になる時間を確認します。</li><li>「屋根・足場」「重作業」「防護服」など、当てはまる現場条件を押します。</li><li>「現場で今すぐ行うこと」と朝礼文を確認し、法令チェック3項目を現場全員へ周知します。</li><li>体調不良者が出たら症状別の対処を確認し、返事がおかしい・自力で飲めない場合は119番します。</li></ol><div class="tip warn">画面のWBGTは気象予報を使った推定値です。黒球付きWBGT計がある場合は現場の実測値を優先してください。</div><a class="quick-link" href="atsusa.html">熱中症AIアラートを開く</a></div></article>
     <article class="acc"><div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-checklist"></i></div><p class="acc-title">現場安全チェックリスト</p><i class="ti ti-chevron-right acc-arrow"></i></div><div class="acc-body"><p class="feature-summary">着工前や作業前の安全確認を行い、結果を提出用に保存します。</p><ol class="steps"><li>現場名、点検者、日付を入力します。</li><li>安全項目を一つずつ確認してチェックします。</li><li>プレビュー後、印刷またはPDFで保存します。</li></ol><a class="quick-link" href="anzen_check.html">安全チェックを開く</a></div></article>
     <article class="acc"><div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-notebook"></i></div><p class="acc-title">作業記録</p><i class="ti ti-chevron-right acc-arrow"></i></div><div class="acc-body"><p class="feature-summary">粉じん・騒音・振動など、将来の労災申請に必要になる作業歴を記録します。</p><ol class="steps"><li>日付、現場、作業内容、使用工具などを入力します。</li><li>記録を保存し、月ごとの一覧で確認します。</li><li>機種変更に備えて、定期的にバックアップを保存します。</li></ol><a class="quick-link" href="work_log.html">作業記録を開く</a></div></article>
     <article class="acc"><div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-clock-hour-4"></i></div><p class="acc-title">36協定・残業カウンター</p><i class="ti ti-chevron-right acc-arrow"></i></div><div class="acc-body"><p class="feature-summary">月・年の残業時間を記録し、上限までの状況を確認します。</p><ol class="steps"><li>対象月と残業時間を入力します。</li><li>月・年の合計と注意表示を確認します。</li><li>必要に応じて正式様式を印刷します。</li></ol><a class="quick-link" href="rodo36.html">残業カウンターを開く</a></div></article>
@@ -218,9 +218,12 @@
         <ol class="steps">
           <li>ホーム画面の「熱中症AIアラート」をタップします。</li>
           <li>位置情報の許可が出たら「許可」を選びます。</li>
-          <li>現在地の気象情報から危険度を確認します。</li>
+          <li>現在地の気象情報から、推定WBGTと今後8時間の危険度を確認します。</li>
+          <li>屋根・足場、照り返し、狭所、重作業、防護服、暑さに慣れていない人など、当てはまる現場条件を押します。</li>
+          <li>現場で今すぐ行うこと、法令チェック、朝礼文を確認します。朝礼文はボタンでコピーできます。</li>
+          <li>具合が悪い人が出たら症状別の対処を確認します。返事がおかしい、自力で飲めない場合は119番します。</li>
         </ol>
-        <div class="tip warn">位置情報を拒否した場合は、ブラウザや端末設定から位置情報の許可を戻してください。</div>
+        <div class="tip warn">位置情報を拒否した場合も「上尾・伊奈で表示」を利用できます。表示は気象データによる推定です。黒球付きWBGT計の実測値を優先してください。</div>
       </div>
     </article>
 
