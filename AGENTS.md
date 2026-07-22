@@ -115,7 +115,7 @@ DokenPrint.preview({title, sections, note})                  // プレビュー�
 | kyosai_guide.html | 総合共済 申請ナビ | 申請事由を選ぶと対象目安・期限・必要書類チェックリストを表示。チェック状態は端末保存。不明点は支部へ相談する運用 |
 | kyokyu.html | 労働者供給事業 | 東栄住宅の求人情報を掲載（変更される可能性あり） |
 | calc.html | 計算ツール（労災保険料/労務費/国保料/給付金/CCUS） | 労災は末尾5（元請工事高）・6（労働者の賃金総額）、建設一人親方の特2（17/1000）、運送一人親方の特1（11/1000）、第一種特別加入の月割りに対応。料率は毎年4月更新が必要（下記7章） |
-| atsusa.html | 熱中症AIアラート | GPS→Open-Meteo API→WBGT計算（気象庁JSONへのフォールバックあり） |
+| atsusa.html | 熱中症AIアラート | GPS→Open-Meteo API→環境省の実況推定式でWBGT概算。今後8時間、建設現場条件、法令チェック、朝礼文、症状別対処を表示。GPS拒否時は上尾・伊奈周辺へ切替、通信失敗時は最大6時間の端末保存データを明示して使用 |
 | alert_settings.html | 天気アラート管理者設定 | 管理PINはコードに保存せず、入力値をApps Scriptの`ALERT_PIN`で検証。6文字以上を使用 |
 | anzen_check.html | 現場安全チェックリスト | 印刷対応 |
 | work_log.html | 作業記録（労災対策） | localStorage保存、PDF印刷、バックアップ/復元機能 |
@@ -150,8 +150,6 @@ DokenPrint.preview({title, sections, note})                  // プレビュー�
 | 用途 | URL | 備考 |
 |---|---|---|
 | 天気・気温湿度 | `api.open-meteo.com/v1/forecast` | キー不要 |
-| 逆ジオコーディング | `nominatim.openstreetmap.org/reverse` | キー不要、利用規約に注意（連続アクセス制限） |
-| 気象庁予報（フォールバック） | `www.jma.go.jp/bosai/forecast/data/forecast/110000.json` | 埼玉県コード110000 |
 | Googleカレンダー | `www.googleapis.com/calendar/v3/calendars/...` | APIキーは`assets/js/calendar-config.js`。Google Calendar API限定・本番URLのHTTPリファラー限定。複数カレンダーは`CALENDARS`配列で管理 |
 | PDF表示 | cdnjsのpdf.js 3.11.174 | 本体・ワーカーはSWインストール時に事前キャッシュ。CMap・標準フォントも必要時取得後に実行時キャッシュ |
 | DOKENギルド・天気設定 | Google Apps Script Webアプリ | URLは`assets/js/guild-config.js`。実働コード更新にはApps Script側の再デプロイが必要 |

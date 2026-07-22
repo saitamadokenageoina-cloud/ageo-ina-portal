@@ -847,7 +847,14 @@ showManual('first');
     windOn: true, windSpeed: 10
   };
 
-  function calcWBGT(temp, hum){
+  function calcWBGT(temp, hum, solarW, windKmh){
+    // 日射・風速まで取得できた場合は、環境省の実況推定WBGT式を使用する。
+    if (Number.isFinite(solarW) && Number.isFinite(windKmh)) {
+      const sr = Math.max(0, solarW) / 1000; // W/㎡ → kW/㎡
+      const ws = Math.max(0, windKmh) / 3.6; // km/h → m/s
+      return 0.735 * temp + 0.0374 * hum + 0.00292 * temp * hum
+        + 7.619 * sr - 4.557 * sr * sr - 0.0572 * ws - 4.064;
+    }
     const tw = temp * Math.atan(0.151977 * Math.pow(hum + 8.313659, 0.5))
       + Math.atan(temp + hum) - Math.atan(hum - 1.676331)
       + 0.00391838 * Math.pow(hum, 1.5) * Math.atan(0.023101 * hum) - 4.686035;
@@ -863,11 +870,12 @@ showManual('first');
     document.getElementById('wx-msg').textContent = msg;
   }
 
-  function decideAlert(cfg, temp, hum, wind, code){
-    const wbgt = calcWBGT(temp, hum);
+  function decideAlert(cfg, temp, hum, wind, code, solarW, windKmh){
+    const wbgt = calcWBGT(temp, hum, solarW, windKmh);
     // ① 熱中症を最優先（現場作業への影響が最も大きいため）
     if (cfg.heatOn && wbgt >= cfg.heatDanger) return showAlert('danger','🔴','熱中症 危険','すべての作業者が危険域。屋外作業の中止を強く推奨します。');
     if (cfg.heatOn && wbgt >= cfg.heatSevere) return showAlert('severe','🌡️','熱中症 厳重警戒','屋外の激しい作業は中止を検討。こまめな休憩と水分補給を。');
+    if (cfg.heatOn && temp >= 31) return showAlert('severe','🦺','法令対応を確認','気温31℃以上です。対象作業では報告体制・対応手順・周知を確認してください。');
     // ② 大雨・雷（足場・高所・電気工事等への影響）
     if (cfg.rainOn && THUNDER_CODES.has(code)) return showAlert('danger','⛈️','雷雨 注意','屋外・高所作業は中止を。落雷のおそれがあります。');
     if (cfg.rainOn && RAIN_CODES.has(code)) return showAlert('caution','🌧️','雨天 注意','足元・資材の濡れに注意。屋外作業は無理のない範囲で。');
@@ -925,16 +933,18 @@ showManual('first');
             .catch(function(e){ console.error('[天気アラート]', e); });
         } else {
           // 当日：現在の気象で判定
-          fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&timezone=Asia%2FTokyo`)
+          fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m,shortwave_radiation&timezone=Asia%2FTokyo`)
             .then(r => r.json())
             .then(data => {
               const c = data.current || {};
               const temp = parseFloat(c.temperature_2m);
               const hum  = parseFloat(c.relative_humidity_2m);
               const wind = parseFloat(c.wind_speed_10m); // km/h
+              const solar = parseFloat(c.shortwave_radiation); // W/㎡
               const code = c.weather_code;
               if (isNaN(temp) || isNaN(hum)) return;
-              decideAlert(cfg, temp, hum, isNaN(wind) ? 0 : wind / 3.6, code); // km/h→m/s
+              decideAlert(cfg, temp, hum, isNaN(wind) ? 0 : wind / 3.6, code,
+                isNaN(solar) ? undefined : solar, isNaN(wind) ? undefined : wind);
             })
             .catch(function(e){ console.error('[天気アラート]', e); });
         }
