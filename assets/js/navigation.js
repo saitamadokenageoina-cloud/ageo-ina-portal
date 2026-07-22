@@ -1,8 +1,8 @@
 (function(){
-  const THEME_KEY = 'doken_theme_v2';
+  var THEME_KEY = 'doken_theme_v2';
   var UI_SIZE_KEY = 'doken_ui_size_v1';
   // 既定はダーク。（旧キーに残るlight設定は無視して確実にダーク既定にする）
-  const initialTheme = localStorage.getItem(THEME_KEY) || 'dark';
+  var initialTheme = localStorage.getItem(THEME_KEY) || 'dark';
   document.documentElement.setAttribute('data-theme', initialTheme);
   try {
     document.documentElement.setAttribute('data-ui-size', localStorage.getItem(UI_SIZE_KEY) || 'normal');
@@ -11,9 +11,9 @@
   }
 
   function defaultBack(fallback){
-    const fallbackUrl = fallback || 'index.html';
-    const ref = document.referrer || '';
-    const sameSite = ref && ref.indexOf(location.origin) === 0;
+    var fallbackUrl = fallback || 'index.html';
+    var ref = document.referrer || '';
+    var sameSite = ref && ref.indexOf(location.origin) === 0;
     if (history.length > 1 && sameSite) {
       history.back();
       return;
@@ -22,13 +22,13 @@
   }
 
   function isPreviewPage(){
-    const file = location.pathname.split('/').pop() || '';
+    var file = location.pathname.split('/').pop() || '';
     return /preview/i.test(file);
   }
 
   function injectContactRail(){
     if (document.querySelector('.doken-contact-rail') || isPreviewPage()) return;
-    const rail = document.createElement('nav');
+    var rail = document.createElement('nav');
     rail.className = 'doken-contact-rail';
     rail.setAttribute('aria-label','支部への連絡');
     rail.innerHTML = [
@@ -42,19 +42,19 @@
 
   function injectThemeToggle(){
     if (document.querySelector('.theme-toggle') || isPreviewPage()) return;
-    const btn = document.createElement('button');
+    var btn = document.createElement('button');
     btn.className = 'theme-toggle';
     btn.type = 'button';
     btn.setAttribute('aria-label','ダークモードとライトモードを切り替え');
     function paint(){
-      const theme = document.documentElement.getAttribute('data-theme') || 'dark';
-      const isDark = theme === 'dark';
+      var theme = document.documentElement.getAttribute('data-theme') || 'dark';
+      var isDark = theme === 'dark';
       btn.innerHTML = isDark ? '<span class="theme-symbol" aria-hidden="true">☀</span>' : '<span class="theme-symbol" aria-hidden="true">☾</span>';
       btn.title = isDark ? 'ライトモードに切替' : 'ダークモードに切替';
       btn.setAttribute('aria-label', isDark ? 'ライトモードに切り替え' : 'ダークモードに切り替え');
     }
     btn.addEventListener('click', function(){
-      const next = (document.documentElement.getAttribute('data-theme') || 'dark') === 'dark' ? 'light' : 'dark';
+      var next = (document.documentElement.getAttribute('data-theme') || 'dark') === 'dark' ? 'light' : 'dark';
       document.documentElement.setAttribute('data-theme', next);
       localStorage.setItem(THEME_KEY, next);
       paint();
@@ -77,20 +77,104 @@
       })
       .catch(function(){ /* 取得できない場合は初期表示のまま継続 */ });
   }
+
+  function enhanceBackButtons(){
+    var buttons = document.querySelectorAll('.hdr-back,.back-btn');
+    var i;
+    for (i = 0; i < buttons.length; i += 1) {
+      if (buttons[i].tagName.toLowerCase() === 'button' && !buttons[i].getAttribute('type')) {
+        buttons[i].setAttribute('type','button');
+      }
+      if (!buttons[i].getAttribute('aria-label')) {
+        buttons[i].setAttribute('aria-label','前の画面に戻る');
+      }
+    }
+  }
+
+  function clearFieldError(control){
+    var errorId = control.getAttribute('data-field-error-id');
+    var error = errorId ? document.getElementById(errorId) : null;
+    control.removeAttribute('aria-invalid');
+    control.classList.remove('is-invalid');
+    if (error && error.parentNode) error.parentNode.removeChild(error);
+    control.removeAttribute('data-field-error-id');
+    if (control.getAttribute('aria-describedby') === errorId) control.removeAttribute('aria-describedby');
+  }
+
+  function showFieldError(control,index){
+    if (!control || control.disabled || control.type === 'hidden') return;
+    clearFieldError(control);
+    var id = control.id ? control.id + '-error' : 'field-error-' + index;
+    var error = document.createElement('p');
+    error.className = 'field-error';
+    error.id = id;
+    error.setAttribute('role','alert');
+    error.textContent = control.validationMessage || '入力内容を確認してください。';
+    control.setAttribute('aria-invalid','true');
+    control.setAttribute('aria-describedby',id);
+    control.setAttribute('data-field-error-id',id);
+    if (control.parentNode) control.parentNode.insertBefore(error,control.nextSibling);
+  }
+
+  function enhanceForms(){
+    var controls = document.querySelectorAll('input,select,textarea');
+    var i;
+    for (i = 0; i < controls.length; i += 1) {
+      (function(control,index){
+        if (control.required) control.setAttribute('aria-required','true');
+        control.addEventListener('invalid',function(){ showFieldError(control,index); });
+        control.addEventListener('input',function(){ if (control.validity.valid) clearFieldError(control); });
+        control.addEventListener('change',function(){ if (control.validity.valid) clearFieldError(control); });
+      })(controls[i],i);
+    }
+  }
+
+  function enhanceExternalLinks(){
+    var links = document.querySelectorAll('a[target="_blank"]');
+    var i;
+    for (i = 0; i < links.length; i += 1) {
+      var rel = links[i].getAttribute('rel') || '';
+      if (rel.indexOf('noopener') === -1) rel += ' noopener';
+      if (rel.indexOf('noreferrer') === -1) rel += ' noreferrer';
+      links[i].setAttribute('rel',rel.replace(/^\s+|\s+$/g,''));
+    }
+  }
+
+  function injectConnectionStatus(){
+    if (isPreviewPage() || document.querySelector('.connection-status')) return;
+    var status = document.createElement('div');
+    status.className = 'connection-status';
+    status.setAttribute('role','status');
+    status.setAttribute('aria-live','polite');
+    status.hidden = true;
+    document.body.appendChild(status);
+    function paint(){
+      var offline = navigator.onLine === false;
+      status.hidden = !offline;
+      status.textContent = offline ? '現在オフラインです。保存済みの内容を表示しています。' : '';
+    }
+    window.addEventListener('online',paint);
+    window.addEventListener('offline',paint);
+    paint();
+  }
+
+  function initializeCommonUi(){
+    injectContactRail();
+    injectThemeToggle();
+    injectConnectionStatus();
+    enhanceBackButtons();
+    enhanceForms();
+    enhanceExternalLinks();
+    updateAppVersion();
+  }
   window.defaultBack = defaultBack;
   if (typeof window.goBack !== 'function') {
     window.goBack = defaultBack;
   }
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function(){
-      injectContactRail();
-      injectThemeToggle();
-      updateAppVersion();
-    });
+    document.addEventListener('DOMContentLoaded', initializeCommonUi);
   } else {
-    injectContactRail();
-    injectThemeToggle();
-    updateAppVersion();
+    initializeCommonUi();
   }
 })();
 
