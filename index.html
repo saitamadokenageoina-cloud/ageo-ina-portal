@@ -130,7 +130,7 @@
   background: linear-gradient(90deg, var(--gray200), transparent);
 }
 .sec-head-label {
-  font-size: 11px; font-weight: 600;
+  font-size: 13px; font-weight: 700;
   color: var(--gray600); letter-spacing: .12em; text-transform: uppercase;
   white-space: nowrap;
 }
@@ -169,7 +169,7 @@
 .mc-emoji { display:none; }
 .mc-body { padding: 11px 12px 13px; }
 .mc-badge {
-  font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 99px;
+  font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 99px;
   display: inline-block; margin-bottom: 5px;
 }
 .mc-badge.new { background: #E8F5EE; color: #1A7A4A; }
@@ -178,8 +178,8 @@
 .mc-badge.health{ background: #E3F3F0; color: #0F766E; }
 .mc-badge.biz  { background: #FBEEDD; color: #B45309; }
 .mc-badge.money{ background: #FCE9EE; color: #BE123C; }
-.mc-title { font-size: 13px; font-weight: 600; color: var(--navy); margin: 0 0 3px; line-height: 1.35; }
-.mc-desc  { font-size: 11px; color: var(--gray600); margin: 0; line-height: 1.5; font-weight: 600; }
+.mc-title { font-size: 15px; font-weight: 700; color: var(--navy); margin: 0 0 3px; line-height: 1.4; }
+.mc-desc  { font-size: 12.5px; color: var(--gray600); margin: 0; line-height: 1.6; font-weight: 600; }
 .mc-guild{grid-column:1/-1;display:grid;grid-template-columns:150px minmax(0,1fr);border-color:#2EA868;background:linear-gradient(135deg,#F1FFF7,#FFFFFF);box-shadow:0 14px 32px rgba(26,122,74,.2);position:relative;}
 .mc-guild::after{content:'おすすめ';position:absolute;top:10px;right:10px;padding:5px 9px;border-radius:99px;background:#E8612A;color:#fff;font-size:10px;font-weight:800;box-shadow:0 5px 12px rgba(232,97,42,.3);}
 .mc-guild .mc-top{height:auto;min-height:132px}.mc-guild .mc-body{display:flex;flex-direction:column;justify-content:center;padding:18px 16px}.mc-guild .mc-title{font-size:21px;font-weight:800;color:#123E2A}.mc-guild .mc-desc{font-size:13px;line-height:1.6}.mc-guild .mc-badge{align-self:flex-start;background:#DDF6E8;color:#145A37;font-weight:800}
@@ -219,6 +219,33 @@
 .notice-bar p { font-size: 13px; color: var(--navy); margin: 0; font-weight: 500; }
 
 .section { padding: 16px 16px 0; }
+.home-tools{padding:16px 16px 0;}
+.home-tools-card{background:var(--white);border:2px solid var(--gray200);border-radius:var(--r16);padding:14px;box-shadow:var(--shadow-sm);}
+.home-tools-title{display:flex;align-items:center;gap:8px;margin:0 0 10px;color:var(--navy);font-size:17px;font-weight:800;}
+.feature-search-wrap{position:relative;}
+.feature-search-wrap i{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--gray600);font-size:20px;pointer-events:none;}
+.feature-search{width:100%;min-height:54px;padding:12px 46px 12px 44px;border:2px solid var(--gray200);border-radius:var(--r12);background:var(--white);color:var(--gray900);font-size:16px;font-weight:600;outline:none;}
+.feature-search:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(26,95,168,.12);}
+.feature-search-clear{position:absolute;right:5px;top:5px;width:44px;height:44px;border:0;background:transparent;color:var(--gray600);font-size:20px;border-radius:10px;display:none;align-items:center;justify-content:center;}
+.feature-search-clear.show{display:flex;}
+.home-tool-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px;}
+.text-size-button{min-height:48px;border:2px solid var(--gray200);background:var(--white);color:var(--navy);border-radius:var(--r12);padding:9px 14px;font-size:14px;font-weight:800;display:flex;align-items:center;gap:7px;}
+.text-size-button[aria-pressed="true"]{background:var(--blue-lt);border-color:var(--blue);color:var(--blue);}
+.search-status{margin:0;color:var(--gray600);font-size:13px;font-weight:700;text-align:right;}
+.recent-wrap{display:none;margin-top:14px;}
+.recent-wrap.show{display:block;}
+.recent-label{margin:0 0 8px;color:var(--gray600);font-size:13px;font-weight:800;}
+.recent-list{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.recent-link{min-height:52px;padding:10px 12px;border:1px solid var(--gray200);border-radius:var(--r12);background:var(--gray50);color:var(--navy);display:flex;align-items:center;gap:8px;font-size:14px;font-weight:800;line-height:1.35;}
+.recent-link i{color:var(--orange);font-size:18px;flex-shrink:0;}
+.section.search-empty{display:none;}
+html[data-ui-size="large"] .mc-title{font-size:17px;}
+html[data-ui-size="large"] .mc-desc{font-size:15px;line-height:1.65;}
+html[data-ui-size="large"] .mc-badge{font-size:13px;}
+html[data-ui-size="large"] .sec-head-label{font-size:14px;}
+html[data-ui-size="large"] .lc-title{font-size:17px;}
+html[data-ui-size="large"] .lc-desc{font-size:15px;}
+html[data-ui-size="large"] .hero-sub{font-size:15px;}
 .app-manual{
   margin: 18px 16px 0; padding: 14px;
   background:
@@ -311,6 +338,26 @@ html[data-theme="dark"] .manual-open{color:#FFFFFF;}
     <i class="ti ti-phone"></i>048-773-9863
   </a>
 </div>
+
+<!-- ===== 機能検索・最近使った機能 ===== -->
+<section class="home-tools" aria-labelledby="home-tools-title">
+  <div class="home-tools-card">
+    <h2 class="home-tools-title" id="home-tools-title"><i class="ti ti-search"></i>使いたい機能を探す</h2>
+    <div class="feature-search-wrap">
+      <i class="ti ti-search" aria-hidden="true"></i>
+      <input class="feature-search" id="feature-search" type="search" inputmode="search" autocomplete="off" placeholder="例：労災、講習、仕事、健康診断" aria-label="機能名や目的で検索">
+      <button class="feature-search-clear" id="feature-search-clear" type="button" aria-label="検索文字を消す"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="home-tool-row">
+      <button class="text-size-button" id="text-size-button" type="button" aria-pressed="false"><i class="ti ti-text-size"></i>文字を大きく</button>
+      <p class="search-status" id="search-status" aria-live="polite">機能名から探せます</p>
+    </div>
+    <div class="recent-wrap" id="recent-wrap">
+      <p class="recent-label"><i class="ti ti-history"></i> 最近使った機能</p>
+      <div class="recent-list" id="recent-list"></div>
+    </div>
+  </div>
+</section>
 
 <!-- ===== よく使う ===== -->
 <div class="section" id="yoku">
@@ -552,7 +599,7 @@ html[data-theme="dark"] .manual-open{color:#FFFFFF;}
         <span class="mc-emoji">🪪</span>
       </div>
       <div class="mc-body">
-        <span class="mc-badge tool">診断</span>
+        <span class="mc-badge tool">公式</span>
         <p class="mc-title">CCUS能力評価サポート診断</p>
         <p class="mc-desc">能力評価の申請条件を確認</p>
       </div>
@@ -760,6 +807,110 @@ html[data-theme="dark"] .manual-open{color:#FFFFFF;}
 <footer>埼玉土建一般労働組合 上尾伊奈支部｜〒362-0003 上尾市菅谷295｜TEL <a href="tel:048-773-9863">048-773-9863</a><br><a href="alert_settings.html" style="color:inherit;opacity:.55;font-size:11px;">天気アラート設定（管理者用）</a></footer>
 </div>
 
+<script>
+/* ホームの機能検索・文字サイズ・最近使った機能（ES5） */
+(function(){
+  var search = document.getElementById('feature-search');
+  var clearButton = document.getElementById('feature-search-clear');
+  var status = document.getElementById('search-status');
+  var sizeButton = document.getElementById('text-size-button');
+  var recentWrap = document.getElementById('recent-wrap');
+  var recentList = document.getElementById('recent-list');
+  var cards = document.querySelectorAll('.section a.mc, .section a.lc');
+  var sections = document.querySelectorAll('.section');
+  var recentKey = 'doken_recent_features_v1';
+  var sizeKey = 'doken_ui_size_v1';
+
+  function normalize(value){
+    return String(value || '').toLowerCase().replace(/[\s　・\/]/g, '');
+  }
+  function cardWords(card){
+    var href = card.getAttribute('href') || '';
+    var aliases = '';
+    if (href.indexOf('atsusa') >= 0) aliases = '暑さ 気温 wbgt 夏';
+    if (href.indexOf('guild') >= 0) aliases = '人材 応援 仕事 職人 資材 道具 求人';
+    if (href.indexOf('calc') >= 0) aliases = '労災 国保 給付金 保険料 お金';
+    if (href.indexOf('ccus') >= 0) aliases = '技能者 能力評価 カード レベル';
+    if (href.indexOf('koushu') >= 0) aliases = '資格 申込 必要書類';
+    if (href.indexOf('work_log') >= 0) aliases = '粉塵 騒音 振動 職業病';
+    return normalize(card.textContent + ' ' + aliases);
+  }
+  function applySearch(){
+    if (!search) return;
+    var query = normalize(search.value);
+    var count = 0;
+    var i;
+    for (i = 0; i < cards.length; i += 1) {
+      var show = !query || cardWords(cards[i]).indexOf(query) >= 0;
+      cards[i].style.display = show ? '' : 'none';
+      if (show) count += 1;
+    }
+    for (i = 0; i < sections.length; i += 1) {
+      var visible = sections[i].querySelector('a.mc:not([style*="display: none"]), a.lc:not([style*="display: none"])');
+      if (query && !visible) sections[i].classList.add('search-empty');
+      else sections[i].classList.remove('search-empty');
+    }
+    if (clearButton) clearButton.className = query ? 'feature-search-clear show' : 'feature-search-clear';
+    if (status) status.textContent = query ? (count ? count + '件見つかりました' : '該当する機能がありません') : '機能名から探せます';
+  }
+  function readRecent(){
+    try { return JSON.parse(localStorage.getItem(recentKey) || '[]'); }
+    catch (e) { return []; }
+  }
+  function saveRecent(item){
+    var items = readRecent();
+    var next = [item];
+    var i;
+    for (i = 0; i < items.length && next.length < 4; i += 1) {
+      if (items[i].href !== item.href) next.push(items[i]);
+    }
+    try { localStorage.setItem(recentKey, JSON.stringify(next)); } catch (e) {}
+  }
+  function renderRecent(){
+    if (!recentList || !recentWrap) return;
+    var items = readRecent();
+    var i;
+    recentList.textContent = '';
+    for (i = 0; i < items.length && i < 4; i += 1) {
+      var link = document.createElement('a');
+      var icon = document.createElement('i');
+      var span = document.createElement('span');
+      link.className = 'recent-link';
+      link.href = items[i].href;
+      if (/^https?:/i.test(items[i].href)) { link.target = '_blank'; link.rel = 'noopener noreferrer'; }
+      icon.className = 'ti ti-arrow-up-right';
+      span.textContent = items[i].title;
+      link.appendChild(icon);
+      link.appendChild(span);
+      recentList.appendChild(link);
+    }
+    if (items.length) recentWrap.className = 'recent-wrap show';
+  }
+  function paintSize(){
+    if (!sizeButton) return;
+    var large = document.documentElement.getAttribute('data-ui-size') === 'large';
+    sizeButton.setAttribute('aria-pressed', large ? 'true' : 'false');
+    sizeButton.innerHTML = '<i class="ti ti-text-size"></i>' + (large ? '標準の文字に戻す' : '文字を大きく');
+  }
+
+  if (search) search.addEventListener('input', applySearch);
+  if (clearButton) clearButton.addEventListener('click', function(){ search.value = ''; applySearch(); search.focus(); });
+  if (sizeButton) sizeButton.addEventListener('click', function(){
+    var next = document.documentElement.getAttribute('data-ui-size') === 'large' ? 'normal' : 'large';
+    document.documentElement.setAttribute('data-ui-size', next);
+    try { localStorage.setItem(sizeKey, next); } catch (e) {}
+    paintSize();
+  });
+  for (var i = 0; i < cards.length; i += 1) {
+    cards[i].addEventListener('click', function(){
+      var title = this.querySelector('.mc-title, .lc-title');
+      if (title) saveRecent({title:title.textContent.trim(), href:this.getAttribute('href') || this.href});
+    });
+  }
+  paintSize();
+  renderRecent();
+})();
+</script>
 <script>
 const MANUALS = {
   first:{

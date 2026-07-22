@@ -158,7 +158,7 @@ html[data-theme="dark"] .rousai-tab{background:#10213A;color:#E8EEF7;border-colo
     </svg>
     <div>
       <p style="font-size:18px;font-weight:700;color:#fff;margin:0 0 3px;">計算ツール</p>
-      <p style="font-size:13px;color:rgba(255,255,255,.92);margin:0;">労災保険料・労務費・国保料・CCUSをかんたん計算</p>
+      <p style="font-size:13px;color:rgba(255,255,255,.92);margin:0;">労災保険料・労務費・国保料・給付金をかんたん計算</p>
     </div>
   </div>
   <!-- ホーム -->
@@ -179,11 +179,11 @@ html[data-theme="dark"] .rousai-tab{background:#10213A;color:#E8EEF7;border-colo
         <p class="tool-card-title">国保料シミュ</p>
         <p class="tool-card-desc">上尾市・伊奈町 vs 土建国保</p>
       </div>
-      <div class="tool-card" onclick="openTool('ccus')">
+      <a class="tool-card" href="https://lv-asses-sup.ccus.jp/" target="_blank" rel="noopener noreferrer" style="display:block;text-decoration:none;">
         <div class="tool-card-icon" style="color:var(--green);"><i class="ti ti-id"></i></div>
-        <p class="tool-card-title">CCUSレベル確認</p>
-        <p class="tool-card-desc">職種別 能力評価判定</p>
-      </div>
+        <p class="tool-card-title">CCUS能力評価（公式）<i class="ti ti-external-link" style="font-size:13px;margin-left:4px;vertical-align:-1px;"></i></p>
+        <p class="tool-card-desc">最新基準は公式サイトで確認</p>
+      </a>
       <div class="tool-card" onclick="openTool('benefit')">
         <div class="tool-card-icon" style="color:#6B21A8;"><i class="ti ti-heart-handshake"></i></div>
         <p class="tool-card-title">給付金</p>
@@ -468,25 +468,10 @@ html[data-theme="dark"] .rousai-tab{background:#10213A;color:#E8EEF7;border-colo
 
   <!-- CCUS -->
   <div id="tool-ccus" class="tool-detail">
-    <p style="font-size:17px;font-weight:700;color:var(--navy);margin:0 0 14px;">CCUSカードレベル確認（職種別）</p>
+    <p style="font-size:17px;font-weight:700;color:var(--navy);margin:0 0 14px;">CCUS能力評価</p>
     <div class="card">
-      <div class="input-group" style="margin-bottom:12px;"><label>職種を選択</label><select id="shoku" onchange="onShokuChange()"></select></div>
-      <div class="grid2">
-        <div class="input-group"><label>累計就労日数（日）</label><input type="number" id="days" min="0" value="" placeholder="例：800"></div>
-        <div class="input-group"><label>職長・班長の就労日数</label><input type="number" id="leader" min="0" value="" placeholder="例：200"></div>
-      </div>
-      <p class="sec-label" style="margin-top:4px;">保有資格</p>
-      <div id="qual-area" style="margin-bottom:8px;"><p class="calc-note" style="font-size:14px;">職種を選ぶと表示されます。</p></div>
-      <button class="btn-primary" onclick="calcCcus()"><i class="ti ti-search"></i>レベルを判定する</button>
-    </div>
-    <div id="ccus-result" class="hidden">
-      <div id="ccus-badge"></div>
-      <div class="card" style="margin-bottom:12px;"><p class="sec-label">進捗</p><div id="ccus-progs"></div></div>
-      <div id="ccus-next-wrap" class="hidden"><p class="sec-label">次のレベルへの条件</p><div class="card" id="ccus-next"></div></div>
-      <p class="sec-label">全レベル早見表</p>
-      <div class="card" id="ccus-table"></div>
-      <div style="display:flex;gap:8px;margin-top:12px;"><button class="print-btn" onclick="previewCcus()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;font-size:14px;font-weight:700;color:#1B2A3B;background:#fff;border:2px solid #1B2A3B;border-radius:11px;cursor:pointer;font-family:inherit;"><i class="ti ti-eye"></i>プレビュー</button><button class="print-btn" onclick="printCcus()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;font-size:14px;font-weight:700;color:#fff;background:#1B2A3B;border:2px solid #1B2A3B;border-radius:11px;cursor:pointer;font-family:inherit;"><i class="ti ti-printer"></i>印刷・PDF</button></div>
-      <div class="alert alert-info"><i class="ti ti-info-circle"></i><span>詳細基準は職種により異なります。申請は支部または各能力評価実施団体へ。就業日数は1年＝215日換算。</span></div>
+      <p style="margin:0 0 12px;line-height:1.7;">能力評価基準は制度改定があるため、最新情報を掲載するCCUS公式サポートサイトで確認してください。</p>
+      <a class="btn-primary" href="https://lv-asses-sup.ccus.jp/" target="_blank" rel="noopener noreferrer"><i class="ti ti-external-link"></i>CCUS公式サイトを開く</a>
     </div>
   </div>
 </div>
@@ -502,16 +487,19 @@ function goBack(){
   else { location.href='index.html'; }
 }
 function openTool(name){
+  if(name==='ccus'){
+    window.open('https://lv-asses-sup.ccus.jp/','_blank','noopener,noreferrer');
+    return;
+  }
   currentTool=name;
   document.getElementById('calc-home').style.display='none';
   document.querySelectorAll('.tool-detail').forEach(d=>d.classList.remove('active'));
   document.getElementById('tool-'+name).classList.add('active');
   document.getElementById('back-label').textContent='計算ツール';
-  const titles={romu:'労務費シミュ',rousai:'労災保険料',kokuho:'国保料シミュ',ccus:'CCUSレベル確認',benefit:'給付金'};
+  const titles={romu:'労務費シミュ',rousai:'労災保険料',kokuho:'国保料シミュ',benefit:'給付金'};
   document.getElementById('page-title').textContent=titles[name]||'計算ツール';
   if(name==='romu'){calcRoumu();}
   if(name==='rousai'){initRousai();calcRousai();}
-  if(name==='ccus')initCcus();
   if(name==='benefit'){initBenefit();}
 }
 function closeTool(){

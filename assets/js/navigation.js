@@ -1,8 +1,14 @@
 (function(){
   const THEME_KEY = 'doken_theme_v2';
+  var UI_SIZE_KEY = 'doken_ui_size_v1';
   // 既定はダーク。（旧キーに残るlight設定は無視して確実にダーク既定にする）
   const initialTheme = localStorage.getItem(THEME_KEY) || 'dark';
   document.documentElement.setAttribute('data-theme', initialTheme);
+  try {
+    document.documentElement.setAttribute('data-ui-size', localStorage.getItem(UI_SIZE_KEY) || 'normal');
+  } catch (e) {
+    document.documentElement.setAttribute('data-ui-size', 'normal');
+  }
 
   function defaultBack(fallback){
     const fallbackUrl = fallback || 'index.html';
