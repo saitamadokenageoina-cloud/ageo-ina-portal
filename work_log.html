@@ -43,6 +43,7 @@
 .btn-main{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:15px;font-size:16px;font-weight:700;color:#fff;background:var(--orange);border:none;border-radius:12px;cursor:pointer;font-family:inherit;box-shadow:0 4px 14px rgba(232,97,42,.3);}
 .btn-main:active{transform:scale(.98);}
 .btn-sub{display:flex;align-items:center;justify-content:center;gap:6px;padding:15px 16px;font-size:14px;font-weight:700;color:var(--navy);background:var(--gray100);border:1.5px solid var(--gray200);border-radius:12px;cursor:pointer;font-family:inherit;white-space:nowrap;}
+.work-draft{display:none;align-items:center;gap:9px;flex-wrap:wrap;margin:0 0 13px;padding:11px 12px;border:1.5px solid #2E82D4;border-radius:11px;background:#EEF6FF;color:#123B64;font-size:13px;font-weight:700}.work-draft.show{display:flex}.work-draft span{flex:1;min-width:170px}.work-draft button{min-height:42px;padding:8px 12px;border-radius:9px;font:inherit;cursor:pointer}.work-draft .restore{border:0;background:#165FA8;color:#fff}.work-draft .discard{border:1px solid #718096;background:#fff;color:#26394D}html[data-theme="dark"] .work-draft{background:#102B49;border-color:#55A9EF;color:#F1F7FF}html[data-theme="dark"] .work-draft .discard{background:#0B192B;color:#F1F7FF;border-color:#7D91A8}
 
 .toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%) translateY(20px);background:#147C62;color:#fff;font-size:14px;font-weight:700;padding:12px 22px;border-radius:99px;box-shadow:0 8px 24px rgba(0,0,0,.3);opacity:0;pointer-events:none;transition:all .25s;z-index:120;max-width:88%;text-align:center;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
@@ -221,6 +222,7 @@
   <!-- 入力フォーム -->
   <div class="card2">
     <p class="card2-title"><i class="ti ti-pencil-plus"></i>今日の作業を記録</p>
+    <div class="work-draft" id="work-draft" role="status" aria-live="polite"><span><i class="ti ti-device-floppy"></i> 保存前の入力がこの端末に残っています</span><button class="restore" type="button" onclick="restoreWorkDraft()">続きから入力</button><button class="discard" type="button" onclick="clearWorkDraft(true)">削除</button></div>
 
     <div class="fld">
       <label for="f-date">日付</label>
@@ -443,6 +445,7 @@ function saveRecord(){
   if(editId){ arr=arr.map(r=>r.id===editId?rec:r); } else { arr.push(rec); }
   store(arr);
   if(job){ try{ localStorage.setItem(KEY_JOB, job); }catch(e){} }
+  clearWorkDraft(false);
 
   toast(editId?'記録を更新しました':'記録を保存しました');
   const _sd=date;
@@ -816,6 +819,21 @@ applySettingsToForm();
 renderHaz();
 initCal();
 render();
+
+// 保存前の入力を、この端末だけに一時保存する
+var WORK_DRAFT_KEY='doken_work_log_draft_v1';
+var workDraftTimer=null;
+var workDraftFields=['f-date','f-job','f-moto','f-site','f-note'];
+function readWorkDraft(){try{return JSON.parse(localStorage.getItem(WORK_DRAFT_KEY)||'null');}catch(e){return null;}}
+function collectWorkDraft(){var data={hazards:collectHazards(),updatedAt:Date.now()};workDraftFields.forEach(function(id){var el=document.getElementById(id);data[id]=el?el.value:'';});return data;}
+function hasWorkDraft(data){return Boolean(data&&(data['f-job']||data['f-moto']||data['f-site']||data['f-note']||(data.hazards&&data.hazards.length)));}
+function saveWorkDraft(){var data=collectWorkDraft();try{if(hasWorkDraft(data))localStorage.setItem(WORK_DRAFT_KEY,JSON.stringify(data));else localStorage.removeItem(WORK_DRAFT_KEY);}catch(e){}updateWorkDraft();}
+function scheduleWorkDraft(){clearTimeout(workDraftTimer);workDraftTimer=setTimeout(saveWorkDraft,350);}
+function updateWorkDraft(){var box=document.getElementById('work-draft');if(box)box.classList.toggle('show',hasWorkDraft(readWorkDraft()));}
+function clearWorkDraft(showMessage){try{localStorage.removeItem(WORK_DRAFT_KEY);}catch(e){}updateWorkDraft();if(showMessage)toast('保存前の入力を削除しました');}
+function restoreWorkDraft(){var data=readWorkDraft();if(!hasWorkDraft(data))return;workDraftFields.forEach(function(id){var el=document.getElementById(id);if(el&&data[id]!==undefined)el.value=data[id];});setHzFromRecord({hazards:data.hazards||[]});updateWorkDraft();var first=document.getElementById('f-job');if(first)first.focus();}
+function setupWorkDraft(){workDraftFields.forEach(function(id){var el=document.getElementById(id);if(el)el.addEventListener('input',scheduleWorkDraft);});var grid=document.getElementById('haz-grid');if(grid)grid.addEventListener('click',scheduleWorkDraft);updateWorkDraft();}
+setupWorkDraft();
 </script>
 
 <script src="assets/js/navigation.js"></script>
