@@ -28,17 +28,22 @@
 #    形式: 'v20260707-NN' → NNをインクリメント
 #    例: v20260707-52 → v20260707-53
 
-# 2. commit & push
+# 2. 公開前の自動検査と実機確認
+node scripts/quality-check.js
+git diff --check
+# RELEASE_CHECKLIST.md に従ってスマートフォン表示・主要機能・オフラインを確認
+
+# 3. commit & push
 git add -A
 git commit -m "変更内容"
 git push origin main
 
-# 3. GitHub Pagesは稀に自動ビルドされないことがあるため、明示的にビルドをトリガー
+# 4. GitHub Pagesは稀に自動ビルドされないことがあるため、明示的にビルドをトリガー
 curl -sS -X POST -H "Authorization: token <GH_TOKEN>" \
   -H "Accept: application/vnd.github+json" \
   https://api.github.com/repos/saitamadokenageoina-cloud/ageo-ina-portal/pages/builds
 
-# 4. ビルド完了をポーリング確認（statusが built かつ commit が最新一致するまで）
+# 5. ビルド完了をポーリング確認（statusが built かつ commit が最新一致するまで）
 curl -sS -H "Authorization: token <GH_TOKEN>" \
   -H "Accept: application/vnd.github+json" \
   https://api.github.com/repos/saitamadokenageoina-cloud/ageo-ina-portal/pages/builds/latest

@@ -386,6 +386,25 @@ html[data-theme="dark"] .doken-contact-rail{background:#13243A;border-color:rgba
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;}
 }
+
+/* 「文字を大きく」選択時は、ページ固有の小さな補足文字も読みやすくする。 */
+html[data-ui-size="large"] .post-meta,
+html[data-ui-size="large"] .post-body,
+html[data-ui-size="large"] .comment-text,
+html[data-ui-size="large"] .glabel,
+html[data-ui-size="large"] .gdocs,
+html[data-ui-size="large"] .gmeta-item p,
+html[data-ui-size="large"] .kcard-place,
+html[data-ui-size="large"] .kcard-note,
+html[data-ui-size="large"] .info-chip,
+html[data-ui-size="large"] .guide-lead,
+html[data-ui-size="large"] .course-guide-list,
+html[data-ui-size="large"] .doc-check,
+html[data-ui-size="large"] .feature-summary,
+html[data-ui-size="large"] .tip,
+html[data-ui-size="large"] .steps li,
+html[data-ui-size="large"] .feature-table{font-size:16px!important;line-height:1.75!important;}
+html[data-ui-size="large"] .acc-title{font-size:17px!important;}
 @media print{
   body{padding-bottom:0!important;}
   .doken-contact-rail,.theme-toggle,.connection-status,.field-error{display:none!important;}

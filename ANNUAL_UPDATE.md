@@ -56,8 +56,9 @@
 1. 資料の年度・発行元・改定日を確認する
 2. 前年度との差分だけを必要なページへ反映する
 3. 計算式、料率、日付、金額、必要書類を再確認する
-4. JavaScript構文、375px幅、ライト／ダークモードを確認する
-5. `sw.js`の`CACHE_VERSION`を1つ上げる
-6. Pull Requestで差分を確認してからmainへ統合する
+4. `node scripts/quality-check.js`と`git diff --check`が合格することを確認する
+5. `RELEASE_CHECKLIST.md`に従い、スマートフォン幅、ライト／ダーク、大きな文字、オフラインを確認する
+6. `sw.js`の`CACHE_VERSION`を1つ上げる
+7. Pull Requestで差分とGitHub Actionsの緑の✓を確認してからmainへ統合する
 
 チェックリストのチェック状態は、建設業許可・総合共済・技能講習ともクラウドへ送信せず、利用端末の`localStorage`だけに保存します。ブラウザデータを削除するとチェック状態も消えます。
