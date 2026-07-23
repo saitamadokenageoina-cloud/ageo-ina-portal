@@ -74,6 +74,8 @@
 .modal-sheet{background:var(--white);border-radius:var(--r24) var(--r24) 0 0;padding:0 20px 40px;width:100%;max-width:640px;max-height:100%;box-sizing:border-box;overflow-y:auto;overscroll-behavior:contain;transform:translateY(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);}
 .modal-overlay.open .modal-sheet{transform:translateY(0);}
 .modal-nav{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:12px;min-height:72px;box-sizing:border-box;margin:0 -20px 16px;padding:14px 20px;background:var(--white);border-bottom:1px solid var(--gray100);}
+.draft-panel{display:none;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 16px;padding:12px 14px;border:1.5px solid #2E82D4;border-radius:12px;background:#EEF6FF;color:#123B64;font-size:13px;font-weight:700;line-height:1.5;}
+.draft-panel.show{display:flex}.draft-panel span{flex:1;min-width:180px}.draft-panel button{min-height:44px;border-radius:10px;padding:9px 13px;font:inherit;cursor:pointer}.draft-restore{border:0;background:#165FA8;color:#fff}.draft-discard{border:1px solid #718096;background:#fff;color:#26394D}
 .modal-back{flex:0 0 auto;min-width:96px;height:48px;padding:8px 14px;border:1.5px solid var(--gray200);border-radius:var(--r12);background:var(--gray50);color:var(--navy);font:inherit;font-size:15px;font-weight:700;line-height:1;white-space:nowrap;display:flex;align-items:center;justify-content:center;gap:7px;}
 .modal-back i{font-size:19px;flex:0 0 auto;}
 .modal-title{min-width:0;font-size:18px;font-weight:700;line-height:1.35;color:var(--navy);margin:0;overflow-wrap:anywhere;}
@@ -195,6 +197,7 @@ html[data-theme="dark"] .post-btn.primary{background:#E8612A;color:#fff;border-c
 html[data-theme="dark"] .post-btn.danger{background:#2A1010;color:#FFD1D1;border-color:#D76A6A;}
 html[data-theme="dark"] .modal-sheet{background:#0F1F35;border:1px solid rgba(255,255,255,.12);}
 html[data-theme="dark"] .modal-nav{background:#0F1F35;border-color:rgba(255,255,255,.12);}
+html[data-theme="dark"] .draft-panel{background:#102B49;border-color:#55A9EF;color:#F1F7FF}html[data-theme="dark"] .draft-discard{background:#0B192B;color:#F1F7FF;border-color:#7D91A8}
 html[data-theme="dark"] .modal-back{background:#243A56;color:#fff;border-color:rgba(255,255,255,.18);}
 html[data-theme="dark"] #post-tel{background:#071426;color:#fff;border-color:rgba(255,255,255,.22);}
 html[data-theme="dark"] .guild-search,html[data-theme="dark"] .guild-sort,html[data-theme="dark"] .archive-btn{background:#0F1F35;color:#E8EEF7;border-color:rgba(255,255,255,.18);}
@@ -338,6 +341,11 @@ html[data-theme="light"] .comment-input{background:#fff;color:#1B2A3B;}
     <div class="modal-nav">
       <button class="modal-back" type="button" onclick="closeModal()"><i class="ti ti-arrow-left"></i>戻る</button>
       <p class="modal-title">新しく投稿する</p>
+    </div>
+    <div class="draft-panel" id="guild-draft-panel" role="status" aria-live="polite">
+      <span><i class="ti ti-device-floppy"></i> この端末に保存した下書きがあります</span>
+      <button class="draft-restore" type="button" onclick="restoreGuildDraft()">続きから入力</button>
+      <button class="draft-discard" type="button" onclick="clearGuildDraft(true)">削除</button>
     </div>
 
     <p style="font-size:12px;font-weight:600;color:var(--gray500);margin:0 0 8px;letter-spacing:.06em;">カテゴリ（投稿目的を選ぶと自動設定）</p>
@@ -879,7 +887,7 @@ function contactBranch(id){
 }
 
 // ===== 投稿 =====
-function openModal(){ const modal=document.getElementById('modal'); modal.classList.add('open'); modal.querySelector('.modal-sheet').scrollTop=0; }
+function openModal(){ const modal=document.getElementById('modal'); modal.classList.add('open'); modal.querySelector('.modal-sheet').scrollTop=0; updateGuildDraftPanel(); }
 function localDateValue(dayOffset){
   const date=new Date(); date.setDate(date.getDate()+dayOffset);
   return [date.getFullYear(),String(date.getMonth()+1).padStart(2,'0'),String(date.getDate()).padStart(2,'0')].join('-');
@@ -893,6 +901,7 @@ function openQuickAvailability(dayOffset){
   document.getElementById('post-expiry').value=offset===0?'24h':'48h';
   document.getElementById('post-urgent').checked=offset===0;
   document.getElementById('post-body').value=(offset===0?'本日':'明日')+'、応援に行けます。職種・地域・時間などの条件をご確認ください。詳しくは支部を通じてお問い合わせください。';
+  saveGuildDraft();
   document.getElementById('post-trade').focus();
 }
 function closeModal(){
@@ -912,6 +921,7 @@ function selCat(cat, btn){
   btn.classList.add('sel');
   document.getElementById('job-fields').classList.toggle('open', cat === 'jinzai');
   if(selectedPurpose && PURPOSE[selectedPurpose].cat !== cat){ selectedPurpose=''; document.querySelectorAll('.purpose-btn').forEach(c=>c.classList.remove('sel')); }
+  scheduleGuildDraftSave();
 }
 
 function selectPurpose(button){
@@ -922,6 +932,7 @@ function selectPurpose(button){
   const cat=PURPOSE[purpose].cat;
   const catButton=document.querySelector('.cat-chip.'+cat);
   if(catButton) selCat(cat,catButton);
+  scheduleGuildDraftSave();
 }
 
 function generatePostTemplate(){
@@ -940,6 +951,7 @@ function generatePostTemplate(){
   if(trade) parts.push(`${trade}${Number.isInteger(people)&&people>0?'を'+people+'人':''}`);
   const action={seek_help:'募集しています',offer_help:'の応援に行けます',request_work:'の仕事をお願いしたいです',offer_work:'の仕事を請けられます',give_material:'をお譲りします',seek_material:'を探しています',share:'について情報を共有します'}[selectedPurpose];
   body.value=(parts.join('、') || PURPOSE[selectedPurpose].label)+'、'+action+'。'+(conditions?'条件は'+conditions+'です。':'')+'詳しくは支部を通じてお問い合わせください。';
+  saveGuildDraft();
   body.focus();
 }
 
@@ -1035,6 +1047,7 @@ async function submitPost(){
     posts.unshift(newPost);
     save();
   }
+  clearGuildDraft(false);
   closeModal();
   currentTab='all';
   document.querySelectorAll('.t-btn')[0].click();
@@ -1044,6 +1057,36 @@ async function submitPost(){
   document.getElementById('post-expiry').value='7d';
   render();
 }
+
+// 投稿途中の内容は、この端末だけに一時保存する（写真は保存しない）
+var GUILD_DRAFT_KEY='doken_guild_post_draft_v1';
+var guildDraftTimer=null;
+var guildDraftFields=['post-body','post-area','post-name','post-tel','post-work-date','post-work-time','post-trade','post-people','post-conditions','post-expiry'];
+function readGuildDraft(){try{return JSON.parse(localStorage.getItem(GUILD_DRAFT_KEY)||'null');}catch(e){return null;}}
+function collectGuildDraft(){
+  var data={cat:selectedCat,purpose:selectedPurpose,urgent:false,updatedAt:Date.now()};
+  var urgent=document.getElementById('post-urgent');if(urgent)data.urgent=urgent.checked;
+  guildDraftFields.forEach(function(id){var el=document.getElementById(id);data[id]=el?el.value:'';});
+  return data;
+}
+function hasGuildDraftContent(data){return Boolean(data&&(data.cat||data.purpose||data['post-body']||data['post-area']||data['post-name']||data['post-tel']||data['post-work-date']||data['post-trade']));}
+function saveGuildDraft(){var data=collectGuildDraft();try{if(hasGuildDraftContent(data))localStorage.setItem(GUILD_DRAFT_KEY,JSON.stringify(data));else localStorage.removeItem(GUILD_DRAFT_KEY);}catch(e){}updateGuildDraftPanel();}
+function scheduleGuildDraftSave(){clearTimeout(guildDraftTimer);guildDraftTimer=setTimeout(saveGuildDraft,350);}
+function updateGuildDraftPanel(){var panel=document.getElementById('guild-draft-panel');if(panel)panel.classList.toggle('show',hasGuildDraftContent(readGuildDraft()));}
+function clearGuildDraft(showMessage){try{localStorage.removeItem(GUILD_DRAFT_KEY);}catch(e){}updateGuildDraftPanel();if(showMessage)alert('この端末の下書きを削除しました。');}
+function restoreGuildDraft(){
+  var data=readGuildDraft();if(!hasGuildDraftContent(data))return;
+  guildDraftFields.forEach(function(id){var el=document.getElementById(id);if(el&&data[id]!==undefined)el.value=data[id];});
+  var urgent=document.getElementById('post-urgent');if(urgent)urgent.checked=Boolean(data.urgent);
+  if(data.purpose){var purposeButton=document.querySelector('.purpose-btn[data-purpose="'+data.purpose+'"]');if(purposeButton)selectPurpose(purposeButton);}
+  else if(data.cat){var catButton=document.querySelector('.cat-chip.'+data.cat);if(catButton)selCat(data.cat,catButton);}
+  updateGuildDraftPanel();var body=document.getElementById('post-body');if(body)body.focus();
+}
+function setupGuildDraft(){
+  guildDraftFields.concat(['post-urgent']).forEach(function(id){var el=document.getElementById(id);if(!el)return;el.addEventListener(el.type==='checkbox'||el.tagName==='SELECT'?'change':'input',scheduleGuildDraftSave);});
+  updateGuildDraftPanel();
+}
+setupGuildDraft();
 
 async function toggleAdmin(){
   if(isAdmin){
