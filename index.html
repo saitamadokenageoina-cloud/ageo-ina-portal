@@ -224,7 +224,12 @@
 .home-tools-title{display:flex;align-items:center;gap:8px;margin:0 0 10px;color:var(--navy);font-size:17px;font-weight:800;}
 .feature-search-wrap{position:relative;}
 .feature-search-wrap i{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--gray600);font-size:20px;pointer-events:none;}
-.feature-search{width:100%;min-height:54px;padding:12px 46px 12px 44px;border:2px solid var(--gray200);border-radius:var(--r12);background:var(--white);color:var(--gray900);font-size:16px;font-weight:600;outline:none;}
+/* 検索欄の左右の余白（アイコンと重ならないようにする）。
+   common.css の input[type=search] は詳細度が (0,1,1) あり、クラスだけの
+   .feature-search (0,1,0) では負けて padding が 11px 14px に上書きされてしまう。
+   その結果、虫めがねアイコンとプレースホルダーの文字がぴったり重なっていた。
+   要素名＋クラスで詳細度を (0,1,1) に上げ、後から読み込まれる分で確実に勝たせる。 */
+input.feature-search{width:100%;min-height:54px;padding:12px 54px 12px 44px;border:2px solid var(--gray200);border-radius:var(--r12);background:var(--white);color:var(--gray900);font-size:16px;font-weight:600;outline:none;}
 .feature-search:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(26,95,168,.12);}
 .feature-search-clear{position:absolute;right:5px;top:5px;width:44px;height:44px;border:0;background:transparent;color:var(--gray600);font-size:20px;border-radius:10px;display:none;align-items:center;justify-content:center;}
 .feature-search-clear.show{display:flex;}
