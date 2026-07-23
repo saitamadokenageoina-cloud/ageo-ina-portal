@@ -38,6 +38,14 @@
       '<a href="guide.html"><i class="ti ti-file-check"></i><span>ガイド</span></a>'
     ].join('');
     document.body.appendChild(rail);
+    var current = location.pathname.split('/').pop() || 'index.html';
+    var links = rail.querySelectorAll('a');
+    var i;
+    for (i = 0; i < links.length; i += 1) {
+      if ((links[i].getAttribute('href') || '') === current) {
+        links[i].setAttribute('aria-current','page');
+      }
+    }
   }
 
   function injectThemeToggle(){
@@ -71,9 +79,10 @@
       .then(function(source){
         var match = source.match(/CACHE_VERSION\s*=\s*['"][^'"]*-(\d+)['"]/);
         if (!match) return;
-        targets.forEach(function(target){
-          target.textContent = 'アプリ版数 v' + match[1];
-        });
+        var i;
+        for (i = 0; i < targets.length; i += 1) {
+          targets[i].textContent = 'アプリ版数 v' + match[1];
+        }
       })
       .catch(function(){ /* 取得できない場合は初期表示のまま継続 */ });
   }
@@ -118,6 +127,7 @@
 
   function enhanceForms(){
     var controls = document.querySelectorAll('input,select,textarea');
+    var forms = document.querySelectorAll('form');
     var i;
     for (i = 0; i < controls.length; i += 1) {
       (function(control,index){
@@ -126,6 +136,27 @@
         control.addEventListener('input',function(){ if (control.validity.valid) clearFieldError(control); });
         control.addEventListener('change',function(){ if (control.validity.valid) clearFieldError(control); });
       })(controls[i],i);
+    }
+    for (i = 0; i < forms.length; i += 1) {
+      (function(form){
+        var guiding = false;
+        form.addEventListener('invalid',function(event){
+          if (guiding || !event.target) return;
+          guiding = true;
+          window.setTimeout(function(){
+            var target = form.querySelector(':invalid');
+            if (target) {
+              if (typeof target.scrollIntoView === 'function') {
+                try { target.scrollIntoView({behavior:'smooth',block:'center'}); }
+                catch (e) { target.scrollIntoView(true); }
+              }
+              try { target.focus({preventScroll:true}); }
+              catch (e2) { target.focus(); }
+            }
+            guiding = false;
+          },80);
+        },true);
+      })(forms[i]);
     }
   }
 
@@ -148,10 +179,25 @@
     status.setAttribute('aria-live','polite');
     status.hidden = true;
     document.body.appendChild(status);
-    function paint(){
+    var wasOffline = navigator.onLine === false;
+    var hideTimer = null;
+    function paint(event){
       var offline = navigator.onLine === false;
-      status.hidden = !offline;
-      status.textContent = offline ? '現在オフラインです。保存済みの内容を表示しています。' : '';
+      if (hideTimer) window.clearTimeout(hideTimer);
+      status.classList.remove('is-online');
+      if (offline) {
+        status.hidden = false;
+        status.textContent = '現在オフラインです。保存済みの内容を表示しています。';
+      } else if (wasOffline && event) {
+        status.hidden = false;
+        status.classList.add('is-online');
+        status.textContent = '通信が戻りました。最新の内容を読み込めます。';
+        hideTimer = window.setTimeout(function(){ status.hidden = true; },3000);
+      } else {
+        status.hidden = true;
+        status.textContent = '';
+      }
+      wasOffline = offline;
     }
     window.addEventListener('online',paint);
     window.addEventListener('offline',paint);
