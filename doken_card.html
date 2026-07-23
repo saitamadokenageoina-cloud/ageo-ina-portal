@@ -158,6 +158,72 @@
 .big-sec .bs-no{flex:0 0 auto;width:30px;height:30px;border-radius:9px;background:var(--orange);color:#fff;font-size:16px;font-weight:800;display:flex;align-items:center;justify-content:center;}
 .big-sec .bs-tx{font-size:18px;font-weight:800;color:var(--navy);line-height:1.2;}
 .big-sec .bs-sub{display:block;font-size:11.5px;color:var(--gray500);font-weight:600;margin-top:1px;}
+
+/* ===== どこにいてもカードを出せるボタン（下部固定）と全画面カード =====
+   お店を検索したあと、すぐカードを見せられるようにするための仕組み。
+   検索を先に置いたことで実物のカードが画面の下になったため、
+   スクロールせずに1タップで大きなカードを出せるようにしている。 */
+.card-fab{
+  position:fixed;left:50%;transform:translateX(-50%);
+  bottom:calc(84px + env(safe-area-inset-bottom));
+  z-index:455;display:inline-flex;align-items:center;gap:9px;
+  min-height:54px;padding:0 22px;border:none;border-radius:99px;
+  background:#C9501C;color:#fff;font-family:inherit;
+  font-size:16px;font-weight:800;letter-spacing:.02em;cursor:pointer;
+  box-shadow:0 8px 22px rgba(0,0,0,.3);
+  transition:opacity .2s, transform .2s;
+}
+.card-fab i{font-size:21px;}
+.card-fab.is-hidden{opacity:0;pointer-events:none;transform:translateX(-50%) translateY(12px);}
+
+.card-modal{
+  position:fixed;inset:0;z-index:900;display:none;
+  background:rgba(9,17,28,.9);
+  padding:16px;overflow-y:auto;
+}
+.card-modal.open{display:block;}
+.cm-inner{max-width:460px;margin:0 auto;padding-bottom:24px;}
+.cm-bar{display:flex;justify-content:flex-end;margin-bottom:10px;}
+.cm-close{
+  display:inline-flex;align-items:center;gap:6px;min-height:48px;padding:0 20px;
+  border:none;border-radius:99px;background:#fff;color:#1B2A3B;
+  font-family:inherit;font-size:15px;font-weight:800;cursor:pointer;
+}
+.cm-lead{color:#fff;font-size:15px;font-weight:700;text-align:center;margin:0 0 12px;line-height:1.6;}
+.cm-card{
+  background:linear-gradient(135deg,#2A3B52,#16233A);
+  border-radius:18px;padding:22px 20px;border:1px solid rgba(255,255,255,.16);
+  box-shadow:0 12px 34px rgba(0,0,0,.4);
+}
+.cm-brand{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+.cm-brand-name{color:#fff;font-size:15px;font-weight:800;letter-spacing:.08em;margin:0;}
+.cm-brand-sub{color:rgba(255,255,255,.55);font-size:10px;letter-spacing:.1em;margin:0;}
+.cm-num{color:rgba(255,255,255,.85);font-size:19px;letter-spacing:.16em;margin:0 0 18px;font-weight:700;}
+.cm-member{color:#fff;font-size:17px;font-weight:800;margin:0;}
+.cm-org{color:rgba(255,255,255,.6);font-size:12px;margin:2px 0 0;}
+.cm-pw{
+  margin-top:18px;background:rgba(255,255,255,.1);border-radius:12px;
+  padding:12px 14px;display:flex;align-items:center;gap:10px;
+}
+.cm-pw-l{flex:1;min-width:0;}
+.cm-pw-label{color:rgba(255,255,255,.6);font-size:11px;font-weight:700;margin:0 0 2px;}
+.cm-pw-val{color:#fff;font-size:19px;font-weight:800;letter-spacing:.12em;margin:0;
+  filter:blur(6px);transition:filter .15s;cursor:pointer;}
+.cm-pw-val.show{filter:none;}
+.cm-pw-btn{
+  flex:0 0 auto;min-height:42px;padding:0 14px;border:1px solid rgba(255,255,255,.3);
+  border-radius:10px;background:transparent;color:#fff;font-family:inherit;
+  font-size:13px;font-weight:800;cursor:pointer;display:inline-flex;align-items:center;gap:5px;
+}
+.cm-note{
+  margin-top:14px;background:rgba(255,255,255,.94);border-radius:12px;padding:13px 15px;
+  color:#1B2A3B;font-size:13px;line-height:1.7;font-weight:600;
+}
+.cm-note strong{color:#C9501C;}
+@media (max-width:360px){
+  .card-fab{font-size:15px;padding:0 18px;}
+  .cm-num{font-size:17px;letter-spacing:.1em;}
+}
 </style>
 </head>
 <body>
@@ -174,101 +240,7 @@
 
 <div class="content">
 
-  <div class="big-sec"><span class="bs-no">1</span><span class="bs-tx">お店で見せる<span class="bs-sub">お店で提示して特典を受けるとき</span></span></div>
-
-  <!-- デジタルカード -->
-  <div class="digital-card">
-    <div class="dc-chip">
-      <div class="dc-chip-icon" style="background:none;padding:0;width:auto;height:auto;">
-        <svg viewBox="0 0 50 50" width="46" height="46">
-          <rect x="2" y="10" width="46" height="30" rx="6" fill="rgba(255,255,255,.18)"/>
-          <rect x="2" y="10" width="46" height="12" rx="6" fill="rgba(255,255,255,.25)"/>
-          <rect x="6" y="28" width="14" height="8" rx="2" fill="rgba(255,200,0,.55)"/>
-          <line x1="24" y1="29" x2="42" y2="29" stroke="rgba(255,255,255,.5)" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="24" y1="33" x2="36" y2="33" stroke="rgba(255,255,255,.4)" stroke-width="1.5" stroke-linecap="round"/>
-          <circle cx="36" cy="17" r="5" fill="rgba(255,200,0,.5)"/>
-          <circle cx="41" cy="17" r="5" fill="rgba(255,100,50,.45)"/>
-        </svg>
-      </div>
-      <div>
-        <p class="dc-chip-text">DOKEN CARD</p>
-        <p class="dc-chip-sub">SAITAMA DOKEN UNION</p>
-      </div>
-    </div>
-    <p class="dc-number">**** **** **** ****</p>
-
-    <!-- パスワード表示 -->
-    <div class="pw-box">
-      <div style="flex:1;">
-        <p class="pw-label"><i class="ti ti-lock" style="font-size:12px;vertical-align:-1px;margin-right:3px;"></i>サイトパスワード</p>
-        <p class="pw-value" id="pw-val" onclick="togglePw()">TD2026</p>
-      </div>
-      <div class="pw-actions">
-        <button class="pw-toggle" onclick="togglePw()" id="pw-btn">
-          <i class="ti ti-eye" id="pw-icon"></i><span id="pw-btn-label">表示</span>
-        </button>
-      </div>
-    </div>
-    <p class="pw-hint"><i class="ti ti-info-circle"></i>下の「STEP1」を押すと、このパスワードが自動でコピーされます。</p>
-
-    <p class="dc-member" style="margin-top:14px;">上尾伊奈支部 組合員</p>
-    <p class="dc-org">埼玉土建一般労働組合</p>
-  </div>
-
-  <!-- ===== かんたん3ステップ（特大ボタン＋イラスト）===== -->
-  <div class="easy-steps">
-    <p class="es-head"><i class="ti ti-hand-click"></i>この順番でタップするだけ</p>
-
-    <!-- STEP 1 -->
-    <span class="es-num">STEP 1</span>
-    <button class="es-btn es-copy" id="es-copy" onclick="copyBig()">
-      <span class="es-ico"><i class="ti ti-key"></i></span>
-      <span class="es-txt"><b>パスワードをコピー</b><small>ここを押すだけで自動でひかえます</small></span>
-      <i class="ti ti-hand-finger es-arrow"></i>
-    </button>
-
-    <div class="es-down"><i class="ti ti-chevron-down"></i></div>
-
-    <!-- STEP 2 -->
-    <span class="es-num">STEP 2</span>
-    <a href="https://doken-card.jp/dc/card" target="_blank" rel="noopener" class="es-btn es-open" onclick="copyForSite()">
-      <span class="es-ico"><i class="ti ti-id-badge-2"></i></span>
-      <span class="es-txt"><b>カードを開く</b><small>公式サイトのカード画面がひらきます</small></span>
-      <i class="ti ti-external-link es-arrow"></i>
-    </a>
-
-    <div class="es-down"><i class="ti ti-chevron-down"></i></div>
-
-    <!-- STEP 3 -->
-    <span class="es-num">STEP 3</span>
-    <div class="es-step3">
-      <p class="es3-title">入力欄を <u>長押し</u> して貼り付け</p>
-      <svg class="es3-fig" viewBox="0 0 260 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <rect x="74" y="6" width="112" height="36" rx="9" fill="#2b2b2b"/>
-        <polygon points="120,42 140,42 130,52" fill="#2b2b2b"/>
-        <text x="130" y="30" text-anchor="middle" fill="#ffffff" font-size="16" font-weight="700" font-family="'M PLUS 1p',sans-serif">ペースト</text>
-        <rect x="22" y="64" width="216" height="44" rx="11" fill="#ffffff" stroke="#E8612A" stroke-width="2.5"/>
-        <circle cx="48" cy="86" r="4.5" fill="#9AA5B4"/>
-        <circle cx="64" cy="86" r="4.5" fill="#9AA5B4"/>
-        <circle cx="80" cy="86" r="4.5" fill="#9AA5B4"/>
-        <circle cx="96" cy="86" r="4.5" fill="#9AA5B4"/>
-        <circle cx="150" cy="86" r="15" fill="none" stroke="#E8612A" stroke-width="2.5" opacity="0.55"/>
-        <circle cx="150" cy="86" r="24" fill="none" stroke="#E8612A" stroke-width="1.5" opacity="0.3"/>
-        <rect x="139" y="96" width="24" height="48" rx="12" fill="#F3CBA3" stroke="#D69A6B" stroke-width="1.6"/>
-        <ellipse cx="151" cy="106" rx="7.5" ry="5.5" fill="#FBE7D3"/>
-      </svg>
-      <p class="es3-desc">入力欄を指で<b>長押し</b>すると出てくる<span class="es-paste"><i class="ti ti-clipboard"></i>ペースト</span>を押す。<br>最後に<b>「認証」</b>を押せば完了です！</p>
-    </div>
-
-    <p class="es-help"><i class="ti ti-phone"></i>分からない時は支部（<a href="tel:048-773-9863" class="tel-inline">048-773-9863</a>）へ。<br>いっしょに操作します。</p>
-  </div>
-
-  <div class="caution">
-    <p><i class="ti ti-shield-check" style="font-size:14px;vertical-align:-2px;margin-right:4px;color:var(--green);"></i>どけんカードは<strong>組合員と家族のみ</strong>が利用できます。</p>
-    <p><i class="ti ti-alert-triangle" style="font-size:14px;vertical-align:-2px;margin-right:4px;color:var(--yellow);"></i>パスワード・サイト情報を<strong>組合外・SNSに流出させることは禁止</strong>されています。</p>
-  </div>
-
-  <div class="big-sec"><span class="bs-no">2</span><span class="bs-tx">特典が使えるお店を探す<span class="bs-sub">どけんカードで割引などが受けられる登録店</span></span></div>
+  <div class="big-sec"><span class="bs-no">1</span><span class="bs-tx">特典が使えるお店を探す<span class="bs-sub">まずは行きたいお店を探します</span></span></div>
 
   <!-- エリアから探す -->
   <p class="sec-label">エリアから探す</p>
@@ -369,7 +341,145 @@
     <i class="ti ti-info-circle"></i>
     <span>カテゴリボタンをタップすると公式サイトへ移動します。最新の優待内容・営業時間は各店舗にご確認ください。</span>
   </div>
+<div class="big-sec"><span class="bs-no">2</span><span class="bs-tx">お店で見せる<span class="bs-sub">お店の会計時に、この画面を見せます</span></span></div>
+
+  <!-- デジタルカード -->
+  <div class="digital-card">
+    <div class="dc-chip">
+      <div class="dc-chip-icon" style="background:none;padding:0;width:auto;height:auto;">
+        <svg viewBox="0 0 50 50" width="46" height="46">
+          <rect x="2" y="10" width="46" height="30" rx="6" fill="rgba(255,255,255,.18)"/>
+          <rect x="2" y="10" width="46" height="12" rx="6" fill="rgba(255,255,255,.25)"/>
+          <rect x="6" y="28" width="14" height="8" rx="2" fill="rgba(255,200,0,.55)"/>
+          <line x1="24" y1="29" x2="42" y2="29" stroke="rgba(255,255,255,.5)" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="24" y1="33" x2="36" y2="33" stroke="rgba(255,255,255,.4)" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="36" cy="17" r="5" fill="rgba(255,200,0,.5)"/>
+          <circle cx="41" cy="17" r="5" fill="rgba(255,100,50,.45)"/>
+        </svg>
+      </div>
+      <div>
+        <p class="dc-chip-text">DOKEN CARD</p>
+        <p class="dc-chip-sub">SAITAMA DOKEN UNION</p>
+      </div>
+    </div>
+    <p class="dc-number">**** **** **** ****</p>
+
+    <!-- パスワード表示 -->
+    <div class="pw-box">
+      <div style="flex:1;">
+        <p class="pw-label"><i class="ti ti-lock" style="font-size:12px;vertical-align:-1px;margin-right:3px;"></i>サイトパスワード</p>
+        <p class="pw-value" id="pw-val" onclick="togglePw()">TD2026</p>
+      </div>
+      <div class="pw-actions">
+        <button class="pw-toggle" onclick="togglePw()" id="pw-btn">
+          <i class="ti ti-eye" id="pw-icon"></i><span id="pw-btn-label">表示</span>
+        </button>
+      </div>
+    </div>
+    <p class="pw-hint"><i class="ti ti-info-circle"></i>下の「STEP1」を押すと、このパスワードが自動でコピーされます。</p>
+
+    <p class="dc-member" style="margin-top:14px;">上尾伊奈支部 組合員</p>
+    <p class="dc-org">埼玉土建一般労働組合</p>
+  </div>
+
+  <!-- ===== かんたん3ステップ（特大ボタン＋イラスト）===== -->
+  <div class="easy-steps">
+    <p class="es-head"><i class="ti ti-hand-click"></i>この順番でタップするだけ</p>
+
+    <!-- STEP 1 -->
+    <span class="es-num">STEP 1</span>
+    <button class="es-btn es-copy" id="es-copy" onclick="copyBig()">
+      <span class="es-ico"><i class="ti ti-key"></i></span>
+      <span class="es-txt"><b>パスワードをコピー</b><small>ここを押すだけで自動でひかえます</small></span>
+      <i class="ti ti-hand-finger es-arrow"></i>
+    </button>
+
+    <div class="es-down"><i class="ti ti-chevron-down"></i></div>
+
+    <!-- STEP 2 -->
+    <span class="es-num">STEP 2</span>
+    <a href="https://doken-card.jp/dc/card" target="_blank" rel="noopener" class="es-btn es-open" onclick="copyForSite()">
+      <span class="es-ico"><i class="ti ti-id-badge-2"></i></span>
+      <span class="es-txt"><b>カードを開く</b><small>公式サイトのカード画面がひらきます</small></span>
+      <i class="ti ti-external-link es-arrow"></i>
+    </a>
+
+    <div class="es-down"><i class="ti ti-chevron-down"></i></div>
+
+    <!-- STEP 3 -->
+    <span class="es-num">STEP 3</span>
+    <div class="es-step3">
+      <p class="es3-title">入力欄を <u>長押し</u> して貼り付け</p>
+      <svg class="es3-fig" viewBox="0 0 260 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect x="74" y="6" width="112" height="36" rx="9" fill="#2b2b2b"/>
+        <polygon points="120,42 140,42 130,52" fill="#2b2b2b"/>
+        <text x="130" y="30" text-anchor="middle" fill="#ffffff" font-size="16" font-weight="700" font-family="'M PLUS 1p',sans-serif">ペースト</text>
+        <rect x="22" y="64" width="216" height="44" rx="11" fill="#ffffff" stroke="#E8612A" stroke-width="2.5"/>
+        <circle cx="48" cy="86" r="4.5" fill="#9AA5B4"/>
+        <circle cx="64" cy="86" r="4.5" fill="#9AA5B4"/>
+        <circle cx="80" cy="86" r="4.5" fill="#9AA5B4"/>
+        <circle cx="96" cy="86" r="4.5" fill="#9AA5B4"/>
+        <circle cx="150" cy="86" r="15" fill="none" stroke="#E8612A" stroke-width="2.5" opacity="0.55"/>
+        <circle cx="150" cy="86" r="24" fill="none" stroke="#E8612A" stroke-width="1.5" opacity="0.3"/>
+        <rect x="139" y="96" width="24" height="48" rx="12" fill="#F3CBA3" stroke="#D69A6B" stroke-width="1.6"/>
+        <ellipse cx="151" cy="106" rx="7.5" ry="5.5" fill="#FBE7D3"/>
+      </svg>
+      <p class="es3-desc">入力欄を指で<b>長押し</b>すると出てくる<span class="es-paste"><i class="ti ti-clipboard"></i>ペースト</span>を押す。<br>最後に<b>「認証」</b>を押せば完了です！</p>
+    </div>
+
+    <p class="es-help"><i class="ti ti-phone"></i>分からない時は支部（<a href="tel:048-773-9863" class="tel-inline">048-773-9863</a>）へ。<br>いっしょに操作します。</p>
+  </div>
+
+  <div class="caution">
+    <p><i class="ti ti-shield-check" style="font-size:14px;vertical-align:-2px;margin-right:4px;color:var(--green);"></i>どけんカードは<strong>組合員と家族のみ</strong>が利用できます。</p>
+    <p><i class="ti ti-alert-triangle" style="font-size:14px;vertical-align:-2px;margin-right:4px;color:var(--yellow);"></i>パスワード・サイト情報を<strong>組合外・SNSに流出させることは禁止</strong>されています。</p>
+  </div>
+
+  </div>
+
+<!-- ===== どこからでもカードを出すボタン＋全画面カード ===== -->
+<button class="card-fab is-hidden" id="card-fab" type="button" onclick="openCardModal()" aria-label="どけんカードを画面いっぱいに表示する">
+  <i class="ti ti-id-badge-2"></i>カードを見せる
+</button>
+
+<div class="card-modal" id="card-modal" role="dialog" aria-modal="true" aria-label="どけんカード">
+  <div class="cm-inner">
+    <div class="cm-bar">
+      <button class="cm-close" type="button" onclick="closeCardModal()"><i class="ti ti-x"></i>閉じる</button>
+    </div>
+    <p class="cm-lead">この画面をお店の方にお見せください</p>
+    <div class="cm-card">
+      <div class="cm-brand">
+        <svg viewBox="0 0 50 50" width="42" height="42" aria-hidden="true">
+          <rect x="2" y="10" width="46" height="30" rx="6" fill="rgba(255,255,255,.18)"/>
+          <rect x="2" y="10" width="46" height="12" rx="6" fill="rgba(255,255,255,.25)"/>
+          <rect x="6" y="28" width="14" height="8" rx="2" fill="rgba(255,200,0,.55)"/>
+          <circle cx="36" cy="17" r="5" fill="rgba(255,200,0,.5)"/>
+          <circle cx="41" cy="17" r="5" fill="rgba(255,100,50,.45)"/>
+        </svg>
+        <div>
+          <p class="cm-brand-name">DOKEN CARD</p>
+          <p class="cm-brand-sub">SAITAMA DOKEN UNION</p>
+        </div>
+      </div>
+      <p class="cm-num">**** **** **** ****</p>
+      <p class="cm-member">上尾伊奈支部 組合員</p>
+      <p class="cm-org">埼玉土建一般労働組合</p>
+      <div class="cm-pw">
+        <div class="cm-pw-l">
+          <p class="cm-pw-label"><i class="ti ti-lock"></i> サイトパスワード</p>
+          <p class="cm-pw-val" id="cm-pw-val" onclick="toggleModalPw()">TD2026</p>
+        </div>
+        <button class="cm-pw-btn" type="button" onclick="toggleModalPw()" id="cm-pw-btn"><i class="ti ti-eye" id="cm-pw-icon"></i><span id="cm-pw-lbl">表示</span></button>
+      </div>
+    </div>
+    <div class="cm-note">
+      お会計のときに<strong>この画面と組合員証</strong>をご提示ください。<br>
+      パスワードは公式サイトにログインするときに使います。<strong>組合外の方には教えないでください。</strong>
+    </div>
+  </div>
 </div>
+
 <footer>埼玉土建一般労働組合 上尾伊奈支部｜TEL <a href="tel:048-773-9863">048-773-9863</a><br><span data-app-version style="font-size:10px;color:var(--gray400);">アプリ版数を確認中</span></footer>
 </div>
 
@@ -438,6 +548,61 @@ async function copyBig(){
 }
 function openCat(cat){ window.open(`https://doken-card.jp/dc/result?category=${cat}`, '_blank', 'noopener'); }
 function e(url, ev){ ev.stopPropagation(); window.open(url, '_blank', 'noopener'); }
+
+/* ===== どこからでもカードを出す仕組み =====
+   検索を先に置いたため、実物のカードは画面の下になった。
+   そこで「カードを見せる」ボタンを常に下部に出しておき、
+   1タップで大きなカードを表示できるようにする。
+   実物のカードが画面に見えているときは、重複するのでボタンを隠す。 */
+var cmPwVisible = false;
+
+function openCardModal(){
+  var m = document.getElementById('card-modal');
+  if(!m) return;
+  m.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeCardModal(){
+  var m = document.getElementById('card-modal');
+  if(!m) return;
+  m.classList.remove('open');
+  document.body.style.overflow = '';
+}
+function toggleModalPw(){
+  cmPwVisible = !cmPwVisible;
+  var v = document.getElementById('cm-pw-val');
+  var i = document.getElementById('cm-pw-icon');
+  var l = document.getElementById('cm-pw-lbl');
+  if(v) v.classList.toggle('show', cmPwVisible);
+  if(i) i.className = cmPwVisible ? 'ti ti-eye-off' : 'ti ti-eye';
+  if(l) l.textContent = cmPwVisible ? '隠す' : '表示';
+}
+
+(function(){
+  var fab  = document.getElementById('card-fab');
+  var real = document.querySelector('.digital-card');
+  if(!fab) return;
+
+  // 背景を押したら閉じる
+  var modal = document.getElementById('card-modal');
+  if(modal){
+    modal.addEventListener('click', function(e){ if(e.target === modal) closeCardModal(); });
+  }
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeCardModal(); });
+
+  // 実物のカードが見えていないときだけボタンを出す
+  if(real && 'IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        fab.classList.toggle('is-hidden', en.isIntersecting);
+      });
+    }, { threshold: 0.35 });
+    io.observe(real);
+  }else{
+    fab.classList.remove('is-hidden');   // 対応していない端末では常に表示
+  }
+})();
+
 </script>
 <script src="assets/js/navigation.js"></script>
 </body>
