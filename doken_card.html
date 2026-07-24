@@ -7,61 +7,35 @@
 <link rel="stylesheet" href="assets/css/tabler-icons.min.css">
 <link rel="stylesheet" href="common.css">
 <style>
-.digital-card{
-  background:linear-gradient(135deg,#0D1F35 0%,#1B3A6B 50%,#0D2A4A 100%);
-  border-radius:var(--r16);padding:24px 20px;margin-bottom:20px;
-  position:relative;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.3);
-}
-.digital-card::before{content:'';position:absolute;right:-40px;top:-40px;width:180px;height:180px;background:rgba(232,97,42,.12);border-radius:50%;}
-.digital-card::after{content:'';position:absolute;left:-30px;bottom:-50px;width:140px;height:140px;background:rgba(255,255,255,.04);border-radius:50%;}
-.dc-chip{display:flex;align-items:center;gap:10px;margin-bottom:20px;}
-.dc-chip-icon{width:42px;height:42px;background:var(--orange);border-radius:var(--r8);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.dc-chip-icon i{font-size:22px;color:#fff;}
-.dc-chip-text{font-size:22px;font-weight:700;color:#fff;letter-spacing:.06em;}
-.dc-chip-sub{font-size:11px;color:rgba(255,255,255,.45);letter-spacing:.04em;}
-.dc-number{font-size:13px;letter-spacing:.22em;color:rgba(255,255,255,.35);font-family:monospace;margin:0 0 18px;}
+
+
+
+
+
+
+
+
+
 
 /* パスワード表示 */
-.pw-box{
-  background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.15);
-  border-radius:var(--r12);padding:14px 16px;
-  display:flex;align-items:center;justify-content:space-between;gap:12px;
-  margin-bottom:12px;
-}
-.pw-label{font-size:11px;color:rgba(255,255,255,.45);margin:0 0 4px;letter-spacing:.06em;text-transform:uppercase;}
-.pw-value{
-  font-size:28px;font-weight:700;color:#fff;
-  letter-spacing:.18em;font-family:monospace;
-  filter:blur(6px);transition:filter .3s;cursor:pointer;
-  user-select:none;
-}
+.pw-box{background:var(--white);border:2px solid var(--gray200);border-radius:var(--r12);padding:13px 14px;display:flex;align-items:center;gap:12px;}
+.pw-label{font-size:11.5px;color:var(--gray500);margin:0 0 3px;letter-spacing:.04em;font-weight:700;}
+.pw-value{font-size:26px;font-weight:800;color:var(--navy);letter-spacing:.16em;font-family:monospace;filter:blur(6px);transition:filter .3s;cursor:pointer;margin:0;word-break:break-all;}
 .pw-value.show{filter:blur(0);}
-.pw-toggle{
-  background:rgba(255,255,255,.15);border:none;border-radius:var(--r8);
-  color:rgba(255,255,255,.7);padding:8px 12px;
-  display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;
-  cursor:pointer;white-space:nowrap;flex-shrink:0;
-  transition:background .15s;
-}
+.pw-toggle{background:var(--white);border:1.5px solid var(--gray300);border-radius:var(--r8);color:var(--gray700);padding:0 13px;min-height:44px;display:flex;align-items:center;justify-content:center;gap:5px;font-size:13px;font-weight:800;font-family:inherit;cursor:pointer;white-space:nowrap;}
 .pw-toggle:hover{background:rgba(255,255,255,.25);}
 .pw-toggle i{font-size:16px;}
-.pw-hint{font-size:12px;color:rgba(255,255,255,.4);margin:0;display:flex;align-items:center;gap:5px;}
+.pw-hint{font-size:12px;color:var(--gray600);margin:9px 0 0;display:flex;align-items:flex-start;gap:6px;line-height:1.6;font-weight:600;}
 .pw-hint i{font-size:13px;}
 .pw-actions{display:flex;flex-direction:column;gap:8px;flex-shrink:0;}
 .pw-copy.copied{background:rgba(26,122,74,.9);color:#fff;}
 
-.dc-member{font-size:16px;font-weight:600;color:#fff;margin:12px 0 2px;}
-.dc-org{font-size:12px;color:rgba(255,255,255,.45);margin:0;}
-.dc-link{
-  margin-top:16px;
-  display:flex;align-items:center;justify-content:space-between;gap:12px;
-  padding:13px 14px;border-radius:var(--r12);
-  background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.18);
-  color:#fff;text-decoration:none;position:relative;z-index:1;
-}
-.dc-link i{font-size:22px;color:#fff;flex-shrink:0;}
-.dc-link-title{font-size:14px;font-weight:700;margin:0 0 2px;color:#fff;}
-.dc-link-sub{font-size:11px;margin:0;color:rgba(255,255,255,.66);}
+
+
+
+
+
+
 
 /* クイックリンク */
 .quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
@@ -203,6 +177,27 @@
   .cm-title{font-size:17px;}
   .cm-close{padding:0 15px;font-size:14px;}
 }
+
+/* 「お店で見せる」の冒頭の案内 */
+.show-lead{
+  display:flex;align-items:flex-start;gap:9px;
+  background:rgba(26,95,168,.08);border:1px solid rgba(26,95,168,.25);
+  border-radius:var(--r12);padding:13px 15px;margin-bottom:14px;
+  font-size:13.5px;line-height:1.7;color:var(--gray700);font-weight:600;
+}
+.show-lead i{color:#1A5FA8;font-size:19px;flex-shrink:0;margin-top:1px;}
+.show-lead strong{color:var(--navy);font-weight:800;}
+
+/* パスワード置き場（カードには見せない） */
+.pw-panel{
+  background:var(--gray100);border:1px solid var(--gray200);
+  border-radius:var(--r16);padding:15px 15px 14px;margin-bottom:16px;
+}
+.pw-panel-t{
+  display:flex;align-items:center;gap:7px;
+  font-size:14px;font-weight:800;color:var(--navy);margin:0 0 10px;
+}
+.pw-panel-t i{color:var(--orange);font-size:18px;}
 </style>
 </head>
 <body>
@@ -324,30 +319,20 @@
 <div id="show-body">
 
   <!-- デジタルカード -->
-  <div class="digital-card">
-    <div class="dc-chip">
-      <div class="dc-chip-icon" style="background:none;padding:0;width:auto;height:auto;">
-        <svg viewBox="0 0 50 50" width="46" height="46">
-          <rect x="2" y="10" width="46" height="30" rx="6" fill="rgba(255,255,255,.18)"/>
-          <rect x="2" y="10" width="46" height="12" rx="6" fill="rgba(255,255,255,.25)"/>
-          <rect x="6" y="28" width="14" height="8" rx="2" fill="rgba(255,200,0,.55)"/>
-          <line x1="24" y1="29" x2="42" y2="29" stroke="rgba(255,255,255,.5)" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="24" y1="33" x2="36" y2="33" stroke="rgba(255,255,255,.4)" stroke-width="1.5" stroke-linecap="round"/>
-          <circle cx="36" cy="17" r="5" fill="rgba(255,200,0,.5)"/>
-          <circle cx="41" cy="17" r="5" fill="rgba(255,100,50,.45)"/>
-        </svg>
-      </div>
-      <div>
-        <p class="dc-chip-text">DOKEN CARD</p>
-        <p class="dc-chip-sub">SAITAMA DOKEN UNION</p>
-      </div>
-    </div>
-    <p class="dc-number">**** **** **** ****</p>
+  <!-- どけんカードの実物はアプリ内には無く、公式サイトでパスワードを入れて表示される。
+     以前はここにカードを模した見た目を置いていたが、本物のカードと紛らわしく、
+     しかもカードへ飛ぶ導線もこの中には無かったため、
+     「公式サイトに入るためのパスワード置き場」だと分かる形に改めた。 -->
+  <div class="show-lead">
+    <i class="ti ti-info-circle"></i>
+    <span>どけんカードは<strong>公式サイトの画面</strong>に表示されます。下の順番でタップしてください。</span>
+  </div>
 
-    <!-- パスワード表示 -->
+  <div class="pw-panel">
+    <p class="pw-panel-t"><i class="ti ti-lock"></i>公式サイトに入るためのパスワード</p>
     <div class="pw-box">
-      <div style="flex:1;">
-        <p class="pw-label"><i class="ti ti-lock" style="font-size:12px;vertical-align:-1px;margin-right:3px;"></i>サイトパスワード</p>
+      <div style="flex:1;min-width:0;">
+        <p class="pw-label">サイトパスワード</p>
         <p class="pw-value" id="pw-val" onclick="togglePw()">TD2026</p>
       </div>
       <div class="pw-actions">
@@ -356,10 +341,7 @@
         </button>
       </div>
     </div>
-    <p class="pw-hint"><i class="ti ti-info-circle"></i>下の「STEP1」を押すと、このパスワードが自動でコピーされます。</p>
-
-    <p class="dc-member" style="margin-top:14px;">上尾伊奈支部 組合員</p>
-    <p class="dc-org">埼玉土建一般労働組合</p>
+    <p class="pw-hint"><i class="ti ti-info-circle"></i>手で入力しなくて大丈夫です。下の「STEP 1」を押すと自動でひかえます。</p>
   </div>
 
   <!-- ===== かんたん3ステップ（特大ボタン＋イラスト）===== -->
