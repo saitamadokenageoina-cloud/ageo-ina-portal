@@ -178,51 +178,30 @@
 
 .card-modal{
   position:fixed;inset:0;z-index:900;display:none;
-  background:rgba(9,17,28,.9);
-  padding:16px;overflow-y:auto;
+  background:rgba(9,17,28,.92);padding:12px;overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
 }
 .card-modal.open{display:block;}
-.cm-inner{max-width:460px;margin:0 auto;padding-bottom:24px;}
-.cm-bar{display:flex;justify-content:flex-end;margin-bottom:10px;}
+.cm-inner{max-width:560px;margin:0 auto;padding-bottom:26px;}
+.cm-bar{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  position:sticky;top:0;z-index:2;padding:6px 2px 10px;
+  background:linear-gradient(180deg,rgba(9,17,28,.98) 70%,rgba(9,17,28,0));
+}
+.cm-title{color:#fff;font-size:19px;font-weight:800;margin:0;}
 .cm-close{
   display:inline-flex;align-items:center;gap:6px;min-height:48px;padding:0 20px;
   border:none;border-radius:99px;background:#fff;color:#1B2A3B;
-  font-family:inherit;font-size:15px;font-weight:800;cursor:pointer;
+  font-family:inherit;font-size:15px;font-weight:800;cursor:pointer;flex:0 0 auto;
 }
-.cm-lead{color:#fff;font-size:15px;font-weight:700;text-align:center;margin:0 0 12px;line-height:1.6;}
-.cm-card{
-  background:linear-gradient(135deg,#2A3B52,#16233A);
-  border-radius:18px;padding:22px 20px;border:1px solid rgba(255,255,255,.16);
-  box-shadow:0 12px 34px rgba(0,0,0,.4);
+/* 移動してきた「お店で見せる」の中身を、暗い背景の上でも読めるように白い紙の上に置く */
+.cm-body{
+  background:var(--gray50);border-radius:16px;padding:14px 13px 6px;
 }
-.cm-brand{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
-.cm-brand-name{color:#fff;font-size:15px;font-weight:800;letter-spacing:.08em;margin:0;}
-.cm-brand-sub{color:rgba(255,255,255,.55);font-size:10px;letter-spacing:.1em;margin:0;}
-.cm-num{color:rgba(255,255,255,.85);font-size:19px;letter-spacing:.16em;margin:0 0 18px;font-weight:700;}
-.cm-member{color:#fff;font-size:17px;font-weight:800;margin:0;}
-.cm-org{color:rgba(255,255,255,.6);font-size:12px;margin:2px 0 0;}
-.cm-pw{
-  margin-top:18px;background:rgba(255,255,255,.1);border-radius:12px;
-  padding:12px 14px;display:flex;align-items:center;gap:10px;
-}
-.cm-pw-l{flex:1;min-width:0;}
-.cm-pw-label{color:rgba(255,255,255,.6);font-size:11px;font-weight:700;margin:0 0 2px;}
-.cm-pw-val{color:#fff;font-size:19px;font-weight:800;letter-spacing:.12em;margin:0;
-  filter:blur(6px);transition:filter .15s;cursor:pointer;}
-.cm-pw-val.show{filter:none;}
-.cm-pw-btn{
-  flex:0 0 auto;min-height:42px;padding:0 14px;border:1px solid rgba(255,255,255,.3);
-  border-radius:10px;background:transparent;color:#fff;font-family:inherit;
-  font-size:13px;font-weight:800;cursor:pointer;display:inline-flex;align-items:center;gap:5px;
-}
-.cm-note{
-  margin-top:14px;background:rgba(255,255,255,.94);border-radius:12px;padding:13px 15px;
-  color:#1B2A3B;font-size:13px;line-height:1.7;font-weight:600;
-}
-.cm-note strong{color:#C9501C;}
 @media (max-width:360px){
   .card-fab{font-size:15px;padding:0 18px;}
-  .cm-num{font-size:17px;letter-spacing:.1em;}
+  .cm-title{font-size:17px;}
+  .cm-close{padding:0 15px;font-size:14px;}
 }
 </style>
 </head>
@@ -342,6 +321,7 @@
     <span>カテゴリボタンをタップすると公式サイトへ移動します。最新の優待内容・営業時間は各店舗にご確認ください。</span>
   </div>
 <div class="big-sec"><span class="bs-no">2</span><span class="bs-tx">お店で見せる<span class="bs-sub">お店の会計時に、この画面を見せます</span></span></div>
+<div id="show-body">
 
   <!-- デジタルカード -->
   <div class="digital-card">
@@ -436,47 +416,20 @@
   </div>
 
   </div>
-
+</div>
+<div id="show-anchor"></div>
 <!-- ===== どこからでもカードを出すボタン＋全画面カード ===== -->
 <button class="card-fab is-hidden" id="card-fab" type="button" onclick="openCardModal()" aria-label="どけんカードを画面いっぱいに表示する">
   <i class="ti ti-id-badge-2"></i>カードを見せる
 </button>
 
-<div class="card-modal" id="card-modal" role="dialog" aria-modal="true" aria-label="どけんカード">
+<div class="card-modal" id="card-modal" role="dialog" aria-modal="true" aria-label="お店で見せる">
   <div class="cm-inner">
     <div class="cm-bar">
+      <p class="cm-title">お店で見せる</p>
       <button class="cm-close" type="button" onclick="closeCardModal()"><i class="ti ti-x"></i>閉じる</button>
     </div>
-    <p class="cm-lead">この画面をお店の方にお見せください</p>
-    <div class="cm-card">
-      <div class="cm-brand">
-        <svg viewBox="0 0 50 50" width="42" height="42" aria-hidden="true">
-          <rect x="2" y="10" width="46" height="30" rx="6" fill="rgba(255,255,255,.18)"/>
-          <rect x="2" y="10" width="46" height="12" rx="6" fill="rgba(255,255,255,.25)"/>
-          <rect x="6" y="28" width="14" height="8" rx="2" fill="rgba(255,200,0,.55)"/>
-          <circle cx="36" cy="17" r="5" fill="rgba(255,200,0,.5)"/>
-          <circle cx="41" cy="17" r="5" fill="rgba(255,100,50,.45)"/>
-        </svg>
-        <div>
-          <p class="cm-brand-name">DOKEN CARD</p>
-          <p class="cm-brand-sub">SAITAMA DOKEN UNION</p>
-        </div>
-      </div>
-      <p class="cm-num">**** **** **** ****</p>
-      <p class="cm-member">上尾伊奈支部 組合員</p>
-      <p class="cm-org">埼玉土建一般労働組合</p>
-      <div class="cm-pw">
-        <div class="cm-pw-l">
-          <p class="cm-pw-label"><i class="ti ti-lock"></i> サイトパスワード</p>
-          <p class="cm-pw-val" id="cm-pw-val" onclick="toggleModalPw()">TD2026</p>
-        </div>
-        <button class="cm-pw-btn" type="button" onclick="toggleModalPw()" id="cm-pw-btn"><i class="ti ti-eye" id="cm-pw-icon"></i><span id="cm-pw-lbl">表示</span></button>
-      </div>
-    </div>
-    <div class="cm-note">
-      お会計のときに<strong>この画面と組合員証</strong>をご提示ください。<br>
-      パスワードは公式サイトにログインするときに使います。<strong>組合外の方には教えないでください。</strong>
-    </div>
+    <div class="cm-body" id="cm-body"><!-- ここに「お店で見せる」の中身を移動して表示します --></div>
   </div>
 </div>
 
@@ -549,57 +502,59 @@ async function copyBig(){
 function openCat(cat){ window.open(`https://doken-card.jp/dc/result?category=${cat}`, '_blank', 'noopener'); }
 function e(url, ev){ ev.stopPropagation(); window.open(url, '_blank', 'noopener'); }
 
-/* ===== どこからでもカードを出す仕組み =====
-   検索を先に置いたため、実物のカードは画面の下になった。
-   そこで「カードを見せる」ボタンを常に下部に出しておき、
-   1タップで大きなカードを表示できるようにする。
-   実物のカードが画面に見えているときは、重複するのでボタンを隠す。 */
-var cmPwVisible = false;
-
+/* ===== 検索中でも「お店で見せる」をすぐ開く仕組み =====
+   このアプリの中にカードそのものは無い。実物のカードは公式サイト
+   （https://doken-card.jp/dc/card）でパスワードを入れると表示される。
+   そのため「カードを見せる」を押したときは、②お店で見せる の中身
+   （パスワード欄＋STEP1〜3の手順）をそのまま画面いっぱいに出す。
+   中身は複製せずDOMごと移動して表示し、閉じたら元の位置へ戻す。
+   こうすればページ内と全画面で内容がずれることがない。 */
 function openCardModal(){
   var m = document.getElementById('card-modal');
-  if(!m) return;
+  var body = document.getElementById('show-body');
+  var host = document.getElementById('cm-body');
+  if(!m || !body || !host) return;
+  host.appendChild(body);              // 中身をモーダルへ移動
   m.classList.add('open');
+  m.scrollTop = 0;
   document.body.style.overflow = 'hidden';
 }
+
 function closeCardModal(){
   var m = document.getElementById('card-modal');
+  var body = document.getElementById('show-body');
+  var anchor = document.getElementById('show-anchor');
   if(!m) return;
   m.classList.remove('open');
   document.body.style.overflow = '';
-}
-function toggleModalPw(){
-  cmPwVisible = !cmPwVisible;
-  var v = document.getElementById('cm-pw-val');
-  var i = document.getElementById('cm-pw-icon');
-  var l = document.getElementById('cm-pw-lbl');
-  if(v) v.classList.toggle('show', cmPwVisible);
-  if(i) i.className = cmPwVisible ? 'ti ti-eye-off' : 'ti ti-eye';
-  if(l) l.textContent = cmPwVisible ? '隠す' : '表示';
+  if(body && anchor && anchor.parentNode){
+    anchor.parentNode.insertBefore(body, anchor);   // 元の位置へ戻す
+  }
 }
 
 (function(){
-  var fab  = document.getElementById('card-fab');
-  var real = document.querySelector('.digital-card');
+  var fab = document.getElementById('card-fab');
   if(!fab) return;
 
-  // 背景を押したら閉じる
   var modal = document.getElementById('card-modal');
   if(modal){
     modal.addEventListener('click', function(e){ if(e.target === modal) closeCardModal(); });
   }
   document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeCardModal(); });
 
-  // 実物のカードが見えていないときだけボタンを出す
-  if(real && 'IntersectionObserver' in window){
+  // 「お店で見せる」が画面に見えているときは、重複するのでボタンを隠す
+  var watch = document.getElementById('show-body');
+  if(watch && 'IntersectionObserver' in window){
     var io = new IntersectionObserver(function(entries){
       entries.forEach(function(en){
-        fab.classList.toggle('is-hidden', en.isIntersecting);
+        // モーダルが開いているときは常に隠す
+        var open = modal && modal.classList.contains('open');
+        fab.classList.toggle('is-hidden', open || en.isIntersecting);
       });
-    }, { threshold: 0.35 });
-    io.observe(real);
+    }, { threshold: 0.12 });
+    io.observe(watch);
   }else{
-    fab.classList.remove('is-hidden');   // 対応していない端末では常に表示
+    fab.classList.remove('is-hidden');
   }
 })();
 
