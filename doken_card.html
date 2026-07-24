@@ -8,32 +8,7 @@
 <link rel="stylesheet" href="common.css">
 <style>
 
-
-
-
-
-
-
-
-
-
 /* パスワード表示 */
-.pw-box{background:var(--white);border:2px solid var(--gray200);border-radius:var(--r12);padding:13px 14px;display:flex;align-items:center;gap:12px;}
-.pw-label{font-size:11.5px;color:var(--gray500);margin:0 0 3px;letter-spacing:.04em;font-weight:700;}
-.pw-value{font-size:26px;font-weight:800;color:var(--navy);letter-spacing:.16em;font-family:monospace;filter:blur(6px);transition:filter .3s;cursor:pointer;margin:0;word-break:break-all;}
-.pw-value.show{filter:blur(0);}
-.pw-toggle{background:var(--white);border:1.5px solid var(--gray300);border-radius:var(--r8);color:var(--gray700);padding:0 13px;min-height:44px;display:flex;align-items:center;justify-content:center;gap:5px;font-size:13px;font-weight:800;font-family:inherit;cursor:pointer;white-space:nowrap;}
-.pw-toggle:hover{background:rgba(255,255,255,.25);}
-.pw-toggle i{font-size:16px;}
-.pw-hint{font-size:12px;color:var(--gray600);margin:9px 0 0;display:flex;align-items:flex-start;gap:6px;line-height:1.6;font-weight:600;}
-.pw-hint i{font-size:13px;}
-.pw-actions{display:flex;flex-direction:column;gap:8px;flex-shrink:0;}
-.pw-copy.copied{background:rgba(26,122,74,.9);color:#fff;}
-
-
-
-
-
 
 
 
@@ -179,25 +154,9 @@
 }
 
 /* 「お店で見せる」の冒頭の案内 */
-.show-lead{
-  display:flex;align-items:flex-start;gap:9px;
-  background:rgba(26,95,168,.08);border:1px solid rgba(26,95,168,.25);
-  border-radius:var(--r12);padding:13px 15px;margin-bottom:14px;
-  font-size:13.5px;line-height:1.7;color:var(--gray700);font-weight:600;
-}
-.show-lead i{color:#1A5FA8;font-size:19px;flex-shrink:0;margin-top:1px;}
-.show-lead strong{color:var(--navy);font-weight:800;}
 
 /* パスワード置き場（カードには見せない） */
-.pw-panel{
-  background:var(--gray100);border:1px solid var(--gray200);
-  border-radius:var(--r16);padding:15px 15px 14px;margin-bottom:16px;
-}
-.pw-panel-t{
-  display:flex;align-items:center;gap:7px;
-  font-size:14px;font-weight:800;color:var(--navy);margin:0 0 10px;
-}
-.pw-panel-t i{color:var(--orange);font-size:18px;}
+
 </style>
 </head>
 <body>
@@ -319,31 +278,6 @@
 <div id="show-body">
 
   <!-- デジタルカード -->
-  <!-- どけんカードの実物はアプリ内には無く、公式サイトでパスワードを入れて表示される。
-     以前はここにカードを模した見た目を置いていたが、本物のカードと紛らわしく、
-     しかもカードへ飛ぶ導線もこの中には無かったため、
-     「公式サイトに入るためのパスワード置き場」だと分かる形に改めた。 -->
-  <div class="show-lead">
-    <i class="ti ti-info-circle"></i>
-    <span>どけんカードは<strong>公式サイトの画面</strong>に表示されます。下の順番でタップしてください。</span>
-  </div>
-
-  <div class="pw-panel">
-    <p class="pw-panel-t"><i class="ti ti-lock"></i>公式サイトに入るためのパスワード</p>
-    <div class="pw-box">
-      <div style="flex:1;min-width:0;">
-        <p class="pw-label">サイトパスワード</p>
-        <p class="pw-value" id="pw-val" onclick="togglePw()">TD2026</p>
-      </div>
-      <div class="pw-actions">
-        <button class="pw-toggle" onclick="togglePw()" id="pw-btn">
-          <i class="ti ti-eye" id="pw-icon"></i><span id="pw-btn-label">表示</span>
-        </button>
-      </div>
-    </div>
-    <p class="pw-hint"><i class="ti ti-info-circle"></i>手で入力しなくて大丈夫です。下の「STEP 1」を押すと自動でひかえます。</p>
-  </div>
-
   <!-- ===== かんたん3ステップ（特大ボタン＋イラスト）===== -->
   <div class="easy-steps">
     <p class="es-head"><i class="ti ti-hand-click"></i>この順番でタップするだけ</p>
@@ -419,57 +353,20 @@
 </div>
 
 <script>
-let pwVisible = false;
+/* 公式サイト（doken-card.jp）に入るためのパスワード。
+   以前は画面上のパスワード欄から文字を読み取っていたが、
+   その欄を廃止したため、ここで一元管理する。
+   変更があったときはこの1か所だけ直せばよい。 */
+var SITE_PW = 'TD2026';
 function copyForSite(){
   // 「デジタルどけんカードを開く」を押した時にパスワードを自動コピー（貼り付けだけで済むように）
   try{
-    var pw = (document.getElementById('pw-val').textContent || '').trim();
+    var pw = SITE_PW;
     if(navigator.clipboard && window.isSecureContext){ navigator.clipboard.writeText(pw); }
   }catch(e){}
 }
-function togglePw(){
-  pwVisible = !pwVisible;
-  const val = document.getElementById('pw-val');
-  const icon = document.getElementById('pw-icon');
-  const label = document.getElementById('pw-btn-label');
-  val.classList.toggle('show', pwVisible);
-  icon.className = pwVisible ? 'ti ti-eye-off' : 'ti ti-eye';
-  if (label) label.textContent = pwVisible ? '隠す' : '表示';
-}
-
-async function copyPw(){
-  const password = document.getElementById('pw-val').textContent.trim();
-  const btn = document.getElementById('pw-copy-btn');
-  try{
-    if(navigator.clipboard && window.isSecureContext){
-      await navigator.clipboard.writeText(password);
-    }else{
-      const input = document.createElement('input');
-      input.value = password;
-      input.setAttribute('readonly','');
-      input.style.position = 'fixed';
-      input.style.opacity = '0';
-      document.body.appendChild(input);
-      input.select();
-      document.execCommand('copy');
-      input.remove();
-    }
-    btn.classList.add('copied');
-    btn.innerHTML = '<i class="ti ti-check"></i>コピー済';
-    setTimeout(() => {
-      btn.classList.remove('copied');
-      btn.innerHTML = '<i class="ti ti-copy"></i>コピー';
-    }, 1800);
-  }catch(e){
-    btn.innerHTML = '<i class="ti ti-alert-circle"></i>失敗';
-    setTimeout(() => {
-      btn.innerHTML = '<i class="ti ti-copy"></i>コピー';
-    }, 1800);
-  }
-}
-
 async function copyBig(){
-  const password=(document.getElementById('pw-val').textContent||'').trim();
+  const password = SITE_PW;
   const btn=document.getElementById('es-copy');
   const ic=btn.querySelector('.es-ico i');
   const b=btn.querySelector('.es-txt b');
