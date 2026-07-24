@@ -102,6 +102,8 @@
 .es-paste{display:inline-flex;align-items:center;gap:4px;background:#2b2b2b;color:#fff;font-size:13px;font-weight:700;padding:3px 12px;border-radius:8px;margin:0 3px;vertical-align:middle;}
 .es-help{display:flex;align-items:center;justify-content:center;gap:7px;margin:16px 0 0;padding-top:14px;border-top:1px solid var(--gray200);font-size:13.5px;font-weight:600;color:var(--gray600);text-align:center;line-height:1.5;}
 .es-help i{color:var(--orange);font-size:18px;flex-shrink:0;}
+.es-help-txt{min-width:0;}
+.es-help .tel-inline{white-space:nowrap;}
 /* ===== 大見出し（2部構成）===== */
 .big-sec{display:flex;align-items:center;gap:10px;margin:26px 2px 14px;}
 .big-sec .bs-no{flex:0 0 auto;width:30px;height:30px;border-radius:9px;background:var(--orange);color:#fff;font-size:16px;font-weight:800;display:flex;align-items:center;justify-content:center;}
@@ -323,7 +325,10 @@
       <p class="es3-desc">入力欄を指で<b>長押し</b>すると出てくる<span class="es-paste"><i class="ti ti-clipboard"></i>ペースト</span>を押す。<br>最後に<b>「認証」</b>を押せば完了です！</p>
     </div>
 
-    <p class="es-help"><i class="ti ti-phone"></i>分からない時は支部（<a href="tel:048-773-9863" class="tel-inline">048-773-9863</a>）へ。<br>いっしょに操作します。</p>
+    <!-- .es-help は display:flex のため、文字と<a>を直接並べると
+     文字が細切れの箱として別々に折り返され、行がばらばらに見えてしまう。
+     文章全体を1つの <span> にまとめ、中では普通の文章として流す。 -->
+    <p class="es-help"><i class="ti ti-phone"></i><span class="es-help-txt">分からない時は支部（<a href="tel:048-773-9863" class="tel-inline">048-773-9863</a>）へ。<br>いっしょに操作します。</span></p>
   </div>
 
   <div class="caution">
