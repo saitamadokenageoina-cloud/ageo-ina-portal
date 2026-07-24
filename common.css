@@ -141,7 +141,7 @@ input,select,textarea,[aria-invalid="true"]{scroll-margin-top:96px;}
 .is-invalid,[aria-invalid="true"]{border-color:#C0392B!important;box-shadow:0 0 0 3px rgba(192,57,43,.15)!important;}
 .field-error{display:flex;align-items:flex-start;gap:6px;margin:0;color:#A92F23;font-size:14px;font-weight:700;line-height:1.5;}
 .field-error::before{content:'!';display:inline-flex;align-items:center;justify-content:center;width:19px;height:19px;flex:0 0 19px;margin-top:1px;border-radius:50%;background:#C0392B;color:#fff;font-size:12px;font-weight:900;}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;}
 
 /* キーボード・音声操作でも現在位置を見失わない */
 a:focus-visible,button:focus-visible,summary:focus-visible,[role="button"]:focus-visible,
@@ -408,4 +408,37 @@ html[data-ui-size="large"] .acc-title{font-size:17px!important;}
 @media print{
   body{padding-bottom:0!important;}
   .doken-contact-rail,.theme-toggle,.connection-status,.field-error{display:none!important;}
+}
+
+/* ===== 日付・時刻の入力欄が枠からはみ出す問題への対策 =====
+   iPhone(Safari)では input[type=date] などが中身に合わせた固有の幅を持ち、
+   その幅より小さくならない。グリッドやフレックスの子は既定で min-width:auto
+   （＝中身より縮まない）のため、列が押し広げられて右にはみ出していた。
+   入力欄自身に縮む余地（min-width:0 / max-width:100%）を与え、
+   ネイティブの見た目も打ち消して幅を素直に従わせる。 */
+input[type=date], input[type=time], input[type=month], input[type=datetime-local]{
+  -webkit-appearance:none;
+  appearance:none;
+  min-width:0;
+  max-width:100%;
+}
+/* 2列に並べた入力欄の列も、中身に押し広げられないようにする。
+   実際に使われている入れ物のクラス名に合わせて指定している。 */
+.site-info-grid > *, .grid2 > *, .job-fields > *, .expiry-box > *,
+.work-draft > *, .form-grid > *, .input-row > *, .two-col > *{
+  min-width:0;
+}
+.input-group, .fld{ min-width:0; }
+
+/* ===== 2列に並べたときの入力欄の高さをそろえる =====
+   ラベルが2行に折り返すと、その分だけ入力欄が下がり、
+   左右の列で位置がずれて見えていた。
+   列の高さはグリッドがそろえてくれるので、入力欄を下端に寄せることで
+   ラベルが1行でも2行でも必ず横一線にそろうようにする。 */
+.grid2 > .input-group, .site-info-grid > .input-group{
+  height:100%;
+}
+.grid2 > .input-group > :last-child,
+.site-info-grid > .input-group > :last-child{
+  margin-top:auto;
 }
