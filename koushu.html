@@ -121,6 +121,60 @@ html[data-theme="dark"] .flow-tab:hover,html[data-theme="dark"] .flow-tab:focus-
 html[data-theme="dark"] .flow-result.ok{background:#123B2A;border-color:#48B982;color:#E8FFF3;}
 html[data-theme="dark"] .flow-result.no{background:#491B1B;border-color:#F17868;color:#FFF0F0;}
 html[data-theme="dark"] .flow-result h3,html[data-theme="dark"] .flow-result p,html[data-theme="dark"] .flow-result li{color:inherit;}
+
+/* ===== 講習カレンダー ===== */
+.view-tabs{display:flex;gap:8px;margin-bottom:14px;}
+.vtab{flex:1;min-height:46px;border:2px solid var(--gray200);border-radius:var(--r12);
+  background:var(--white);color:var(--gray600);font-family:inherit;font-size:15px;font-weight:800;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;}
+.vtab i{font-size:19px;}
+.vtab.on{background:var(--navy);border-color:var(--navy);color:#fff;}
+
+.cal-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;}
+.cal-title{font-size:19px;font-weight:800;color:var(--navy);margin:0;text-align:center;flex:1;}
+.cal-nav{width:46px;height:46px;flex:0 0 auto;border:2px solid var(--gray200);border-radius:12px;
+  background:var(--white);color:var(--navy);cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.cal-nav i{font-size:22px;}
+
+.cal-weekdays{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px;margin-bottom:3px;}
+.cal-wd{text-align:center;font-size:12px;font-weight:800;color:var(--gray600);padding:4px 0;}
+.cal-wd.sun{color:#C92A35;}
+.cal-wd.sat{color:#1A5FA8;}
+
+.cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px;}
+.cal-cell{position:relative;min-height:52px;border-radius:10px;background:var(--gray50);
+  border:1.5px solid transparent;padding:4px 2px 2px;display:flex;flex-direction:column;
+  align-items:center;cursor:default;}
+.cal-cell.empty{background:transparent;}
+.cal-cell.has{cursor:pointer;background:var(--white);border-color:var(--gray200);}
+.cal-cell.today{border-color:var(--orange);border-width:2px;}
+.cal-cell.selected{background:#FFF3EC;border-color:var(--orange);border-width:2px;}
+.cal-daynum{font-size:14px;font-weight:700;color:var(--gray900);line-height:1;margin-bottom:3px;}
+.cal-cell.sun .cal-daynum{color:#C92A35;}
+.cal-cell.sat .cal-daynum{color:#1A5FA8;}
+/* 分類ごとの色の点（形＋色で区別） */
+.cal-dots{display:flex;flex-wrap:wrap;gap:2px;justify-content:center;align-items:center;line-height:1;}
+.cal-dot{width:7px;height:7px;border-radius:50%;display:inline-block;}
+.cal-dot.gino{background:#E8612A;}
+.cal-dot.tokubetsu{background:#1A5FA8;}
+.cal-dot.sakugyou{background:#1A7A4A;}
+.cal-dot.yobo{background:#7B2FBE;}
+.cal-dot.other{background:#888;}
+.cal-more{font-size:9px;font-weight:800;color:var(--gray600);}
+
+/* 選んだ日の講習カード */
+.cal-selected{margin-top:14px;}
+.cal-sel-date{font-size:15px;font-weight:800;color:var(--navy);margin:0 0 10px;
+  display:flex;align-items:center;gap:6px;}
+.cal-sel-date i{color:var(--orange);font-size:18px;}
+.cal-sel-empty{text-align:center;color:var(--gray600);font-weight:600;padding:22px 10px;font-size:14px;}
+
+@media (max-width:360px){
+  .cal-cell{min-height:46px;}
+  .cal-daynum{font-size:13px;}
+  .cal-dot{width:6px;height:6px;}
+  .cal-title{font-size:17px;}
+}
 </style>
 </head>
 <body>
@@ -193,9 +247,31 @@ html[data-theme="dark"] .flow-result h3,html[data-theme="dark"] .flow-result p,h
     <div class="legend-item"><div class="legend-dot" style="background:#1A5FA8;"></div>特別教育</div>
     <div class="legend-item"><div class="legend-dot" style="background:#1A7A4A;"></div>作業主任者</div>
     <div class="legend-item"><div class="legend-dot" style="background:#7B2FBE;"></div>安全衛生教育</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#888;"></div>その他</div>
   </div>
 
-  <!-- 期タブ -->
+  <!-- 表示切り替え：カレンダー / 一覧 -->
+        <div class="view-tabs">
+          <button class="vtab on" type="button" onclick="setView('calendar',this)"><i class="ti ti-calendar-month"></i>カレンダー</button>
+          <button class="vtab" type="button" onclick="setView('list',this)"><i class="ti ti-list"></i>一覧</button>
+        </div>
+
+        <!-- 講習カレンダー本体（分類ごとに色分け） -->
+        <div id="calendar-view">
+          <div class="cal-head">
+            <button class="cal-nav" type="button" onclick="calMove(-1)" aria-label="前の月"><i class="ti ti-chevron-left"></i></button>
+            <p class="cal-title" id="cal-title">―</p>
+            <button class="cal-nav" type="button" onclick="calMove(1)" aria-label="次の月"><i class="ti ti-chevron-right"></i></button>
+          </div>
+          <div class="cal-weekdays">
+            <span class="cal-wd sun">日</span><span class="cal-wd">月</span><span class="cal-wd">火</span><span class="cal-wd">水</span><span class="cal-wd">木</span><span class="cal-wd">金</span><span class="cal-wd sat">土</span>
+          </div>
+          <div class="cal-grid" id="cal-grid"></div>
+          <div class="cal-selected" id="cal-selected"></div>
+        </div>
+
+        <div id="list-view" hidden>
+        <!-- 期タブ -->
   <div class="period-tabs">
     <button class="ptab on" onclick="setPeriod('all',this)">全期間</button>
     <button class="ptab" onclick="setPeriod('1',this)">第一期（4〜7月）</button>
@@ -213,6 +289,7 @@ html[data-theme="dark"] .flow-result h3,html[data-theme="dark"] .flow-result p,h
   </div>
 
   <div id="koushu-list"></div>
+        </div>
 
   <div class="card" style="margin-top:8px;">
     <p class="sec-label">申込・詳細</p>
@@ -487,6 +564,25 @@ function isUpcoming(k) {
   return end >= today;
 }
 
+
+/* 講習カードのHTMLを作る。一覧とカレンダーの両方から使う共通関数。 */
+function koushuCardHtml(k){
+  var catLabel = CAT_LABEL[k.cat] || k.cat;
+  var guideKey = courseGuideKey(k);
+  var noteHtml = k.note ? '<p class="kcard-note"><i class="ti ti-info-circle" style="font-size:12px;vertical-align:-2px;margin-right:3px;color:var(--orange);"></i>'+k.note+'</p>' : '';
+  var placeIcon = k.place.indexOf('アイチ')>=0 ? '📍' : '🏫';
+  return '<div class="kcard '+k.cat+'"'+(guideKey?' data-course-guide="'+guideKey+'"':'')+'>'
+    + '<div class="kcard-top">'
+    + '<p class="kcard-name">'+k.name+'</p>'
+    + '<span class="kcat-badge '+k.cat+'">'+catLabel+'</span>'
+    + '</div>'
+    + '<p class="kcard-date">📅 '+k.date+'</p>'
+    + '<p class="kcard-place">'+placeIcon+' '+k.place+'</p>'
+    + (k.fee ? '<p style="font-size:13px;font-weight:600;color:#E8612A;background:#FFF0E9;border-radius:6px;padding:5px 10px;margin:4px 0 0;display:inline-block;">💴 '+k.fee+'</p>' : '')
+    + noteHtml
+    + '</div>';
+}
+
 function render() {
   let items = KOUSHU.filter(isUpcoming);
   if(curPeriod !== 'all') items = items.filter(k=>k.period===curPeriod);
@@ -510,20 +606,7 @@ function render() {
     if(!byMonth[m]) return;
     html += `<div class="month-group"><p class="month-label">📅 ${m}</p>`;
     byMonth[m].forEach(k=>{
-      const catLabel = CAT_LABEL[k.cat] || k.cat;
-      const guideKey = courseGuideKey(k);
-      const noteHtml = k.note ? `<p class="kcard-note"><i class="ti ti-info-circle" style="font-size:12px;vertical-align:-2px;margin-right:3px;color:var(--orange);"></i>${k.note}</p>` : '';
-      const placeIcon = k.place.includes('アイチ') ? '📍' : '🏫';
-      html += `<div class="kcard ${k.cat}"${guideKey ? ` data-course-guide="${guideKey}"` : ''}>
-        <div class="kcard-top">
-          <p class="kcard-name">${k.name}</p>
-          <span class="kcat-badge ${k.cat}">${catLabel}</span>
-        </div>
-        <p class="kcard-date">📅 ${k.date}</p>
-        <p class="kcard-place">${placeIcon} ${k.place}</p>
-        ${k.fee ? `<p style="font-size:13px;font-weight:600;color:#E8612A;background:#FFF0E9;border-radius:6px;padding:5px 10px;margin:4px 0 0;display:inline-block;">💴 ${k.fee}</p>` : ''}
-        ${noteHtml}
-      </div>`;
+      html += koushuCardHtml(k);
     });
     html += '</div>';
   });
@@ -545,6 +628,164 @@ document.addEventListener('change',event=>{
 });
 renderFlow();
 render();
+
+/* ===== 講習カレンダー（分類ごとに色分け）=====
+   データは既存の KOUSHU 配列だけを使う。日付は date 文字列から解釈する。
+   複数日（「4月7日・8日・9日」）は全ての日に印を付ける。
+   年度は4月始まりで、1〜3月は翌年。 */
+var CAL_FY = 2026;
+
+function parseKoushuDates(dateStr, monthHint){
+  var out=[], curMonth=null;
+  var re=/(\d+)月|(\d+)日/g, m;
+  while((m=re.exec(dateStr))!==null){
+    if(m[1]){ curMonth=parseInt(m[1],10); }
+    else if(m[2]){
+      var day=parseInt(m[2],10);
+      if(curMonth===null){
+        var mh=(monthHint||'').match(/(\d+)月/);
+        curMonth=mh?parseInt(mh[1],10):null;
+      }
+      if(curMonth!==null){
+        var year=(curMonth>=4)?CAL_FY:CAL_FY+1;
+        out.push({year:year, month:curMonth, day:day});
+      }
+    }
+  }
+  return out;
+}
+
+var calIndex = {};
+var noDateCourses = [];
+function buildCalIndex(){
+  calIndex = {}; noDateCourses = [];
+  KOUSHU.forEach(function(k){
+    var ds = parseKoushuDates(k.date, k.month);
+    if(ds.length===0){ noDateCourses.push(k); return; }
+    var seen={};
+    ds.forEach(function(d){
+      var key=d.year+'-'+d.month+'-'+d.day;
+      if(seen[key]) return; seen[key]=1;
+      (calIndex[key]=calIndex[key]||[]).push(k);
+    });
+  });
+}
+
+var calYear, calMonth, calSelKey=null;
+
+function initCalMonth(){
+  var today=new Date(); today.setHours(0,0,0,0);
+  var cand=Object.keys(calIndex).map(function(k){
+    var p=k.split('-'); return new Date(+p[0], +p[1]-1, +p[2]);
+  }).filter(function(d){ return d>=today; }).sort(function(a,b){return a-b;});
+  if(cand.length){ calYear=cand[0].getFullYear(); calMonth=cand[0].getMonth()+1; }
+  else { calYear=CAL_FY; calMonth=4; }
+}
+
+var CAT_ORDER=['gino','tokubetsu','sakugyou','yobo','other'];
+
+function renderCalendar(){
+  var grid=document.getElementById('cal-grid');
+  var title=document.getElementById('cal-title');
+  if(!grid) return;
+  title.textContent=calYear+'年 '+calMonth+'月';
+  var first=new Date(calYear, calMonth-1, 1);
+  var startWd=first.getDay();
+  var days=new Date(calYear, calMonth, 0).getDate();
+  var today=new Date(); today.setHours(0,0,0,0);
+  var html='';
+  for(var i=0;i<startWd;i++) html+='<div class="cal-cell empty"></div>';
+  for(var d=1; d<=days; d++){
+    var key=calYear+'-'+calMonth+'-'+d;
+    var list=calIndex[key]||[];
+    var wd=new Date(calYear, calMonth-1, d).getDay();
+    var cls='cal-cell';
+    if(list.length) cls+=' has';
+    if(wd===0) cls+=' sun';
+    if(wd===6) cls+=' sat';
+    var dd=new Date(calYear, calMonth-1, d);
+    if(dd.getTime()===today.getTime()) cls+=' today';
+    if(key===calSelKey) cls+=' selected';
+    var cats=[];
+    list.forEach(function(k){ if(cats.indexOf(k.cat)<0) cats.push(k.cat); });
+    cats.sort(function(a,b){return CAT_ORDER.indexOf(a)-CAT_ORDER.indexOf(b);});
+    var dots='';
+    cats.slice(0,4).forEach(function(c){ dots+='<span class="cal-dot '+c+'"></span>'; });
+    if(cats.length>4) dots+='<span class="cal-more">+</span>';
+    var onclick = list.length ? ' onclick="calSelect(\''+key+'\')"' : '';
+    html+='<div class="'+cls+'"'+onclick+'>'
+        + '<span class="cal-daynum">'+d+'</span>'
+        + '<span class="cal-dots">'+dots+'</span>'
+        + '</div>';
+  }
+  grid.innerHTML=html;
+  renderCalSelected();
+}
+
+function renderCalSelected(){
+  var box=document.getElementById('cal-selected');
+  if(!box) return;
+  if(!calSelKey || !calIndex[calSelKey]){
+    box.innerHTML='<p class="cal-sel-empty">色の付いた日を押すと、その日の講習が表示されます。</p>'
+      + (noDateCourses.length ? renderNoDate() : '');
+    return;
+  }
+  var p=calSelKey.split('-');
+  var wd=['日','月','火','水','木','金','土'][new Date(+p[0],+p[1]-1,+p[2]).getDay()];
+  var list=calIndex[calSelKey];
+  var html='<p class="cal-sel-date"><i class="ti ti-calendar-event"></i>'
+         + p[1]+'月'+p[2]+'日（'+wd+'）の講習</p>';
+  list.forEach(function(k){ html+=koushuCardHtml(k); });
+  html+=renderNoDate();
+  box.innerHTML=html;
+  attachCourseGuides(box);
+}
+
+/* 必要書類ガイドを、カード内に差し込む（一覧と同じ仕組みをカレンダーでも使う） */
+function attachCourseGuides(root){
+  root.querySelectorAll('[data-course-guide]').forEach(function(card){
+    var key=card.dataset.courseGuide;
+    var course={name:key==='smallCrane'?'小型移動式クレーン':key==='scaffold'?'足場の組立て':key==='foreman'?'職長・安全衛生責任者能力向上':key==='aerial'?'高所作業車（10m以上）':'一般建築物石綿含有建材調査者',cat:key==='scaffold'?'sakugyou':''};
+    var guide=createCourseGuide(course);
+    if(guide) card.appendChild(guide);
+  });
+}
+
+function renderNoDate(){
+  if(!noDateCourses.length) return '';
+  var html='<p class="cal-sel-date" style="margin-top:16px;"><i class="ti ti-alert-triangle"></i>日程が確定していない講習</p>';
+  noDateCourses.forEach(function(k){ html+=koushuCardHtml(k); });
+  return html;
+}
+
+function calSelect(key){
+  calSelKey=key;
+  renderCalendar();
+  var box=document.getElementById('cal-selected');
+  if(box) box.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+function calMove(delta){
+  var m=calMonth+delta, y=calYear;
+  if(m<1){ m=12; y--; }
+  if(m>12){ m=1; y++; }
+  calYear=y; calMonth=m; calSelKey=null;
+  renderCalendar();
+}
+
+function setView(v, btn){
+  document.querySelectorAll('.vtab').forEach(function(b){b.classList.remove('on');});
+  btn.classList.add('on');
+  var cal=document.getElementById('calendar-view');
+  var list=document.getElementById('list-view');
+  if(v==='calendar'){ cal.hidden=false; list.hidden=true; renderCalendar(); }
+  else { cal.hidden=true; list.hidden=false; render(); }
+}
+
+buildCalIndex();
+initCalMonth();
+renderCalendar();
+
 </script>
 <script src="assets/js/navigation.js"></script>
 </body>
