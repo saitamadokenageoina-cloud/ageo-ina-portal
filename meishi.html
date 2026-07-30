@@ -83,7 +83,18 @@
               <label class="field wide"><span>住所</span><input id="address" name="street-address" maxlength="70" placeholder="埼玉県上尾市〇〇" autocomplete="street-address"></label>
               <label class="field wide"><span>ホームページ</span><input id="website" maxlength="120" inputmode="url" placeholder="https://example.jp"></label>
               <label class="field wide"><span>LINE・SNS</span><input id="social" maxlength="120" placeholder="LINE公式URL、Instagramなど"></label>
-              <label class="field wide"><span>QRコードのリンク先</span><input id="qr-url" maxlength="180" inputmode="url" placeholder="HP・LINE・施工事例・見積依頼などのhttps://URL"></label>
+              <label class="field wide"><span>QRコードにするURLの種類</span><select id="qr-source">
+                <option value="">QRコードを使用しない</option>
+                <option value="website">ホームページ</option>
+                <option value="line">LINE</option>
+                <option value="social">Instagram・SNS</option>
+                <option value="works">施工事例</option>
+                <option value="map">Googleマップ</option>
+                <option value="contact">見積依頼・お問い合わせ</option>
+                <option value="custom">その他のURL</option>
+              </select></label>
+              <label class="field wide" id="qr-url-field"><span id="qr-url-label">QRコードにするURL</span><input id="qr-url" maxlength="180" inputmode="url" autocomplete="url" aria-describedby="qr-url-status" placeholder="https://から始まるURL"></label>
+              <div id="qr-url-status" class="qr-url-status wide" role="status" aria-live="polite">QRコードを使用する場合は、URLの種類を選んでください。</div>
               <div class="field wide"><span>ロゴ・写真（任意）</span><div id="photo-control" class="photo-control"><input id="photo" type="file" accept="image/png,image/jpeg,image/webp"><button id="remove-photo" type="button" hidden><i class="ti ti-trash"></i>画像を削除</button><span id="photo-status" class="photo-status" aria-live="polite">画像は未選択です</span></div></div>
             </div>
             <div id="back-fields">
