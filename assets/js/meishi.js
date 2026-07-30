@@ -6,7 +6,7 @@
     vertical:{finished:{width:650,height:1075},bleed:{width:720,height:1146,inset:35},finishedMm:{width:55,height:91},bleedMm:{width:61,height:97}}
   };
   const STORAGE_KEY = 'doken_meishi_draft_v1';
-  const fields = ['company', 'person-name', 'role', 'trade', 'custom-trade', 'tagline', 'services', 'strengths', 'qualifications', 'permit-number', 'experience', 'achievements', 'ccus', 'insurance', 'invoice-number', 'business-hours', 'phone', 'email', 'address', 'website', 'social', 'service-area', 'qr-url', 'back-focus', 'style-preset', 'vertical-layout', 'accent-color', 'member-label'];
+  const fields = ['company', 'person-name', 'role', 'trade', 'custom-trade', 'tagline', 'services', 'strengths', 'qualifications', 'permit-number', 'experience', 'achievements', 'ccus', 'insurance', 'invoice-number', 'business-hours', 'phone', 'email', 'address', 'website', 'social', 'service-area', 'qr-source', 'qr-url', 'back-focus', 'style-preset', 'vertical-layout', 'accent-color', 'member-label'];
   const form = document.getElementById('card-form');
   const preview = document.getElementById('card-preview');
   const context = preview.getContext('2d');
@@ -146,11 +146,11 @@
 
   function cardData() {
     return {
-      company: value('company'), name: value('person-name') || 'お名前', role: value('role'),
+      company: value('company'), name: value('person-name'), role: value('role'),
       trade: value('trade'), tradeName:tradeLabel(), tagline: value('tagline'), services: value('services'),
       qualifications: value('qualifications'), phone: value('phone'), email: value('email'),
       address: value('address'), website: value('website'), social: value('social'), area: value('service-area'),
-      qrUrl: value('qr-url'), illustration:selectedIllustration(), backFocus: value('back-focus') || 'services', orientation:selectedOrientation(), verticalLayout:value('vertical-layout')||'center',
+      qrSource: value('qr-source'), qrUrl: value('qr-url'), illustration:selectedIllustration(), backFocus: value('back-focus') || 'services', orientation:selectedOrientation(), verticalLayout:value('vertical-layout')||'center',
       strengths:value('strengths'), permit:value('permit-number'), experience:value('experience'), achievements:value('achievements'), ccus:value('ccus'), insurance:value('insurance'), invoice:value('invoice-number'), hours:value('business-hours'), member: value('member-label'), useBack:selectedBack(),
       style: selectedStyle(), accent: value('accent-color') || '#e8612a'
     };
@@ -172,8 +172,69 @@
     }
   }
 
+  const QR_SOURCE_SETTINGS = {
+    website: { label: 'ホームページ', prompt: 'ホームページのURLを入力してください' },
+    line: { label: 'LINE', prompt: 'LINEのURLを入力してください' },
+    social: { label: 'Instagram・SNS', prompt: 'Instagram・SNSのURLを入力してください' },
+    works: { label: '施工事例', prompt: '施工事例ページのURLを入力してください' },
+    map: { label: 'Googleマップ', prompt: 'GoogleマップのURLを入力してください' },
+    contact: { label: '見積依頼・お問い合わせ', prompt: '見積依頼・お問い合わせページのURLを入力してください' },
+    custom: { label: 'その他のURL', prompt: 'QRコードにするURLを入力してください' }
+  };
+
   function qrTarget(data) {
-    return safeHttpsUrl(data.qrUrl) || safeHttpsUrl(data.website) || safeHttpsUrl(data.social);
+    if (!data.qrSource || !QR_SOURCE_SETTINGS[data.qrSource]) return '';
+    return safeHttpsUrl(data.qrUrl);
+  }
+
+  function syncQrUrlUI(allowSuggestion) {
+    const source = value('qr-source');
+    const input = document.getElementById('qr-url');
+    const field = document.getElementById('qr-url-field');
+    const label = document.getElementById('qr-url-label');
+    const status = document.getElementById('qr-url-status');
+    const setting = QR_SOURCE_SETTINGS[source];
+    if (!input || !field || !label || !status) return;
+    if (!setting) {
+      input.disabled = true;
+      input.removeAttribute('aria-invalid');
+      input.placeholder = '先にURLの種類を選んでください';
+      label.textContent = 'QRコードにするURL';
+      field.classList.add('is-disabled');
+      status.className = 'qr-url-status wide';
+      status.textContent = 'QRコードを使用する場合は、URLの種類を選んでください。';
+      return;
+    }
+    input.disabled = false;
+    field.classList.remove('is-disabled');
+    label.textContent = `${setting.label}のURL`;
+    input.placeholder = setting.prompt;
+    if (allowSuggestion && !value('qr-url')) {
+      const suggested = source === 'website' ? value('website') : (source === 'line' || source === 'social' ? value('social') : '');
+      if (safeHttpsUrl(suggested)) input.value = suggested;
+    }
+    const raw = value('qr-url');
+    const valid = safeHttpsUrl(raw);
+    status.replaceChildren();
+    if (!raw) {
+      input.setAttribute('aria-invalid', 'true');
+      status.className = 'qr-url-status wide error';
+      status.textContent = 'QRコードにするURLを入力してください';
+      return;
+    }
+    if (!valid) {
+      input.setAttribute('aria-invalid', 'true');
+      status.className = 'qr-url-status wide error';
+      status.textContent = 'https://から始まる正しいURLを入力してください';
+      return;
+    }
+    input.removeAttribute('aria-invalid');
+    status.className = 'qr-url-status wide valid';
+    const heading = document.createElement('strong');
+    heading.textContent = `このURLからQRコードを作成します（${setting.label}）`;
+    const url = document.createElement('span');
+    url.textContent = valid;
+    status.append(heading, url);
   }
 
   function makeQrMatrix(text) {
@@ -308,27 +369,26 @@
   }
 
   function backInformation(data) {
-    const suggestion = tradeSuggestions[data.trade] || tradeSuggestions.general;
-    const tagline = data.tagline || suggestion.lines[0];
+    const tagline = data.tagline;
     const blocks = [
-      { key: 'services', label: '主な業務', text: data.services || suggestion.services },
-      { key: 'message', label: '選ばれる理由', text: data.strengths || tagline },
-      { key: 'area', label: '対応エリア', text: data.area || '対応エリアをご入力ください' },
-      { key: 'qualifications', label: '資格', text: data.qualifications || '保有資格をご入力ください' },
-      { key: 'qualifications', label: '建設業許可', text: data.permit || '許可番号をご入力ください' },
-      { key: 'trust', label: '創業・経験／施工実績', text: [data.experience, data.achievements].filter(Boolean).join('／') || '経験年数・施工実績をご入力ください' },
-      { key: 'trust', label: 'CCUS・所属団体', text: data.ccus || 'CCUS・所属団体をご入力ください' },
-      { key: 'trust', label: '保険・保証', text: data.insurance || '加入保険・保証をご入力ください' }
-    ];
+      { key: 'services', label: '主な業務', text: data.services },
+      { key: 'message', label: '選ばれる理由', text: data.strengths },
+      { key: 'area', label: '対応エリア', text: data.area },
+      { key: 'qualifications', label: '資格', text: data.qualifications },
+      { key: 'qualifications', label: '建設業許可', text: data.permit },
+      { key: 'trust', label: '創業・経験／施工実績', text: [data.experience, data.achievements].filter(Boolean).join('／') },
+      { key: 'trust', label: 'CCUS・所属団体', text: data.ccus },
+      { key: 'trust', label: '保険・保証', text: data.insurance }
+    ].filter(block => block.text);
     const focused = blocks.filter(block => block.key === data.backFocus);
     const remaining = blocks.filter(block => block.key !== data.backFocus);
     return {
       tagline,
       blocks: focused.concat(remaining),
       footer: [
-        { label: '営業時間・緊急対応', text: data.hours || '営業時間をご入力ください' },
-        { label: 'インボイス', text: data.invoice || '登録番号をご入力ください' }
-      ]
+        { label: '営業時間・緊急対応', text: data.hours },
+        { label: 'インボイス', text: data.invoice }
+      ].filter(item => item.text)
     };
   }
 
@@ -347,10 +407,10 @@
     const columnWidth = (usableWidth - gap * (columns - 1)) / columns;
     const titleY = panelY + (vertical ? 65 : 52);
     const taglineY = titleY + (vertical ? 55 : 43);
-    const bodyY = taglineY + (vertical ? 64 : 58);
-    const footerHeight = vertical ? 98 : 56;
+    const bodyY = info.tagline ? taglineY + (vertical ? 64 : 58) : titleY + (vertical ? 52 : 46);
+    const footerHeight = info.footer.length ? (vertical ? 98 : 56) : 12;
     const footerY = panelY + panelHeight - footerHeight;
-    const rows = vertical ? info.blocks.length : Math.ceil(info.blocks.length / columns);
+    const rows = Math.max(1, vertical ? info.blocks.length : Math.ceil(info.blocks.length / columns));
     const rowHeight = (footerY - bodyY - 8) / rows;
     const titleColor = options.titleColor || '#ffffff';
     const valueColor = options.valueColor || '#f4f7fb';
@@ -364,10 +424,12 @@
     }
 
     drawFittedLine(ctx, data.company || data.name, left, titleY, usableWidth, vertical ? 42 : 39, vertical ? 25 : 23, 800, titleColor, options.serif);
-    const tagline = fittedWrappedText(ctx, info.tagline, usableWidth, 2, vertical ? 26 : 23, 17, 800, options.serif);
-    setReadableFont(ctx, 800, tagline.size, options.serif);
-    ctx.fillStyle = labelColor;
-    drawLines(ctx, tagline.lines, left, taglineY, tagline.size + 5);
+    if (info.tagline) {
+      const tagline = fittedWrappedText(ctx, info.tagline, usableWidth, 2, vertical ? 26 : 23, 17, 800, options.serif);
+      setReadableFont(ctx, 800, tagline.size, options.serif);
+      ctx.fillStyle = labelColor;
+      drawLines(ctx, tagline.lines, left, taglineY, tagline.size + 5);
+    }
 
     info.blocks.forEach((block, index) => {
       const column = vertical ? 0 : index % columns;
@@ -500,7 +562,7 @@
       if(data.role){ctx.fillStyle=palette.mid;ctx.font='700 27px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif';ctx.fillText(clippedText(ctx,data.role,max),x,282);}
       drawTradeBadge(ctx,data.tradeName,x,315,max,data.accent);ctx.fillStyle=data.accent;ctx.fillRect(x,385,max,5);
       drawVerticalContactLines(ctx,data,x,465,target?330:max,64,'#20344a');
-      if(target){const q=165,qx=420,qy=770;drawQr(ctx,target,qx,qy,q);ctx.fillStyle=palette.dark;ctx.font='700 23px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif';ctx.textAlign='center';ctx.fillText('WEB・LINE',qx+q/2,qy+q+36);ctx.textAlign='left';}
+      if(target){const q=200,qx=width-q-40,qy=750;drawQr(ctx,target,qx,qy,q);}
       if(data.member){ctx.fillStyle=data.accent;ctx.font='700 23px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif';ctx.fillText('埼玉土建 上尾伊奈支部 組合員',x,1015);}
       return;
     }
@@ -509,7 +571,7 @@
     if(data.role){ctx.fillStyle=palette.mid;ctx.font='700 26px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif';ctx.fillText(clippedText(ctx,data.role,max),x,268);}
     drawTradeBadge(ctx,data.tradeName,x,300,max,data.accent);ctx.fillStyle=data.accent;ctx.fillRect(x,365,max,5);
     contactDetails(data).forEach((detail,index)=>drawFittedLine(ctx,detail,x,415+index*43,max,25,15,600,'#20344a',false));
-    if(target){const q=190,qx=820,qy=350;drawQr(ctx,target,qx,qy,q);ctx.fillStyle=palette.dark;ctx.font='700 23px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif';ctx.textAlign='center';ctx.fillText('WEB・LINE',qx+q/2,qy+q+36);ctx.textAlign='left';}
+    if(target){const q=210,qx=width-q-45,qy=345;drawQr(ctx,target,qx,qy,q);}
     if(data.member){ctx.fillStyle=data.accent;ctx.font='700 23px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif';ctx.fillText('埼玉土建 上尾伊奈支部 組合員',x,620);}
   }
 
@@ -624,7 +686,7 @@
       sceneDetails(ctx,data,left,398,max,43,'#19324d',24);
       const artX=width*.86,artY=height*.18,artSize=target?118:172;
       if(photoImage)drawPhoto(ctx,photoImage,artX,artY,artSize*.82,data.accent);else if(data.illustration!=='none')drawTradeIllustration(ctx,data.trade,artX,artY,artSize,'#ffffff',true);
-      if(target){const qx=width-qrSize-55,qy=height-qrSize-55;drawQr(ctx,target,qx,qy,qrSize);ctx.fillStyle='#ffffff';ctx.font=sceneFont(data.style,700,20);ctx.textAlign='center';ctx.fillText('WEB・LINE',qx+qrSize/2,qy+qrSize+29);ctx.textAlign='left';}
+      if(target){const qx=width-qrSize-55,qy=height-qrSize-55;drawQr(ctx,target,qx,qy,qrSize);}
       if(data.member){ctx.fillStyle=data.accent;ctx.font=sceneFont(data.style,700,20);ctx.fillText('埼玉土建 上尾伊奈支部 組合員',left,height-30);}
       return;
     }
@@ -638,7 +700,7 @@
       if(photoImage)drawPhoto(ctx,photoImage,width*.88,height*.16,112,data.accent);else if(data.illustration!=='none')drawTradeIllustration(ctx,data.trade,width*.88,height*.16,110,'#ffffff',true);
       const left=62,detailMax=target?560:930;ctx.fillStyle='#ffffff';ctx.font=sceneFont(data.style,700,31);if(data.company)ctx.fillText(clippedText(ctx,data.company,detailMax),left,height*.61);
       sceneDetails(ctx,data,left,height*.68,detailMax,38,'#eef8fa',23);
-      if(target){const qx=width-qrSize-52,qy=height-qrSize-48;drawQr(ctx,target,qx,qy,qrSize);ctx.fillStyle='#fff';ctx.font=sceneFont(data.style,700,19);ctx.textAlign='center';ctx.fillText('WEB・LINE',qx+qrSize/2,qy+qrSize+27);ctx.textAlign='left';}
+      if(target){const qx=width-qrSize-52,qy=height-qrSize-48;drawQr(ctx,target,qx,qy,qrSize);}
       if(data.member){ctx.fillStyle=data.accent;ctx.font=sceneFont(data.style,700,19);ctx.fillText('埼玉土建 上尾伊奈支部 組合員',right,height-30);}
       return;
     }
@@ -650,7 +712,7 @@
     if(data.role){ctx.fillStyle=palette.mid;ctx.font=sceneFont(data.style,700,26);ctx.fillText(clippedText(ctx,data.role,max),left,height*.33);}
     drawTradeBadge(ctx,data.tradeName,left,height*.355,max,data.accent);ctx.fillStyle=data.accent;ctx.fillRect(left,height*.48,max,6);
     sceneDetails(ctx,data,left,height*.56,target?width*.31:max,52,'#352f2b',23);
-    if(target){const qx=width-qrSize-48,qy=height-qrSize-46;drawQr(ctx,target,qx,qy,qrSize);ctx.fillStyle=palette.dark;ctx.font=sceneFont(data.style,700,19);ctx.textAlign='center';ctx.fillText('WEB・LINE',qx+qrSize/2,qy+qrSize+27);ctx.textAlign='left';}
+    if(target){const qx=width-qrSize-48,qy=height-qrSize-46;drawQr(ctx,target,qx,qy,qrSize);}
     if(data.member){ctx.fillStyle='#ffffff';ctx.font=sceneFont(data.style,700,18);ctx.textAlign='center';ctx.fillText('埼玉土建 上尾伊奈支部 組合員',artX,height-28);ctx.textAlign='left';}
   }
 
@@ -749,7 +811,7 @@
       if(data.role){ctx.fillStyle='rgba(255,255,255,.72)';ctx.font='700 26px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif';ctx.fillText(clippedText(ctx,data.role,max),x,500);}
       drawTradeBadge(ctx,data.tradeName,x,530,max,data.accent);ctx.fillStyle=data.accent;ctx.fillRect(x,590,max,5);
       drawVerticalContactLines(ctx,data,x,665,target?330:max,58,'rgba(255,255,255,.9)');
-      if(target){const q=165,qx=425,qy=745;drawQr(ctx,target,qx,qy,q);ctx.fillStyle='#fff';ctx.font='700 23px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif';ctx.textAlign='center';ctx.fillText('WEB・LINE',qx+q/2,qy+q+36);ctx.textAlign='left';}
+      if(target){const q=200,qx=width-q-40,qy=735;drawQr(ctx,target,qx,qy,q);}
       if(data.member){ctx.fillStyle=data.accent;ctx.font='700 23px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif';ctx.fillText('埼玉土建 上尾伊奈支部 組合員',x,1020);}
       return;
     }
@@ -763,7 +825,7 @@
       if(data.role){ctx.fillStyle=palette.mid;ctx.font='700 27px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif';ctx.fillText(clippedText(ctx,data.role,max),x,310);}
       ctx.fillStyle=data.accent;ctx.fillRect(x,350,max,7);
       drawVerticalContactLines(ctx,data,x,425,max,64,'#20344a');
-      if(target){const q=170,qx=width-q-48,qy=790;drawQr(ctx,target,qx,qy,q);ctx.fillStyle=palette.dark;ctx.font='700 24px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif';ctx.textAlign='center';ctx.fillText('WEB・LINE',qx+q/2,qy+q+38);ctx.textAlign='left';}
+      if(target){const q=200,qx=width-q-48,qy=775;drawQr(ctx,target,qx,qy,q);}
       if(data.member){ctx.fillStyle=data.accent;ctx.font='700 24px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif';ctx.fillText('埼玉土建 上尾伊奈支部 組合員',x,1020);}
       return;
     }
@@ -776,7 +838,7 @@
       if(data.role){ctx.fillStyle=palette.mid;ctx.font='700 27px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif';ctx.fillText(clippedText(ctx,data.role,500),width/2,555);}
       ctx.textAlign='left';drawTradeBadge(ctx,data.tradeName,55,570,540,data.accent);ctx.fillStyle=data.accent;ctx.fillRect(55,625,540,7);
       drawVerticalContactLines(ctx,data,60,700,target?330:530,60,'#20344a');
-      if(target){const q=165,qx=430,qy=745;drawQr(ctx,target,qx,qy,q);ctx.fillStyle=palette.dark;ctx.font='700 23px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif';ctx.textAlign='center';ctx.fillText('WEB・LINE',qx+q/2,qy+q+36);ctx.textAlign='left';}
+      if(target){const q=200,qx=width-q-40,qy=735;drawQr(ctx,target,qx,qy,q);}
       if(data.member){ctx.fillStyle=data.accent;ctx.font='700 23px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif';ctx.fillText('埼玉土建 上尾伊奈支部 組合員',60,1020);}
       return;
     }
@@ -788,7 +850,7 @@
     if(data.role){ctx.fillStyle=palette.mid;ctx.font='700 27px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif';ctx.fillText(clippedText(ctx,data.role,500),width/2,510);}
     ctx.textAlign='left';drawTradeBadge(ctx,data.tradeName,55,530,540,data.accent);ctx.fillStyle=data.accent;ctx.fillRect(55,590,540,7);
     drawVerticalContactLines(ctx,data,60,665,target?330:530,60,'#20344a');
-    if(target){const q=165,qx=430,qy=710;drawQr(ctx,target,qx,qy,q);ctx.fillStyle=palette.dark;ctx.font='700 23px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif';ctx.textAlign='center';ctx.fillText('WEB・LINE',qx+q/2,qy+q+36);ctx.textAlign='left';}
+    if(target){const q=200,qx=width-q-40,qy=700;drawQr(ctx,target,qx,qy,q);}
     if(data.member){ctx.fillStyle=data.accent;ctx.font='700 23px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif';ctx.fillText('埼玉土建 上尾伊奈支部 組合員',60,1020);}
   }
 
@@ -940,7 +1002,6 @@
     if(target){
       const qrSize=Math.round(width*20/91);const qrX=isBand?width*.05:width-qrSize-width*.055;const qrY=height*.49;
       drawQr(ctx,target,qrX,qrY,qrSize);
-      ctx.fillStyle=isBand||isDark||rightDark?'#fff':palette.dark;ctx.font=`700 ${Math.max(25,Math.round(height*.021))}px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif`;ctx.textAlign='center';ctx.fillText('WEB・LINE・施工事例',qrX+qrSize/2,qrY+qrSize+height*.045);ctx.textAlign='left';
     }
   }
 
@@ -1208,8 +1269,9 @@
     }else{
       score+=25;items.push({ok:true,text:'裏面は白無地で出力します'});
     }
-    const rawQr=data.qrUrl || data.website || data.social;
-    add(Boolean(qrTarget(data)),15,'QRコードは約20mm・余白付きです',rawQr?'QRコードのURLはhttps://から入力してください':'QRコードのリンク先を入れると営業力が上がります');
+    const rawQr=data.qrUrl;
+    const qrAdvice=!data.qrSource&&rawQr?'QRコードにするURLの種類を選んでください':rawQr?'QRコードのURLはhttps://から入力してください':'QRコードのリンク先を入れると営業力が上がります';
+    add(Boolean(qrTarget(data)),15,'QRコードは約20mm・余白付きです',qrAdvice);
     score=Math.min(100,score);
     const list=document.getElementById('quality-list'); list.replaceChildren();
     items.forEach(item=>{const li=document.createElement('li');li.className=item.ok?'ok':'warn';li.textContent=`${item.ok?'✓':'△'} ${item.text}`;list.appendChild(li);});
@@ -1285,12 +1347,16 @@
       const max=Number(element.maxLength)>0?Number(element.maxLength):500;
       element.value=String(draft[id]).slice(0,max);
     });
+    if(!draft['qr-source'] && draft['qr-url']){
+      const qrSource=document.getElementById('qr-source');
+      if(qrSource)qrSource.value='custom';
+    }
     const restoredStyle=normalizeStyle(draft.style||draft['style-preset']);if(restoredStyle){const select=document.getElementById('style-preset');if([...select.options].some(option=>option.value===restoredStyle))select.value=restoredStyle;}
     [['orientation',draft.orientation],['illustration-choice',draft.illustrationChoice],['back-choice',draft.backChoice]].forEach(([name,choice])=>{if(!choice)return;const radio=form.querySelector(`input[name="${name}"][value="${choice}"]`);if(radio)radio.checked=true;});
     layoutVariant=Number.isInteger(draft.layoutVariant)?Math.abs(draft.layoutVariant)%3:0;
     photoData='';photoImage=null;
     if(typeof draft.photo==='string'&&draft.photo.length<6500000&&/^data:image\/(png|jpeg|webp);base64,/.test(draft.photo)){photoData=draft.photo;photoImage=new Image();photoImage.onload=()=>{syncPhotoControls();queueRender();};photoImage.src=photoData;}
-    syncPhotoControls();syncTradeUI();syncKeyOptions();queueRender();
+    syncPhotoControls();syncTradeUI();syncQrUrlUI(false);syncKeyOptions();queueRender();
     document.getElementById('save-message').textContent=message;
   }
 
@@ -1334,6 +1400,8 @@
 
   form.addEventListener('input',()=>{queueRender();queueAutoSave();});
   form.addEventListener('change',()=>{queueRender();queueAutoSave();});
+  document.getElementById('qr-source').addEventListener('change',()=>{syncQrUrlUI(true);queueRender();queueAutoSave();});
+  document.getElementById('qr-url').addEventListener('input',()=>syncQrUrlUI(false));
   form.querySelectorAll('input[name="orientation"],input[name="illustration-choice"]').forEach(radio=>radio.addEventListener('change',syncKeyOptions));
   document.getElementById('trade').addEventListener('change',syncTradeUI);
   form.querySelectorAll('input[name="back-choice"]').forEach(radio=>radio.addEventListener('change',()=>{syncKeyOptions();if(selectedBack())selectPreviewSide('back');else selectPreviewSide('front');}));
@@ -1355,6 +1423,7 @@
   document.querySelectorAll('.side-tab').forEach(button=>button.addEventListener('click',()=>selectPreviewSide(button.dataset.side)));
 
   restoreDraft();
+  syncQrUrlUI(false);
   syncPhotoControls();
   syncTradeUI();
   syncKeyOptions();
