@@ -226,7 +226,7 @@
   function fitText(ctx, text, maxWidth, initialSize, minSize, weight = 700) {
     let size = initialSize;
     do {
-      ctx.font = `${weight} ${size}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;
+      ctx.font = `${weight} ${size}px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif`;
       if (ctx.measureText(text).width <= maxWidth) return size;
       size -= 2;
     } while (size >= minSize);
@@ -263,6 +263,134 @@
 
   function drawLines(ctx, lines, x, y, lineHeight) {
     lines.forEach((line, index) => ctx.fillText(line, x, y + lineHeight * index));
+  }
+
+  function contactDetails(data) {
+    return [
+      data.phone && `TEL  ${data.phone}`,
+      data.email && `MAIL  ${data.email}`,
+      data.address,
+      data.website && `WEB  ${data.website}`,
+      data.social && `SNS  ${data.social}`
+    ].filter(Boolean);
+  }
+
+  function setReadableFont(ctx, weight, size, serif) {
+    const family = serif
+      ? '"BIZ UDPMincho","Yu Mincho","Hiragino Mincho ProN",serif'
+      : '"BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif';
+    ctx.font = `${weight} ${size}px ${family}`;
+  }
+
+  function drawFittedLine(ctx, text, x, y, maxWidth, initialSize, minSize, weight, color, serif) {
+    if (!text) return;
+    let size = initialSize;
+    setReadableFont(ctx, weight, size, serif);
+    while (size > minSize && ctx.measureText(text).width > maxWidth) {
+      size -= 1;
+      setReadableFont(ctx, weight, size, serif);
+    }
+    ctx.fillStyle = color;
+    ctx.fillText(clippedText(ctx, text, maxWidth), x, y);
+  }
+
+  function fittedWrappedText(ctx, text, maxWidth, maxLines, initialSize, minSize, weight, serif) {
+    let size = initialSize;
+    let lines = [];
+    while (size >= minSize) {
+      setReadableFont(ctx, weight, size, serif);
+      lines = wrapLines(ctx, text, maxWidth, 99);
+      if (lines.length <= maxLines) return { size, lines };
+      size -= 1;
+    }
+    setReadableFont(ctx, weight, minSize, serif);
+    return { size: minSize, lines: wrapLines(ctx, text, maxWidth, maxLines) };
+  }
+
+  function backInformation(data) {
+    const suggestion = tradeSuggestions[data.trade] || tradeSuggestions.general;
+    const tagline = data.tagline || suggestion.lines[0];
+    const blocks = [
+      { key: 'services', label: '主な業務', text: data.services || suggestion.services },
+      { key: 'message', label: '選ばれる理由', text: data.strengths || tagline },
+      { key: 'area', label: '対応エリア', text: data.area || '対応エリアをご入力ください' },
+      { key: 'qualifications', label: '資格', text: data.qualifications || '保有資格をご入力ください' },
+      { key: 'qualifications', label: '建設業許可', text: data.permit || '許可番号をご入力ください' },
+      { key: 'trust', label: '創業・経験／施工実績', text: [data.experience, data.achievements].filter(Boolean).join('／') || '経験年数・施工実績をご入力ください' },
+      { key: 'trust', label: 'CCUS・所属団体', text: data.ccus || 'CCUS・所属団体をご入力ください' },
+      { key: 'trust', label: '保険・保証', text: data.insurance || '加入保険・保証をご入力ください' }
+    ];
+    const focused = blocks.filter(block => block.key === data.backFocus);
+    const remaining = blocks.filter(block => block.key !== data.backFocus);
+    return {
+      tagline,
+      blocks: focused.concat(remaining),
+      footer: [
+        { label: '営業時間・緊急対応', text: data.hours || '営業時間をご入力ください' },
+        { label: 'インボイス', text: data.invoice || '登録番号をご入力ください' }
+      ]
+    };
+  }
+
+  function drawBackInformation(ctx, data, width, height, options) {
+    const info = backInformation(data);
+    const vertical = Boolean(options.vertical);
+    const panelX = options.panelX || (vertical ? 32 : 34);
+    const panelY = options.panelY || (vertical ? 28 : 26);
+    const panelWidth = options.panelWidth || (width - panelX * 2);
+    const panelHeight = options.panelHeight || (height - panelY * 2);
+    const left = panelX + (vertical ? 28 : 34);
+    const right = panelX + panelWidth - (vertical ? 28 : 34);
+    const usableWidth = right - left;
+    const columns = vertical ? 1 : 2;
+    const gap = vertical ? 0 : 30;
+    const columnWidth = (usableWidth - gap * (columns - 1)) / columns;
+    const titleY = panelY + (vertical ? 65 : 52);
+    const taglineY = titleY + (vertical ? 55 : 43);
+    const bodyY = taglineY + (vertical ? 64 : 58);
+    const footerHeight = vertical ? 98 : 56;
+    const footerY = panelY + panelHeight - footerHeight;
+    const rows = vertical ? info.blocks.length : Math.ceil(info.blocks.length / columns);
+    const rowHeight = (footerY - bodyY - 8) / rows;
+    const titleColor = options.titleColor || '#ffffff';
+    const valueColor = options.valueColor || '#f4f7fb';
+    const mutedColor = options.mutedColor || valueColor;
+    const labelColor = options.labelColor || data.accent;
+
+    if (options.panelColor) {
+      ctx.fillStyle = options.panelColor;
+      roundedRect(ctx, panelX, panelY, panelWidth, panelHeight, vertical ? 22 : 20);
+      ctx.fill();
+    }
+
+    drawFittedLine(ctx, data.company || data.name, left, titleY, usableWidth, vertical ? 42 : 39, vertical ? 25 : 23, 800, titleColor, options.serif);
+    const tagline = fittedWrappedText(ctx, info.tagline, usableWidth, 2, vertical ? 26 : 23, 17, 800, options.serif);
+    setReadableFont(ctx, 800, tagline.size, options.serif);
+    ctx.fillStyle = labelColor;
+    drawLines(ctx, tagline.lines, left, taglineY, tagline.size + 5);
+
+    info.blocks.forEach((block, index) => {
+      const column = vertical ? 0 : index % columns;
+      const row = vertical ? index : Math.floor(index / columns);
+      const x = left + column * (columnWidth + gap);
+      const y = bodyY + row * rowHeight;
+      const labelSize = vertical ? 20 : 18;
+      setReadableFont(ctx, 800, labelSize, options.serif);
+      ctx.fillStyle = labelColor;
+      ctx.fillText(block.label, x, y + labelSize);
+      const value = fittedWrappedText(ctx, block.text, columnWidth, 3, vertical ? 20 : 18, 14, 600, options.serif);
+      setReadableFont(ctx, 600, value.size, options.serif);
+      ctx.fillStyle = valueColor;
+      drawLines(ctx, value.lines, x, y + labelSize + value.size + 8, value.size + 4);
+    });
+
+    const footerGap = vertical ? 8 : 30;
+    const footerColumnWidth = vertical ? usableWidth : (usableWidth - footerGap) / 2;
+    info.footer.forEach((item, index) => {
+      const x = vertical ? left : left + index * (footerColumnWidth + footerGap);
+      const y = footerY + (vertical ? index * 44 : 24);
+      drawFittedLine(ctx, `${item.label}：${item.text}`, x, y, footerColumnWidth, vertical ? 17 : 16, 12, 600, mutedColor, options.serif);
+    });
   }
 
   function colorLuminance(color) {
@@ -357,7 +485,7 @@
   }
 
   function drawTradeBadge(ctx,text,x,y,maxWidth,accent){
-    ctx.save();ctx.textAlign='left';ctx.textBaseline='middle';ctx.font='800 25px "BIZ UDPGothic","Noto Sans JP",sans-serif';
+    ctx.save();ctx.textAlign='left';ctx.textBaseline='middle';ctx.font='800 25px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif';
     const label=clippedText(ctx,text||'建設業',maxWidth-34);const width=Math.min(maxWidth,ctx.measureText(label).width+34);
     ctx.fillStyle=accent;roundedRect(ctx,x,y,width,44,12);ctx.fill();ctx.fillStyle='#fff';ctx.fillText(label,x+17,y+23);ctx.restore();
   }
@@ -367,33 +495,39 @@
     ctx.fillStyle='#fff';ctx.fillRect(0,0,width,height);ctx.fillStyle=data.accent;ctx.fillRect(0,0,width,vertical?14:12);
     ctx.strokeStyle='rgba(16,36,61,.14)';ctx.lineWidth=2;ctx.strokeRect(vertical?34:28,vertical?34:28,width-(vertical?68:56),height-(vertical?68:56));ctx.textBaseline='alphabetic';ctx.textAlign='left';
     if(vertical){
-      const x=60,max=530;ctx.fillStyle=palette.mid;ctx.font='700 28px "BIZ UDPGothic","Noto Sans JP",sans-serif';if(data.company)ctx.fillText(clippedText(ctx,data.company,max),x,105);
-      ctx.fillStyle=palette.dark;ctx.font=`800 ${fitText(ctx,data.name,max,72,44,800)}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;ctx.fillText(data.name,x,225);
-      if(data.role){ctx.fillStyle=palette.mid;ctx.font='700 27px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText(clippedText(ctx,data.role,max),x,282);}
+      const x=60,max=530;ctx.fillStyle=palette.mid;ctx.font='700 28px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif';if(data.company)ctx.fillText(clippedText(ctx,data.company,max),x,105);
+      ctx.fillStyle=palette.dark;ctx.font=`800 ${fitText(ctx,data.name,max,72,44,800)}px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif`;ctx.fillText(data.name,x,225);
+      if(data.role){ctx.fillStyle=palette.mid;ctx.font='700 27px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif';ctx.fillText(clippedText(ctx,data.role,max),x,282);}
       drawTradeBadge(ctx,data.tradeName,x,315,max,data.accent);ctx.fillStyle=data.accent;ctx.fillRect(x,385,max,5);
       drawVerticalContactLines(ctx,data,x,465,target?330:max,64,'#20344a');
-      if(target){const q=165,qx=420,qy=770;drawQr(ctx,target,qx,qy,q);ctx.fillStyle=palette.dark;ctx.font='700 23px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.textAlign='center';ctx.fillText('WEB・LINE',qx+q/2,qy+q+36);ctx.textAlign='left';}
-      if(data.member){ctx.fillStyle=data.accent;ctx.font='700 23px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText('埼玉土建 上尾伊奈支部 組合員',x,1015);}
+      if(target){const q=165,qx=420,qy=770;drawQr(ctx,target,qx,qy,q);ctx.fillStyle=palette.dark;ctx.font='700 23px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif';ctx.textAlign='center';ctx.fillText('WEB・LINE',qx+q/2,qy+q+36);ctx.textAlign='left';}
+      if(data.member){ctx.fillStyle=data.accent;ctx.font='700 23px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif';ctx.fillText('埼玉土建 上尾伊奈支部 組合員',x,1015);}
       return;
     }
-    const x=75,max=target?650:925;ctx.fillStyle=palette.mid;ctx.font='700 27px "BIZ UDPGothic","Noto Sans JP",sans-serif';if(data.company)ctx.fillText(clippedText(ctx,data.company,max),x,95);
-    ctx.fillStyle=palette.dark;ctx.font=`800 ${fitText(ctx,data.name,max,78,46,800)}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;ctx.fillText(data.name,x,210);
-    if(data.role){ctx.fillStyle=palette.mid;ctx.font='700 26px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText(clippedText(ctx,data.role,max),x,268);}
+    const x=75,max=target?650:925;ctx.fillStyle=palette.mid;ctx.font='700 27px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif';if(data.company)ctx.fillText(clippedText(ctx,data.company,max),x,95);
+    ctx.fillStyle=palette.dark;ctx.font=`800 ${fitText(ctx,data.name,max,78,46,800)}px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif`;ctx.fillText(data.name,x,210);
+    if(data.role){ctx.fillStyle=palette.mid;ctx.font='700 26px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif';ctx.fillText(clippedText(ctx,data.role,max),x,268);}
     drawTradeBadge(ctx,data.tradeName,x,300,max,data.accent);ctx.fillStyle=data.accent;ctx.fillRect(x,365,max,5);
-    const details=[data.phone&&`TEL  ${data.phone}`,data.email&&`MAIL  ${data.email}`,data.address,[data.website&&`WEB  ${data.website}`,data.social&&`SNS  ${data.social}`].filter(Boolean).join('  ')].filter(Boolean);
-    ctx.fillStyle='#20344a';ctx.font='600 25px "BIZ UDPGothic","Noto Sans JP",sans-serif';details.slice(0,4).forEach((detail,index)=>ctx.fillText(clippedText(ctx,detail,max),x,425+index*52));
-    if(target){const q=190,qx=820,qy=350;drawQr(ctx,target,qx,qy,q);ctx.fillStyle=palette.dark;ctx.font='700 23px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.textAlign='center';ctx.fillText('WEB・LINE',qx+q/2,qy+q+36);ctx.textAlign='left';}
-    if(data.member){ctx.fillStyle=data.accent;ctx.font='700 23px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText('埼玉土建 上尾伊奈支部 組合員',x,620);}
+    contactDetails(data).forEach((detail,index)=>drawFittedLine(ctx,detail,x,415+index*43,max,25,15,600,'#20344a',false));
+    if(target){const q=190,qx=820,qy=350;drawQr(ctx,target,qx,qy,q);ctx.fillStyle=palette.dark;ctx.font='700 23px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif';ctx.textAlign='center';ctx.fillText('WEB・LINE',qx+q/2,qy+q+36);ctx.textAlign='left';}
+    if(data.member){ctx.fillStyle=data.accent;ctx.font='700 23px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif';ctx.fillText('埼玉土建 上尾伊奈支部 組合員',x,620);}
   }
 
   function drawTextOnlyBack(ctx,data,width,height){
     if(!data.useBack){ctx.fillStyle='#fff';ctx.fillRect(0,0,width,height);return;}
-    const vertical=data.orientation==='vertical';const palette=paletteFor(data);const suggestion=tradeSuggestions[data.trade]||tradeSuggestions.general;const tagline=data.tagline||suggestion.lines[0];const left=vertical?60:75;const max=width-left*2;
-    ctx.fillStyle='#fff';ctx.fillRect(0,0,width,height);ctx.fillStyle=data.accent;ctx.fillRect(0,0,width,vertical?14:12);ctx.fillStyle=palette.dark;ctx.font=`800 ${vertical?44:45}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;ctx.fillText(clippedText(ctx,data.company||data.name,max),left,vertical?105:95);
-    ctx.fillStyle=data.accent;ctx.font=`800 ${vertical?28:27}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;ctx.fillText(clippedText(ctx,tagline,max),left,vertical?165:155);
-    const blocks=[{label:'主な業務',text:data.services||suggestion.services},{label:'選ばれる理由',text:data.strengths||tagline},{label:'資格・許可',text:[data.qualifications,data.permit].filter(Boolean).join('／')||'資格・許可などの信頼情報'},{label:'対応エリア',text:data.area||'対応エリアをご入力ください'}];
-    const start=vertical?275:250;const gap=vertical?160:112;blocks.slice(0,vertical?4:3).forEach((block,index)=>{const y=start+index*gap;ctx.fillStyle=data.accent;ctx.font='800 26px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText(block.label,left,y);ctx.fillStyle='#24384d';ctx.font='600 25px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText(clippedText(ctx,block.text,max),left,y+45);});
-    const bottom=[data.hours,data.invoice].filter(Boolean).join('　｜　');if(bottom){ctx.fillStyle=palette.mid;ctx.font='600 23px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText(clippedText(ctx,bottom,max),left,vertical?1015:610);}
+    const vertical=data.orientation==='vertical';const palette=paletteFor(data);
+    ctx.fillStyle='#fff';ctx.fillRect(0,0,width,height);ctx.fillStyle=data.accent;ctx.fillRect(0,0,width,vertical?14:12);
+    drawBackInformation(ctx,data,width,height,{
+      vertical,
+      panelX:vertical?28:30,
+      panelY:vertical?26:24,
+      panelWidth:width-(vertical?56:60),
+      panelHeight:height-(vertical?52:48),
+      titleColor:palette.dark,
+      valueColor:'#24384d',
+      mutedColor:palette.mid,
+      labelColor:data.accent
+    });
   }
 
   function drawPhoto(ctx, image, x, y, size, accent) {
@@ -468,19 +602,12 @@
   }
 
   function sceneFont(style,weight,size) {
-    const family=style==='fireworks'?'"BIZ UDPMincho","Yu Mincho","Hiragino Mincho ProN",serif':'"BIZ UDPGothic","Noto Sans JP",sans-serif';
+    const family=style==='fireworks'?'"BIZ UDPMincho","Yu Mincho","Hiragino Mincho ProN",serif':'"BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif';
     return `${weight} ${size}px ${family}`;
   }
 
   function sceneDetails(ctx,data,x,startY,maxWidth,lineHeight,color,fontSize=25) {
-    const details=[
-      data.phone&&`TEL  ${data.phone}`,
-      data.email&&`MAIL  ${data.email}`,
-      data.address,
-      [data.website&&`WEB  ${data.website}`,data.social&&`SNS  ${data.social}`].filter(Boolean).join('  ')
-    ].filter(Boolean);
-    ctx.fillStyle=color;ctx.font=sceneFont(data.style,600,fontSize);
-    details.slice(0,4).forEach((detail,index)=>ctx.fillText(clippedText(ctx,detail,maxWidth),x,startY+index*lineHeight));
+    contactDetails(data).forEach((detail,index)=>drawFittedLine(ctx,detail,x,startY+index*lineHeight,maxWidth,fontSize,14,600,color,data.style==='fireworks'));
   }
 
   function drawSceneFront(ctx,data,width,height) {
@@ -494,7 +621,7 @@
       ctx.fillStyle=palette.dark;ctx.font=sceneFont(data.style,800,fitText(ctx,data.name,max,76,45,800));ctx.fillText(data.name,left,205);
       if(data.role){ctx.fillStyle='#37506e';ctx.font=sceneFont(data.style,700,27);ctx.fillText(clippedText(ctx,data.role,max),left,255);}
       drawTradeBadge(ctx,data.tradeName,left,278,max,data.accent);ctx.fillStyle=data.accent;ctx.fillRect(left,355,max,6);
-      sceneDetails(ctx,data,left,410,max,54,'#19324d',24);
+      sceneDetails(ctx,data,left,398,max,43,'#19324d',24);
       const artX=width*.86,artY=height*.18,artSize=target?118:172;
       if(photoImage)drawPhoto(ctx,photoImage,artX,artY,artSize*.82,data.accent);else if(data.illustration!=='none')drawTradeIllustration(ctx,data.trade,artX,artY,artSize,'#ffffff',true);
       if(target){const qx=width-qrSize-55,qy=height-qrSize-55;drawQr(ctx,target,qx,qy,qrSize);ctx.fillStyle='#ffffff';ctx.font=sceneFont(data.style,700,20);ctx.textAlign='center';ctx.fillText('WEB・LINE',qx+qrSize/2,qy+qrSize+29);ctx.textAlign='left';}
@@ -510,7 +637,7 @@
       drawTradeBadge(ctx,data.tradeName,right,height*.405,max,data.accent);
       if(photoImage)drawPhoto(ctx,photoImage,width*.88,height*.16,112,data.accent);else if(data.illustration!=='none')drawTradeIllustration(ctx,data.trade,width*.88,height*.16,110,'#ffffff',true);
       const left=62,detailMax=target?560:930;ctx.fillStyle='#ffffff';ctx.font=sceneFont(data.style,700,31);if(data.company)ctx.fillText(clippedText(ctx,data.company,detailMax),left,height*.61);
-      sceneDetails(ctx,data,left,height*.7,detailMax,50,'#eef8fa',23);
+      sceneDetails(ctx,data,left,height*.68,detailMax,38,'#eef8fa',23);
       if(target){const qx=width-qrSize-52,qy=height-qrSize-48;drawQr(ctx,target,qx,qy,qrSize);ctx.fillStyle='#fff';ctx.font=sceneFont(data.style,700,19);ctx.textAlign='center';ctx.fillText('WEB・LINE',qx+qrSize/2,qy+qrSize+27);ctx.textAlign='left';}
       if(data.member){ctx.fillStyle=data.accent;ctx.font=sceneFont(data.style,700,19);ctx.fillText('埼玉土建 上尾伊奈支部 組合員',right,height-30);}
       return;
@@ -528,23 +655,23 @@
   }
 
   function drawSceneBack(ctx,data,width,height) {
-    const palette=paletteFor(data);const suggestion=tradeSuggestions[data.trade]||tradeSuggestions.general;const tagline=data.tagline||suggestion.lines[0];
+    const palette=paletteFor(data);
     if(data.style==='ichimatsu'){ctx.fillStyle='#fff';ctx.fillRect(0,0,width,height);drawIchimatsuArc(ctx,width,height,palette.dark,palette.mid,data.accent);ctx.fillStyle='#f3f7fc';ctx.fillRect(0,height*.78,width,height*.22);}
     else if(data.style==='fireworks'){const g=ctx.createLinearGradient(0,0,width,height);g.addColorStop(0,'#056178');g.addColorStop(1,'#073f59');ctx.fillStyle=g;ctx.fillRect(0,0,width,height);drawFireworkBurst(ctx,width*.86,height*.18,height*.13,'#ffffff',.55);drawFireworkBurst(ctx,width*.72,height*.43,height*.08,data.accent,.68);}
     else{ctx.fillStyle=palette.dark;ctx.fillRect(0,0,width,height);drawTownscape(ctx,width,height,'#ffffff',.18);ctx.fillStyle=data.accent;ctx.fillRect(0,0,width,11);}
-    const darkText=data.style==='ichimatsu';const ink=darkText?palette.dark:'#ffffff';const muted=darkText?'#344b66':'#eef4f7';const left=70,max=width*.54;
-    if(data.style==='ichimatsu'){
-      ctx.fillStyle='rgba(255,255,255,.96)';roundedRect(ctx,34,28,width*.61,height*.72,24);ctx.fill();
-    }
-    ctx.fillStyle=ink;ctx.font=sceneFont(data.style,800,45);ctx.fillText(clippedText(ctx,data.company||data.name,max),left,92);
-    ctx.fillStyle=data.accent;ctx.font=sceneFont(data.style,800,25);ctx.fillText(clippedText(ctx,tagline,max),left,145);
-    const blocks=[
-      {label:'主な業務',text:data.services||suggestion.services},
-      {label:'資格・許可',text:[data.qualifications,data.permit].filter(Boolean).join('／')||'資格・許可・保険などの信頼情報'},
-      {label:'対応エリア・強み',text:[data.area,data.strengths].filter(Boolean).join('／')||'対応エリア・選ばれる理由'}
-    ];
-    blocks.forEach((block,index)=>{const y=height*(.37+index*.19);ctx.fillStyle=data.accent;ctx.font=sceneFont(data.style,800,23);ctx.fillText(block.label,left,y);ctx.fillStyle=muted;ctx.font=sceneFont(data.style,600,22);ctx.fillText(clippedText(ctx,block.text,max),left,y+43);});
-    const bottom=[data.experience,data.achievements,data.ccus,data.insurance,data.hours].filter(Boolean).join('　｜　');if(bottom){ctx.fillStyle=muted;ctx.font=sceneFont(data.style,600,19);ctx.fillText(clippedText(ctx,bottom,max),left,height-35);}
+    drawBackInformation(ctx,data,width,height,{
+      vertical:false,
+      panelX:30,
+      panelY:24,
+      panelWidth:width-60,
+      panelHeight:height-48,
+      panelColor:'rgba(8,29,52,.94)',
+      titleColor:'#ffffff',
+      valueColor:'#f4f8fb',
+      mutedColor:'#e7f0f7',
+      labelColor:data.accent,
+      serif:data.style==='fireworks'
+    });
   }
 
   function drawStyleTexture(ctx,data,width,height) {
@@ -607,15 +734,7 @@
   }
 
   function drawVerticalContactLines(ctx,data,x,startY,maxWidth,lineHeight,color){
-    const details=[
-      data.phone&&`TEL  ${data.phone}`,
-      data.email&&`MAIL  ${data.email}`,
-      data.address,
-      data.website&&`WEB  ${data.website}`,
-      data.social&&`SNS  ${data.social}`
-    ].filter(Boolean);
-    ctx.fillStyle=color;ctx.font='600 25px "BIZ UDPGothic","Noto Sans JP",sans-serif';
-    details.slice(0,5).forEach((detail,index)=>ctx.fillText(clippedText(ctx,detail,maxWidth),x,startY+index*lineHeight));
+    contactDetails(data).forEach((detail,index)=>drawFittedLine(ctx,detail,x,startY+index*lineHeight,maxWidth,25,14,600,color,false));
   }
 
   function drawFrontVertical(ctx,data,width,height){
@@ -624,71 +743,70 @@
     if(data.style==='ink_black'){
       ctx.fillStyle='#090b0e';ctx.fillRect(0,0,width,height);ctx.fillStyle='#24282d';ctx.fillRect(width*.72,0,width*.28,height);ctx.fillStyle=data.accent;ctx.fillRect(width*.72,0,5,height);
       ctx.fillStyle='rgba(255,255,255,.07)';for(let y=0;y<height;y+=32){ctx.fillRect(width*.75,y,width*.25,1);}
-      const x=58,max=530;ctx.fillStyle='rgba(255,255,255,.76)';ctx.font='700 27px "BIZ UDPGothic","Noto Sans JP",sans-serif';if(data.company)ctx.fillText(clippedText(ctx,data.company,max),x,105);
+      const x=58,max=530;ctx.fillStyle='rgba(255,255,255,.76)';ctx.font='700 27px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif';if(data.company)ctx.fillText(clippedText(ctx,data.company,max),x,105);
       if(photoImage)drawPhoto(ctx,photoImage,width/2,255,180,data.accent);else if(data.illustration!=='none')drawTradeIllustration(ctx,data.trade,width/2,255,175,'#fff',true);
-      ctx.fillStyle='#fff';ctx.font=`800 ${fitText(ctx,data.name,max,70,43,800)}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;ctx.fillText(data.name,x,445);
-      if(data.role){ctx.fillStyle='rgba(255,255,255,.72)';ctx.font='700 26px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText(clippedText(ctx,data.role,max),x,500);}
+      ctx.fillStyle='#fff';ctx.font=`800 ${fitText(ctx,data.name,max,70,43,800)}px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif`;ctx.fillText(data.name,x,445);
+      if(data.role){ctx.fillStyle='rgba(255,255,255,.72)';ctx.font='700 26px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif';ctx.fillText(clippedText(ctx,data.role,max),x,500);}
       drawTradeBadge(ctx,data.tradeName,x,530,max,data.accent);ctx.fillStyle=data.accent;ctx.fillRect(x,590,max,5);
       drawVerticalContactLines(ctx,data,x,665,target?330:max,58,'rgba(255,255,255,.9)');
-      if(target){const q=165,qx=425,qy=745;drawQr(ctx,target,qx,qy,q);ctx.fillStyle='#fff';ctx.font='700 23px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.textAlign='center';ctx.fillText('WEB・LINE',qx+q/2,qy+q+36);ctx.textAlign='left';}
-      if(data.member){ctx.fillStyle=data.accent;ctx.font='700 23px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText('埼玉土建 上尾伊奈支部 組合員',x,1020);}
+      if(target){const q=165,qx=425,qy=745;drawQr(ctx,target,qx,qy,q);ctx.fillStyle='#fff';ctx.font='700 23px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif';ctx.textAlign='center';ctx.fillText('WEB・LINE',qx+q/2,qy+q+36);ctx.textAlign='left';}
+      if(data.member){ctx.fillStyle=data.accent;ctx.font='700 23px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif';ctx.fillText('埼玉土建 上尾伊奈支部 組合員',x,1020);}
       return;
     }
     if(mode==='stripe'){
       ctx.fillStyle='#f7fafc';ctx.fillRect(0,0,width,height);ctx.fillStyle=palette.dark;ctx.fillRect(0,0,155,height);ctx.fillStyle=data.accent;ctx.fillRect(155,0,10,height);drawStyleTexture(ctx,data,width,height);
       if(photoImage)drawPhoto(ctx,photoImage,78,190,112,data.accent);else if(data.illustration!=='none')drawTradeIllustration(ctx,data.trade,78,190,112,'#fff',true);
       const x=200,max=400;
-      ctx.fillStyle=palette.mid;ctx.font='700 28px "BIZ UDPGothic","Noto Sans JP",sans-serif';if(data.company)ctx.fillText(clippedText(ctx,data.company,max),x,120);
+      ctx.fillStyle=palette.mid;ctx.font='700 28px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif';if(data.company)ctx.fillText(clippedText(ctx,data.company,max),x,120);
       drawTradeBadge(ctx,data.tradeName,x,145,max,data.accent);
-      ctx.fillStyle=palette.dark;ctx.font=`800 ${fitText(ctx,data.name,max,70,43,800)}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;ctx.fillText(data.name,x,255);
-      if(data.role){ctx.fillStyle=palette.mid;ctx.font='700 27px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText(clippedText(ctx,data.role,max),x,310);}
+      ctx.fillStyle=palette.dark;ctx.font=`800 ${fitText(ctx,data.name,max,70,43,800)}px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif`;ctx.fillText(data.name,x,255);
+      if(data.role){ctx.fillStyle=palette.mid;ctx.font='700 27px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif';ctx.fillText(clippedText(ctx,data.role,max),x,310);}
       ctx.fillStyle=data.accent;ctx.fillRect(x,350,max,7);
       drawVerticalContactLines(ctx,data,x,425,max,64,'#20344a');
-      if(target){const q=170,qx=width-q-48,qy=790;drawQr(ctx,target,qx,qy,q);ctx.fillStyle=palette.dark;ctx.font='700 24px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.textAlign='center';ctx.fillText('WEB・LINE',qx+q/2,qy+q+38);ctx.textAlign='left';}
-      if(data.member){ctx.fillStyle=data.accent;ctx.font='700 24px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText('埼玉土建 上尾伊奈支部 組合員',x,1020);}
+      if(target){const q=170,qx=width-q-48,qy=790;drawQr(ctx,target,qx,qy,q);ctx.fillStyle=palette.dark;ctx.font='700 24px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif';ctx.textAlign='center';ctx.fillText('WEB・LINE',qx+q/2,qy+q+38);ctx.textAlign='left';}
+      if(data.member){ctx.fillStyle=data.accent;ctx.font='700 24px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif';ctx.fillText('埼玉土建 上尾伊奈支部 組合員',x,1020);}
       return;
     }
 
     if(mode==='photo'){
       const g=ctx.createLinearGradient(0,0,0,height);g.addColorStop(0,palette.dark);g.addColorStop(.4,palette.mid);g.addColorStop(.401,'#fff');g.addColorStop(1,'#fff');ctx.fillStyle=g;ctx.fillRect(0,0,width,height);drawStyleTexture(ctx,data,width,height);
       if(photoImage)drawPhoto(ctx,photoImage,width/2,205,235,data.accent);else if(data.illustration!=='none')drawTradeIllustration(ctx,data.trade,width/2,205,220,'#fff',true);
-      ctx.textAlign='center';ctx.fillStyle='#fff';ctx.font='700 27px "BIZ UDPGothic","Noto Sans JP",sans-serif';if(data.company)ctx.fillText(clippedText(ctx,data.company,540),width/2,360);
-      ctx.fillStyle=palette.dark;ctx.font=`800 ${fitText(ctx,data.name,540,68,42,800)}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;ctx.fillText(data.name,width/2,505);
-      if(data.role){ctx.fillStyle=palette.mid;ctx.font='700 27px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText(clippedText(ctx,data.role,500),width/2,555);}
+      ctx.textAlign='center';ctx.fillStyle='#fff';ctx.font='700 27px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif';if(data.company)ctx.fillText(clippedText(ctx,data.company,540),width/2,360);
+      ctx.fillStyle=palette.dark;ctx.font=`800 ${fitText(ctx,data.name,540,68,42,800)}px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif`;ctx.fillText(data.name,width/2,505);
+      if(data.role){ctx.fillStyle=palette.mid;ctx.font='700 27px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif';ctx.fillText(clippedText(ctx,data.role,500),width/2,555);}
       ctx.textAlign='left';drawTradeBadge(ctx,data.tradeName,55,570,540,data.accent);ctx.fillStyle=data.accent;ctx.fillRect(55,625,540,7);
       drawVerticalContactLines(ctx,data,60,700,target?330:530,60,'#20344a');
-      if(target){const q=165,qx=430,qy=745;drawQr(ctx,target,qx,qy,q);ctx.fillStyle=palette.dark;ctx.font='700 23px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.textAlign='center';ctx.fillText('WEB・LINE',qx+q/2,qy+q+36);ctx.textAlign='left';}
-      if(data.member){ctx.fillStyle=data.accent;ctx.font='700 23px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText('埼玉土建 上尾伊奈支部 組合員',60,1020);}
+      if(target){const q=165,qx=430,qy=745;drawQr(ctx,target,qx,qy,q);ctx.fillStyle=palette.dark;ctx.font='700 23px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif';ctx.textAlign='center';ctx.fillText('WEB・LINE',qx+q/2,qy+q+36);ctx.textAlign='left';}
+      if(data.member){ctx.fillStyle=data.accent;ctx.font='700 23px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif';ctx.fillText('埼玉土建 上尾伊奈支部 組合員',60,1020);}
       return;
     }
 
     ctx.fillStyle='#fff';ctx.fillRect(0,0,width,height);ctx.fillStyle=palette.dark;ctx.fillRect(0,0,width,270);ctx.fillStyle=data.accent;ctx.fillRect(0,270,width,10);drawStyleTexture(ctx,data,width,height);
     if(photoImage)drawPhoto(ctx,photoImage,width/2,155,175,data.accent);else if(data.illustration!=='none')drawTradeIllustration(ctx,data.trade,width/2,155,170,'#fff',true);
-    ctx.textAlign='center';ctx.fillStyle=palette.mid;ctx.font='700 28px "BIZ UDPGothic","Noto Sans JP",sans-serif';if(data.company)ctx.fillText(clippedText(ctx,data.company,540),width/2,355);
-    ctx.fillStyle=palette.dark;ctx.font=`800 ${fitText(ctx,data.name,540,72,44,800)}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;ctx.fillText(data.name,width/2,455);
-    if(data.role){ctx.fillStyle=palette.mid;ctx.font='700 27px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText(clippedText(ctx,data.role,500),width/2,510);}
+    ctx.textAlign='center';ctx.fillStyle=palette.mid;ctx.font='700 28px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif';if(data.company)ctx.fillText(clippedText(ctx,data.company,540),width/2,355);
+    ctx.fillStyle=palette.dark;ctx.font=`800 ${fitText(ctx,data.name,540,72,44,800)}px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif`;ctx.fillText(data.name,width/2,455);
+    if(data.role){ctx.fillStyle=palette.mid;ctx.font='700 27px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif';ctx.fillText(clippedText(ctx,data.role,500),width/2,510);}
     ctx.textAlign='left';drawTradeBadge(ctx,data.tradeName,55,530,540,data.accent);ctx.fillStyle=data.accent;ctx.fillRect(55,590,540,7);
     drawVerticalContactLines(ctx,data,60,665,target?330:530,60,'#20344a');
-    if(target){const q=165,qx=430,qy=710;drawQr(ctx,target,qx,qy,q);ctx.fillStyle=palette.dark;ctx.font='700 23px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.textAlign='center';ctx.fillText('WEB・LINE',qx+q/2,qy+q+36);ctx.textAlign='left';}
-    if(data.member){ctx.fillStyle=data.accent;ctx.font='700 23px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText('埼玉土建 上尾伊奈支部 組合員',60,1020);}
+    if(target){const q=165,qx=430,qy=710;drawQr(ctx,target,qx,qy,q);ctx.fillStyle=palette.dark;ctx.font='700 23px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif';ctx.textAlign='center';ctx.fillText('WEB・LINE',qx+q/2,qy+q+36);ctx.textAlign='left';}
+    if(data.member){ctx.fillStyle=data.accent;ctx.font='700 23px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif';ctx.fillText('埼玉土建 上尾伊奈支部 組合員',60,1020);}
   }
 
   function drawBackVertical(ctx,data,width,height){
     if(!data.useBack){ctx.fillStyle='#fff';ctx.fillRect(0,0,width,height);return;}
     const palette=paletteFor(data);const gradient=ctx.createLinearGradient(0,0,0,height);gradient.addColorStop(0,palette.dark);gradient.addColorStop(1,palette.mid);ctx.fillStyle=gradient;ctx.fillRect(0,0,width,height);ctx.fillStyle=data.accent;ctx.fillRect(0,0,width,14);
-    const left=58,max=534;ctx.fillStyle='#fff';ctx.font='800 45px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText(clippedText(ctx,data.company||data.name,max),left,105);
-    const suggestion=tradeSuggestions[data.trade]||tradeSuggestions.general;const tagline=data.tagline||suggestion.lines[0];
-    ctx.fillStyle=data.accent;ctx.font='800 28px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText(clippedText(ctx,tagline,max),left,165);
-    const blocks=[
-      {key:'services',label:'主な業務',text:data.services||suggestion.services},
-      {key:'qualifications',label:'資格・許可',text:[data.qualifications,data.permit].filter(Boolean).join('／')||'資格・許可・保険などの信頼情報'},
-      {key:'area',label:'対応エリア',text:data.area||'対応エリアをご入力ください'},
-      {key:'message',label:'選ばれる理由',text:data.strengths||tagline},
-      {key:'trust',label:'信頼情報',text:[data.experience,data.achievements,data.ccus,data.insurance].filter(Boolean).join('／')}
-    ].filter(block=>block.text);
-    blocks.sort((a,b)=>(a.key===data.backFocus?-1:b.key===data.backFocus?1:0));
-    blocks.slice(0,4).forEach((block,index)=>{const y=270+index*165;ctx.fillStyle=data.accent;ctx.font='800 27px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText(block.label,left,y);ctx.fillStyle='#fff';ctx.font='600 25px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText(clippedText(ctx,block.text,max),left,y+48);});
-    const bottom=[data.hours,data.invoice].filter(Boolean).join('　｜　');if(bottom){ctx.fillStyle='rgba(255,255,255,.92)';ctx.font='600 23px "BIZ UDPGothic","Noto Sans JP",sans-serif';ctx.fillText(clippedText(ctx,bottom,max),left,1015);}
+    drawBackInformation(ctx,data,width,height,{
+      vertical:true,
+      panelX:28,
+      panelY:24,
+      panelWidth:width-56,
+      panelHeight:height-48,
+      panelColor:'rgba(7,25,45,.7)',
+      titleColor:'#ffffff',
+      valueColor:'#f4f7fb',
+      mutedColor:'#e5edf5',
+      labelColor:data.accent
+    });
   }
 
   function drawSignatureBackground(ctx,data,palette,width,height){
@@ -794,30 +912,23 @@
     if(family==='card'||family==='photo'){ctx.fillStyle='rgba(255,255,255,.94)';roundedRect(ctx,width*.035,height*.045,width*.62,height*.91,22);ctx.fill();}
     const companyX=left;const companyWidth=contentWidth;
     ctx.fillStyle = isDark?'#fff':palette.mid;
-    ctx.font = `700 ${Math.max(25,Math.round(height*.04))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;
+    ctx.font = `700 ${Math.max(25,Math.round(height*.04))}px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif`;
     if (data.company) ctx.fillText(clippedText(ctx, data.company, companyWidth), companyX, height*.14);
     ctx.fillStyle = isDark?'#fff':palette.dark;
     const nameSize = fitText(ctx, data.name, contentWidth, height*.115, height*.07, 800);
-    ctx.font = `800 ${nameSize}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;
+    ctx.font = `800 ${nameSize}px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif`;
     ctx.fillText(data.name, left, height*.285);
     if (data.role) {
       ctx.fillStyle = isDark?'rgba(255,255,255,.82)':palette.mid;
-      ctx.font = `700 ${Math.max(25,Math.round(height*.035))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;
+      ctx.font = `700 ${Math.max(25,Math.round(height*.035))}px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif`;
       ctx.fillText(clippedText(ctx, data.role, contentWidth), left, height*.37);
     }
     drawTradeBadge(ctx,data.tradeName,left,height*.395,contentWidth,data.accent);
     ctx.fillStyle=data.accent;ctx.fillRect(left,height*.475,contentWidth,height*.008);
-    const details = [
-      data.phone && `TEL  ${data.phone}`,
-      data.email && `MAIL  ${data.email}`,
-      data.address,
-      [data.website&&`WEB  ${data.website}`,data.social&&`SNS  ${data.social}`].filter(Boolean).join('  ')
-    ].filter(Boolean);
-    ctx.fillStyle = isDark?'rgba(255,255,255,.92)':'#20344a';
-    ctx.font = `600 ${Math.max(25,Math.round(height*.027))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;
-    details.slice(0,4).forEach((detail,index) => ctx.fillText(clippedText(ctx, detail, contentWidth), left, height*(.56 + index*.085)));
+    const contactColor = isDark?'rgba(255,255,255,.92)':'#20344a';
+    contactDetails(data).forEach((detail,index) => drawFittedLine(ctx,detail,left,height*(.545+index*.072),contentWidth,Math.max(25,Math.round(height*.027)),14,600,contactColor,false));
     if (data.member) {
-      ctx.fillStyle = data.accent; ctx.font = `700 ${Math.max(25,Math.round(height*.022))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;
+      ctx.fillStyle = data.accent; ctx.font = `700 ${Math.max(25,Math.round(height*.022))}px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif`;
       ctx.fillText('埼玉土建 上尾伊奈支部 組合員', left, height*.925);
     }
     const target=qrTarget(data);
@@ -829,7 +940,7 @@
     if(target){
       const qrSize=Math.round(width*20/91);const qrX=isBand?width*.05:width-qrSize-width*.055;const qrY=height*.49;
       drawQr(ctx,target,qrX,qrY,qrSize);
-      ctx.fillStyle=isBand||isDark||rightDark?'#fff':palette.dark;ctx.font=`700 ${Math.max(25,Math.round(height*.021))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;ctx.textAlign='center';ctx.fillText('WEB・LINE・施工事例',qrX+qrSize/2,qrY+qrSize+height*.045);ctx.textAlign='left';
+      ctx.fillStyle=isBand||isDark||rightDark?'#fff':palette.dark;ctx.font=`700 ${Math.max(25,Math.round(height*.021))}px "BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif`;ctx.textAlign='center';ctx.fillText('WEB・LINE・施工事例',qrX+qrSize/2,qrY+qrSize+height*.045);ctx.textAlign='left';
     }
   }
 
@@ -844,28 +955,18 @@
     ctx.fillStyle = gradient; ctx.fillRect(0,0,width,height);
     ctx.fillStyle = data.accent; ctx.fillRect(0,0,width,16);
     ctx.fillStyle = colorWithAlpha(data.accent,.14); ctx.beginPath(); ctx.arc(width*.9,height*.14,width*.25,0,Math.PI*2); ctx.fill();
-    if (data.illustration === 'auto') drawTradeIllustration(ctx,data.trade,width*.86,height*.2,height*.24,'rgba(255,255,255,.72)',true);
-    const left = width*.08; const max = width*.82;
-    ctx.fillStyle = '#fff'; ctx.font = `800 ${Math.max(25,Math.round(height*.072))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;
-    ctx.fillText(clippedText(ctx,data.company || data.name,width*.64),left,height*.16);
-    const suggestion=tradeSuggestions[data.trade]||tradeSuggestions.general;const tagline=data.tagline||suggestion.lines[0];
-    ctx.fillStyle=data.accent;ctx.font=`800 ${Math.max(25,Math.round(height*.034))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;ctx.fillText(clippedText(ctx,tagline,max),left,height*.26);
-    const standardBlocks = [
-      { key: 'services', label: '主な業務', text: data.services||suggestion.services },
-      { key: 'qualifications', label: '資格・許可', text: [data.qualifications,data.permit].filter(Boolean).join('／')||'資格・許可・保険などの信頼情報' },
-      { key: 'area', label: '対応エリア', text: data.area||'対応エリアをご入力ください' },
-      { key: 'message', label: '選ばれる理由', text: data.strengths||tagline },
-      { key: 'trust', label: '信頼情報', text: [data.experience,data.achievements,data.ccus,data.insurance].filter(Boolean).join('／') }
-    ];
-    const blocks=standardBlocks.filter(block => block.text);
-    blocks.sort((a,b) => (a.key === data.backFocus ? -1 : b.key === data.backFocus ? 1 : 0));
-    blocks.slice(0,3).forEach((block,index) => {
-      const labelY = height*(.38 + index*.19);
-      ctx.fillStyle = data.accent; ctx.font = `800 ${Math.max(25,Math.round(height*.031))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`; ctx.fillText(block.label,left,labelY);
-      ctx.fillStyle = '#fff'; ctx.font = `600 ${Math.max(25,Math.round(height*.029))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`; ctx.fillText(clippedText(ctx,block.text,max),left,labelY+height*.062);
+    drawBackInformation(ctx,data,width,height,{
+      vertical:false,
+      panelX:28,
+      panelY:24,
+      panelWidth:width-56,
+      panelHeight:height-48,
+      panelColor:'rgba(7,25,45,.72)',
+      titleColor:'#ffffff',
+      valueColor:'#f4f7fb',
+      mutedColor:'#e5edf5',
+      labelColor:data.accent
     });
-    const bottom = [data.hours,data.invoice].filter(Boolean).join('　｜　');
-    if(bottom){ctx.fillStyle='rgba(255,255,255,.92)';ctx.font=`600 ${Math.max(25,Math.round(height*.025))}px "BIZ UDPGothic","Noto Sans JP",sans-serif`;ctx.fillText(clippedText(ctx,bottom,max),left,height*.95);}
   }
 
   function renderToCanvas(canvas, side, includeBleed) {
@@ -1257,4 +1358,7 @@
   syncPhotoControls();
   syncTradeUI();
   syncKeyOptions();
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(() => queueRender()).catch(() => {});
+  }
 })();
