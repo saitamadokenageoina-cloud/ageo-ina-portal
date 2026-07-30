@@ -1,6 +1,6 @@
 :root{--card-orange:#e8612a;--card-navy:#10243d;}
 *{box-sizing:border-box;}
-.meishi-main{padding-bottom:26px;}
+.meishi-main{padding-bottom:26px;font-family:"BIZ UDPGothic","BIZ UDPゴシック","M PLUS 1p","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif;}
 .hdr-right{text-align:right;}
 .meishi-hero{display:flex;gap:14px;align-items:center;padding:20px;margin-bottom:14px;border-radius:20px;color:#fff;background:linear-gradient(135deg,#10243d,#1a5fa8);box-shadow:0 12px 30px rgba(16,36,61,.24);}
 .hero-mark{width:54px;height:54px;flex:0 0 54px;display:grid;place-items:center;border-radius:17px;background:rgba(255,255,255,.14);font-size:30px;color:#ffc56d;}
@@ -22,7 +22,7 @@
 .field{display:flex;flex-direction:column;gap:6px;min-width:0;color:var(--navy);font-size:13px;font-weight:700;}
 .field[hidden],#back-fields[hidden]{display:none!important;}
 .field span em{font-style:normal;color:var(--orange);font-size:10px;}
-.field input,.field select{width:100%;min-height:48px;border:1px solid var(--gray300);border-radius:11px;padding:10px 12px;background:var(--white);color:var(--gray800);font:inherit;font-weight:500;outline:none;}
+.field input,.field select{width:100%;min-height:50px;border:1px solid var(--gray300);border-radius:11px;padding:10px 12px;background:var(--white);color:var(--gray800);font-family:inherit;font-size:16px;font-weight:500;line-height:1.4;outline:none;}
 .field input:focus,.field select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(26,95,168,.14);}
 .field input::placeholder{color:var(--gray400);font-weight:400;}
 .basic-fields{padding:12px;border:1px solid rgba(26,95,168,.18);border-radius:14px;background:rgba(26,95,168,.05);}
