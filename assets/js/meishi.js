@@ -370,7 +370,7 @@
 
   function backInformation(data) {
     const tagline = data.tagline;
-    const blocks = [
+    let blocks = [
       { key: 'services', label: '主な業務', text: data.services },
       { key: 'message', label: '選ばれる理由', text: data.strengths },
       { key: 'area', label: '対応エリア', text: data.area },
@@ -380,11 +380,21 @@
       { key: 'trust', label: 'CCUS・所属団体', text: data.ccus },
       { key: 'trust', label: '保険・保証', text: data.insurance }
     ].filter(block => block.text);
+    const isSample = blocks.length === 0;
+    if (isSample) {
+      blocks = [
+        { key: 'services', label: '主な仕事内容', text: '入力すると、主な工事内容が表示されます' },
+        { key: 'message', label: '得意な工事・強み', text: '入力すると、選ばれる理由が表示されます' },
+        { key: 'area', label: '対応エリア', text: '入力すると、対応できる地域が表示されます' },
+        { key: 'qualifications', label: '資格・許可', text: '入力すると、資格や許可番号が表示されます' }
+      ];
+    }
     const focused = blocks.filter(block => block.key === data.backFocus);
     const remaining = blocks.filter(block => block.key !== data.backFocus);
     return {
       tagline,
       blocks: focused.concat(remaining),
+      isSample,
       footer: [
         { label: '営業時間・緊急対応', text: data.hours },
         { label: 'インボイス', text: data.invoice }
@@ -408,7 +418,9 @@
     const titleY = panelY + (vertical ? 65 : 52);
     const taglineY = titleY + (vertical ? 55 : 43);
     const bodyY = info.tagline ? taglineY + (vertical ? 64 : 58) : titleY + (vertical ? 52 : 46);
-    const footerHeight = info.footer.length ? (vertical ? 98 : 56) : 12;
+    const target = qrTarget(data);
+    const qrSize = target ? 220 : 0;
+    const footerHeight = target ? (vertical ? 250 : 230) : (info.footer.length ? (vertical ? 98 : 56) : 12);
     const footerY = panelY + panelHeight - footerHeight;
     const rows = Math.max(1, vertical ? info.blocks.length : Math.ceil(info.blocks.length / columns));
     const rowHeight = (footerY - bodyY - 8) / rows;
@@ -423,7 +435,7 @@
       ctx.fill();
     }
 
-    drawFittedLine(ctx, data.company || data.name, left, titleY, usableWidth, vertical ? 42 : 39, vertical ? 25 : 23, 800, titleColor, options.serif);
+    drawFittedLine(ctx, data.company || data.name || '名刺の裏面（見本）', left, titleY, usableWidth, vertical ? 42 : 39, vertical ? 25 : 23, 800, titleColor, options.serif);
     if (info.tagline) {
       const tagline = fittedWrappedText(ctx, info.tagline, usableWidth, 2, vertical ? 26 : 23, 17, 800, options.serif);
       setReadableFont(ctx, 800, tagline.size, options.serif);
@@ -438,62 +450,33 @@
       const y = bodyY + row * rowHeight;
       const labelSize = vertical ? 20 : 18;
       setReadableFont(ctx, 800, labelSize, options.serif);
-      ctx.fillStyle = labelColor;
+      ctx.fillStyle = info.isSample ? mutedColor : labelColor;
       ctx.fillText(block.label, x, y + labelSize);
-      const value = fittedWrappedText(ctx, block.text, columnWidth, 3, vertical ? 20 : 18, 14, 600, options.serif);
-      setReadableFont(ctx, 600, value.size, options.serif);
-      ctx.fillStyle = valueColor;
+      const availableValueHeight = Math.max(24, rowHeight - labelSize - 12);
+      const maxValueLines = Math.max(1, Math.min(3, Math.floor(availableValueHeight / (vertical ? 23 : 21))));
+      const initialValueSize = Math.min(vertical ? 20 : 18, Math.max(14, Math.floor(availableValueHeight / maxValueLines) - 4));
+      const value = fittedWrappedText(ctx, block.text, columnWidth, maxValueLines, initialValueSize, 14, info.isSample ? 500 : 600, options.serif);
+      setReadableFont(ctx, info.isSample ? 500 : 600, value.size, options.serif);
+      ctx.fillStyle = info.isSample ? mutedColor : valueColor;
       drawLines(ctx, value.lines, x, y + labelSize + value.size + 8, value.size + 4);
     });
 
     const footerGap = vertical ? 8 : 30;
-    const footerColumnWidth = vertical ? usableWidth : (usableWidth - footerGap) / 2;
+    const footerUsableWidth = target ? Math.max(180, usableWidth - qrSize - (vertical ? 28 : 40)) : usableWidth;
+    const footerColumnWidth = vertical ? footerUsableWidth : (footerUsableWidth - footerGap) / 2;
     info.footer.forEach((item, index) => {
-      const x = vertical ? left : left + index * (footerColumnWidth + footerGap);
-      const y = footerY + (vertical ? index * 44 : 24);
+      const x = vertical ? left : left + (index % 2) * (footerColumnWidth + footerGap);
+      const y = footerY + (vertical ? 26 + index * 44 : 30);
       drawFittedLine(ctx, `${item.label}：${item.text}`, x, y, footerColumnWidth, vertical ? 17 : 16, 12, 600, mutedColor, options.serif);
     });
-  }
-
-  function colorLuminance(color) {
-    if (typeof color !== 'string') return .5;
-    const hex = color.trim().match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i);
-    let rgb;
-    if (hex) {
-      const value = hex[1].length === 3 ? hex[1].split('').map(char => char + char).join('') : hex[1];
-      rgb = [0, 2, 4].map(index => parseInt(value.slice(index, index + 2), 16));
-    } else {
-      const match = color.match(/rgba?\(\s*([\d.]+)[,\s]+([\d.]+)[,\s]+([\d.]+)/i);
-      if (!match) return .5;
-      rgb = match.slice(1, 4).map(Number);
+    if (target) {
+      const qrX = right - qrSize;
+      const qrY = panelY + panelHeight - qrSize - (vertical ? 18 : 12);
+      drawQr(ctx, target, qrX, qrY, qrSize);
+      drawFittedLine(ctx, '詳しくはこちら', qrX, qrY - 10, qrSize, 15, 12, 700, mutedColor, options.serif);
+    } else if (info.isSample) {
+      drawFittedLine(ctx, '※見本です。入力すると実際の内容へ切り替わります', left, panelY + panelHeight - 18, usableWidth, vertical ? 16 : 14, 12, 600, mutedColor, options.serif);
     }
-    const linear = rgb.map(value => {
-      const channel = value / 255;
-      return channel <= .03928 ? channel / 12.92 : Math.pow((channel + .055) / 1.055, 2.4);
-    });
-    return linear[0] * .2126 + linear[1] * .7152 + linear[2] * .0722;
-  }
-
-  function enableLegibleText(ctx) {
-    if (ctx.__dokenLegibleText) return;
-    const originalFillText = ctx.fillText.bind(ctx);
-    const originalStrokeText = ctx.strokeText.bind(ctx);
-    ctx.fillText = function(text, x, y, maxWidth) {
-      const sizeMatch = String(ctx.font || '').match(/([\d.]+)px/);
-      const fontSize = sizeMatch ? Number(sizeMatch[1]) : 24;
-      const outline = colorLuminance(ctx.fillStyle) > .58 ? 'rgba(8,25,48,.82)' : 'rgba(255,255,255,.94)';
-      ctx.save();
-      ctx.lineJoin = 'round';
-      ctx.miterLimit = 2;
-      ctx.strokeStyle = outline;
-      ctx.lineWidth = Math.max(3, Math.min(6, fontSize * .12));
-      if (maxWidth === undefined) originalStrokeText(text, x, y);
-      else originalStrokeText(text, x, y, maxWidth);
-      ctx.restore();
-      if (maxWidth === undefined) originalFillText(text, x, y);
-      else originalFillText(text, x, y, maxWidth);
-    };
-    ctx.__dokenLegibleText = true;
   }
 
   const tradeIconPaths = {
@@ -1037,12 +1020,10 @@
     const ctx = canvas.getContext('2d');
     const target = includeBleed ? bleed : finished;
     canvas.width = target.width; canvas.height = target.height;
-    enableLegibleText(ctx);
     ctx.clearRect(0,0,target.width,target.height);
     if (includeBleed) {
       const design=document.createElement('canvas'); design.width=finished.width; design.height=finished.height;
       const designContext=design.getContext('2d');
-      enableLegibleText(designContext);
       if (side === 'front') drawFront(designContext,data,finished.width,finished.height); else drawBack(designContext,data,finished.width,finished.height);
       const i=bleed.inset,w=finished.width,h=finished.height;
       ctx.drawImage(design,0,0,w,h,i,i,w,h);
@@ -1101,9 +1082,16 @@
   }
 
   function resizePhoto(file) {
-    if (!file || !/^image\/(png|jpeg|webp)$/.test(file.type)) return;
+    if (!file) return;
+    if (!/^image\/(png|jpeg|webp)$/.test(file.type)) {
+      document.getElementById('photo-status').textContent='PNG・JPEG・WebP形式の画像を選んでください。';
+      document.getElementById('suggestion-message').textContent='この画像形式は読み込めません。PNG・JPEG・WebP形式を選んでください。';
+      return;
+    }
     if (file.size > 8 * 1024 * 1024) {
-      document.getElementById('suggestion-message').textContent = '画像は8MB以下を選んでください。'; return;
+      document.getElementById('photo-status').textContent='画像が大きすぎます。8MB以下を選んでください。';
+      document.getElementById('suggestion-message').textContent = '画像は8MB以下を選んでください。';
+      return;
     }
     document.getElementById('photo-status').textContent='画像を読み込んでいます…';
     const reader = new FileReader();
@@ -1115,7 +1103,15 @@
         canvas.getContext('2d').drawImage(image,0,0,canvas.width,canvas.height);
         photoData=canvas.toDataURL('image/jpeg',.84); photoImage=new Image(); photoImage.onload=()=>{syncPhotoControls();queueRender();queueAutoSave();}; photoImage.src=photoData;
       };
+      image.onerror = () => {
+        document.getElementById('photo-status').textContent='画像を読み込めませんでした。別の画像を選んでください。';
+        document.getElementById('suggestion-message').textContent='画像の読み込みに失敗しました。画像を選び直してください。';
+      };
       image.src=String(reader.result);
+    };
+    reader.onerror = () => {
+      document.getElementById('photo-status').textContent='画像を読み込めませんでした。別の画像を選んでください。';
+      document.getElementById('suggestion-message').textContent='画像の読み込みに失敗しました。画像を選び直してください。';
     };
     reader.readAsDataURL(file);
   }
@@ -1182,6 +1178,10 @@
   }
 
   function download(side) {
+    if(side==='back'&&!selectedBack()){
+      document.getElementById('save-message').textContent='裏面は「作らない・白無地」が選択されています。裏面PNGは出力しません。';
+      return;
+    }
     const canvas=document.createElement('canvas'); renderToCanvas(canvas,side,true);
     canvas.toBlob(async blob => {
       if (!blob) return;
@@ -1221,7 +1221,7 @@
 
   function ascii(text) { return new TextEncoder().encode(text); }
 
-  function makePdf(frontBytes,backBytes,sizes) {
+  function makePdf(frontBytes,backBytes,sizes,includeBack) {
     const chunks=[]; const offsets=[]; let length=0;
     const append = data => { const bytes=typeof data==='string'?ascii(data):data; chunks.push(bytes); length+=bytes.length; };
     const object = (number,parts) => {
@@ -1232,27 +1232,32 @@
     const content2=ascii(`q\n${pageWidth} 0 0 ${pageHeight} 0 0 cm\n/Im2 Do\nQ\n`);
     append('%PDF-1.4\n%\xE2\xE3\xCF\xD3\n');
     object(1,['<< /Type /Catalog /Pages 2 0 R >>']);
-    object(2,['<< /Type /Pages /Count 2 /Kids [3 0 R 6 0 R] >>']);
+    object(2,[includeBack?'<< /Type /Pages /Count 2 /Kids [3 0 R 6 0 R] >>':'<< /Type /Pages /Count 1 /Kids [3 0 R] >>']);
     object(3,[`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${pageWidth} ${pageHeight}] /Resources << /XObject << /Im1 4 0 R >> >> /Contents 5 0 R >>`]);
     object(4,[`<< /Type /XObject /Subtype /Image /Width ${sizes.bleed.width} /Height ${sizes.bleed.height} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${frontBytes.length} >>\nstream\n`,frontBytes,'\nendstream']);
     object(5,[`<< /Length ${content1.length} >>\nstream\n`,content1,'endstream']);
-    object(6,[`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${pageWidth} ${pageHeight}] /Resources << /XObject << /Im2 7 0 R >> >> /Contents 8 0 R >>`]);
-    object(7,[`<< /Type /XObject /Subtype /Image /Width ${sizes.bleed.width} /Height ${sizes.bleed.height} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${backBytes.length} >>\nstream\n`,backBytes,'\nendstream']);
-    object(8,[`<< /Length ${content2.length} >>\nstream\n`,content2,'endstream']);
-    const xref=length; append('xref\n0 9\n0000000000 65535 f \n');
-    for(let number=1;number<=8;number+=1) append(`${String(offsets[number]).padStart(10,'0')} 00000 n \n`);
-    append(`trailer\n<< /Size 9 /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF`);
+    if(includeBack){
+      object(6,[`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${pageWidth} ${pageHeight}] /Resources << /XObject << /Im2 7 0 R >> >> /Contents 8 0 R >>`]);
+      object(7,[`<< /Type /XObject /Subtype /Image /Width ${sizes.bleed.width} /Height ${sizes.bleed.height} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${backBytes.length} >>\nstream\n`,backBytes,'\nendstream']);
+      object(8,[`<< /Length ${content2.length} >>\nstream\n`,content2,'endstream']);
+    }
+    const objectCount=includeBack?9:6;
+    const xref=length; append(`xref\n0 ${objectCount}\n0000000000 65535 f \n`);
+    for(let number=1;number<objectCount;number+=1) append(`${String(offsets[number]).padStart(10,'0')} 00000 n \n`);
+    append(`trailer\n<< /Size ${objectCount} /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF`);
     return new Blob(chunks,{type:'application/pdf'});
   }
 
   function downloadPdf() {
     const front=document.createElement('canvas'); const back=document.createElement('canvas');
-    renderToCanvas(front,'front',true); renderToCanvas(back,'back',true);
-    const sizes=currentSizes();const pdf=makePdf(dataUrlBytes(front.toDataURL('image/jpeg',.96)),dataUrlBytes(back.toDataURL('image/jpeg',.96)),sizes);
+    const includeBack=selectedBack();
+    renderToCanvas(front,'front',true);
+    if(includeBack)renderToCanvas(back,'back',true);
+    const sizes=currentSizes();const pdf=makePdf(dataUrlBytes(front.toDataURL('image/jpeg',.96)),includeBack?dataUrlBytes(back.toDataURL('image/jpeg',.96)):null,sizes,includeBack);
     const base=(value('company') || value('person-name') || '名刺').replace(/[\\/:*?"<>|\s]+/g,'_').slice(0,30);
     const orientation=selectedOrientation()==='vertical'?'縦型':'横型';
-    triggerDownload(pdf,`${base}_${orientation}_表裏_${sizes.bleedMm.width}x${sizes.bleedMm.height}mm_RGB.pdf`);
-    document.getElementById('save-message').textContent='表裏2ページの入稿用PDFを保存しました。ラクスルのデータチェックで仕上がりと色を確認してください。';
+    triggerDownload(pdf,`${base}_${orientation}_${includeBack?'表裏':'表面'}_${sizes.bleedMm.width}x${sizes.bleedMm.height}mm_RGB.pdf`);
+    document.getElementById('save-message').textContent=includeBack?'表裏2ページの入稿用PDFを保存しました。ラクスルのデータチェックで仕上がりと色を確認してください。':'裏面なしの表面1ページPDFを保存しました。';
   }
 
   function updateQuality() {
@@ -1295,11 +1300,15 @@
 
   function preparePrint() {
     const front=document.createElement('canvas'); const back=document.createElement('canvas');
-    renderToCanvas(front,'front',true); renderToCanvas(back,'back',true);
+    const includeBack=selectedBack();
+    renderToCanvas(front,'front',true);
+    if(includeBack)renderToCanvas(back,'back',true);
     const sizes=currentSizes();
     ['front','back'].forEach(side=>{const image=document.getElementById(`print-${side}`);image.style.width=`${sizes.bleedMm.width}mm`;image.style.height=`${sizes.bleedMm.height}mm`;});
     document.querySelectorAll('.print-dimensions').forEach(node=>{node.textContent=`外枠：塗り足し${sizes.bleedMm.width}×${sizes.bleedMm.height}mm／内側：仕上がり${sizes.finishedMm.width}×${sizes.finishedMm.height}mm`;});
-    document.getElementById('print-front').src=front.toDataURL('image/png'); document.getElementById('print-back').src=back.toDataURL('image/png');
+    document.getElementById('print-front').src=front.toDataURL('image/png');
+    document.getElementById('print-back-sheet').hidden=!includeBack;
+    if(includeBack)document.getElementById('print-back').src=back.toDataURL('image/png');
     setTimeout(()=>window.print(),80);
   }
 
@@ -1380,6 +1389,7 @@
     const sizes=currentSizes();const vertical=selectedOrientation()==='vertical';
     document.getElementById('vertical-layout-wrap').hidden=!vertical;
     document.getElementById('back-fields').hidden=!selectedBack();
+    document.getElementById('download-back').disabled=!selectedBack();
     const shell=document.getElementById('canvas-shell');shell.style.aspectRatio=`${sizes.finished.width}/${sizes.finished.height}`;shell.classList.toggle('vertical',vertical);
     document.getElementById('card-size-label').textContent=`実際の比率 ${sizes.finishedMm.width}mm × ${sizes.finishedMm.height}mm`;
     queueRender();
@@ -1393,6 +1403,14 @@
   }
 
   function selectPreviewSide(side){
+    if(side==='back'&&!selectedBack()){
+      const createBack=form.querySelector('input[name="back-choice"][value="yes"]');
+      if(createBack){
+        createBack.checked=true;
+        document.getElementById('back-fields').hidden=false;
+        queueAutoSave();
+      }
+    }
     currentSide=side;
     document.querySelectorAll('.side-tab').forEach(tab=>{const active=tab.dataset.side===side;tab.classList.toggle('active',active);tab.setAttribute('aria-selected',String(active));});
     queueRender();
