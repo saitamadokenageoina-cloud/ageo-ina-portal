@@ -205,6 +205,7 @@
   }
 
   function initializeCommonUi(){
+    loadUsageAnalytics();
     injectContactRail();
     injectThemeToggle();
     injectConnectionStatus();
@@ -212,6 +213,17 @@
     enhanceForms();
     enhanceExternalLinks();
     updateAppVersion();
+  }
+
+  function loadUsageAnalytics(){
+    var existing = document.querySelector('script[data-doken-usage]');
+    var script;
+    if (existing || isPreviewPage()) return;
+    script = document.createElement('script');
+    script.src = '/ageo-ina-portal/assets/js/usage-analytics.js';
+    script.async = true;
+    script.setAttribute('data-doken-usage','true');
+    document.head.appendChild(script);
   }
   window.defaultBack = defaultBack;
   if (typeof window.goBack !== 'function') {
