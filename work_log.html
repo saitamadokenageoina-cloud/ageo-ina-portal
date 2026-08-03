@@ -444,6 +444,7 @@ function saveRecord(){
   let arr=load();
   if(editId){ arr=arr.map(r=>r.id===editId?rec:r); } else { arr.push(rec); }
   store(arr);
+  if(window.DokenUsage) window.DokenUsage.track('work_log_save','work_log');
   if(job){ try{ localStorage.setItem(KEY_JOB, job); }catch(e){} }
   clearWorkDraft(false);
 
