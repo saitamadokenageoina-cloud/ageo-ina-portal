@@ -2,7 +2,7 @@
 // ★重要★ 変更をデプロイするたびに CACHE_VERSION の末尾番号を必ず1つ上げること。
 //   このファイルのバイトが変わることでブラウザが更新を検知し、
 //   新SWを再インストール → 古いキャッシュを全削除 → ページ自動リロードとなる。
-const CACHE_VERSION = 'v20260802-119';
+const CACHE_VERSION = 'v20260803-120';
 const CACHE_NAME = 'ageo-ina-portal-' + CACHE_VERSION;
 
 // GitHub Pages プロジェクトページのため、配信は /ageo-ina-portal/ 配下
@@ -18,6 +18,7 @@ const CACHE_FILES = [
   BASE + 'assets/css/print.css',
   BASE + 'assets/js/print-util.js',
   BASE + 'assets/js/navigation.js',
+  BASE + 'assets/js/usage-analytics.js',
   BASE + 'assets/js/calendar-config.js',
   BASE + 'assets/js/calendar-upcoming.js',
   BASE + 'assets/js/guild-config.js',

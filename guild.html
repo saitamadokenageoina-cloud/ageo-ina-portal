@@ -1047,6 +1047,7 @@ async function submitPost(){
     posts.unshift(newPost);
     save();
   }
+  if(window.DokenUsage) window.DokenUsage.track('guild_post_complete','guild');
   clearGuildDraft(false);
   closeModal();
   currentTab='all';

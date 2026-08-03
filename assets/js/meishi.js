@@ -1187,6 +1187,7 @@
       if (!blob) return;
       try { triggerDownload(await addPngDpi(blob,300),safeFilename(side)); }
       catch (error) { triggerDownload(blob,safeFilename(side)); }
+      if(window.DokenUsage)window.DokenUsage.track('business_card_png_download','business_card');
     },'image/png');
   }
 
@@ -1257,6 +1258,7 @@
     const base=(value('company') || value('person-name') || '名刺').replace(/[\\/:*?"<>|\s]+/g,'_').slice(0,30);
     const orientation=selectedOrientation()==='vertical'?'縦型':'横型';
     triggerDownload(pdf,`${base}_${orientation}_${includeBack?'表裏':'表面'}_${sizes.bleedMm.width}x${sizes.bleedMm.height}mm_RGB.pdf`);
+    if(window.DokenUsage)window.DokenUsage.track('business_card_pdf_download','business_card');
     document.getElementById('save-message').textContent=includeBack?'表裏2ページの入稿用PDFを保存しました。ラクスルのデータチェックで仕上がりと色を確認してください。':'裏面なしの表面1ページPDFを保存しました。';
   }
 
