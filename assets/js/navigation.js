@@ -1,6 +1,7 @@
 (function(){
   var THEME_KEY = 'doken_theme_v2';
   var UI_SIZE_KEY = 'doken_ui_size_v1';
+  var GA_MEASUREMENT_ID = 'G-6X0MLM597Y';
   // 既定はダーク。（旧キーに残るlight設定は無視して確実にダーク既定にする）
   var initialTheme = localStorage.getItem(THEME_KEY) || 'dark';
   document.documentElement.setAttribute('data-theme', initialTheme);
@@ -204,6 +205,27 @@
     paint();
   }
 
+  function initializeAnalytics(){
+    var script;
+    if (location.hostname !== 'saitamadokenageoina-cloud.github.io') return;
+    if (document.querySelector('script[data-doken-analytics]')) return;
+
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = window.gtag || function(){ window.dataLayer.push(arguments); };
+    window.gtag('js',new Date());
+    window.gtag('config',GA_MEASUREMENT_ID,{
+      'allow_google_signals':false,
+      'allow_ad_personalization_signals':false,
+      'anonymize_ip':true
+    });
+
+    script = document.createElement('script');
+    script.async = true;
+    script.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(GA_MEASUREMENT_ID);
+    script.setAttribute('data-doken-analytics','true');
+    document.head.appendChild(script);
+  }
+
   function initializeCommonUi(){
     injectContactRail();
     injectThemeToggle();
@@ -212,6 +234,7 @@
     enhanceForms();
     enhanceExternalLinks();
     updateAppVersion();
+    initializeAnalytics();
   }
   window.defaultBack = defaultBack;
   if (typeof window.goBack !== 'function') {
