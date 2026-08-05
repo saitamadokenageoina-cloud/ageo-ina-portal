@@ -7,36 +7,55 @@
 <link rel="stylesheet" href="assets/css/tabler-icons.min.css">
 <link rel="stylesheet" href="common.css">
 <style>
+/* ===== ヒーロー・検索 ===== */
+.guild-hero{position:relative;overflow:hidden;margin-bottom:14px;padding:22px 20px;border-radius:20px;background:linear-gradient(135deg,#0F5132 0%,#168654 58%,#25A46A 100%);color:#fff;box-shadow:0 12px 30px rgba(15,81,50,.2);}
+.guild-hero:after{content:"";position:absolute;right:-36px;bottom:-54px;width:190px;height:190px;border:36px solid rgba(255,255,255,.08);border-radius:50%;}
+.guild-hero-kicker{display:inline-flex;align-items:center;gap:6px;margin:0 0 9px;padding:5px 10px;border:1px solid rgba(255,255,255,.35);border-radius:99px;background:rgba(7,46,29,.2);font-size:11px;font-weight:800;letter-spacing:.05em;}
+.guild-hero-title{position:relative;z-index:1;margin:0;font-size:27px;font-weight:850;letter-spacing:.02em;line-height:1.2;}
+.guild-hero-copy{position:relative;z-index:1;max-width:390px;margin:8px 0 0;color:rgba(255,255,255,.9);font-size:14px;font-weight:650;line-height:1.65;}
+.guild-hero-points{position:relative;z-index:1;display:flex;gap:7px;flex-wrap:wrap;margin-top:13px;}
+.guild-hero-points span{display:inline-flex;align-items:center;gap:4px;padding:5px 9px;border-radius:99px;background:rgba(4,39,24,.28);font-size:11px;font-weight:750;}
+.search-panel{margin-bottom:13px;padding:12px;border:1px solid var(--gray100);border-radius:17px;background:var(--white);box-shadow:0 7px 22px rgba(18,38,63,.07);}
+.search-label{display:block;margin:0 0 7px;color:var(--navy);font-size:12px;font-weight:800;}
+.search-row{display:grid;grid-template-columns:minmax(0,1fr) 126px;gap:8px;}
+.search-input-wrap{position:relative;min-width:0;}
+.search-input-wrap i{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--gray500);font-size:19px;pointer-events:none;}
+.search-input-wrap .guild-search{padding-left:42px;}
+.result-line{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:11px 2px 0;color:var(--gray600);font-size:12px;font-weight:700;}
+.result-line strong{color:var(--navy);font-size:13px;}
+
 /* ===== タブ ===== */
-.tab-row{display:flex;gap:4px;background:var(--gray100);border-radius:var(--r12);padding:4px;margin-bottom:16px;}
-.t-btn{flex:1;min-width:0;border:none;border-radius:var(--r8);padding:9px 2px;font-size:12px;font-weight:600;color:var(--gray600);background:none;cursor:pointer;transition:all .15s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.t-btn.active{background:var(--white);color:var(--navy);box-shadow:var(--shadow-sm);}
+.tab-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;background:var(--gray100);border-radius:14px;padding:5px;margin-bottom:11px;}
+.t-btn{min-width:0;min-height:50px;border:none;border-radius:10px;padding:7px 3px;font-size:12px;font-weight:700;color:var(--gray600);background:none;cursor:pointer;transition:all .15s;line-height:1.3;}
+.t-btn i{font-size:17px;}
+.t-btn.active{background:var(--white);color:#A93F15;box-shadow:0 4px 12px rgba(18,38,63,.1),inset 0 -3px 0 var(--orange);}
 
 /* ===== 投稿カード ===== */
-.post-card{background:var(--white);border-radius:var(--r16);box-shadow:var(--shadow-sm);padding:16px;margin-bottom:10px;border-left:4px solid transparent;}
-.post-card.jinzai{border-left-color:#E8612A;}
-.post-card.shizai{border-left-color:#1A7A4A;}
-.post-card.soudan{border-left-color:#6B21A8;}
-.post-header{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.post-card{position:relative;overflow:hidden;background:var(--white);border-radius:18px;box-shadow:0 8px 26px rgba(18,38,63,.09);padding:18px;margin-bottom:13px;border:1px solid var(--gray100);}
+.post-card:before{content:"";position:absolute;inset:0 auto 0 0;width:5px;background:#E8612A;}
+.post-card.shizai:before{background:#1A7A4A;}
+.post-card.soudan:before{background:#6B21A8;}
+.post-header{display:flex;align-items:center;gap:10px;margin-top:13px;padding-top:12px;border-top:1px solid var(--gray100);}
 .post-avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;background:var(--gray100);}
-.post-author{font-size:14px;font-weight:600;color:var(--navy);margin:0 0 1px;}
+.post-author{font-size:13px;font-weight:700;color:var(--navy);margin:0 0 1px;}
 .post-meta{font-size:12px;color:var(--gray600);margin:0;font-weight:600;}
-.post-badge{margin-left:auto;font-size:11px;font-weight:600;padding:3px 10px;border-radius:99px;white-space:nowrap;flex-shrink:0;}
+.post-badge{margin-left:0;font-size:11px;font-weight:700;padding:4px 10px;border-radius:99px;white-space:nowrap;flex-shrink:0;}
 .badge-jinzai{background:#FEE8D6;color:#9B3A1A;}
 .badge-shizai{background:#E8F5EE;color:#1A4A2A;}
 .badge-soudan{background:#EDE8FE;color:#4A1A9B;}
-.post-body{font-size:15px;color:var(--gray900);margin:0 0 10px;line-height:1.65;}
-.post-flags{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 9px;}
+.post-card-title{margin:0 0 8px;color:var(--navy);font-size:18px;font-weight:850;line-height:1.45;overflow-wrap:anywhere;}
+.post-body{font-size:15px;color:var(--gray700);margin:0 0 12px;line-height:1.7;overflow-wrap:anywhere;}
+.post-flags{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:0 0 10px;}
 .status-chip,.urgent-chip{display:inline-flex;align-items:center;min-height:24px;padding:3px 9px;border-radius:99px;font-size:11px;font-weight:700;}
 .status-open{background:#E8F5EE;color:#1A4A2A;}.status-negotiating{background:#FFF4D6;color:#6B4B00;}.status-closed{background:#E2E8F0;color:#475569;}
 .urgent-chip{background:#FDE2E2;color:#9B1C1C;}
-.post-details{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin:0 0 10px;}
-.post-detail{min-width:0;padding:7px 9px;border-radius:9px;background:var(--gray50);color:var(--gray700);font-size:12px;overflow-wrap:anywhere;}
-.post-detail strong{color:var(--navy);font-weight:700;}
+.post-details{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;margin:0 0 12px;overflow:hidden;border:1px solid var(--gray100);border-radius:12px;background:var(--gray100);}
+.post-detail{display:grid;grid-template-columns:58px minmax(0,1fr);gap:6px;align-items:start;min-width:0;padding:10px;background:var(--gray50);color:var(--gray700);font-size:13px;line-height:1.5;overflow-wrap:anywhere;}
+.post-detail strong{color:var(--gray500);font-weight:700;}
 .post-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
 .post-tag{font-size:12px;background:var(--gray50);color:var(--gray600);padding:3px 10px;border-radius:99px;font-weight:500;}
-.post-actions{display:flex;gap:8px;}
-.post-btn{flex:1;padding:9px;border-radius:var(--r8);border:1.5px solid var(--gray200);background:none;font-size:13px;font-weight:600;color:var(--gray600);display:flex;align-items:center;justify-content:center;gap:5px;transition:all .15s;cursor:pointer;}
+.post-actions{display:flex;gap:8px;flex-wrap:wrap;}
+.post-btn{flex:1;min-height:48px;padding:10px;border-radius:11px;border:1.5px solid var(--gray200);background:none;font-size:13px;font-weight:700;color:var(--gray600);display:flex;align-items:center;justify-content:center;gap:5px;transition:all .15s;cursor:pointer;}
 .post-btn:hover{border-color:var(--orange);color:var(--orange);}
 .post-btn.primary{background:var(--orange);color:#fff;border-color:var(--orange);}
 .post-btn.primary:hover{background:var(--orange-dk);}
@@ -102,10 +121,9 @@
 .guild-toolbar button{flex:1;border:1.5px solid var(--gray200);background:var(--white);border-radius:var(--r12);padding:9px 10px;font-size:13px;font-weight:600;color:var(--gray600);}
 .guild-toolbar button.active{background:#1B2A3B;color:#fff;border-color:var(--navy);}
 .sync-status{font-size:12px;color:var(--gray600);margin:-6px 0 12px;text-align:right;font-weight:600;}
-.guild-controls{display:grid;grid-template-columns:minmax(0,1fr) 130px;gap:8px;margin-bottom:10px;}
 .guild-search,.guild-sort{width:100%;min-height:44px;border:1.5px solid var(--gray200);border-radius:var(--r12);background:var(--white);color:var(--gray900);font:inherit;font-size:13px;padding:8px 12px;}
 .guild-search:focus,.guild-sort:focus{outline:3px solid rgba(232,97,42,.2);border-color:var(--orange);}
-.archive-btn{width:100%;min-height:44px;margin-bottom:12px;border:1.5px solid var(--gray200);border-radius:var(--r12);background:var(--white);color:var(--gray600);font-size:13px;font-weight:600;}
+.archive-btn{width:auto;min-height:38px;margin:0;border:0;border-radius:10px;background:transparent;color:var(--gray600);font-size:11px;font-weight:700;}
 .archive-btn.active{background:#1B2A3B;color:#fff;border-color:#1B2A3B;}
 .job-fields{display:none;padding:12px;margin:0 0 14px;border:1px solid var(--gray200);border-radius:var(--r12);background:var(--gray50);}
 .job-fields.open{display:block;}
@@ -122,12 +140,6 @@
 .summary-card{min-width:0;padding:12px 10px;border:1px solid var(--gray100);border-radius:14px;background:linear-gradient(145deg,var(--white),var(--gray50));box-shadow:0 5px 18px rgba(18,38,63,.06);}
 .summary-value{display:block;font-size:22px;line-height:1.1;font-weight:800;color:var(--navy);}
 .summary-label{display:block;margin-top:5px;font-size:10px;font-weight:700;color:var(--gray500);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.availability-panel{margin:0 0 14px;padding:14px;border:1px solid #CFE1F1;border-radius:16px;background:linear-gradient(145deg,#F7FBFF,#EAF5FF);box-shadow:0 7px 22px rgba(20,71,112,.08);}
-.availability-heading{display:flex;align-items:flex-start;gap:9px;margin-bottom:10px;color:#163F64;}
-.availability-heading i{margin-top:1px;font-size:20px;color:#1A7A4A;}.availability-heading strong{display:block;font-size:14px;}.availability-heading span{display:block;margin-top:2px;font-size:11px;color:#506B83;line-height:1.45;}
-.availability-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.availability-btn{min-height:52px;padding:9px 10px;border:1.5px solid #2C759F;border-radius:13px;background:#fff;color:#174B70;font:inherit;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:7px;box-shadow:0 4px 12px rgba(20,71,112,.08);}
-.availability-btn.today{border-color:#1A7A4A;background:#EAF8F0;color:#145A37;}
 .purpose-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
 .purpose-btn{min-height:52px;padding:9px 10px;border:1.5px solid var(--gray200);border-radius:13px;background:var(--white);color:var(--gray700);font:inherit;font-size:12px;font-weight:700;text-align:left;line-height:1.35;}
 .purpose-btn.sel{border-color:var(--orange);background:#FFF1E9;color:#963C16;box-shadow:0 0 0 3px rgba(232,97,42,.12);}
@@ -180,6 +192,9 @@ html[data-theme="dark"] .tab-row{background:#071426;border:1px solid rgba(255,25
 html[data-theme="dark"] .t-btn{color:#D8E4F2;background:#13243A;}
 html[data-theme="dark"] .t-btn.active{background:#E8612A;color:#fff;box-shadow:none;}
 html[data-theme="dark"] .post-card{background:#0F1F35;border-color:rgba(255,255,255,.12);}
+html[data-theme="dark"] .post-card-title,
+html[data-theme="dark"] .search-label,
+html[data-theme="dark"] .result-line strong{color:#fff;}
 html[data-theme="dark"] .post-author,
 html[data-theme="dark"] .comment-author{color:#fff!important;}
 html[data-theme="dark"] .post-meta,
@@ -205,7 +220,8 @@ html[data-theme="dark"] .job-fields{background:#071426;border-color:rgba(255,255
 html[data-theme="dark"] .check-row{color:#E8EEF7;}
 html[data-theme="dark"] .form-note{background:#132D4D;color:#D8E9FF;}
 html[data-theme="dark"] .view-switch,html[data-theme="dark"] .summary-card,html[data-theme="dark"] .form-section{background:#071426;border-color:rgba(255,255,255,.12);}
-html[data-theme="dark"] .availability-panel{background:#0B1B2E;border-color:rgba(255,255,255,.15);box-shadow:none;}html[data-theme="dark"] .availability-heading{color:#fff;}html[data-theme="dark"] .availability-heading span{color:#B8C7DA;}html[data-theme="dark"] .availability-btn{background:#132D4D;color:#D8E9FF;border-color:#4C83B6;}html[data-theme="dark"] .availability-btn.today{background:#103822;color:#C9FAD9;border-color:#37A96B;}
+html[data-theme="dark"] .guild-hero{background:linear-gradient(135deg,#0B3A26,#126B45 60%,#168654);}
+html[data-theme="dark"] .search-panel{background:#0F1F35;border-color:rgba(255,255,255,.12);box-shadow:none;}
 html[data-theme="dark"] .view-btn.active,html[data-theme="dark"] .purpose-btn,html[data-theme="dark"] .guild-field,html[data-theme="dark"] .photo-picker,html[data-theme="dark"] .agenda-item{background:#0F1F35;color:#E8EEF7;border-color:rgba(255,255,255,.18);}
 html[data-theme="dark"] .guild-calendar,html[data-theme="dark"] .calendar-day{background:#0F1F35;border-color:rgba(255,255,255,.12);color:#E8EEF7}html[data-theme="dark"] .calendar-day.empty{background:#071426}html[data-theme="dark"] .calendar-day.selected{background:#16324F;color:#fff}html[data-theme="dark"] .calendar-month,html[data-theme="dark"] .calendar-selection-title,html[data-theme="dark"] .calendar-job strong{color:#fff}html[data-theme="dark"] .calendar-nav button,html[data-theme="dark"] .calendar-job{background:#071426;color:#fff;border-color:rgba(255,255,255,.15)}html[data-theme="dark"] .calendar-job span{color:#B8C7DA}
 html[data-theme="dark"] .summary-value,html[data-theme="dark"] .photo-picker strong,html[data-theme="dark"] .agenda-date,html[data-theme="dark"] .agenda-item strong{color:#fff;}
@@ -222,7 +238,7 @@ html[data-theme="light"] .post-btn.primary{background:#E8612A;color:#fff;border-
 html[data-theme="light"] .post-btn.danger{background:#FFF5F5;color:#9B1C1C;border-color:#F2B8B5;}
 html[data-theme="light"] .comment-body{background:#F7FAFC;color:#1B2A3B;}
 html[data-theme="light"] .comment-input{background:#fff;color:#1B2A3B;}
-@media(max-width:520px){.guild-controls{grid-template-columns:1fr;}.post-details{grid-template-columns:1fr}.post-actions{flex-wrap:wrap}.post-btn{min-width:calc(50% - 4px)}.premium-summary{gap:6px}.summary-card{padding:10px 7px}.summary-value{font-size:19px}.admin-stats{grid-template-columns:1fr 1fr}.purpose-grid{grid-template-columns:1fr}.calendar-hero{align-items:flex-start;flex-direction:column}.availability-actions{grid-template-columns:1fr}.availability-btn{min-height:50px}.job-fields .grid2{grid-template-columns:minmax(0,1fr)!important}.job-fields .input-group{min-width:0}.job-fields input{width:100%;min-width:0;box-sizing:border-box}.guild-calendar{padding:9px}.calendar-day{min-height:54px;padding:5px 1px}}
+@media(max-width:520px){.guild-hero{padding:20px 17px}.guild-hero-title{font-size:24px}.search-row{grid-template-columns:1fr}.post-details{grid-template-columns:1fr}.post-actions{flex-wrap:wrap}.post-btn{min-width:calc(50% - 4px)}.premium-summary{gap:6px}.summary-card{padding:10px 7px}.summary-value{font-size:19px}.admin-stats{grid-template-columns:1fr 1fr}.purpose-grid{grid-template-columns:1fr}.calendar-hero{align-items:flex-start;flex-direction:column}.job-fields .grid2{grid-template-columns:minmax(0,1fr)!important}.job-fields .input-group{min-width:0}.job-fields input{width:100%;min-width:0;box-sizing:border-box}.guild-calendar{padding:9px}.calendar-day{min-height:54px;padding:5px 1px}}
 </style>
 </head>
 <body>
@@ -240,29 +256,12 @@ html[data-theme="light"] .comment-input{background:#fff;color:#1B2A3B;}
 <div class="content" style="padding-bottom:90px;">
 
   <!-- Hero -->
-  <div style="background:linear-gradient(135deg,#1A7A4A,#2EA868);border-radius:16px;padding:18px 20px;margin-bottom:14px;display:flex;align-items:center;gap:16px;">
-    <svg viewBox="0 0 70 70" width="60" height="60" style="flex-shrink:0;">
-      <!-- 人物2人 -->
-      <circle cx="22" cy="20" r="9" fill="rgba(255,255,255,.4)"/>
-      <path d="M8 44 Q22 34 36 44" stroke="rgba(255,255,255,.5)" stroke-width="4" fill="none" stroke-linecap="round"/>
-      <circle cx="48" cy="20" r="9" fill="rgba(255,255,255,.28)"/>
-      <path d="M34 44 Q48 34 62 44" stroke="rgba(255,255,255,.35)" stroke-width="4" fill="none" stroke-linecap="round"/>
-      <!-- 会話バブル -->
-      <rect x="10" y="4" width="22" height="12" rx="4" fill="rgba(255,255,255,.35)"/>
-      <polygon points="14,16 11,22 20,16" fill="rgba(255,255,255,.35)"/>
-      <line x1="14" y1="9" x2="28" y2="9" stroke="rgba(255,255,255,.6)" stroke-width="1.5" stroke-linecap="round"/>
-      <line x1="14" y1="13" x2="25" y2="13" stroke="rgba(255,255,255,.5)" stroke-width="1.5" stroke-linecap="round"/>
-      <rect x="38" y="8" width="22" height="12" rx="4" fill="rgba(255,255,255,.22)"/>
-      <polygon points="56,20 60,26 50,20" fill="rgba(255,255,255,.22)"/>
-      <line x1="42" y1="13" x2="56" y2="13" stroke="rgba(255,255,255,.45)" stroke-width="1.5" stroke-linecap="round"/>
-      <!-- 握手 -->
-      <text x="35" y="66" text-anchor="middle" font-size="18" fill="rgba(255,255,255,.7)">🤝</text>
-    </svg>
-    <div>
-      <p style="font-size:18px;font-weight:700;color:#fff;margin:0 0 3px;">DOKENギルド</p>
-      <p style="font-size:13px;color:rgba(255,255,255,.7);margin:0;">人材・資材マッチング掲示板</p>
-    </div>
-  </div>
+  <section class="guild-hero" aria-labelledby="guild-title">
+    <p class="guild-hero-kicker"><i class="ti ti-shield-check"></i> 上尾伊奈支部の仕事・応援マッチング</p>
+    <h1 class="guild-hero-title" id="guild-title">DOKENギルド</h1>
+    <p class="guild-hero-copy">人手、仕事、資材・道具を支部の仲間でつなぎます。連絡先は公開せず、支部が取り次ぎます。</p>
+    <div class="guild-hero-points"><span><i class="ti ti-search"></i>条件で探せる</span><span><i class="ti ti-lock"></i>連絡先は非公開</span><span><i class="ti ti-calendar"></i>作業日を確認</span></div>
+  </section>
 
   <div class="guild-notice">
     <i class="ti ti-lock"></i>
@@ -285,33 +284,28 @@ html[data-theme="light"] .comment-input{background:#fff;color:#1B2A3B;}
     <div class="summary-card"><span class="summary-value" id="summary-upcoming">0</span><span class="summary-label">予定あり</span></div>
   </div>
 
-  <section class="availability-panel" aria-labelledby="availability-title">
-    <div class="availability-heading"><i class="ti ti-bolt"></i><div><strong id="availability-title">急な応援に行けますか？</strong><span>日にちを選ぶと投稿フォームへ自動入力します。職種・地域・連絡先を足すだけです。</span></div></div>
-    <div class="availability-actions">
-      <button class="availability-btn today" type="button" onclick="openQuickAvailability(0)"><i class="ti ti-sun"></i>今日 空いています</button>
-      <button class="availability-btn" type="button" onclick="openQuickAvailability(1)"><i class="ti ti-calendar-plus"></i>明日 空いています</button>
-    </div>
-  </section>
-
   <div class="admin-dashboard" id="admin-dashboard" aria-live="polite"></div>
 
   <div class="board-panel" id="board-panel">
 
-  <div class="guild-controls">
-    <input class="guild-search" id="guild-search" type="search" maxlength="80" placeholder="地域・職種・投稿内容を検索" aria-label="投稿を検索" oninput="updateSearch(this.value)">
-    <select class="guild-sort" id="guild-sort" aria-label="投稿の並べ替え" onchange="updateSort(this.value)">
-      <option value="newest">新しい順</option>
-      <option value="urgent">急募を優先</option>
-    </select>
+  <div class="search-panel">
+    <label class="search-label" for="guild-search">募集を探す</label>
+    <div class="search-row">
+      <div class="search-input-wrap"><i class="ti ti-search"></i><input class="guild-search" id="guild-search" type="search" maxlength="80" placeholder="職種・地域・キーワード" aria-label="投稿を検索" oninput="updateSearch(this.value)"></div>
+      <select class="guild-sort" id="guild-sort" aria-label="投稿の並べ替え" onchange="updateSort(this.value)">
+        <option value="newest">新しい順</option>
+        <option value="urgent">急募を優先</option>
+      </select>
+    </div>
+    <div class="result-line"><strong id="result-count" aria-live="polite">0件を表示</strong><button class="archive-btn" id="archive-toggle" type="button" onclick="toggleArchive()"><i class="ti ti-archive"></i> 過去・解決済み</button></div>
   </div>
-  <button class="archive-btn" id="archive-toggle" type="button" onclick="toggleArchive()"><i class="ti ti-archive"></i> 過去・解決済みの投稿を表示</button>
 
   <!-- フィルタータブ -->
-  <div class="tab-row">
-    <button class="t-btn active" onclick="switchTab('all',this)">すべて</button>
-    <button class="t-btn" onclick="switchTab('jinzai',this)">👷 人材募集</button>
-    <button class="t-btn" onclick="switchTab('shizai',this)">🔧 資材・道具</button>
-    <button class="t-btn" onclick="switchTab('soudan',this)">💬 相談</button>
+  <div class="tab-row" role="group" aria-label="投稿の種類で絞り込む">
+    <button type="button" class="t-btn active" aria-pressed="true" onclick="switchTab('all',this)"><i class="ti ti-layout-grid"></i><br>すべて</button>
+    <button type="button" class="t-btn" aria-pressed="false" onclick="switchTab('jinzai',this)"><i class="ti ti-users"></i><br>人材・仕事</button>
+    <button type="button" class="t-btn" aria-pressed="false" onclick="switchTab('shizai',this)"><i class="ti ti-tools"></i><br>資材・道具</button>
+    <button type="button" class="t-btn" aria-pressed="false" onclick="switchTab('soudan',this)"><i class="ti ti-message-circle"></i><br>相談</button>
   </div>
 
   <div id="post-list"></div>
@@ -653,6 +647,10 @@ function detailHtml(post){
   if(!details.length) return '';
   return `<div class="post-details">${details.map(item=>`<div class="post-detail"><strong>${esc(item[0])}</strong> ${esc(item[1])}</div>`).join('')}</div>`;
 }
+function cardTitle(post){
+  const purpose = PURPOSE[post.purpose] ? PURPOSE[post.purpose].label : CAT[post.cat].label;
+  return [post.trade, purpose].filter(Boolean).join('｜') || purpose;
+}
 function filteredPosts(){
   const query = searchTerm.toLowerCase();
   const filtered = posts.filter(post=>{
@@ -742,6 +740,8 @@ function renderAdminDashboard(){
 function render(){
   const list = document.getElementById('post-list');
   const filtered = filteredPosts();
+  const count = document.getElementById('result-count');
+  if(count) count.textContent = filtered.length + '件' + (showArchived ? 'の過去・解決済みを表示' : 'を表示');
   renderSummary();
   renderAgenda();
   renderAdminDashboard();
@@ -754,27 +754,27 @@ function render(){
     const image = p.imageData ? `<img class="post-photo" src="${p.imageData}" alt="投稿写真" loading="lazy">` : '';
     const expires = expiryText(p);
     return `
-    <div class="post-card ${p.cat}" id="pc-${p.id}">
-      <div class="post-header">
-        <div class="post-avatar">${esc(p.emoji||'👤')}</div>
-        <div style="flex:1;">
-          <p class="post-author">${esc(p.name||'匿名')}${p.area?` <span style="font-size:11px;color:var(--gray400);">📍${esc(p.area)}</span>`:''}</p>
-          <p class="post-meta">${esc(p.time)}</p>
-        </div>
-        <span class="post-badge ${CAT[p.cat].badge}">${CAT[p.cat].label}</span>
-      </div>
+    <article class="post-card ${p.cat}" id="pc-${p.id}" aria-labelledby="post-title-${p.id}">
       <div class="post-flags">
         <span class="status-chip ${STATUS[p.status].className}">${STATUS[p.status].label}</span>
-        <span class="purpose-chip">${esc(PURPOSE[p.purpose].icon+' '+PURPOSE[p.purpose].label)}</span>
+        <span class="post-badge ${CAT[p.cat].badge}">${CAT[p.cat].label}</span>
         ${expires?`<span class="expiry-chip">${esc(expires)}</span>`:''}
         ${isAdmin?`<span class="workflow-chip">${esc(WORKFLOW[p.workflow])}</span>`:''}
         ${p.urgent?'<span class="urgent-chip">急募</span>':''}
       </div>
+      <h2 class="post-card-title" id="post-title-${p.id}">${esc(PURPOSE[p.purpose].icon+' '+cardTitle(p))}</h2>
       <p class="post-body">${esc(p.body)}</p>
       ${image}
       ${detailHtml(p)}
       ${matches.length?`<div class="match-box"><strong><i class="ti ti-sparkles"></i> 条件が近い投稿 ${matches.length}件</strong>${matches.map(item=>esc(PURPOSE[item.purpose].label+(item.trade?'・'+item.trade:'')+(item.area?'（'+item.area+'）':''))).join('<br>')}</div>`:''}
       <div class="post-tags">${(p.tags||[]).map(t=>`<span class="post-tag">${esc(t)}</span>`).join('')}</div>
+      <div class="post-header">
+        <div class="post-avatar">${esc(p.emoji||'👤')}</div>
+        <div style="flex:1;">
+          <p class="post-author">${esc(p.name||'匿名')}${p.area?` <span style="font-size:11px;color:var(--gray500);">📍${esc(p.area)}</span>`:''}</p>
+          <p class="post-meta">投稿 ${esc(p.time)}</p>
+        </div>
+      </div>
       <div class="post-actions">
         <button class="post-btn" onclick="toggleComment(${p.id})">
           <i class="ti ti-message-circle"></i>コメント（${(p.comments||[]).length}）
@@ -810,7 +810,7 @@ function render(){
           <button class="comment-send" onclick="sendComment(${p.id})">送信</button>
         </div>
       </div>
-    </div>`;}).join('');
+    </article>`;}).join('');
 }
 
 function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -828,8 +828,9 @@ function switchView(view){
 
 function switchTab(tab, btn){
   currentTab = tab;
-  document.querySelectorAll('.t-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.t-btn').forEach(b=>{b.classList.remove('active');b.setAttribute('aria-pressed','false');});
   btn.classList.add('active');
+  btn.setAttribute('aria-pressed','true');
   render();
 }
 function updateSearch(value){ searchTerm = String(value || '').trim(); render(); }
@@ -891,18 +892,6 @@ function openModal(){ const modal=document.getElementById('modal'); modal.classL
 function localDateValue(dayOffset){
   const date=new Date(); date.setDate(date.getDate()+dayOffset);
   return [date.getFullYear(),String(date.getMonth()+1).padStart(2,'0'),String(date.getDate()).padStart(2,'0')].join('-');
-}
-function openQuickAvailability(dayOffset){
-  const offset=dayOffset===1?1:0;
-  openModal();
-  const purposeButton=document.querySelector('.purpose-btn[data-purpose="offer_help"]');
-  if(purposeButton) selectPurpose(purposeButton);
-  document.getElementById('post-work-date').value=localDateValue(offset);
-  document.getElementById('post-expiry').value=offset===0?'24h':'48h';
-  document.getElementById('post-urgent').checked=offset===0;
-  document.getElementById('post-body').value=(offset===0?'本日':'明日')+'、応援に行けます。職種・地域・時間などの条件をご確認ください。詳しくは支部を通じてお問い合わせください。';
-  saveGuildDraft();
-  document.getElementById('post-trade').focus();
 }
 function closeModal(){
   document.getElementById('modal').classList.remove('open');
