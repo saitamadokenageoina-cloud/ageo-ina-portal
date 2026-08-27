@@ -2,7 +2,7 @@
 // ★重要★ 変更をデプロイするたびに CACHE_VERSION の末尾番号を必ず1つ上げること。
 //   このファイルのバイトが変わることでブラウザが更新を検知し、
 //   新SWを再インストール → 古いキャッシュを全削除 → ページ自動リロードとなる。
-const CACHE_VERSION = 'v20260818-124';
+const CACHE_VERSION = 'v20260818-125';
 const CACHE_NAME = 'ageo-ina-portal-' + CACHE_VERSION;
 
 // GitHub Pages プロジェクトページのため、配信は /ageo-ina-portal/ 配下
@@ -39,6 +39,7 @@ const CACHE_FILES = [
   BASE + 'guide.html',
   BASE + 'calendar.html',
   BASE + 'calc.html',
+  BASE + 'kyosai_calc.html',
   BASE + 'atsusa.html',
   BASE + 'koushu.html',
   BASE + 'rodo36.html',
