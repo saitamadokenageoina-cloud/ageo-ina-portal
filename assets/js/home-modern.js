@@ -6,17 +6,68 @@
   var ICONS=[
     ['calendar.html','ti-calendar-event','tone-green'],['doken_card.html','ti-discount-2','tone-purple'],['guild.html','ti-users-group','tone-green'],['meishi.html','ti-id-badge-2','tone-blue'],['estimate/','ti-file-invoice','tone-cyan'],['atsusa.html','ti-temperature-sun','tone-orange'],['anzen_check.html','ti-shield-check','tone-orange'],['work_log.html','ti-clipboard-text','tone-green'],['rodo36.html','ti-clock-hour-4','tone-blue'],['lv-asses-sup.ccus.jp','ti-id','tone-blue'],['kyosai_guide.html','ti-shield-heart','tone-pink'],['forms.gle','ti-stethoscope','tone-green'],['calc.html','ti-calculator','tone-blue'],['kyosai_calc.html','ti-home-dollar','tone-pink'],['disaster_support.html','ti-shield-exclamation','tone-orange'],['kensetsu_check.html','ti-building','tone-gold'],['hitori.html','ti-user-shield','tone-purple'],['koushu.html','ti-certificate','tone-gold'],['shiryo.html','ti-folders','tone-cyan'],['book.html','ti-books','tone-purple'],['merit.html','ti-discount-check','tone-orange'],['guide.html','ti-route','tone-blue']
   ];
-  var SECTION_ICONS={yoku:'ti-sparkles',shigoto:'ti-users-group',genba:'ti-helmet',tetsuzuki:'ti-file-description',shiryo:'ti-books',sonota:'ti-dots'};
+  var SECTION_ICONS={yoku:'ti-sparkles',nichijo:'ti-calendar-event',shigoto:'ti-users-group',genba:'ti-helmet',tetsuzuki:'ti-file-description',shiryo:'ti-books',sonota:'ti-dots'};
 
   function trimText(value){return String(value||'').replace(/^\s+|\s+$/g,'');}
   function iconFor(href){var i;href=href||'';for(i=0;i<ICONS.length;i+=1){if(href.indexOf(ICONS[i][0])!==-1)return{icon:ICONS[i][1],tone:ICONS[i][2]};}return{icon:'ti-apps',tone:'tone-gray'};}
   function scrollToSection(id){var el=document.getElementById(id);if(!el)return;try{el.scrollIntoView({behavior:'smooth',block:'start'});}catch(e){el.scrollIntoView(true);}}
 
+  function injectHeaderIconPolish(){
+    var style=document.createElement('style');
+    style.id='home-header-icon-polish';
+    style.textContent=[
+      '.home-modern .sec-head-icon{background:#EAF4FD!important;color:#1769AA!important;border-color:rgba(23,38,58,.08)!important;box-shadow:none!important}',
+      '.home-modern .sec-head-glyph i{color:inherit!important}',
+      '.home-modern #yoku .sec-head-icon{background:#FFF6E5!important;color:#A96800!important}',
+      '.home-modern #nichijo .sec-head-icon{background:#EAF4FD!important;color:#1769AA!important}',
+      '.home-modern #shigoto .sec-head-icon{background:#EAF8F0!important;color:#16764B!important}',
+      '.home-modern #genba .sec-head-icon{background:#FFF0E7!important;color:#D85A21!important}',
+      '.home-modern #tetsuzuki .sec-head-icon{background:#F1ECFD!important;color:#6544A8!important}',
+      '.home-modern #shiryo .sec-head-icon{background:#E8F8FB!important;color:#147A8A!important}',
+      '.home-modern #sonota .sec-head-icon{background:#EEF2F6!important;color:#405064!important}',
+      'html[data-theme="dark"] .home-modern .sec-head-icon{border-color:rgba(255,255,255,.12)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.04)!important}',
+      'html[data-theme="dark"] .home-modern #yoku .sec-head-icon{background:#44371A!important;color:#FFD66B!important}',
+      'html[data-theme="dark"] .home-modern #nichijo .sec-head-icon{background:#123656!important;color:#72C7FF!important}',
+      'html[data-theme="dark"] .home-modern #shigoto .sec-head-icon{background:#123B32!important;color:#65D5A5!important}',
+      'html[data-theme="dark"] .home-modern #genba .sec-head-icon{background:#4A2C21!important;color:#FF9A67!important}',
+      'html[data-theme="dark"] .home-modern #tetsuzuki .sec-head-icon{background:#30274F!important;color:#B79BFF!important}',
+      'html[data-theme="dark"] .home-modern #shiryo .sec-head-icon{background:#123A43!important;color:#68D9E8!important}',
+      'html[data-theme="dark"] .home-modern #sonota .sec-head-icon{background:#26374B!important;color:#D5E2F0!important}'
+    ].join('\n');
+    document.head.appendChild(style);
+  }
+
+  function createDailyCard(href,badge,title,desc){
+    var a=document.createElement('a');
+    a.className='mc';
+    a.href=href;
+    a.innerHTML='<div class="mc-top"></div><div class="mc-body"><span class="mc-badge tool">'+badge+'</span><p class="mc-title">'+title+'</p><p class="mc-desc">'+desc+'</p></div>';
+    return a;
+  }
+
+  function buildDailySection(){
+    var shigoto=document.getElementById('shigoto'),section,head,grid;
+    if(!shigoto||document.getElementById('nichijo'))return;
+    section=document.createElement('div');
+    section.className='section';
+    section.id='nichijo';
+    head=document.createElement('div');
+    head.className='sec-head';
+    head.innerHTML='<div class="sec-head-icon blue"><span class="sec-head-glyph" aria-hidden="true"></span></div><span class="sec-head-label">日常・予定</span><div class="sec-head-line"></div>';
+    grid=document.createElement('div');
+    grid.className='grid2';
+    grid.appendChild(createDailyCard('calendar.html','予定','支部カレンダー','支部行事・会議・予定を確認'));
+    grid.appendChild(createDailyCard('doken_card.html','優待','DOKENカード','県内の登録店・組合員優待を確認'));
+    section.appendChild(head);
+    section.appendChild(grid);
+    shigoto.parentNode.insertBefore(section,shigoto);
+  }
+
   function enhanceSectionIcons(){var sections=document.querySelectorAll('.section[id]'),i,glyph;for(i=0;i<sections.length;i+=1){glyph=sections[i].querySelector('.sec-head-glyph');if(glyph)glyph.innerHTML='<i class="ti '+(SECTION_ICONS[sections[i].id]||'ti-layout-grid')+'" aria-hidden="true"></i>';}}
   function enhanceCards(){var cards=document.querySelectorAll('.section:not(#yoku) .mc'),i,card,top,info,icon,desc;for(i=0;i<cards.length;i+=1){card=cards[i];top=card.querySelector('.mc-top');if(top&&!top.querySelector('.home-card-icon')){info=iconFor(card.getAttribute('href')||'');icon=document.createElement('span');icon.className='home-card-icon '+info.tone;icon.setAttribute('aria-hidden','true');icon.innerHTML='<i class="ti '+info.icon+'"></i>';top.appendChild(icon);}if((card.getAttribute('href')||'')==='guild.html'){desc=card.querySelector('.mc-desc');if(desc)desc.textContent='人手、仕事、資材・道具を支部の仲間でつなぎます。';}}}
 
   function quickItem(href,label,icon,tone,external){var a=document.createElement('a');a.className='home-quick-item '+tone;a.href=href;if(external){a.target='_blank';a.rel='noopener noreferrer';}a.innerHTML='<span class="home-quick-icon" aria-hidden="true"><i class="ti '+icon+'"></i></span><span class="home-quick-label">'+label+'</span>';return a;}
-  function buildQuickMenu(){var section=document.getElementById('yoku'),grid,all,oldGrid;if(!section||section.querySelector('.home-quick-grid'))return;grid=document.createElement('div');grid.className='home-quick-grid';grid.setAttribute('aria-label','よく使う機能');grid.appendChild(quickItem('calendar.html','カレンダー','ti-calendar-event','tone-green'));grid.appendChild(quickItem('guild.html','DOKENギルド','ti-users-group','tone-green'));grid.appendChild(quickItem('calc.html','計算ツール','ti-calculator','tone-blue'));grid.appendChild(quickItem('guide.html','手続き','ti-route','tone-purple'));grid.appendChild(quickItem('https://forms.gle/uKCqkLJAw7gMjwUMA','健康診断','ti-stethoscope','tone-cyan',true));grid.appendChild(quickItem('kyosai_guide.html','共済','ti-shield-heart','tone-pink'));grid.appendChild(quickItem('koushu.html','資格・講習','ti-certificate','tone-gold'));all=document.createElement('button');all.type='button';all.className='home-quick-item tone-gray';all.setAttribute('aria-haspopup','dialog');all.innerHTML='<span class="home-quick-icon" aria-hidden="true"><i class="ti ti-apps"></i></span><span class="home-quick-label">すべて</span>';all.addEventListener('click',function(){openToolsSheet(null);});grid.appendChild(all);oldGrid=section.querySelector('.grid2');if(oldGrid)section.insertBefore(grid,oldGrid);else section.appendChild(grid);}
+  function buildQuickMenu(){var section=document.getElementById('yoku'),grid,all,oldGrid;if(!section||section.querySelector('.home-quick-grid'))return;grid=document.createElement('div');grid.className='home-quick-grid';grid.setAttribute('aria-label','よく使う機能');grid.appendChild(quickItem('calendar.html','カレンダー','ti-calendar-event','tone-green'));grid.appendChild(quickItem('guild.html','DOKENギルド','ti-users-group','tone-green'));grid.appendChild(quickItem('calc.html','計算ツール','ti-calculator','tone-blue'));grid.appendChild(quickItem('doken_card.html','DOKENカード','ti-discount-2','tone-purple'));grid.appendChild(quickItem('https://forms.gle/uKCqkLJAw7gMjwUMA','健康診断','ti-stethoscope','tone-cyan',true));grid.appendChild(quickItem('work_log.html','作業記録','ti-clipboard-text','tone-green'));grid.appendChild(quickItem('koushu.html','資格・講習','ti-certificate','tone-gold'));all=document.createElement('button');all.type='button';all.className='home-quick-item tone-gray';all.setAttribute('aria-haspopup','dialog');all.innerHTML='<span class="home-quick-icon" aria-hidden="true"><i class="ti ti-apps"></i></span><span class="home-quick-label">すべて</span>';all.addEventListener('click',function(){openToolsSheet(null);});grid.appendChild(all);oldGrid=section.querySelector('.grid2');if(oldGrid)section.insertBefore(grid,oldGrid);else section.appendChild(grid);}
 
   function updateRail(shell,grid){if(!shell||!grid)return;shell.classList.toggle('is-end',grid.scrollLeft+grid.clientWidth>=grid.scrollWidth-8);}
   function enhanceRails(){var sections=document.querySelectorAll('.section:not(#yoku)'),i;for(i=0;i<sections.length;i+=1){(function(section){var grid=section.querySelector('.grid2'),head=section.querySelector('.sec-head'),btn,shell,fade;if(!grid||!head||grid.parentNode.classList.contains('home-rail-shell'))return;btn=document.createElement('button');btn.type='button';btn.className='home-all-btn';btn.setAttribute('aria-haspopup','dialog');btn.innerHTML='すべて見る <i class="ti ti-apps" aria-hidden="true"></i>';head.appendChild(btn);shell=document.createElement('div');shell.className='home-rail-shell';grid.parentNode.insertBefore(shell,grid);shell.appendChild(grid);fade=document.createElement('span');fade.className='home-rail-fade';fade.setAttribute('aria-hidden','true');shell.appendChild(fade);btn.addEventListener('click',function(){openToolsSheet(section);});grid.addEventListener('scroll',function(){updateRail(shell,grid);},false);window.addEventListener('resize',function(){updateRail(shell,grid);});window.setTimeout(function(){updateRail(shell,grid);},40);})(sections[i]);}}
@@ -38,6 +89,6 @@
 
   function buildBottomNav(){var nav,buttons;if(document.querySelector('.home-bottom-nav'))return;nav=document.createElement('nav');nav.className='home-bottom-nav';nav.setAttribute('aria-label','ホーム画面メニュー');nav.innerHTML='<button class="home-bottom-item active" type="button" data-target="top"><i class="ti ti-home"></i><span>ホーム</span></button><button class="home-bottom-item" type="button" data-target="shigoto"><i class="ti ti-users-group"></i><span>仕事</span></button><button class="home-bottom-item" type="button" data-target="genba"><i class="ti ti-helmet"></i><span>現場</span></button><button class="home-bottom-item" type="button" data-target="tetsuzuki"><i class="ti ti-file-description"></i><span>手続き</span></button><button class="home-bottom-item" type="button" data-menu="true"><i class="ti ti-menu-2"></i><span>メニュー</span></button>';document.body.appendChild(nav);buttons=nav.querySelectorAll('.home-bottom-item');Array.prototype.forEach.call(buttons,function(btn){btn.addEventListener('click',function(){var target;if(btn.getAttribute('data-menu')==='true'){openMenu();return;}target=btn.getAttribute('data-target');if(target==='top'){try{window.scrollTo({top:0,behavior:'smooth'});}catch(e){window.scrollTo(0,0);}}else scrollToSection(target);Array.prototype.forEach.call(buttons,function(b){b.classList.remove('active');});btn.classList.add('active');});});}
 
-  function modernize(){document.body.classList.add('home-modern');enhanceSectionIcons();buildQuickMenu();enhanceCards();enhanceRails();buildBottomNav();}
+  function modernize(){document.body.classList.add('home-modern');injectHeaderIconPolish();buildDailySection();enhanceSectionIcons();buildQuickMenu();enhanceCards();enhanceRails();buildBottomNav();}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',modernize);else modernize();
 })();
