@@ -1,192 +1,54 @@
-/* DOKEN SMART PORTAL theme polish
-   - 既存の情報設計・機能配置は変更しない
-   - ライト/ダークの見た目をページ横断で統一する
-*/
+@import url('./theme-polish-base.css');
 
-/* ===== 共通：Webページ感を減らし、アプリらしい操作感へ ===== */
-body{background:var(--gray50);}
-.card,.mc,.lc,.acc,.install-card,.post-card,.check-section,.gauge-card,.support-panel,
-.ky-card,.result-card,.beginner-map,.home-tools-card,.category-filter,.search-panel{
-  border-color:var(--gray200)!important;
-  box-shadow:0 3px 12px rgba(18,38,63,.08),0 1px 2px rgba(18,38,63,.05)!important;
+/* 2026-08-28 light mode follow-up fixes */
+html[data-theme="light"] .app-manual{
+  background:linear-gradient(180deg,#F8FBFE 0%,#F3F7FB 100%)!important;
+  background-image:none!important;
+  color:#111827!important;
+  border:1px solid #D7E0E9!important;
+  box-shadow:0 6px 20px rgba(18,38,63,.09)!important;
 }
-.mc,.lc,.card,.acc,.install-card,.post-card,.ky-card,.purpose-link,.guide-tab,
-.category-jumps a,.t-btn,.ky-tab,.btn-primary,.btn-secondary,.quick-link,.post-btn{
-  -webkit-tap-highlight-color:transparent;
-  transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease,background-color .16s ease!important;
+html[data-theme="light"] .app-manual::before,
+html[data-theme="light"] .app-manual::after{display:none!important;}
+html[data-theme="light"] .app-manual h2{color:#162338!important;}
+html[data-theme="light"] .manual-panel{background:#FFFFFF!important;}
+html[data-theme="light"] .manual-faq details{background:#FFFFFF!important;}
+
+html[data-theme="light"] .briefing{
+  background:linear-gradient(145deg,#EEF7FC,#F8FCFF)!important;
+  color:#162338!important;
+  border-color:#C7DFEC!important;
 }
-a.mc:active,a.lc:active,.category-jumps a:active,.t-btn:active,.ky-tab:active,
-.btn-primary:active,.btn-secondary:active,.quick-link:active,.post-btn:active{transform:scale(.985);}
-
-/* 見出し・カード間の階層を少し強くする */
-.sec-head-label,.home-tools-title,.category-filter-title{letter-spacing:.02em!important;}
-.mc-title,.lc-title,.acc-title,.ky-title{letter-spacing:0!important;}
-
-/* ===== ライトモード：基本トークンを明示 ===== */
-html[data-theme="light"]{
-  --white:#FFFFFF;
-  --navy:#162338;
-  --gray50:#F4F7FB;
-  --gray100:#EEF2F6;
-  --gray200:#DCE3EB;
-  --gray300:#C7D0DB;
-  --gray400:#64748B;
-  --gray500:#526173;
-  --gray600:#405064;
-  --gray700:#26364A;
-  --gray900:#111827;
-  --blue:#1769AA;
-  --blue-lt:#EAF3FB;
-  --green:#157A4B;
-  --green-lt:#E9F7F0;
-  --yellow-lt:#FFF8E5;
-  --orange-lt:#FFF1EA;
-  --shadow-sm:0 2px 8px rgba(18,38,63,.07);
-  --shadow-md:0 7px 20px rgba(18,38,63,.10);
+html[data-theme="light"] .briefing .section-title{color:#162338!important;}
+html[data-theme="light"] .briefing .section-lead{color:#526173!important;}
+html[data-theme="light"] .briefing-text{
+  background:#FFFFFF!important;
+  color:#26364A!important;
+  border:1px solid #D7E3EC!important;
 }
-html[data-theme="light"] body,
-html[data-theme="light"] .app,
-html[data-theme="light"] .content{background:#F4F7FB!important;color:#111827!important;}
-html[data-theme="light"] .content{background-image:linear-gradient(180deg,#F8FAFC 0,#F4F7FB 220px)!important;}
-
-/* ホームのヒーローはブランド領域として明るくする。固定の暗色背景を打ち消す */
-html[data-theme="light"] .hero{
-  background:linear-gradient(145deg,#F8FCFF 0%,#EEF7FD 58%,#FFF6F0 100%)!important;
-  border-bottom:1px solid #DCE7F0!important;
+html[data-theme="light"] .copy-btn{
+  background:#1769AA!important;
+  color:#FFFFFF!important;
+  border-color:#1769AA!important;
 }
-html[data-theme="light"] .hero::before{background-image:linear-gradient(rgba(23,105,170,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(23,105,170,.055) 1px,transparent 1px)!important;}
-html[data-theme="light"] .hero::after{background:radial-gradient(circle,rgba(23,105,170,.11) 0%,transparent 70%)!important;}
-html[data-theme="light"] .hero-glow{background:radial-gradient(circle,rgba(232,97,42,.11) 0%,transparent 70%)!important;}
-html[data-theme="light"] .hero-tag{background:#EAF6FD!important;border-color:#BBDDF1!important;color:#0877AB!important;box-shadow:0 3px 10px rgba(23,105,170,.08)!important;}
-html[data-theme="light"] .hero-tag::before{background:#0AADE0!important;}
-html[data-theme="light"] .hero-title{color:#162338!important;text-shadow:none!important;}
-html[data-theme="light"] .hero-title span{color:#078EC0!important;}
-html[data-theme="light"] .hero-sub,
-html[data-theme="light"] .hero-sub span{color:#42546A!important;}
-html[data-theme="light"] .hero-sub .dot{color:#5EAFCB!important;}
-html[data-theme="light"] .hero-scan-line{display:none!important;}
-
-/* 天気・注意カードはライトでも独立カードとして見せる */
-html[data-theme="light"] .wx-alert{background:#FFFFFF!important;color:#162338!important;border-color:#D7E2EB!important;box-shadow:0 5px 16px rgba(18,38,63,.09)!important;}
-html[data-theme="light"] .wx-alert .wx-msg{color:#26364A!important;}
-html[data-theme="light"] .wx-alert .wx-arrow{color:#64748B!important;}
-html[data-theme="light"] .wx-alert.lv-caution .wx-label{color:#1769AA!important;}
-html[data-theme="light"] .wx-alert.lv-warn .wx-label{color:#8A5A00!important;}
-html[data-theme="light"] .wx-alert.lv-severe .wx-label,
-html[data-theme="light"] .wx-alert.lv-danger .wx-label{color:#B33B21!important;}
-html[data-theme="light"] .wx-alert.lv-wind .wx-label{color:#166579!important;}
-
-/* ホームカード・検索 */
-html[data-theme="light"] .mc,
-html[data-theme="light"] .lc,
-html[data-theme="light"] .home-tools-card,
-html[data-theme="light"] .search-panel,
-html[data-theme="light"] .category-filter{background:#FFFFFF!important;border-color:#DCE3EB!important;}
-html[data-theme="light"] .mc:hover,
-html[data-theme="light"] .lc:hover{border-color:#B9C8D7!important;box-shadow:0 8px 22px rgba(18,38,63,.11)!important;}
-html[data-theme="light"] .mc-guild{background:linear-gradient(135deg,#F4FFF8,#FFFFFF)!important;border-color:#9ED7B8!important;}
-html[data-theme="light"] .feature-search,
-html[data-theme="light"] input,
-html[data-theme="light"] select,
-html[data-theme="light"] textarea{background:#FFFFFF!important;color:#111827!important;border-color:#D4DCE6!important;}
-html[data-theme="light"] input::placeholder,
-html[data-theme="light"] textarea::placeholder{color:#8A96A6!important;opacity:1;}
-html[data-theme="light"] .feature-search:focus,
-html[data-theme="light"] input:focus,
-html[data-theme="light"] select:focus,
-html[data-theme="light"] textarea:focus{border-color:#2B7DBB!important;box-shadow:0 0 0 4px rgba(43,125,187,.12)!important;}
-
-/* セクション見出しのアイコンをライトモードでも立体的に */
-html[data-theme="light"] .sec-head-icon{border:1px solid rgba(23,105,170,.10)!important;box-shadow:0 4px 12px rgba(18,38,63,.08)!important;}
-html[data-theme="light"] .sec-head-label{color:#26364A!important;}
-html[data-theme="light"] .sec-head-line{background:linear-gradient(90deg,#C9D4DF,transparent)!important;}
-
-/* ===== スクリーンショットにあるホーム内「使い方」エリア ===== */
-html[data-theme="light"] .manual-wrap,
-html[data-theme="light"] .manual-panel,
-html[data-theme="light"] .manual-faq details{background:#FFFFFF!important;color:#111827!important;border-color:#D7E0E9!important;box-shadow:0 4px 14px rgba(18,38,63,.08)!important;}
-html[data-theme="light"] .manual-label{background:linear-gradient(90deg,#E9F7EF,#F4FBF7)!important;border:1px solid #B8DFC8!important;color:#17623E!important;box-shadow:none!important;}
-html[data-theme="light"] .manual-label small{color:#4D705F!important;}
-html[data-theme="light"] .manual-tabs{gap:10px!important;}
-html[data-theme="light"] .manual-tab{background:#FFFFFF!important;color:#26364A!important;border:1px solid #D7E0E9!important;box-shadow:0 3px 10px rgba(18,38,63,.08)!important;}
-html[data-theme="light"] .manual-tab.active{background:#EAF3FB!important;color:#174F7C!important;border-color:#7FB4D9!important;box-shadow:0 0 0 2px rgba(23,105,170,.10),0 4px 12px rgba(18,38,63,.08)!important;}
-html[data-theme="light"] .manual-tab.active .manual-glyph{color:#1769AA!important;}
-html[data-theme="light"] .manual-panel-title{color:#162338!important;}
-html[data-theme="light"] .manual-panel-lead,
-html[data-theme="light"] .manual-step,
-html[data-theme="light"] .manual-faq p{color:#405064!important;}
-html[data-theme="light"] .manual-step b{background:#F08A24!important;color:#FFFFFF!important;}
-html[data-theme="light"] .manual-open{background:linear-gradient(135deg,#F06A2D,#E8612A)!important;color:#FFFFFF!important;box-shadow:0 5px 14px rgba(232,97,42,.22)!important;}
-html[data-theme="light"] .manual-faq summary{background:#FFFFFF!important;color:#162338!important;}
-html[data-theme="light"] .manual-faq summary::after{color:#1769AA!important;}
-html[data-theme="light"] .manual-faq details[open] summary{background:#EEF6FC!important;}
-
-/* ===== 説明書・ヘルプ app_guide.html ===== */
-html[data-theme="light"] .guide-hero{background:linear-gradient(135deg,#EAF5FC,#FFF6EF)!important;color:#162338!important;border:1px solid #D4E5F0!important;box-shadow:0 6px 18px rgba(18,38,63,.09)!important;}
-html[data-theme="light"] .guide-hero h1{color:#162338!important;}
-html[data-theme="light"] .guide-hero p{color:#526173!important;}
-html[data-theme="light"] .guide-hero i{color:#E8612A!important;}
-html[data-theme="light"] .guide-tabs{background:#FFFFFF!important;border-color:#D7E0E9!important;box-shadow:0 4px 14px rgba(18,38,63,.07)!important;}
-html[data-theme="light"] .guide-tab{background:#FFFFFF!important;color:#405064!important;border-color:#D7E0E9!important;}
-html[data-theme="light"] .guide-tab.active{background:linear-gradient(135deg,#E8612A,#D75521)!important;color:#FFFFFF!important;box-shadow:inset 0 -3px 0 rgba(0,0,0,.08)!important;}
-html[data-theme="light"] .acc{background:#FFFFFF!important;border-color:#D7E0E9!important;}
-html[data-theme="light"] .acc-head{background:#FFFFFF!important;}
-html[data-theme="light"] .acc.open .acc-head{background:#F1F7FC!important;}
-html[data-theme="light"] .acc-body{background:#FFFFFF!important;border-color:#E6EBF1!important;color:#405064!important;}
-html[data-theme="light"] .acc-icon{background:#FFF1EA!important;color:#D95722!important;}
-html[data-theme="light"] .beginner-map{background:#FFFFFF!important;border-color:#F0B429!important;}
-html[data-theme="light"] .category-jumps a{background:#FFFFFF!important;color:#162338!important;border-color:#D7E0E9!important;box-shadow:0 3px 10px rgba(18,38,63,.07)!important;}
-html[data-theme="light"] .guide-category{background:linear-gradient(135deg,#EAF3FB,#F5F9FC)!important;color:#162338!important;border:1px solid #C9DDEA!important;}
-html[data-theme="light"] .guide-category h2{color:#162338!important;}
-html[data-theme="light"] .guide-category p{color:#526173!important;}
-html[data-theme="light"] .guide-category i{color:#1769AA!important;}
-html[data-theme="light"] .feature-table{background:#FFFFFF!important;border:1px solid #E1E7EE!important;}
-html[data-theme="light"] .feature-table th{background:#EAF3FB!important;color:#173A59!important;}
-html[data-theme="light"] .feature-table td{color:#405064!important;border-color:#E6EBF1!important;}
-html[data-theme="light"] .feature-table td:first-child{color:#162338!important;}
-html[data-theme="light"] .codebox{background:#EEF3F7!important;color:#25364A!important;border:1px solid #D7E0E9!important;}
-
-/* ===== 共通ページ固有カードをライトへ寄せる ===== */
-html[data-theme="light"] .ky-card,
-html[data-theme="light"] .result-card,
-html[data-theme="light"] .support-panel,
-html[data-theme="light"] .post-card,
-html[data-theme="light"] .check-section,
-html[data-theme="light"] .gauge-card,
-html[data-theme="light"] .install-card,
-html[data-theme="light"] .modal-sheet{background:#FFFFFF!important;color:#111827!important;border-color:#DCE3EB!important;}
-html[data-theme="light"] .ky-title,
-html[data-theme="light"] .ky-subtitle,
-html[data-theme="light"] .modal-title,
-html[data-theme="light"] .check-section-title,
-html[data-theme="light"] .gauge-title{color:#162338!important;}
-
-/* 選択中は色だけでなく輪郭と影を併用 */
-html[data-theme="light"] .ky-tab.active,
-html[data-theme="light"] .t-btn.active,
-html[data-theme="light"] [aria-selected="true"]{box-shadow:0 0 0 2px rgba(23,105,170,.12),0 5px 14px rgba(18,38,63,.09)!important;}
-
-/* ===== 固定ボトムアクションバー ===== */
-.doken-contact-rail{backdrop-filter:saturate(1.15) blur(12px);-webkit-backdrop-filter:saturate(1.15) blur(12px);}
-html[data-theme="light"] .doken-contact-rail{background:rgba(248,250,252,.96)!important;border-color:#D8E0E8!important;box-shadow:0 -8px 24px rgba(18,38,63,.12)!important;}
-html[data-theme="light"] .doken-contact-rail a{box-shadow:0 4px 12px rgba(18,38,63,.12)!important;border:1px solid rgba(255,255,255,.45)!important;}
-.doken-contact-rail a:active{transform:scale(.97);}
-
-/* テーマ切替をよりアプリのフローティングボタンらしく */
-.theme-toggle{transition:transform .16s ease,box-shadow .16s ease,background-color .16s ease!important;}
-.theme-toggle:active{transform:scale(.94);}
-html[data-theme="light"] .theme-toggle{background:#FFFFFF!important;color:#1769AA!important;border-color:#CCD7E2!important;box-shadow:0 6px 18px rgba(18,38,63,.18)!important;}
-
-/* 大きい画面でもスマホアプリの面としてまとまる */
-@media(min-width:641px){
-  html[data-theme="light"] body{background:#E9EEF4!important;}
-  html[data-theme="light"] .app{box-shadow:0 0 40px rgba(18,38,63,.10)!important;}
+html[data-theme="light"] .timer-box{
+  background:#F1F6FA!important;
+  border:1px solid #D7E1EA!important;
 }
-
-@media(max-width:390px){
-  .card,.mc-body,.ky-card{padding-left:14px!important;padding-right:14px!important;}
+html[data-theme="light"] .timer-label{color:#526173!important;}
+html[data-theme="light"] .timer-val{color:#162338!important;}
+html[data-theme="light"] .timer-select{
+  background:#FFFFFF!important;
+  color:#162338!important;
+  border:1px solid #CCD8E3!important;
 }
+html[data-theme="light"] .timer-btn{background:#E8612A!important;color:#FFFFFF!important;}
+html[data-theme="light"] .section-card{background:#FFFFFF!important;color:#111827!important;border-color:#DCE3EB!important;}
+html[data-theme="light"] .section-title{color:#162338!important;}
+html[data-theme="light"] .section-lead{color:#526173!important;}
 
 @media(prefers-reduced-motion:reduce){
-  .mc,.lc,.card,.acc,.install-card,.post-card,.ky-card,.guide-tab,.category-jumps a,.t-btn,.ky-tab,.btn-primary,.btn-secondary,.quick-link,.post-btn,.theme-toggle,.doken-contact-rail a{transition:none!important;}
+  html[data-theme="light"] .app-manual,
+  html[data-theme="light"] .briefing,
+  html[data-theme="light"] .timer-box{transition:none!important;}
 }
