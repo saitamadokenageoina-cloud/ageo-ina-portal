@@ -1,3 +1,4 @@
-/* Home card visual entry point.
-   Card visuals are intentionally defined in paypay-tabs-base.css so the
-   production home cannot be overridden by the legacy sprite implementation. */
+/* Home card 3D illustration entry point.
+   Loaded by navigation.js after home-modern.css. */
+@import url('./home-card-art-core.css');
+@import url('./home-card-art-v2.css');
