@@ -80,7 +80,7 @@ body.home-modern{padding-bottom:92px;background:#F5F6F8;}
 .home-modern .home-tools{padding:8px 16px 4px!important;}
 .home-modern .home-tools-card{border:0!important;box-shadow:none!important;background:transparent!important;padding:8px 0!important;}
 .home-modern .home-tools-title{font-size:15px!important;margin-bottom:8px!important;}
-.home-modern input.feature-search{min-height:50px;border:1px solid #D9E0E7!important;border-radius:14px!important;background:#fff!important;box-shadow:0 2px 8px rgba(22,35,56,.05);}
+.home-modern input.feature-search{min-height:50px;border:0!important;border-radius:14px!important;background:#fff!important;box-shadow:none!important;}
 .home-modern .home-tool-row{margin-top:8px;}
 
 /* Bottom navigation */
@@ -113,7 +113,7 @@ html[data-theme="dark"] .home-modern .sec-head-label{color:#F6F8FB!important;}
 html[data-theme="dark"] .home-modern .home-rail-fade{background:linear-gradient(90deg,rgba(7,20,38,0),rgba(7,20,38,.94));}
 html[data-theme="dark"] .home-modern .home-rail-next{background:#142A45;color:#7FD7F0;border-color:#3A526D;}
 html[data-theme="dark"] .home-quick-label{color:#F5F7FA;}
-html[data-theme="dark"] .home-modern input.feature-search{background:#10213A!important;color:#F5F7FA!important;border-color:#344A62!important;}
+html[data-theme="dark"] .home-modern input.feature-search{background:#10213A!important;color:#F5F7FA!important;border:1px solid #344A62!important;}
 html[data-theme="dark"] .home-bottom-nav{background:rgba(10,26,46,.97);border-color:#31475F;box-shadow:0 -7px 22px rgba(0,0,0,.32);}
 html[data-theme="dark"] .home-bottom-item{color:#B8C7D8;}
 html[data-theme="dark"] .home-bottom-item.active{background:#173452;color:#7FD7F0;}
@@ -150,46 +150,35 @@ html[data-theme="dark"] .home-menu-link{background:#142A45;border-color:#324A64;
   box-shadow:none;
 }
 .home-quick-icon{width:60px;height:60px;border-radius:18px;}
-.home-quick-icon i{font-size:30px;line-height:1;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
+.home-quick-icon i{font-size:30px;line-height:1;font-weight:500;-webkit-font-smoothing:antialiased;}
 .home-card-icon{width:52px;height:52px;border-radius:16px;}
-.home-card-icon i{font-size:28px;line-height:1;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
-.home-modern .sec-head-glyph i,
-.home-bottom-item i,.home-menu-link i{
-  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
-}
-.home-modern .section:not(#yoku) .mc-top{font-size:0!important;}
-.home-modern .section:not(#yoku) .mc-top>svg,
-.home-modern .section:not(#yoku) .mc-top>.mc-emoji{display:none!important;}
-.home-quick-item.tone-gray .home-quick-icon{background:#F0F4F8;color:#34485D;border-color:#E4E9EF;}
+.home-card-icon i{font-size:28px;line-height:1;font-weight:500;-webkit-font-smoothing:antialiased;}
 .home-quick-item:focus-visible .home-quick-icon,
-.home-modern .section:not(#yoku) .grid2>.mc:focus-visible .home-card-icon{outline:3px solid rgba(23,105,170,.28);outline-offset:3px;}
+.home-modern .mc:focus-visible .home-card-icon{outline:3px solid rgba(23,105,170,.28);outline-offset:3px;}
+/* Legacy illustrations/emoji must never compete with the app icon. */
+.home-modern .section:not(#yoku) .mc-top>svg,
+.home-modern .section:not(#yoku) .mc-top>.mc-emoji,
+.home-modern .section:not(#yoku) .mc-top>span:not(.home-card-icon){display:none!important;}
 
-/* Missing icon-name compatibility for the bundled Tabler version */
-.ti-building-construction:before{content:"\ea4f";}
-.ti-rosette-discount-check:before{content:"\f599";}
-
-/* Dark-mode palette: colored dark surfaces + luminous line icons */
+/* Dark mode: use deep tinted tiles + luminous line icons, not pale tiles. */
 html[data-theme="dark"] .home-quick-icon,
-html[data-theme="dark"] .home-card-icon,
-html[data-theme="dark"] .home-menu-link i{border-color:rgba(255,255,255,.075);box-shadow:none;}
+html[data-theme="dark"] .home-card-icon{
+  border-color:rgba(255,255,255,.10);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.035);
+}
 html[data-theme="dark"] .home-quick-item.tone-blue .home-quick-icon,
-html[data-theme="dark"] .home-card-icon.tone-blue{background:#0D3554!important;color:#63C3FF!important;}
+html[data-theme="dark"] .home-card-icon.tone-blue{background:#123656;color:#72C7FF;}
 html[data-theme="dark"] .home-quick-item.tone-green .home-quick-icon,
-html[data-theme="dark"] .home-card-icon.tone-green{background:#103B30!important;color:#62D99D!important;}
+html[data-theme="dark"] .home-card-icon.tone-green{background:#123B32;color:#65D5A5;}
 html[data-theme="dark"] .home-quick-item.tone-orange .home-quick-icon,
-html[data-theme="dark"] .home-card-icon.tone-orange{background:#48291D!important;color:#FF9D73!important;}
+html[data-theme="dark"] .home-card-icon.tone-orange{background:#4A2C21;color:#FF9A67;}
 html[data-theme="dark"] .home-quick-item.tone-purple .home-quick-icon,
-html[data-theme="dark"] .home-card-icon.tone-purple{background:#302653!important;color:#B9A3FF!important;}
+html[data-theme="dark"] .home-card-icon.tone-purple{background:#30274F;color:#B79BFF;}
 html[data-theme="dark"] .home-quick-item.tone-cyan .home-quick-icon,
-html[data-theme="dark"] .home-card-icon.tone-cyan{background:#103A43!important;color:#6FDFEA!important;}
+html[data-theme="dark"] .home-card-icon.tone-cyan{background:#123A43;color:#68D9E8;}
 html[data-theme="dark"] .home-quick-item.tone-pink .home-quick-icon,
-html[data-theme="dark"] .home-card-icon.tone-pink{background:#472337!important;color:#FF91B8!important;}
+html[data-theme="dark"] .home-card-icon.tone-pink{background:#47283A;color:#FF91B9;}
 html[data-theme="dark"] .home-quick-item.tone-gold .home-quick-icon,
-html[data-theme="dark"] .home-card-icon.tone-gold{background:#493A18!important;color:#FFD56B!important;}
+html[data-theme="dark"] .home-card-icon.tone-gold{background:#44371A;color:#FFD66B;}
 html[data-theme="dark"] .home-quick-item.tone-gray .home-quick-icon,
-html[data-theme="dark"] .home-card-icon.tone-gray{background:#223247!important;color:#DCE6F1!important;border-color:#32465E!important;}
-html[data-theme="dark"] .home-menu-link i{background:#0D3554!important;color:#63C3FF!important;}
-html[data-theme="dark"] .home-modern .sec-head-icon{border-color:rgba(255,255,255,.10)!important;}
-html[data-theme="dark"] .home-modern .sec-head-glyph i{color:#DDE7F2!important;}
-html[data-theme="dark"] .home-bottom-item i{color:inherit;}
-html[data-theme="dark"] .home-bottom-item.active{background:#173A5A!important;color:#7FD7FF!important;}
+html[data-theme="dark"] .home-card-icon.tone-gray{background:#26374B;color:#D5E2F0;}
