@@ -1,4 +1,4 @@
-/* DOKEN SMART PORTAL - vivid mobile category UI v3 */
+/* DOKEN SMART PORTAL - vivid mobile category UI v4 */
 
 /* ===== DOKEN Guild: 4-way app tabs ===== */
 body:has(.guild-hero) .category-filter{padding:16px 0 18px!important;border:0!important;border-radius:22px!important;background:#fff!important;box-shadow:0 10px 28px rgba(18,38,63,.09)!important;overflow:hidden!important;}
@@ -31,33 +31,31 @@ body:has(.guild-hero) .category-filter .t-btn[data-category="soudan"].active .t-
 body:has(.guild-hero) .category-filter .t-btn[data-category="soudan"].active .t-btn-copy strong{color:#6740B8!important;}
 body:has(.guild-hero) .category-filter .tab-row::after{grid-column:1/-1!important;margin:18px 14px 0!important;min-height:150px!important;border-radius:18px!important;}
 
-/* ===== Home category rails: PayPay-like visual hierarchy ===== */
+/* ===== Home category rails ===== */
 body.home-modern .section:not(#yoku){--rail-accent:#1683CC;--rail-soft:#EAF4FD;--rail-ink:#126CA7;}
-body.home-modern #daily{--rail-accent:#1683CC;--rail-soft:#EAF4FD;--rail-ink:#126CA7;}
+body.home-modern #nichijo{--rail-accent:#1683CC;--rail-soft:#EAF4FD;--rail-ink:#126CA7;}
 body.home-modern #shigoto{--rail-accent:#14935F;--rail-soft:#E8F7EF;--rail-ink:#0F7A4D;}
 body.home-modern #genba{--rail-accent:#E16727;--rail-soft:#FFF0E6;--rail-ink:#C95518;}
 body.home-modern #tetsuzuki{--rail-accent:#7551C5;--rail-soft:#F1ECFD;--rail-ink:#6542B4;}
 body.home-modern #shiryo{--rail-accent:#13859A;--rail-soft:#E8F7FA;--rail-ink:#0D7182;}
-
-body.home-modern .section:not(#yoku)>.sec-head{position:relative!important;padding-bottom:10px!important;margin-bottom:12px!important;}
-body.home-modern .section:not(#yoku)>.sec-head::after{content:'';position:absolute;left:16px;right:16px;bottom:0;height:3px;border-radius:99px;background:linear-gradient(90deg,var(--rail-accent) 0 54px,rgba(120,136,153,.16) 54px);}
-body.home-modern .section:not(#yoku) .sec-head-icon{background:var(--rail-soft)!important;color:var(--rail-ink)!important;border-color:color-mix(in srgb,var(--rail-accent) 20%,transparent)!important;box-shadow:none!important;}
+body.home-modern .section:not(#yoku)>.sec-head{position:relative!important;padding:0 30px 10px!important;margin-bottom:12px!important;}
+body.home-modern .section:not(#yoku)>.sec-head::after{content:'';position:absolute;left:30px;right:30px;bottom:0;height:3px;border-radius:99px;background:linear-gradient(90deg,var(--rail-accent) 0 54px,rgba(120,136,153,.16) 54px);}
+body.home-modern .section:not(#yoku) .sec-head-icon{background:var(--rail-soft)!important;color:var(--rail-ink)!important;border-color:rgba(22,131,204,.18)!important;box-shadow:none!important;}
 body.home-modern .section:not(#yoku) .sec-head-glyph i{color:inherit!important;}
 body.home-modern .section:not(#yoku) .home-all-btn{color:var(--rail-accent)!important;font-weight:900!important;}
-
 body.home-modern .section:not(#yoku) .grid2{gap:13px!important;padding-top:4px!important;}
-body.home-modern .section:not(#yoku) .grid2>.mc{height:272px!important;border-radius:20px!important;border:1px solid rgba(23,38,58,.07)!important;box-shadow:0 7px 20px rgba(18,38,63,.08)!important;background:#fff!important;overflow:hidden!important;}
+body.home-modern .section:not(#yoku) .grid2>.mc{height:292px!important;border-radius:20px!important;border:1px solid rgba(23,38,58,.07)!important;box-shadow:0 7px 20px rgba(18,38,63,.08)!important;background:#fff!important;overflow:hidden!important;}
 body.home-modern .section:not(#yoku) .grid2>.mc::before{content:'';position:absolute;left:0;right:0;top:0;height:5px;background:var(--rail-accent);z-index:2;}
-body.home-modern .section:not(#yoku) .mc-top{height:106px!important;min-height:106px!important;padding:18px 14px 12px!important;align-items:center!important;justify-content:center!important;background:linear-gradient(180deg,var(--rail-soft),#fff)!important;border-bottom:1px solid rgba(23,38,58,.045)!important;}
-body.home-modern .section:not(#yoku) .home-card-icon{width:66px!important;height:66px!important;border-radius:20px!important;background:#fff!important;color:var(--rail-ink)!important;border:1px solid rgba(23,38,58,.06)!important;box-shadow:0 7px 18px rgba(18,38,63,.10)!important;}
-body.home-modern .section:not(#yoku) .home-card-icon i{font-size:34px!important;}
+body.home-modern .section:not(#yoku) .mc-top{height:128px!important;min-height:128px!important;padding:0!important;display:flex!important;align-items:center!important;justify-content:center!important;background:linear-gradient(180deg,var(--rail-soft),#fff)!important;border-bottom:1px solid rgba(23,38,58,.06)!important;overflow:hidden!important;}
+body.home-modern .section:not(#yoku) .home-card-icon{display:flex!important;width:86px!important;height:86px!important;border-radius:28px!important;background:linear-gradient(145deg,#fff,var(--rail-soft))!important;color:var(--rail-ink)!important;border:1px solid rgba(23,38,58,.08)!important;box-shadow:0 12px 24px rgba(18,38,63,.15),inset 0 1px 0 rgba(255,255,255,.9)!important;transform:perspective(180px) rotateX(3deg)!important;}
+body.home-modern .section:not(#yoku) .home-card-icon i{font-size:44px!important;filter:drop-shadow(0 3px 2px rgba(18,38,63,.12));}
 body.home-modern .section:not(#yoku) .mc-body{padding:12px 14px 16px!important;}
 body.home-modern .section:not(#yoku) .mc-badge{background:var(--rail-soft)!important;color:var(--rail-ink)!important;border:0!important;font-size:10px!important;font-weight:900!important;padding:5px 9px!important;margin-bottom:8px!important;}
 body.home-modern .section:not(#yoku) .mc-title{font-size:16px!important;line-height:1.32!important;font-weight:900!important;color:#17263A!important;min-height:42px!important;margin-bottom:7px!important;}
 body.home-modern .section:not(#yoku) .mc-desc{font-size:11.5px!important;line-height:1.52!important;color:#637184!important;font-weight:700!important;}
 body.home-modern .section:not(#yoku) .grid2>.mc:active{transform:scale(.975)!important;box-shadow:0 3px 10px rgba(18,38,63,.08)!important;}
 
-/* ===== Bottom navigation: remove the line that looked vertically shifted ===== */
+/* ===== Bottom navigation ===== */
 body.home-modern .home-bottom-nav{padding-top:6px!important;}
 body.home-modern .home-bottom-item{border-radius:14px!important;padding-top:4px!important;gap:3px!important;background:transparent!important;}
 body.home-modern .home-bottom-item::before{display:none!important;content:none!important;}
@@ -72,24 +70,12 @@ html[data-theme="dark"] body:has(.guild-hero) .category-filter .tab-row{border-b
 html[data-theme="dark"] body:has(.guild-hero) .category-filter .t-btn{background:transparent!important;color:#AEBCCE!important;border:0!important;box-shadow:none!important;}
 html[data-theme="dark"] body:has(.guild-hero) .category-filter .t-btn-icon{background:#1A304B!important;color:#B7C6D7!important;}
 html[data-theme="dark"] body:has(.guild-hero) .category-filter .t-btn-copy strong{color:#B7C6D7!important;}
-html[data-theme="dark"] body:has(.guild-hero) .category-filter .t-btn.active .t-btn-icon{background:#123F61!important;color:#7DD0FF!important;}
-html[data-theme="dark"] body:has(.guild-hero) .category-filter .t-btn[data-category="jinzai"].active .t-btn-icon{background:#123B32!important;color:#6EE0AD!important;}
-html[data-theme="dark"] body:has(.guild-hero) .category-filter .t-btn[data-category="shizai"].active .t-btn-icon{background:#4A2C21!important;color:#FFA06D!important;}
-html[data-theme="dark"] body:has(.guild-hero) .category-filter .t-btn[data-category="soudan"].active .t-btn-icon{background:#30274F!important;color:#C0A5FF!important;}
-
 html[data-theme="dark"] body.home-modern .section:not(#yoku) .grid2>.mc{background:#10213A!important;border-color:#2A4058!important;box-shadow:0 8px 22px rgba(0,0,0,.22)!important;}
-html[data-theme="dark"] body.home-modern .section:not(#yoku) .mc-top{background:linear-gradient(180deg,color-mix(in srgb,var(--rail-accent) 16%,#10213A),#10213A)!important;border-bottom-color:#263C54!important;}
-html[data-theme="dark"] body.home-modern .section:not(#yoku) .home-card-icon{background:#172B44!important;color:color-mix(in srgb,var(--rail-accent) 62%,#fff)!important;border-color:#36506A!important;box-shadow:0 7px 18px rgba(0,0,0,.20)!important;}
+html[data-theme="dark"] body.home-modern .section:not(#yoku) .mc-top{background:linear-gradient(180deg,rgba(22,131,204,.10),#10213A)!important;border-bottom-color:#263C54!important;}
+html[data-theme="dark"] body.home-modern .section:not(#yoku) .home-card-icon{background:linear-gradient(145deg,#1B3553,#122740)!important;color:#86D2FF!important;border-color:#36506A!important;box-shadow:0 12px 24px rgba(0,0,0,.26),inset 0 1px 0 rgba(255,255,255,.08)!important;}
 html[data-theme="dark"] body.home-modern .section:not(#yoku) .mc-title{color:#F7F9FC!important;}
 html[data-theme="dark"] body.home-modern .section:not(#yoku) .mc-desc{color:#C8D4E1!important;}
-html[data-theme="dark"] body.home-modern .section:not(#yoku) .mc-badge{background:color-mix(in srgb,var(--rail-accent) 20%,#10213A)!important;color:color-mix(in srgb,var(--rail-accent) 56%,#fff)!important;}
 html[data-theme="dark"] body.home-modern .section:not(#yoku)>.sec-head::after{background:linear-gradient(90deg,var(--rail-accent) 0 54px,rgba(150,170,190,.18) 54px);}
 html[data-theme="dark"] body.home-modern .home-bottom-item.active{color:#79D1FF!important;background:#173452!important;box-shadow:inset 0 0 0 1px #2E5574!important;}
-
-@media(max-width:350px){
- body:has(.guild-hero) .category-filter .t-btn{min-height:108px!important;padding-left:1px!important;padding-right:1px!important;}
- body:has(.guild-hero) .category-filter .t-btn-icon{width:48px!important;height:48px!important;font-size:26px!important;}
- body:has(.guild-hero) .category-filter .t-btn-copy strong::after{font-size:11px!important;}
- body.home-modern .section:not(#yoku) .grid2>.mc{height:284px!important;}
-}
+@media(max-width:350px){body.home-modern .section:not(#yoku)>.sec-head{padding-left:16px!important;padding-right:16px!important;}body.home-modern .section:not(#yoku)>.sec-head::after{left:16px;right:16px;}body.home-modern .section:not(#yoku) .grid2>.mc{height:300px!important;}}
 @media(prefers-reduced-motion:reduce){body:has(.guild-hero) .category-filter .t-btn,body.home-modern .section:not(#yoku) .grid2>.mc,body.home-modern .home-bottom-item{transition:none!important;}}
