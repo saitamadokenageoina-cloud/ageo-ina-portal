@@ -319,17 +319,6 @@
   else initializeCommonUi();
 })();
 
-(function(){
-  var file = location.pathname.split('/').pop() || 'index.html';
-  if (file !== 'index.html') return;
-  if (document.querySelector('script[data-home-ux-v2]')) return;
-  var script = document.createElement('script');
-  script.src = 'assets/js/home-ux-v2.js';
-  script.defer = true;
-  script.setAttribute('data-home-ux-v2','true');
-  document.head.appendChild(script);
-})();
-
 (function () {
   if (!('serviceWorker' in navigator)) return;
   var SW_URL = '/ageo-ina-portal/sw.js';
