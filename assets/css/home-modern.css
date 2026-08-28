@@ -137,3 +137,59 @@ html[data-theme="dark"] .home-menu-link{background:#142A45;border-color:#324A64;
 @media(prefers-reduced-motion:reduce){
   .home-quick-icon,.home-menu-overlay,.home-menu-sheet{transition:none!important;}
 }
+
+/* ===== Icon polish v2: crisp, app-grade, dark-mode safe ===== */
+.home-quick-item{
+  appearance:none;-webkit-appearance:none;border:0;background:transparent;font:inherit;cursor:pointer;width:100%;margin:0;
+}
+.home-quick-icon,
+.home-card-icon,
+.home-menu-link i{
+  box-sizing:border-box;
+  border:1px solid rgba(23,38,58,.055);
+  box-shadow:none;
+}
+.home-quick-icon{width:60px;height:60px;border-radius:18px;}
+.home-quick-icon i{font-size:30px;line-height:1;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
+.home-card-icon{width:52px;height:52px;border-radius:16px;}
+.home-card-icon i{font-size:28px;line-height:1;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
+.home-modern .sec-head-glyph i,
+.home-bottom-item i,.home-menu-link i{
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+}
+.home-modern .section:not(#yoku) .mc-top{font-size:0!important;}
+.home-modern .section:not(#yoku) .mc-top>svg,
+.home-modern .section:not(#yoku) .mc-top>.mc-emoji{display:none!important;}
+.home-quick-item.tone-gray .home-quick-icon{background:#F0F4F8;color:#34485D;border-color:#E4E9EF;}
+.home-quick-item:focus-visible .home-quick-icon,
+.home-modern .section:not(#yoku) .grid2>.mc:focus-visible .home-card-icon{outline:3px solid rgba(23,105,170,.28);outline-offset:3px;}
+
+/* Missing icon-name compatibility for the bundled Tabler version */
+.ti-building-construction:before{content:"\ea4f";}
+.ti-rosette-discount-check:before{content:"\f599";}
+
+/* Dark-mode palette: colored dark surfaces + luminous line icons */
+html[data-theme="dark"] .home-quick-icon,
+html[data-theme="dark"] .home-card-icon,
+html[data-theme="dark"] .home-menu-link i{border-color:rgba(255,255,255,.075);box-shadow:none;}
+html[data-theme="dark"] .home-quick-item.tone-blue .home-quick-icon,
+html[data-theme="dark"] .home-card-icon.tone-blue{background:#0D3554!important;color:#63C3FF!important;}
+html[data-theme="dark"] .home-quick-item.tone-green .home-quick-icon,
+html[data-theme="dark"] .home-card-icon.tone-green{background:#103B30!important;color:#62D99D!important;}
+html[data-theme="dark"] .home-quick-item.tone-orange .home-quick-icon,
+html[data-theme="dark"] .home-card-icon.tone-orange{background:#48291D!important;color:#FF9D73!important;}
+html[data-theme="dark"] .home-quick-item.tone-purple .home-quick-icon,
+html[data-theme="dark"] .home-card-icon.tone-purple{background:#302653!important;color:#B9A3FF!important;}
+html[data-theme="dark"] .home-quick-item.tone-cyan .home-quick-icon,
+html[data-theme="dark"] .home-card-icon.tone-cyan{background:#103A43!important;color:#6FDFEA!important;}
+html[data-theme="dark"] .home-quick-item.tone-pink .home-quick-icon,
+html[data-theme="dark"] .home-card-icon.tone-pink{background:#472337!important;color:#FF91B8!important;}
+html[data-theme="dark"] .home-quick-item.tone-gold .home-quick-icon,
+html[data-theme="dark"] .home-card-icon.tone-gold{background:#493A18!important;color:#FFD56B!important;}
+html[data-theme="dark"] .home-quick-item.tone-gray .home-quick-icon,
+html[data-theme="dark"] .home-card-icon.tone-gray{background:#223247!important;color:#DCE6F1!important;border-color:#32465E!important;}
+html[data-theme="dark"] .home-menu-link i{background:#0D3554!important;color:#63C3FF!important;}
+html[data-theme="dark"] .home-modern .sec-head-icon{border-color:rgba(255,255,255,.10)!important;}
+html[data-theme="dark"] .home-modern .sec-head-glyph i{color:#DDE7F2!important;}
+html[data-theme="dark"] .home-bottom-item i{color:inherit;}
+html[data-theme="dark"] .home-bottom-item.active{background:#173A5A!important;color:#7FD7FF!important;}
