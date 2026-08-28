@@ -24,7 +24,7 @@
     ['koushu.html','ti-certificate','tone-gold'],
     ['shiryo.html','ti-folders','tone-cyan'],
     ['book.html','ti-books','tone-purple'],
-    ['merit.html','ti-rosette-discount-check','tone-orange'],
+    ['merit.html','ti-discount-check','tone-orange'],
     ['guide.html','ti-route','tone-blue'],
     ['default','ti-apps','tone-gray']
   ];
@@ -32,7 +32,7 @@
   var SECTION_ICONS = {
     yoku:'ti-sparkles',
     shigoto:'ti-users-group',
-    genba:'ti-building-construction',
+    genba:'ti-helmet',
     tetsuzuki:'ti-file-description',
     shiryo:'ti-books',
     sonota:'ti-dots'
@@ -159,7 +159,7 @@
           try { grid.scrollBy({left:amount,behavior:'smooth'}); }
           catch(e){ grid.scrollLeft += amount; }
         });
-        grid.addEventListener('scroll',function(){ updateRail(shell,grid,next); },{passive:true});
+        grid.addEventListener('scroll',function(){ updateRail(shell,grid,next); },false);
         window.addEventListener('resize',function(){ updateRail(shell,grid,next); });
 
         allBtn.addEventListener('click',function(){
@@ -187,9 +187,9 @@
         var title = cards[j].querySelector('.mc-title');
         var href = cards[j].getAttribute('href');
         if(!title || !href) continue;
-        items.push({title:title.textContent.trim(),href:href,external:cards[j].target==='_blank',icon:iconFor(href)});
+        items.push({title:title.textContent.replace(/^\s+|\s+$/g,''),href:href,external:cards[j].target==='_blank',icon:iconFor(href)});
       }
-      groups.push({label:label ? label.textContent.trim() : '機能',items:items});
+      groups.push({label:label ? label.textContent.replace(/^\s+|\s+$/g,'') : '機能',items:items});
     }
     return groups;
   }
@@ -208,23 +208,26 @@
     sheet.style.overflowY = 'auto';
     sheet.innerHTML = '<div class="home-menu-handle"></div><div class="home-menu-title"><span>すべての機能</span><button class="home-menu-close" type="button" aria-label="閉じる"><i class="ti ti-x"></i></button></div>';
     var groups = collectAllTools();
-    groups.forEach(function(group){
+    var i,j;
+    for(i=0;i<groups.length;i+=1){
+      var group = groups[i];
       var h = document.createElement('h3');
       h.style.cssText='font-size:14px;margin:17px 2px 8px;color:var(--navy);';
       h.textContent=group.label;
       sheet.appendChild(h);
       var grid=document.createElement('div');
       grid.className='home-menu-grid';
-      group.items.forEach(function(item){
+      for(j=0;j<group.items.length;j+=1){
+        var item=group.items[j];
         var a=document.createElement('a');
         a.className='home-menu-link';
         a.href=item.href;
         if(item.external){a.target='_blank';a.rel='noopener noreferrer';}
         a.innerHTML='<i class="ti '+item.icon.icon+'" aria-hidden="true"></i><span>'+item.title+'</span>';
         grid.appendChild(a);
-      });
+      }
       sheet.appendChild(grid);
-    });
+    }
     allOverlay.appendChild(sheet);
     document.body.appendChild(allOverlay);
     allOverlay.querySelector('.home-menu-close').addEventListener('click',closeAllTools);
@@ -264,7 +267,7 @@
     var nav=document.createElement('nav');
     nav.className='home-bottom-nav';
     nav.setAttribute('aria-label','ホーム画面メニュー');
-    nav.innerHTML='<button class="home-bottom-item active" type="button" data-target="top"><i class="ti ti-home"></i><span>ホーム</span></button><button class="home-bottom-item" type="button" data-target="shigoto"><i class="ti ti-users-group"></i><span>仕事</span></button><button class="home-bottom-item" type="button" data-target="genba"><i class="ti ti-building-construction"></i><span>現場</span></button><button class="home-bottom-item" type="button" data-target="tetsuzuki"><i class="ti ti-file-description"></i><span>手続き</span></button><button class="home-bottom-item" type="button" data-menu="true"><i class="ti ti-menu-2"></i><span>メニュー</span></button>';
+    nav.innerHTML='<button class="home-bottom-item active" type="button" data-target="top"><i class="ti ti-home"></i><span>ホーム</span></button><button class="home-bottom-item" type="button" data-target="shigoto"><i class="ti ti-users-group"></i><span>仕事</span></button><button class="home-bottom-item" type="button" data-target="genba"><i class="ti ti-helmet"></i><span>現場</span></button><button class="home-bottom-item" type="button" data-target="tetsuzuki"><i class="ti ti-file-description"></i><span>手続き</span></button><button class="home-bottom-item" type="button" data-menu="true"><i class="ti ti-menu-2"></i><span>メニュー</span></button>';
     document.body.appendChild(nav);
     var buttons=nav.querySelectorAll('.home-bottom-item');
     Array.prototype.forEach.call(buttons,function(btn){
