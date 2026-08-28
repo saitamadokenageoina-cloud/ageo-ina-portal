@@ -10,6 +10,15 @@
     document.documentElement.setAttribute('data-ui-size', 'normal');
   }
 
+  function injectThemePolishStylesheet(){
+    if (document.querySelector('link[data-theme-polish]')) return;
+    var link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = 'assets/css/theme-polish.css';
+    link.setAttribute('data-theme-polish','true');
+    document.head.appendChild(link);
+  }
+
   function defaultBack(fallback){
     var fallbackUrl = fallback || 'index.html';
     var ref = document.referrer || '';
@@ -301,6 +310,7 @@
   }
 
   function initializeCommonUi(){
+    injectThemePolishStylesheet();
     injectDisasterHomeCard();
     enhanceGuildMobile();
     enhanceKyosaiCalcTabs();
