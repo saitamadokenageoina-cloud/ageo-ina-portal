@@ -1,10 +1,36 @@
-/* Home card 3D illustration - production direct rules. */
-body.home-modern.home-modern .section:not(#yoku) .grid2>.mc{height:292px!important;}
-body.home-modern.home-modern .section:not(#yoku) .mc-top{height:128px!important;min-height:128px!important;padding:0!important;background-color:var(--rail-soft)!important;background-image:none!important;border-bottom:1px solid rgba(23,38,58,.08)!important;overflow:hidden!important;align-items:center!important;justify-content:center!important;}
-/* home-modern.css has a generic rule that hides mc-top spans. This selector is deliberately
-   more specific so the illustration inserted by home-modern.js remains visible. */
-body.home-modern.home-modern .section:not(#yoku) .grid2>.mc .mc-top>span.home-card-art-direct{display:block!important;visibility:visible!important;opacity:1!important;width:100%!important;height:100%!important;min-width:100%!important;min-height:128px!important;flex:1 1 100%!important;background-image:url('../img/home-card-art-sprite.svg')!important;background-repeat:no-repeat!important;background-size:400% 300%!important;background-color:transparent!important;}
-body.home-modern.home-modern .section:not(#yoku) .grid2>.mc .mc-top>.home-card-icon{display:none!important;}
-body.home-modern.home-modern .section:not(#yoku) .mc-body{padding:11px 14px 15px!important;}
-html[data-theme="dark"] body.home-modern.home-modern .section:not(#yoku) .mc-top{border-bottom-color:#334960!important;filter:none!important;}
-@media(max-width:350px){body.home-modern.home-modern .section:not(#yoku) .grid2>.mc{height:300px!important;}body.home-modern.home-modern .section:not(#yoku) .mc-top{height:124px!important;min-height:124px!important;}body.home-modern.home-modern .section:not(#yoku) .grid2>.mc .mc-top>span.home-card-art-direct{min-height:124px!important;}}
+/* Home card illustration: one asset per feature. No sprite/background-position. */
+body.home-modern .section:not(#yoku) .grid2>.mc{height:292px!important;}
+body.home-modern .section:not(#yoku) .mc-top{height:128px!important;min-height:128px!important;padding:0!important;border-bottom:1px solid rgba(23,38,58,.08)!important;overflow:hidden!important;background-color:#eef5f8!important;background-repeat:no-repeat!important;background-position:center!important;background-size:cover!important;}
+body.home-modern .section:not(#yoku) .mc-top>span.home-card-art-direct{display:block!important;width:100%!important;height:100%!important;min-height:128px!important;background-repeat:no-repeat!important;background-position:center!important;background-size:cover!important;}
+body.home-modern .section:not(#yoku) .mc-top>.home-card-icon{display:none!important;}
+body.home-modern a[href="calendar.html"] .mc-top,body.home-modern a[href="calendar.html"] .home-card-art-direct{background-image:url('../illustrations/home/calendar.svg')!important;}
+body.home-modern a[href="doken_card.html"] .mc-top,body.home-modern a[href="doken_card.html"] .home-card-art-direct{background-image:url('../illustrations/home/doken-card.svg')!important;}
+body.home-modern a[href="guild.html"] .mc-top,body.home-modern a[href="guild.html"] .home-card-art-direct{background-image:url('../illustrations/home/guild.svg')!important;}
+body.home-modern a[href="meishi.html"] .mc-top,body.home-modern a[href="meishi.html"] .home-card-art-direct{background-image:url('../illustrations/home/meishi.svg')!important;}
+body.home-modern a[href*="/kyujin/"] .mc-top{background-image:url('../illustrations/home/job.svg')!important;}
+body.home-modern a[href*="/estimate/"] .mc-top,body.home-modern a[href*="/estimate/"] .home-card-art-direct{background-image:url('../illustrations/home/estimate.svg')!important;}
+body.home-modern a[href="atsusa.html"] .mc-top,body.home-modern a[href="atsusa.html"] .home-card-art-direct{background-image:url('../illustrations/home/heat.svg')!important;}
+body.home-modern a[href="anzen_check.html"] .mc-top,body.home-modern a[href="anzen_check.html"] .home-card-art-direct{background-image:url('../illustrations/home/safety.svg')!important;}
+body.home-modern a[href="work_log.html"] .mc-top,body.home-modern a[href="work_log.html"] .home-card-art-direct{background-image:url('../illustrations/home/work-log.svg')!important;}
+body.home-modern a[href*="forms.gle"] .mc-top,body.home-modern a[href*="forms.gle"] .home-card-art-direct{background-image:url('../illustrations/home/health.svg')!important;}
+body.home-modern a[href="calc.html"] .mc-top,body.home-modern a[href="calc.html"] .home-card-art-direct{background-image:url('../illustrations/home/calc.svg')!important;}
+body.home-modern a[href="koushu.html"] .mc-top,body.home-modern a[href="koushu.html"] .home-card-art-direct{background-image:url('../illustrations/home/training.svg')!important;}
+body.home-modern a[href="disaster_support.html"] .mc-top,body.home-modern a[href="disaster_support.html"] .home-card-art-direct{background-image:url('../illustrations/home/disaster.svg')!important;}
+/* Every remaining card receives a stable, self-contained scene instead of a blank top. */
+body.home-modern .section:not(#yoku) .mc-top{background-image:url('../illustrations/home/general.svg');}
+body.home-modern a[href="calendar.html"] .mc-top{background-image:url('../illustrations/home/calendar.svg')!important;}
+body.home-modern a[href="doken_card.html"] .mc-top{background-image:url('../illustrations/home/doken-card.svg')!important;}
+body.home-modern a[href="guild.html"] .mc-top{background-image:url('../illustrations/home/guild.svg')!important;}
+body.home-modern a[href="meishi.html"] .mc-top{background-image:url('../illustrations/home/meishi.svg')!important;}
+body.home-modern a[href*="/kyujin/"] .mc-top{background-image:url('../illustrations/home/job.svg')!important;}
+body.home-modern a[href*="/estimate/"] .mc-top{background-image:url('../illustrations/home/estimate.svg')!important;}
+body.home-modern a[href="atsusa.html"] .mc-top{background-image:url('../illustrations/home/heat.svg')!important;}
+body.home-modern a[href="anzen_check.html"] .mc-top{background-image:url('../illustrations/home/safety.svg')!important;}
+body.home-modern a[href="work_log.html"] .mc-top{background-image:url('../illustrations/home/work-log.svg')!important;}
+body.home-modern a[href*="forms.gle"] .mc-top{background-image:url('../illustrations/home/health.svg')!important;}
+body.home-modern a[href="calc.html"] .mc-top{background-image:url('../illustrations/home/calc.svg')!important;}
+body.home-modern a[href="koushu.html"] .mc-top{background-image:url('../illustrations/home/training.svg')!important;}
+body.home-modern a[href="disaster_support.html"] .mc-top{background-image:url('../illustrations/home/disaster.svg')!important;}
+body.home-modern .section:not(#yoku) .mc-body{padding:11px 14px 15px!important;}
+html[data-theme="dark"] body.home-modern .section:not(#yoku) .mc-top{border-bottom-color:#334960!important;filter:saturate(.9) brightness(.9);}
+@media(max-width:350px){body.home-modern .section:not(#yoku) .grid2>.mc{height:300px!important;}body.home-modern .section:not(#yoku) .mc-top,body.home-modern .section:not(#yoku) .mc-top>span.home-card-art-direct{height:124px!important;min-height:124px!important;}}
