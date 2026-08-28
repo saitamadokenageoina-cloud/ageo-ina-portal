@@ -35,6 +35,13 @@
       art.setAttribute('data-home-card-art','true');
       document.head.appendChild(art);
     }
+    if (!document.querySelector('link[data-home-alignment-fix]')) {
+      var alignment = document.createElement('link');
+      alignment.rel = 'stylesheet';
+      alignment.href = 'assets/css/home-alignment-fix.css';
+      alignment.setAttribute('data-home-alignment-fix','true');
+      document.head.appendChild(alignment);
+    }
     if (!document.querySelector('script[data-home-modern]')) {
       var script = document.createElement('script');
       script.src = 'assets/js/home-modern.js';
