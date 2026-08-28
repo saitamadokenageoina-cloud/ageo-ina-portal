@@ -2,7 +2,7 @@
   var THEME_KEY = 'doken_theme_v2';
   var UI_SIZE_KEY = 'doken_ui_size_v1';
   var GA_MEASUREMENT_ID = 'G-6X0MLM597Y';
-  var initialTheme = localStorage.getItem(THEME_KEY) || 'dark';
+  var initialTheme = localStorage.getItem(THEME_KEY) || 'light';
   document.documentElement.setAttribute('data-theme', initialTheme);
   try {
     document.documentElement.setAttribute('data-ui-size', localStorage.getItem(UI_SIZE_KEY) || 'normal');
@@ -151,14 +151,14 @@
     btn.type = 'button';
     btn.setAttribute('aria-label','ダークモードとライトモードを切り替え');
     function paint(){
-      var theme = document.documentElement.getAttribute('data-theme') || 'dark';
+      var theme = document.documentElement.getAttribute('data-theme') || 'light';
       var isDark = theme === 'dark';
       btn.innerHTML = isDark ? '<span class="theme-symbol" aria-hidden="true">☀</span>' : '<span class="theme-symbol" aria-hidden="true">☾</span>';
       btn.title = isDark ? 'ライトモードに切替' : 'ダークモードに切替';
       btn.setAttribute('aria-label', isDark ? 'ライトモードに切り替え' : 'ダークモードに切り替え');
     }
     btn.addEventListener('click', function(){
-      var next = (document.documentElement.getAttribute('data-theme') || 'dark') === 'dark' ? 'light' : 'dark';
+      var next = (document.documentElement.getAttribute('data-theme') || 'light') === 'dark' ? 'light' : 'dark';
       document.documentElement.setAttribute('data-theme', next);
       localStorage.setItem(THEME_KEY, next);
       paint();
