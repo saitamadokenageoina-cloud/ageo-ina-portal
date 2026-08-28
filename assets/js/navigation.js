@@ -28,6 +28,13 @@
       link.setAttribute('data-home-modern','true');
       document.head.appendChild(link);
     }
+    if (!document.querySelector('link[data-home-card-art]')) {
+      var art = document.createElement('link');
+      art.rel = 'stylesheet';
+      art.href = 'assets/css/home-card-art.css';
+      art.setAttribute('data-home-card-art','true');
+      document.head.appendChild(art);
+    }
     if (!document.querySelector('script[data-home-modern]')) {
       var script = document.createElement('script');
       script.src = 'assets/js/home-modern.js';
@@ -277,7 +284,7 @@
               catch (e2) { target.focus(); }
             }
             guiding = false;
-          },80);
+          },0);
         },true);
       })(forms[i]);
     }
@@ -288,34 +295,28 @@
     var i;
     for (i = 0; i < links.length; i += 1) {
       var rel = links[i].getAttribute('rel') || '';
-      if (rel.indexOf('noopener') === -1) rel += ' noopener';
-      if (rel.indexOf('noreferrer') === -1) rel += ' noreferrer';
-      links[i].setAttribute('rel',rel.replace(/^\s+|\s+$/g,''));
+      if (rel.indexOf('noopener') === -1) links[i].setAttribute('rel',(rel + ' noopener').replace(/^\s+/,''));
     }
   }
 
   function injectConnectionStatus(){
-    if (isPreviewPage() || document.querySelector('.connection-status')) return;
+    if (document.querySelector('.connection-status') || isPreviewPage()) return;
     var status = document.createElement('div');
+    var wasOffline = !navigator.onLine;
     status.className = 'connection-status';
     status.setAttribute('role','status');
     status.setAttribute('aria-live','polite');
     status.hidden = true;
     document.body.appendChild(status);
-    var wasOffline = navigator.onLine === false;
-    var hideTimer = null;
-    function paint(event){
-      var offline = navigator.onLine === false;
-      if (hideTimer) window.clearTimeout(hideTimer);
-      status.classList.remove('is-online');
+    function paint(){
+      var offline = !navigator.onLine;
       if (offline) {
         status.hidden = false;
-        status.textContent = '現在オフラインです。保存済みの内容を表示しています。';
-      } else if (wasOffline && event) {
+        status.textContent = 'オフラインです。保存済みのページを表示します。';
+      } else if (wasOffline) {
         status.hidden = false;
-        status.classList.add('is-online');
-        status.textContent = '通信が戻りました。最新の内容を読み込めます。';
-        hideTimer = window.setTimeout(function(){ status.hidden = true; },3000);
+        status.textContent = 'オンラインに戻りました。';
+        window.setTimeout(function(){ status.hidden = true; status.textContent = ''; },2200);
       } else {
         status.hidden = true;
         status.textContent = '';
@@ -390,10 +391,10 @@
         reg.update();
         activateWaiting(reg);
         reg.addEventListener('updatefound', function () {
-          var nw = reg.installing;
-          if (!nw) return;
-          nw.addEventListener('statechange', function () {
-            if (nw.state === 'installed' && navigator.serviceWorker.controller) nw.postMessage({ type: 'SKIP_WAITING' });
+          var worker = reg.installing;
+          if (!worker) return;
+          worker.addEventListener('statechange', function () {
+            if (worker.state === 'installed') activateWaiting(reg);
           });
         });
       })
@@ -401,10 +402,4 @@
   }
   if (document.readyState === 'complete') register();
   else window.addEventListener('load', register);
-  document.addEventListener('visibilitychange', function () {
-    if (document.visibilityState !== 'visible') return;
-    navigator.serviceWorker.getRegistration(SCOPE).then(function (reg) {
-      if (reg) { reg.update(); activateWaiting(reg); }
-    }).catch(function () {});
-  });
 })();
