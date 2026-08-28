@@ -1,6 +1,6 @@
 // Service Worker - キャッシュ制御
 // ★重要★ 変更をデプロイするたびに CACHE_VERSION の末尾番号を必ず1つ上げること。
-const CACHE_VERSION = 'v20260828-129';
+const CACHE_VERSION = 'v20260828-130';
 const CACHE_NAME = 'ageo-ina-portal-' + CACHE_VERSION;
 const BASE = '/ageo-ina-portal/';
 const PDFJS_CDN = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/';
@@ -10,6 +10,7 @@ const CACHE_FILES = [
   BASE + 'manifest.webmanifest',
   BASE + 'common.css',
   BASE + 'assets/css/theme-polish.css',
+  BASE + 'assets/css/theme-polish-base.css',
   BASE + 'assets/css/print.css',
   BASE + 'assets/js/print-util.js',
   BASE + 'assets/js/navigation.js',
