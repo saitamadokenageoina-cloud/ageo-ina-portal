@@ -1,0 +1,4 @@
+/* Home alignment correction: category/header rail aligns with card rail edges. */
+body.home-modern .section:not(#yoku)>.sec-head{padding-left:34px!important;padding-right:34px!important;}
+body.home-modern .section:not(#yoku)>.sec-head::after{left:34px!important;right:34px!important;}
+@media(max-width:350px){body.home-modern .section:not(#yoku)>.sec-head{padding-left:16px!important;padding-right:16px!important;}body.home-modern .section:not(#yoku)>.sec-head::after{left:16px!important;right:16px!important;}}
