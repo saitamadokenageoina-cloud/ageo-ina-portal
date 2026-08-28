@@ -1,44 +1,33 @@
-/* Home card cinematic 3D artwork. Exact 3x2 cells avoid sprite bleed. */
+/* Home cards: cinematic 3D artwork atlas (7 columns x 4 rows). */
 body.home-modern .section:not(#yoku) .grid2>.mc{height:292px!important;}
-body.home-modern .section:not(#yoku) .mc-top{height:128px!important;min-height:128px!important;padding:0!important;overflow:hidden!important;border-bottom:1px solid rgba(23,38,58,.08)!important;background-color:#eaf2f6!important;background-image:url('../img/home-card-3d-sheet.webp')!important;background-repeat:no-repeat!important;background-size:300% 200%!important;background-position:100% 0!important;}
+body.home-modern .section:not(#yoku) .mc-top{height:128px!important;min-height:128px!important;padding:0!important;overflow:hidden!important;border-bottom:1px solid rgba(23,38,58,.08)!important;background-color:#eaf2f6!important;background-image:url('../illustrations/home/home-card-cinematic.png')!important;background-repeat:no-repeat!important;background-size:700% 400%!important;background-position:var(--art-x,0%) var(--art-y,0%)!important;}
 body.home-modern .section:not(#yoku) .mc-top>span.home-card-art-direct{display:none!important;}
 body.home-modern .section:not(#yoku) .mc-top>.home-card-icon{display:none!important;}
-
-/* 日常・予定: calendar / member benefit */
-body.home-modern a[href="calendar.html"] .mc-top{background-position:0 0!important;}
-body.home-modern a[href="doken_card.html"] .mc-top{background-position:50% 0!important;}
-
-/* 仕事・人手: people and connection */
-body.home-modern a[href="guild.html"] .mc-top,
-body.home-modern a[href="meishi.html"] .mc-top,
-body.home-modern a[href*="saitama-doken.or.jp/kyujin/"] .mc-top,
-body.home-modern a[href="kyokyu.html"] .mc-top,
-body.home-modern a[href*="home-dr-navi.jp"] .mc-top{background-position:100% 0!important;}
-
-/* 現場・管理: safety scene */
-body.home-modern a[href*="/estimate/"] .mc-top,
-body.home-modern a[href="atsusa.html"] .mc-top,
-body.home-modern a[href="anzen_check.html"] .mc-top,
-body.home-modern a[href="work_log.html"] .mc-top,
-body.home-modern a[href="rodo36.html"] .mc-top,
-body.home-modern a[href*="lv-asses-sup.ccus.jp"] .mc-top{background-position:0 100%!important;}
-
-/* 手続き・共済・健康・講習・資料: guidance scene */
-body.home-modern a[href="kyosai_guide.html"] .mc-top,
-body.home-modern a[href*="forms.gle"] .mc-top,
-body.home-modern a[href="guide.html"] .mc-top,
-body.home-modern a[href="kensetsu_check.html"] .mc-top,
-body.home-modern a[href="hitori.html"] .mc-top,
-body.home-modern a[href="disaster_support.html"] .mc-top,
-body.home-modern a[href="koushu.html"] .mc-top,
-body.home-modern a[href="merit.html"] .mc-top,
-body.home-modern a[href="shiryo.html"] .mc-top,
-body.home-modern a[href*="youtube.com/channel/"] .mc-top{background-position:50% 100%!important;}
-
-/* Calculation tools */
-body.home-modern a[href="calc.html"] .mc-top,
-body.home-modern a[href="kyosai_calc.html"] .mc-top{background-position:100% 100%!important;}
-
+body.home-modern a[href="calendar.html"]{--art-x:0%;--art-y:0%;}
+body.home-modern a[href="doken_card.html"]{--art-x:16.667%;--art-y:0%;}
+body.home-modern a[href="guild.html"]{--art-x:33.333%;--art-y:0%;}
+body.home-modern a[href="meishi.html"]{--art-x:50%;--art-y:0%;}
+body.home-modern a[href*="saitama-doken.or.jp/kyujin/"]{--art-x:66.667%;--art-y:0%;}
+body.home-modern a[href="kyokyu.html"]{--art-x:83.333%;--art-y:0%;}
+body.home-modern a[href*="home-dr-navi.jp"]{--art-x:100%;--art-y:0%;}
+body.home-modern a[href*="/estimate/"]{--art-x:0%;--art-y:33.333%;}
+body.home-modern a[href="atsusa.html"]{--art-x:16.667%;--art-y:33.333%;}
+body.home-modern a[href="anzen_check.html"]{--art-x:33.333%;--art-y:33.333%;}
+body.home-modern a[href="work_log.html"]{--art-x:50%;--art-y:33.333%;}
+body.home-modern a[href="rodo36.html"]{--art-x:66.667%;--art-y:33.333%;}
+body.home-modern a[href*="lv-asses-sup.ccus.jp"]{--art-x:83.333%;--art-y:33.333%;}
+body.home-modern a[href="kyosai_guide.html"]{--art-x:100%;--art-y:33.333%;}
+body.home-modern a[href*="forms.gle"]{--art-x:0%;--art-y:66.667%;}
+body.home-modern a[href="guide.html"]{--art-x:16.667%;--art-y:66.667%;}
+body.home-modern a[href="calc.html"]{--art-x:33.333%;--art-y:66.667%;}
+body.home-modern a[href="kyosai_calc.html"]{--art-x:50%;--art-y:66.667%;}
+body.home-modern a[href="kensetsu_check.html"]{--art-x:66.667%;--art-y:66.667%;}
+body.home-modern a[href="hitori.html"]{--art-x:83.333%;--art-y:66.667%;}
+body.home-modern a[href="koushu.html"]{--art-x:100%;--art-y:66.667%;}
+body.home-modern a[href="merit.html"]{--art-x:0%;--art-y:100%;}
+body.home-modern a[href="shiryo.html"]{--art-x:16.667%;--art-y:100%;}
+body.home-modern a[href*="youtube.com/channel/"]{--art-x:33.333%;--art-y:100%;}
+body.home-modern a[href="disaster_support.html"]{--art-x:66.667%;--art-y:100%;}
 body.home-modern .section:not(#yoku) .mc-body{padding:11px 14px 15px!important;}
 html[data-theme="dark"] body.home-modern .section:not(#yoku) .mc-top{border-bottom-color:#334960!important;filter:saturate(.96) brightness(.96);}
 @media(max-width:350px){body.home-modern .section:not(#yoku) .grid2>.mc{height:300px!important;}body.home-modern .section:not(#yoku) .mc-top{height:124px!important;min-height:124px!important;}}
