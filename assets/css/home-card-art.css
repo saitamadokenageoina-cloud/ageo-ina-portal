@@ -1,6 +1,9 @@
 /* Home card 3D illustration - production direct rules. */
 body.home-modern.home-modern .section:not(#yoku) .grid2>.mc{height:292px!important;}
 body.home-modern.home-modern .section:not(#yoku) .mc-top{height:128px!important;min-height:128px!important;padding:0!important;background-color:var(--rail-soft)!important;background-image:none!important;background-repeat:no-repeat!important;background-size:400% 300%!important;background-position:center!important;border-bottom:1px solid rgba(23,38,58,.08)!important;overflow:hidden!important;align-items:center!important;justify-content:center!important;}
+/* DOMへ直接挿入したイラスト。外部CSS基準の正しい相対パスを使用する。 */
+body.home-modern.home-modern .home-card-art-direct{display:block!important;width:100%!important;height:100%!important;background-image:url('../img/home-card-art-sprite.svg')!important;background-repeat:no-repeat!important;background-size:400% 300%!important;background-color:transparent!important;}
+body.home-modern.home-modern .mc-top .home-card-art-direct+.home-card-icon{display:none!important;}
 body.home-modern.home-modern a[href="calendar.html"] .mc-top{background-image:url('../img/home-card-art-sprite.svg')!important;background-position:0% 0%!important;}
 body.home-modern.home-modern a[href="doken_card.html"] .mc-top{background-image:url('../img/home-card-art-sprite.svg')!important;background-position:33.333% 0%!important;}
 body.home-modern.home-modern a[href="work_log.html"] .mc-top{background-image:url('../img/home-card-art-sprite.svg')!important;background-position:66.666% 0%!important;}
