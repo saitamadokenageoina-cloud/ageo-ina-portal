@@ -25,6 +25,8 @@
       '.home-modern #tetsuzuki .sec-head-icon{background:#F1ECFD!important;color:#6544A8!important}',
       '.home-modern #shiryo .sec-head-icon{background:#E8F8FB!important;color:#147A8A!important}',
       '.home-modern #sonota .sec-head-icon{background:#EEF2F6!important;color:#405064!important}',
+      '.home-modern .section:not(#yoku) a[href="guild.html"] .mc-desc{font-size:12px!important;min-height:54px!important}',
+      '.home-modern .section:not(#yoku) a[href="guild.html"] .mc-desc::after{content:none!important;display:none!important}',
       'html[data-theme="dark"] .home-modern .sec-head-icon{border-color:rgba(255,255,255,.12)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.04)!important}',
       'html[data-theme="dark"] .home-modern #yoku .sec-head-icon{background:#44371A!important;color:#FFD66B!important}',
       'html[data-theme="dark"] .home-modern #nichijo .sec-head-icon{background:#123656!important;color:#72C7FF!important}',
