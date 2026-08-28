@@ -19,6 +19,23 @@
     document.head.appendChild(link);
   }
 
+  function injectHomeModernAssets(){
+    if (currentFile() !== 'index.html') return;
+    if (!document.querySelector('link[data-home-modern]')) {
+      var link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = 'assets/css/home-modern.css';
+      link.setAttribute('data-home-modern','true');
+      document.head.appendChild(link);
+    }
+    if (!document.querySelector('script[data-home-modern]')) {
+      var script = document.createElement('script');
+      script.src = 'assets/js/home-modern.js';
+      script.setAttribute('data-home-modern','true');
+      document.body.appendChild(script);
+    }
+  }
+
   function defaultBack(fallback){
     var fallbackUrl = fallback || 'index.html';
     var ref = document.referrer || '';
@@ -62,6 +79,22 @@
       'html[data-theme="dark"] .t-btn[data-category="soudan"].active{background:#2B2040!important;border-color:#B98AFF!important}',
       'html[data-theme="dark"] .t-btn-check{color:#DDEEFF!important}'
     ].join('\n'));
+
+    var copyMap = {
+      jinzai:['仕事・応援','応援を頼む・仕事を探す'],
+      shizai:['資材・道具','探す・譲る'],
+      soudan:['困りごと相談','仕事・制度を相談する']
+    };
+    var buttons = document.querySelectorAll('.t-btn[data-category]');
+    var i;
+    for (i = 0; i < buttons.length; i += 1) {
+      var cat = buttons[i].getAttribute('data-category');
+      if (!copyMap[cat]) continue;
+      var strong = buttons[i].querySelector('.t-btn-copy strong');
+      var small = buttons[i].querySelector('.t-btn-copy small');
+      if (strong) strong.textContent = copyMap[cat][0];
+      if (small) small.textContent = copyMap[cat][1];
+    }
   }
 
   function enhanceKyosaiCalcTabs(){
@@ -312,6 +345,7 @@
   function initializeCommonUi(){
     injectThemePolishStylesheet();
     injectDisasterHomeCard();
+    injectHomeModernAssets();
     enhanceGuildMobile();
     enhanceKyosaiCalcTabs();
     injectContactRail();
