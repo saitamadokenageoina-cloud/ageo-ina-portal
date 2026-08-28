@@ -1,51 +1,42 @@
-/* Cinematic 3D home-card art. One optimized WebP atlas, 7 columns x 4 rows.
-   Every tile is pre-cropped to the same 13:10 ratio as the card art viewport,
-   so there is no neighboring-image bleed or per-card scaling drift. */
-body.home-modern .section:not(#yoku) .grid2>.mc{height:292px!important;--art-x:100%;--art-y:100%;}
-body.home-modern .section:not(#yoku) .mc-top,
-body.home-modern .section:not(#yoku) .mc-top>span.home-card-art-direct{
-  height:128px!important;min-height:128px!important;padding:0!important;
-  display:block!important;width:100%!important;overflow:hidden!important;
-  background-image:url('../illustrations/home/home-card-cinematic.webp')!important;
-  background-repeat:no-repeat!important;background-size:700% 400%!important;
-  background-position:var(--art-x) var(--art-y)!important;
-}
-body.home-modern .section:not(#yoku) .mc-top{border-bottom:1px solid rgba(23,38,58,.08)!important;background-color:#eef5f8!important;}
+/* Home card illustrations: one dedicated asset per feature. */
+body.home-modern .section:not(#yoku) .grid2>.mc{height:292px!important;}
+body.home-modern .section:not(#yoku) .mc-top{height:128px!important;min-height:128px!important;padding:0!important;border-bottom:1px solid rgba(23,38,58,.08)!important;overflow:hidden!important;background-color:#eef5f8!important;background-repeat:no-repeat!important;background-position:center!important;background-size:cover!important;}
+body.home-modern .section:not(#yoku) .mc-top>span.home-card-art-direct{display:block!important;width:100%!important;height:100%!important;min-height:128px!important;background-repeat:no-repeat!important;background-position:center!important;background-size:cover!important;}
 body.home-modern .section:not(#yoku) .mc-top>.home-card-icon{display:none!important;}
 
-/* Row 1 — 日常・予定 / 仕事・人手 */
-body.home-modern a[href="calendar.html"]{--art-x:0%;--art-y:0%;}
-body.home-modern a[href="doken_card.html"]{--art-x:16.667%;--art-y:0%;}
-body.home-modern a[href="guild.html"]{--art-x:33.333%;--art-y:0%;}
-body.home-modern a[href="meishi.html"]{--art-x:50%;--art-y:0%;}
-body.home-modern a[href*="saitama-doken.or.jp/kyujin/"]{--art-x:66.667%;--art-y:0%;}
-body.home-modern a[href="kyokyu.html"]{--art-x:83.333%;--art-y:0%;}
-body.home-modern a[href*="home-dr-navi.jp"]{--art-x:100%;--art-y:0%;}
+/* 日常・予定 */
+body.home-modern a[href="calendar.html"] .mc-top,body.home-modern a[href="calendar.html"] .home-card-art-direct{background-image:url('../illustrations/home/calendar.svg')!important;}
+body.home-modern a[href="doken_card.html"] .mc-top,body.home-modern a[href="doken_card.html"] .home-card-art-direct{background-image:url('../illustrations/home/doken-card.svg')!important;}
+/* 仕事・人手 */
+body.home-modern a[href="guild.html"] .mc-top,body.home-modern a[href="guild.html"] .home-card-art-direct{background-image:url('../illustrations/home/guild.svg')!important;}
+body.home-modern a[href="meishi.html"] .mc-top,body.home-modern a[href="meishi.html"] .home-card-art-direct{background-image:url('../illustrations/home/meishi.svg')!important;}
+body.home-modern a[href*="saitama-doken.or.jp/kyujin/"] .mc-top,body.home-modern a[href*="saitama-doken.or.jp/kyujin/"] .home-card-art-direct{background-image:url('../illustrations/home/job.svg')!important;}
+body.home-modern a[href="kyokyu.html"] .mc-top,body.home-modern a[href="kyokyu.html"] .home-card-art-direct{background-image:url('../illustrations/home/worker-supply.svg')!important;}
+body.home-modern a[href*="home-dr-navi.jp"] .mc-top,body.home-modern a[href*="home-dr-navi.jp"] .home-card-art-direct{background-image:url('../illustrations/home/home-doctor.svg')!important;}
+/* 現場・管理 */
+body.home-modern a[href*="/estimate/"] .mc-top,body.home-modern a[href*="/estimate/"] .home-card-art-direct{background-image:url('../illustrations/home/estimate.svg')!important;}
+body.home-modern a[href="atsusa.html"] .mc-top,body.home-modern a[href="atsusa.html"] .home-card-art-direct{background-image:url('../illustrations/home/heat.svg')!important;}
+body.home-modern a[href="anzen_check.html"] .mc-top,body.home-modern a[href="anzen_check.html"] .home-card-art-direct{background-image:url('../illustrations/home/safety.svg')!important;}
+body.home-modern a[href="work_log.html"] .mc-top,body.home-modern a[href="work_log.html"] .home-card-art-direct{background-image:url('../illustrations/home/work-log.svg')!important;}
+body.home-modern a[href="rodo36.html"] .mc-top,body.home-modern a[href="rodo36.html"] .home-card-art-direct{background-image:url('../illustrations/home/rodo36.svg')!important;}
+body.home-modern a[href*="lv-asses-sup.ccus.jp"] .mc-top,body.home-modern a[href*="lv-asses-sup.ccus.jp"] .home-card-art-direct{background-image:url('../illustrations/home/ccus.svg')!important;}
+/* 手続き・計算 */
+body.home-modern a[href="kyosai_guide.html"] .mc-top,body.home-modern a[href="kyosai_guide.html"] .home-card-art-direct{background-image:url('../illustrations/home/kyosai.svg')!important;}
+body.home-modern a[href*="forms.gle"] .mc-top,body.home-modern a[href*="forms.gle"] .home-card-art-direct{background-image:url('../illustrations/home/health.svg')!important;}
+body.home-modern a[href="guide.html"] .mc-top,body.home-modern a[href="guide.html"] .home-card-art-direct{background-image:url('../illustrations/home/guide.svg')!important;}
+body.home-modern a[href="calc.html"] .mc-top,body.home-modern a[href="calc.html"] .home-card-art-direct{background-image:url('../illustrations/home/calc.svg')!important;}
+body.home-modern a[href="kyosai_calc.html"] .mc-top,body.home-modern a[href="kyosai_calc.html"] .home-card-art-direct{background-image:url('../illustrations/home/calc.svg')!important;}
+body.home-modern a[href="kensetsu_check.html"] .mc-top,body.home-modern a[href="kensetsu_check.html"] .home-card-art-direct{background-image:url('../illustrations/home/permit.svg')!important;}
+body.home-modern a[href="hitori.html"] .mc-top,body.home-modern a[href="hitori.html"] .home-card-art-direct{background-image:url('../illustrations/home/hitori.svg')!important;}
+body.home-modern a[href="disaster_support.html"] .mc-top,body.home-modern a[href="disaster_support.html"] .home-card-art-direct{background-image:url('../illustrations/home/disaster.svg')!important;}
+/* 講習・資料 */
+body.home-modern a[href="koushu.html"] .mc-top,body.home-modern a[href="koushu.html"] .home-card-art-direct{background-image:url('../illustrations/home/training.svg')!important;}
+body.home-modern a[href="merit.html"] .mc-top,body.home-modern a[href="merit.html"] .home-card-art-direct{background-image:url('../illustrations/home/merit.svg')!important;}
+body.home-modern a[href="shiryo.html"] .mc-top,body.home-modern a[href="shiryo.html"] .home-card-art-direct{background-image:url('../illustrations/home/documents.svg')!important;}
+body.home-modern a[href*="youtube.com/channel/"] .mc-top,body.home-modern a[href*="youtube.com/channel/"] .home-card-art-direct{background-image:url('../illustrations/home/youtube.svg')!important;}
 
-/* Row 2 — 現場・管理 */
-body.home-modern a[href*="/estimate/"]{--art-x:0%;--art-y:33.333%;}
-body.home-modern a[href="atsusa.html"]{--art-x:16.667%;--art-y:33.333%;}
-body.home-modern a[href="anzen_check.html"]{--art-x:33.333%;--art-y:33.333%;}
-body.home-modern a[href="work_log.html"]{--art-x:50%;--art-y:33.333%;}
-body.home-modern a[href="rodo36.html"]{--art-x:66.667%;--art-y:33.333%;}
-body.home-modern a[href*="lv-asses-sup.ccus.jp"]{--art-x:83.333%;--art-y:33.333%;}
-body.home-modern a[href="kyosai_guide.html"]{--art-x:100%;--art-y:33.333%;}
-
-/* Row 3 — 手続き・計算 / 講習 */
-body.home-modern a[href*="forms.gle"]{--art-x:0%;--art-y:66.667%;}
-body.home-modern a[href="guide.html"]{--art-x:16.667%;--art-y:66.667%;}
-body.home-modern a[href="calc.html"]{--art-x:33.333%;--art-y:66.667%;}
-body.home-modern a[href="kyosai_calc.html"]{--art-x:50%;--art-y:66.667%;}
-body.home-modern a[href="kensetsu_check.html"]{--art-x:66.667%;--art-y:66.667%;}
-body.home-modern a[href="hitori.html"]{--art-x:83.333%;--art-y:66.667%;}
-body.home-modern a[href="koushu.html"]{--art-x:100%;--art-y:66.667%;}
-
-/* Row 4 — 講習・資料 / support */
-body.home-modern a[href="merit.html"]{--art-x:0%;--art-y:100%;}
-body.home-modern a[href="shiryo.html"]{--art-x:16.667%;--art-y:100%;}
-body.home-modern a[href*="youtube.com/channel/"]{--art-x:33.333%;--art-y:100%;}
-body.home-modern a[href="disaster_support.html"]{--art-x:50%;--art-y:100%;}
-
+/* Safety fallback: unexpected future cards never render a blank top. */
+body.home-modern .section:not(#yoku) .mc-top{background-image:url('../illustrations/home/general.svg');}
 body.home-modern .section:not(#yoku) .mc-body{padding:11px 14px 15px!important;}
-html[data-theme="dark"] body.home-modern .section:not(#yoku) .mc-top{border-bottom-color:#334960!important;filter:none!important;}
+html[data-theme="dark"] body.home-modern .section:not(#yoku) .mc-top{border-bottom-color:#334960!important;filter:saturate(.94) brightness(.94);}
 @media(max-width:350px){body.home-modern .section:not(#yoku) .grid2>.mc{height:300px!important;}body.home-modern .section:not(#yoku) .mc-top,body.home-modern .section:not(#yoku) .mc-top>span.home-card-art-direct{height:124px!important;min-height:124px!important;}}
