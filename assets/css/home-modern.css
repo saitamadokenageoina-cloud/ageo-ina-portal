@@ -27,12 +27,23 @@ body.home-modern{padding-bottom:92px;background:#F5F6F8;}
 .home-quick-item.tone-gold .home-quick-icon{background:#FFF7DC;color:#9A6A00;}
 .home-quick-item.tone-gray .home-quick-icon{background:#EEF2F6;color:#405064;}
 
+/* Desired quick-menu order: calendar, DOKEN card, guild, work log / training, health, calc, all */
+.home-quick-grid>.home-quick-item:nth-child(1){order:1;}
+.home-quick-grid>.home-quick-item:nth-child(4){order:2;}
+.home-quick-grid>.home-quick-item:nth-child(2){order:3;}
+.home-quick-grid>.home-quick-item:nth-child(6){order:4;}
+.home-quick-grid>.home-quick-item:nth-child(7){order:5;}
+.home-quick-grid>.home-quick-item:nth-child(5){order:6;}
+.home-quick-grid>.home-quick-item:nth-child(3){order:7;}
+.home-quick-grid>.home-quick-item:nth-child(8){order:8;}
+
 /* Search surface */
-.home-modern .home-tools{padding:8px 16px 8px!important;}
-.home-modern .home-tools-card{border:0!important;box-shadow:none!important;background:transparent!important;padding:8px 0!important;}
-.home-modern .home-tools-title{font-size:15px!important;margin-bottom:9px!important;}
+.home-modern .home-tools{padding:14px 16px 18px!important;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;}
+.home-modern .home-tools-card{border:0!important;box-shadow:none!important;background:transparent!important;padding:10px 0 4px!important;}
+.home-modern .home-tools-title{font-size:15px!important;margin-bottom:12px!important;}
+.home-modern .feature-search-wrap{margin-bottom:12px!important;}
 .home-modern input.feature-search{min-height:50px;border:0!important;border-radius:14px!important;background:#fff!important;box-shadow:none!important;}
-.home-modern .home-tool-row{margin-top:8px;}
+.home-modern .home-tool-row{margin-top:12px;}
 
 /* Category header */
 .home-modern .section:not(#yoku){padding:24px 0 6px!important;position:relative;overflow:hidden;}
@@ -56,7 +67,7 @@ body.home-modern{padding-bottom:92px;background:#F5F6F8;}
 .home-rail-shell{position:relative;overflow:visible;}
 .home-modern .section:not(#yoku) .grid2{display:flex!important;grid-template-columns:none!important;gap:12px!important;overflow-x:auto!important;overflow-y:hidden!important;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;padding:2px 34px 18px 16px!important;margin:0!important;scrollbar-width:none;}
 .home-modern .section:not(#yoku) .grid2::-webkit-scrollbar{display:none;}
-.home-modern .section:not(#yoku) .grid2>.mc{box-sizing:border-box;flex:0 0 clamp(158px,43vw,178px)!important;width:auto!important;min-width:0!important;height:218px!important;scroll-snap-align:start;border:1px solid rgba(23,38,58,.065)!important;border-radius:18px!important;box-shadow:0 5px 16px rgba(25,38,55,.055)!important;background:#fff!important;display:flex!important;grid-template-columns:none!important;flex-direction:column!important;overflow:hidden!important;position:relative;text-decoration:none;transition:transform .15s ease,box-shadow .15s ease;}
+.home-modern .section:not(#yoku) .grid2>.mc{box-sizing:border-box;flex:0 0 clamp(158px,43vw,178px)!important;width:auto!important;min-width:0!important;height:252px!important;scroll-snap-align:start;border:1px solid rgba(23,38,58,.065)!important;border-radius:18px!important;box-shadow:0 5px 16px rgba(25,38,55,.055)!important;background:#fff!important;display:flex!important;grid-template-columns:none!important;flex-direction:column!important;overflow:hidden!important;position:relative;text-decoration:none;transition:transform .15s ease,box-shadow .15s ease;}
 .home-modern .section:not(#yoku) .grid2>.mc:active{transform:scale(.985);box-shadow:0 2px 8px rgba(25,38,55,.06)!important;}
 .home-modern .section:not(#yoku) .grid2>.mc:focus-visible{outline:3px solid rgba(23,105,170,.25);outline-offset:3px;}
 .home-modern .section:not(#yoku) .grid2>.mc::after{display:none!important;}
@@ -74,16 +85,19 @@ body.home-modern{padding-bottom:92px;background:#F5F6F8;}
 .home-card-icon.tone-pink{background:#FDEEF3;color:#B43E67;}
 .home-card-icon.tone-gold{background:#FFF7DC;color:#9A6A00;}
 .home-card-icon.tone-gray{background:#EEF2F6;color:#405064;}
-.home-modern .section:not(#yoku) .mc-body{padding:11px 14px 15px!important;display:flex!important;flex:1 1 auto!important;flex-direction:column!important;align-items:flex-start!important;}
+.home-modern .section:not(#yoku) .mc-body{padding:11px 14px 16px!important;display:flex!important;flex:1 1 auto!important;flex-direction:column!important;align-items:flex-start!important;}
 .home-modern .section:not(#yoku) .mc-badge{font-size:10px!important;line-height:1.2!important;font-weight:800!important;padding:4px 8px!important;margin:0 0 7px!important;border-radius:999px!important;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis;}
-.home-modern .section:not(#yoku) .mc-title{font-size:15px!important;font-weight:900!important;line-height:1.35!important;margin:0 0 6px!important;color:#17263A!important;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:40px;}
-.home-modern .section:not(#yoku) .mc-desc{font-size:12px!important;line-height:1.48!important;font-weight:650!important;color:#667487!important;margin:auto 0 0!important;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.home-modern .section:not(#yoku) .mc-title{font-size:15px!important;font-weight:900!important;line-height:1.35!important;margin:0 0 8px!important;color:#17263A!important;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:40px;}
+.home-modern .section:not(#yoku) .mc-desc{font-size:12px!important;line-height:1.5!important;font-weight:650!important;color:#667487!important;margin:auto 0 0!important;display:block!important;-webkit-line-clamp:unset!important;-webkit-box-orient:initial!important;overflow:visible!important;white-space:normal!important;max-height:none!important;}
 
-/* DOKEN Guild: explicitly show its full scope */
+/* DOKEN Guild: full explanatory sentence must remain visible */
 .home-modern a[href="guild.html"] .mc-badge{font-size:0!important;}
 .home-modern a[href="guild.html"] .mc-badge::after{content:'組合員同士をつなぐ';font-size:10px;}
-.home-modern a[href="guild.html"] .mc-desc{font-size:0!important;display:block!important;min-height:36px;}
-.home-modern a[href="guild.html"] .mc-desc::after{content:'仕事・人手・道具・資材・相談';font-size:12px;line-height:1.48;font-weight:700;color:#667487;}
+.home-modern a[href="guild.html"] .mc-desc{font-size:0!important;display:block!important;min-height:54px!important;overflow:visible!important;}
+.home-modern a[href="guild.html"] .mc-desc::after{content:'人手、仕事、資材・道具を支部の仲間でつなぎます。'!important;font-size:12px!important;line-height:1.5!important;font-weight:700!important;color:#667487!important;display:block!important;white-space:normal!important;}
+
+/* Disaster card also shows the complete guidance text */
+.home-modern a[href="disaster_support.html"] .mc-desc{display:block!important;-webkit-line-clamp:unset!important;overflow:visible!important;max-height:none!important;}
 
 /* Visual hint: next card peeks in, no floating round arrow over content */
 .home-rail-next{display:none!important;}
@@ -92,7 +106,7 @@ body.home-modern{padding-bottom:92px;background:#F5F6F8;}
 
 /* Expanded fallback */
 .home-modern .section.is-expanded .grid2{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;overflow:visible!important;padding:2px 16px 14px!important;}
-.home-modern .section.is-expanded .grid2>.mc{width:100%!important;min-width:0!important;height:218px!important;}
+.home-modern .section.is-expanded .grid2>.mc{width:100%!important;min-width:0!important;height:252px!important;}
 .home-modern .section.is-expanded .home-rail-fade{display:none!important;}
 
 /* Bottom navigation */
@@ -152,7 +166,7 @@ html[data-theme="dark"] .home-menu-link{background:#142A45;border-color:#324A64;
   .home-quick-icon{width:54px;height:54px;border-radius:16px;}
   .home-quick-icon i{font-size:27px;}
   .home-quick-label{font-size:11px;}
-  .home-modern .section:not(#yoku) .grid2>.mc{flex-basis:156px!important;height:216px!important;}
+  .home-modern .section:not(#yoku) .grid2>.mc{flex-basis:156px!important;height:268px!important;}
   .home-modern .section.is-expanded .grid2{grid-template-columns:1fr!important;}
 }
 @media(min-width:641px){.home-bottom-nav{border-left:1px solid #DCE2E8;border-right:1px solid #DCE2E8;}}
