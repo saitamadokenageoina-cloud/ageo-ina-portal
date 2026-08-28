@@ -1,79 +1,95 @@
-/* DOKEN SMART PORTAL - high-clarity app tabs inspired by modern payment-app IA v2 */
+/* DOKEN SMART PORTAL - vivid mobile category UI v3 */
 
-/* DOKEN Guild: icon-first 4-way category tabs */
+/* ===== DOKEN Guild: 4-way app tabs ===== */
 body:has(.guild-hero) .category-filter{padding:16px 0 18px!important;border:0!important;border-radius:22px!important;background:#fff!important;box-shadow:0 10px 28px rgba(18,38,63,.09)!important;overflow:hidden!important;}
 body:has(.guild-hero) .category-filter-title{padding:0 18px;margin:0 0 14px!important;font-size:20px!important;font-weight:900!important;color:#17263A!important;letter-spacing:-.02em!important;}
 body:has(.guild-hero) .category-filter-help{display:none!important;}
 body:has(.guild-hero) .category-filter .tab-row{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:0!important;padding:0!important;border-bottom:1px solid #E4E9EF!important;}
-body:has(.guild-hero) .category-filter .t-btn{position:relative!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:flex-start!important;gap:7px!important;min-width:0!important;min-height:122px!important;padding:11px 3px 15px!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;text-align:center!important;color:#7B8795!important;overflow:visible!important;transform:none!important;}
-body:has(.guild-hero) .category-filter .t-btn::after{content:''!important;position:absolute!important;left:8%!important;right:8%!important;bottom:-1px!important;height:5px!important;border-radius:5px 5px 0 0!important;background:transparent!important;transform:scaleX(.35)!important;transition:transform .18s ease,background-color .18s ease!important;}
-body:has(.guild-hero) .category-filter .t-btn-icon{display:flex!important;align-items:center!important;justify-content:center!important;width:58px!important;height:58px!important;border:0!important;border-radius:19px!important;background:#EEF2F5!important;color:#667482!important;font-size:31px!important;box-shadow:inset 0 0 0 1px rgba(23,38,58,.04)!important;transition:transform .16s ease,background-color .16s ease,color .16s ease!important;}
+body:has(.guild-hero) .category-filter .t-btn{position:relative!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:flex-start!important;gap:7px!important;min-width:0!important;min-height:118px!important;padding:11px 2px 14px!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;text-align:center!important;color:#7B8795!important;overflow:visible!important;transform:none!important;}
+body:has(.guild-hero) .category-filter .t-btn::after{content:''!important;position:absolute!important;left:10%!important;right:10%!important;bottom:-1px!important;height:5px!important;border-radius:5px 5px 0 0!important;background:transparent!important;transform:scaleX(.35)!important;}
+body:has(.guild-hero) .category-filter .t-btn-icon{display:flex!important;align-items:center!important;justify-content:center!important;width:56px!important;height:56px!important;border:0!important;border-radius:18px!important;background:#EEF2F5!important;color:#667482!important;font-size:30px!important;box-shadow:inset 0 0 0 1px rgba(23,38,58,.04)!important;}
 body:has(.guild-hero) .category-filter .t-btn-copy{display:block!important;width:100%!important;min-width:0!important;}
 body:has(.guild-hero) .category-filter .t-btn-copy strong{display:block!important;color:#667482!important;font-size:0!important;font-weight:900!important;line-height:1.25!important;white-space:nowrap!important;}
 body:has(.guild-hero) .category-filter .t-btn-copy small{display:none!important;}
-body:has(.guild-hero) .category-filter .t-btn[data-category="all"] .t-btn-copy strong::after{content:'すべて';font-size:13px;}
-body:has(.guild-hero) .category-filter .t-btn[data-category="jinzai"] .t-btn-copy strong::after{content:'人手・仕事';font-size:13px;}
-body:has(.guild-hero) .category-filter .t-btn[data-category="shizai"] .t-btn-copy strong::after{content:'資材・道具';font-size:13px;}
-body:has(.guild-hero) .category-filter .t-btn[data-category="soudan"] .t-btn-copy strong::after{content:'相談・情報';font-size:13px;}
+body:has(.guild-hero) .category-filter .t-btn[data-category="all"] .t-btn-copy strong::after{content:'すべて';font-size:12px;}
+body:has(.guild-hero) .category-filter .t-btn[data-category="jinzai"] .t-btn-copy strong::after{content:'人手・仕事';font-size:12px;}
+body:has(.guild-hero) .category-filter .t-btn[data-category="shizai"] .t-btn-copy strong::after{content:'資材・道具';font-size:12px;}
+body:has(.guild-hero) .category-filter .t-btn[data-category="soudan"] .t-btn-copy strong::after{content:'相談・情報';font-size:12px;}
 body:has(.guild-hero) .category-filter .t-btn-check{display:none!important;}
-body:has(.guild-hero) .category-filter .t-btn.active{background:linear-gradient(180deg,rgba(35,136,209,.10),rgba(35,136,209,.025))!important;}
+body:has(.guild-hero) .category-filter .t-btn.active{background:linear-gradient(180deg,rgba(35,136,209,.10),rgba(35,136,209,.02))!important;}
 body:has(.guild-hero) .category-filter .t-btn.active::after{background:#2388D1!important;transform:scaleX(1)!important;}
-body:has(.guild-hero) .category-filter .t-btn.active .t-btn-icon{background:#DFF1FE!important;color:#087AC4!important;transform:translateY(-2px)!important;box-shadow:0 5px 14px rgba(35,136,209,.16)!important;}
+body:has(.guild-hero) .category-filter .t-btn.active .t-btn-icon{background:#DFF1FE!important;color:#087AC4!important;box-shadow:0 5px 14px rgba(35,136,209,.16)!important;}
 body:has(.guild-hero) .category-filter .t-btn.active .t-btn-copy strong{color:#087AC4!important;}
-body:has(.guild-hero) .category-filter .t-btn[data-category="jinzai"].active{background:linear-gradient(180deg,rgba(20,147,95,.11),rgba(20,147,95,.02))!important;}
 body:has(.guild-hero) .category-filter .t-btn[data-category="jinzai"].active::after{background:#14935F!important;}
-body:has(.guild-hero) .category-filter .t-btn[data-category="jinzai"].active .t-btn-icon{background:#DDF6E9!important;color:#0F8150!important;box-shadow:0 5px 14px rgba(20,147,95,.15)!important;}
+body:has(.guild-hero) .category-filter .t-btn[data-category="jinzai"].active .t-btn-icon{background:#DDF6E9!important;color:#0F8150!important;}
 body:has(.guild-hero) .category-filter .t-btn[data-category="jinzai"].active .t-btn-copy strong{color:#0F8150!important;}
-body:has(.guild-hero) .category-filter .t-btn[data-category="shizai"].active{background:linear-gradient(180deg,rgba(217,107,39,.11),rgba(217,107,39,.02))!important;}
 body:has(.guild-hero) .category-filter .t-btn[data-category="shizai"].active::after{background:#D96B27!important;}
-body:has(.guild-hero) .category-filter .t-btn[data-category="shizai"].active .t-btn-icon{background:#FFE9DA!important;color:#C95112!important;box-shadow:0 5px 14px rgba(217,107,39,.15)!important;}
+body:has(.guild-hero) .category-filter .t-btn[data-category="shizai"].active .t-btn-icon{background:#FFE9DA!important;color:#C95112!important;}
 body:has(.guild-hero) .category-filter .t-btn[data-category="shizai"].active .t-btn-copy strong{color:#C95112!important;}
-body:has(.guild-hero) .category-filter .t-btn[data-category="soudan"].active{background:linear-gradient(180deg,rgba(117,81,197,.11),rgba(117,81,197,.02))!important;}
 body:has(.guild-hero) .category-filter .t-btn[data-category="soudan"].active::after{background:#7551C5!important;}
-body:has(.guild-hero) .category-filter .t-btn[data-category="soudan"].active .t-btn-icon{background:#EAE2FD!important;color:#6740B8!important;box-shadow:0 5px 14px rgba(117,81,197,.15)!important;}
+body:has(.guild-hero) .category-filter .t-btn[data-category="soudan"].active .t-btn-icon{background:#EAE2FD!important;color:#6740B8!important;}
 body:has(.guild-hero) .category-filter .t-btn[data-category="soudan"].active .t-btn-copy strong{color:#6740B8!important;}
-body:has(.guild-hero) .category-filter .t-btn:active .t-btn-icon{transform:scale(.93)!important;}
-body:has(.guild-hero) .category-filter .t-btn:focus-visible{outline:3px solid rgba(35,136,209,.28)!important;outline-offset:-3px!important;}
-
-/* Keep the explanatory illustration below the tabs, visually separate like a content rail */
 body:has(.guild-hero) .category-filter .tab-row::after{grid-column:1/-1!important;margin:18px 14px 0!important;min-height:150px!important;border-radius:18px!important;}
 
-/* Guild dark mode */
+/* ===== Home category rails: PayPay-like visual hierarchy ===== */
+body.home-modern .section:not(#yoku){--rail-accent:#1683CC;--rail-soft:#EAF4FD;--rail-ink:#126CA7;}
+body.home-modern #daily{--rail-accent:#1683CC;--rail-soft:#EAF4FD;--rail-ink:#126CA7;}
+body.home-modern #shigoto{--rail-accent:#14935F;--rail-soft:#E8F7EF;--rail-ink:#0F7A4D;}
+body.home-modern #genba{--rail-accent:#E16727;--rail-soft:#FFF0E6;--rail-ink:#C95518;}
+body.home-modern #tetsuzuki{--rail-accent:#7551C5;--rail-soft:#F1ECFD;--rail-ink:#6542B4;}
+body.home-modern #shiryo{--rail-accent:#13859A;--rail-soft:#E8F7FA;--rail-ink:#0D7182;}
+
+body.home-modern .section:not(#yoku)>.sec-head{position:relative!important;padding-bottom:10px!important;margin-bottom:12px!important;}
+body.home-modern .section:not(#yoku)>.sec-head::after{content:'';position:absolute;left:16px;right:16px;bottom:0;height:3px;border-radius:99px;background:linear-gradient(90deg,var(--rail-accent) 0 54px,rgba(120,136,153,.16) 54px);}
+body.home-modern .section:not(#yoku) .sec-head-icon{background:var(--rail-soft)!important;color:var(--rail-ink)!important;border-color:color-mix(in srgb,var(--rail-accent) 20%,transparent)!important;box-shadow:none!important;}
+body.home-modern .section:not(#yoku) .sec-head-glyph i{color:inherit!important;}
+body.home-modern .section:not(#yoku) .home-all-btn{color:var(--rail-accent)!important;font-weight:900!important;}
+
+body.home-modern .section:not(#yoku) .grid2{gap:13px!important;padding-top:4px!important;}
+body.home-modern .section:not(#yoku) .grid2>.mc{height:272px!important;border-radius:20px!important;border:1px solid rgba(23,38,58,.07)!important;box-shadow:0 7px 20px rgba(18,38,63,.08)!important;background:#fff!important;overflow:hidden!important;}
+body.home-modern .section:not(#yoku) .grid2>.mc::before{content:'';position:absolute;left:0;right:0;top:0;height:5px;background:var(--rail-accent);z-index:2;}
+body.home-modern .section:not(#yoku) .mc-top{height:106px!important;min-height:106px!important;padding:18px 14px 12px!important;align-items:center!important;justify-content:center!important;background:linear-gradient(180deg,var(--rail-soft),#fff)!important;border-bottom:1px solid rgba(23,38,58,.045)!important;}
+body.home-modern .section:not(#yoku) .home-card-icon{width:66px!important;height:66px!important;border-radius:20px!important;background:#fff!important;color:var(--rail-ink)!important;border:1px solid rgba(23,38,58,.06)!important;box-shadow:0 7px 18px rgba(18,38,63,.10)!important;}
+body.home-modern .section:not(#yoku) .home-card-icon i{font-size:34px!important;}
+body.home-modern .section:not(#yoku) .mc-body{padding:12px 14px 16px!important;}
+body.home-modern .section:not(#yoku) .mc-badge{background:var(--rail-soft)!important;color:var(--rail-ink)!important;border:0!important;font-size:10px!important;font-weight:900!important;padding:5px 9px!important;margin-bottom:8px!important;}
+body.home-modern .section:not(#yoku) .mc-title{font-size:16px!important;line-height:1.32!important;font-weight:900!important;color:#17263A!important;min-height:42px!important;margin-bottom:7px!important;}
+body.home-modern .section:not(#yoku) .mc-desc{font-size:11.5px!important;line-height:1.52!important;color:#637184!important;font-weight:700!important;}
+body.home-modern .section:not(#yoku) .grid2>.mc:active{transform:scale(.975)!important;box-shadow:0 3px 10px rgba(18,38,63,.08)!important;}
+
+/* ===== Bottom navigation: remove the line that looked vertically shifted ===== */
+body.home-modern .home-bottom-nav{padding-top:6px!important;}
+body.home-modern .home-bottom-item{border-radius:14px!important;padding-top:4px!important;gap:3px!important;background:transparent!important;}
+body.home-modern .home-bottom-item::before{display:none!important;content:none!important;}
+body.home-modern .home-bottom-item.active{color:#1683CC!important;background:#EDF7FE!important;box-shadow:inset 0 0 0 1px rgba(35,136,209,.08)!important;}
+body.home-modern .home-bottom-item i{font-size:25px!important;}
+body.home-modern .home-bottom-item span{font-size:11px!important;font-weight:900!important;}
+
+/* ===== Dark mode ===== */
 html[data-theme="dark"] body:has(.guild-hero) .category-filter{background:#10213A!important;box-shadow:0 8px 24px rgba(0,0,0,.22)!important;}
 html[data-theme="dark"] body:has(.guild-hero) .category-filter-title{color:#F7FAFC!important;}
 html[data-theme="dark"] body:has(.guild-hero) .category-filter .tab-row{border-bottom-color:#314A64!important;}
 html[data-theme="dark"] body:has(.guild-hero) .category-filter .t-btn{background:transparent!important;color:#AEBCCE!important;border:0!important;box-shadow:none!important;}
-html[data-theme="dark"] body:has(.guild-hero) .category-filter .t-btn-icon{background:#1A304B!important;color:#B7C6D7!important;border:0!important;box-shadow:inset 0 0 0 1px rgba(255,255,255,.04)!important;}
+html[data-theme="dark"] body:has(.guild-hero) .category-filter .t-btn-icon{background:#1A304B!important;color:#B7C6D7!important;}
 html[data-theme="dark"] body:has(.guild-hero) .category-filter .t-btn-copy strong{color:#B7C6D7!important;}
-html[data-theme="dark"] body:has(.guild-hero) .category-filter .t-btn.active{background:linear-gradient(180deg,rgba(52,164,235,.15),transparent)!important;border:0!important;box-shadow:none!important;}
-html[data-theme="dark"] body:has(.guild-hero) .category-filter .t-btn.active .t-btn-icon{background:#123F61!important;color:#7DD0FF!important;box-shadow:0 5px 16px rgba(0,0,0,.22)!important;}
-html[data-theme="dark"] body:has(.guild-hero) .category-filter .t-btn.active .t-btn-copy strong{color:#7DD0FF!important;}
-html[data-theme="dark"] body:has(.guild-hero) .category-filter .t-btn[data-category="jinzai"].active{background:linear-gradient(180deg,rgba(63,207,147,.13),transparent)!important;}
+html[data-theme="dark"] body:has(.guild-hero) .category-filter .t-btn.active .t-btn-icon{background:#123F61!important;color:#7DD0FF!important;}
 html[data-theme="dark"] body:has(.guild-hero) .category-filter .t-btn[data-category="jinzai"].active .t-btn-icon{background:#123B32!important;color:#6EE0AD!important;}
-html[data-theme="dark"] body:has(.guild-hero) .category-filter .t-btn[data-category="jinzai"].active .t-btn-copy strong{color:#6EE0AD!important;}
-html[data-theme="dark"] body:has(.guild-hero) .category-filter .t-btn[data-category="shizai"].active{background:linear-gradient(180deg,rgba(255,142,83,.13),transparent)!important;}
 html[data-theme="dark"] body:has(.guild-hero) .category-filter .t-btn[data-category="shizai"].active .t-btn-icon{background:#4A2C21!important;color:#FFA06D!important;}
-html[data-theme="dark"] body:has(.guild-hero) .category-filter .t-btn[data-category="shizai"].active .t-btn-copy strong{color:#FFA06D!important;}
-html[data-theme="dark"] body:has(.guild-hero) .category-filter .t-btn[data-category="soudan"].active{background:linear-gradient(180deg,rgba(183,155,255,.13),transparent)!important;}
 html[data-theme="dark"] body:has(.guild-hero) .category-filter .t-btn[data-category="soudan"].active .t-btn-icon{background:#30274F!important;color:#C0A5FF!important;}
-html[data-theme="dark"] body:has(.guild-hero) .category-filter .t-btn[data-category="soudan"].active .t-btn-copy strong{color:#C0A5FF!important;}
 
-/* Home bottom navigation: icon -> label -> vivid active indicator */
-body.home-modern .home-bottom-nav{padding-top:0!important;}
-body.home-modern .home-bottom-item{position:relative!important;border-radius:0!important;gap:4px!important;padding-top:9px!important;background:transparent!important;transition:color .15s ease,transform .15s ease!important;}
-body.home-modern .home-bottom-item::before{content:''!important;position:absolute!important;left:18%!important;right:18%!important;top:0!important;height:4px!important;border-radius:0 0 4px 4px!important;background:transparent!important;transform:scaleX(.35)!important;transition:transform .18s ease,background-color .18s ease!important;}
-body.home-modern .home-bottom-item i{font-size:25px!important;}
-body.home-modern .home-bottom-item span{font-size:11px!important;font-weight:900!important;}
-body.home-modern .home-bottom-item.active{color:#1683CC!important;background:linear-gradient(180deg,rgba(35,136,209,.11),transparent 72%)!important;}
-body.home-modern .home-bottom-item.active::before{background:#2388D1!important;transform:scaleX(1)!important;}
-body.home-modern .home-bottom-item:active{transform:scale(.95)!important;}
-html[data-theme="dark"] body.home-modern .home-bottom-item{color:#AFC0D2!important;background:transparent!important;}
-html[data-theme="dark"] body.home-modern .home-bottom-item.active{color:#79D1FF!important;background:linear-gradient(180deg,rgba(70,181,244,.16),transparent 72%)!important;}
-html[data-theme="dark"] body.home-modern .home-bottom-item.active::before{background:#62C8FF!important;}
+html[data-theme="dark"] body.home-modern .section:not(#yoku) .grid2>.mc{background:#10213A!important;border-color:#2A4058!important;box-shadow:0 8px 22px rgba(0,0,0,.22)!important;}
+html[data-theme="dark"] body.home-modern .section:not(#yoku) .mc-top{background:linear-gradient(180deg,color-mix(in srgb,var(--rail-accent) 16%,#10213A),#10213A)!important;border-bottom-color:#263C54!important;}
+html[data-theme="dark"] body.home-modern .section:not(#yoku) .home-card-icon{background:#172B44!important;color:color-mix(in srgb,var(--rail-accent) 62%,#fff)!important;border-color:#36506A!important;box-shadow:0 7px 18px rgba(0,0,0,.20)!important;}
+html[data-theme="dark"] body.home-modern .section:not(#yoku) .mc-title{color:#F7F9FC!important;}
+html[data-theme="dark"] body.home-modern .section:not(#yoku) .mc-desc{color:#C8D4E1!important;}
+html[data-theme="dark"] body.home-modern .section:not(#yoku) .mc-badge{background:color-mix(in srgb,var(--rail-accent) 20%,#10213A)!important;color:color-mix(in srgb,var(--rail-accent) 56%,#fff)!important;}
+html[data-theme="dark"] body.home-modern .section:not(#yoku)>.sec-head::after{background:linear-gradient(90deg,var(--rail-accent) 0 54px,rgba(150,170,190,.18) 54px);}
+html[data-theme="dark"] body.home-modern .home-bottom-item.active{color:#79D1FF!important;background:#173452!important;box-shadow:inset 0 0 0 1px #2E5574!important;}
 
 @media(max-width:350px){
- body:has(.guild-hero) .category-filter .t-btn{min-height:112px!important;padding-left:1px!important;padding-right:1px!important;}
- body:has(.guild-hero) .category-filter .t-btn-icon{width:50px!important;height:50px!important;font-size:27px!important;}
+ body:has(.guild-hero) .category-filter .t-btn{min-height:108px!important;padding-left:1px!important;padding-right:1px!important;}
+ body:has(.guild-hero) .category-filter .t-btn-icon{width:48px!important;height:48px!important;font-size:26px!important;}
  body:has(.guild-hero) .category-filter .t-btn-copy strong::after{font-size:11px!important;}
+ body.home-modern .section:not(#yoku) .grid2>.mc{height:284px!important;}
 }
-@media(prefers-reduced-motion:reduce){body:has(.guild-hero) .category-filter .t-btn,body:has(.guild-hero) .category-filter .t-btn-icon,body.home-modern .home-bottom-item{transition:none!important;}}
+@media(prefers-reduced-motion:reduce){body:has(.guild-hero) .category-filter .t-btn,body.home-modern .section:not(#yoku) .grid2>.mc,body.home-modern .home-bottom-item{transition:none!important;}}
