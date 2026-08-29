@@ -14,7 +14,7 @@
     if (document.querySelector('link[data-theme-polish]')) return;
     var link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = 'assets/css/theme-polish.css?v=184';
+    link.href = 'assets/css/theme-polish.css?v=185';
     link.setAttribute('data-theme-polish','true');
     document.head.appendChild(link);
   }
@@ -24,27 +24,27 @@
     if (!document.querySelector('link[data-home-modern]')) {
       var link = document.createElement('link');
       link.rel = 'stylesheet';
-      link.href = 'assets/css/home-modern.css?v=184';
+      link.href = 'assets/css/home-modern.css?v=185';
       link.setAttribute('data-home-modern','true');
       document.head.appendChild(link);
     }
     if (!document.querySelector('link[data-home-card-art]')) {
       var art = document.createElement('link');
       art.rel = 'stylesheet';
-      art.href = 'assets/css/home-card-art.css?v=184';
+      art.href = 'assets/css/home-card-art.css?v=185';
       art.setAttribute('data-home-card-art','true');
       document.head.appendChild(art);
     }
     if (!document.querySelector('link[data-home-alignment-fix]')) {
       var alignment = document.createElement('link');
       alignment.rel = 'stylesheet';
-      alignment.href = 'assets/css/home-alignment-fix.css?v=184';
+      alignment.href = 'assets/css/home-alignment-fix.css?v=185';
       alignment.setAttribute('data-home-alignment-fix','true');
       document.head.appendChild(alignment);
     }
     if (!document.querySelector('script[data-home-modern]')) {
       var script = document.createElement('script');
-      script.src = 'assets/js/home-modern.js?v=184';
+      script.src = 'assets/js/home-modern.js?v=185';
       script.setAttribute('data-home-modern','true');
       document.body.appendChild(script);
     }
@@ -163,12 +163,13 @@
     var grid = document.querySelector('#tetsuzuki .grid2');
     if (!grid) return;
     var card = document.createElement('a');
+    var permitCard;
     card.className = 'mc service-disaster-card';
     card.href = 'disaster_support.html';
-    card.style.order = '0';
     card.setAttribute('data-feature-keywords','災害 台風 大雨 浸水 強風 雹 落雷 火災 地震 車 事故 共済 罹災証明');
     card.innerHTML = '<div class="mc-top home-card-image-wrap"><img src="assets/illustrations/home-3d/disaster-v181.jpg" alt="" class="home-card-image" aria-hidden="true" width="960" height="640" decoding="async"></div><div class="mc-body"><span class="mc-badge money">もしもの時</span><p class="mc-title">災害・事故のとき</p><p class="mc-desc">火災・台風・水害・落雷・雹・地震・事故で、まずやることを確認</p></div>';
-    grid.insertBefore(card,grid.firstChild);
+    permitCard = grid.querySelector('a[href="kensetsu_check.html"]');
+    grid.insertBefore(card,permitCard || null);
   }
 
   function injectContactRail(){

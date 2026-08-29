@@ -1,7 +1,7 @@
 /* Home card art: one valid raster image owned by each card */
-body.home-modern .section:not(#yoku) .grid2>.mc{height:292px!important;}
-body.home-modern .section:not(#yoku) .mc-top{height:128px!important;min-height:128px!important;padding:0!important;overflow:hidden!important;position:relative!important;border-bottom:1px solid rgba(23,38,58,.08)!important;background:#F7E6C4!important;}
+body.home-modern .section:not(#yoku) .grid2>.mc{height:276px!important;}
+body.home-modern .section:not(#yoku) .mc-top{height:118px!important;min-height:118px!important;padding:0!important;overflow:hidden!important;position:relative!important;border-bottom:1px solid rgba(23,38,58,.08)!important;background:#F7E6C4!important;}
 body.home-modern .section:not(#yoku) .mc-top>.home-card-icon{display:none!important;}
 body.home-modern .section:not(#yoku) .mc-top.home-card-image-wrap{filter:none!important;}
 body.home-modern .section:not(#yoku) .mc-top>.home-card-image{display:block!important;position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:none!important;object-fit:cover!important;object-position:center!important;z-index:1!important;}
-@media(max-width:430px){body.home-modern .section:not(#yoku) .grid2>.mc{height:286px!important;}body.home-modern .section:not(#yoku) .mc-top{height:124px!important;min-height:124px!important;}}
+@media(max-width:430px){body.home-modern .section:not(#yoku) .grid2>.mc{height:270px!important;}body.home-modern .section:not(#yoku) .mc-top{height:114px!important;min-height:114px!important;}}
