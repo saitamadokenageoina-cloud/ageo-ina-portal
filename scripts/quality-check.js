@@ -258,6 +258,33 @@ function checkSharedJavaScript() {
   checkEs5JavaScript('assets/js/home-modern-legacy-v177.js');
 }
 
+function checkHomeAssetVersions() {
+  var serviceWorker = read('sw.js');
+  var indexSource = read('index.html');
+  var navigationSource = read('assets/js/navigation.js');
+  var wrapperSource = read('assets/js/home-modern.js');
+  var match = serviceWorker.match(/CACHE_VERSION\s*=\s*['"]v\d{8}-(\d+)['"]/);
+  var release;
+  var checks;
+  var i;
+  if (!match) return;
+  release = match[1];
+  checks = [
+    [indexSource, 'assets/js/navigation.js?v=' + release, 'index.html: navigation.js'],
+    [navigationSource, 'assets/css/theme-polish.css?v=' + release, 'navigation.js: theme-polish.css'],
+    [navigationSource, 'assets/css/home-modern.css?v=' + release, 'navigation.js: home-modern.css'],
+    [navigationSource, 'assets/css/home-card-art.css?v=' + release, 'navigation.js: home-card-art.css'],
+    [navigationSource, 'assets/css/home-alignment-fix.css?v=' + release, 'navigation.js: home-alignment-fix.css'],
+    [navigationSource, 'assets/js/home-modern.js?v=' + release, 'navigation.js: home-modern.js'],
+    [wrapperSource, 'assets/js/home-modern-legacy-v177.js?v=' + release, 'home-modern.js: legacy script']
+  ];
+  for (i = 0; i < checks.length; i += 1) {
+    if (checks[i][0].indexOf(checks[i][1]) === -1) {
+      fail(checks[i][2] + ' のキャッシュ版数がService Workerと一致しません');
+    }
+  }
+}
+
 function checkSensitiveTokens(files) {
   var tokenPattern = /(?:github_pat_[A-Za-z0-9_]{20,}|ghp_[A-Za-z0-9]{20,}|Bearer\s+[A-Za-z0-9._-]{20,})/;
   var i;
@@ -277,6 +304,7 @@ checkServiceWorker(htmlFiles);
 checkCachedJpegs();
 checkHomeCardImages();
 checkSharedJavaScript();
+checkHomeAssetVersions();
 checkSensitiveTokens(publicTextFiles);
 
 if (warnings.length) {
