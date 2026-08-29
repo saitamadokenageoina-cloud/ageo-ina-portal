@@ -182,6 +182,7 @@ function checkCachedJpegs() {
 function checkHomeCardImages() {
   var indexSource = read('index.html');
   var homeScript = read('assets/js/home-modern-legacy-v177.js');
+  var navigationSource = read('assets/js/navigation.js');
   var artCss = read('assets/css/home-card-art.css');
   var imagePattern = /<img\b[^>]*\bclass=["'][^"']*\bhome-card-image\b[^"']*["'][^>]*>/gi;
   var sourcePattern = /\bsrc=["']([^"']+)["']/i;
@@ -207,6 +208,17 @@ function checkHomeCardImages() {
   }
   if (homeScript.indexOf("doken-card-v180.jpg") === -1) {
     fail('home-modern-legacy-v177.js: DOKENカード画像が生成時HTMLにありません');
+  }
+  if (!/href=["']meishi\.html["'][\s\S]*?<img\b[^>]*src=["']assets\/illustrations\/home-3d\/meishi-v181\.jpg["']/i.test(indexSource)) {
+    fail('index.html: AI名刺作成カードに名刺専用画像がありません');
+  }
+  if (navigationSource.indexOf("disaster-v181.jpg") === -1 || navigationSource.indexOf('class="home-card-image"') === -1) {
+    fail('navigation.js: 災害・事故カードに直接画像がありません');
+  } else {
+    checkJpeg('assets/illustrations/home-3d/disaster-v181.jpg');
+  }
+  if (/service-disaster-card[\s\S]{0,1200}linear-gradient/.test(navigationSource)) {
+    fail('navigation.js: 災害・事故カードに旧gradient描画が残っています');
   }
   if (/\bART\s*=|home-card-art-direct|artFor\s*\(/.test(homeScript)) {
     fail('home-modern-legacy-v177.js: 旧sprite描画処理が残っています');

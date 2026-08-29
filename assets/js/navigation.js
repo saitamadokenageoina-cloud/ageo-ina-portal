@@ -44,7 +44,7 @@
     }
     if (!document.querySelector('script[data-home-modern]')) {
       var script = document.createElement('script');
-      script.src = 'assets/js/home-modern.js';
+      script.src = 'assets/js/home-modern.js?v=181';
       script.setAttribute('data-home-modern','true');
       document.body.appendChild(script);
     }
@@ -167,7 +167,7 @@
     card.href = 'disaster_support.html';
     card.style.order = '0';
     card.setAttribute('data-feature-keywords','災害 台風 大雨 浸水 強風 雹 落雷 火災 地震 車 事故 共済 罹災証明');
-    card.innerHTML = '<div class="mc-top" style="background:linear-gradient(135deg,#8A3A16,#D95B24);"><div aria-hidden="true" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;gap:13px;color:#fff;font-size:30px"><span>🛡️</span><span>🏠</span><span>⚠️</span></div><span class="mc-emoji">🆘</span></div><div class="mc-body"><span class="mc-badge money">もしもの時</span><p class="mc-title">災害・事故のとき</p><p class="mc-desc">火災・台風・水害・落雷・雹・地震・事故で、まずやることを確認</p></div>';
+    card.innerHTML = '<div class="mc-top home-card-image-wrap"><img src="assets/illustrations/home-3d/disaster-v181.jpg" alt="" class="home-card-image" aria-hidden="true" width="960" height="640" decoding="async"></div><div class="mc-body"><span class="mc-badge money">もしもの時</span><p class="mc-title">災害・事故のとき</p><p class="mc-desc">火災・台風・水害・落雷・雹・地震・事故で、まずやることを確認</p></div>';
     grid.insertBefore(card,grid.firstChild);
   }
 
