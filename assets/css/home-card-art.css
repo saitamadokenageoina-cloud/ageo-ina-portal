@@ -1,33 +1,33 @@
-/* Home cards: cinematic 3D artwork atlas (7 columns x 4 rows). */
+/* Home cards: reliable per-card artwork. Each card owns an independent asset. */
 body.home-modern .section:not(#yoku) .grid2>.mc{height:292px!important;}
-body.home-modern .section:not(#yoku) .mc-top{height:128px!important;min-height:128px!important;padding:0!important;overflow:hidden!important;border-bottom:1px solid rgba(23,38,58,.08)!important;background-color:#eaf2f6!important;background-image:url('../illustrations/home/home-card-cinematic.png')!important;background-repeat:no-repeat!important;background-size:700% 400%!important;background-position:var(--art-x,0%) var(--art-y,0%)!important;}
+body.home-modern .section:not(#yoku) .mc-top{height:128px!important;min-height:128px!important;padding:0!important;overflow:hidden!important;border-bottom:1px solid rgba(23,38,58,.08)!important;background-color:#eaf2f6!important;background-image:var(--home-card-art,url('../illustrations/home/general.svg'))!important;background-repeat:no-repeat!important;background-size:cover!important;background-position:center!important;}
 body.home-modern .section:not(#yoku) .mc-top>span.home-card-art-direct{display:none!important;}
 body.home-modern .section:not(#yoku) .mc-top>.home-card-icon{display:none!important;}
-body.home-modern a[href="calendar.html"]{--art-x:0%;--art-y:0%;}
-body.home-modern a[href="doken_card.html"]{--art-x:16.667%;--art-y:0%;}
-body.home-modern a[href="guild.html"]{--art-x:33.333%;--art-y:0%;}
-body.home-modern a[href="meishi.html"]{--art-x:50%;--art-y:0%;}
-body.home-modern a[href*="saitama-doken.or.jp/kyujin/"]{--art-x:66.667%;--art-y:0%;}
-body.home-modern a[href="kyokyu.html"]{--art-x:83.333%;--art-y:0%;}
-body.home-modern a[href*="home-dr-navi.jp"]{--art-x:100%;--art-y:0%;}
-body.home-modern a[href*="/estimate/"]{--art-x:0%;--art-y:33.333%;}
-body.home-modern a[href="atsusa.html"]{--art-x:16.667%;--art-y:33.333%;}
-body.home-modern a[href="anzen_check.html"]{--art-x:33.333%;--art-y:33.333%;}
-body.home-modern a[href="work_log.html"]{--art-x:50%;--art-y:33.333%;}
-body.home-modern a[href="rodo36.html"]{--art-x:66.667%;--art-y:33.333%;}
-body.home-modern a[href*="lv-asses-sup.ccus.jp"]{--art-x:83.333%;--art-y:33.333%;}
-body.home-modern a[href="kyosai_guide.html"]{--art-x:100%;--art-y:33.333%;}
-body.home-modern a[href*="forms.gle"]{--art-x:0%;--art-y:66.667%;}
-body.home-modern a[href="guide.html"]{--art-x:16.667%;--art-y:66.667%;}
-body.home-modern a[href="calc.html"]{--art-x:33.333%;--art-y:66.667%;}
-body.home-modern a[href="kyosai_calc.html"]{--art-x:50%;--art-y:66.667%;}
-body.home-modern a[href="kensetsu_check.html"]{--art-x:66.667%;--art-y:66.667%;}
-body.home-modern a[href="hitori.html"]{--art-x:83.333%;--art-y:66.667%;}
-body.home-modern a[href="koushu.html"]{--art-x:100%;--art-y:66.667%;}
-body.home-modern a[href="merit.html"]{--art-x:0%;--art-y:100%;}
-body.home-modern a[href="shiryo.html"]{--art-x:16.667%;--art-y:100%;}
-body.home-modern a[href*="youtube.com/channel/"]{--art-x:33.333%;--art-y:100%;}
-body.home-modern a[href="disaster_support.html"]{--art-x:66.667%;--art-y:100%;}
+body.home-modern a[href="calendar.html"]{--home-card-art:url('../illustrations/home/calendar.svg');}
+body.home-modern a[href="doken_card.html"]{--home-card-art:url('../illustrations/home/doken-card.svg');}
+body.home-modern a[href="guild.html"]{--home-card-art:url('../illustrations/home/guild.svg');}
+body.home-modern a[href="meishi.html"]{--home-card-art:url('../illustrations/home/meishi.svg');}
+body.home-modern a[href*="saitama-doken.or.jp/kyujin/"]{--home-card-art:url('../illustrations/home/job.svg');}
+body.home-modern a[href="kyokyu.html"]{--home-card-art:url('../illustrations/home/worker-supply.svg');}
+body.home-modern a[href*="home-dr-navi.jp"]{--home-card-art:url('../illustrations/home/home-doctor.svg');}
+body.home-modern a[href*="/estimate/"]{--home-card-art:url('../illustrations/home/estimate.svg');}
+body.home-modern a[href="atsusa.html"]{--home-card-art:url('../illustrations/home/heat.svg');}
+body.home-modern a[href="anzen_check.html"]{--home-card-art:url('../illustrations/home/safety.svg');}
+body.home-modern a[href="work_log.html"]{--home-card-art:url('../illustrations/home/work-log.svg');}
+body.home-modern a[href="rodo36.html"]{--home-card-art:url('../illustrations/home/rodo36.svg');}
+body.home-modern a[href*="lv-asses-sup.ccus.jp"]{--home-card-art:url('../illustrations/home/ccus.svg');}
+body.home-modern a[href="kyosai_guide.html"]{--home-card-art:url('../illustrations/home/kyosai.svg');}
+body.home-modern a[href*="forms.gle"]{--home-card-art:url('../illustrations/home/health.svg');}
+body.home-modern a[href="guide.html"]{--home-card-art:url('../illustrations/home/guide.svg');}
+body.home-modern a[href="calc.html"]{--home-card-art:url('../illustrations/home/calc.svg');}
+body.home-modern a[href="kyosai_calc.html"]{--home-card-art:url('../illustrations/home/kyosai.svg');}
+body.home-modern a[href="kensetsu_check.html"]{--home-card-art:url('../illustrations/home/permit.svg');}
+body.home-modern a[href="hitori.html"]{--home-card-art:url('../illustrations/home/hitori.svg');}
+body.home-modern a[href="koushu.html"]{--home-card-art:url('../illustrations/home/training.svg');}
+body.home-modern a[href="merit.html"]{--home-card-art:url('../illustrations/home/merit.svg');}
+body.home-modern a[href="shiryo.html"]{--home-card-art:url('../illustrations/home/documents.svg');}
+body.home-modern a[href*="youtube.com/channel/"]{--home-card-art:url('../illustrations/home/youtube.svg');}
+body.home-modern a[href="disaster_support.html"]{--home-card-art:url('../illustrations/home/disaster.svg');}
 body.home-modern .section:not(#yoku) .mc-body{padding:11px 14px 15px!important;}
-html[data-theme="dark"] body.home-modern .section:not(#yoku) .mc-top{border-bottom-color:#334960!important;filter:saturate(.96) brightness(.96);}
+html[data-theme="dark"] body.home-modern .section:not(#yoku) .mc-top{border-bottom-color:#334960!important;filter:saturate(.94) brightness(.94);}
 @media(max-width:350px){body.home-modern .section:not(#yoku) .grid2>.mc{height:300px!important;}body.home-modern .section:not(#yoku) .mc-top{height:124px!important;min-height:124px!important;}}
