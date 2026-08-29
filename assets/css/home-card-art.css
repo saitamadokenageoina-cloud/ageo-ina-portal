@@ -3,7 +3,7 @@ body.home-modern .section:not(#yoku) .grid2>.mc{height:292px!important;}
 body.home-modern .section:not(#yoku) .mc-top{height:128px!important;min-height:128px!important;padding:0!important;overflow:hidden!important;border-bottom:1px solid rgba(23,38,58,.08)!important;background-color:#eaf2f6!important;background-image:var(--home-card-art,url('../illustrations/home/general.svg'))!important;background-repeat:no-repeat!important;background-size:cover!important;background-position:center!important;}
 body.home-modern .section:not(#yoku) .mc-top>span.home-card-art-direct{display:none!important;}
 body.home-modern .section:not(#yoku) .mc-top>.home-card-icon{display:none!important;}
-body.home-modern a[href="calendar.html"]{--home-card-art:url('../illustrations/home-3d/calendar.jpg');}
+body.home-modern a[href="calendar.html"]{--home-card-art:url('../illustrations/home-3d/calendar-v162.svg');}
 body.home-modern a[href="doken_card.html"]{--home-card-art:url('../illustrations/home-3d/doken-card.jpg');}
 body.home-modern a[href="guild.html"]{--home-card-art:url('../illustrations/home-3d/guild.jpg');}
 body.home-modern a[href="meishi.html"]{--home-card-art:url('../illustrations/home/meishi.svg');}
