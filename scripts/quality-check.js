@@ -231,6 +231,12 @@ function checkHomeCardImages() {
   if (indexSource.indexOf('class="home-tools-title home-tools-trigger"') === -1) {
     fail('index.html: 機能検索の見出しが操作できるボタンではありません');
   }
+  if (indexSource.indexOf("classList.add('search-hidden')") === -1 || indexSource.indexOf('.mc.search-hidden{display:none!important') === -1) {
+    fail('index.html: 検索対象外カードを確実に隠す処理がありません');
+  }
+  if (/cards\[i\]\.style\.display\s*=/.test(indexSource)) {
+    fail('index.html: !importantに負ける旧検索非表示処理が残っています');
+  }
   if (homeScript.indexOf("window.addEventListener('pageshow',queueRailReset,false)") === -1 || homeScript.indexOf('scrollLeft=0') === -1) {
     fail('home-modern-legacy-v177.js: 再表示時の横レール初期化がありません');
   }
