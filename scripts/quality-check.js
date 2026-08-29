@@ -14,6 +14,10 @@ function read(relativePath) {
   return fs.readFileSync(path.join(root, relativePath), 'utf8');
 }
 
+function readBinary(relativePath) {
+  return fs.readFileSync(path.join(root, relativePath));
+}
+
 function fail(message) {
   failures.push(message);
 }
@@ -97,11 +101,95 @@ function checkServiceWorker(htmlFiles) {
   }
 }
 
-function checkSharedJavaScript() {
-  var source = read('assets/js/navigation.js');
-  if (/\bconst\b|\blet\b|=>|\?\./.test(source)) {
-    fail('assets/js/navigation.js: ES5以外の構文があります');
+function checkJpeg(relativePath) {
+  var absolutePath = path.join(root, relativePath);
+  var data;
+  var offset;
+  var marker;
+  var segmentLength;
+  var foundFrame = false;
+  var foundScan = false;
+  var frameMarkers = {
+    0xc0: true, 0xc1: true, 0xc2: true, 0xc3: true,
+    0xc5: true, 0xc6: true, 0xc7: true,
+    0xc9: true, 0xca: true, 0xcb: true,
+    0xcd: true, 0xce: true, 0xcf: true
+  };
+
+  if (!fs.existsSync(absolutePath)) {
+    fail('sw.js: JPEG画像がありません: ' + relativePath);
+    return;
   }
+  data = readBinary(relativePath);
+  if (data.length < 4 || data[0] !== 0xff || data[1] !== 0xd8) {
+    fail(relativePath + ': JPEGの開始マーカーがありません');
+    return;
+  }
+
+  offset = 2;
+  while (offset < data.length) {
+    if (data[offset] !== 0xff) {
+      fail(relativePath + ': JPEGマーカーの前に不正なデータがあります');
+      return;
+    }
+    while (offset < data.length && data[offset] === 0xff) offset += 1;
+    if (offset >= data.length) break;
+    marker = data[offset];
+    offset += 1;
+
+    if (marker === 0xd9) break;
+    if (marker === 0xd8 || marker === 0x01 || (marker >= 0xd0 && marker <= 0xd7)) continue;
+    if (offset + 2 > data.length) {
+      fail(relativePath + ': JPEGセグメントが途中で切れています');
+      return;
+    }
+    segmentLength = data.readUInt16BE(offset);
+    if (segmentLength < 2 || offset + segmentLength > data.length) {
+      fail(relativePath + ': JPEGセグメント長が不正です');
+      return;
+    }
+    if (frameMarkers[marker]) {
+      if (segmentLength < 7 || data.readUInt16BE(offset + 3) < 1 || data.readUInt16BE(offset + 5) < 1) {
+        fail(relativePath + ': JPEGの画像サイズが不正です');
+        return;
+      }
+      foundFrame = true;
+    }
+    if (marker === 0xda) {
+      if (!foundFrame) {
+        fail(relativePath + ': JPEGの画像情報より先に画像データが始まっています');
+        return;
+      }
+      foundScan = true;
+      break;
+    }
+    offset += segmentLength;
+  }
+
+  if (!foundFrame || !foundScan) fail(relativePath + ': JPEGとして復号できる構造ではありません');
+  if (data[data.length - 2] !== 0xff || data[data.length - 1] !== 0xd9) {
+    fail(relativePath + ': JPEGの終了マーカーがありません');
+  }
+}
+
+function checkCachedJpegs() {
+  var source = read('sw.js');
+  var pattern = /BASE \+ '([^']+\.jpe?g)'/gi;
+  var match;
+  while ((match = pattern.exec(source))) checkJpeg(match[1]);
+}
+
+function checkEs5JavaScript(relativePath) {
+  var source = read(relativePath);
+  if (/\bconst\b|\blet\b|=>|\?\./.test(source)) {
+    fail(relativePath + ': ES5以外の構文があります');
+  }
+}
+
+function checkSharedJavaScript() {
+  checkEs5JavaScript('assets/js/navigation.js');
+  checkEs5JavaScript('assets/js/home-modern.js');
+  checkEs5JavaScript('assets/js/home-modern-legacy-v177.js');
 }
 
 function checkSensitiveTokens(files) {
@@ -120,6 +208,7 @@ var i;
 
 for (i = 0; i < htmlFiles.length; i += 1) checkHtml(htmlFiles[i]);
 checkServiceWorker(htmlFiles);
+checkCachedJpegs();
 checkSharedJavaScript();
 checkSensitiveTokens(publicTextFiles);
 
@@ -134,4 +223,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('品質チェック合格: HTML ' + htmlFiles.length + 'ページ、リンク、ID、画像、共通JS、キャッシュ、認証情報を確認しました。');
+console.log('品質チェック合格: HTML ' + htmlFiles.length + 'ページ、リンク、ID、画像データ、共通JS、キャッシュ、認証情報を確認しました。');
