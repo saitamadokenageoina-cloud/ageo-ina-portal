@@ -1,12 +1,21 @@
-@import url('./calendar-art-inline.css?v=168');
 /* Dark-mode compatibility for per-card home artwork.
-   Never replace --home-card-art with a theme background or a missing atlas. */
+   Keep the same per-card --home-card-art mapping used in light mode. */
 html[data-theme="dark"] body.home-modern .section:not(#yoku) .mc-top{
   background-image:var(--home-card-art,url('../illustrations/home/general.svg'))!important;
   background-repeat:no-repeat!important;
   background-size:cover!important;
   background-position:center!important;
   filter:saturate(.94) brightness(.94)!important;
+}
+/* Calendar must win over the generic dark-mode rule above. The screenshot proved the card selector is correct; the generic dark rule was repainting it with the fallback background. */
+html[data-theme="dark"] body.home-modern #nichijo .mc:first-child .mc-top,
+html[data-theme="dark"] body.home-modern #nichijo a.mc:first-of-type .mc-top{
+  background-color:#f7e6c4!important;
+  background-image:url('../illustrations/home-3d/calendar-cinematic-v167.jpg?v=175')!important;
+  background-repeat:no-repeat!important;
+  background-size:cover!important;
+  background-position:center center!important;
+  filter:none!important;
 }
 html[data-theme="dark"] body.home-modern .section:not(#yoku) .mc-top>span.home-card-art-direct{
   display:none!important;
