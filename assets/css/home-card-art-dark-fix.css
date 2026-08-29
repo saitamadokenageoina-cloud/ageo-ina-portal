@@ -1,10 +1,12 @@
-/* Dark-mode compatibility for cinematic home-card artwork.
-   Keep the same WebP atlas and per-card position variables; do not replace it with theme backgrounds. */
-html[data-theme="dark"] body.home-modern .section:not(#yoku) .mc-top,
-html[data-theme="dark"] body.home-modern .section:not(#yoku) .mc-top>span.home-card-art-direct{
-  background-image:url('../illustrations/home/home-card-cinematic.webp')!important;
+/* Dark-mode compatibility for per-card home artwork.
+   Never replace --home-card-art with a theme background or a missing atlas. */
+html[data-theme="dark"] body.home-modern .section:not(#yoku) .mc-top{
+  background-image:var(--home-card-art,url('../illustrations/home/general.svg'))!important;
   background-repeat:no-repeat!important;
-  background-size:700% 400%!important;
-  background-position:var(--art-x) var(--art-y)!important;
-  filter:none!important;
+  background-size:cover!important;
+  background-position:center!important;
+  filter:saturate(.94) brightness(.94)!important;
+}
+html[data-theme="dark"] body.home-modern .section:not(#yoku) .mc-top>span.home-card-art-direct{
+  display:none!important;
 }
