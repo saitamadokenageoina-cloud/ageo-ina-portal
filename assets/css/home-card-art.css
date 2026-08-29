@@ -6,10 +6,10 @@ body.home-modern .section:not(#yoku) .mc-top>.home-card-icon{display:none!import
 body.home-modern a[href="calendar.html"]{--home-card-art:url('../illustrations/home-3d/calendar-v162.svg');}
 body.home-modern a[href="doken_card.html"]{--home-card-art:url('../illustrations/home-3d/doken-card.jpg');}
 body.home-modern a[href="guild.html"]{--home-card-art:url('../illustrations/home-3d/guild.jpg');}
-body.home-modern a[href="meishi.html"]{--home-card-art:url('../illustrations/home/meishi.svg');}
-body.home-modern a[href*="saitama-doken.or.jp/kyujin/"]{--home-card-art:url('../illustrations/home/job.svg');}
-body.home-modern a[href="kyokyu.html"]{--home-card-art:url('../illustrations/home/worker-supply.svg');}
-body.home-modern a[href*="home-dr-navi.jp"]{--home-card-art:url('../illustrations/home/home-doctor.svg');}
+body.home-modern a[href="meishi.html"]{--home-card-art:url('../illustrations/home-3d/meishi.svg');}
+body.home-modern a[href*="saitama-doken.or.jp/kyujin/"]{--home-card-art:url('../illustrations/home-3d/job.svg');}
+body.home-modern a[href="kyokyu.html"]{--home-card-art:url('../illustrations/home-3d/worker-supply.svg');}
+body.home-modern a[href*="home-dr-navi.jp"]{--home-card-art:url('../illustrations/home-3d/home-doctor.svg');}
 body.home-modern a[href*="/estimate/"]{--home-card-art:url('../illustrations/home/estimate.svg');}
 body.home-modern a[href="atsusa.html"]{--home-card-art:url('../illustrations/home/heat.svg');}
 body.home-modern a[href="anzen_check.html"]{--home-card-art:url('../illustrations/home/safety.svg');}
