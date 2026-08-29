@@ -48,9 +48,6 @@ body:has(.guild-hero) #post-list{position:relative;padding-top:34px;}
 body:has(.guild-hero) #post-list::before{content:'投稿を見る';position:absolute;left:2px;top:2px;color:#17263A;font-size:16px;font-weight:900;}
 
 /* ホームのDOKENギルド説明は指定文で固定 */
-body.home-modern a[href="guild.html"] .mc-desc{font-size:0!important;display:block!important;min-height:42px!important;}
-body.home-modern a[href="guild.html"] .mc-desc::after{content:'人手、仕事、資材・道具を支部の仲間でつなぎます。'!important;font-size:12px!important;line-height:1.5!important;font-weight:700!important;color:#667487!important;}
-html[data-theme="dark"] body.home-modern a[href="guild.html"] .mc-desc::after{color:#C8D4E1!important;}
 
 /* ホームのカテゴリ見出しアイコン: ダーク時も沈まない */
 html[data-theme="dark"] body.home-modern #shigoto .sec-head-icon{background:#123656!important;border-color:#2D5E84!important;color:#72C7FF!important;}

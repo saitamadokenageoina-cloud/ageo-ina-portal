@@ -44,7 +44,7 @@
     }
     if (!document.querySelector('script[data-home-modern]')) {
       var script = document.createElement('script');
-      script.src = 'assets/js/home-modern.js?v=181';
+      script.src = 'assets/js/home-modern.js?v=182';
       script.setAttribute('data-home-modern','true');
       document.body.appendChild(script);
     }

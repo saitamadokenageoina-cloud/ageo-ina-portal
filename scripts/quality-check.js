@@ -184,6 +184,8 @@ function checkHomeCardImages() {
   var homeScript = read('assets/js/home-modern-legacy-v177.js');
   var navigationSource = read('assets/js/navigation.js');
   var artCss = read('assets/css/home-card-art.css');
+  var homeCss = read('assets/css/home-modern.css');
+  var themeCss = read('assets/css/theme-polish.css');
   var imagePattern = /<img\b[^>]*\bclass=["'][^"']*\bhome-card-image\b[^"']*["'][^>]*>/gi;
   var sourcePattern = /\bsrc=["']([^"']+)["']/i;
   var cardPattern = /<a\b[^>]*\bclass=["'][^"']*\bmc\b[^"']*["'][^>]*>/gi;
@@ -225,6 +227,21 @@ function checkHomeCardImages() {
   }
   if (/--home-card-art|background-image/.test(artCss)) {
     fail('home-card-art.css: 旧background-image方式が残っています');
+  }
+  if (indexSource.indexOf('class="home-tools-title home-tools-trigger"') === -1) {
+    fail('index.html: 機能検索の見出しが操作できるボタンではありません');
+  }
+  if (homeScript.indexOf("window.addEventListener('pageshow',queueRailReset,false)") === -1 || homeScript.indexOf('scrollLeft=0') === -1) {
+    fail('home-modern-legacy-v177.js: 再表示時の横レール初期化がありません');
+  }
+  if (homeCss.indexOf('scroll-padding-left:16px') === -1) {
+    fail('home-modern.css: 横レールの先頭位置が統一されていません');
+  }
+  if (homeScript.indexOf("['youtube.com',['YouTube','チャンネル']]") === -1 || homeCss.indexOf('.mc-title-line') === -1) {
+    fail('ホームカード: 意味の切れ目で見出しを改行する処理がありません');
+  }
+  if (/a\[href=["']guild\.html["']\] \.mc-desc::after/.test(homeCss + themeCss + homeScript)) {
+    fail('ホームカード: DOKENギルドだけ説明文サイズを変える旧処理が残っています');
   }
 }
 

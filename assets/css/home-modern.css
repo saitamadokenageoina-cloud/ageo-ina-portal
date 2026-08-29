@@ -41,6 +41,9 @@ body.home-modern{padding-bottom:92px;background:#F5F6F8;}
 .home-modern .home-tools{padding:14px 16px 18px!important;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;}
 .home-modern .home-tools-card{border:0!important;box-shadow:none!important;background:transparent!important;padding:10px 0 4px!important;}
 .home-modern .home-tools-title{font-size:15px!important;margin-bottom:12px!important;}
+.home-modern button.home-tools-trigger{appearance:none;-webkit-appearance:none;width:100%;min-height:46px;padding:7px 4px;border:0;border-radius:12px;background:transparent;color:#17263A;font:inherit;font-size:15px!important;font-weight:900;text-align:left;cursor:pointer;}
+.home-modern .home-tools-trigger-icon{margin-left:auto;color:#1877B8;}
+.home-modern button.home-tools-trigger:focus-visible{outline:3px solid rgba(23,105,170,.24);outline-offset:2px;}
 .home-modern .feature-search-wrap{margin-bottom:12px!important;}
 .home-modern input.feature-search{min-height:50px;border:0!important;border-radius:14px!important;background:#fff!important;box-shadow:none!important;}
 .home-modern .home-tool-row{margin-top:12px;}
@@ -65,7 +68,7 @@ body.home-modern{padding-bottom:92px;background:#F5F6F8;}
 
 /* PayPay-style horizontal card rails */
 .home-rail-shell{position:relative;overflow:visible;}
-.home-modern .section:not(#yoku) .grid2{display:flex!important;grid-template-columns:none!important;gap:12px!important;overflow-x:auto!important;overflow-y:hidden!important;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;padding:2px 34px 18px 16px!important;margin:0!important;scrollbar-width:none;}
+.home-modern .section:not(#yoku) .grid2{display:flex!important;grid-template-columns:none!important;gap:12px!important;overflow-x:auto!important;overflow-y:hidden!important;scroll-snap-type:x proximity;scroll-padding-left:16px;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;padding:2px 34px 18px 16px!important;margin:0!important;scrollbar-width:none;}
 .home-modern .section:not(#yoku) .grid2::-webkit-scrollbar{display:none;}
 .home-modern .section:not(#yoku) .grid2>.mc{box-sizing:border-box;flex:0 0 clamp(158px,43vw,178px)!important;width:auto!important;min-width:0!important;height:252px!important;scroll-snap-align:start;border:1px solid rgba(23,38,58,.065)!important;border-radius:18px!important;box-shadow:0 5px 16px rgba(25,38,55,.055)!important;background:#fff!important;display:flex!important;grid-template-columns:none!important;flex-direction:column!important;overflow:hidden!important;position:relative;text-decoration:none;transition:transform .15s ease,box-shadow .15s ease;}
 .home-modern .section:not(#yoku) .grid2>.mc:active{transform:scale(.985);box-shadow:0 2px 8px rgba(25,38,55,.06)!important;}
@@ -87,17 +90,13 @@ body.home-modern{padding-bottom:92px;background:#F5F6F8;}
 .home-card-icon.tone-gray{background:#EEF2F6;color:#405064;}
 .home-modern .section:not(#yoku) .mc-body{padding:11px 14px 16px!important;display:flex!important;flex:1 1 auto!important;flex-direction:column!important;align-items:flex-start!important;}
 .home-modern .section:not(#yoku) .mc-badge{font-size:10px!important;line-height:1.2!important;font-weight:800!important;padding:4px 8px!important;margin:0 0 7px!important;border-radius:999px!important;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis;}
-.home-modern .section:not(#yoku) .mc-title{font-size:15px!important;font-weight:900!important;line-height:1.35!important;margin:0 0 8px!important;color:#17263A!important;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:40px;}
-.home-modern .section:not(#yoku) .mc-desc{font-size:12px!important;line-height:1.5!important;font-weight:650!important;color:#667487!important;margin:auto 0 0!important;display:block!important;-webkit-line-clamp:unset!important;-webkit-box-orient:initial!important;overflow:visible!important;white-space:normal!important;max-height:none!important;}
+.home-modern .section:not(#yoku) .mc-title{width:100%;font-size:15px!important;font-weight:900!important;line-height:1.35!important;margin:0 0 8px!important;color:#17263A!important;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:40px;word-break:keep-all;overflow-wrap:normal;}
+.home-modern .section:not(#yoku) .mc-title-line{display:block;white-space:nowrap;}
+.home-modern .section:not(#yoku) .mc-desc{width:100%;min-height:53px!important;font-size:11.5px!important;line-height:1.52!important;font-weight:700!important;color:#637184!important;margin:auto 0 0!important;display:-webkit-box!important;-webkit-line-clamp:3!important;-webkit-box-orient:vertical!important;overflow:hidden!important;white-space:normal!important;max-height:53px!important;}
 
 /* DOKEN Guild: full explanatory sentence must remain visible */
 .home-modern a[href="guild.html"] .mc-badge{font-size:0!important;}
 .home-modern a[href="guild.html"] .mc-badge::after{content:'組合員同士をつなぐ';font-size:10px;}
-.home-modern a[href="guild.html"] .mc-desc{font-size:0!important;display:block!important;min-height:54px!important;overflow:visible!important;}
-.home-modern a[href="guild.html"] .mc-desc::after{content:'人手、仕事、資材・道具を支部の仲間でつなぎます。'!important;font-size:12px!important;line-height:1.5!important;font-weight:700!important;color:#667487!important;display:block!important;white-space:normal!important;}
-
-/* Disaster card also shows the complete guidance text */
-.home-modern a[href="disaster_support.html"] .mc-desc{display:block!important;-webkit-line-clamp:unset!important;overflow:visible!important;max-height:none!important;}
 
 /* Visual hint: next card peeks in, no floating round arrow over content */
 .home-rail-next{display:none!important;}
@@ -139,8 +138,8 @@ html[data-theme="dark"] #genba .sec-head-label::after,
 html[data-theme="dark"] #tetsuzuki .sec-head-label::after{color:#F6F8FB;}
 html[data-theme="dark"] .home-modern .section:not(#yoku) .grid2>.mc{background:#10213A!important;border-color:#2A4058!important;box-shadow:0 5px 18px rgba(0,0,0,.18)!important;}
 html[data-theme="dark"] .home-modern .section:not(#yoku) .mc-title{color:#F7F9FC!important;}
-html[data-theme="dark"] .home-modern .section:not(#yoku) .mc-desc,
-html[data-theme="dark"] .home-modern a[href="guild.html"] .mc-desc::after{color:#C8D4E1!important;}
+html[data-theme="dark"] .home-modern .section:not(#yoku) .mc-desc{color:#C8D4E1!important;}
+html[data-theme="dark"] .home-modern button.home-tools-trigger{color:#F5F7FA;}
 html[data-theme="dark"] .home-modern .home-rail-fade{background:linear-gradient(90deg,rgba(7,20,38,0),rgba(7,20,38,.78));}
 html[data-theme="dark"] .home-modern input.feature-search{background:#10213A!important;color:#F5F7FA!important;border:1px solid #344A62!important;}
 html[data-theme="dark"] .home-quick-icon,

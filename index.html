@@ -370,7 +370,9 @@ html[data-theme="dark"] .manual-open{color:#FFFFFF;}
 <!-- ===== 機能検索・最近使った機能 ===== -->
 <section class="home-tools" aria-labelledby="home-tools-title">
   <div class="home-tools-card">
-    <h2 class="home-tools-title" id="home-tools-title"><i class="ti ti-search"></i>使いたい機能を探す</h2>
+    <button class="home-tools-title home-tools-trigger" id="home-tools-title" type="button" aria-controls="feature-search">
+      <i class="ti ti-search" aria-hidden="true"></i><span>使いたい機能を探す</span><i class="ti ti-chevron-down home-tools-trigger-icon" aria-hidden="true"></i>
+    </button>
     <div class="feature-search-wrap">
       <i class="ti ti-search" aria-hidden="true"></i>
       <input class="feature-search" id="feature-search" type="search" inputmode="search" autocomplete="off" placeholder="例：労災、講習、仕事、健康診断" aria-label="機能名や目的で検索">
@@ -686,6 +688,7 @@ html[data-theme="dark"] .manual-open{color:#FFFFFF;}
 /* ホームの機能検索・文字サイズ・最近使った機能（ES5） */
 (function(){
   var search = document.getElementById('feature-search');
+  var searchTrigger = document.getElementById('home-tools-title');
   var clearButton = document.getElementById('feature-search-clear');
   var status = document.getElementById('search-status');
   var sizeButton = document.getElementById('text-size-button');
@@ -712,6 +715,8 @@ html[data-theme="dark"] .manual-open{color:#FFFFFF;}
   }
   function applySearch(){
     if (!search) return;
+    cards = document.querySelectorAll('.section a.mc, .section a.lc');
+    sections = document.querySelectorAll('.section');
     var query = normalize(search.value);
     var count = 0;
     var i;
@@ -769,6 +774,11 @@ html[data-theme="dark"] .manual-open{color:#FFFFFF;}
   }
 
   if (search) search.addEventListener('input', applySearch);
+  if (searchTrigger && search) searchTrigger.addEventListener('click', function(){
+    search.focus();
+    try { search.scrollIntoView({behavior:'smooth', block:'center'}); }
+    catch (e) { search.scrollIntoView(true); }
+  });
   if (clearButton) clearButton.addEventListener('click', function(){ search.value = ''; applySearch(); search.focus(); });
   if (sizeButton) sizeButton.addEventListener('click', function(){
     var next = document.documentElement.getAttribute('data-ui-size') === 'large' ? 'normal' : 'large';
@@ -849,7 +859,7 @@ function showManual(key, btn){
 }
 showManual('first');
 </script>
-<script src="assets/js/navigation.js?v=181"></script>
+<script src="assets/js/navigation.js?v=182"></script>
 <script src="assets/js/guild-config.js"></script>
 
 <script>
