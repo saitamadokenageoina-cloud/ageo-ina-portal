@@ -1,5 +1,5 @@
 // Service Worker - キャッシュ制御
-const CACHE_VERSION = 'v20260829-178';
+const CACHE_VERSION = 'v20260829-179';
 const CACHE_NAME = 'ageo-ina-portal-' + CACHE_VERSION;
 const BASE = '/ageo-ina-portal/';
 const PDFJS_CDN = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/';
@@ -8,7 +8,7 @@ const CACHE_FILES = [
   BASE + 'assets/css/theme-polish.css', BASE + 'assets/css/theme-polish-base.css',
   BASE + 'assets/css/paypay-tabs.css', BASE + 'assets/css/paypay-tabs-base.css', BASE + 'assets/css/home-card-art-dark-fix.css',
   BASE + 'assets/css/home-card-art.css', BASE + 'assets/css/home-alignment-fix.css', BASE + 'assets/css/home-modern.css',
-  BASE + 'assets/illustrations/home-3d/calendar-v176.jpg', BASE + 'assets/illustrations/home-3d/doken-card.jpg', BASE + 'assets/illustrations/home-3d/guild.jpg', BASE + 'assets/illustrations/home-3d/meishi.svg', BASE + 'assets/illustrations/home-3d/job.svg', BASE + 'assets/illustrations/home-3d/worker-supply.svg', BASE + 'assets/illustrations/home-3d/home-doctor.svg',
+  BASE + 'assets/illustrations/home-3d/calendar-v179.jpg', BASE + 'assets/illustrations/home-3d/doken-card.jpg', BASE + 'assets/illustrations/home-3d/guild.jpg', BASE + 'assets/illustrations/home-3d/meishi.svg', BASE + 'assets/illustrations/home-3d/job.svg', BASE + 'assets/illustrations/home-3d/worker-supply.svg', BASE + 'assets/illustrations/home-3d/home-doctor.svg',
   BASE + 'assets/illustrations/home-3d/estimate-warm.svg', BASE + 'assets/illustrations/home-3d/safety-warm.svg', BASE + 'assets/illustrations/home-3d/heat-warm.svg', BASE + 'assets/illustrations/home-3d/procedure-warm.svg', BASE + 'assets/illustrations/home-3d/health-warm.svg',
   BASE + 'assets/illustrations/home/general.svg', BASE + 'assets/illustrations/home/youtube.svg',
   BASE + 'assets/css/print.css', BASE + 'assets/js/print-util.js', BASE + 'assets/js/navigation.js', BASE + 'assets/js/home-modern.js', BASE + 'assets/js/home-modern-legacy-v177.js',
