@@ -108,14 +108,27 @@
         <table class="feature-table">
           <thead><tr><th>区分</th><th>できること</th></tr></thead>
           <tbody>
+            <tr><td>基本操作</td><td>カードを左右にスライドして選び、「すべて見る」で区分内の全機能を確認します。</td></tr>
             <tr><td>よく使う</td><td>支部カレンダー、どけんカード登録店を開きます。</td></tr>
-            <tr><td>仕事確保</td><td>DOKENギルド、AI名刺作成、求人求職、労働者供給事業、ホームドクターなびを開きます。</td></tr>
-            <tr><td>現場・管理関係</td><td>標準見積書作成、熱中症AIアラート、現場安全チェックリスト、作業記録、36協定・残業カウンター、CCUS能力評価サポート診断を開きます。</td></tr>
-            <tr><td>手続き・シミュレーション</td><td>健康診断、計算ツール、手続き・必要書類ガイド、総合共済申請ナビ、建設業許可チェッカー、一人親方の基礎知識・診断を開きます。</td></tr>
-            <tr><td>講習・資料</td><td>技能講習日程案内、加入のメリット、資料本棚、YouTubeチャンネルを開きます。講習の日程カードでは必要書類を確認でき、足場・石綿は質問に答えて受講資格を確認できます。</td></tr>
+            <tr><td>仕事・人手</td><td>DOKENギルド、AI名刺作成、求人求職、労働者供給事業、ホームドクターなびを開きます。</td></tr>
+            <tr><td>現場・管理</td><td>標準見積書作成、熱中症AIアラート、現場安全チェックリスト、作業記録、36協定・残業カウンター、CCUS能力評価サポート診断を開きます。</td></tr>
+            <tr><td>手続き・計算</td><td>計算ツール、健康診断、手続き・必要書類ガイド、総合共済申請ナビ、災害・事故のとき、建設業許可チェッカーを開きます。</td></tr>
+            <tr><td>講習・資料</td><td>技能講習日程案内、加入のメリット、一人親方の基礎知識・診断、資料本棚、YouTubeチャンネルを開きます。講習の日程カードでは必要書類を確認でき、足場・石綿は質問に答えて受講資格を確認できます。</td></tr>
           </tbody>
         </table>
-        <div class="tip green">迷ったときは、目的に近いカードをタップしてください。各ページの左上「戻る」から前の画面へ戻れます。</div>
+        <div class="tip green">迷ったときは「使いたい機能を探す」に目的を入力してください。画面下のメニューから仕事・現場・手続きへ直接移動することもできます。</div>
+      </div>
+    </article>
+
+    <article class="acc">
+      <div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-search"></i></div><p class="acc-title">使いたい機能を検索する</p><i class="ti ti-chevron-right acc-arrow"></i></div>
+      <div class="acc-body">
+        <ol class="steps">
+          <li>ホーム上部の「使いたい機能を探す」を押すと、検索欄へ移動します。</li>
+          <li>「労災」「講習」「仕事」「健康」など、目的に近い言葉を入力します。</li>
+          <li>当てはまるカードだけが表示されます。検索欄右側の「×」で全機能へ戻せます。</li>
+          <li>一度開いた機能は「最近使った機能」からすぐ開けます。</li>
+        </ol>
       </div>
     </article>
 
@@ -160,18 +173,18 @@
   <section class="guide-content" id="tab-features">
     <div class="beginner-map">
       <h2><i class="ti ti-hand-click"></i> 機能の探し方</h2>
-      <p>ホーム画面は、下の5つの区分に分かれています。使いたい区分を選び、機能名をタップしてください。この説明書もホーム画面と同じ順番です。</p>
+      <p>ホーム画面は、下の5つの区分に分かれています。カードを左右にスライドして選ぶか、「すべて見る」で一覧を開いてください。この説明書もホーム画面と同じ順番です。</p>
       <ol class="steps">
-        <li>下の区分をタップして、目的の場所へ移動します。</li>
+        <li>画面下の「仕事・現場・手続き」または下の区分名をタップして、目的の場所へ移動します。</li>
         <li>機能名をタップすると、使い方が開きます。</li>
         <li>実際に使うときは、説明の最後にある「○○を開く」をタップします。</li>
       </ol>
     </div>
     <nav class="category-jumps" aria-label="機能区分へ移動">
       <a href="#manual-favorites"><i class="ti ti-star"></i>よく使う</a>
-      <a href="#manual-jobs"><i class="ti ti-briefcase"></i>仕事確保</a>
-      <a href="#manual-site"><i class="ti ti-helmet"></i>現場・管理関係</a>
-      <a href="#manual-procedures"><i class="ti ti-clipboard-list"></i>手続き・シミュレーション</a>
+      <a href="#manual-jobs"><i class="ti ti-briefcase"></i>仕事・人手</a>
+      <a href="#manual-site"><i class="ti ti-helmet"></i>現場・管理</a>
+      <a href="#manual-procedures"><i class="ti ti-clipboard-list"></i>手続き・計算</a>
       <a href="#manual-learning"><i class="ti ti-book"></i>講習・資料</a>
     </nav>
 
@@ -179,14 +192,14 @@
     <article class="acc open"><div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-calendar-event"></i></div><p class="acc-title">支部カレンダー</p><i class="ti ti-chevron-right acc-arrow"></i></div><div class="acc-body"><p class="feature-summary">支部行事や会議など、今後の支部予定を確認します。技能講習の日程は「技能講習日程案内」で確認してください。</p><ol class="steps"><li>ホームの「よく使う」から「支部カレンダー」をタップします。</li><li>月表示で予定を確認します。画面下の「今後の予定」では、日付・時間・場所をカードで確認できます。</li><li>予定カードをタップすると、詳しい内容が開きます。</li></ol><a class="quick-link" href="calendar.html">支部カレンダーを開く</a></div></article>
     <article class="acc"><div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-discount-2"></i></div><p class="acc-title">どけんカード登録店</p><i class="ti ti-chevron-right acc-arrow"></i></div><div class="acc-body"><p class="feature-summary">組合員向けの優待が使える登録店を検索します。</p><ol class="steps"><li>「どけんカード登録店」をタップします。</li><li>地域や業種から利用したいお店を探します。</li><li>必要な場合は、画面に表示されるパスワードをコピーします。</li></ol><a class="quick-link" href="doken_card.html">登録店を探す</a></div></article>
 
-    <div class="guide-category" id="manual-jobs"><i class="ti ti-briefcase"></i><div><h2>2．仕事確保</h2><p>仕事・人手・営業のつながりをつくります</p></div></div>
+    <div class="guide-category" id="manual-jobs"><i class="ti ti-briefcase"></i><div><h2>2．仕事・人手</h2><p>仕事・人手・営業のつながりをつくります</p></div></div>
     <article class="acc"><div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-users-group"></i></div><p class="acc-title">DOKENギルド</p><i class="ti ti-chevron-right acc-arrow"></i></div><div class="acc-body"><p class="feature-summary">「人手が足りない」「仕事に行ける」「資材や道具を探している」を支部内でつなぐ掲示板です。</p><ol class="steps"><li>「掲示板」で募集を探すか、「投稿する」で新しい内容を登録します。</li><li>職種・地域・キーワードで検索できます。人材・仕事、資材・道具、相談のボタンで絞り込めます。</li><li>入力途中の内容は写真を除いてこの端末に下書き保存されます。再度「投稿する」を開き、「続きから入力」を押してください。</li><li>投稿者の電話番号は公開されず、必要な連絡は支部が取り次ぎます。</li></ol><a class="quick-link" href="guild.html">DOKENギルドを開く</a></div></article>
     <article class="acc"><div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-id"></i></div><p class="acc-title">AI名刺作成</p><i class="ti ti-chevron-right acc-arrow"></i></div><div class="acc-body"><p class="feature-summary">会社名・氏名・職種などを入力し、営業に使える名刺を端末内で作成します。</p><ol class="steps"><li>基本情報を入力し、横型・縦型、イラスト、裏面、デザインを選びます。</li><li>表面と裏面を確認し、文字・写真・QRコードが重なっていないか確認します。</li><li>PNGまたは印刷用PDFで保存します。作業データを保存すれば、続きから編集できます。</li></ol><div class="tip warn"><strong>支部へ印刷を依頼する場合は、100枚2,000円です。</strong></div><a class="quick-link" href="meishi.html">AI名刺作成を開く</a></div></article>
     <article class="acc"><div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-user-search"></i></div><p class="acc-title">求人求職</p><i class="ti ti-chevron-right acc-arrow"></i></div><div class="acc-body"><p class="feature-summary">埼玉土建の求人・求職情報を外部サイトで確認します。</p><ol class="steps"><li>「求人求職」をタップします。</li><li>開いたページで、仕事を探す・人を募集する情報を確認します。</li></ol></div></article>
     <article class="acc"><div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-building-community"></i></div><p class="acc-title">労働者供給事業</p><i class="ti ti-chevron-right acc-arrow"></i></div><div class="acc-body"><p class="feature-summary">組合が行う仕事紹介です。募集中の事業所、仕事内容、賃金を確認できます。</p><ol class="steps"><li>「労働者供給事業」をタップします。</li><li>募集内容を確認し、希望する場合は案内に沿って支部へ相談します。</li></ol><a class="quick-link" href="kyokyu.html">労働者供給事業を開く</a></div></article>
     <article class="acc"><div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-home-hand"></i></div><p class="acc-title">ホームドクターなび</p><i class="ti ti-chevron-right acc-arrow"></i></div><div class="acc-body"><p class="feature-summary">住民から寄せられる住まいの相談や仕事依頼につながる外部サイトです。</p><ol class="steps"><li>「ホームドクターなび」をタップします。</li><li>外部サイトで制度や登録内容を確認します。</li></ol></div></article>
 
-    <div class="guide-category" id="manual-site"><i class="ti ti-helmet"></i><div><h2>3．現場・管理関係</h2><p>見積、安全、記録、残業、技能を管理します</p></div></div>
+    <div class="guide-category" id="manual-site"><i class="ti ti-helmet"></i><div><h2>3．現場・管理</h2><p>見積、安全、記録、残業、技能を管理します</p></div></div>
     <article class="acc"><div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-file-invoice"></i></div><p class="acc-title">標準見積書作成</p><i class="ti ti-chevron-right acc-arrow"></i></div><div class="acc-body"><p class="feature-summary">法定福利費を含む見積書・請求書を作成します。</p><ol class="steps"><li>会社情報、工事内容、金額を入力します。</li><li>計算結果と書類の内容を確認します。</li><li>印刷またはPDFで保存します。</li></ol></div></article>
     <article class="acc"><div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-temperature-sun"></i></div><p class="acc-title">熱中症AIアラート</p><i class="ti ti-chevron-right acc-arrow"></i></div><div class="acc-body"><p class="feature-summary">現在地の気温・湿度・日射・風から推定WBGTと今後8時間を表示し、建設現場の作業判断を助けます。</p><ol class="steps"><li>位置情報の確認が出たら「許可」をタップします。許可しない場合は「上尾・伊奈で表示」を使えます。</li><li>現在の危険度と、今後8時間で最も危険になる時間を確認します。</li><li>「屋根・足場」「重作業」「防護服」など、当てはまる現場条件を押します。</li><li>「現場で今すぐ行うこと」と朝礼文を確認し、法令チェック3項目を現場全員へ周知します。「本日の確認 3／3項目（完了）」まで確認します。</li><li>体調不良者が出たら症状別の対処を確認し、返事がおかしい・自力で飲めない場合は119番します。</li></ol><div class="tip warn">画面のWBGTは気象予報を使った推定値です。黒球付きWBGT計がある場合は現場の実測値を優先してください。</div><a class="quick-link" href="atsusa.html">熱中症AIアラートを開く</a></div></article>
     <article class="acc"><div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-checklist"></i></div><p class="acc-title">現場安全チェックリスト</p><i class="ti ti-chevron-right acc-arrow"></i></div><div class="acc-body"><p class="feature-summary">着工前や作業前の安全確認を行い、結果を提出用に保存します。</p><ol class="steps"><li>現場名、点検者、日付を入力します。</li><li>安全項目を一つずつ確認してチェックします。</li><li>プレビュー後、印刷またはPDFで保存します。</li></ol><a class="quick-link" href="anzen_check.html">安全チェックを開く</a></div></article>
@@ -194,17 +207,18 @@
     <article class="acc"><div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-clock-hour-4"></i></div><p class="acc-title">36協定・残業カウンター</p><i class="ti ti-chevron-right acc-arrow"></i></div><div class="acc-body"><p class="feature-summary">月・年の残業時間を記録し、上限までの状況を確認します。</p><ol class="steps"><li>対象月と残業時間を入力します。</li><li>月・年の合計と注意表示を確認します。</li><li>必要に応じて正式様式を印刷します。</li></ol><a class="quick-link" href="rodo36.html">残業カウンターを開く</a></div></article>
     <article class="acc"><div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-certificate"></i></div><p class="acc-title">CCUS能力評価サポート（公式）</p><i class="ti ti-chevron-right acc-arrow"></i></div><div class="acc-body"><p class="feature-summary">最新の能力評価基準は、CCUS公式サポートサイトで確認します。</p><ol class="steps"><li>ホームの「CCUS能力評価サポート診断」を押します。</li><li>公式サイトで職種を選びます。</li><li>画面の案内に沿って最新の申請条件を確認します。</li></ol><a class="quick-link" href="https://lv-asses-sup.ccus.jp/" target="_blank" rel="noopener noreferrer">CCUS公式サイトを開く</a></div></article>
 
-    <div class="guide-category" id="manual-procedures"><i class="ti ti-clipboard-list"></i><div><h2>4．手続き・シミュレーション</h2><p>健康、保険、共済、許可の手続きを調べます</p></div></div>
-    <article class="acc"><div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-heart-rate-monitor"></i></div><p class="acc-title">健康診断</p><i class="ti ti-chevron-right acc-arrow"></i></div><div class="acc-body"><p class="feature-summary">健康診断の申し込みフォームを開きます。</p><ol class="steps"><li>「健康診断」をタップします。</li><li>氏名や希望内容を入力します。</li><li>入力内容を確認して送信します。</li></ol></div></article>
+    <div class="guide-category" id="manual-procedures"><i class="ti ti-clipboard-list"></i><div><h2>4．手続き・計算</h2><p>健康、保険、共済、災害、許可の手続きを調べます</p></div></div>
     <article class="acc"><div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-calculator"></i></div><p class="acc-title">計算ツール</p><i class="ti ti-chevron-right acc-arrow"></i></div><div class="acc-body"><p class="feature-summary">労務費、国保料比較、給付金、労災保険料、火災・地震共済を計算します。CCUSは最新基準の公式サイトへ移動します。</p><ol class="steps"><li>計算したい項目を選びます。前回使った項目がある場合は「前回の○○を続ける」からすぐ再開できます。</li><li>画面の案内に沿って金額や人数などを入力します。</li><li>結果を確認し、必要な場合は印刷またはPDF保存します。</li></ol><a class="quick-link" href="calc.html">計算ツールを開く</a></div></article>
+    <article class="acc"><div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-heart-rate-monitor"></i></div><p class="acc-title">健康診断</p><i class="ti ti-chevron-right acc-arrow"></i></div><div class="acc-body"><p class="feature-summary">健康診断の申し込みフォームを開きます。</p><ol class="steps"><li>「健康診断」をタップします。</li><li>氏名や希望内容を入力します。</li><li>入力内容を確認して送信します。</li></ol></div></article>
     <article class="acc"><div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-file-search"></i></div><p class="acc-title">手続き・必要書類ガイド</p><i class="ti ti-chevron-right acc-arrow"></i></div><div class="acc-body"><p class="feature-summary">組合加入、国保、共済、労働保険などの手続きと必要書類を調べます。</p><ol class="steps"><li>行いたい手続きを選びます。</li><li>必要書類と注意事項を一つずつ確認します。</li><li>分からない点は、書類を用意する前に支部へ相談します。</li></ol><a class="quick-link" href="guide.html">必要書類ガイドを開く</a></div></article>
     <article class="acc"><div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-heart-handshake"></i></div><p class="acc-title">総合共済 申請ナビ</p><i class="ti ti-chevron-right acc-arrow"></i></div><div class="acc-body"><p class="feature-summary">入院、けが、結婚、住宅災害、宿泊、資格取得などから、申請できる共済と必要書類を確認します。</p><ol class="steps"><li>起きたできごとを選びます。</li><li>対象条件、申請期限、必要書類を確認します。</li><li>準備できた書類にチェックします。チェックはその端末だけに保存されます。</li></ol><a class="quick-link" href="kyosai_guide.html">総合共済ナビを開く</a></div></article>
+    <article class="acc"><div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-shield-check"></i></div><p class="acc-title">災害・事故のとき</p><i class="ti ti-chevron-right acc-arrow"></i></div><div class="acc-body"><p class="feature-summary">火災、台風、水害、落雷、雹、地震、車の事故などが起きた直後に、最初に行うことを確認します。</p><ol class="steps"><li>起きた災害・事故に近い項目を選びます。</li><li>安全確保、写真記録、連絡先、必要書類を順番に確認します。</li><li>被害状況を整理し、共済の対象や申請方法を支部へ相談します。</li></ol><a class="quick-link" href="disaster_support.html">災害・事故の案内を開く</a></div></article>
     <article class="acc"><div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-building-skyscraper"></i></div><p class="acc-title">建設業許可チェッカー</p><i class="ti ti-chevron-right acc-arrow"></i></div><div class="acc-body"><p class="feature-summary">建設業許可が必要か、申請区分と必要書類を確認します。</p><ol class="steps"><li>質問に順番に答え、許可が必要か確認します。</li><li>「新規・更新・事業年度終了報告」と「個人・法人」を選びます。</li><li>必要書類を確認します。準備済みチェックはその端末だけに保存されます。</li></ol><a class="quick-link" href="kensetsu_check.html">許可チェッカーを開く</a></div></article>
-    <article class="acc"><div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-user-shield"></i></div><p class="acc-title">一人親方の基礎知識・診断</p><i class="ti ti-chevron-right acc-arrow"></i></div><div class="acc-body"><p class="feature-summary">一人親方に該当するか、働き方・保険・年金の基礎を確認します。</p><ol class="steps"><li>5つの質問に答えて適性を確認します。</li><li>会社員との違い、メリットと注意点を読みます。</li><li>判断に迷う場合は、結果を見ながら支部へ相談します。</li></ol><a class="quick-link" href="hitori.html">一人親方診断を開く</a></div></article>
 
     <div class="guide-category" id="manual-learning"><i class="ti ti-book"></i><div><h2>5．講習・資料</h2><p>資格、組合の制度、資料、動画を確認します</p></div></div>
     <article class="acc"><div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-school"></i></div><p class="acc-title">技能講習日程案内</p><i class="ti ti-chevron-right acc-arrow"></i></div><div class="acc-body"><p class="feature-summary">技能講習の日程、受講料、受講資格、必要書類を確認します。</p><ol class="steps"><li>受けたい講習を選びます。</li><li>日程、受講料、申込期限、必要書類を確認します。</li><li>足場・石綿は質問に答えて、受講区分や必要書類を確認します。</li></ol><a class="quick-link" href="koushu.html">技能講習日程を開く</a></div></article>
     <article class="acc"><div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-gift"></i></div><p class="acc-title">加入のメリット</p><i class="ti ti-chevron-right acc-arrow"></i></div><div class="acc-body"><p class="feature-summary">共済、国保、資格支援、仕事や暮らしの支援など、組合加入の利点を確認します。</p><ol class="steps"><li>知りたい制度を選びます。</li><li>対象条件や利用方法を確認します。</li><li>家族や仲間へ説明するときにも利用できます。</li></ol><a class="quick-link" href="merit.html">加入のメリットを開く</a></div></article>
+    <article class="acc"><div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-user-shield"></i></div><p class="acc-title">一人親方の基礎知識・診断</p><i class="ti ti-chevron-right acc-arrow"></i></div><div class="acc-body"><p class="feature-summary">一人親方に該当するか、働き方・保険・年金の基礎を確認します。</p><ol class="steps"><li>5つの質問に答えて適性を確認します。</li><li>会社員との違い、メリットと注意点を読みます。</li><li>判断に迷う場合は、結果を見ながら支部へ相談します。</li></ol><a class="quick-link" href="hitori.html">一人親方診断を開く</a></div></article>
     <article class="acc"><div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-books"></i></div><p class="acc-title">資料本棚</p><i class="ti ti-chevron-right acc-arrow"></i></div><div class="acc-body"><p class="feature-summary">支部の案内や制度資料をまとめて読みます。</p><ol class="steps"><li>読みたい資料を選びます。</li><li>画面で読みづらい場合はPDF表示に切り替えます。</li><li>拡大して読むか、必要に応じて保存・印刷します。</li></ol><a class="quick-link" href="shiryo.html">資料本棚を開く</a></div></article>
     <article class="acc"><div class="acc-head" onclick="toggleAcc(this)"><div class="acc-icon"><i class="ti ti-brand-youtube"></i></div><p class="acc-title">YouTubeチャンネル</p><i class="ti ti-chevron-right acc-arrow"></i></div><div class="acc-body"><p class="feature-summary">埼玉土建の活動動画や講習案内を視聴します。</p><ol class="steps"><li>「YouTubeチャンネル」をタップします。</li><li>見たい動画を選んで再生します。</li></ol></div></article>
   </section>

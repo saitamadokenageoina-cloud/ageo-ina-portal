@@ -172,6 +172,20 @@ function checkJpeg(relativePath) {
   }
 }
 
+function checkSourceOrder(source, needles, label) {
+  var previous = -1;
+  var position;
+  var i;
+  for (i = 0; i < needles.length; i += 1) {
+    position = source.indexOf(needles[i]);
+    if (position === -1 || position <= previous) {
+      fail(label + ': 指定した並び順になっていません: ' + needles[i]);
+      return;
+    }
+    previous = position;
+  }
+}
+
 function checkCachedJpegs() {
   var source = read('sw.js');
   var pattern = /BASE \+ '([^']+\.jpe?g)'/gi;
@@ -184,8 +198,12 @@ function checkHomeCardImages() {
   var homeScript = read('assets/js/home-modern-legacy-v177.js');
   var navigationSource = read('assets/js/navigation.js');
   var artCss = read('assets/css/home-card-art.css');
+  var paypayCss = read('assets/css/paypay-tabs-base.css');
   var homeCss = read('assets/css/home-modern.css');
   var themeCss = read('assets/css/theme-polish.css');
+  var guideSource = read('app_guide.html');
+  var procedureSource;
+  var learningSource;
   var imagePattern = /<img\b[^>]*\bclass=["'][^"']*\bhome-card-image\b[^"']*["'][^>]*>/gi;
   var sourcePattern = /\bsrc=["']([^"']+)["']/i;
   var cardPattern = /<a\b[^>]*\bclass=["'][^"']*\bmc\b[^"']*["'][^>]*>/gi;
@@ -248,6 +266,28 @@ function checkHomeCardImages() {
   }
   if (/a\[href=["']guild\.html["']\] \.mc-desc::after/.test(homeCss + themeCss + homeScript)) {
     fail('ホームカード: DOKENギルドだけ説明文サイズを変える旧処理が残っています');
+  }
+  procedureSource = indexSource.slice(indexSource.indexOf('id="tetsuzuki"'), indexSource.indexOf('id="koushu"'));
+  learningSource = indexSource.slice(indexSource.indexOf('id="koushu"'), indexSource.indexOf('<section class="app-manual">'));
+  checkSourceOrder(procedureSource, ['href="calc.html"', 'forms.gle/uKCqkLJAw7gMjwUMA', 'href="guide.html"', 'href="kyosai_guide.html"', 'href="kensetsu_check.html"'], 'index.html: 手続き・計算');
+  checkSourceOrder(learningSource, ['href="koushu.html"', 'href="merit.html"', 'href="hitori.html"', 'href="shiryo.html"', 'youtube.com/channel/'], 'index.html: 講習・資料');
+  if (/style=["'][^"']*order\s*:/.test(procedureSource) || /card\.style\.order/.test(navigationSource)) {
+    fail('ホームカード: CSSのorderに依存する旧並び替えが残っています');
+  }
+  if (navigationSource.indexOf('grid.insertBefore(card,permitCard || null)') === -1 || navigationSource.indexOf('a[href="kensetsu_check.html"]') === -1) {
+    fail('navigation.js: 災害・事故カードが建設業許可チェッカーの直前に挿入されません');
+  }
+  if (artCss.indexOf('height:276px!important') === -1 || artCss.indexOf('height:270px!important') === -1 || artCss.indexOf('height:118px!important') === -1 || artCss.indexOf('height:114px!important') === -1) {
+    fail('home-card-art.css: カードの縦幅がコンパクト版に統一されていません');
+  }
+  if (paypayCss.indexOf('.mc-body{padding:10px 12px 12px!important') === -1 || paypayCss.indexOf('margin-bottom:6px!important') === -1) {
+    fail('paypay-tabs-base.css: カード内部の余白がコンパクト版に統一されていません');
+  }
+  if (indexSource.indexOf('機能を探す</button>') === -1 || indexSource.indexOf('各区分のカードは、指で左右にスライドして選びます。') === -1 || indexSource.indexOf('区分右上の「すべて見る」') === -1 || indexSource.indexOf('画面下の「ホーム・仕事・現場・手続き・メニュー」') === -1) {
+    fail('index.html: 「このアプリの使い方」が最新のホーム操作を案内していません');
+  }
+  if (guideSource.indexOf('カードを左右にスライドして選び') === -1 || guideSource.indexOf('使いたい機能を検索する') === -1 || guideSource.indexOf('計算ツール、健康診断、手続き・必要書類ガイド、総合共済申請ナビ、災害・事故のとき、建設業許可チェッカー') === -1 || guideSource.indexOf('技能講習日程案内、加入のメリット、一人親方の基礎知識・診断、資料本棚、YouTubeチャンネル') === -1) {
+    fail('app_guide.html: 詳しい説明書が最新のホーム構成と一致していません');
   }
 }
 
