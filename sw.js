@@ -1,5 +1,5 @@
 // Service Worker - キャッシュ制御
-const CACHE_VERSION = 'v20260829-179';
+const CACHE_VERSION = 'v20260829-180';
 const CACHE_NAME = 'ageo-ina-portal-' + CACHE_VERSION;
 const BASE = '/ageo-ina-portal/';
 const PDFJS_CDN = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/';
@@ -8,9 +8,11 @@ const CACHE_FILES = [
   BASE + 'assets/css/theme-polish.css', BASE + 'assets/css/theme-polish-base.css',
   BASE + 'assets/css/paypay-tabs.css', BASE + 'assets/css/paypay-tabs-base.css', BASE + 'assets/css/home-card-art-dark-fix.css',
   BASE + 'assets/css/home-card-art.css', BASE + 'assets/css/home-alignment-fix.css', BASE + 'assets/css/home-modern.css',
-  BASE + 'assets/illustrations/home-3d/calendar-v179.jpg', BASE + 'assets/illustrations/home-3d/doken-card.jpg', BASE + 'assets/illustrations/home-3d/guild.jpg', BASE + 'assets/illustrations/home-3d/meishi.svg', BASE + 'assets/illustrations/home-3d/job.svg', BASE + 'assets/illustrations/home-3d/worker-supply.svg', BASE + 'assets/illustrations/home-3d/home-doctor.svg',
-  BASE + 'assets/illustrations/home-3d/estimate-warm.svg', BASE + 'assets/illustrations/home-3d/safety-warm.svg', BASE + 'assets/illustrations/home-3d/heat-warm.svg', BASE + 'assets/illustrations/home-3d/procedure-warm.svg', BASE + 'assets/illustrations/home-3d/health-warm.svg',
-  BASE + 'assets/illustrations/home/general.svg', BASE + 'assets/illustrations/home/youtube.svg',
+  BASE + 'assets/illustrations/home-3d/calendar-v179.jpg', BASE + 'assets/illustrations/home-3d/doken-card-v180.jpg',
+  BASE + 'assets/illustrations/home-3d/guild-v180.jpg', BASE + 'assets/illustrations/home-3d/meishi-v180.jpg', BASE + 'assets/illustrations/home-3d/job-v180.jpg', BASE + 'assets/illustrations/home-3d/worker-supply-v180.jpg', BASE + 'assets/illustrations/home-3d/home-doctor-v180.jpg',
+  BASE + 'assets/illustrations/home-3d/estimate-v180.jpg', BASE + 'assets/illustrations/home-3d/heat-v180.jpg', BASE + 'assets/illustrations/home-3d/safety-v180.jpg', BASE + 'assets/illustrations/home-3d/work-log-v180.jpg', BASE + 'assets/illustrations/home-3d/rodo36-v180.jpg', BASE + 'assets/illustrations/home-3d/ccus-v180.jpg',
+  BASE + 'assets/illustrations/home-3d/kyosai-guide-v180.jpg', BASE + 'assets/illustrations/home-3d/health-v180.jpg', BASE + 'assets/illustrations/home-3d/guide-v180.jpg', BASE + 'assets/illustrations/home-3d/calc-v180.jpg', BASE + 'assets/illustrations/home-3d/permit-v180.jpg', BASE + 'assets/illustrations/home-3d/hitori-v180.jpg',
+  BASE + 'assets/illustrations/home-3d/training-v180.jpg', BASE + 'assets/illustrations/home-3d/merit-v180.jpg', BASE + 'assets/illustrations/home-3d/documents-v180.jpg', BASE + 'assets/illustrations/home-3d/youtube-v180.jpg',
   BASE + 'assets/css/print.css', BASE + 'assets/js/print-util.js', BASE + 'assets/js/navigation.js', BASE + 'assets/js/home-modern.js', BASE + 'assets/js/home-modern-legacy-v177.js',
   BASE + 'assets/js/calendar-config.js', BASE + 'assets/js/calendar-upcoming.js', BASE + 'assets/js/guild-config.js', BASE + 'assets/js/bookshelf.js', BASE + 'assets/js/meishi.js', BASE + 'assets/js/qrcode-generator.js', BASE + 'assets/css/meishi.css',
   BASE + 'assets/css/tabler-icons.min.css', BASE + 'assets/fonts/tabler-icons/tabler-icons.woff2',
