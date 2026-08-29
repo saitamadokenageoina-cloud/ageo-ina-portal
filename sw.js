@@ -1,5 +1,5 @@
 // Service Worker - キャッシュ制御
-const CACHE_VERSION = 'v20260829-173';
+const CACHE_VERSION = 'v20260829-174';
 const CACHE_NAME = 'ageo-ina-portal-' + CACHE_VERSION;
 const BASE = '/ageo-ina-portal/';
 const PDFJS_CDN = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/';
