@@ -1,73 +1,41 @@
 (function(){
   'use strict';
-  if ((location.pathname.split('/').pop() || 'index.html') !== 'index.html') return;
-  if (document.body.classList.contains('home-modern')) return;
-
-  var ICONS=[
-    ['calendar.html','ti-calendar-event','tone-green'],['doken_card.html','ti-discount-2','tone-purple'],['guild.html','ti-users-group','tone-green'],['meishi.html','ti-id-badge-2','tone-blue'],['estimate/','ti-file-invoice','tone-cyan'],['atsusa.html','ti-temperature-sun','tone-orange'],['anzen_check.html','ti-shield-check','tone-orange'],['work_log.html','ti-clipboard-text','tone-green'],['rodo36.html','ti-clock-hour-4','tone-blue'],['lv-asses-sup.ccus.jp','ti-id','tone-blue'],['kyosai_guide.html','ti-shield-heart','tone-pink'],['forms.gle','ti-stethoscope','tone-green'],['calc.html','ti-calculator','tone-blue'],['kyosai_calc.html','ti-home-dollar','tone-pink'],['disaster_support.html','ti-shield-exclamation','tone-orange'],['kensetsu_check.html','ti-building','tone-gold'],['hitori.html','ti-user-shield','tone-purple'],['koushu.html','ti-certificate','tone-gold'],['shiryo.html','ti-folders','tone-cyan'],['book.html','ti-books','tone-purple'],['merit.html','ti-discount-check','tone-orange'],['guide.html','ti-route','tone-blue']
-  ];
-  var SECTION_ICONS={yoku:'ti-sparkles',nichijo:'ti-calendar-event',shigoto:'ti-users-group',genba:'ti-helmet',tetsuzuki:'ti-file-description',shiryo:'ti-books',sonota:'ti-dots'};
-  var ART={
-    'calendar.html':['0%','0%'],'doken_card.html':['33.333%','0%'],'work_log.html':['66.666%','0%'],'koushu.html':['100%','0%'],
-    'guild.html':['0%','50%'],'meishi.html':['33.333%','50%'],'estimate/':['66.666%','50%'],'atsusa.html':['100%','50%'],
-    'disaster_support.html':['0%','100%'],'forms.gle':['33.333%','100%'],'calc.html':['66.666%','100%'],'anzen_check.html':['100%','100%']
-  };
-
-  function trimText(value){return String(value||'').replace(/^\s+|\s+$/g,'');}
-  function iconFor(href){var i;href=href||'';for(i=0;i<ICONS.length;i+=1){if(href.indexOf(ICONS[i][0])!==-1)return{icon:ICONS[i][1],tone:ICONS[i][2]};}return{icon:'ti-apps',tone:'tone-gray'};}
-  function artFor(href){var key;href=href||'';for(key in ART){if(ART.hasOwnProperty(key)&&href.indexOf(key)!==-1)return ART[key];}return null;}
-  function scrollToSection(id){var el=document.getElementById(id);if(!el)return;try{el.scrollIntoView({behavior:'smooth',block:'start'});}catch(e){el.scrollIntoView(true);}}
-
-  function injectHeaderIconPolish(){
-    var style=document.createElement('style');
-    style.id='home-header-icon-polish';
-    style.textContent=[
-      '.home-modern .sec-head-icon{background:#EAF4FD!important;color:#1769AA!important;border-color:rgba(23,38,58,.08)!important;box-shadow:none!important}',
-      '.home-modern .sec-head-glyph i{color:inherit!important}',
-      '.home-modern #yoku .sec-head-icon{background:#FFF6E5!important;color:#A96800!important}',
-      '.home-modern #nichijo .sec-head-icon{background:#EAF4FD!important;color:#1769AA!important}',
-      '.home-modern #shigoto .sec-head-icon{background:#EAF8F0!important;color:#16764B!important}',
-      '.home-modern #genba .sec-head-icon{background:#FFF0E7!important;color:#D85A21!important}',
-      '.home-modern #tetsuzuki .sec-head-icon{background:#F1ECFD!important;color:#6544A8!important}',
-      '.home-modern #shiryo .sec-head-icon{background:#E8F8FB!important;color:#147A8A!important}',
-      '.home-modern #sonota .sec-head-icon{background:#EEF2F6!important;color:#405064!important}',
-      '.home-modern .section:not(#yoku) a[href="guild.html"] .mc-desc{font-size:12px!important;min-height:54px!important}',
-      '.home-modern .section:not(#yoku) a[href="guild.html"] .mc-desc::after{content:none!important;display:none!important}',
-      '.home-modern .home-card-art-direct{display:block!important;width:100%!important;height:100%!important;background-image:url("../img/home-card-art-sprite.svg")!important;background-repeat:no-repeat!important;background-size:400% 300%!important}',
-      '.home-modern .mc-top:has(.home-card-art-direct){padding:0!important;overflow:hidden!important}',
-      '.home-modern .mc-top:has(.home-card-art-direct) .home-card-icon{display:none!important}',
-      'html[data-theme="dark"] .home-modern .sec-head-icon{border-color:rgba(255,255,255,.12)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.04)!important}',
-      'html[data-theme="dark"] .home-modern #yoku .sec-head-icon{background:#44371A!important;color:#FFD66B!important}',
-      'html[data-theme="dark"] .home-modern #nichijo .sec-head-icon{background:#123656!important;color:#72C7FF!important}',
-      'html[data-theme="dark"] .home-modern #shigoto .sec-head-icon{background:#123B32!important;color:#65D5A5!important}',
-      'html[data-theme="dark"] .home-modern #genba .sec-head-icon{background:#4A2C21!important;color:#FF9A67!important}',
-      'html[data-theme="dark"] .home-modern #tetsuzuki .sec-head-icon{background:#30274F!important;color:#B79BFF!important}',
-      'html[data-theme="dark"] .home-modern #shiryo .sec-head-icon{background:#123A43!important;color:#68D9E8!important}',
-      'html[data-theme="dark"] .home-modern #sonota .sec-head-icon{background:#26374B!important;color:#D5E2F0!important}'
-    ].join('\n');
-    document.head.appendChild(style);
+  function installCalendarImage(){
+    var section=document.getElementById('nichijo');
+    var card,top,img;
+    if(!section)return;
+    card=section.querySelector('.mc');
+    if(!card)return;
+    top=card.querySelector('.mc-top');
+    if(!top)return;
+    while(top.firstChild)top.removeChild(top.firstChild);
+    top.style.setProperty('background-image','none','important');
+    top.style.setProperty('background-color','#f7e6c4','important');
+    top.style.setProperty('padding','0','important');
+    top.style.setProperty('overflow','hidden','important');
+    img=document.createElement('img');
+    img.src='assets/illustrations/home-3d/calendar-v176.jpg?v=177';
+    img.alt='';
+    img.setAttribute('aria-hidden','true');
+    img.className='calendar-card-real-img';
+    img.style.setProperty('display','block','important');
+    img.style.setProperty('width','100%','important');
+    img.style.setProperty('height','100%','important');
+    img.style.setProperty('object-fit','cover','important');
+    img.style.setProperty('object-position','center','important');
+    img.style.setProperty('position','relative','important');
+    img.style.setProperty('z-index','20','important');
+    top.appendChild(img);
   }
-
-  function createDailyCard(href,badge,title,desc){var a=document.createElement('a');a.className='mc';a.href=href;a.innerHTML='<div class="mc-top"></div><div class="mc-body"><span class="mc-badge tool">'+badge+'</span><p class="mc-title">'+title+'</p><p class="mc-desc">'+desc+'</p></div>';return a;}
-  function buildDailySection(){var shigoto=document.getElementById('shigoto'),section,head,grid;if(!shigoto||document.getElementById('nichijo'))return;section=document.createElement('div');section.className='section';section.id='nichijo';head=document.createElement('div');head.className='sec-head';head.innerHTML='<div class="sec-head-icon blue"><span class="sec-head-glyph" aria-hidden="true"></span></div><span class="sec-head-label">日常・予定</span><div class="sec-head-line"></div>';grid=document.createElement('div');grid.className='grid2';grid.appendChild(createDailyCard('calendar.html','予定','支部カレンダー','支部行事・会議・予定を確認'));grid.appendChild(createDailyCard('doken_card.html','優待','DOKENカード','県内の登録店・組合員優待を確認'));section.appendChild(head);section.appendChild(grid);shigoto.parentNode.insertBefore(section,shigoto);}
-  function enhanceSectionIcons(){var sections=document.querySelectorAll('.section[id]'),i,glyph;for(i=0;i<sections.length;i+=1){glyph=sections[i].querySelector('.sec-head-glyph');if(glyph)glyph.innerHTML='<i class="ti '+(SECTION_ICONS[sections[i].id]||'ti-layout-grid')+'" aria-hidden="true"></i>';}}
-  function enhanceCards(){var cards=document.querySelectorAll('.section:not(#yoku) .mc'),i,card,top,info,icon,desc,art,visual;for(i=0;i<cards.length;i+=1){card=cards[i];top=card.querySelector('.mc-top');art=artFor(card.getAttribute('href')||'');if(top&&art){visual=document.createElement('span');visual.className='home-card-art-direct';visual.setAttribute('aria-hidden','true');visual.style.backgroundPosition=art[0]+' '+art[1];top.innerHTML='';top.appendChild(visual);}else if(top&&!top.querySelector('.home-card-icon')){info=iconFor(card.getAttribute('href')||'');icon=document.createElement('span');icon.className='home-card-icon '+info.tone;icon.setAttribute('aria-hidden','true');icon.innerHTML='<i class="ti '+info.icon+'"></i>';top.appendChild(icon);}if((card.getAttribute('href')||'')==='guild.html'){desc=card.querySelector('.mc-desc');if(desc)desc.textContent='人手、仕事、資材・道具を支部の仲間でつなぎます。';}}}
-
-  function quickItem(href,label,icon,tone,external){var a=document.createElement('a');a.className='home-quick-item '+tone;a.href=href;if(external){a.target='_blank';a.rel='noopener noreferrer';}a.innerHTML='<span class="home-quick-icon" aria-hidden="true"><i class="ti '+icon+'"></i></span><span class="home-quick-label">'+label+'</span>';return a;}
-  function buildQuickMenu(){var section=document.getElementById('yoku'),grid,all,oldGrid;if(!section||section.querySelector('.home-quick-grid'))return;grid=document.createElement('div');grid.className='home-quick-grid';grid.setAttribute('aria-label','よく使う機能');grid.appendChild(quickItem('calendar.html','カレンダー','ti-calendar-event','tone-green'));grid.appendChild(quickItem('guild.html','DOKENギルド','ti-users-group','tone-green'));grid.appendChild(quickItem('calc.html','計算ツール','ti-calculator','tone-blue'));grid.appendChild(quickItem('doken_card.html','DOKENカード','ti-discount-2','tone-purple'));grid.appendChild(quickItem('https://forms.gle/uKCqkLJAw7gMjwUMA','健康診断','ti-stethoscope','tone-cyan',true));grid.appendChild(quickItem('work_log.html','作業記録','ti-clipboard-text','tone-green'));grid.appendChild(quickItem('koushu.html','資格・講習','ti-certificate','tone-gold'));all=document.createElement('button');all.type='button';all.className='home-quick-item tone-gray';all.setAttribute('aria-haspopup','dialog');all.innerHTML='<span class="home-quick-icon" aria-hidden="true"><i class="ti ti-apps"></i></span><span class="home-quick-label">すべて</span>';all.addEventListener('click',function(){openToolsSheet(null);});grid.appendChild(all);oldGrid=section.querySelector('.grid2');if(oldGrid)section.insertBefore(grid,oldGrid);else section.appendChild(grid);}
-  function updateRail(shell,grid){if(!shell||!grid)return;shell.classList.toggle('is-end',grid.scrollLeft+grid.clientWidth>=grid.scrollWidth-8);}
-  function enhanceRails(){var sections=document.querySelectorAll('.section:not(#yoku)'),i;for(i=0;i<sections.length;i+=1){(function(section){var grid=section.querySelector('.grid2'),head=section.querySelector('.sec-head'),btn,shell,fade;if(!grid||!head||grid.parentNode.classList.contains('home-rail-shell'))return;btn=document.createElement('button');btn.type='button';btn.className='home-all-btn';btn.setAttribute('aria-haspopup','dialog');btn.innerHTML='すべて見る <i class="ti ti-apps" aria-hidden="true"></i>';head.appendChild(btn);shell=document.createElement('div');shell.className='home-rail-shell';grid.parentNode.insertBefore(shell,grid);shell.appendChild(grid);fade=document.createElement('span');fade.className='home-rail-fade';fade.setAttribute('aria-hidden','true');shell.appendChild(fade);btn.addEventListener('click',function(){openToolsSheet(section);});grid.addEventListener('scroll',function(){updateRail(shell,grid);},false);window.addEventListener('resize',function(){updateRail(shell,grid);});window.setTimeout(function(){updateRail(shell,grid);},40);})(sections[i]);}}
-  function sectionData(section){var label=section.querySelector('.sec-head-label'),cards=section.querySelectorAll('.mc'),items=[],i,title,href,desc;for(i=0;i<cards.length;i+=1){title=cards[i].querySelector('.mc-title');href=cards[i].getAttribute('href');desc=cards[i].querySelector('.mc-desc');if(!title||!href)continue;items.push({title:trimText(title.textContent),desc:desc?trimText(desc.textContent):'',href:href,external:cards[i].target==='_blank',icon:iconFor(href)});}return{label:label?trimText(label.textContent):'機能',items:items};}
-  function collectAll(){var sections=document.querySelectorAll('.section:not(#yoku)'),groups=[],i;for(i=0;i<sections.length;i+=1){if(sections[i].querySelectorAll('.mc').length)groups.push(sectionData(sections[i]));}return groups;}
-  var toolsOverlay=null;
-  function closeToolsSheet(){if(!toolsOverlay)return;toolsOverlay.classList.remove('open');document.body.style.overflow='';}
-  function buildToolsSheet(section){var groups=section?[sectionData(section)]:collectAll(),sheet,title,i,j,group,item,groupTitle,grid,a,iconWrap,textWrap;if(toolsOverlay&&toolsOverlay.parentNode)toolsOverlay.parentNode.removeChild(toolsOverlay);toolsOverlay=document.createElement('div');toolsOverlay.className='home-menu-overlay home-all-overlay';toolsOverlay.setAttribute('role','dialog');toolsOverlay.setAttribute('aria-modal','true');toolsOverlay.setAttribute('aria-label',section?'カテゴリーの全機能':'すべての機能');sheet=document.createElement('div');sheet.className='home-menu-sheet home-tools-sheet';title=section?groups[0].label:'すべての機能';sheet.innerHTML='<div class="home-menu-handle"></div><div class="home-menu-title"><span>'+title+'</span><button class="home-menu-close" type="button" aria-label="閉じる"><i class="ti ti-x"></i></button></div><p class="home-sheet-guide">アイコンをタップすると機能を開きます</p>';for(i=0;i<groups.length;i+=1){group=groups[i];if(!section){groupTitle=document.createElement('h3');groupTitle.className='home-sheet-group-title';groupTitle.textContent=group.label;sheet.appendChild(groupTitle);}grid=document.createElement('div');grid.className='home-sheet-icon-grid';for(j=0;j<group.items.length;j+=1){item=group.items[j];a=document.createElement('a');a.className='home-sheet-tool';a.href=item.href;if(item.external){a.target='_blank';a.rel='noopener noreferrer';}iconWrap=document.createElement('span');iconWrap.className='home-sheet-tool-icon '+item.icon.tone;iconWrap.innerHTML='<i class="ti '+item.icon.icon+'" aria-hidden="true"></i>';textWrap=document.createElement('span');textWrap.className='home-sheet-tool-text';textWrap.innerHTML='<strong>'+item.title+'</strong>'+(item.desc?'<small>'+item.desc+'</small>':'');a.appendChild(iconWrap);a.appendChild(textWrap);grid.appendChild(a);}sheet.appendChild(grid);}toolsOverlay.appendChild(sheet);document.body.appendChild(toolsOverlay);toolsOverlay.querySelector('.home-menu-close').addEventListener('click',closeToolsSheet);toolsOverlay.addEventListener('click',function(e){if(e.target===toolsOverlay)closeToolsSheet();});}
-  function openToolsSheet(section){buildToolsSheet(section);toolsOverlay.classList.add('open');document.body.style.overflow='hidden';var close=toolsOverlay.querySelector('.home-menu-close');if(close)close.focus();}
-  var menuOverlay=null;
-  function closeMenu(){if(!menuOverlay)return;menuOverlay.classList.remove('open');document.body.style.overflow='';}
-  function buildMenuOverlay(){if(menuOverlay)return;menuOverlay=document.createElement('div');menuOverlay.className='home-menu-overlay';menuOverlay.setAttribute('role','dialog');menuOverlay.setAttribute('aria-modal','true');menuOverlay.setAttribute('aria-label','メニュー');menuOverlay.innerHTML='<div class="home-menu-sheet"><div class="home-menu-handle"></div><div class="home-menu-title"><span>メニュー</span><button class="home-menu-close" type="button" aria-label="閉じる"><i class="ti ti-x"></i></button></div><div class="home-menu-grid"><a class="home-menu-link" href="tel:048-773-9863"><i class="ti ti-phone"></i><span>支部へ電話</span></a><a class="home-menu-link" href="https://lin.ee/QqbqtCy" target="_blank" rel="noopener noreferrer"><i class="ti ti-brand-line"></i><span>LINE</span></a><a class="home-menu-link" href="https://www.google.com/maps/search/?api=1&query=%E4%B8%8A%E5%B0%BE%E5%B8%82%E8%8F%85%E8%B0%B7295" target="_blank" rel="noopener noreferrer"><i class="ti ti-map-pin"></i><span>支部の地図</span></a><a class="home-menu-link" href="app_guide.html"><i class="ti ti-help-circle"></i><span>使い方・ヘルプ</span></a></div></div>';document.body.appendChild(menuOverlay);menuOverlay.querySelector('.home-menu-close').addEventListener('click',closeMenu);menuOverlay.addEventListener('click',function(e){if(e.target===menuOverlay)closeMenu();});}
-  function openMenu(){buildMenuOverlay();menuOverlay.classList.add('open');document.body.style.overflow='hidden';menuOverlay.querySelector('.home-menu-close').focus();}
-  function buildBottomNav(){var nav,buttons;if(document.querySelector('.home-bottom-nav'))return;nav=document.createElement('nav');nav.className='home-bottom-nav';nav.setAttribute('aria-label','ホーム画面メニュー');nav.innerHTML='<button class="home-bottom-item active" type="button" data-target="top"><i class="ti ti-home"></i><span>ホーム</span></button><button class="home-bottom-item" type="button" data-target="shigoto"><i class="ti ti-users-group"></i><span>仕事</span></button><button class="home-bottom-item" type="button" data-target="genba"><i class="ti ti-helmet"></i><span>現場</span></button><button class="home-bottom-item" type="button" data-target="tetsuzuki"><i class="ti ti-file-description"></i><span>手続き</span></button><button class="home-bottom-item" type="button" data-target="menu"><i class="ti ti-menu-2"></i><span>メニュー</span></button>';document.body.appendChild(nav);buttons=nav.querySelectorAll('.home-bottom-item');for(var i=0;i<buttons.length;i+=1){buttons[i].addEventListener('click',function(){var target=this.getAttribute('data-target');if(target==='top'){window.scrollTo(0,0);}else if(target==='menu'){openMenu();}else{scrollToSection(target);}});}}
-  function init(){document.body.classList.add('home-modern');injectHeaderIconPolish();buildDailySection();enhanceSectionIcons();enhanceCards();buildQuickMenu();enhanceRails();buildBottomNav();}
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+  function afterLegacy(){
+    if(document.readyState==='loading'){
+      document.addEventListener('DOMContentLoaded',function(){window.setTimeout(installCalendarImage,0);});
+    }else{
+      window.setTimeout(installCalendarImage,0);
+    }
+  }
+  var legacy=document.createElement('script');
+  legacy.src='assets/js/home-modern-legacy-v177.js';
+  legacy.onload=afterLegacy;
+  document.body.appendChild(legacy);
 })();
