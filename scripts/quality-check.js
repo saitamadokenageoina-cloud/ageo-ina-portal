@@ -179,6 +179,43 @@ function checkCachedJpegs() {
   while ((match = pattern.exec(source))) checkJpeg(match[1]);
 }
 
+function checkHomeCardImages() {
+  var indexSource = read('index.html');
+  var homeScript = read('assets/js/home-modern-legacy-v177.js');
+  var artCss = read('assets/css/home-card-art.css');
+  var imagePattern = /<img\b[^>]*\bclass=["'][^"']*\bhome-card-image\b[^"']*["'][^>]*>/gi;
+  var sourcePattern = /\bsrc=["']([^"']+)["']/i;
+  var cardPattern = /<a\b[^>]*\bclass=["'][^"']*\bmc\b[^"']*["'][^>]*>/gi;
+  var images = indexSource.match(imagePattern) || [];
+  var cards = indexSource.match(cardPattern) || [];
+  var match;
+  var i;
+
+  if (images.length !== cards.length) {
+    fail('index.html: 機能カード ' + cards.length + '枚に対して直接画像が ' + images.length + '枚です');
+  }
+  for (i = 0; i < images.length; i += 1) {
+    match = images[i].match(sourcePattern);
+    if (!match || !/^assets\/illustrations\/home-3d\/.+-v\d+\.jpg$/i.test(match[1])) {
+      fail('index.html: カード画像はバージョン付き個別JPEGを直接参照してください');
+    } else {
+      checkJpeg(match[1]);
+    }
+    if (!/\bwidth=["']960["']/i.test(images[i]) || !/\bheight=["']640["']/i.test(images[i])) {
+      fail('index.html: カード画像のwidth/heightは960×640にしてください');
+    }
+  }
+  if (homeScript.indexOf("doken-card-v180.jpg") === -1) {
+    fail('home-modern-legacy-v177.js: DOKENカード画像が生成時HTMLにありません');
+  }
+  if (/\bART\s*=|home-card-art-direct|artFor\s*\(/.test(homeScript)) {
+    fail('home-modern-legacy-v177.js: 旧sprite描画処理が残っています');
+  }
+  if (/--home-card-art|background-image/.test(artCss)) {
+    fail('home-card-art.css: 旧background-image方式が残っています');
+  }
+}
+
 function checkEs5JavaScript(relativePath) {
   var source = read(relativePath);
   if (/\bconst\b|\blet\b|=>|\?\./.test(source)) {
@@ -209,6 +246,7 @@ var i;
 for (i = 0; i < htmlFiles.length; i += 1) checkHtml(htmlFiles[i]);
 checkServiceWorker(htmlFiles);
 checkCachedJpegs();
+checkHomeCardImages();
 checkSharedJavaScript();
 checkSensitiveTokens(publicTextFiles);
 

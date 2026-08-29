@@ -1,13 +1,11 @@
-/* Dark-mode compatibility for per-card home artwork. */
-html[data-theme="dark"] body.home-modern .section:not(#yoku) .mc-top{
-  background-image:var(--home-card-art,url('../illustrations/home/general.svg'))!important;
-  background-repeat:no-repeat!important;
-  background-size:cover!important;
-  background-position:center!important;
-  filter:saturate(.94) brightness(.94)!important;
-}
+/* Keep photographic card art intact in dark mode. */
+html[data-theme="dark"] body.home-modern .section:not(#yoku) .mc-top,
 html[data-theme="dark"] body.home-modern .section:not(#yoku) .mc-top.home-card-image-wrap{
-  background:#f7e6c4!important;
+  background:#1B2B3C!important;
   filter:none!important;
 }
-html[data-theme="dark"] body.home-modern .section:not(#yoku) .mc-top>span.home-card-art-direct{display:none!important;}
+html[data-theme="dark"] body.home-modern .section:not(#yoku) .mc-top>.home-card-image{
+  opacity:1!important;
+  visibility:visible!important;
+  filter:none!important;
+}
