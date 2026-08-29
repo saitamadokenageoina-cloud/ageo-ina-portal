@@ -280,8 +280,8 @@ function checkHomeCardImages() {
   if (artCss.indexOf('height:276px!important') === -1 || artCss.indexOf('height:270px!important') === -1 || artCss.indexOf('height:118px!important') === -1 || artCss.indexOf('height:114px!important') === -1) {
     fail('home-card-art.css: カードの縦幅がコンパクト版に統一されていません');
   }
-  if (paypayCss.indexOf('.mc-body{padding:10px 12px 12px!important') === -1 || paypayCss.indexOf('margin-bottom:6px!important') === -1) {
-    fail('paypay-tabs-base.css: カード内部の余白がコンパクト版に統一されていません');
+  if (paypayCss.indexOf('.mc-body{padding:10px 12px 12px!important') === -1 || paypayCss.indexOf('margin-bottom:6px!important') === -1 || artCss.indexOf('.mc-body{padding:10px 12px 12px!important') === -1 || artCss.indexOf('.mc-badge{padding:4px 8px!important;margin-bottom:6px!important') === -1) {
+    fail('ホームカードCSS: キャッシュに左右されない最終余白指定がありません');
   }
   if (indexSource.indexOf('機能を探す</button>') === -1 || indexSource.indexOf('各区分のカードは、指で左右にスライドして選びます。') === -1 || indexSource.indexOf('区分右上の「すべて見る」') === -1 || indexSource.indexOf('画面下の「ホーム・仕事・現場・手続き・メニュー」') === -1) {
     fail('index.html: 「このアプリの使い方」が最新のホーム操作を案内していません');
