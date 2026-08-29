@@ -1,3 +1,4 @@
+@import url('./calendar-art-inline.css');
 /* Home card art: independent assets with safe fallbacks */
 body.home-modern .section:not(#yoku) .grid2>.mc{height:292px!important;}
 body.home-modern .section:not(#yoku) .mc-top{height:128px!important;min-height:128px!important;padding:0!important;overflow:hidden!important;border-bottom:1px solid rgba(23,38,58,.08)!important;background-color:#f7e6c4!important;background-image:var(--home-card-art,url('../illustrations/home/general.svg'))!important;background-repeat:no-repeat!important;background-size:cover!important;background-position:center!important;}
