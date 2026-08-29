@@ -1,3 +1,4 @@
+@import url('./calendar-art-inline.css?v=168');
 /* Dark-mode compatibility for per-card home artwork.
    Never replace --home-card-art with a theme background or a missing atlas. */
 html[data-theme="dark"] body.home-modern .section:not(#yoku) .mc-top{
