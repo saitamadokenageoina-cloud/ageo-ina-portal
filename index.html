@@ -236,6 +236,8 @@ input.feature-search{width:100%;min-height:54px;padding:12px 54px 12px 44px;bord
 .recent-link{min-height:52px;padding:10px 12px;border:1px solid var(--gray200);border-radius:var(--r12);background:var(--gray50);color:var(--navy);display:flex;align-items:center;gap:8px;font-size:14px;font-weight:800;line-height:1.35;}
 .recent-link i{color:var(--orange);font-size:18px;flex-shrink:0;}
 .section.search-empty{display:none;}
+.section a.mc.search-hidden,.section a.lc.search-hidden{display:none!important;}
+body.home-modern .section:not(#yoku) .grid2>.mc.search-hidden{display:none!important;}
 html[data-ui-size="large"] .mc-title{font-size:17px;}
 html[data-ui-size="large"] .mc-desc{font-size:15px;line-height:1.65;}
 html[data-ui-size="large"] .mc-badge{font-size:13px;}
@@ -722,11 +724,12 @@ html[data-theme="dark"] .manual-open{color:#FFFFFF;}
     var i;
     for (i = 0; i < cards.length; i += 1) {
       var show = !query || cardWords(cards[i]).indexOf(query) >= 0;
-      cards[i].style.display = show ? '' : 'none';
+      if (show) cards[i].classList.remove('search-hidden');
+      else cards[i].classList.add('search-hidden');
       if (show) count += 1;
     }
     for (i = 0; i < sections.length; i += 1) {
-      var visible = sections[i].querySelector('a.mc:not([style*="display: none"]), a.lc:not([style*="display: none"])');
+      var visible = sections[i].querySelector('a.mc:not(.search-hidden), a.lc:not(.search-hidden)');
       if (query && !visible) sections[i].classList.add('search-empty');
       else sections[i].classList.remove('search-empty');
     }
@@ -859,7 +862,7 @@ function showManual(key, btn){
 }
 showManual('first');
 </script>
-<script src="assets/js/navigation.js?v=183"></script>
+<script src="assets/js/navigation.js?v=184"></script>
 <script src="assets/js/guild-config.js"></script>
 
 <script>
