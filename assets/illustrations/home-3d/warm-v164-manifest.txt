@@ -1,0 +1,5 @@
+estimate-warm.svg
+safety-warm.svg
+heat-warm.svg
+procedure-warm.svg
+health-warm.svg
