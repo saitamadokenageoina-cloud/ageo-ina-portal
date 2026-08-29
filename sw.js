@@ -1,6 +1,6 @@
 // Service Worker - キャッシュ制御
 // ★重要★ 変更をデプロイするたびに CACHE_VERSION の末尾番号を必ず1つ上げること。
-const CACHE_VERSION = 'v20260829-161';
+const CACHE_VERSION = 'v20260829-162';
 const CACHE_NAME = 'ageo-ina-portal-' + CACHE_VERSION;
 const BASE = '/ageo-ina-portal/';
 const PDFJS_CDN = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/';
@@ -9,7 +9,7 @@ const CACHE_FILES = [
   BASE + 'assets/css/theme-polish.css', BASE + 'assets/css/theme-polish-base.css',
   BASE + 'assets/css/paypay-tabs.css', BASE + 'assets/css/paypay-tabs-base.css', BASE + 'assets/css/home-card-art-dark-fix.css',
   BASE + 'assets/css/home-card-art.css', BASE + 'assets/css/home-alignment-fix.css', BASE + 'assets/css/home-modern.css',
-  BASE + 'assets/illustrations/home-3d/calendar.jpg', BASE + 'assets/illustrations/home-3d/doken-card.jpg', BASE + 'assets/illustrations/home-3d/guild.jpg',
+  BASE + 'assets/illustrations/home-3d/calendar-v162.svg', BASE + 'assets/illustrations/home-3d/doken-card.jpg', BASE + 'assets/illustrations/home-3d/guild.jpg',
   BASE + 'assets/illustrations/home/calendar.svg', BASE + 'assets/illustrations/home/doken-card.svg', BASE + 'assets/illustrations/home/guild.svg', BASE + 'assets/illustrations/home/meishi.svg', BASE + 'assets/illustrations/home/job.svg', BASE + 'assets/illustrations/home/worker-supply.svg', BASE + 'assets/illustrations/home/home-doctor.svg', BASE + 'assets/illustrations/home/estimate.svg', BASE + 'assets/illustrations/home/heat.svg', BASE + 'assets/illustrations/home/safety.svg', BASE + 'assets/illustrations/home/work-log.svg', BASE + 'assets/illustrations/home/rodo36.svg', BASE + 'assets/illustrations/home/ccus.svg', BASE + 'assets/illustrations/home/kyosai.svg', BASE + 'assets/illustrations/home/health.svg', BASE + 'assets/illustrations/home/guide.svg', BASE + 'assets/illustrations/home/calc.svg', BASE + 'assets/illustrations/home/permit.svg', BASE + 'assets/illustrations/home/hitori.svg', BASE + 'assets/illustrations/home/training.svg', BASE + 'assets/illustrations/home/merit.svg', BASE + 'assets/illustrations/home/documents.svg', BASE + 'assets/illustrations/home/youtube.svg', BASE + 'assets/illustrations/home/disaster.svg', BASE + 'assets/illustrations/home/general.svg',
   BASE + 'assets/css/print.css', BASE + 'assets/js/print-util.js', BASE + 'assets/js/navigation.js', BASE + 'assets/js/home-modern.js',
   BASE + 'assets/js/calendar-config.js', BASE + 'assets/js/calendar-upcoming.js', BASE + 'assets/js/guild-config.js', BASE + 'assets/js/bookshelf.js', BASE + 'assets/js/meishi.js', BASE + 'assets/js/qrcode-generator.js', BASE + 'assets/css/meishi.css',
