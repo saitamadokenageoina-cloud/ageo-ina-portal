@@ -2,463 +2,134 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#071426">
 <title>デジタルブック｜埼玉土建 上尾伊奈支部</title>
 <link rel="stylesheet" href="assets/css/tabler-icons.min.css">
 <link rel="stylesheet" href="common.css">
 <style>
-body{background:#111b27;color:#fff;min-height:100vh;overflow:hidden;overscroll-behavior:none;}
-.book-app{height:100vh;display:grid;grid-template-rows:auto 1fr auto;background:radial-gradient(circle at 50% 0,#243648 0,#111b27 54%,#0b1119 100%);}
-.bookbar{
-  display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px;
-  padding:10px 12px;background:rgba(17,27,39,.94);border-bottom:1px solid rgba(255,255,255,.1);z-index:5;
-}
-.back-btn,.icon-btn,.book-link{
-  border:none;border-radius:8px;background:rgba(255,255,255,.1);color:#fff;
-  display:flex;align-items:center;justify-content:center;gap:6px;font-weight:600;
-}
-.back-btn{padding:8px 10px;font-size:13px;}
-.icon-btn{width:40px;height:40px;font-size:20px;}
-.book-link{height:40px;padding:0 10px;font-size:13px;}
-.book-title{min-width:0;}
-.book-title strong{display:block;font-size:14px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.book-title span{display:block;font-size:11px;color:rgba(255,255,255,.58);line-height:1.2;margin-top:2px;}
-.bar-actions{display:flex;gap:6px;align-items:center;}
-.stage{
-  position:relative;min-height:0;display:flex;align-items:center;justify-content:center;
-  padding:14px 12px 8px;overflow:hidden;touch-action:pan-y;
-}
-.book{
-  display:flex;align-items:center;justify-content:center;gap:10px;width:100%;height:100%;
-  perspective:1800px;transition:transform .18s ease, opacity .18s ease;transform-style:preserve-3d;
-}
-.book.flipping{transform:translateX(4px);opacity:.9;}
-.book.turning-next .right-page-shell{transform:rotateY(-18deg) translateX(-10px);box-shadow:-26px 18px 42px rgba(0,0,0,.42);}
-.book.turning-prev .left-page-shell{transform:rotateY(18deg) translateX(10px);box-shadow:26px 18px 42px rgba(0,0,0,.42);}
-.page-wrap{
-  max-width:calc(50vw - 22px);max-height:100%;background:#fff;border-radius:5px;
-  box-shadow:0 16px 44px rgba(0,0,0,.45);overflow:hidden;position:relative;
-  transform-origin:left center;transition:transform .24s cubic-bezier(.2,.75,.2,1), box-shadow .24s ease;
-  backface-visibility:hidden;
-}
-.left-page-shell{transform-origin:right center;}
-.right-page-shell{transform-origin:left center;}
-.page-wrap::before{
-  content:"";position:absolute;top:0;bottom:0;width:16px;z-index:2;pointer-events:none;opacity:.42;
-}
-.left-page-shell::before{right:0;background:linear-gradient(90deg,rgba(0,0,0,0),rgba(0,0,0,.22));}
-.right-page-shell::before{left:0;background:linear-gradient(90deg,rgba(0,0,0,.22),rgba(0,0,0,0));}
-.page-wrap::after{
-  content:"";position:absolute;top:8px;bottom:8px;width:10px;z-index:-1;background:rgba(255,255,255,.72);
-  box-shadow:0 0 0 1px rgba(255,255,255,.16),0 6px 18px rgba(0,0,0,.22);
-}
-.left-page-shell::after{left:-7px;border-radius:5px 0 0 5px;}
-.right-page-shell::after{right:-7px;border-radius:0 5px 5px 0;}
-.page-wrap.single{max-width:min(100%,780px);}
-.page-wrap canvas{display:block;background:#fff;max-width:100%;max-height:100%;}
-.page-label{
-  position:absolute;right:8px;bottom:6px;background:rgba(17,27,39,.72);color:#fff;
-  border-radius:99px;padding:2px 7px;font-size:11px;font-weight:600;
-}
-.nav-hit{
-  position:absolute;top:72px;bottom:72px;width:30%;border:none;background:transparent;color:transparent;z-index:3;
-}
-.nav-hit.prev{left:0;}
-.nav-hit.next{right:0;}
-.nav-hit:active{background:rgba(255,255,255,.04);}
-.turn-cue{
-  position:absolute;top:50%;transform:translateY(-50%);width:42px;height:72px;border-radius:8px;
-  border:1px solid rgba(255,255,255,.18);background:rgba(17,27,39,.48);color:#fff;z-index:4;
-  display:flex;align-items:center;justify-content:center;font-size:28px;opacity:.7;
-}
-.turn-cue.prev{left:10px;}
-.turn-cue.next{right:10px;}
-.loader,.error{
-  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;
-  padding:24px;color:rgba(255,255,255,.82);font-weight:600;
-}
-.error{display:none;color:#fff;}
-.thumbbar{
-  display:flex;gap:6px;align-items:center;overflow-x:auto;padding:8px 10px 11px;
-  background:rgba(17,27,39,.96);border-top:1px solid rgba(255,255,255,.1);scrollbar-width:none;
-}
-.thumbbar::-webkit-scrollbar{display:none;}
-.page-chip{
-  flex:0 0 auto;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.08);
-  color:rgba(255,255,255,.8);border-radius:8px;padding:6px 9px;font-size:12px;font-weight:700;
-}
-.page-chip.active{background:#E8612A;border-color:#E8612A;color:#fff;}
-.zoom-label{font-size:12px;font-weight:700;color:rgba(255,255,255,.72);min-width:42px;text-align:center;}
-.drawer-backdrop{
-  position:fixed;inset:0;background:rgba(0,0,0,.52);z-index:20;display:none;
-}
-.drawer-backdrop.open{display:block;}
-.toc-drawer{
-  position:fixed;top:0;right:0;bottom:0;width:min(86vw,360px);background:#fff;color:#1B1E27;
-  z-index:21;transform:translateX(100%);transition:transform .2s ease;box-shadow:-14px 0 38px rgba(0,0,0,.32);
-  display:flex;flex-direction:column;
-}
-.toc-drawer.open{transform:translateX(0);}
-.toc-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid #ECEEF2;}
-.toc-head strong{font-size:16px;color:#1B2A3B;}
-.toc-close{border:none;background:#ECEEF2;color:#1B2A3B;border-radius:8px;width:36px;height:36px;font-size:20px;}
-.toc-list{overflow:auto;padding:10px 10px 18px;}
-.toc-item{
-  width:100%;border:none;background:#fff;color:#1B2A3B;text-align:left;border-radius:8px;
-  padding:10px 9px;margin-bottom:4px;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;
-}
-.toc-item:active,.toc-item.active{background:#FFF0E9;color:#C04E1E;}
-.toc-item span:first-child{font-size:13px;font-weight:600;line-height:1.35;}
-.toc-item span:last-child{font-size:11px;font-weight:700;color:#5A6070;}
-.toc-empty{padding:18px 12px;color:#5A6070;font-size:13px;line-height:1.6;}
-@media (max-width:899px){
-  .bookbar{grid-template-columns:auto 1fr;grid-template-areas:"back title" "actions actions";padding:8px 10px;}
-  .back-btn{grid-area:back;}
-  .book-title{grid-area:title;}
-  .bar-actions{grid-area:actions;justify-content:space-between;margin-top:4px;}
-  .stage{padding:10px 8px 6px;}
-  .book{gap:0;}
-  .page-wrap{max-width:100%;}
-  .nav-hit{top:112px;bottom:64px;width:28%;}
-  .turn-cue{display:none;}
-  .book-link span{display:none;}
-}
+:root{--reader-bg:#071426;--reader-panel:#10213a;--reader-line:#2b4159;--reader-text:#f7f9fc;--reader-sub:#c7d3df;--reader-accent:#e8612a;--reader-blue:#73c6e6}
+*{box-sizing:border-box}html,body{height:100%;margin:0;background:var(--reader-bg);overscroll-behavior:none}body{overflow:hidden;color:var(--reader-text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif}.reader{height:100dvh;display:grid;grid-template-rows:auto 1fr auto;background:radial-gradient(circle at 50% -10%,#193655 0,#0d2239 35%,#071426 75%)}
+.reader-top{position:relative;z-index:30;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:8px;padding:8px 10px;padding-top:max(8px,env(safe-area-inset-top));background:rgba(7,20,38,.96);border-bottom:1px solid rgba(255,255,255,.1);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.reader-back,.top-action,.bottom-btn,.sheet-close,.tool-btn,.jump-btn,.error-btn{appearance:none;border:0;font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}.reader-back,.top-action{min-width:44px;height:44px;border-radius:13px;background:rgba(255,255,255,.08);color:#fff;display:flex;align-items:center;justify-content:center;gap:5px}.reader-back{padding:0 11px;font-size:13px;font-weight:800}.reader-back i,.top-action i{font-size:21px}.reader-title{min-width:0}.reader-title strong{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:14px;line-height:1.25}.reader-title span{display:block;margin-top:2px;color:rgba(255,255,255,.64);font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.top-actions{display:flex;gap:5px}.top-action{width:44px}.top-action.bookmarked{background:#fff4dc;color:#9a6414}.top-label{display:none}
+.stage{position:relative;min-height:0;overflow:hidden;display:flex;align-items:center;justify-content:center;padding:10px;touch-action:none;user-select:none;-webkit-user-select:none}.pages-transform{display:flex;align-items:center;justify-content:center;gap:2px;max-width:100%;max-height:100%;transform:translate3d(0,0,0);transform-origin:center center;will-change:transform}.page-shell{position:relative;flex:0 0 auto;background:#fff;border-radius:4px;overflow:hidden;box-shadow:0 18px 48px rgba(0,0,0,.5);transform-style:preserve-3d;backface-visibility:hidden;transition:transform .28s cubic-bezier(.2,.8,.2,1),box-shadow .28s ease,opacity .2s ease}.page-shell canvas{display:block;background:#fff}.page-shell::before{content:"";position:absolute;top:0;bottom:0;width:20px;pointer-events:none;z-index:3}.page-shell.left::before{right:0;background:linear-gradient(90deg,transparent,rgba(0,0,0,.18))}.page-shell.right::before{left:0;background:linear-gradient(90deg,rgba(0,0,0,.18),transparent)}.page-shell.single::before{display:none}.page-no{position:absolute;right:7px;bottom:6px;z-index:4;border-radius:999px;background:rgba(7,20,38,.72);padding:2px 7px;color:#fff;font-size:10px;font-weight:800}.turn-next .page-shell.right{transform:perspective(1300px) rotateY(-12deg) translateX(-8px);box-shadow:-28px 18px 44px rgba(0,0,0,.55)}.turn-prev .page-shell.left{transform:perspective(1300px) rotateY(12deg) translateX(8px);box-shadow:28px 18px 44px rgba(0,0,0,.55)}.stage-edge{position:absolute;z-index:8;top:20%;bottom:20%;width:18%;border:0;background:transparent}.stage-edge.prev{left:0}.stage-edge.next{right:0}.stage-edge:focus-visible{outline:3px solid var(--reader-blue);outline-offset:-3px}.edge-cue{position:absolute;z-index:7;top:50%;transform:translateY(-50%);width:42px;height:76px;border-radius:13px;background:rgba(7,20,38,.52);border:1px solid rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;color:#fff;pointer-events:none;opacity:.7}.edge-cue.prev{left:10px}.edge-cue.next{right:10px}.edge-cue i{font-size:26px}.loading,.reader-error{position:absolute;z-index:12;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;background:rgba(7,20,38,.88)}.loading-card{width:min(320px,86vw)}.loading-title{font-size:15px;font-weight:900;margin-bottom:12px}.progress{height:8px;border-radius:999px;background:rgba(255,255,255,.13);overflow:hidden}.progress>span{display:block;height:100%;width:6%;border-radius:inherit;background:var(--reader-accent);transition:width .15s ease}.progress-text{margin-top:8px;color:var(--reader-sub);font-size:12px}.reader-error{display:none}.error-card{width:min(360px,90vw);padding:20px;border:1px solid rgba(255,255,255,.12);border-radius:18px;background:#10213a}.error-card i{font-size:38px;color:#ff9a68}.error-card h2{margin:8px 0 6px;font-size:18px}.error-card p{margin:0 0 14px;color:var(--reader-sub);font-size:13px;line-height:1.6}.error-actions{display:grid;gap:8px}.error-btn{min-height:46px;border-radius:12px;background:#fff;color:#17263a;font-weight:850}.error-btn.primary{background:var(--reader-accent);color:#fff}
+.reader-bottom{position:relative;z-index:25;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:8px;padding:7px 10px;padding-bottom:max(8px,env(safe-area-inset-bottom));background:rgba(7,20,38,.97);border-top:1px solid rgba(255,255,255,.1);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}.bottom-btn{height:48px;min-width:48px;border-radius:14px;background:rgba(255,255,255,.09);color:#fff;display:flex;align-items:center;justify-content:center;gap:5px;font-weight:850}.bottom-btn i{font-size:22px}.page-jump{justify-self:center;min-width:110px;padding:0 14px}.zoom-tools{display:flex;gap:5px}.zoom-value{min-width:54px;font-size:11px;color:var(--reader-sub);font-weight:850}.zoom-tools .bottom-btn{min-width:44px;width:44px}.bottom-label{font-size:11px}
+.backdrop{position:fixed;z-index:80;inset:0;background:rgba(0,0,0,.58);opacity:0;pointer-events:none;transition:opacity .18s ease}.backdrop.open{opacity:1;pointer-events:auto}.sheet{position:fixed;z-index:81;background:#fff;color:#17263a;box-shadow:0 -18px 48px rgba(0,0,0,.28);transition:transform .22s ease;display:flex;flex-direction:column}.sheet.bottom{left:0;right:0;bottom:0;max-height:78dvh;border-radius:22px 22px 0 0;transform:translateY(105%);padding-bottom:env(safe-area-inset-bottom)}.sheet.side{top:0;right:0;bottom:0;width:min(90vw,390px);transform:translateX(105%)}.sheet.open{transform:translate(0)}.sheet-handle{width:46px;height:5px;border-radius:99px;background:#c8d0d8;margin:10px auto 4px}.sheet-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 14px 12px;border-bottom:1px solid #e4e9ee}.sheet-head strong{font-size:17px}.sheet-close{width:44px;height:44px;border-radius:13px;background:#eef2f5;color:#405064;font-size:20px}.sheet-body{min-height:0;overflow:auto;padding:12px}.toc-item,.bookmark-item,.search-item{width:100%;border:0;background:#fff;color:#17263a;border-radius:12px;padding:11px 10px;text-align:left;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;margin-bottom:4px}.toc-item:active,.toc-item.active,.bookmark-item:active,.search-item:active{background:#fff0e8}.toc-item span:first-child,.bookmark-item strong{font-size:13px;font-weight:800;line-height:1.4}.toc-item span:last-child,.bookmark-item span{font-size:11px;color:#637184;font-weight:800}.thumb-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.thumb{appearance:none;border:2px solid transparent;background:#f3f6f8;border-radius:11px;padding:6px;color:#17263a;min-width:0}.thumb.active{border-color:var(--reader-accent);background:#fff0e8}.thumb-canvas{display:block;width:100%;aspect-ratio:3/4;object-fit:contain;background:#dfe5ea;border-radius:6px}.thumb span{display:block;margin-top:5px;font-size:11px;font-weight:850}.search-box{display:grid;grid-template-columns:1fr auto;gap:7px;position:sticky;top:0;background:#fff;padding-bottom:10px;z-index:2}.search-box input{min-width:0;height:46px;border:2px solid #dce3e9;border-radius:12px;padding:0 12px;font:inherit;font-size:14px}.search-box button{border:0;border-radius:12px;background:#1769aa;color:#fff;padding:0 14px;font-weight:850}.search-status{font-size:12px;color:#637184;margin:2px 2px 10px}.search-snippet{font-size:12px;line-height:1.5;color:#526274;margin-top:3px}.tool-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.tool-btn{min-height:82px;border-radius:15px;background:#f2f5f7;color:#17263a;padding:9px 5px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-size:11px;font-weight:850;text-decoration:none}.tool-btn i{font-size:26px;color:#1769aa}.tool-btn.active{background:#fff0e8;color:#b84b1d}.tool-btn.active i{color:#e8612a}.empty{padding:28px 12px;text-align:center;color:#637184;font-size:13px;line-height:1.7}
+.dialog-wrap{position:fixed;z-index:95;inset:0;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(0,0,0,.6)}.dialog-wrap.open{display:flex}.jump-dialog{width:min(340px,92vw);border-radius:18px;background:#fff;color:#17263a;padding:18px}.jump-dialog h2{font-size:17px;margin:0 0 6px}.jump-dialog p{font-size:12px;color:#637184;margin:0 0 12px}.jump-dialog input{width:100%;height:50px;border:2px solid #dce3e9;border-radius:12px;padding:0 12px;font:inherit;font-size:18px}.jump-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.jump-btn{height:46px;border-radius:12px;background:#eef2f5;color:#405064;font-weight:850}.jump-btn.primary{background:var(--reader-accent);color:#fff}
+@media (min-width:900px){.reader-top{padding-left:16px;padding-right:16px}.top-label{display:inline;font-size:11px;font-weight:800}.top-action{width:auto;padding:0 11px}.sheet.bottom{left:50%;right:auto;width:min(760px,92vw);transform:translate(-50%,105%)}.sheet.bottom.open{transform:translate(-50%,0)}.thumb-grid{grid-template-columns:repeat(5,minmax(0,1fr))}.stage{padding:16px 72px}.reader-bottom{grid-template-columns:auto auto auto;justify-content:center;gap:10px}.zoom-tools{margin-left:18px}.edge-cue.prev{left:24px}.edge-cue.next{right:24px}}
+@media (max-width:520px){.reader-top{grid-template-columns:auto minmax(0,1fr) auto}.top-actions .top-action:nth-child(-n+2){display:none}.reader-back span{display:none}.reader-back{width:44px;padding:0}.stage{padding:7px 5px}.edge-cue{display:none}.stage-edge{top:10%;bottom:10%;width:20%}.reader-bottom{gap:5px;padding-left:7px;padding-right:7px}.bottom-label{display:none}.page-jump{min-width:94px}.zoom-value{display:none}.thumb-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important}}
 </style>
 </head>
 <body>
-<div class="book-app">
-  <header class="bookbar">
-    <button class="back-btn" onclick="location.href='shiryo.html'"><i class="ti ti-arrow-left"></i><span>戻る</span></button>
-    <div class="book-title">
-      <strong id="book-title">デジタルブック</strong>
-      <span id="book-sub">読み込み中...</span>
-    </div>
-    <div class="bar-actions">
-      <button class="icon-btn" id="prev-btn" title="前のページ"><i class="ti ti-chevron-left"></i></button>
-      <span class="zoom-label" id="page-label">--/--</span>
-      <button class="icon-btn" id="next-btn" title="次のページ"><i class="ti ti-chevron-right"></i></button>
-      <button class="icon-btn" id="zoom-out" title="縮小"><i class="ti ti-zoom-out"></i></button>
-      <button class="icon-btn" id="zoom-in" title="拡大"><i class="ti ti-zoom-in"></i></button>
-      <button class="icon-btn" id="toc-btn" title="目次"><i class="ti ti-list-tree"></i></button>
-      <a class="book-link" id="pdf-link" href="#" target="_blank" rel="noopener"><i class="ti ti-file-type-pdf"></i><span>PDF表示</span></a>
-      <a class="book-link" id="save-link" href="#" download><i class="ti ti-download"></i><span>保存</span></a>
+<div class="reader" id="reader">
+  <header class="reader-top">
+    <button class="reader-back" id="back-btn" aria-label="資料本棚へ戻る"><i class="ti ti-arrow-left"></i><span>本棚</span></button>
+    <div class="reader-title"><strong id="book-title">デジタルブック</strong><span id="book-sub">資料を開いています…</span></div>
+    <div class="top-actions">
+      <button class="top-action" data-open="toc" aria-label="目次"><i class="ti ti-list-tree"></i><span class="top-label">目次</span></button>
+      <button class="top-action" data-open="thumbs" aria-label="ページ一覧"><i class="ti ti-layout-grid"></i><span class="top-label">ページ一覧</span></button>
+      <button class="top-action" id="bookmark-btn" aria-label="このページをしおりに保存"><i class="ti ti-bookmark"></i></button>
+      <button class="top-action" data-open="tools" aria-label="その他の操作"><i class="ti ti-dots"></i></button>
     </div>
   </header>
 
-  <main class="stage">
-    <button class="nav-hit prev" id="prev-hit" aria-label="前のページ"></button>
-    <button class="turn-cue prev" id="prev-cue" aria-label="前のページ"><i class="ti ti-chevron-left"></i></button>
-    <div class="book" id="book">
-      <div class="page-wrap left-page-shell" id="left-wrap"><canvas id="left-page"></canvas><span class="page-label" id="left-label"></span></div>
-      <div class="page-wrap right-page-shell" id="right-wrap"><canvas id="right-page"></canvas><span class="page-label" id="right-label"></span></div>
+  <main class="stage" id="stage" aria-label="デジタルブック本文">
+    <button class="stage-edge prev" id="prev-hit" aria-label="前のページ"></button>
+    <span class="edge-cue prev"><i class="ti ti-chevron-left"></i></span>
+    <div class="pages-transform" id="pages-transform">
+      <div class="page-shell left" id="left-shell"><canvas id="left-page"></canvas><span class="page-no" id="left-no"></span></div>
+      <div class="page-shell right" id="right-shell"><canvas id="right-page"></canvas><span class="page-no" id="right-no"></span></div>
     </div>
-    <button class="turn-cue next" id="next-cue" aria-label="次のページ"><i class="ti ti-chevron-right"></i></button>
-    <button class="nav-hit next" id="next-hit" aria-label="次のページ"></button>
-    <div class="loader" id="loader">PDFを読み込んでいます...</div>
-    <div class="error" id="error">デジタルブックを表示できませんでした。PDFボタンから直接開いてください。</div>
+    <span class="edge-cue next"><i class="ti ti-chevron-right"></i></span>
+    <button class="stage-edge next" id="next-hit" aria-label="次のページ"></button>
+    <div class="loading" id="loading"><div class="loading-card"><div class="loading-title">資料を開いています…</div><div class="progress"><span id="progress-bar"></span></div><div class="progress-text" id="progress-text">読み込みを開始しています</div></div></div>
+    <div class="reader-error" id="reader-error"><div class="error-card"><i class="ti ti-file-alert"></i><h2>資料を開けませんでした</h2><p>通信状態を確認して、もう一度お試しください。</p><div class="error-actions"><button class="error-btn primary" id="retry-btn">もう一度読み込む</button><a class="error-btn" id="error-pdf" href="#" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;text-decoration:none">PDFで開く</a><button class="error-btn" id="error-back">資料本棚へ戻る</button></div></div></div>
   </main>
 
-  <nav class="thumbbar" id="page-list" aria-label="ページ一覧"></nav>
+  <footer class="reader-bottom">
+    <button class="bottom-btn" id="prev-btn" aria-label="前のページ"><i class="ti ti-chevron-left"></i><span class="bottom-label">前へ</span></button>
+    <button class="bottom-btn page-jump" id="page-jump" aria-label="ページ番号を指定して移動"><span id="page-label">-- / --</span></button>
+    <div class="zoom-tools">
+      <button class="bottom-btn" id="zoom-out" aria-label="縮小"><i class="ti ti-zoom-out"></i></button>
+      <span class="zoom-value" id="zoom-value">100%</span>
+      <button class="bottom-btn" id="zoom-in" aria-label="拡大"><i class="ti ti-zoom-in"></i></button>
+      <button class="bottom-btn" id="next-btn" aria-label="次のページ"><i class="ti ti-chevron-right"></i><span class="bottom-label">次へ</span></button>
+    </div>
+  </footer>
 </div>
 
-<div class="drawer-backdrop" id="toc-backdrop"></div>
-<aside class="toc-drawer" id="toc-drawer" aria-label="目次">
-  <div class="toc-head">
-    <strong>目次</strong>
-    <button class="toc-close" id="toc-close" aria-label="閉じる"><i class="ti ti-x"></i></button>
-  </div>
-  <div class="toc-list" id="toc-list">
-    <div class="toc-empty">PDFを読み込んでいます...</div>
-  </div>
-</aside>
+<div class="backdrop" id="backdrop"></div>
+<aside class="sheet side" id="sheet-toc" aria-label="目次"><div class="sheet-head"><strong>目次</strong><button class="sheet-close" data-close aria-label="閉じる"><i class="ti ti-x"></i></button></div><div class="sheet-body" id="toc-list"><div class="empty">目次を読み込んでいます…</div></div></aside>
+<aside class="sheet bottom" id="sheet-thumbs" aria-label="ページ一覧"><div class="sheet-handle"></div><div class="sheet-head"><strong>ページ一覧</strong><button class="sheet-close" data-close aria-label="閉じる"><i class="ti ti-x"></i></button></div><div class="sheet-body"><div class="thumb-grid" id="thumb-grid"></div></div></aside>
+<aside class="sheet side" id="sheet-search" aria-label="本文検索"><div class="sheet-head"><strong>本文検索</strong><button class="sheet-close" data-close aria-label="閉じる"><i class="ti ti-x"></i></button></div><div class="sheet-body"><div class="search-box"><input id="search-input" type="search" inputmode="search" placeholder="例：国保、共済、健康診断"><button id="search-btn">検索</button></div><div class="search-status" id="search-status">キーワードを入力してください</div><div id="search-results"></div></div></aside>
+<aside class="sheet side" id="sheet-bookmarks" aria-label="しおり一覧"><div class="sheet-head"><strong>しおり</strong><button class="sheet-close" data-close aria-label="閉じる"><i class="ti ti-x"></i></button></div><div class="sheet-body" id="bookmark-list"></div></aside>
+<aside class="sheet bottom" id="sheet-tools" aria-label="その他の操作"><div class="sheet-handle"></div><div class="sheet-head"><strong>表示・その他</strong><button class="sheet-close" data-close aria-label="閉じる"><i class="ti ti-x"></i></button></div><div class="sheet-body"><div class="tool-grid"><button class="tool-btn" data-open="search"><i class="ti ti-search"></i>本文検索</button><button class="tool-btn" data-open="bookmarks"><i class="ti ti-bookmarks"></i>しおり一覧</button><button class="tool-btn" id="share-btn"><i class="ti ti-share"></i>このページを共有</button><button class="tool-btn" id="view-btn"><i class="ti ti-book-2"></i><span id="view-label">表示：自動</span></button><button class="tool-btn" id="fullscreen-btn"><i class="ti ti-arrows-maximize"></i>全画面</button><a class="tool-btn" id="pdf-link" href="#" target="_blank" rel="noopener"><i class="ti ti-file-type-pdf"></i>PDF表示</a><a class="tool-btn" id="save-link" href="#" download><i class="ti ti-download"></i>PDF保存</a></div></div></aside>
 
-<script src="assets/js/bookshelf.js"></script>
+<div class="dialog-wrap" id="jump-wrap" role="dialog" aria-modal="true" aria-label="ページへ移動"><div class="jump-dialog"><h2>ページへ移動</h2><p id="jump-help">ページ番号を入力してください。</p><input id="jump-input" type="number" min="1" inputmode="numeric"><div class="jump-actions"><button class="jump-btn" id="jump-cancel">キャンセル</button><button class="jump-btn primary" id="jump-go">移動</button></div></div></div>
+
+<script src="assets/js/bookshelf.js?v=190"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>
-if(window.pdfjsLib){
-  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-}
-
-const params = new URLSearchParams(location.search);
-const doc = (window.BOOKSHELF_DOCS || []).find(item => item.id === params.get('book')) || (window.BOOKSHELF_DOCS || [])[0];
-const state = { pdf:null, page:1, zoom:1, token:0 };
-let touchStart = null;
-const els = {
-  title:document.getElementById('book-title'),
-  sub:document.getElementById('book-sub'),
-  pageLabel:document.getElementById('page-label'),
-  book:document.getElementById('book'),
-  loader:document.getElementById('loader'),
-  error:document.getElementById('error'),
-  leftWrap:document.getElementById('left-wrap'),
-  rightWrap:document.getElementById('right-wrap'),
-  leftCanvas:document.getElementById('left-page'),
-  rightCanvas:document.getElementById('right-page'),
-  leftLabel:document.getElementById('left-label'),
-  rightLabel:document.getElementById('right-label'),
-  list:document.getElementById('page-list'),
-  tocBtn:document.getElementById('toc-btn'),
-  tocDrawer:document.getElementById('toc-drawer'),
-  tocBackdrop:document.getElementById('toc-backdrop'),
-  tocList:document.getElementById('toc-list'),
-  pdfLink:document.getElementById('pdf-link'),
-  saveLink:document.getElementById('save-link')
-};
-
-function isSpread(){
-  return window.innerWidth >= 900;
-}
-
-function clampPage(page){
-  if(!state.pdf) return 1;
-  return Math.min(Math.max(1, page), state.pdf.numPages);
-}
-
-function pageStep(){
-  return isSpread() ? 2 : 1;
-}
-
-async function renderPage(pageNo, canvas, label, wrap, token){
-  if(pageNo > state.pdf.numPages){
-    wrap.style.display = 'none';
-    return;
-  }
-  wrap.style.display = '';
-  wrap.classList.toggle('single', !isSpread());
-  const page = await state.pdf.getPage(pageNo);
-  if(token !== state.token) return;
-  const base = page.getViewport({scale:1});
-  const stage = document.querySelector('.stage').getBoundingClientRect();
-  const usableWidth = isSpread() ? (stage.width - 34) / 2 : stage.width - 20;
-  const usableHeight = stage.height - 12;
-  const fit = Math.min(usableWidth / base.width, usableHeight / base.height);
-  const scale = Math.max(.25, fit * state.zoom);
-  const viewport = page.getViewport({scale});
-  const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-  canvas.width = Math.floor(viewport.width * dpr);
-  canvas.height = Math.floor(viewport.height * dpr);
-  canvas.style.width = `${Math.floor(viewport.width)}px`;
-  canvas.style.height = `${Math.floor(viewport.height)}px`;
-  const ctx = canvas.getContext('2d');
-  ctx.setTransform(dpr,0,0,dpr,0,0);
-  await page.render({canvasContext:ctx, viewport, intent:'display'}).promise;
-  label.textContent = `${pageNo}`;
-}
-
-function updateChips(){
-  const chips = els.list.querySelectorAll('.page-chip');
-  chips.forEach(chip => {
-    const p = Number(chip.dataset.page);
-    const active = isSpread() ? p === state.page || p === state.page + 1 : p === state.page;
-    chip.classList.toggle('active', active);
-    if(active) chip.scrollIntoView({block:'nearest', inline:'center'});
-  });
-}
-
-function updateTocActive(){
-  els.tocList.querySelectorAll('.toc-item').forEach(item => {
-    item.classList.toggle('active', Number(item.dataset.page) === state.page);
-  });
-}
-
-function escHtml(value){
-  return String(value ?? '').replace(/[&<>"']/g, ch => ({
-    '&':'&amp;',
-    '<':'&lt;',
-    '>':'&gt;',
-    '"':'&quot;',
-    "'":'&#39;'
-  }[ch]));
-}
-
-async function render(){
-  if(!state.pdf) return;
-  state.page = clampPage(state.page);
-  const token = ++state.token;
-  els.book.classList.add('flipping');
-  els.loader.style.display = 'flex';
-  els.error.style.display = 'none';
-  els.rightWrap.style.display = isSpread() ? '' : 'none';
-  try{
-    await renderPage(state.page, els.leftCanvas, els.leftLabel, els.leftWrap, token);
-    if(isSpread()) await renderPage(state.page + 1, els.rightCanvas, els.rightLabel, els.rightWrap, token);
-    if(token !== state.token) return;
-    els.pageLabel.textContent = isSpread() && state.page < state.pdf.numPages
-      ? `${state.page}-${Math.min(state.page + 1, state.pdf.numPages)} / ${state.pdf.numPages}`
-      : `${state.page} / ${state.pdf.numPages}`;
-    updateChips();
-    updateTocActive();
-  }catch(e){
-    console.error(e);
-    els.error.style.display = 'flex';
-  }finally{
-    if(token === state.token){
-      els.loader.style.display = 'none';
-      setTimeout(()=>els.book.classList.remove('flipping','turning-next','turning-prev'), 180);
-    }
-  }
-}
-
-function go(delta){
-  const next = clampPage(state.page + delta);
-  if(next === state.page) return;
-  els.book.classList.remove('turning-next','turning-prev');
-  els.book.classList.add(delta > 0 ? 'turning-next' : 'turning-prev');
-  state.page = next;
-  render();
-}
-
-function jumpTo(page){
-  state.page = clampPage(page);
-  closeToc();
-  render();
-}
-
-function buildPageList(){
-  els.list.innerHTML = Array.from({length:state.pdf.numPages}, (_, i) => {
-    const p = i + 1;
-    return `<button class="page-chip" data-page="${p}">${p}</button>`;
-  }).join('');
-  els.list.querySelectorAll('.page-chip').forEach(btn => {
-    btn.addEventListener('click', () => {
-      state.page = Number(btn.dataset.page);
-      render();
-    });
-  });
-}
-
-async function resolveOutlinePage(item){
-  try{
-    const dest = typeof item.dest === 'string' ? await state.pdf.getDestination(item.dest) : item.dest;
-    if(!dest || !dest[0]) return null;
-    const index = await state.pdf.getPageIndex(dest[0]);
-    return index + 1;
-  }catch(e){
-    return null;
-  }
-}
-
-async function buildTocFromOutline(){
-  const outline = await state.pdf.getOutline();
-  const rows = [];
-  async function walk(items, depth){
-    for(const item of items || []){
-      const page = await resolveOutlinePage(item);
-      if(page) rows.push({ title:item.title || `ページ ${page}`, page, depth });
-      if(item.items && item.items.length) await walk(item.items, depth + 1);
-    }
-  }
-  await walk(outline || [], 0);
-  return rows;
-}
-
-function buildFallbackToc(){
-  const total = state.pdf.numPages;
-  const step = total <= 12 ? 1 : total <= 40 ? 5 : 10;
-  const rows = [{ title:'表紙', page:1, depth:0 }];
-  for(let p = 1 + step; p <= total; p += step){
-    rows.push({ title:`ページ ${p} から`, page:p, depth:0 });
-  }
-  return rows;
-}
-
-async function buildToc(){
-  let rows = [];
-  try{
-    rows = await buildTocFromOutline();
-  }catch(e){
-    rows = [];
-  }
-  if(!rows.length) rows = buildFallbackToc();
-  els.tocList.innerHTML = rows.map(row => `
-    <button class="toc-item" data-page="${row.page}" style="padding-left:${9 + row.depth * 14}px;">
-      <span>${escHtml(row.title)}</span>
-      <span>P.${row.page}</span>
-    </button>
-  `).join('');
-  els.tocList.querySelectorAll('.toc-item').forEach(btn => {
-    btn.addEventListener('click', () => jumpTo(Number(btn.dataset.page)));
-  });
-}
-
-function openToc(){
-  els.tocDrawer.classList.add('open');
-  els.tocBackdrop.classList.add('open');
-}
-
-function closeToc(){
-  els.tocDrawer.classList.remove('open');
-  els.tocBackdrop.classList.remove('open');
-}
-
-async function boot(){
-  if(!doc){
-    els.error.style.display = 'flex';
-    els.loader.style.display = 'none';
-    return;
-  }
-  document.title = `${doc.title}｜デジタルブック`;
-  els.title.textContent = doc.title;
-  els.sub.textContent = doc.category;
-  els.pdfLink.href = doc.file;
-  els.saveLink.href = doc.file;
-  if(!window.pdfjsLib){
-    els.loader.style.display = 'none';
-    els.error.style.display = 'flex';
-    return;
-  }
-  try{
-    state.pdf = await pdfjsLib.getDocument({
-      url:doc.file,
-      cMapUrl:'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/',
-      cMapPacked:true,
-      standardFontDataUrl:'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/standard_fonts/'
-    }).promise;
-    els.sub.textContent = `${doc.category} / ${state.pdf.numPages}ページ`;
-    buildPageList();
-    await buildToc();
-    render();
-  }catch(e){
-    console.error(e);
-    els.loader.style.display = 'none';
-    els.error.style.display = 'flex';
-  }
-}
-
-document.getElementById('prev-btn').addEventListener('click', () => go(-pageStep()));
-document.getElementById('next-btn').addEventListener('click', () => go(pageStep()));
-document.getElementById('prev-hit').addEventListener('click', () => go(-pageStep()));
-document.getElementById('next-hit').addEventListener('click', () => go(pageStep()));
-document.getElementById('prev-cue').addEventListener('click', () => go(-pageStep()));
-document.getElementById('next-cue').addEventListener('click', () => go(pageStep()));
-document.getElementById('zoom-out').addEventListener('click', () => { state.zoom = Math.max(.65, state.zoom - .15); render(); });
-document.getElementById('zoom-in').addEventListener('click', () => { state.zoom = Math.min(2, state.zoom + .15); render(); });
-els.tocBtn.addEventListener('click', openToc);
-els.tocBackdrop.addEventListener('click', closeToc);
-document.getElementById('toc-close').addEventListener('click', closeToc);
-document.querySelector('.stage').addEventListener('touchstart', e => {
-  if(e.touches.length !== 1) return;
-  const t = e.touches[0];
-  touchStart = { x:t.clientX, y:t.clientY, time:Date.now() };
-}, {passive:true});
-document.querySelector('.stage').addEventListener('touchend', e => {
-  if(!touchStart || !e.changedTouches.length) return;
-  const t = e.changedTouches[0];
-  const dx = t.clientX - touchStart.x;
-  const dy = t.clientY - touchStart.y;
-  const dt = Date.now() - touchStart.time;
-  touchStart = null;
-  if(dt > 700 || Math.abs(dx) < 42 || Math.abs(dx) < Math.abs(dy) * 1.15) return;
-  go(dx < 0 ? pageStep() : -pageStep());
-}, {passive:true});
-window.addEventListener('resize', () => render());
-window.addEventListener('keydown', e => {
-  if(e.key === 'ArrowLeft') go(-pageStep());
-  if(e.key === 'ArrowRight') go(pageStep());
-  if(e.key === 'Escape') closeToc();
-});
-
+(function(){
+'use strict';
+if(window.pdfjsLib){pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';}
+const params=new URLSearchParams(location.search);
+const docs=window.BOOKSHELF_DOCS||[];
+const doc=docs.find(d=>d.id===params.get('book'))||docs[0];
+const state={pdf:null,page:Math.max(1,parseInt(params.get('page')||'1',10)||1),zoom:1,panX:0,panY:0,view:'auto',token:0,renderTasks:[],touch:null,pinch:null,textCache:new Map(),thumbObserver:null};
+const $=id=>document.getElementById(id);
+const els={reader:$('reader'),stage:$('stage'),pages:$('pages-transform'),leftShell:$('left-shell'),rightShell:$('right-shell'),leftCanvas:$('left-page'),rightCanvas:$('right-page'),leftNo:$('left-no'),rightNo:$('right-no'),title:$('book-title'),sub:$('book-sub'),pageLabel:$('page-label'),zoomValue:$('zoom-value'),loading:$('loading'),progressBar:$('progress-bar'),progressText:$('progress-text'),error:$('reader-error'),pdf:$('pdf-link'),save:$('save-link'),errorPdf:$('error-pdf'),backdrop:$('backdrop'),toc:$('toc-list'),thumbs:$('thumb-grid'),searchInput:$('search-input'),searchStatus:$('search-status'),searchResults:$('search-results'),bookmarkBtn:$('bookmark-btn'),bookmarkList:$('bookmark-list'),viewLabel:$('view-label')};
+function clamp(v,min,max){return Math.min(max,Math.max(min,v));}
+function spread(){if(state.view==='single')return false;if(state.view==='spread')return window.innerWidth>=650;return window.innerWidth>=900;}
+function step(){return spread()?2:1;}
+function maxPage(){return state.pdf?state.pdf.numPages:1;}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function pageText(){return spread()&&state.page<maxPage()?`${state.page}-${state.page+1} / ${maxPage()}`:`${state.page} / ${maxPage()}`;}
+function setProgress(p,msg){const n=clamp(Math.round(p||0),0,100);els.progressBar.style.width=Math.max(6,n)+'%';els.progressText.textContent=msg||(n?`${n}%`:'読み込み中…');}
+function showError(){els.loading.style.display='none';els.error.style.display='flex';}
+function cancelRenders(){state.renderTasks.forEach(t=>{try{t.cancel();}catch(e){}});state.renderTasks=[];}
+function fitScale(page){const vp=page.getViewport({scale:1});const r=els.stage.getBoundingClientRect();const count=spread()?2:1;const gap=spread()?8:0;const usableW=Math.max(120,(r.width-24-gap)/count);const usableH=Math.max(120,r.height-22);return Math.min(usableW/vp.width,usableH/vp.height);}
+async function draw(pageNo,canvas,shell,label,token){if(pageNo>maxPage()){shell.style.display='none';return;}shell.style.display='block';shell.classList.toggle('single',!spread());const page=await state.pdf.getPage(pageNo);if(token!==state.token)return;const scale=Math.max(.18,fitScale(page)*state.zoom);const viewport=page.getViewport({scale});const dpr=Math.min(window.devicePixelRatio||1,1.75);canvas.width=Math.max(1,Math.floor(viewport.width*dpr));canvas.height=Math.max(1,Math.floor(viewport.height*dpr));canvas.style.width=Math.floor(viewport.width)+'px';canvas.style.height=Math.floor(viewport.height)+'px';const ctx=canvas.getContext('2d',{alpha:false});ctx.setTransform(dpr,0,0,dpr,0,0);const task=page.render({canvasContext:ctx,viewport,intent:'display'});state.renderTasks.push(task);try{await task.promise;}catch(e){if(e&&e.name!=='RenderingCancelledException')throw e;}label.textContent=pageNo;}
+function updateUrl(){const u=new URL(location.href);u.searchParams.set('book',doc.id);u.searchParams.set('page',String(state.page));history.replaceState(null,'',u);}
+function applyPan(){if(state.zoom<=1){state.panX=0;state.panY=0;}els.pages.style.transform=`translate3d(${state.panX}px,${state.panY}px,0)`;}
+function currentBookmarks(){try{return JSON.parse(localStorage.getItem('doken_bookmarks_v1')||'{}');}catch(e){return{};}}
+function bookmarkPages(){const all=currentBookmarks();return Array.isArray(all[doc.id])?all[doc.id]:[];}
+function saveBookmarkPages(pages){const all=currentBookmarks();all[doc.id]=pages;localStorage.setItem('doken_bookmarks_v1',JSON.stringify(all));}
+function updateBookmarkButton(){const on=bookmarkPages().includes(state.page);els.bookmarkBtn.classList.toggle('bookmarked',on);els.bookmarkBtn.innerHTML=`<i class="ti ${on?'ti-bookmark-filled':'ti-bookmark'}"></i>`;els.bookmarkBtn.setAttribute('aria-label',on?'このページのしおりを削除':'このページをしおりに保存');}
+function renderBookmarks(){const pages=bookmarkPages().sort((a,b)=>a-b);els.bookmarkList.innerHTML=pages.length?pages.map(p=>`<button class="bookmark-item" data-page="${p}"><strong>ページ ${p}</strong><span>開く</span></button>`).join(''):'<div class="empty">まだ、しおりはありません。<br>読み返したいページで上部のしおりボタンを押してください。</div>';els.bookmarkList.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>{jump(Number(b.dataset.page));closeSheets();}));}
+function toggleBookmark(){let pages=bookmarkPages();const i=pages.indexOf(state.page);if(i>=0)pages.splice(i,1);else pages.push(state.page);saveBookmarkPages(pages);updateBookmarkButton();renderBookmarks();}
+async function render(){if(!state.pdf)return;state.page=clamp(state.page,1,maxPage());cancelRenders();const token=++state.token;els.loading.style.display='flex';els.error.style.display='none';els.reader.classList.remove('turn-next','turn-prev');els.rightShell.style.display=spread()?'block':'none';try{await draw(state.page,els.leftCanvas,els.leftShell,els.leftNo,token);if(spread())await draw(state.page+1,els.rightCanvas,els.rightShell,els.rightNo,token);if(token!==state.token)return;els.pageLabel.textContent=pageText();els.zoomValue.textContent=Math.round(state.zoom*100)+'%';els.sub.textContent=`${doc.category||'資料'} / ${maxPage()}ページ`;applyPan();updateUrl();updateBookmarkButton();markActiveThumb();preloadNeighbors();}catch(e){if(!(e&&e.name==='RenderingCancelledException')){console.error(e);showError();}}finally{if(token===state.token)els.loading.style.display='none';}}
+function preloadNeighbors(){[state.page-step(),state.page+step(),state.page+step()*2].filter(p=>p>=1&&p<=maxPage()).forEach(p=>state.pdf.getPage(p).catch(()=>{}));}
+function go(delta){if(!state.pdf)return;const next=clamp(state.page+delta,1,maxPage());if(next===state.page)return;state.panX=state.panY=0;els.reader.classList.add(delta>0?'turn-next':'turn-prev');state.page=next;render();setTimeout(()=>els.reader.classList.remove('turn-next','turn-prev'),300);}
+function jump(p){state.panX=state.panY=0;state.page=clamp(Math.round(p||1),1,maxPage());render();}
+function setZoom(z){state.zoom=clamp(Math.round(z*100)/100,1,4);if(state.zoom===1){state.panX=0;state.panY=0;}render();}
+function openSheet(name){closeSheets(false);const sheet=$('sheet-'+name);if(!sheet)return;els.backdrop.classList.add('open');sheet.classList.add('open');if(name==='thumbs')ensureThumbs();if(name==='bookmarks')renderBookmarks();if(name==='search')setTimeout(()=>els.searchInput.focus(),160);}
+function closeSheets(hideBackdrop=true){document.querySelectorAll('.sheet.open').forEach(s=>s.classList.remove('open'));if(hideBackdrop)els.backdrop.classList.remove('open');}
+async function resolveOutlinePage(item){try{const dest=typeof item.dest==='string'?await state.pdf.getDestination(item.dest):item.dest;if(!dest||!dest[0])return null;return(await state.pdf.getPageIndex(dest[0]))+1;}catch(e){return null;}}
+async function buildToc(){let rows=[];try{const outline=await state.pdf.getOutline();async function walk(items,depth){for(const item of items||[]){const p=await resolveOutlinePage(item);if(p)rows.push({title:item.title||`ページ ${p}`,page:p,depth});if(item.items&&item.items.length)await walk(item.items,depth+1);}}await walk(outline||[],0);}catch(e){}if(!rows.length&&Array.isArray(doc.toc))rows=doc.toc.map(x=>({title:x.title,page:x.page,depth:x.depth||0}));if(!rows.length){const stride=maxPage()<=20?2:maxPage()<=50?5:10;rows=[{title:'表紙',page:1,depth:0}];for(let p=1+stride;p<=maxPage();p+=stride)rows.push({title:`ページ ${p} から`,page:p,depth:0});}els.toc.innerHTML=rows.map(r=>`<button class="toc-item" data-page="${r.page}" style="padding-left:${10+r.depth*14}px"><span>${esc(r.title)}</span><span>P.${r.page}</span></button>`).join('');els.toc.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>{jump(Number(b.dataset.page));closeSheets();}));}
+function ensureThumbs(){if(els.thumbs.children.length)return;const frag=document.createDocumentFragment();for(let p=1;p<=maxPage();p++){const b=document.createElement('button');b.className='thumb';b.dataset.page=p;b.innerHTML=`<canvas class="thumb-canvas" width="120" height="160" aria-label="ページ ${p} のサムネイル"></canvas><span>${p}</span>`;b.addEventListener('click',()=>{jump(p);closeSheets();});frag.appendChild(b);}els.thumbs.appendChild(frag);state.thumbObserver=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting){renderThumb(entry.target).catch(()=>{});state.thumbObserver.unobserve(entry.target);}});},{root:$('sheet-thumbs').querySelector('.sheet-body'),rootMargin:'160px'});els.thumbs.querySelectorAll('.thumb').forEach(t=>state.thumbObserver.observe(t));markActiveThumb();}
+async function renderThumb(btn){if(btn.dataset.rendered)return;btn.dataset.rendered='1';const p=Number(btn.dataset.page);const page=await state.pdf.getPage(p);const base=page.getViewport({scale:1});const scale=Math.min(130/base.width,170/base.height);const vp=page.getViewport({scale});const c=btn.querySelector('canvas');c.width=Math.max(1,Math.floor(vp.width));c.height=Math.max(1,Math.floor(vp.height));const ctx=c.getContext('2d',{alpha:false});await page.render({canvasContext:ctx,viewport:vp,intent:'display'}).promise;}
+function markActiveThumb(){els.thumbs.querySelectorAll('.thumb').forEach(t=>{const p=Number(t.dataset.page);t.classList.toggle('active',p===state.page||(spread()&&p===state.page+1));});const active=els.thumbs.querySelector('.thumb.active');if(active&&$('sheet-thumbs').classList.contains('open'))active.scrollIntoView({block:'nearest',inline:'center'});}
+async function getPageText(p){if(state.textCache.has(p))return state.textCache.get(p);const page=await state.pdf.getPage(p);const tc=await page.getTextContent();const text=tc.items.map(i=>i.str).join(' ').replace(/\s+/g,' ').trim();state.textCache.set(p,text);return text;}
+async function search(){const q=els.searchInput.value.trim().toLowerCase();if(!q){els.searchStatus.textContent='キーワードを入力してください';els.searchResults.innerHTML='';return;}els.searchResults.innerHTML='';let hits=[];for(let p=1;p<=maxPage();p++){els.searchStatus.textContent=`検索中… ${p} / ${maxPage()}ページ`;try{const text=await getPageText(p);const low=text.toLowerCase();const idx=low.indexOf(q);if(idx>=0){const s=Math.max(0,idx-36),e=Math.min(text.length,idx+q.length+55);hits.push({page:p,snippet:(s?'…':'')+text.slice(s,e)+(e<text.length?'…':'')});}}catch(e){}await new Promise(r=>setTimeout(r,0));}els.searchStatus.textContent=`${hits.length}件見つかりました`;els.searchResults.innerHTML=hits.length?hits.map(h=>`<button class="search-item" data-page="${h.page}"><div><strong>ページ ${h.page}</strong><div class="search-snippet">${esc(h.snippet)}</div></div><span><i class="ti ti-chevron-right"></i></span></button>`).join(''):'<div class="empty">該当するページがありません。</div>';els.searchResults.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>{jump(Number(b.dataset.page));closeSheets();}));}
+function cycleView(){state.view=state.view==='auto'?'single':state.view==='single'?'spread':'auto';els.viewLabel.textContent=state.view==='auto'?'表示：自動':state.view==='single'?'表示：1ページ':'表示：見開き';state.panX=state.panY=0;render();}
+async function sharePage(){const url=location.href;const data={title:doc.title,text:`${doc.title}（${state.page}ページ）`,url};try{if(navigator.share)await navigator.share(data);else{await navigator.clipboard.writeText(url);alert('このページのURLをコピーしました。');}}catch(e){if(e&&e.name!=='AbortError')alert('共有できませんでした。');}}
+function toggleFullscreen(){const root=document.documentElement;if(!document.fullscreenElement&&root.requestFullscreen){root.requestFullscreen().catch(()=>{});}else if(document.exitFullscreen){document.exitFullscreen().catch(()=>{});}}
+function openJump(){if(!state.pdf)return;$('jump-input').max=maxPage();$('jump-input').value=state.page;$('jump-help').textContent=`1〜${maxPage()}ページの番号を入力してください。`;$('jump-wrap').classList.add('open');setTimeout(()=>$('jump-input').select(),60);}
+function closeJump(){$('jump-wrap').classList.remove('open');}
+function distance(a,b){return Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY);}
+function midpoint(a,b){return{x:(a.clientX+b.clientX)/2,y:(a.clientY+b.clientY)/2};}
+let lastTap=0;
+els.stage.addEventListener('touchstart',e=>{if(e.touches.length===2){const m=midpoint(e.touches[0],e.touches[1]);state.pinch={dist:distance(e.touches[0],e.touches[1]),zoom:state.zoom,x:m.x,y:m.y};state.touch=null;return;}if(e.touches.length===1){const t=e.touches[0];state.touch={x:t.clientX,y:t.clientY,lastX:t.clientX,lastY:t.clientY,time:Date.now()};}}, {passive:true});
+els.stage.addEventListener('touchmove',e=>{if(e.touches.length===2&&state.pinch){e.preventDefault();const d=distance(e.touches[0],e.touches[1]);const next=clamp(state.pinch.zoom*(d/state.pinch.dist),1,4);state.zoom=Math.round(next*100)/100;els.zoomValue.textContent=Math.round(state.zoom*100)+'%';return;}if(e.touches.length===1&&state.touch&&state.zoom>1){e.preventDefault();const t=e.touches[0];state.panX+=t.clientX-state.touch.lastX;state.panY+=t.clientY-state.touch.lastY;state.touch.lastX=t.clientX;state.touch.lastY=t.clientY;applyPan();}}, {passive:false});
+els.stage.addEventListener('touchend',e=>{if(state.pinch&&e.touches.length<2){state.pinch=null;render();return;}if(!state.touch||!e.changedTouches.length)return;const t=e.changedTouches[0],dx=t.clientX-state.touch.x,dy=t.clientY-state.touch.y,dt=Date.now()-state.touch.time;state.touch=null;if(state.zoom>1)return;if(dt<650&&Math.abs(dx)>46&&Math.abs(dx)>Math.abs(dy)*1.2){go(dx<0?step():-step());return;}const now=Date.now();if(dt<260&&Math.abs(dx)<12&&Math.abs(dy)<12){if(now-lastTap<330){lastTap=0;setZoom(state.zoom>1?1:2);}else lastTap=now;}}, {passive:true});
+$('back-btn').addEventListener('click',()=>location.href='shiryo.html');$('error-back').addEventListener('click',()=>location.href='shiryo.html');$('retry-btn').addEventListener('click',()=>boot());$('prev-btn').addEventListener('click',()=>go(-step()));$('next-btn').addEventListener('click',()=>go(step()));$('prev-hit').addEventListener('click',()=>{if(state.zoom===1)go(-step());});$('next-hit').addEventListener('click',()=>{if(state.zoom===1)go(step());});$('zoom-out').addEventListener('click',()=>setZoom(state.zoom-.25));$('zoom-in').addEventListener('click',()=>setZoom(state.zoom+.25));$('page-jump').addEventListener('click',openJump);$('jump-cancel').addEventListener('click',closeJump);$('jump-go').addEventListener('click',()=>{jump(Number($('jump-input').value));closeJump();});$('jump-input').addEventListener('keydown',e=>{if(e.key==='Enter')$('jump-go').click();});els.bookmarkBtn.addEventListener('click',toggleBookmark);document.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',()=>openSheet(b.dataset.open)));document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>closeSheets()));els.backdrop.addEventListener('click',()=>closeSheets());$('search-btn').addEventListener('click',search);els.searchInput.addEventListener('keydown',e=>{if(e.key==='Enter')search();});$('view-btn').addEventListener('click',cycleView);$('share-btn').addEventListener('click',sharePage);$('fullscreen-btn').addEventListener('click',toggleFullscreen);$('jump-wrap').addEventListener('click',e=>{if(e.target===$('jump-wrap'))closeJump();});
+if(!document.documentElement.requestFullscreen)$('fullscreen-btn').style.display='none';
+window.addEventListener('resize',()=>{state.panX=state.panY=0;render();});window.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')go(-step());else if(e.key==='ArrowRight')go(step());else if(e.key==='Home')jump(1);else if(e.key==='End')jump(maxPage());else if(e.key==='Escape'){closeSheets();closeJump();}});
+async function boot(){if(!doc){showError();return;}els.title.textContent=doc.title;document.title=doc.title+'｜デジタルブック';els.pdf.href=doc.file;els.save.href=doc.file;els.errorPdf.href=doc.file;els.loading.style.display='flex';els.error.style.display='none';setProgress(4,'PDFを読み込んでいます…');if(!window.pdfjsLib){showError();return;}try{const task=pdfjsLib.getDocument({url:doc.file,cMapUrl:'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/',cMapPacked:true,standardFontDataUrl:'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/standard_fonts/'});task.onProgress=p=>{if(p&&p.total)setProgress((p.loaded/p.total)*100,`${Math.round((p.loaded/p.total)*100)}%`);};state.pdf=await task.promise;state.page=clamp(state.page,1,maxPage());setProgress(100,'表示を準備しています…');await buildToc();renderBookmarks();await render();}catch(e){console.error(e);showError();}}
 boot();
+})();
 </script>
 <script src="assets/js/navigation.js"></script>
 </body>
