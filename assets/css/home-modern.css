@@ -170,3 +170,55 @@ html[data-theme="dark"] .home-menu-link{background:#142A45;border-color:#324A64;
 }
 @media(min-width:641px){.home-bottom-nav{border-left:1px solid #DCE2E8;border-right:1px solid #DCE2E8;}}
 @media(prefers-reduced-motion:reduce){.home-quick-icon,.home-menu-overlay,.home-menu-sheet,.home-modern .mc{transition:none!important;}}
+
+/* ===== Home clarity experiment v187 =====
+   Reversible layer: category semantics + adjacent-card separation.
+   Remove this block (or revert its commit) to restore the previous home UI. */
+.home-modern #nichijo{--cat:#0B648C;--cat-alt:#B4551B;--cat-soft:#EAF6FA;}
+.home-modern #shigoto{--cat:#176A47;--cat-alt:#0F638C;--cat-soft:#EAF7F0;}
+.home-modern #genba{--cat:#0D6B66;--cat-alt:#A14E19;--cat-soft:#E7F6F4;}
+.home-modern #tetsuzuki{--cat:#A84718;--cat-alt:#175F91;--cat-soft:#FFF0E7;}
+.home-modern #koushu{--cat:#6444A2;--cat-alt:#176A47;--cat-soft:#F2EDFD;}
+.home-modern #shiryo{--cat:#185F98;--cat-alt:#8A4A13;--cat-soft:#EAF3FB;}
+.home-modern #sonota{--cat:#4D5D70;--cat-alt:#176A47;--cat-soft:#EEF2F6;}
+
+/* Category is recognisable before reading the label: icon tint + short underline. */
+.home-modern .section:not(#yoku)>.sec-head{position:relative;}
+.home-modern .section:not(#yoku)>.sec-head::after{content:'';position:absolute;left:62px;bottom:1px;width:34px;height:3px;border-radius:99px;background:var(--cat,#1769AA);opacity:.92;}
+.home-modern .section:not(#yoku) .sec-head-icon{background:var(--cat-soft,#EAF4FD)!important;color:var(--cat,#1769AA)!important;border-color:color-mix(in srgb,var(--cat,#1769AA) 22%,transparent)!important;}
+.home-modern .section:not(#yoku) .sec-head-label{color:var(--cat,#17263A)!important;}
+.home-modern #shigoto .sec-head-label::after,
+.home-modern #genba .sec-head-label::after,
+.home-modern #tetsuzuki .sec-head-label::after{color:var(--cat)!important;}
+
+/* Adjacent cards get a small A/B cue without turning the whole screen multicolour. */
+.home-modern .section:not(#yoku) .grid2>.mc::before{content:'';position:absolute;left:0;right:0;top:0;height:4px;background:var(--cat,#1769AA);z-index:30;pointer-events:none;}
+.home-modern .section:not(#yoku) .grid2>.mc:nth-child(even)::before{background:var(--cat-alt,#B4551B);}
+.home-modern .section:not(#yoku) .grid2>.mc .mc-title{color:var(--cat,#17263A)!important;}
+.home-modern .section:not(#yoku) .grid2>.mc:nth-child(even) .mc-title{color:var(--cat-alt,#17263A)!important;}
+.home-modern .section:not(#yoku) .grid2>.mc .mc-desc{color:#526276!important;font-weight:700!important;}
+.home-modern .section:not(#yoku) .grid2>.mc:nth-child(even){box-shadow:0 7px 18px rgba(25,38,55,.075)!important;}
+
+/* Quick launcher: preserve varied icons, strengthen label hierarchy and row scanning. */
+.home-modern .home-quick-label{color:#24364A;font-weight:900;}
+.home-modern .home-quick-grid>.home-quick-item:nth-child(4n+2) .home-quick-label,
+.home-modern .home-quick-grid>.home-quick-item:nth-child(4n+4) .home-quick-label{color:#40566D;}
+
+/* Dark mode uses brighter semantic accents while keeping body copy calm. */
+html[data-theme="dark"] .home-modern #nichijo{--cat:#72D2F1;--cat-alt:#FFAA76;--cat-soft:#15384B;}
+html[data-theme="dark"] .home-modern #shigoto{--cat:#72D7A8;--cat-alt:#79CFFF;--cat-soft:#15382D;}
+html[data-theme="dark"] .home-modern #genba{--cat:#72D8D1;--cat-alt:#FFAD77;--cat-soft:#143936;}
+html[data-theme="dark"] .home-modern #tetsuzuki{--cat:#FFAA76;--cat-alt:#80CAFF;--cat-soft:#493023;}
+html[data-theme="dark"] .home-modern #koushu{--cat:#C0A8FF;--cat-alt:#79D8A9;--cat-soft:#30294B;}
+html[data-theme="dark"] .home-modern #shiryo{--cat:#83CAFF;--cat-alt:#FFC27E;--cat-soft:#18364F;}
+html[data-theme="dark"] .home-modern #sonota{--cat:#D1DCE8;--cat-alt:#78D5A7;--cat-soft:#29394A;}
+html[data-theme="dark"] .home-modern .section:not(#yoku) .sec-head-label{color:var(--cat,#F6F8FB)!important;}
+html[data-theme="dark"] .home-modern #shigoto .sec-head-label::after,
+html[data-theme="dark"] .home-modern #genba .sec-head-label::after,
+html[data-theme="dark"] .home-modern #tetsuzuki .sec-head-label::after{color:var(--cat)!important;}
+html[data-theme="dark"] .home-modern .section:not(#yoku) .grid2>.mc .mc-title{color:var(--cat,#F7F9FC)!important;}
+html[data-theme="dark"] .home-modern .section:not(#yoku) .grid2>.mc:nth-child(even) .mc-title{color:var(--cat-alt,#F7F9FC)!important;}
+html[data-theme="dark"] .home-modern .section:not(#yoku) .grid2>.mc .mc-desc{color:#D1DCE8!important;}
+html[data-theme="dark"] .home-modern .home-quick-label{color:#F5F7FA!important;}
+html[data-theme="dark"] .home-modern .home-quick-grid>.home-quick-item:nth-child(4n+2) .home-quick-label,
+html[data-theme="dark"] .home-modern .home-quick-grid>.home-quick-item:nth-child(4n+4) .home-quick-label{color:#C7D5E5!important;}
