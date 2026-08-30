@@ -33,7 +33,7 @@ async function draw(pageNo,canvas,shell,label,token){
 }
 function updateUrl(){const u=new URL(location.href);u.searchParams.set('book',doc.id);u.searchParams.set('page',String(state.page));history.replaceState(null,'',u);}
 function applyPan(extraScale){if(state.zoom<=1){state.panX=0;state.panY=0;}els.pages.style.transform=`translate3d(${state.panX}px,${state.panY}px,0) scale(${extraScale||1})`;}
-function constrainPan(){if(state.zoom<=1){state.panX=0;state.panY=0;return;}const r=els.stage.getBoundingClientRect();const p=els.pages.getBoundingClientRect();const maxX=Math.max(0,(p.width-r.width)/2+70),maxY=Math.max(0,(p.height-r.height)/2+70);state.panX=clamp(state.panX,-maxX,maxX);state.panY=clamp(state.panY,-maxY,maxY);}
+function constrainPan(){if(state.zoom<=1){state.panX=0;state.panY=0;return;}const r=els.stage.getBoundingClientRect(),p=els.pages.getBoundingClientRect(),maxX=Math.max(0,(p.width-r.width)/2+70),maxY=Math.max(0,(p.height-r.height)/2+70);state.panX=clamp(state.panX,-maxX,maxX);state.panY=clamp(state.panY,-maxY,maxY);}
 
 function currentBookmarks(){try{return JSON.parse(localStorage.getItem('doken_bookmarks_v1')||'{}');}catch(e){return{};}}
 function bookmarkPages(){const all=currentBookmarks();return Array.isArray(all[doc.id])?all[doc.id]:[];}
@@ -43,7 +43,7 @@ function renderBookmarks(){const pages=bookmarkPages().sort((a,b)=>a-b);els.book
 function toggleBookmark(){let pages=bookmarkPages();const i=pages.indexOf(state.page);if(i>=0)pages.splice(i,1);else pages.push(state.page);saveBookmarkPages(pages);updateBookmarkButton();renderBookmarks();}
 
 async function render(){
-  if(!state.pdf)return;state.page=clamp(state.page,1,maxPage());cancelRenders();const token=++state.token;els.loading.style.display='flex';els.error.style.display='none';els.reader.classList.remove('turn-next','turn-prev');els.rightShell.style.display=spread()?'block':'none';
+  if(!state.pdf)return;state.page=clamp(state.page,1,maxPage());cancelRenders();const token=++state.token;els.error.style.display='none';els.rightShell.style.display=spread()?'block':'none';
   try{
     await draw(state.page,els.leftCanvas,els.leftShell,els.leftNo,token);if(spread())await draw(state.page+1,els.rightCanvas,els.rightShell,els.rightNo,token);if(token!==state.token)return;
     els.pageLabel.textContent=pageText();els.zoomValue.textContent=Math.round(state.zoom*100)+'%';els.sub.textContent=`${doc.category||'資料'} / ${maxPage()}ページ`;
