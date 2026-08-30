@@ -1,0 +1,103 @@
+/* DOKEN SMART PORTAL - cross-page contrast safeguards
+   Fixed-color surfaces must use fixed foreground colors; theme-remapped text tokens
+   must not leak onto them. Keep selectors component-scoped to avoid flattening design. */
+
+/* Semantic foregrounds for common strong surfaces. */
+:root{
+  --contrast-on-dark:#FFFFFF;
+  --contrast-on-dark-muted:#DDEAF7;
+  --contrast-on-light:#17263A;
+  --contrast-on-light-muted:#334155;
+}
+
+/* Primary/action surfaces: always high-contrast white. */
+.btn-primary,.connection-status,.doken-contact-rail a,
+.cur-tag,.rousai-tab.active{
+  color:var(--contrast-on-dark)!important;
+}
+.btn-primary *, .connection-status *, .doken-contact-rail a *,
+.cur-tag *, .rousai-tab.active *{
+  color:inherit!important;
+  -webkit-text-fill-color:inherit!important;
+}
+
+/* Fixed pale status surfaces: never inherit theme-remapped light text. */
+html[data-theme="light"] .alert-warn{color:#684800!important;}
+html[data-theme="light"] .alert-ok{color:#145C39!important;}
+html[data-theme="light"] .alert-danger{color:#9F2F24!important;}
+html[data-theme="light"] .alert-info{color:#154F8A!important;}
+html[data-theme="light"] .winner-banner.doken{color:#145C39!important;}
+html[data-theme="light"] .winner-banner.city{color:#154F8A!important;}
+html[data-theme="light"] .rousai-warning{color:#68410A!important;}
+html[data-theme="light"] .rousai-who{color:#17324D!important;}
+html[data-theme="light"] .rousai-who-title{color:#0C4F82!important;}
+
+/* Fixed dark/gradient result surfaces: protect every text descendant from the
+   global theme rules for small/p/h1-h3. This fixes the 労災「概算保険料 合計」 label. */
+.rousai-total,
+.lv-badge{
+  color:var(--contrast-on-dark)!important;
+}
+.rousai-total strong,
+.rousai-total .result-val,
+.lv-badge h1,.lv-badge h2,.lv-badge h3,.lv-badge strong{
+  color:var(--contrast-on-dark)!important;
+  -webkit-text-fill-color:var(--contrast-on-dark)!important;
+}
+html[data-theme="light"] .rousai-total small,
+html[data-theme="dark"] .rousai-total small,
+.rousai-total small{
+  color:#E7F2FC!important;
+  -webkit-text-fill-color:#E7F2FC!important;
+  opacity:1!important;
+}
+.lv-badge p,.lv-badge small{
+  color:#E2EAF3!important;
+  -webkit-text-fill-color:#E2EAF3!important;
+  opacity:1!important;
+}
+
+/* Form controls: explicit readable foreground/placeholder in both themes. */
+html[data-theme="light"] input,
+html[data-theme="light"] select,
+html[data-theme="light"] textarea{color:#111827;}
+html[data-theme="light"] input::placeholder,
+html[data-theme="light"] textarea::placeholder{color:#526173;opacity:1;}
+html[data-theme="dark"] input,
+html[data-theme="dark"] select,
+html[data-theme="dark"] textarea{color:#F8FAFC!important;}
+html[data-theme="dark"] input::placeholder,
+html[data-theme="dark"] textarea::placeholder{color:#B9C9DA!important;opacity:1;}
+
+/* Disabled controls still need to be legible. */
+html[data-theme="light"] input:disabled,
+html[data-theme="light"] select:disabled,
+html[data-theme="light"] textarea:disabled,
+html[data-theme="light"] button:disabled{opacity:.72;}
+html[data-theme="dark"] input:disabled,
+html[data-theme="dark"] select:disabled,
+html[data-theme="dark"] textarea:disabled,
+html[data-theme="dark"] button:disabled{opacity:.78;}
+
+/* Dark status surfaces use fixed pairs rather than light-theme tokens. */
+html[data-theme="dark"] .alert-info{background:#102A4A!important;color:#C7E2FF!important;}
+html[data-theme="dark"] .alert-warn{background:#3B2D0A!important;color:#FFE9AE!important;}
+html[data-theme="dark"] .alert-ok{background:#0D3324!important;color:#C5F4D9!important;}
+html[data-theme="dark"] .alert-danger{background:#3B1515!important;color:#FFD0D0!important;}
+html[data-theme="dark"] .rousai-warning{background:#3A2A08!important;color:#FFF0C6!important;}
+html[data-theme="dark"] .rousai-who{background:#102B49!important;color:#E8F3FF!important;border-color:#3E7DAE!important;}
+html[data-theme="dark"] .rousai-who-title{color:#A9D8FF!important;}
+
+/* Preserve inherited foreground inside alerts/results even when common.css has
+   broad p/small theme selectors. */
+.alert span,.alert p,.alert strong,.alert small,
+.winner-banner span,.winner-banner p,.winner-banner strong,.winner-banner small{
+  color:inherit!important;
+  -webkit-text-fill-color:inherit!important;
+}
+
+@media(prefers-contrast:more){
+  .rousai-total small,.lv-badge p,.lv-badge small{color:#FFFFFF!important;-webkit-text-fill-color:#FFFFFF!important;}
+  html[data-theme="light"] input::placeholder,html[data-theme="light"] textarea::placeholder{color:#334155;}
+  html[data-theme="dark"] input::placeholder,html[data-theme="dark"] textarea::placeholder{color:#D8E4F2!important;}
+}
