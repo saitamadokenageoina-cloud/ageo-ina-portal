@@ -1,0 +1,55 @@
+/* DOKEN SMART PORTAL - semantic home palette v188
+   Reversible layer. Remove this file/import to restore the previous palette. */
+:root{
+  --home-bg:#F5F7F9;--home-surface:#FFFFFF;--home-text:#17263A;--home-text-sub:#526274;--home-border:#DDE4EA;--home-brand:#123B63;--home-action:#1769AA;
+  --daily:#2878A8;--daily-soft:#EAF5FA;
+  --work:#C65D25;--work-soft:#FFF0E8;
+  --site:#187361;--site-soft:#E8F5F1;
+  --procedure:#6652A3;--procedure-soft:#F1EEFA;
+  --training:#9A6414;--training-soft:#FFF5DF;
+  --library:#35678B;--library-soft:#EDF4F8;
+  --other:#596979;--other-soft:#EEF2F5;
+  --state-danger:#C93636;--state-warning:#A96500;--state-success:#17734B;
+}
+body.home-modern,.home-modern .app{background:var(--home-bg)!important;}
+.home-modern #nichijo{--cat:var(--daily);--cat-soft:var(--daily-soft);}
+.home-modern #shigoto{--cat:var(--work);--cat-soft:var(--work-soft);}
+.home-modern #genba{--cat:var(--site);--cat-soft:var(--site-soft);}
+.home-modern #tetsuzuki{--cat:var(--procedure);--cat-soft:var(--procedure-soft);}
+.home-modern #koushu{--cat:var(--training);--cat-soft:var(--training-soft);}
+.home-modern #shiryo{--cat:var(--library);--cat-soft:var(--library-soft);}
+.home-modern #sonota{--cat:var(--other);--cat-soft:var(--other-soft);}
+
+/* Category colour is navigation; text remains calm and highly legible. */
+.home-modern .section:not(#yoku)>.sec-head{position:relative;}
+.home-modern .section:not(#yoku)>.sec-head::after{content:'';position:absolute;left:62px;bottom:1px;width:38px;height:4px;border-radius:99px;background:var(--cat,var(--home-action));opacity:1;}
+.home-modern .section:not(#yoku) .sec-head-icon{background:var(--cat-soft,#EAF4FD)!important;color:var(--cat,var(--home-action))!important;border-color:var(--home-border)!important;}
+.home-modern .section:not(#yoku) .sec-head-label{color:var(--home-text)!important;}
+.home-modern #shigoto .sec-head-label::after,.home-modern #genba .sec-head-label::after,.home-modern #tetsuzuki .sec-head-label::after{color:var(--home-text)!important;}
+
+/* One semantic colour per category: remove meaningless odd/even colour switching. */
+.home-modern .section:not(#yoku) .grid2>.mc{background:var(--home-surface)!important;border-color:var(--home-border)!important;box-shadow:0 5px 16px rgba(25,38,55,.06)!important;}
+.home-modern .section:not(#yoku) .grid2>.mc::before,.home-modern .section:not(#yoku) .grid2>.mc:nth-child(even)::before{content:'';position:absolute;left:0;right:0;top:0;height:4px;background:var(--cat,var(--home-action))!important;z-index:30;pointer-events:none;}
+.home-modern .section:not(#yoku) .grid2>.mc .mc-title,.home-modern .section:not(#yoku) .grid2>.mc:nth-child(even) .mc-title{color:var(--home-text)!important;}
+.home-modern .section:not(#yoku) .grid2>.mc .mc-desc{color:var(--home-text-sub)!important;}
+.home-modern .section:not(#yoku) .grid2>.mc:nth-child(even){box-shadow:0 5px 16px rgba(25,38,55,.06)!important;}
+.home-modern .section:not(#yoku) .mc-badge{border:1px solid var(--cat-soft,#EDF4F8);}
+.home-modern .home-quick-label,.home-modern .home-quick-grid>.home-quick-item:nth-child(4n+2) .home-quick-label,.home-modern .home-quick-grid>.home-quick-item:nth-child(4n+4) .home-quick-label{color:var(--home-text)!important;}
+.home-modern .home-all-btn,.home-modern .home-tools-trigger-icon{color:var(--home-action)!important;}
+
+html[data-theme="dark"]{
+  --home-bg:#071426;--home-surface:#10213A;--home-text:#F7F9FC;--home-text-sub:#C7D3DF;--home-border:#2B4159;--home-brand:#73C6E6;--home-action:#73C6E6;
+  --daily:#73C6E6;--daily-soft:#15384B;
+  --work:#FF9A68;--work-soft:#493023;
+  --site:#67CDB2;--site-soft:#143936;
+  --procedure:#B6A3F2;--procedure-soft:#30294B;
+  --training:#F0C56A;--training-soft:#44371A;
+  --library:#87BCD9;--library-soft:#18364F;
+  --other:#B8C6D3;--other-soft:#29394A;
+}
+html[data-theme="dark"] body.home-modern,html[data-theme="dark"] .home-modern .app{background:var(--home-bg)!important;}
+html[data-theme="dark"] .home-modern .section:not(#yoku) .grid2>.mc{background:var(--home-surface)!important;border-color:var(--home-border)!important;box-shadow:0 5px 18px rgba(0,0,0,.18)!important;}
+html[data-theme="dark"] .home-modern .section:not(#yoku) .sec-head-label,html[data-theme="dark"] .home-modern #shigoto .sec-head-label::after,html[data-theme="dark"] .home-modern #genba .sec-head-label::after,html[data-theme="dark"] .home-modern #tetsuzuki .sec-head-label::after{color:var(--home-text)!important;}
+html[data-theme="dark"] .home-modern .section:not(#yoku) .grid2>.mc .mc-title,html[data-theme="dark"] .home-modern .section:not(#yoku) .grid2>.mc:nth-child(even) .mc-title{color:var(--home-text)!important;}
+html[data-theme="dark"] .home-modern .section:not(#yoku) .grid2>.mc .mc-desc{color:var(--home-text-sub)!important;}
+html[data-theme="dark"] .home-modern .home-quick-label,html[data-theme="dark"] .home-modern .home-quick-grid>.home-quick-item:nth-child(4n+2) .home-quick-label,html[data-theme="dark"] .home-modern .home-quick-grid>.home-quick-item:nth-child(4n+4) .home-quick-label{color:var(--home-text)!important;}
