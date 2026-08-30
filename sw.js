@@ -7,7 +7,7 @@ const CACHE_FILES = [
   BASE, BASE + 'index.html', BASE + 'manifest.webmanifest', BASE + 'common.css',
   BASE + 'assets/css/theme-polish.css', BASE + 'assets/css/theme-polish-base.css',
   BASE + 'assets/css/paypay-tabs.css', BASE + 'assets/css/paypay-tabs-base.css', BASE + 'assets/css/home-card-art-dark-fix.css',
-  BASE + 'assets/css/home-card-art.css', BASE + 'assets/css/home-alignment-fix.css', BASE + 'assets/css/home-modern.css',
+  BASE + 'assets/css/home-card-art.css', BASE + 'assets/css/home-alignment-fix.css', BASE + 'assets/css/home-modern.css', BASE + 'assets/css/home-semantic-palette.css',
   BASE + 'assets/illustrations/home-3d/calendar-v179.jpg', BASE + 'assets/illustrations/home-3d/doken-card-v180.jpg',
   BASE + 'assets/illustrations/home-3d/guild-v180.jpg', BASE + 'assets/illustrations/home-3d/meishi-v181.jpg', BASE + 'assets/illustrations/home-3d/job-v180.jpg', BASE + 'assets/illustrations/home-3d/worker-supply-v180.jpg', BASE + 'assets/illustrations/home-3d/home-doctor-v180.jpg',
   BASE + 'assets/illustrations/home-3d/estimate-v180.jpg', BASE + 'assets/illustrations/home-3d/heat-v180.jpg', BASE + 'assets/illustrations/home-3d/safety-v180.jpg', BASE + 'assets/illustrations/home-3d/work-log-v180.jpg', BASE + 'assets/illustrations/home-3d/rodo36-v180.jpg', BASE + 'assets/illustrations/home-3d/ccus-v180.jpg',
