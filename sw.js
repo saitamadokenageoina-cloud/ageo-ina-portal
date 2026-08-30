@@ -1,5 +1,5 @@
 // Service Worker - キャッシュ制御
-const CACHE_VERSION = 'v20260829-186';
+const CACHE_VERSION = 'v20260831-189';
 const CACHE_NAME = 'ageo-ina-portal-' + CACHE_VERSION;
 const BASE = '/ageo-ina-portal/';
 const PDFJS_CDN = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/';
@@ -25,4 +25,4 @@ const CACHE_FILES = [
 self.addEventListener('message', event => { if (event.data && event.data.type === 'SKIP_WAITING') self.skipWaiting(); });
 self.addEventListener('install', event => { console.log('[SW] Install:', CACHE_NAME); event.waitUntil(caches.open(CACHE_NAME).then(cache => Promise.allSettled(CACHE_FILES.map(f => cache.add(f)))).then(() => self.skipWaiting())); });
 self.addEventListener('activate', event => { console.log('[SW] Activate:', CACHE_NAME); event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))).then(() => self.clients.claim()).then(() => self.clients.matchAll({type: 'window'})).then(clients => clients.forEach(c => c.postMessage({type:'SW_UPDATED',version:CACHE_VERSION})))); });
-self.addEventListener('fetch', event => { if (event.request.method !== 'GET') return; const url = new URL(event.request.url); const isPdfJsAsset = url.hostname === 'cdnjs.cloudflare.com' && url.pathname.startsWith('/ajax/libs/pdf.js/3.11.174/'); if (url.origin !== self.location.origin && !isPdfJsAsset) return; event.respondWith(fetch(event.request.mode === 'navigate' ? new Request(event.request,{cache:'no-store'}) : event.request).then(response => { const clone = response.clone(); caches.open(CACHE_NAME).then(cache => cache.put(event.request,clone)); return response; }).catch(() => caches.match(event.request))); });
+self.addEventListener('fetch', event => { if (event.request.method !== 'GET') return; const url = new URL(event.request.url); const isPdfJsAsset = url.hostname === 'cdnjs.cloudflare.com' && url.pathname.startsWith('/ajax/libs/pdf.js/3.11.174/'); if (url.origin !== self.location.origin && !isPdfJsAsset) return; const forceFresh = event.request.mode === 'navigate' || (url.origin === self.location.origin && /\.(?:js|css)$/.test(url.pathname)); const networkRequest = forceFresh ? new Request(event.request,{cache:'no-store'}) : event.request; event.respondWith(fetch(networkRequest).then(response => { const clone = response.clone(); caches.open(CACHE_NAME).then(cache => cache.put(event.request,clone)); return response; }).catch(() => caches.match(event.request))); });
