@@ -1,11 +1,11 @@
 // Service Worker - キャッシュ制御
-const CACHE_VERSION = 'v20260829-186';
+const CACHE_VERSION = 'v20260830-187';
 const CACHE_NAME = 'ageo-ina-portal-' + CACHE_VERSION;
 const BASE = '/ageo-ina-portal/';
 const PDFJS_CDN = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/';
 const CACHE_FILES = [
   BASE, BASE + 'index.html', BASE + 'manifest.webmanifest', BASE + 'common.css',
-  BASE + 'assets/css/theme-polish.css', BASE + 'assets/css/theme-polish-base.css',
+  BASE + 'assets/css/theme-polish.css', BASE + 'assets/css/theme-polish-base.css', BASE + 'assets/css/contrast-audit.css',
   BASE + 'assets/css/paypay-tabs.css', BASE + 'assets/css/paypay-tabs-base.css', BASE + 'assets/css/home-card-art-dark-fix.css',
   BASE + 'assets/css/home-card-art.css', BASE + 'assets/css/home-alignment-fix.css', BASE + 'assets/css/home-modern.css',
   BASE + 'assets/illustrations/home-3d/calendar-v179.jpg', BASE + 'assets/illustrations/home-3d/doken-card-v180.jpg',
