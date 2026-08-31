@@ -22,3 +22,5 @@ jobs:
           node-version: '20'
       - name: Run portal quality check
         run: node scripts/quality-check.js
+      - name: Run DOKEN Guild regression check
+        run: node scripts/guild-regression-check.js
