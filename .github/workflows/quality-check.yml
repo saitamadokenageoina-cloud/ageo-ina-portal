@@ -24,3 +24,5 @@ jobs:
         run: node scripts/quality-check.js
       - name: Run DOKEN Guild regression check
         run: node scripts/guild-regression-check.js
+      - name: Run DOKEN Guild template paragraph check
+        run: node scripts/guild-template-check.js
