@@ -1,8 +1,8 @@
 window.DOKEN_GUILD_CONFIG={apiUrl:'https://script.google.com/macros/s/AKfycbxSyE47dgEqRzugYnufktKxlCx5KMrU_DNDovymGrDX4XPwRhPGrxZbGMpr885WHO2O/exec',notifyEmail:'ageoina@saitama-doken.or.jp'};
 
-/* Hotfix v197: keep the visual guild stylesheet without loading the admin
- * enhancement scripts that interfered with standard posting. Also load the
- * isolated display patch that preserves multiline post bodies.
+/* DOKEN Guild v198 bootstrap.
+ * The page's built-in submitPost remains the canonical new-post implementation.
+ * Enhancements load only after window.load, after guild.html has defined its core functions.
  */
 (function(){
   'use strict';
@@ -15,12 +15,12 @@ window.DOKEN_GUILD_CONFIG={apiUrl:'https://script.google.com/macros/s/AKfycbxSyE
       link.href='assets/css/guild-v195.css?v=186';
       document.head.appendChild(link);
     }
-    if(!document.getElementById('guild-display-hotfix-v197')){
+    if(!document.getElementById('guild-canonical-v198')){
       script=document.createElement('script');
-      script.id='guild-display-hotfix-v197';
-      script.src='assets/js/guild-display-hotfix-v197.js?v=186';
+      script.id='guild-canonical-v198';
+      script.src='assets/js/guild-canonical-v198.js?v=186';
       document.body.appendChild(script);
     }
   }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',loadAssets);else loadAssets();
+  if(document.readyState==='complete')loadAssets();else window.addEventListener('load',loadAssets);
 })();
