@@ -1,0 +1,39 @@
+/* DOKEN SMART PORTAL contrast hotfix v205
+ * Prevent the light-mode generic small-text rule from darkening text
+ * that sits on intentionally dark/gradient surfaces.
+ */
+
+/* AI名刺作成: 「成果重視で自動設計」 */
+html[data-theme="light"] .result-principle,
+html[data-theme="light"] .result-principle strong{
+  color:#FFFFFF!important;
+  -webkit-text-fill-color:#FFFFFF!important;
+}
+html[data-theme="light"] .result-principle small{
+  color:#F3F8FE!important;
+  -webkit-text-fill-color:#F3F8FE!important;
+  opacity:1!important;
+}
+
+/* 労働者供給事業: ヒーロー・問い合わせCTA */
+html[data-theme="light"] .ls-hero .hp small,
+html[data-theme="light"] .cta small{
+  color:#F7FAFC!important;
+  -webkit-text-fill-color:#F7FAFC!important;
+  opacity:1!important;
+}
+html[data-theme="light"] .cta p,
+html[data-theme="light"] .cta .cta-sub2{
+  color:#FFFFFF!important;
+  -webkit-text-fill-color:#FFFFFF!important;
+  opacity:1!important;
+}
+
+/* 共通フッター: アプリ版数を背景に沈ませない */
+footer [data-app-version]{
+  color:#CBD5E1!important;
+  -webkit-text-fill-color:#CBD5E1!important;
+  font-size:11px!important;
+  font-weight:700!important;
+  opacity:1!important;
+}
