@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#123B63">
+<title>PDF表示｜埼玉土建 上尾伊奈支部</title>
+<link rel="stylesheet" href="assets/css/tabler-icons.min.css">
+<link rel="stylesheet" href="common.css">
+<style>
+html,body{height:100%;margin:0;overflow:hidden;background:#eef2f5}.pdf-viewer{height:100%;height:100dvh;display:flex;flex-direction:column}.pdf-top{min-height:58px;padding:env(safe-area-inset-top) 10px 0;display:flex;align-items:center;gap:10px;background:#123B63;color:#fff;box-shadow:0 2px 10px rgba(0,0,0,.16);z-index:5}.pdf-back{min-width:88px;min-height:46px;border:0;border-radius:12px;background:#fff;color:#123B63;font:inherit;font-weight:800;display:flex;align-items:center;justify-content:center;gap:5px;cursor:pointer}.pdf-back i{font-size:22px}.pdf-title{min-width:0;flex:1}.pdf-title strong{display:block;font-size:15px;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.pdf-title span{display:block;font-size:11px;color:#dbe9f4;margin-top:2px}.pdf-frame{border:0;width:100%;flex:1;min-height:0;background:#fff}.pdf-error{display:none;flex:1;align-items:center;justify-content:center;padding:24px;text-align:center;color:#17263A}.pdf-error a{display:inline-flex;min-height:48px;align-items:center;padding:0 18px;border-radius:12px;background:#123B63;color:#fff;text-decoration:none;font-weight:800;margin-top:12px}@media(max-width:480px){.pdf-top{min-height:54px}.pdf-back{min-width:82px}.pdf-title strong{font-size:14px}}
+html[data-theme="dark"] body{background:#071426}html[data-theme="dark"] .pdf-error{color:#f7f9fc}
+</style>
+</head>
+<body>
+<div class="pdf-viewer">
+<header class="pdf-top">
+<button class="pdf-back" id="pdf-back" type="button" aria-label="資料本棚へ戻る"><i class="ti ti-arrow-left"></i><span>戻る</span></button>
+<div class="pdf-title"><strong id="pdf-title">PDF表示</strong><span>資料本棚のPDF</span></div>
+</header>
+<iframe class="pdf-frame" id="pdf-frame" title="PDF資料"></iframe>
+<div class="pdf-error" id="pdf-error"><div><strong>PDFを表示できませんでした。</strong><br><a id="pdf-direct" href="#">PDFを直接開く</a></div></div>
+</div>
+<script src="assets/js/bookshelf.js?v=191"></script>
+<script>
+(function(){
+'use strict';
+var params=new URLSearchParams(location.search);var id=params.get('book');var docs=window.BOOKSHELF_DOCS||[];var doc=null;var i;
+for(i=0;i<docs.length;i++){if(docs[i].id===id){doc=docs[i];break;}}
+function back(){location.href='shiryo.html';}
+document.getElementById('pdf-back').addEventListener('click',back);
+if(!doc){document.getElementById('pdf-frame').style.display='none';document.getElementById('pdf-error').style.display='flex';return;}
+document.getElementById('pdf-title').textContent=doc.title;document.title=doc.title+'｜PDF表示';document.getElementById('pdf-frame').src=doc.file;document.getElementById('pdf-direct').href=doc.file;
+})();
+</script>
+<script src="assets/js/navigation.js"></script>
+</body>
+</html>
