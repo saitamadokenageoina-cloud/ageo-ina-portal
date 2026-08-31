@@ -1,5 +1,5 @@
 // Service Worker - キャッシュ制御
-const CACHE_VERSION = 'v20260831-186';
+const CACHE_VERSION = 'v20260831-187';
 const CACHE_NAME = 'ageo-ina-portal-' + CACHE_VERSION;
 const BASE = '/ageo-ina-portal/';
 const PDFJS_CDN = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/';
@@ -14,7 +14,7 @@ const CACHE_FILES = [
   BASE + 'assets/illustrations/home-3d/kyosai-guide-v180.jpg', BASE + 'assets/illustrations/home-3d/health-v180.jpg', BASE + 'assets/illustrations/home-3d/guide-v180.jpg', BASE + 'assets/illustrations/home-3d/calc-v180.jpg', BASE + 'assets/illustrations/home-3d/permit-v180.jpg', BASE + 'assets/illustrations/home-3d/hitori-v180.jpg',
   BASE + 'assets/illustrations/home-3d/training-v180.jpg', BASE + 'assets/illustrations/home-3d/merit-v180.jpg', BASE + 'assets/illustrations/home-3d/documents-v180.jpg', BASE + 'assets/illustrations/home-3d/youtube-v180.jpg', BASE + 'assets/illustrations/home-3d/disaster-v181.jpg',
   BASE + 'assets/css/print.css', BASE + 'assets/js/print-util.js', BASE + 'assets/js/navigation.js', BASE + 'assets/js/home-modern.js', BASE + 'assets/js/home-modern-legacy-v177.js', BASE + 'assets/js/book-reader-v190.js', BASE + 'assets/js/book-reader-v191.js', BASE + 'assets/js/pdfjs-loader-v191.js', BASE + 'assets/js/bookshelf-view-v191.js',
-  BASE + 'assets/js/calendar-config.js', BASE + 'assets/js/calendar-upcoming.js', BASE + 'assets/js/guild-config.js', BASE + 'assets/js/guild-canonical-v198.js', BASE + 'assets/js/bookshelf.js', BASE + 'assets/js/meishi.js', BASE + 'assets/js/qrcode-generator.js', BASE + 'assets/css/meishi.css',
+  BASE + 'assets/js/calendar-config.js', BASE + 'assets/js/calendar-upcoming.js', BASE + 'assets/js/guild-config.js', BASE + 'assets/js/guild-canonical-v199.js', BASE + 'assets/js/bookshelf.js', BASE + 'assets/js/meishi.js', BASE + 'assets/js/qrcode-generator.js', BASE + 'assets/css/meishi.css',
   BASE + 'assets/css/tabler-icons.min.css', BASE + 'assets/fonts/tabler-icons/tabler-icons.woff2',
   BASE + 'assets/icons/app-icon-192.png', BASE + 'assets/icons/app-icon-512.png', BASE + 'assets/icons/apple-touch-icon.png', BASE + 'assets/icons/favicon-16.png', BASE + 'assets/icons/favicon-32.png',
   BASE + 'assets/illustrations/guild-all.svg', BASE + 'assets/illustrations/guild-work.svg', BASE + 'assets/illustrations/guild-tools.svg', BASE + 'assets/illustrations/guild-consult.svg',

@@ -14,7 +14,7 @@
     if (document.querySelector('link[data-theme-polish]')) return;
     var link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = 'assets/css/theme-polish.css?v=186';
+    link.href = 'assets/css/theme-polish.css?v=187';
     link.setAttribute('data-theme-polish','true');
     document.head.appendChild(link);
   }
@@ -24,27 +24,27 @@
     if (!document.querySelector('link[data-home-modern]')) {
       var link = document.createElement('link');
       link.rel = 'stylesheet';
-      link.href = 'assets/css/home-modern.css?v=186';
+      link.href = 'assets/css/home-modern.css?v=187';
       link.setAttribute('data-home-modern','true');
       document.head.appendChild(link);
     }
     if (!document.querySelector('link[data-home-card-art]')) {
       var art = document.createElement('link');
       art.rel = 'stylesheet';
-      art.href = 'assets/css/home-card-art.css?v=186';
+      art.href = 'assets/css/home-card-art.css?v=187';
       art.setAttribute('data-home-card-art','true');
       document.head.appendChild(art);
     }
     if (!document.querySelector('link[data-home-alignment-fix]')) {
       var alignment = document.createElement('link');
       alignment.rel = 'stylesheet';
-      alignment.href = 'assets/css/home-alignment-fix.css?v=186';
+      alignment.href = 'assets/css/home-alignment-fix.css?v=187';
       alignment.setAttribute('data-home-alignment-fix','true');
       document.head.appendChild(alignment);
     }
     if (!document.querySelector('script[data-home-modern]')) {
       var script = document.createElement('script');
-      script.src = 'assets/js/home-modern.js?v=186';
+      script.src = 'assets/js/home-modern.js?v=187';
       script.setAttribute('data-home-modern','true');
       document.body.appendChild(script);
     }
@@ -76,39 +76,6 @@
     style.id = id;
     style.textContent = css;
     document.head.appendChild(style);
-  }
-
-  function enhanceGuildMobile(){
-    if (currentFile() !== 'guild.html') return;
-    injectPageStyle('guild-mobile-fix',[
-      '.t-btn-copy strong,.t-btn-copy small{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;word-break:keep-all!important;overflow-wrap:normal!important}',
-      '.t-btn{overflow:visible!important}',
-      '@media(max-width:430px){.category-filter{padding:12px!important}.tab-row{grid-template-columns:1fr!important;gap:9px!important}.t-btn{grid-template-columns:42px minmax(0,1fr) 24px!important;min-height:72px!important;padding:10px 12px!important}.t-btn-icon{width:42px!important;height:42px!important}.t-btn-copy strong{font-size:15px!important;line-height:1.35!important}.t-btn-copy small{font-size:12px!important;line-height:1.45!important}.t-btn-check{font-size:20px!important}.search-row{grid-template-columns:1fr!important}}',
-      'html[data-theme="dark"] .t-btn{background:#10213A!important;border-color:#40536B!important;color:#E8EEF7!important}',
-      'html[data-theme="dark"] .t-btn .t-btn-copy strong{color:#F7FAFC!important}',
-      'html[data-theme="dark"] .t-btn .t-btn-copy small{color:#C9D6E5!important}',
-      'html[data-theme="dark"] .t-btn.active{background:#17324D!important;border-color:#71B7E6!important;box-shadow:0 0 0 2px rgba(113,183,230,.2)!important}',
-      'html[data-theme="dark"] .t-btn[data-category="jinzai"].active{background:#3A241A!important;border-color:#FF986B!important}',
-      'html[data-theme="dark"] .t-btn[data-category="shizai"].active{background:#153126!important;border-color:#57C48C!important}',
-      'html[data-theme="dark"] .t-btn[data-category="soudan"].active{background:#2B2040!important;border-color:#B98AFF!important}',
-      'html[data-theme="dark"] .t-btn-check{color:#DDEEFF!important}'
-    ].join('\n'));
-
-    var copyMap = {
-      jinzai:['仕事・応援','応援を頼む・仕事を探す'],
-      shizai:['資材・道具','探す・譲る'],
-      soudan:['困りごと相談','仕事・制度を相談する']
-    };
-    var buttons = document.querySelectorAll('.t-btn[data-category]');
-    var i;
-    for (i = 0; i < buttons.length; i += 1) {
-      var cat = buttons[i].getAttribute('data-category');
-      if (!copyMap[cat]) continue;
-      var strong = buttons[i].querySelector('.t-btn-copy strong');
-      var small = buttons[i].querySelector('.t-btn-copy small');
-      if (strong) strong.textContent = copyMap[cat][0];
-      if (small) small.textContent = copyMap[cat][1];
-    }
   }
 
   function enhanceKyosaiCalcTabs(){
@@ -355,7 +322,6 @@
     injectThemePolishStylesheet();
     injectDisasterHomeCard();
     injectHomeModernAssets();
-    enhanceGuildMobile();
     enhanceKyosaiCalcTabs();
     injectContactRail();
     injectThemeToggle();

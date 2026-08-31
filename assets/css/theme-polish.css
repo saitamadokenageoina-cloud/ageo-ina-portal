@@ -5,9 +5,8 @@ html[data-theme="light"] .app-manual{background:linear-gradient(180deg,#F8FBFE 0
 html[data-theme="light"] .app-manual::before,html[data-theme="light"] .app-manual::after{display:none!important;}html[data-theme="light"] .app-manual h2{color:#162338!important;}html[data-theme="light"] .manual-panel,html[data-theme="light"] .manual-faq details{background:#FFFFFF!important;}
 html[data-theme="light"] .briefing{background:linear-gradient(145deg,#EEF7FC,#F8FCFF)!important;color:#162338!important;border-color:#C7DFEC!important;}html[data-theme="light"] .briefing .section-title,html[data-theme="light"] .section-title{color:#162338!important;}html[data-theme="light"] .briefing .section-lead,html[data-theme="light"] .section-lead{color:#526173!important;}html[data-theme="light"] .briefing-text{background:#FFFFFF!important;color:#26364A!important;border:1px solid #D7E3EC!important;}html[data-theme="light"] .copy-btn{background:#1769AA!important;color:#FFFFFF!important;border-color:#1769AA!important;}html[data-theme="light"] .timer-box{background:#F1F6FA!important;border:1px solid #D7E1EA!important;}html[data-theme="light"] .timer-label{color:#526173!important;}html[data-theme="light"] .timer-val{color:#162338!important;}html[data-theme="light"] .timer-select{background:#FFFFFF!important;color:#162338!important;border:1px solid #CCD8E3!important;}html[data-theme="light"] .timer-btn{background:#E8612A!important;color:#FFFFFF!important;}html[data-theme="light"] .section-card{background:#FFFFFF!important;color:#111827!important;border-color:#DCE3EB!important;}
 
-/* DOKENギルド: 説明は一度だけ、カテゴリ選択はアプリ品質へ */
-body:has(.guild-hero) .guild-hero-copy{font-size:0!important;}
-body:has(.guild-hero) .guild-hero-copy::after{content:'人手、仕事、資材・道具を支部の仲間でつなぎます。';font-size:15px;font-weight:700;line-height:1.7;}
+/* DOKENギルド: HTMLの実テキストを唯一の表示・読み上げ名とする */
+body:has(.guild-hero) .guild-hero-copy{font-size:15px!important;font-weight:700;line-height:1.7;}
 body:has(.guild-hero) .category-filter{padding:16px!important;border:1px solid #E3E9EF!important;border-radius:22px!important;background:#fff!important;box-shadow:0 8px 26px rgba(18,38,63,.07)!important;overflow:hidden;}
 body:has(.guild-hero) .category-filter-title{font-size:18px!important;font-weight:900!important;letter-spacing:-.01em;}
 body:has(.guild-hero) .category-filter-help{display:none!important;}
@@ -16,26 +15,14 @@ body:has(.guild-hero) .t-btn{position:relative!important;display:grid!important;
 body:has(.guild-hero) .t-btn:active{transform:scale(.985)!important;}
 body:has(.guild-hero) .t-btn-icon{display:flex!important;align-items:center!important;justify-content:center!important;width:50px!important;height:50px!important;border-radius:16px!important;font-size:25px!important;border:1px solid rgba(23,38,58,.05)!important;box-shadow:none!important;}
 body:has(.guild-hero) .t-btn-copy{min-width:0!important;}
-body:has(.guild-hero) .t-btn-copy strong{display:block!important;color:#17263A!important;font-size:0!important;font-weight:900!important;line-height:1.35!important;}
-body:has(.guild-hero) .t-btn-copy small{display:block!important;margin-top:4px!important;color:#667487!important;font-size:0!important;font-weight:700!important;line-height:1.45!important;}
-body:has(.guild-hero) .t-btn[data-category="all"] .t-btn-copy strong{font-size:15px!important;}
-body:has(.guild-hero) .t-btn[data-category="all"] .t-btn-copy small{font-size:11px!important;}
-body:has(.guild-hero) .t-btn[data-category="jinzai"] .t-btn-copy strong::after{content:'人手・仕事';font-size:15px;}
-body:has(.guild-hero) .t-btn[data-category="shizai"] .t-btn-copy strong::after{content:'資材・道具';font-size:15px;}
-body:has(.guild-hero) .t-btn[data-category="soudan"] .t-btn-copy strong::after{content:'相談・情報';font-size:15px;}
-body:has(.guild-hero) .t-btn[data-category="jinzai"] .t-btn-copy small::after{content:'応援募集・仕事依頼';font-size:11px;}
-body:has(.guild-hero) .t-btn[data-category="shizai"] .t-btn-copy small::after{content:'譲る・探す';font-size:11px;}
-body:has(.guild-hero) .t-btn[data-category="soudan"] .t-btn-copy small::after{content:'困りごとを共有';font-size:11px;}
+body:has(.guild-hero) .t-btn-copy strong{display:block!important;color:#17263A!important;font-size:15px!important;font-weight:900!important;line-height:1.35!important;}
+body:has(.guild-hero) .t-btn-copy small{display:block!important;margin-top:4px!important;color:#667487!important;font-size:11px!important;font-weight:700!important;line-height:1.45!important;}
 body:has(.guild-hero) .t-btn-check{position:absolute!important;right:9px!important;top:9px!important;font-size:18px!important;visibility:hidden!important;}
-body:has(.guild-hero) .t-btn.active{border-color:#78A9D0!important;background:#F2F8FD!important;box-shadow:0 0 0 3px rgba(46,130,212,.10)!important;}
 body:has(.guild-hero) .t-btn.active .t-btn-check{visibility:visible!important;color:#1769AA!important;}
 body:has(.guild-hero) .t-btn[data-category="all"] .t-btn-icon{background:#EEF2F6!important;color:#405064!important;}
 body:has(.guild-hero) .t-btn[data-category="jinzai"] .t-btn-icon{background:#EAF4FD!important;color:#1769AA!important;}
 body:has(.guild-hero) .t-btn[data-category="shizai"] .t-btn-icon{background:#EAF8F0!important;color:#16764B!important;}
 body:has(.guild-hero) .t-btn[data-category="soudan"] .t-btn-icon{background:#F1ECFD!important;color:#6B4DB8!important;}
-body:has(.guild-hero) .t-btn[data-category="jinzai"].active{border-color:#65A8DC!important;background:#F0F8FE!important;}
-body:has(.guild-hero) .t-btn[data-category="shizai"].active{border-color:#69B991!important;background:#F1FBF6!important;}
-body:has(.guild-hero) .t-btn[data-category="soudan"].active{border-color:#9D84D8!important;background:#F8F5FE!important;}
 
 /* 選択カテゴリの意味をイラストで理解できるコンパクトヒーロー */
 body:has(.guild-hero) .tab-row::after{content:'すべての投稿をまとめて確認';grid-column:1/-1;display:flex;align-items:flex-end;min-height:164px;margin-top:4px;padding:18px 48% 18px 18px;border-radius:20px;background-color:#F4F8FB;background-image:url('../illustrations/guild-all.svg');background-repeat:no-repeat;background-position:right 8px center;background-size:48% auto;color:#17263A;font-size:17px;font-weight:900;line-height:1.4;box-shadow:inset 0 0 0 1px rgba(23,38,58,.05);}
@@ -66,11 +53,6 @@ html[data-theme="dark"] body:has(.guild-hero) .t-btn[data-category="all"] .t-btn
 html[data-theme="dark"] body:has(.guild-hero) .t-btn[data-category="jinzai"] .t-btn-icon{background:#123656!important;color:#72C7FF!important;border-color:#28577D!important;}
 html[data-theme="dark"] body:has(.guild-hero) .t-btn[data-category="shizai"] .t-btn-icon{background:#123B32!important;color:#65D5A5!important;border-color:#285D4C!important;}
 html[data-theme="dark"] body:has(.guild-hero) .t-btn[data-category="soudan"] .t-btn-icon{background:#30274F!important;color:#B79BFF!important;border-color:#514078!important;}
-html[data-theme="dark"] body:has(.guild-hero) .t-btn.active{background:#17324D!important;border-color:#71B7E6!important;box-shadow:0 0 0 3px rgba(113,183,230,.13)!important;}
-html[data-theme="dark"] body:has(.guild-hero) .t-btn[data-category="jinzai"].active{background:#12314B!important;border-color:#72C7FF!important;}
-html[data-theme="dark"] body:has(.guild-hero) .t-btn[data-category="shizai"].active{background:#12352C!important;border-color:#65D5A5!important;}
-html[data-theme="dark"] body:has(.guild-hero) .t-btn[data-category="soudan"].active{background:#2B2447!important;border-color:#B79BFF!important;}
-html[data-theme="dark"] body:has(.guild-hero) .t-btn.active .t-btn-check{color:#E8F4FF!important;}
 html[data-theme="dark"] body:has(.guild-hero) .tab-row::after{background-color:#13263E!important;color:#F7FAFC!important;box-shadow:inset 0 0 0 1px #314A64!important;}
 html[data-theme="dark"] body:has(.guild-hero) .tab-row:has(.t-btn[data-category="jinzai"].active)::after{background-color:#102B43!important;}
 html[data-theme="dark"] body:has(.guild-hero) .tab-row:has(.t-btn[data-category="shizai"].active)::after{background-color:#102E27!important;}
@@ -83,8 +65,11 @@ html[data-theme="dark"] .home-tools-sheet{background:#10213A!important;}html[dat
 
 @media(max-width:430px){
   body:has(.guild-hero) .category-filter{padding:14px!important;}
-  body:has(.guild-hero) .t-btn{grid-template-columns:46px minmax(0,1fr)!important;min-height:88px!important;padding:11px!important;}
-  body:has(.guild-hero) .t-btn-icon{width:46px!important;height:46px!important;border-radius:15px!important;font-size:23px!important;}
+  body:has(.guild-hero) .tab-row{grid-template-columns:1fr!important;gap:9px!important;}
+  body:has(.guild-hero) .t-btn{grid-template-columns:42px minmax(0,1fr) 24px!important;min-height:72px!important;padding:10px 12px!important;}
+  body:has(.guild-hero) .t-btn-icon{width:42px!important;height:42px!important;border-radius:14px!important;font-size:23px!important;}
+  body:has(.guild-hero) .t-btn-copy small{font-size:12px!important;}
+  body:has(.guild-hero) .t-btn-check{font-size:20px!important;}
   body:has(.guild-hero) .tab-row::after{min-height:154px;padding:16px 47% 16px 16px;background-size:47% auto;font-size:15px;}
 }
 @media(max-width:350px){
