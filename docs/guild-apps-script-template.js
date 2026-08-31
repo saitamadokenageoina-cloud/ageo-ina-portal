@@ -30,7 +30,8 @@ const PURPOSES = ['seek_help', 'offer_help', 'request_work', 'offer_work', 'give
 const PURPOSE_CATEGORY = { seek_help:'jinzai', offer_help:'jinzai', request_work:'jinzai', offer_work:'jinzai', give_material:'shizai', seek_material:'shizai', share:'soudan' };
 const PURPOSE_LABELS = { seek_help:'応援に来てほしい', offer_help:'応援に行ける', request_work:'仕事を依頼したい', offer_work:'仕事を請けられる', give_material:'資材・道具を譲りたい', seek_material:'資材・道具を探している', share:'相談・情報共有' };
 const WORKFLOWS = ['unhandled', 'contacting', 'referred', 'matched', 'failed', 'completed'];
-const EXPIRY_OPTIONS = ['24h', '48h', '3d', '7d', '14d', 'workdate'];
+const EXPIRY_OPTIONS = ['24h', '48h', '3d', '7d', '14d', '1m', '2m', '3m', '6m', '1y', 'workdate', 'unlimited'];
+const EXPIRY_COMPATIBILITY_PREFIX = '__dx:';
 
 function doPost(e) {
   let body;
@@ -132,6 +133,42 @@ function doPost(e) {
     return json_({ ok: true, post: publicPost_(savedPost) });
   }
 
+  if (action === 'updatePost') {
+    if (!validPin_(body.adminPin, 'ADMIN_PIN')) {
+      return json_({ ok: false, error: 'invalid admin pin' });
+    }
+    const postId = positiveInteger_(body.postId);
+    const changes = body.changes;
+    if (!postId || !changes || typeof changes !== 'object') {
+      return json_({ ok: false, error: 'invalid post update' });
+    }
+    const updated = withLock_(function () {
+      const posts = readPosts_(sheet);
+      const index = posts.findIndex(post => String(post.id) === String(postId));
+      if (index === -1) return false;
+      const current = posts[index];
+      const candidate = Object.assign({}, current, changes, {
+        id: current.id,
+        clientId: current.clientId,
+        comments: current.comments,
+        status: current.status,
+        workflow: current.workflow,
+        time: current.time,
+        createdAt: current.createdAt,
+        lastReviewedAt: current.lastReviewedAt
+      });
+      if (!safeText_(candidate.name, 40) || !isPhone_(candidate.tel)) return false;
+      const normalized = normalizePost_(candidate, true);
+      if (!normalized) return false;
+      normalized.expiresAt = calculateExpiry_(normalized.expiryOption, normalized.workDate);
+      normalized.lastReviewedAt = new Date().toISOString();
+      posts[index] = normalized;
+      writePosts_(sheet, posts);
+      return true;
+    });
+    return json_({ ok: updated, error: updated ? '' : 'post not found or invalid update' });
+  }
+
   if (action === 'comment') {
     const postId = positiveInteger_(body.postId);
     const comment = normalizeComment_(body.comment);
@@ -200,6 +237,7 @@ function doPost(e) {
       target.lastReviewedAt = new Date().toISOString();
       if (decision === 'continue') {
         target.status = 'open';
+        if (['matched', 'failed', 'completed'].indexOf(target.workflow) !== -1) target.workflow = 'unhandled';
         target.expiryOption = '7d';
         target.expiresAt = new Date(Date.now() + 7 * 86400000).toISOString();
       } else {
@@ -311,7 +349,7 @@ function publicPost_(post) {
 
 function normalizePost_(post, preserveServerFields) {
   if (!post || typeof post !== 'object' || !CATEGORIES[post.cat]) return null;
-  const body = redactContact_(safeText_(post.body, 1200));
+  const body = redactContact_(safeMultilineText_(post.body, 1200));
   if (!body) return null;
   const telRaw = safeText_(post.tel, 40);
   const tel = isPhone_(telRaw) ? telRaw : '';
@@ -322,7 +360,14 @@ function normalizePost_(post, preserveServerFields) {
   const fallbackPurpose = post.cat === 'jinzai' ? 'seek_help' : post.cat === 'shizai' ? 'give_material' : 'share';
   const purpose = PURPOSES.indexOf(post.purpose) !== -1 && PURPOSE_CATEGORY[post.purpose] === post.cat ? post.purpose : fallbackPurpose;
   const workflow = WORKFLOWS.indexOf(post.workflow) !== -1 ? post.workflow : 'unhandled';
-  const expiryOption = EXPIRY_OPTIONS.indexOf(post.expiryOption) !== -1 ? post.expiryOption : (preserveServerFields ? 'legacy' : '7d');
+  const rawTags = Array.isArray(post.tags) ? post.tags.slice(0, 8).map(tag => safeText_(tag, 30)).filter(Boolean) : [];
+  const expiryCompatibility = parseExpiryCompatibilityTag_(rawTags, post.clientId);
+  let expiryOption = EXPIRY_OPTIONS.indexOf(post.expiryOption) !== -1 ? post.expiryOption : (preserveServerFields ? 'legacy' : '7d');
+  let expiresAt = preserveServerFields ? safeIsoDate_(post.expiresAt) : calculateExpiry_(expiryOption, post.workDate);
+  if (expiryCompatibility && (expiryOption === 'legacy' || (expiryOption === '7d' && !post.lastReviewedAt))) {
+    expiryOption = expiryCompatibility.option;
+    expiresAt = expiryCompatibility.option === 'unlimited' || !expiryCompatibility.stamp ? '' : new Date(expiryCompatibility.stamp).toISOString();
+  }
   const imageData = safeImageData_(post.imageData);
   const normalized = {
     id: preserveServerFields ? positiveInteger_(post.id) : 1,
@@ -333,7 +378,7 @@ function normalizePost_(post, preserveServerFields) {
     area: safeText_(post.area, 80),
     time: safeText_(post.time, 40) || '日時不明',
     body: body,
-    tags: Array.isArray(post.tags) ? post.tags.slice(0, 8).map(tag => safeText_(tag, 30)).filter(Boolean) : [],
+    tags: rawTags.filter(tag => tag.indexOf(EXPIRY_COMPATIBILITY_PREFIX) !== 0),
     tel: tel,
     comments: Array.isArray(post.comments) ? post.comments.map(normalizeComment_).filter(Boolean).slice(-100) : [],
     status: status,
@@ -346,7 +391,7 @@ function normalizePost_(post, preserveServerFields) {
     purpose: purpose,
     workflow: workflow,
     expiryOption: expiryOption,
-    expiresAt: preserveServerFields ? safeIsoDate_(post.expiresAt) : calculateExpiry_(expiryOption, post.workDate),
+    expiresAt: expiresAt,
     imageData: imageData,
     createdAt: preserveServerFields ? safeText_(post.createdAt, 40) : '',
     lastReviewedAt: preserveServerFields ? safeIsoDate_(post.lastReviewedAt) : ''
@@ -373,16 +418,37 @@ function safeIsoDate_(value) {
   return text && !isNaN(new Date(text).getTime()) ? new Date(text).toISOString() : '';
 }
 
-function calculateExpiry_(option, workDate) {
-  const now = new Date();
+function addCalendarMonths_(date, months) {
+  const result = new Date(date.getTime());
+  const day = result.getDate();
+  result.setDate(1);
+  result.setMonth(result.getMonth() + months);
+  const lastDay = new Date(result.getFullYear(), result.getMonth() + 1, 0).getDate();
+  result.setDate(Math.min(day, lastDay));
+  return result;
+}
+
+function calculateExpiry_(option, workDate, baseDate) {
+  const now = baseDate ? new Date(baseDate) : new Date();
   const days = { '24h': 1, '48h': 2, '3d': 3, '7d': 7, '14d': 14 };
+  const months = { '1m': 1, '2m': 2, '3m': 3, '6m': 6, '1y': 12 };
+  if (option === 'unlimited') return '';
   if (days[option]) return new Date(now.getTime() + days[option] * 86400000).toISOString();
   const dateText = safeText_(workDate, 20);
   if (option === 'workdate' && /^\d{4}-\d{2}-\d{2}$/.test(dateText)) {
     const end = new Date(dateText + 'T23:59:59+09:00');
     if (!isNaN(end.getTime()) && end.getTime() >= now.getTime()) return end.toISOString();
   }
+  if (months[option]) return addCalendarMonths_(now, months[option]).toISOString();
   return new Date(now.getTime() + 7 * 86400000).toISOString();
+}
+
+function parseExpiryCompatibilityTag_(tags, clientId) {
+  const sources = (Array.isArray(tags) ? tags : []).concat(String(clientId || '').split('|'));
+  const tag = sources.find(value => /^__dx:(1m|2m|3m|6m|1y|unlimited):\d{1,13}$/.test(String(value || '')));
+  if (!tag) return null;
+  const parts = tag.split(':');
+  return { option: parts[1], stamp: Number(parts[2]) || 0 };
 }
 
 function normalizeComment_(comment) {
@@ -405,6 +471,19 @@ function redactContact_(value) {
 function safeText_(value, maxLength) {
   return String(value == null ? '' : value)
     .replace(/[\u0000-\u001F\u007F]/g, ' ')
+    .trim()
+    .slice(0, maxLength);
+}
+
+function safeMultilineText_(value, maxLength) {
+  return String(value == null ? '' : value)
+    .replace(/\r\n?/g, '\n')
+    .replace(/\u2028/g, '\n')
+    .replace(/\u2029/g, '\n\n')
+    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, ' ')
+    .replace(/[ \t]+\n/g, '\n')
+    .replace(/\n[ \t]+/g, '\n')
+    .replace(/\n{3,}/g, '\n\n')
     .trim()
     .slice(0, maxLength);
 }
