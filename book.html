@@ -12,7 +12,7 @@
 <body>
 <div class="reader" id="reader">
   <header class="reader-top">
-    <button class="reader-back" id="back-btn" aria-label="資料本棚へ戻る"><i class="ti ti-arrow-left"></i><span>本棚</span></button>
+    <button class="reader-back" id="back-btn" aria-label="資料本棚へ戻る"><i class="ti ti-arrow-left"></i><span>戻る</span></button>
     <div class="reader-title"><strong id="book-title">デジタルブック</strong><span id="book-sub">資料を開いています…</span></div>
     <div class="top-actions">
       <button class="top-action" data-open="toc" aria-label="目次"><i class="ti ti-list-tree"></i><span class="top-label">目次</span></button>
@@ -59,6 +59,13 @@
 <script src="assets/js/bookshelf.js?v=191"></script>
 <script src="assets/js/pdfjs-loader-v191.js?v=191"></script>
 <script src="assets/js/book-reader-v191.js?v=191"></script>
+<script>
+(function(){
+'use strict';
+function openPdfViewer(e){var id=new URLSearchParams(location.search).get('book');if(!id)return;e.preventDefault();location.href='pdf_viewer.html?book='+encodeURIComponent(id);}
+var pdf=document.getElementById('pdf-link');var errorPdf=document.getElementById('error-pdf');if(pdf)pdf.addEventListener('click',openPdfViewer);if(errorPdf)errorPdf.addEventListener('click',openPdfViewer);
+})();
+</script>
 <script src="assets/js/navigation.js"></script>
 </body>
 </html>
