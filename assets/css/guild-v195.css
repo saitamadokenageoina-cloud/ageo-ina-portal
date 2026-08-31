@@ -12,3 +12,9 @@ html[data-theme="dark"] body:has(.guild-hero) .t-btn.active{background:#237DB8!i
 html[data-theme="dark"] body:has(.guild-hero) .t-btn[data-category="jinzai"].active{background:#B95025!important;}
 html[data-theme="dark"] body:has(.guild-hero) .t-btn[data-category="shizai"].active{background:#176D47!important;}
 html[data-theme="dark"] body:has(.guild-hero) .t-btn[data-category="soudan"].active{background:#6746A6!important;}
+
+/* v202: 「すべて」は上のカテゴリボタンと意味が重複するため、追加の案内カードを表示しない。 */
+body:has(.guild-hero) .tab-row::after{display:none!important;}
+body:has(.guild-hero) .tab-row:has(.t-btn[data-category="jinzai"].active)::after,
+body:has(.guild-hero) .tab-row:has(.t-btn[data-category="shizai"].active)::after,
+body:has(.guild-hero) .tab-row:has(.t-btn[data-category="soudan"].active)::after{display:flex!important;}
