@@ -1,6 +1,6 @@
 window.DOKEN_GUILD_CONFIG={apiUrl:'https://script.google.com/macros/s/AKfycbxSyE47dgEqRzugYnufktKxlCx5KMrU_DNDovymGrDX4XPwRhPGrxZbGMpr885WHO2O/exec',notifyEmail:'ageoina@saitama-doken.or.jp'};
 
-/* DOKEN Guild v199 + readable-template v200 bootstrap.
+/* DOKEN Guild v199 + readable-template v200 + admin-update compat v201 bootstrap.
  * The page's built-in submitPost remains the canonical new-post implementation.
  * Enhancements load only after window.load, after guild.html has defined its core functions.
  */
@@ -25,6 +25,12 @@ window.DOKEN_GUILD_CONFIG={apiUrl:'https://script.google.com/macros/s/AKfycbxSyE
       script=document.createElement('script');
       script.id='guild-template-v200';
       script.src='assets/js/guild-template-v200.js?v=187';
+      document.body.appendChild(script);
+    }
+    if(!document.getElementById('guild-update-compat-v201')){
+      script=document.createElement('script');
+      script.id='guild-update-compat-v201';
+      script.src='assets/js/guild-update-compat-v201.js?v=187';
       document.body.appendChild(script);
     }
   }

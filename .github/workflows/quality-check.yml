@@ -26,3 +26,5 @@ jobs:
         run: node scripts/guild-regression-check.js
       - name: Run DOKEN Guild template paragraph check
         run: node scripts/guild-template-check.js
+      - name: Run DOKEN Guild admin update compatibility check
+        run: node scripts/guild-update-compat-check.js
