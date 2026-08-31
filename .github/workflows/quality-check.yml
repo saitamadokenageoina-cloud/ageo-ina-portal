@@ -28,3 +28,5 @@ jobs:
         run: node scripts/guild-template-check.js
       - name: Run DOKEN Guild admin update compatibility check
         run: node scripts/guild-update-compat-check.js
+      - name: Run portal contrast hotfix check
+        run: node scripts/contrast-hotfix-check.js
