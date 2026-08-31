@@ -19,6 +19,6 @@ body:has(.guild-hero) .tab-row:has(.t-btn[data-category="jinzai"].active)::after
 body:has(.guild-hero) .tab-row:has(.t-btn[data-category="shizai"].active)::after,
 body:has(.guild-hero) .tab-row:has(.t-btn[data-category="soudan"].active)::after{display:flex!important;}
 
-/* v203: スマホで投稿一覧へ最短で到達できるよう、集計と検索UIは画面上から外す。JS互換のためDOMは保持する。 */
-body:has(.guild-hero) .premium-summary,
-body:has(.guild-hero) .search-panel{display:none!important;}
+/* v204: 集計カードと検索パネルを確実に画面から外す。:has() に依存せず、実DOMを直接指定する。 */
+.premium-summary,
+.search-panel{display:none!important;}
