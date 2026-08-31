@@ -12,19 +12,19 @@ window.DOKEN_GUILD_CONFIG={apiUrl:'https://script.google.com/macros/s/AKfycbxSyE
       link=document.createElement('link');
       link.id='guild-v195-css';
       link.rel='stylesheet';
-      link.href='assets/css/guild-v195.css?v=188';
+      link.href='assets/css/guild-v195.css?v=187';
       document.head.appendChild(link);
     }
     if(!document.getElementById('guild-canonical-v199')){
       script=document.createElement('script');
       script.id='guild-canonical-v199';
-      script.src='assets/js/guild-canonical-v199.js?v=188';
+      script.src='assets/js/guild-canonical-v199.js?v=187';
       document.body.appendChild(script);
     }
     if(!document.getElementById('guild-template-v200')){
       script=document.createElement('script');
       script.id='guild-template-v200';
-      script.src='assets/js/guild-template-v200.js?v=188';
+      script.src='assets/js/guild-template-v200.js?v=187';
       document.body.appendChild(script);
     }
   }
