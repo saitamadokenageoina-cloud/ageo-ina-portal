@@ -30,3 +30,5 @@ jobs:
         run: node scripts/guild-update-compat-check.js
       - name: Run portal contrast hotfix check
         run: node scripts/contrast-hotfix-check.js
+      - name: Run calculation and accessibility regression check
+        run: node scripts/calc-a11y-check.js
