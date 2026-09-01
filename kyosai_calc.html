@@ -114,7 +114,9 @@ function addDateInputs(){
   document.querySelectorAll('[data-expiry]').forEach(box=>{const p=box.dataset.expiry;box.innerHTML=`<div><label for="${p}-y">年</label><input id="${p}-y" type="number" inputmode="numeric" min="2000" max="2200" placeholder="2027"></div><div><label for="${p}-m">月末</label><input id="${p}-m" type="number" inputmode="numeric" min="1" max="12" placeholder="3"></div>`});
 }
 function setMode(mode){kyMode=mode;document.querySelectorAll('.ky-tab').forEach(b=>{const on=b.dataset.mode===mode;b.classList.toggle('active',on);b.setAttribute('aria-selected',on)});document.querySelectorAll('.ky-pane').forEach(p=>p.classList.toggle('active',p.id==='pane-'+mode));el('ky-result').classList.remove('show');el('ky-error').classList.remove('show');localStorage.setItem('doken_kyosai_mode',mode)}
-function showError(messages){el('ky-error').innerHTML='<strong>入力内容をご確認ください</strong><br>'+messages.join('<br>');el('ky-error').classList.add('show');el('ky-error').scrollIntoView({behavior:'smooth',block:'center'})}
+// エラー時は前回の試算結果を必ず隠す。隠さないと「エラー」と「前回の掛金」が同じ画面に並び、
+// 利用者が古い金額を今回の結果と誤読してしまう（印刷にも残る）。
+function showError(messages){el('ky-result').classList.remove('show');el('result-total').textContent='0円';el('result-lines').innerHTML='';lastResultText='';el('ky-error').innerHTML='<strong>入力内容をご確認ください</strong><br>'+messages.join('<br>');el('ky-error').classList.add('show');el('ky-error').scrollIntoView({behavior:'smooth',block:'center'})}
 function clearError(){el('ky-error').classList.remove('show');el('ky-error').textContent=''}
 function getRate(errors){const key=el('construction').value;if(!KY_RATES[key]){errors.push('建物の構造を選択してください。');return null}return KY_RATES[key]}
 function validWhole(id,label,errors,allowZero=true){if(!integer(id)||num(id)<(allowZero?0:1)){errors.push(label+'は'+(allowZero?'0以上':'1以上')+'の整数で入力してください。');return false}return true}

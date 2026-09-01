@@ -402,29 +402,29 @@ html[data-theme="light"] .comment-input{background:#fff;color:#1B2A3B;}
     <div class="job-fields" id="job-fields">
       <p style="font-size:12px;font-weight:700;color:var(--gray600);margin:0 0 10px;">人材募集の詳細（任意）</p>
       <div class="grid2">
-        <div class="input-group"><label>作業日</label><input type="date" id="post-work-date"></div>
-        <div class="input-group"><label>作業時間</label><input type="text" id="post-work-time" maxlength="40" placeholder="例：7時〜17時"></div>
+        <div class="input-group"><label for="post-work-date">作業日</label><input type="date" id="post-work-date"></div>
+        <div class="input-group"><label for="post-work-time">作業時間</label><input type="text" id="post-work-time" maxlength="40" placeholder="例：7時〜17時"></div>
       </div>
       <div class="grid2">
-        <div class="input-group"><label>職種</label><input type="text" id="post-trade" maxlength="40" placeholder="例：大工、左官"></div>
-        <div class="input-group"><label>必要人数</label><input type="number" id="post-people" min="1" max="99" inputmode="numeric" placeholder="例：2"></div>
+        <div class="input-group"><label for="post-trade">職種</label><input type="text" id="post-trade" maxlength="40" placeholder="例：大工、左官"></div>
+        <div class="input-group"><label for="post-people">必要人数</label><input type="number" id="post-people" min="1" max="99" inputmode="numeric" placeholder="例：2"></div>
       </div>
-      <div class="input-group"><label>条件</label><input type="text" id="post-conditions" maxlength="120" placeholder="例：経験者、単価応相談"></div>
+      <div class="input-group"><label for="post-conditions">条件</label><input type="text" id="post-conditions" maxlength="120" placeholder="例：経験者、単価応相談"></div>
     </div>
 
     <div class="grid2">
       <div class="input-group">
-        <label>地域（任意）</label>
+        <label for="post-area">地域（任意）</label>
         <input type="text" id="post-area" maxlength="80" placeholder="例：上尾市、伊奈町">
       </div>
       <div class="input-group">
-        <label>投稿者名・職種（必須）</label>
+        <label for="post-name">投稿者名・職種（必須）</label>
         <input type="text" id="post-name" maxlength="40" autocomplete="name" placeholder="例：大工 鈴木" required>
       </div>
     </div>
 
     <div class="input-group">
-      <label>連絡先電話番号（必須・非公開）</label>
+      <label for="post-tel">連絡先電話番号（必須・非公開）</label>
       <input type="tel" id="post-tel" maxlength="24" inputmode="tel" autocomplete="tel" placeholder="例：090-1234-5678" required>
     </div>
 
@@ -448,7 +448,7 @@ html[data-theme="light"] .comment-input{background:#fff;color:#1B2A3B;}
     <button class="template-action" type="button" onclick="generatePostTemplate()"><i class="ti ti-wand"></i>入力内容から文章を作る</button>
 
     <div class="input-group">
-      <label>投稿内容（必須）</label>
+      <label for="post-body">投稿内容（必須）</label>
       <textarea id="post-body" rows="5" maxlength="1200" placeholder="入力内容から文章を作ることもできます。" style="resize:none;font-size:15px;"></textarea>
     </div>
 

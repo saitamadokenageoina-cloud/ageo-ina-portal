@@ -353,8 +353,13 @@ html[data-theme="light"] .theme-toggle{background:#fff;color:#1A5FA8;border-colo
   min-height:58px;display:flex;align-items:center;justify-content:center;gap:7px;
   border-radius:16px;color:#fff;font-size:16px;font-weight:800;line-height:1;text-align:center;
 }
-.doken-contact-rail a:nth-child(1){background:#E8612A;}
-.doken-contact-rail a:nth-child(2){background:#06C755;}
+/* 下部の固定バーは白文字16px。WCAG AAの4.5:1を満たす濃さにする。
+   旧色は 電話#E8612A=3.40、LINE#06C755=2.26 で基準未満だった。
+   最も使う「電話」が読みにくいのは高齢の組合員に影響が大きいため濃色へ。
+   LINEは#06C755がブランド色だが白文字では2.26しかないため、
+   緑の印象を保ったまま濃くする（3番の地図#1A7A4Aとは明度差で区別できる）。 */
+.doken-contact-rail a:nth-child(1){background:#C9501C;} /* 電話 比4.52 */
+.doken-contact-rail a:nth-child(2){background:#04893B;} /* LINE 比4.52 */
 .doken-contact-rail a:nth-child(3){background:#1A7A4A;}
 .doken-contact-rail a:nth-child(4){background:#1B2A3B;}
 .doken-contact-rail i{font-size:21px;}

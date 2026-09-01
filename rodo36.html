@@ -141,7 +141,7 @@ html[data-theme="dark"] .status-badge.sb-over{background:#3B1515;color:#FFC3C3;}
     <p class="sec-label">対象年を選択</p>
     <div class="grid2" style="margin-bottom:14px;">
       <div class="input-group">
-        <label>対象年</label>
+        <label for="year-sel">対象年</label>
         <select id="year-sel" onchange="renderMonths()">
           <option value="2024">2024年</option>
           <option value="2025">2025年</option>
@@ -150,7 +150,7 @@ html[data-theme="dark"] .status-badge.sb-over{background:#3B1515;color:#FFC3C3;}
         </select>
       </div>
       <div class="input-group">
-        <label>雇用形態</label>
+        <label for="emp-type">雇用形態</label>
         <select id="emp-type" onchange="update()">
           <option value="ippan">一般（月45h・年360h）</option>
           <option value="tokubetsu">特別条項あり（月100h・年720h）</option>
@@ -230,33 +230,33 @@ html[data-theme="dark"] .status-badge.sb-over{background:#3B1515;color:#FFC3C3;}
     <!-- 事業場・届出情報 -->
     <p class="form-sec-title" style="margin-top:0;">▶ 事業場情報</p>
     <div class="grid2">
-      <div class="input-group"><label>事業の種類</label><input type="text" id="f-jigyoshu" placeholder="例：建築工事業"></div>
-      <div class="input-group"><label>事業の名称</label><input type="text" id="f-jigyomei" placeholder="例：〇〇建設（有）"></div>
+      <div class="input-group"><label for="f-jigyoshu">事業の種類</label><input type="text" id="f-jigyoshu" placeholder="例：建築工事業"></div>
+      <div class="input-group"><label for="f-jigyomei">事業の名称</label><input type="text" id="f-jigyomei" placeholder="例：〇〇建設（有）"></div>
     </div>
-    <div class="input-group"><label>事業の所在地（電話番号）</label><input type="text" id="f-jusho" placeholder="例：埼玉県上尾市菅谷1-1-1（TEL 048-000-0000）"></div>
+    <div class="input-group"><label for="f-jusho">事業の所在地（電話番号）</label><input type="text" id="f-jusho" placeholder="例：埼玉県上尾市菅谷1-1-1（TEL 048-000-0000）"></div>
     <div class="grid2">
-      <div class="input-group"><label>労働保険番号（14桁）</label><input type="text" id="f-rodo-bango" placeholder="00-000000-000000-000"></div>
-      <div class="input-group"><label>法人番号（任意）</label><input type="text" id="f-hojin-bango" placeholder="13桁の番号"></div>
+      <div class="input-group"><label for="f-rodo-bango">労働保険番号（14桁）</label><input type="text" id="f-rodo-bango" placeholder="00-000000-000000-000"></div>
+      <div class="input-group"><label for="f-hojin-bango">法人番号（任意）</label><input type="text" id="f-hojin-bango" placeholder="13桁の番号"></div>
     </div>
     <div class="grid2">
-      <div class="input-group"><label>常時使用する労働者数</label><input type="number" id="f-ninzu" placeholder="例：5" min="1"></div>
-      <div class="input-group"><label>対象となる労働者数</label><input type="number" id="f-kyotei-ninzu" placeholder="例：4" min="1"></div>
+      <div class="input-group"><label for="f-ninzu">常時使用する労働者数</label><input type="number" id="f-ninzu" placeholder="例：5" min="1"></div>
+      <div class="input-group"><label for="f-kyotei-ninzu">対象となる労働者数</label><input type="number" id="f-kyotei-ninzu" placeholder="例：4" min="1"></div>
     </div>
 
     <!-- 時間外労働の内容 -->
     <p class="form-sec-title">▶ 時間外労働の内容</p>
     <div class="input-group">
-      <label>時間外労働をさせる必要のある具体的事由</label>
+      <label for="f-jiyu">時間外労働をさせる必要のある具体的事由</label>
       <textarea id="f-jiyu" rows="3" placeholder="例：工期の短縮を必要とする場合、機械・設備の緊急修理、予期せぬ設計変更・追加工事への対応、年末工事完了対応など&#10;※「業務の都合」「繁忙期」など抽象的な事由は認められません"></textarea>
     </div>
-    <div class="input-group"><label>業務の種類</label><input type="text" id="f-gyomu" placeholder="例：大工工事・内装仕上げ工事・施工管理"></div>
+    <div class="input-group"><label for="f-gyomu">業務の種類</label><input type="text" id="f-gyomu" placeholder="例：大工工事・内装仕上げ工事・施工管理"></div>
     <div class="grid2">
-      <div class="input-group"><label>1日の延長時間の上限</label><input type="text" id="f-1nichi" placeholder="例：4時間"></div>
-      <div class="input-group"><label>所定労働時間（1日）</label><input type="text" id="f-shotei" placeholder="例：8時間"></div>
+      <div class="input-group"><label for="f-1nichi">1日の延長時間の上限</label><input type="text" id="f-1nichi" placeholder="例：4時間"></div>
+      <div class="input-group"><label for="f-shotei">所定労働時間（1日）</label><input type="text" id="f-shotei" placeholder="例：8時間"></div>
     </div>
     <div class="grid2">
-      <div class="input-group"><label>1か月の上限時間</label><input type="text" id="f-1tsuki" value="45時間"></div>
-      <div class="input-group"><label>1年間の上限時間</label><input type="text" id="f-1nen" value="360時間"></div>
+      <div class="input-group"><label for="f-1tsuki">1か月の上限時間</label><input type="text" id="f-1tsuki" value="45時間"></div>
+      <div class="input-group"><label for="f-1nen">1年間の上限時間</label><input type="text" id="f-1nen" value="360時間"></div>
     </div>
 
     <!-- 休日労働 -->
@@ -266,12 +266,12 @@ html[data-theme="dark"] .status-badge.sb-over{background:#3B1515;color:#FFC3C3;}
         休日労働あり（法定休日に労働させる場合）
       </label>
       <div id="kyujitsu-detail" style="display:none;margin-top:10px;">
-        <div class="input-group"><label>休日労働をさせる必要のある具体的事由</label><input type="text" id="f-kj-jiyu" placeholder="例：工期遅延の挽回、緊急の補修工事対応"></div>
+        <div class="input-group"><label for="f-kj-jiyu">休日労働をさせる必要のある具体的事由</label><input type="text" id="f-kj-jiyu" placeholder="例：工期遅延の挽回、緊急の補修工事対応"></div>
         <div class="grid2">
-          <div class="input-group"><label>業務の種類</label><input type="text" id="f-kj-gyomu" placeholder="例：大工工事"></div>
-          <div class="input-group"><label>対象労働者数</label><input type="number" id="f-kj-ninzu" placeholder="例：3" min="1"></div>
+          <div class="input-group"><label for="f-kj-gyomu">業務の種類</label><input type="text" id="f-kj-gyomu" placeholder="例：大工工事"></div>
+          <div class="input-group"><label for="f-kj-ninzu">対象労働者数</label><input type="number" id="f-kj-ninzu" placeholder="例：3" min="1"></div>
         </div>
-        <div class="input-group"><label>労働させることができる休日</label><input type="text" id="f-kj-bi" placeholder="例：毎月第2・第4土曜日（月2回以内）"></div>
+        <div class="input-group"><label for="f-kj-bi">労働させることができる休日</label><input type="text" id="f-kj-bi" placeholder="例：毎月第2・第4土曜日（月2回以内）"></div>
       </div>
     </div>
 
@@ -279,19 +279,19 @@ html[data-theme="dark"] .status-badge.sb-over{background:#3B1515;color:#FFC3C3;}
     <div id="tokubetsu-section" style="display:none;margin-top:8px;background:#FFF8E6;border-radius:var(--r12);padding:14px;border-left:4px solid var(--orange);">
       <p style="font-size:12px;font-weight:600;color:var(--orange);margin:0 0 10px;">⚠️ 特別条項（臨時的に限度時間を超えて労働させる場合のみ）</p>
       <div class="input-group">
-        <label>臨時的に限度時間を超えて労働させる必要のある具体的事由</label>
+        <label for="f-toku-jiyu">臨時的に限度時間を超えて労働させる必要のある具体的事由</label>
         <textarea id="f-toku-jiyu" rows="2" placeholder="例：大規模な設計変更・工法変更に伴う追加工事、自然災害による緊急補修工事、官公庁の検査・引渡し対応&#10;※恒常的な長時間労働を招く事由は不可"></textarea>
       </div>
       <div class="grid2">
-        <div class="input-group"><label>1か月の上限時間（特別条項）</label><input type="text" id="f-toku-tsuki" value="100時間未満"></div>
-        <div class="input-group"><label>1年間の上限時間（特別条項）</label><input type="text" id="f-toku-nen" value="720時間"></div>
+        <div class="input-group"><label for="f-toku-tsuki">1か月の上限時間（特別条項）</label><input type="text" id="f-toku-tsuki" value="100時間未満"></div>
+        <div class="input-group"><label for="f-toku-nen">1年間の上限時間（特別条項）</label><input type="text" id="f-toku-nen" value="720時間"></div>
       </div>
       <div class="grid2">
-        <div class="input-group"><label>特別条項を適用できる回数（年）</label><input type="text" id="f-toku-kaisu" value="6回以内"></div>
-        <div class="input-group"><label>限度時間超の割増賃金率（%）</label><input type="number" id="f-warimashi" value="25" min="25"></div>
+        <div class="input-group"><label for="f-toku-kaisu">特別条項を適用できる回数（年）</label><input type="text" id="f-toku-kaisu" value="6回以内"></div>
+        <div class="input-group"><label for="f-warimashi">限度時間超の割増賃金率（%）</label><input type="number" id="f-warimashi" value="25" min="25"></div>
       </div>
       <div class="input-group">
-        <label>健康及び福祉を確保するための措置</label>
+        <label for="f-fukushi">健康及び福祉を確保するための措置</label>
         <select id="f-fukushi">
           <option value="対象労働者への医師による面接指導">対象労働者への医師による面接指導</option>
           <option value="深夜業の回数の制限">深夜業の回数の制限</option>
@@ -305,24 +305,24 @@ html[data-theme="dark"] .status-badge.sb-over{background:#3B1515;color:#FFC3C3;}
     <!-- 協定・届出情報 -->
     <p class="form-sec-title">▶ 協定・届出情報</p>
     <div class="grid2">
-      <div class="input-group"><label>協定の締結年月日</label><input type="date" id="f-teiketsu"></div>
-      <div class="input-group"><label>届出年月日（提出日）</label><input type="date" id="f-todoke"></div>
+      <div class="input-group"><label for="f-teiketsu">協定の締結年月日</label><input type="date" id="f-teiketsu"></div>
+      <div class="input-group"><label for="f-todoke">届出年月日（提出日）</label><input type="date" id="f-todoke"></div>
     </div>
-    <div class="input-group"><label>協定の有効期間</label><input type="text" id="f-yuko" value="1年間（締結日の翌日から1年）"></div>
-    <div class="input-group"><label>提出先 労働基準監督署</label><input type="text" id="f-roukisho" placeholder="例：大宮労働基準監督署長"></div>
+    <div class="input-group"><label for="f-yuko">協定の有効期間</label><input type="text" id="f-yuko" value="1年間（締結日の翌日から1年）"></div>
+    <div class="input-group"><label for="f-roukisho">提出先 労働基準監督署</label><input type="text" id="f-roukisho" placeholder="例：大宮労働基準監督署長"></div>
 
     <!-- 署名情報 -->
     <p class="form-sec-title">▶ 署名・押印（協定書兼用の場合は必要）</p>
     <div class="grid2">
-      <div class="input-group"><label>使用者 職名</label><input type="text" id="f-shiyosha-shoku" placeholder="例：代表取締役"></div>
-      <div class="input-group"><label>使用者 氏名</label><input type="text" id="f-shiyosha-name" placeholder="例：埼玉 太郎"></div>
+      <div class="input-group"><label for="f-shiyosha-shoku">使用者 職名</label><input type="text" id="f-shiyosha-shoku" placeholder="例：代表取締役"></div>
+      <div class="input-group"><label for="f-shiyosha-name">使用者 氏名</label><input type="text" id="f-shiyosha-name" placeholder="例：埼玉 太郎"></div>
     </div>
     <div class="grid2">
-      <div class="input-group"><label>労働者代表 職名</label><input type="text" id="f-daihyo-shoku" placeholder="例：大工（班長）"></div>
-      <div class="input-group"><label>労働者代表 氏名</label><input type="text" id="f-daihyo-name" placeholder="例：建設 花子"></div>
+      <div class="input-group"><label for="f-daihyo-shoku">労働者代表 職名</label><input type="text" id="f-daihyo-shoku" placeholder="例：大工（班長）"></div>
+      <div class="input-group"><label for="f-daihyo-name">労働者代表 氏名</label><input type="text" id="f-daihyo-name" placeholder="例：建設 花子"></div>
     </div>
     <div class="input-group">
-      <label>労働者代表の選出方法</label>
+      <label for="f-daihyo-method">労働者代表の選出方法</label>
       <select id="f-daihyo-method">
         <option value="投票による選出">投票による選出</option>
         <option value="挙手による選出">挙手による選出</option>
@@ -351,7 +351,7 @@ function renderMonths(){
   const grid = document.getElementById('month-grid');
   grid.innerHTML = MONTHS.map((m,i)=>`
     <div class="month-cell" id="mc-${i}">
-      <label>${m}</label>
+      <label for="h-${i}">${m}</label>
       <input type="number" id="h-${i}" min="0" max="744" value="${hours[i]||''}" placeholder="0"
         oninput="hours[${i}]=parseFloat(this.value)||0;update()" onchange="update()">
     </div>`).join('');

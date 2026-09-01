@@ -88,7 +88,7 @@
       <div class="set-row">
         <div><p class="set-label">表示する予報の対象日</p><p class="set-sub">前日から翌日の予報で早めに知らせることもできます</p></div>
         <div class="set-ctl">
-          <select id="s-dayMode">
+          <select id="s-dayMode" aria-label="表示する予報の対象日">
             <option value="today">当日のみ（初期設定）</option>
             <option value="prevday">前日から（翌日の予報）</option>
           </select>
@@ -97,7 +97,7 @@
       <div class="set-row">
         <div><p class="set-label">表示を開始する時刻</p><p class="set-sub">この時刻以降にアプリを開くとアラート判定が始まります</p></div>
         <div class="set-ctl">
-          <select id="s-startHour">
+          <select id="s-startHour" aria-label="表示を開始する時刻">
             <option value="0">0時（初期設定・深夜0時から）</option>
             <option value="5">5時</option>
             <option value="6">6時</option>
@@ -118,17 +118,17 @@
       <div class="thr-row">
         <span class="thr-badge warn">警戒</span>
         <span class="thr-name">こまめな休憩・水分補給を促す</span>
-        <span class="thr-input"><input type="number" id="s-heatWarn" value="25" min="20" max="35" step="0.5"><span>℃以上</span></span>
+        <span class="thr-input"><input type="number" id="s-heatWarn" aria-label="警戒とする暑さ指数（℃以上）" value="25" min="20" max="35" step="0.5"><span>℃以上</span></span>
       </div>
       <div class="thr-row">
         <span class="thr-badge severe">厳重警戒</span>
         <span class="thr-name">激しい作業の中止を検討</span>
-        <span class="thr-input"><input type="number" id="s-heatSevere" value="28" min="20" max="35" step="0.5"><span>℃以上</span></span>
+        <span class="thr-input"><input type="number" id="s-heatSevere" aria-label="厳重警戒とする暑さ指数（℃以上）" value="28" min="20" max="35" step="0.5"><span>℃以上</span></span>
       </div>
       <div class="thr-row">
         <span class="thr-badge danger">危険</span>
         <span class="thr-name">屋外作業の中止を強く推奨</span>
-        <span class="thr-input"><input type="number" id="s-heatDanger" value="31" min="20" max="35" step="0.5"><span>℃以上</span></span>
+        <span class="thr-input"><input type="number" id="s-heatDanger" aria-label="危険とする暑さ指数（℃以上）" value="31" min="20" max="35" step="0.5"><span>℃以上</span></span>
       </div>
     </div>
 
@@ -149,7 +149,7 @@
       <div class="thr-row">
         <span class="thr-badge severe">注意</span>
         <span class="thr-name">風速がこの値以上で表示</span>
-        <span class="thr-input"><input type="number" id="s-windSpeed" value="10" min="5" max="25" step="1"><span>m/s以上</span></span>
+        <span class="thr-input"><input type="number" id="s-windSpeed" aria-label="強風とする風速（m/s以上）" value="10" min="5" max="25" step="1"><span>m/s以上</span></span>
       </div>
     </div>
 

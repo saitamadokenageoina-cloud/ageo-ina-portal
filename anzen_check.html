@@ -23,7 +23,12 @@
 /* チェック項目 */
 .check-item{display:flex;align-items:flex-start;gap:12px;padding:11px 0;border-bottom:1px solid var(--gray100);}
 .check-item:last-child{border:none;}
-.check-item input[type=checkbox]{width:22px;height:22px;flex-shrink:0;margin-top:1px;cursor:pointer;accent-color:var(--orange);}
+.check-item input[type=checkbox]{width:22px;height:22px;flex-shrink:0;margin-top:1px;cursor:pointer;accent-color:var(--orange);position:relative;}
+/* 現場で手袋のまま・指の太い方でも押せるよう、当たり判定だけ44px角へ広げる。
+   見た目の四角は22pxのまま（擬似要素で透明な当たり判定を重ねている）。
+   ラベルにも最低44pxの高さを与え、文字を押しても確実に入るようにする。 */
+.check-item input[type=checkbox]::after{content:'';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:44px;height:44px;}
+.check-item-label{min-height:44px;display:flex;align-items:center;cursor:pointer;}
 .check-item-label{font-size:14px;color:var(--navy);line-height:1.55;flex:1;cursor:pointer;}
 .check-item.checked .check-item-label{color:var(--gray400);text-decoration:line-through;}
 .check-required{display:inline-block;white-space:nowrap;font-size:10px;font-weight:600;background:var(--red-lt);color:var(--red);padding:2px 7px;border-radius:99px;margin-left:6px;vertical-align:1px;}
@@ -87,10 +92,10 @@
   <div class="card">
     <p class="sec-label">現場情報（任意）</p>
     <div class="site-info-grid">
-      <div class="input-group"><label>現場名・工事名</label><input type="text" id="site-name" placeholder="例：〇〇新築工事"></div>
-      <div class="input-group"><label>確認日</label><input type="date" id="check-date"></div>
-      <div class="input-group"><label>確認者名</label><input type="text" id="checker" placeholder="例：鈴木"></div>
-      <div class="input-group"><label>天気</label>
+      <div class="input-group"><label for="site-name">現場名・工事名</label><input type="text" id="site-name" placeholder="例：〇〇新築工事"></div>
+      <div class="input-group"><label for="check-date">確認日</label><input type="date" id="check-date"></div>
+      <div class="input-group"><label for="checker">確認者名</label><input type="text" id="checker" placeholder="例：鈴木"></div>
+      <div class="input-group"><label for="weather">天気</label>
         <select id="weather">
           <option value="晴">☀️ 晴</option><option value="曇">⛅ 曇</option>
           <option value="雨">🌧️ 雨</option><option value="強風">💨 強風</option><option value="雪">❄️ 雪</option>

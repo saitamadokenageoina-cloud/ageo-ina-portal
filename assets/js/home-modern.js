@@ -2,9 +2,9 @@
   'use strict';
   var home=document.createElement('script');
   var palette=document.createElement('link');
-  home.src='assets/js/home-modern-legacy-v177.js?v=187';
+  home.src='assets/js/home-modern-legacy-v177.js?v=188';
   palette.rel='stylesheet';
-  palette.href='assets/css/home-semantic-palette.css?v=187';
+  palette.href='assets/css/home-semantic-palette.css?v=188';
   document.body.appendChild(home);
   document.head.appendChild(palette);
 

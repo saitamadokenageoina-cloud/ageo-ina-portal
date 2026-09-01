@@ -14,7 +14,7 @@
     if (document.querySelector('link[data-theme-polish]')) return;
     var link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = 'assets/css/theme-polish.css?v=187';
+    link.href = 'assets/css/theme-polish.css?v=188';
     link.setAttribute('data-theme-polish','true');
     document.head.appendChild(link);
   }
@@ -24,27 +24,27 @@
     if (!document.querySelector('link[data-home-modern]')) {
       var link = document.createElement('link');
       link.rel = 'stylesheet';
-      link.href = 'assets/css/home-modern.css?v=187';
+      link.href = 'assets/css/home-modern.css?v=188';
       link.setAttribute('data-home-modern','true');
       document.head.appendChild(link);
     }
     if (!document.querySelector('link[data-home-card-art]')) {
       var art = document.createElement('link');
       art.rel = 'stylesheet';
-      art.href = 'assets/css/home-card-art.css?v=187';
+      art.href = 'assets/css/home-card-art.css?v=188';
       art.setAttribute('data-home-card-art','true');
       document.head.appendChild(art);
     }
     if (!document.querySelector('link[data-home-alignment-fix]')) {
       var alignment = document.createElement('link');
       alignment.rel = 'stylesheet';
-      alignment.href = 'assets/css/home-alignment-fix.css?v=187';
+      alignment.href = 'assets/css/home-alignment-fix.css?v=188';
       alignment.setAttribute('data-home-alignment-fix','true');
       document.head.appendChild(alignment);
     }
     if (!document.querySelector('script[data-home-modern]')) {
       var script = document.createElement('script');
-      script.src = 'assets/js/home-modern.js?v=187';
+      script.src = 'assets/js/home-modern.js?v=188';
       script.setAttribute('data-home-modern','true');
       document.body.appendChild(script);
     }

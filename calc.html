@@ -229,8 +229,8 @@ html[data-theme="dark"] .rousai-who{background:#102B49;border-color:#3E7DAE;colo
           <p class="rousai-who-title"><i class="ti ti-building" aria-hidden="true"></i>こんな事業主が対象</p>
           <p>元請として建設工事を行う事業主。元請工事の現場で働く労働者（下請の労働者を含む）を補償します。自社が下請として入る工事は、原則として元請の現場労災が適用されます。</p>
         </div>
-        <div class="input-group"><label>元請工事高（税抜・円）</label><input type="number" id="rs5-amount" min="0" step="10000" value="10000000" inputmode="numeric" oninput="calcRousai()"></div>
-        <div class="input-group"><label>工事の種類</label><select id="rs5-type" onchange="calcRousai()"></select></div>
+        <div class="input-group"><label for="rs5-amount">元請工事高（税抜・円）</label><input type="number" id="rs5-amount" min="0" step="10000" value="10000000" inputmode="numeric" oninput="calcRousai()"></div>
+        <div class="input-group"><label for="rs5-type">工事の種類</label><select id="rs5-type" onchange="calcRousai()"></select></div>
         <label style="display:flex;align-items:center;gap:9px;font-size:14px;font-weight:700;margin-top:12px;"><input type="checkbox" id="rs5-special" checked onchange="toggleSpecial('5');calcRousai()" style="width:22px;height:22px;accent-color:var(--orange);">事業主特別加入を含める</label>
         <div id="rs5-special-fields"></div>
       </div>
@@ -243,7 +243,7 @@ html[data-theme="dark"] .rousai-who{background:#102B49;border-color:#3E7DAE;colo
           <p class="rousai-who-title"><i class="ti ti-building-warehouse" aria-hidden="true"></i>こんな事業主が対象</p>
           <p>事務所・資材置場などで、特定の工事現場に付随しない仕事をする労働者がいる建設事業主。事務員がいなくても、現場職が道具の整理・整備、見積りの現場確認などを行う見込みがあれば必要です。</p>
         </div>
-        <div class="input-group"><label>労働者の年間賃金総額（円）</label><input type="number" id="rs6-amount" min="0" step="10000" value="10000000" inputmode="numeric" oninput="calcRousai()"></div>
+        <div class="input-group"><label for="rs6-amount">労働者の年間賃金総額（円）</label><input type="number" id="rs6-amount" min="0" step="10000" value="10000000" inputmode="numeric" oninput="calcRousai()"></div>
         <label style="display:flex;align-items:center;gap:9px;font-size:14px;font-weight:700;"><input type="checkbox" id="rs6-special" checked onchange="toggleSpecial('6');calcRousai()" style="width:22px;height:22px;accent-color:var(--orange);">事業主特別加入を含める</label>
         <div id="rs6-special-fields"></div>
       </div>
@@ -283,11 +283,11 @@ html[data-theme="dark"] .rousai-who{background:#102B49;border-color:#3E7DAE;colo
       <p class="sec-label">基本情報を入力</p>
       <div class="grid2">
         <div class="input-group">
-          <label>標準報酬月額（円）</label>
+          <label for="rm-hyojun">標準報酬月額（円）</label>
           <input type="number" id="rm-hyojun" value="300000" step="1000" min="58000" max="1390000" oninput="calcRoumu()">
         </div>
         <div class="input-group">
-          <label>年齢区分</label>
+          <label for="rm-age">年齢区分</label>
           <select id="rm-age" onchange="calcRoumu()">
             <option value="u40">40歳未満</option>
             <option value="4064" selected>40〜64歳（介護保険あり）</option>
@@ -295,14 +295,14 @@ html[data-theme="dark"] .rousai-who{background:#102B49;border-color:#3E7DAE;colo
           </select>
         </div>
         <div class="input-group">
-          <label>雇用保険の対象</label>
+          <label for="rm-koyo">雇用保険の対象</label>
           <select id="rm-koyo" onchange="calcRoumu()">
             <option value="ippan" selected>一般の事業（建設業等）</option>
             <option value="nashi">対象外（役員・家族従事者等）</option>
           </select>
         </div>
         <div class="input-group">
-          <label>事業の種類（雇用保険）</label>
+          <label for="rm-jigyoshu">事業の種類（雇用保険）</label>
           <select id="rm-jigyoshu" onchange="calcRoumu()">
             <option value="kensetsu" selected>建設の事業</option>
             <option value="ippan">一般の事業</option>
@@ -332,9 +332,9 @@ html[data-theme="dark"] .rousai-who{background:#102B49;border-color:#3E7DAE;colo
     <p style="font-size:17px;font-weight:700;color:var(--navy);margin:0 0 14px;">国保料シミュレーター（令和8年度）</p>
     <div class="card">
       <div class="grid2">
-        <div class="input-group"><label>市町村</label><select id="kk-city" onchange="kkHandleCityChange()"><option value="ageo">上尾市</option><option value="ina">伊奈町</option></select></div>
+        <div class="input-group"><label for="kk-city">市町村</label><select id="kk-city" onchange="kkHandleCityChange()"><option value="ageo">上尾市</option><option value="ina">伊奈町</option></select></div>
         <div class="input-group" style="grid-column:1/-1;">
-  <label>土建国保 区分 <span id="kubun-change-btn" onclick="toggleKubunGuide()" style="font-size:11px;font-weight:600;color:var(--orange);cursor:pointer;text-decoration:underline;margin-left:6px;">区分の見方 ▼</span></label>
+  <label for="kk-dkubun">土建国保 区分 <span id="kubun-change-btn" onclick="toggleKubunGuide()" style="font-size:11px;font-weight:600;color:var(--orange);cursor:pointer;text-decoration:underline;margin-left:6px;">区分の見方 ▼</span></label>
   <select id="kk-dkubun" onchange="showKubunDesc()">
     <option value="toku2">特2種（50歳以上の法人代表／株式と妻以外にも従業員）</option>
     <option value="toku1">特1種（50歳以上の法人代表／妻以外を使わない株式以外）</option>
@@ -415,7 +415,7 @@ html[data-theme="dark"] .rousai-who{background:#102B49;border-color:#3E7DAE;colo
       <p class="sec-label">一部負担払戻金の目安（2026国保ガイド）</p>
       <div class="grid2">
         <div class="input-group">
-          <label>対象者</label>
+          <label for="bf-med-person">対象者</label>
           <select id="bf-med-person" onchange="calcMedicalRefund()">
             <option value="member">組合員（入院・通院）</option>
             <option value="family_in">家族（加入7カ月以降の入院）</option>
@@ -423,7 +423,7 @@ html[data-theme="dark"] .rousai-who{background:#102B49;border-color:#3E7DAE;colo
           </select>
         </div>
         <div class="input-group">
-          <label>窓口自己負担額（月額）</label>
+          <label for="bf-med-cost">窓口自己負担額（月額）</label>
           <input type="number" id="bf-med-cost" value="60000" min="0" oninput="calcMedicalRefund()">
         </div>
       </div>
@@ -435,7 +435,7 @@ html[data-theme="dark"] .rousai-who{background:#102B49;border-color:#3E7DAE;colo
       <p class="sec-label">傷病手当金の目安（2026国保ガイド）</p>
       <div class="grid2">
         <div class="input-group">
-          <label>保険料区分</label>
+          <label for="bf-sick-kubun">保険料区分</label>
           <select id="bf-sick-kubun" onchange="calcSickPay()">
             <option value="toku2">特2種</option>
             <option value="toku1">特1種</option>
@@ -448,7 +448,7 @@ html[data-theme="dark"] .rousai-who{background:#102B49;border-color:#3E7DAE;colo
           </select>
         </div>
         <div class="input-group">
-          <label>療養区分</label>
+          <label for="bf-sick-type">療養区分</label>
           <select id="bf-sick-type" onchange="calcSickPay()">
             <option value="illIn">病気・入院日</option>
             <option value="illHome">病気・自宅療養日</option>
@@ -457,7 +457,7 @@ html[data-theme="dark"] .rousai-who{background:#102B49;border-color:#3E7DAE;colo
           </select>
         </div>
         <div class="input-group" style="grid-column:1/-1;">
-          <label>支給対象日数</label>
+          <label for="bf-sick-days">支給対象日数</label>
           <input type="number" id="bf-sick-days" value="20" min="1" max="180" oninput="calcSickPay()">
         </div>
       </div>
@@ -469,7 +469,7 @@ html[data-theme="dark"] .rousai-who{background:#102B49;border-color:#3E7DAE;colo
       <p class="sec-label">出産・葬祭などの給付目安</p>
       <div class="grid2">
         <div class="input-group">
-          <label>給付の種類</label>
+          <label for="bf-event">給付の種類</label>
           <select id="bf-event" onchange="calcEventPay()">
             <option value="birth">出産育児一時金</option>
             <option value="birthNoOb">出産育児一時金（産科医療補償制度なし）</option>
@@ -482,7 +482,7 @@ html[data-theme="dark"] .rousai-who{background:#102B49;border-color:#3E7DAE;colo
           </select>
         </div>
         <div class="input-group">
-          <label>人数・月数・回数</label>
+          <label for="bf-event-count">人数・月数・回数</label>
           <input type="number" id="bf-event-count" value="1" min="1" max="20" oninput="calcEventPay()">
         </div>
       </div>
@@ -589,7 +589,10 @@ function rsYen(v){return Math.floor(v).toLocaleString('ja-JP')+'円'}
 // ========== 労務費シミュレーター ==========
 // 令和8年度 料率
 const RM = {
-  nenkin:  { rate: 0.183,  min: 16104 }, // 厚生年金 18.3%（労使折半）月額最低16,104円
+  // 厚生年金 18.3%（労使折半）。標準報酬月額は第1等級88,000円〜第32等級650,000円で決まり、
+  // 650,000円を超える報酬でも保険料は650,000円で頭打ちになる（厚生年金保険法 別表）。
+  // maxHyojun が無いと高額報酬で保険料を過大表示するため必須。
+  nenkin:  { rate: 0.183,  min: 16104, maxHyojun: 650000 },
   kaigo:   { rate: 0.0162 },              // 介護保険 1.62%（労使折半）
   koyo: {
     // 令和8年度（2026.4〜2027.3）厚労省告示。単位=賃金の割合
@@ -705,15 +708,26 @@ function calcEventPay(){
 }
 
 function calcRoumu(){
-  const h     = parseFloat(document.getElementById('rm-hyojun').value)||300000;
+  // 入力が空・文字・0以下なら計算しない。
+  // 以前は `||300000` で勝手に30万円として計算していたため、空欄にしても前回の結果が残り、
+  // 利用者が古い金額を有効な結果と誤読する状態だった。
+  const rawH  = document.getElementById('rm-hyojun').value;
+  const h     = parseFloat(rawH);
+  if(!Number.isFinite(h) || h <= 0){
+    document.getElementById('romu-result-inner').innerHTML =
+      '<p style="text-align:center;color:var(--gray600);font-weight:600;padding:18px 10px;margin:0;">'
+      + '標準報酬月額を入力すると、ここに計算結果が表示されます。</p>';
+    return;
+  }
   const age   = document.getElementById('rm-age').value;
   const koyo  = document.getElementById('rm-koyo').value;
   const jshu  = document.getElementById('rm-jigyoshu').value;
   const hasKaigo = age === '4064';
   const hasKoyo  = koyo === 'ippan';
 
-  // 厚生年金
-  const nenkinH = Math.max(h * RM.nenkin.rate / 2, RM.nenkin.min / 2);
+  // 厚生年金（標準報酬月額の上限650,000円で頭打ち。介護・雇用保険は別規定のため適用しない）
+  const nenkinBase = Math.min(h, RM.nenkin.maxHyojun);
+  const nenkinH = Math.max(nenkinBase * RM.nenkin.rate / 2, RM.nenkin.min / 2);
   const nenkinK = nenkinH;
 
   // 介護保険（40〜64歳のみ）
@@ -750,7 +764,7 @@ function calcRoumu(){
     `</div>
     <div style="background:var(--yellow-lt);border-radius:var(--r8);padding:10px 14px;margin-top:4px;font-size:12px;color:#7A5500;">
       <i class="ti ti-info-circle" style="font-size:13px;vertical-align:-2px;margin-right:4px;"></i>
-      ※ 健康保険料（協会けんぽ・土建国保等）は含まれていません。別途「国保料シミュ」でご確認ください。
+      ${h > RM.nenkin.maxHyojun ? '※ 厚生年金は標準報酬月額の上限650,000円で計算しています（それ以上の報酬でも保険料は増えません）。<br>' : ''}※ 健康保険料（協会けんぽ・土建国保等）は含まれていません。別途「国保料シミュ」でご確認ください。
     </div>`;
 }
 
@@ -939,7 +953,7 @@ function kkAddMember(){
   div.innerHTML=`
     <div style="display:flex;flex-direction:column;gap:6px;flex:1;">
       <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-        <label class="calc-muted" style="font-size:13px;white-space:nowrap;">続柄</label>
+        <label for="kkrel-${id}" class="calc-muted" style="font-size:13px;white-space:nowrap;">続柄</label>
         <select id="kkrel-${id}" style="font-size:14px;padding:6px 8px;flex:1;min-width:160px;">
           <option value="honnin" ${isFirst?'selected':''}>本人（組合員）</option>
           <option value="tokubetsu" ${!isFirst?'selected':''}>特別家族（20〜59歳）</option>
@@ -948,11 +962,11 @@ function kkAddMember(){
           <option value="shogaku">小学生相当（6〜11歳）</option>
           <option value="mishuugaku">未就学児（5歳以下）</option>
         </select>
-        <label class="calc-muted" style="font-size:13px;white-space:nowrap;">年齢</label>
+        <label for="kkage-${id}" class="calc-muted" style="font-size:13px;white-space:nowrap;">年齢</label>
         <input type="number" id="kkage-${id}" min="0" max="100" value="${isFirst?40:35}" style="width:64px;font-size:14px;padding:6px 8px;">
       </div>
       <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-        <label class="calc-muted" style="font-size:13px;white-space:nowrap;">前年所得額</label>
+        <label for="kkinc-${id}" class="calc-muted" style="font-size:13px;white-space:nowrap;">前年所得額</label>
         <input type="number" id="kkinc-${id}" min="0" value="0" inputmode="numeric" style="width:130px;font-size:14px;padding:6px 8px;">
         <span class="calc-small">円（給与の総支給額ではありません。源泉徴収票の「給与所得控除後の金額」を入力）</span>
       </div>
