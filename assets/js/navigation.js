@@ -145,13 +145,11 @@
     var grid = document.querySelector('#genba .grid2');
     if (!grid) return;
     var card = document.createElement('a');
-    var safetyCard = grid.querySelector('a[href="anzen_check.html"]');
     card.className = 'mc service-watching-card';
     card.href = 'watching.html';
     card.setAttribute('data-feature-keywords','ウォッチング まち 地域 危険 道路 ひび 陥没 側溝 公園 遊具 ブロック塀 カーブミラー 看板 安全 安心 投稿 写真');
-    card.innerHTML = '<div class="mc-top" style="background:linear-gradient(135deg,#0E7490,#1A5FA8);"><svg viewBox="0 0 200 80" aria-hidden="true"><circle cx="76" cy="37" r="22" fill="rgba(255,255,255,.92)"/><circle cx="76" cy="37" r="12" fill="none" stroke="#0E7490" stroke-width="5"/><path d="M92 53l18 18" stroke="rgba(255,255,255,.92)" stroke-width="8" stroke-linecap="round"/><rect x="125" y="18" width="38" height="48" rx="7" fill="rgba(255,255,255,.9)"/><circle cx="144" cy="56" r="3" fill="#0E7490"/><path d="M132 29h24v18h-24z" fill="#E8612A" opacity=".75"/></svg><span class="mc-emoji">🔎</span></div><div class="mc-body"><span class="mc-badge health">地域安全</span><p class="mc-title">まちの危険を報告</p><p class="mc-desc">ウォッチング行動｜道路・公園・ブロック塀などをスマホで投稿</p></div>';
-    if (safetyCard && safetyCard.nextSibling) grid.insertBefore(card,safetyCard.nextSibling);
-    else grid.appendChild(card);
+    card.innerHTML = '<div class="mc-top home-card-image-wrap"><img src="assets/illustrations/home-3d/watching-v189.svg" alt="" class="home-card-image" aria-hidden="true" width="960" height="640" decoding="async"></div><div class="mc-body"><span class="mc-badge health">地域安全</span><p class="mc-title">まちの危険を報告</p><p class="mc-desc">ウォッチング行動｜道路・公園・ブロック塀などをスマホで投稿</p></div>';
+    grid.appendChild(card);
   }
 
   function injectContactRail(){
