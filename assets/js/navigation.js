@@ -14,7 +14,7 @@
     if (document.querySelector('link[data-theme-polish]')) return;
     var link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = 'assets/css/theme-polish.css?v=188';
+    link.href = 'assets/css/theme-polish.css?v=190';
     link.setAttribute('data-theme-polish','true');
     document.head.appendChild(link);
   }
@@ -24,27 +24,27 @@
     if (!document.querySelector('link[data-home-modern]')) {
       var link = document.createElement('link');
       link.rel = 'stylesheet';
-      link.href = 'assets/css/home-modern.css?v=188';
+      link.href = 'assets/css/home-modern.css?v=190';
       link.setAttribute('data-home-modern','true');
       document.head.appendChild(link);
     }
     if (!document.querySelector('link[data-home-card-art]')) {
       var art = document.createElement('link');
       art.rel = 'stylesheet';
-      art.href = 'assets/css/home-card-art.css?v=188';
+      art.href = 'assets/css/home-card-art.css?v=190';
       art.setAttribute('data-home-card-art','true');
       document.head.appendChild(art);
     }
     if (!document.querySelector('link[data-home-alignment-fix]')) {
       var alignment = document.createElement('link');
       alignment.rel = 'stylesheet';
-      alignment.href = 'assets/css/home-alignment-fix.css?v=188';
+      alignment.href = 'assets/css/home-alignment-fix.css?v=190';
       alignment.setAttribute('data-home-alignment-fix','true');
       document.head.appendChild(alignment);
     }
     if (!document.querySelector('script[data-home-modern]')) {
       var script = document.createElement('script');
-      script.src = 'assets/js/home-modern.js?v=188';
+      script.src = 'assets/js/home-modern.js?v=190';
       script.setAttribute('data-home-modern','true');
       document.body.appendChild(script);
     }
@@ -148,7 +148,7 @@
     card.className = 'mc service-watching-card';
     card.href = 'watching.html';
     card.setAttribute('data-feature-keywords','ウォッチング まち 地域 危険 道路 ひび 陥没 側溝 公園 遊具 ブロック塀 カーブミラー 看板 安全 安心 投稿 写真');
-    card.innerHTML = '<div class="mc-top home-card-image-wrap"><img src="assets/illustrations/home-3d/watching-v189.svg" alt="" class="home-card-image" aria-hidden="true" width="960" height="640" decoding="async"></div><div class="mc-body"><span class="mc-badge health">地域安全</span><p class="mc-title">まちの危険を報告</p><p class="mc-desc">ウォッチング行動｜道路・公園・ブロック塀などをスマホで投稿</p></div>';
+    card.innerHTML = '<div class="mc-top home-card-image-wrap"><img src="assets/illustrations/home-3d/watching-v190.jpg" alt="" class="home-card-image" aria-hidden="true" width="960" height="640" decoding="async"></div><div class="mc-body"><span class="mc-badge health">地域安全</span><p class="mc-title">まちの危険を報告</p><p class="mc-desc">ウォッチング行動｜道路・公園・ブロック塀などをスマホで投稿</p></div>';
     grid.appendChild(card);
   }
 
