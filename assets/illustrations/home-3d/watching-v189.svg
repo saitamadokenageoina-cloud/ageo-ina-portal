@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 640" role="img" aria-labelledby="title desc">
+<title id="title">まちの危険をスマホで報告するイラスト</title>
+<desc id="desc">道路のひび割れを見つけた建設職人がスマートフォンで撮影している場面</desc>
+<defs>
+  <linearGradient id="sky" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#DFF5FF"/><stop offset="1" stop-color="#BFE7F4"/></linearGradient>
+  <linearGradient id="road" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#75879B"/><stop offset="1" stop-color="#536475"/></linearGradient>
+  <linearGradient id="vest" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#FFB24A"/><stop offset="1" stop-color="#E8612A"/></linearGradient>
+  <linearGradient id="phone" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#123B64"/><stop offset="1" stop-color="#1A5FA8"/></linearGradient>
+  <filter id="shadow" x="-30%" y="-30%" width="160%" height="180%"><feDropShadow dx="0" dy="16" stdDeviation="14" flood-color="#17324D" flood-opacity=".2"/></filter>
+</defs>
+<rect width="960" height="640" rx="40" fill="url(#sky)"/>
+<circle cx="800" cy="108" r="62" fill="#FFF7C7" opacity=".9"/>
+<path d="M0 342h960v298H0z" fill="url(#road)"/>
+<path d="M0 335h960v30H0z" fill="#D7DDE4"/>
+<path d="M52 502h240" stroke="#F6C94C" stroke-width="18" stroke-linecap="round" opacity=".9"/>
+<path d="M669 494l-45 30 36 22-58 34 47 18" fill="none" stroke="#293847" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+<ellipse cx="674" cy="520" rx="126" ry="66" fill="#203243" opacity=".08"/>
+<g filter="url(#shadow)">
+  <rect x="90" y="122" width="278" height="180" rx="28" fill="#fff" opacity=".96"/>
+  <circle cx="170" cy="212" r="54" fill="#E8F5EE"/>
+  <path d="M145 207h50M170 182v50" stroke="#1A7A4A" stroke-width="14" stroke-linecap="round"/>
+  <text x="236" y="198" font-family="sans-serif" font-size="34" font-weight="800" fill="#17324D">危険を発見</text>
+  <text x="236" y="244" font-family="sans-serif" font-size="28" font-weight="700" fill="#536475">スマホでパシャッ</text>
+</g>
+<g filter="url(#shadow)" transform="translate(520 92)">
+  <ellipse cx="176" cy="438" rx="152" ry="42" fill="#17324D" opacity=".18"/>
+  <circle cx="166" cy="108" r="62" fill="#F2C7A5"/>
+  <path d="M104 100c6-72 114-92 138-17l-10 26H112z" fill="#18324C"/>
+  <path d="M98 87h142l-14-48H112z" fill="#F4B52D"/>
+  <rect x="128" y="38" width="78" height="20" rx="10" fill="#FFE18B"/>
+  <path d="M119 168c15-22 80-28 105 0l31 182H91z" fill="url(#vest)"/>
+  <path d="M132 175h70l19 175h-104z" fill="#F7FAFC"/>
+  <path d="M132 223h90M125 280h104" stroke="#FFCB77" stroke-width="14" opacity=".8"/>
+  <path d="M99 208L36 304" stroke="#F2C7A5" stroke-width="34" stroke-linecap="round"/>
+  <path d="M230 205l63 61" stroke="#F2C7A5" stroke-width="34" stroke-linecap="round"/>
+  <g transform="translate(255 225) rotate(-8)">
+    <rect width="92" height="146" rx="18" fill="url(#phone)"/>
+    <rect x="10" y="15" width="72" height="102" rx="10" fill="#EAF7FF"/>
+    <path d="M23 86l17-18 15 12 15-25" fill="none" stroke="#E8612A" stroke-width="8" stroke-linecap="round"/>
+    <circle cx="46" cy="132" r="7" fill="#fff"/>
+  </g>
+  <path d="M120 350l-21 118" stroke="#17324D" stroke-width="38" stroke-linecap="round"/>
+  <path d="M218 350l32 118" stroke="#17324D" stroke-width="38" stroke-linecap="round"/>
+  <path d="M68 474h72M232 474h72" stroke="#10213A" stroke-width="30" stroke-linecap="round"/>
+</g>
+<g transform="translate(416 402)" filter="url(#shadow)">
+  <circle cx="0" cy="0" r="82" fill="#fff" opacity=".96"/>
+  <circle cx="0" cy="0" r="49" fill="none" stroke="#0E7490" stroke-width="18"/>
+  <path d="M38 38l74 74" stroke="#0E7490" stroke-width="24" stroke-linecap="round"/>
+</g>
+</svg>
