@@ -2,102 +2,52 @@
    Fixed-color surfaces must use fixed foreground colors; theme-remapped text tokens
    must not leak onto them. Keep selectors component-scoped to avoid flattening design. */
 
-/* Semantic foregrounds for common strong surfaces. */
-:root{
-  --contrast-on-dark:#FFFFFF;
-  --contrast-on-dark-muted:#DDEAF7;
-  --contrast-on-light:#17263A;
-  --contrast-on-light-muted:#334155;
-}
+:root{--contrast-on-dark:#FFFFFF;--contrast-on-dark-muted:#DDEAF7;--contrast-on-light:#17263A;--contrast-on-light-muted:#334155;}
+.btn-primary,.connection-status,.doken-contact-rail a,.cur-tag,.rousai-tab.active{color:var(--contrast-on-dark)!important;}
+.btn-primary *, .connection-status *, .doken-contact-rail a *,.cur-tag *, .rousai-tab.active *{color:inherit!important;-webkit-text-fill-color:inherit!important;}
+html[data-theme="light"] .alert-warn{color:#684800!important;}html[data-theme="light"] .alert-ok{color:#145C39!important;}html[data-theme="light"] .alert-danger{color:#9F2F24!important;}html[data-theme="light"] .alert-info{color:#154F8A!important;}html[data-theme="light"] .winner-banner.doken{color:#145C39!important;}html[data-theme="light"] .winner-banner.city{color:#154F8A!important;}html[data-theme="light"] .rousai-warning{color:#68410A!important;}html[data-theme="light"] .rousai-who{color:#17324D!important;}html[data-theme="light"] .rousai-who-title{color:#0C4F82!important;}
+.rousai-total,.lv-badge{color:var(--contrast-on-dark)!important;}.rousai-total strong,.rousai-total .result-val,.lv-badge h1,.lv-badge h2,.lv-badge h3,.lv-badge strong{color:var(--contrast-on-dark)!important;-webkit-text-fill-color:var(--contrast-on-dark)!important;}html[data-theme="light"] .rousai-total small,html[data-theme="dark"] .rousai-total small,.rousai-total small{color:#E7F2FC!important;-webkit-text-fill-color:#E7F2FC!important;opacity:1!important;}.lv-badge p,.lv-badge small{color:#E2EAF3!important;-webkit-text-fill-color:#E2EAF3!important;opacity:1!important;}
+html[data-theme="light"] input,html[data-theme="light"] select,html[data-theme="light"] textarea{color:#111827;}html[data-theme="light"] input::placeholder,html[data-theme="light"] textarea::placeholder{color:#526173;opacity:1;}html[data-theme="dark"] input,html[data-theme="dark"] select,html[data-theme="dark"] textarea{color:#F8FAFC!important;}html[data-theme="dark"] input::placeholder,html[data-theme="dark"] textarea::placeholder{color:#B9C9DA!important;opacity:1;}
+html[data-theme="light"] input:disabled,html[data-theme="light"] select:disabled,html[data-theme="light"] textarea:disabled,html[data-theme="light"] button:disabled{opacity:.72;}html[data-theme="dark"] input:disabled,html[data-theme="dark"] select:disabled,html[data-theme="dark"] textarea:disabled,html[data-theme="dark"] button:disabled{opacity:.78;}
+html[data-theme="dark"] .alert-info{background:#102A4A!important;color:#C7E2FF!important;}html[data-theme="dark"] .alert-warn{background:#3B2D0A!important;color:#FFE9AE!important;}html[data-theme="dark"] .alert-ok{background:#0D3324!important;color:#C5F4D9!important;}html[data-theme="dark"] .alert-danger{background:#3B1515!important;color:#FFD0D0!important;}html[data-theme="dark"] .rousai-warning{background:#3A2A08!important;color:#FFF0C6!important;}html[data-theme="dark"] .rousai-who{background:#102B49!important;color:#E8F3FF!important;border-color:#3E7DAE!important;}html[data-theme="dark"] .rousai-who-title{color:#A9D8FF!important;}
+.alert span,.alert p,.alert strong,.alert small,.winner-banner span,.winner-banner p,.winner-banner strong,.winner-banner small{color:inherit!important;-webkit-text-fill-color:inherit!important;}
 
-/* Primary/action surfaces: always high-contrast white. */
-.btn-primary,.connection-status,.doken-contact-rail a,
-.cur-tag,.rousai-tab.active{
-  color:var(--contrast-on-dark)!important;
-}
-.btn-primary *, .connection-status *, .doken-contact-rail a *,
-.cur-tag *, .rousai-tab.active *{
-  color:inherit!important;
-  -webkit-text-fill-color:inherit!important;
-}
+/* ===== 火災・地震共済 試算ツール 2026-10パンフレット準拠ブラッシュアップ =====
+   パンフレットの紫=火災、緑=地震を手掛かりにしつつ、入力欄は中立色を維持する。 */
+body:has(.ky-hero) .content{max-width:760px;margin-inline:auto;}
+body:has(.ky-hero) .ky-hero{position:relative;overflow:hidden;padding:22px 18px 20px!important;border-radius:22px!important;background:linear-gradient(135deg,#7A286F 0%,#A32F73 48%,#C84A61 100%)!important;box-shadow:0 12px 30px rgba(89,31,91,.22)!important;}
+body:has(.ky-hero) .ky-hero::after{content:'2026年10月改定対応';position:absolute;right:12px;top:10px;padding:5px 9px;border-radius:999px;background:rgba(255,255,255,.94);color:#6B215F;font-size:10px;font-weight:900;letter-spacing:.02em;}
+body:has(.ky-hero) .ky-hero i{font-size:46px!important;filter:drop-shadow(0 4px 8px rgba(0,0,0,.16));}
+body:has(.ky-hero) .ky-hero h1{padding-right:112px;font-size:21px!important;font-weight:900!important;letter-spacing:-.02em;}
+body:has(.ky-hero) .ky-hero p{max-width:520px;margin-top:5px!important;font-size:13px!important;font-weight:700;}
+body:has(.ky-hero) .ky-tabs{gap:9px!important;margin:16px 0!important;}
+body:has(.ky-hero) .ky-tab{min-height:60px!important;border-radius:16px!important;border:1.5px solid #D8E0E8!important;background:#fff!important;color:#23364C!important;font-size:14px!important;box-shadow:0 3px 10px rgba(18,38,63,.05)!important;}
+body:has(.ky-hero) .ky-tab[data-mode="new"]{grid-column:1/-1;min-height:68px!important;font-size:16px!important;}
+body:has(.ky-hero) .ky-tab.active{border-color:#7A286F!important;background:linear-gradient(135deg,#7A286F,#A93878)!important;color:#fff!important;box-shadow:0 8px 20px rgba(122,40,111,.22)!important;}
+body:has(.ky-hero) .ky-card{border-radius:18px!important;border-color:#DCE4EB!important;box-shadow:0 6px 18px rgba(18,38,63,.065)!important;}
+body:has(.ky-hero) .ky-title{font-size:17px!important;}
+body:has(.ky-hero) .ky-field label{font-size:13px!important;}
+body:has(.ky-hero) .ky-field input,body:has(.ky-hero) .ky-field select{min-height:52px!important;border-radius:12px!important;font-size:17px!important;font-weight:700;}
+body:has(.ky-hero) #pane-new .ky-card:nth-of-type(2){border-top:5px solid #9A367E!important;}
+body:has(.ky-hero) #pane-new .ky-card:nth-of-type(2) .ky-title i{color:#9A367E!important;}
+body:has(.ky-hero) #pane-new .ky-card:nth-of-type(3){border-top:5px solid #17865C!important;}
+body:has(.ky-hero) #pane-new .ky-card:nth-of-type(3) .ky-title i{color:#17865C!important;}
+body:has(.ky-hero) .ky-limit{padding:11px 13px!important;border-radius:12px!important;background:#EDF7FC!important;border-color:#A9D1E6!important;color:#173B57!important;font-size:12.5px!important;}
+body:has(.ky-hero) #new-eq-limit{background:#EAF8F0!important;border-color:#9ED7BA!important;color:#155A3D!important;}
+body:has(.ky-hero) .ky-help{font-size:12px!important;line-height:1.7!important;}
+body:has(.ky-hero) .ky-action{position:sticky;bottom:calc(72px + env(safe-area-inset-bottom,0px));z-index:8;min-height:60px!important;border-radius:16px!important;background:linear-gradient(135deg,#C34E20,#E76B2D)!important;font-size:18px!important;box-shadow:0 10px 26px rgba(195,78,32,.30)!important;}
+body:has(.ky-hero) .ky-total{padding:20px!important;border-radius:18px!important;background:linear-gradient(135deg,#123B64,#1769AA)!important;box-shadow:0 9px 24px rgba(18,59,100,.22);}
+body:has(.ky-hero) .ky-total small{font-size:13px!important;color:#E7F2FC!important;-webkit-text-fill-color:#E7F2FC!important;}
+body:has(.ky-hero) .ky-total strong{font-size:34px!important;}
+body:has(.ky-hero) .ky-note{font-size:12px!important;line-height:1.75!important;}
+body:has(.ky-hero) .ky-source{padding:10px 12px;border-radius:12px;background:#F4F7FA;font-size:11px!important;}
+html[data-theme="dark"] body:has(.ky-hero) .ky-tab{background:#10213A!important;border-color:#334A63!important;color:#F2F6FA!important;}
+html[data-theme="dark"] body:has(.ky-hero) .ky-tab.active{background:linear-gradient(135deg,#81306F,#A7437E)!important;border-color:#B85B91!important;color:#fff!important;}
+html[data-theme="dark"] body:has(.ky-hero) #pane-new .ky-card:nth-of-type(2){border-top-color:#D875B8!important;}
+html[data-theme="dark"] body:has(.ky-hero) #pane-new .ky-card:nth-of-type(3){border-top-color:#55C995!important;}
+html[data-theme="dark"] body:has(.ky-hero) .ky-limit{background:#102B49!important;border-color:#3E7DAE!important;color:#E8F3FF!important;}
+html[data-theme="dark"] body:has(.ky-hero) #new-eq-limit{background:#103329!important;border-color:#32785B!important;color:#D8F6E8!important;}
+html[data-theme="dark"] body:has(.ky-hero) .ky-source{background:#10213A!important;color:#C8D8E8!important;}
+@media(max-width:430px){body:has(.ky-hero) .ky-hero{padding:20px 15px 18px!important;}body:has(.ky-hero) .ky-hero::after{top:9px;right:9px;font-size:9px;}body:has(.ky-hero) .ky-hero h1{padding-right:98px;font-size:19px!important;}body:has(.ky-hero) .ky-tabs{grid-template-columns:1fr 1fr!important;}body:has(.ky-hero) .ky-tab[data-mode="new"]{grid-column:1/-1;}body:has(.ky-hero) .ky-total strong{font-size:31px!important;}}
 
-/* Fixed pale status surfaces: never inherit theme-remapped light text. */
-html[data-theme="light"] .alert-warn{color:#684800!important;}
-html[data-theme="light"] .alert-ok{color:#145C39!important;}
-html[data-theme="light"] .alert-danger{color:#9F2F24!important;}
-html[data-theme="light"] .alert-info{color:#154F8A!important;}
-html[data-theme="light"] .winner-banner.doken{color:#145C39!important;}
-html[data-theme="light"] .winner-banner.city{color:#154F8A!important;}
-html[data-theme="light"] .rousai-warning{color:#68410A!important;}
-html[data-theme="light"] .rousai-who{color:#17324D!important;}
-html[data-theme="light"] .rousai-who-title{color:#0C4F82!important;}
-
-/* Fixed dark/gradient result surfaces: protect every text descendant from the
-   global theme rules for small/p/h1-h3. This fixes the 労災「概算保険料 合計」 label. */
-.rousai-total,
-.lv-badge{
-  color:var(--contrast-on-dark)!important;
-}
-.rousai-total strong,
-.rousai-total .result-val,
-.lv-badge h1,.lv-badge h2,.lv-badge h3,.lv-badge strong{
-  color:var(--contrast-on-dark)!important;
-  -webkit-text-fill-color:var(--contrast-on-dark)!important;
-}
-html[data-theme="light"] .rousai-total small,
-html[data-theme="dark"] .rousai-total small,
-.rousai-total small{
-  color:#E7F2FC!important;
-  -webkit-text-fill-color:#E7F2FC!important;
-  opacity:1!important;
-}
-.lv-badge p,.lv-badge small{
-  color:#E2EAF3!important;
-  -webkit-text-fill-color:#E2EAF3!important;
-  opacity:1!important;
-}
-
-/* Form controls: explicit readable foreground/placeholder in both themes. */
-html[data-theme="light"] input,
-html[data-theme="light"] select,
-html[data-theme="light"] textarea{color:#111827;}
-html[data-theme="light"] input::placeholder,
-html[data-theme="light"] textarea::placeholder{color:#526173;opacity:1;}
-html[data-theme="dark"] input,
-html[data-theme="dark"] select,
-html[data-theme="dark"] textarea{color:#F8FAFC!important;}
-html[data-theme="dark"] input::placeholder,
-html[data-theme="dark"] textarea::placeholder{color:#B9C9DA!important;opacity:1;}
-
-/* Disabled controls still need to be legible. */
-html[data-theme="light"] input:disabled,
-html[data-theme="light"] select:disabled,
-html[data-theme="light"] textarea:disabled,
-html[data-theme="light"] button:disabled{opacity:.72;}
-html[data-theme="dark"] input:disabled,
-html[data-theme="dark"] select:disabled,
-html[data-theme="dark"] textarea:disabled,
-html[data-theme="dark"] button:disabled{opacity:.78;}
-
-/* Dark status surfaces use fixed pairs rather than light-theme tokens. */
-html[data-theme="dark"] .alert-info{background:#102A4A!important;color:#C7E2FF!important;}
-html[data-theme="dark"] .alert-warn{background:#3B2D0A!important;color:#FFE9AE!important;}
-html[data-theme="dark"] .alert-ok{background:#0D3324!important;color:#C5F4D9!important;}
-html[data-theme="dark"] .alert-danger{background:#3B1515!important;color:#FFD0D0!important;}
-html[data-theme="dark"] .rousai-warning{background:#3A2A08!important;color:#FFF0C6!important;}
-html[data-theme="dark"] .rousai-who{background:#102B49!important;color:#E8F3FF!important;border-color:#3E7DAE!important;}
-html[data-theme="dark"] .rousai-who-title{color:#A9D8FF!important;}
-
-/* Preserve inherited foreground inside alerts/results even when common.css has
-   broad p/small theme selectors. */
-.alert span,.alert p,.alert strong,.alert small,
-.winner-banner span,.winner-banner p,.winner-banner strong,.winner-banner small{
-  color:inherit!important;
-  -webkit-text-fill-color:inherit!important;
-}
-
-@media(prefers-contrast:more){
-  .rousai-total small,.lv-badge p,.lv-badge small{color:#FFFFFF!important;-webkit-text-fill-color:#FFFFFF!important;}
-  html[data-theme="light"] input::placeholder,html[data-theme="light"] textarea::placeholder{color:#334155;}
-  html[data-theme="dark"] input::placeholder,html[data-theme="dark"] textarea::placeholder{color:#D8E4F2!important;}
-}
+@media(prefers-contrast:more){.rousai-total small,.lv-badge p,.lv-badge small{color:#FFFFFF!important;-webkit-text-fill-color:#FFFFFF!important;}html[data-theme="light"] input::placeholder,html[data-theme="light"] textarea::placeholder{color:#334155;}html[data-theme="dark"] input::placeholder,html[data-theme="dark"] textarea::placeholder{color:#D8E4F2!important;}body:has(.ky-hero) .ky-tab{border-width:2px!important;}}
