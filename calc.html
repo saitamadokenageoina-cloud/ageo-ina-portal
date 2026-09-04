@@ -169,21 +169,21 @@ html[data-theme="dark"] .rousai-who{background:#102B49;border-color:#3E7DAE;colo
   <div id="calc-home">
     <button type="button" class="calc-resume" id="calc-resume" onclick="openLastCalc()"><span><i class="ti ti-history"></i> <span id="calc-resume-label">前回の計算を続ける</span><small>入力値はこの端末に残っている範囲で表示します</small></span><i class="ti ti-chevron-right"></i></button>
     <div class="tool-grid">
-      <div class="tool-card" onclick="openTool('romu')">
+      <a class="tool-card" href="calc.html?tool=romu" onclick="event.preventDefault();openTool('romu')" style="display:block;text-decoration:none;color:inherit;">
         <div class="tool-card-icon" style="color:var(--blue);"><i class="ti ti-receipt-2"></i></div>
         <p class="tool-card-title">労務費シミュ</p>
         <p class="tool-card-desc">雇用保険・厚生年金・介護保険</p>
-      </div>
-      <div class="tool-card" onclick="openTool('rousai')">
+      </a>
+      <a class="tool-card" href="calc.html?tool=rousai&mode=5" onclick="event.preventDefault();openTool('rousai')" style="display:block;text-decoration:none;color:inherit;">
         <div class="tool-card-icon" style="color:#C0392B;"><i class="ti ti-shield-check"></i></div>
         <p class="tool-card-title">労災保険料</p>
         <p class="tool-card-desc">末尾5・6／特1・特2の月割り</p>
-      </div>
-      <div class="tool-card" onclick="openTool('kokuho')">
+      </a>
+      <a class="tool-card" href="calc.html?tool=kokuho" onclick="event.preventDefault();openTool('kokuho')" style="display:block;text-decoration:none;color:inherit;">
         <div class="tool-card-icon" style="color:var(--orange);"><i class="ti ti-building-community"></i></div>
         <p class="tool-card-title">国保料シミュ</p>
         <p class="tool-card-desc">上尾市・伊奈町 vs 土建国保</p>
-      </div>
+      </a>
       <a class="tool-card" href="kyosai_calc.html" style="display:block;text-decoration:none;">
         <div class="tool-card-icon" style="color:#D94B20;"><i class="ti ti-home-shield"></i></div>
         <p class="tool-card-title">火災・地震共済</p>
@@ -194,11 +194,11 @@ html[data-theme="dark"] .rousai-who{background:#102B49;border-color:#3E7DAE;colo
         <p class="tool-card-title">CCUS能力評価（公式）<i class="ti ti-external-link" style="font-size:13px;margin-left:4px;vertical-align:-1px;"></i></p>
         <p class="tool-card-desc">最新基準は公式サイトで確認</p>
       </a>
-      <div class="tool-card" onclick="openTool('benefit')">
+      <a class="tool-card" href="calc.html?tool=benefit" onclick="event.preventDefault();openTool('benefit')" style="display:block;text-decoration:none;color:inherit;">
         <div class="tool-card-icon" style="color:#6B21A8;"><i class="ti ti-heart-handshake"></i></div>
         <p class="tool-card-title">給付金</p>
         <p class="tool-card-desc">医療費払戻・傷病手当・出産葬祭</p>
-      </div>
+      </a>
       <a class="tool-card" href="https://www2.kentaikyo.taisyokukin.go.jp/taishokukin/index.php" target="_blank" rel="noopener" style="display:block;text-decoration:none;">
         <div class="tool-card-icon" style="color:#B45309;"><i class="ti ti-pig-money"></i></div>
         <p class="tool-card-title">退職金シミュレーション<i class="ti ti-external-link" style="font-size:13px;margin-left:4px;vertical-align:-1px;"></i></p>
@@ -518,11 +518,25 @@ function goBack(){
   else if(window.defaultBack){ window.defaultBack(); }
   else { location.href='index.html'; }
 }
-function openTool(name){
+function setCalcUrl(name,mode){
+  if(!window.history||!history.replaceState)return;
+  var url=new URL(location.href);
+  if(name){
+    url.searchParams.set('tool',name);
+    if(name==='rousai')url.searchParams.set('mode',mode||rousaiMode||'5');
+    else url.searchParams.delete('mode');
+  }else{
+    url.searchParams.delete('tool');
+    url.searchParams.delete('mode');
+  }
+  history.replaceState(null,'',url.pathname+url.search+url.hash);
+}
+function openTool(name,skipUrl){
   if(name==='ccus'){
     window.open('https://lv-asses-sup.ccus.jp/','_blank','noopener,noreferrer');
     return;
   }
+  if(!CALC_TITLES[name])return;
   currentTool=name;
   try{localStorage.setItem(CALC_LAST_KEY,name);}catch(e){}
   document.getElementById('calc-home').style.display='none';
@@ -533,16 +547,31 @@ function openTool(name){
   if(name==='romu'){calcRoumu();}
   if(name==='rousai'){initRousai();calcRousai();}
   if(name==='benefit'){initBenefit();}
+  if(!skipUrl)setCalcUrl(name,name==='rousai'?rousaiMode:null);
 }
 function openLastCalc(){var name='';try{name=localStorage.getItem(CALC_LAST_KEY)||'';}catch(e){}if(CALC_TITLES[name])openTool(name);}
 function setupLastCalc(){var name='';try{name=localStorage.getItem(CALC_LAST_KEY)||'';}catch(e){}var button=document.getElementById('calc-resume'),label=document.getElementById('calc-resume-label');if(button&&label&&CALC_TITLES[name]){label.textContent='前回の「'+CALC_TITLES[name]+'」を続ける';button.classList.add('show');}}
+function applyCalcDirectUrl(){
+  var params=new URLSearchParams(location.search);
+  var name=params.get('tool')||'';
+  if(!CALC_TITLES[name])return;
+  openTool(name,true);
+  if(name==='rousai'){
+    var mode=params.get('mode')||'5';
+    if(['5','6','8','t1'].indexOf(mode)<0)mode='5';
+    selectRousai(mode,true);
+    if(params.get('mode')!==mode)setCalcUrl('rousai',mode);
+  }
+}
 setupLastCalc();
+applyCalcDirectUrl();
 function closeTool(){
   currentTool=null;
   document.getElementById('calc-home').style.display='';
   document.querySelectorAll('.tool-detail').forEach(d=>d.classList.remove('active'));
   document.getElementById('back-label').textContent='戻る';
   document.getElementById('page-title').textContent='計算ツール';
+  setCalcUrl(null);
 }
 
 const ROUSAI_TYPES=[
@@ -566,8 +595,8 @@ function makeSpecialFields(kind){
   const count=document.createElement('div');count.className='input-group wide';const cl=document.createElement('label');cl.textContent=(kind==='8'||kind==='t1')?'一人親方の人数（同じ日額・加入月）':'特別加入者数（同じ日額・加入月）';const ci=document.createElement('input');ci.type='number';ci.id='rs'+kind+'-count';ci.min='1';ci.max='20';ci.value='1';ci.oninput=calcRousai;count.append(cl,ci);wrap.append(daily,month,count);box.append(wrap);
 }
 function toggleSpecial(kind){const box=document.getElementById('rs'+kind+'-special-fields'),on=document.getElementById('rs'+kind+'-special');if(box&&on)box.style.display=on.checked?'':'none'}
-function selectRousai(kind){
-  rousaiMode=kind;['5','6','8','t1'].forEach(k=>{const on=k===kind;document.getElementById('rs-tab-'+k).classList.toggle('active',on);document.getElementById('rs-tab-'+k).setAttribute('aria-selected',String(on));document.getElementById('rs-pane-'+k).classList.toggle('active',on)});calcRousai();
+function selectRousai(kind,skipUrl){
+  rousaiMode=kind;['5','6','8','t1'].forEach(k=>{const on=k===kind;document.getElementById('rs-tab-'+k).classList.toggle('active',on);document.getElementById('rs-tab-'+k).setAttribute('aria-selected',String(on));document.getElementById('rs-pane-'+k).classList.toggle('active',on)});calcRousai();if(currentTool==='rousai'&&!skipUrl)setCalcUrl('rousai',kind);
 }
 function specialPremium(kind,rate){
   const daily=Number(document.getElementById('rs'+kind+'-daily').value),month=Number(document.getElementById('rs'+kind+'-month').value),count=Math.max(1,Number(document.getElementById('rs'+kind+'-count').value)||1),months=month>=4?16-month:4-month;
