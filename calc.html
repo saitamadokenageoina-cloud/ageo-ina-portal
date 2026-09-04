@@ -1209,5 +1209,31 @@ function _ccusData(){
 function printCcus(){ const d=_ccusData(); if(d) printSections(d.title,d.secs,d.note); }
 function previewCcus(){ const d=_ccusData(); if(d) previewSections(d.title,d.secs,d.note); }
 </script>
+<script>
+/* 計算ツール個別URL：既存の計算処理がすべて読み込まれた後だけ実行する */
+(function(){
+  function openDirectCalculatorFromUrl(){
+    var params = new URLSearchParams(window.location.search);
+    var tool = params.get('tool') || '';
+    var allowed = {romu:true, rousai:true, kokuho:true, benefit:true};
+    if(!allowed[tool]) return;
+
+    /* 既存の openTool / 計算ロジックは変更せず、そのまま呼び出す */
+    openTool(tool);
+
+    if(tool === 'rousai'){
+      var mode = params.get('mode') || '5';
+      if(['5','6','8','t1'].indexOf(mode) < 0) mode = '5';
+      selectRousai(mode);
+    }
+  }
+
+  if(document.readyState === 'complete'){
+    window.setTimeout(openDirectCalculatorFromUrl, 0);
+  }else{
+    window.addEventListener('load', openDirectCalculatorFromUrl, {once:true});
+  }
+})();
+</script>
 </body>
 </html>
