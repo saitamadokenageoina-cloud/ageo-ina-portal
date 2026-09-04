@@ -564,7 +564,10 @@ function applyCalcDirectUrl(){
   }
 }
 setupLastCalc();
-applyCalcDirectUrl();
+// 直接URLは、このscript内のconst/let初期化がすべて完了してから開く。
+// 特に労災（末尾5等）は rousaiMode / rousaiReady / ROUSAI_TYPES の初期化前に
+// 実行するとスマホで画面が途中状態のまま停止するため、次のタスクへ遅延する。
+window.setTimeout(applyCalcDirectUrl,0);
 function closeTool(){
   currentTool=null;
   document.getElementById('calc-home').style.display='';
